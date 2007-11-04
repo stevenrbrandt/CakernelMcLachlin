@@ -1,4 +1,4 @@
-(* < ADM.m /Applications/Mathematica.app/Contents/MacOS/MathKernel | tee ADM.out && rsync -Prl --delete ADM BSSN ~/Calpha/arrangements/KrancEinstein *)
+(* < McLachlan.m /Applications/Mathematica.app/Contents/MacOS/MathKernel | tee McLachlan.out *)
 
 $Path = Join[$Path, {"~/Calpha/Kranc-devel/Tools/CodeGen",
                      "~/Calpha/Kranc-devel/Tools/MathematicaMisc"}];
@@ -140,7 +140,7 @@ groupsBSSN = Join [declaredGroupsBSSN, extraGroups];
 
 initialCalc =
 {
-  Name -> "ADM_Minkowski",
+  Name -> "ML_ADM_Minkowski",
   Schedule -> {"IN ADMBase_InitialData"},
   ConditionalOnKeyword -> {"my_initial_data", "Minkowski"},
   (* Where -> Boundary, *)
@@ -156,7 +156,7 @@ initialCalc =
 
 initialCalcBSSN =
 {
-  Name -> "BSSN_Minkowski",
+  Name -> "ML_BSSN_Minkowski",
   Schedule -> {"IN ADMBase_InitialData"},
   ConditionalOnKeyword -> {"my_initial_data", "Minkowski"},
   (* Where -> Boundary, *)
@@ -181,7 +181,7 @@ initialCalcBSSN =
 
 convertFromADMBaseCalc =
 {
-  Name -> "ADM_convertFromADMBase",
+  Name -> "ML_ADM_convertFromADMBase",
   Schedule -> {"AT initial", "AFTER ADMBase_PostInitial"},
   ConditionalOnKeyword -> {"my_initial_data", "ADMBase"},
   Equations -> 
@@ -208,7 +208,7 @@ convertFromADMBaseCalc =
 
 convertFromADMBaseCalcBSSN =
 {
-  Name -> "BSSN_convertFromADMBase",
+  Name -> "ML_BSSN_convertFromADMBase",
   Schedule -> {"AT initial", "AFTER ADMBase_PostInitial"},
   ConditionalOnKeyword -> {"my_initial_data", "ADMBase"},
   Shorthands -> {g[la,lb], detg, gu[ua,ub], em4phi, K[la,lb], Km[ua,lb]},
@@ -255,9 +255,10 @@ convertFromADMBaseCalcBSSN =
 
 convertFromADMBaseCalcBSSNGamma =
 {
-  Name -> "BSSN_convertFromADMBaseGamma",
-  Schedule -> {"AT initial", "AFTER BSSN_convertFromADMBase"},
+  Name -> "ML_BSSN_convertFromADMBaseGamma",
+  Schedule -> {"AT initial", "AFTER ML_BSSN_convertFromADMBase"},
   ConditionalOnKeyword -> {"my_initial_data", "ADMBase"},
+  Where -> Interior,
   Shorthands -> {detgt, gtu[ua,ub], Gt[ua,lb,lc]},
   Equations -> 
   {
@@ -275,7 +276,7 @@ convertFromADMBaseCalcBSSNGamma =
 
 convertToADMBaseCalc =
 {
-  Name -> "ADM_convertToADMBase",
+  Name -> "ML_ADM_convertToADMBase",
   Schedule -> {"IN MoL_PostStep", "AFTER ADM_ApplyBoundConds"},
   Equations -> 
   {
@@ -305,8 +306,8 @@ convertToADMBaseCalc =
 
 convertToADMBaseCalcBSSN =
 {
-  Name -> "BSSN_convertToADMBase",
-  Schedule -> {"IN MoL_PostStep", "AFTER ADM_ApplyBoundConds"},
+  Name -> "ML_BSSN_convertToADMBase",
+  Schedule -> {"IN MoL_PostStep", "AFTER ML_ADM_ApplyBoundConds"},
   Shorthands -> {e4phi, g[la,lb], K[la,lb]},
   Equations -> 
   {
@@ -342,7 +343,7 @@ convertToADMBaseCalcBSSN =
 
 evolCalc =
 {
-  Name -> "ADM_RHS",
+  Name -> "ML_ADM_RHS",
   Schedule -> {"IN MoL_CalcRHS"},
   Shorthands -> {detg, gu[ua,ub], G[ua,lb,lc], R[la,lb], Km[ua,lb], trK},
   Equations -> 
@@ -369,7 +370,7 @@ evolCalc =
 
 enforceCalcBSSN =
 {
-  Name -> "BSSN_enforce",
+  Name -> "ML_BSSN_enforce",
   Schedule -> {"IN MoL_PostStep"},
   Shorthands -> {detgt, gtu[ua,ub], trA},
   Equations -> 
@@ -389,8 +390,9 @@ enforceCalcBSSN =
 
 constraintsCalc =
 {
-  Name -> "ADM_constraints",
+  Name -> "ML_ADM_constraints",
   Schedule -> {"AT analysis"},
+  Where -> Interior,
   Shorthands -> {detg, gu[ua,ub], G[ua,lb,lc], R[la,lb], trR, Km[ua,lb], trK},
   Equations -> 
   {
@@ -412,8 +414,9 @@ constraintsCalc =
 
 constraintsCalcBSSN =
 {
-  Name -> "BSSN_constraints",
+  Name -> "ML_BSSN_constraints",
   Schedule -> {"AT analysis"},
+  Where -> Interior,
   Shorthands -> {detgt, ddetgt[la], gtu[ua,ub], Gt[ua,lb,lc], e4phi,
                  g[la,lb], detg, gu[ua,ub], ddetg[la], G[ua,lb,lc],
                  Rt[la,lb], Rphi[la,lb], R[la,lb], trR,
@@ -510,7 +513,7 @@ calculations =
   constraintsCalc
 };
 
-CreateKrancThornTT [groups, ".", "ADM",
+CreateKrancThornTT [groups, ".", "ML_ADM",
   Calculations -> calculations,
   DeclaredGroups -> declaredGroupNames,
   PartialDerivatives -> derivatives,
@@ -530,7 +533,7 @@ calculationsBSSN =
   constraintsCalcBSSN
 };
 
-CreateKrancThornTT [groupsBSSN, ".", "BSSN",
+CreateKrancThornTT [groupsBSSN, ".", "ML_BSSN",
   Calculations -> calculationsBSSN,
   DeclaredGroups -> declaredGroupNamesBSSN,
   PartialDerivatives -> derivatives,

@@ -87,6 +87,7 @@ if (CCTK_EQUALS(my_initial_data, "ADMBase"))
   {
     LANG: C
     
+    SYNC: Gamma
   } "ML_BSSN_convertFromADMBaseGamma"
 }
 
@@ -97,6 +98,7 @@ if (CCTK_EQUALS(my_initial_data, "ADMBase"))
   {
     LANG: C
     
+    SYNC: Gamma
   } "ML_BSSN_convertFromADMBaseGamma"
 }
 
@@ -122,6 +124,11 @@ schedule ML_BSSN_constraints AT analysis
 {
   LANG: C
   
+  SYNC: cons_detg
+  SYNC: cons_Gamma
+  SYNC: cons_traceA
+  SYNC: Ham
+  SYNC: mom
 } "ML_BSSN_constraints"
 
 schedule ML_BSSN_ApplyBoundConds in MoL_PostStep

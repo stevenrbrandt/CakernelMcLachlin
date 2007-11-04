@@ -86,7 +86,7 @@ void ML_BSSN_constraints_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCTK_REA
   /* Loop over the grid points */
   LC_LOOP3 (somename,
             i,j,k, min[0],min[1],min[2], max[0],max[1],max[2],
-            max[0]-min[0],max[1]-min[1],max[2]-min[2])
+            cctk_lsh[0],cctk_lsh[1],cctk_lsh[2])
   {
     int index = INITVALUE;
     int subblock_index = INITVALUE;
@@ -976,5 +976,5 @@ void ML_BSSN_constraints(CCTK_ARGUMENTS)
   DECLARE_CCTK_ARGUMENTS
   DECLARE_CCTK_PARAMETERS
   
-  GenericFD_LoopOverEverything(cctkGH, &ML_BSSN_constraints_Body);
+  GenericFD_LoopOverInterior(cctkGH, &ML_BSSN_constraints_Body);
 }
