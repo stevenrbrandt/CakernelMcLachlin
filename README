@@ -3,6 +3,7 @@ McLachlan
 A suite of spacetime codes.  The name "McLachlan" is in honour of
 Sarah McLachlan, the Canadian singer.
 
-The code requires Cactus <http://www.cactuscode.org/>.  The code is
-generated with Kranc <http://numrel.aei.mpg.de/Research/Kranc/>, which
-requires Mathematica to run.
+The code requires Cactus <http://www.cactuscode.org/> and Carpet
+<http://www.carpetcode.org/>.  The code is generated with Kranc
+<http://numrel.aei.mpg.de/Research/Kranc/>, which requires Mathematica
+to run.
