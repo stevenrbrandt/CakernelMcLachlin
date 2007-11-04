@@ -1,0 +1,121 @@
+# File produced by user eschnett
+# Produced with Mathematica Version 6.0 for Mac OS X x86 (32-bit) (April 20, 2007)
+
+# Mathematica script written by Ian Hinder and Sascha Husa
+
+
+STORAGE: Ham[1]
+
+STORAGE: mom[1]
+
+STORAGE: curvrhs[1]
+
+STORAGE: lapserhs[1]
+
+STORAGE: metricrhs[1]
+
+STORAGE: shiftrhs[1]
+
+STORAGE: curv[3]
+
+STORAGE: lapse[3]
+
+STORAGE: metric[3]
+
+STORAGE: shift[3]
+
+schedule ML_ADM_Startup at STARTUP
+{
+  LANG: C
+  OPTIONS: meta
+} "create banner"
+
+schedule ML_ADM_RegisterVars in MoL_Register
+{
+  LANG: C
+  OPTIONS: meta
+} "Register Variables for MoL"
+
+schedule ML_ADM_RegisterSymmetries at BASEGRID
+{
+  LANG: C
+  OPTIONS: meta
+} "register symmetries"
+
+
+if (CCTK_EQUALS(my_initial_data, "Minkowski"))
+{
+  schedule ML_ADM_Minkowski IN ADMBase_InitialData
+  {
+    LANG: C
+    
+  } "ML_ADM_Minkowski"
+}
+
+
+if (CCTK_EQUALS(my_initial_data, "ADMBase"))
+{
+  schedule ML_ADM_convertFromADMBase AT initial
+  {
+    LANG: C
+    
+  } "ML_ADM_convertFromADMBase"
+}
+
+
+if (CCTK_EQUALS(my_initial_data, "ADMBase"))
+{
+  schedule ML_ADM_convertFromADMBase AFTER ADMBase_PostInitial
+  {
+    LANG: C
+    
+  } "ML_ADM_convertFromADMBase"
+}
+
+schedule ML_ADM_RHS IN MoL_CalcRHS
+{
+  LANG: C
+  
+} "ML_ADM_RHS"
+
+schedule ML_ADM_convertToADMBase IN MoL_PostStep
+{
+  LANG: C
+  
+} "ML_ADM_convertToADMBase"
+
+schedule ML_ADM_convertToADMBase AFTER ADM_ApplyBoundConds
+{
+  LANG: C
+  
+} "ML_ADM_convertToADMBase"
+
+schedule ML_ADM_constraints AT analysis
+{
+  LANG: C
+  
+  SYNC: Ham
+  SYNC: mom
+} "ML_ADM_constraints"
+
+schedule ML_ADM_ApplyBoundConds in MoL_PostStep
+{
+  LANG: C
+  OPTIONS: level
+  SYNC: curv
+  SYNC: lapse
+  SYNC: metric
+  SYNC: shift
+} "apply boundary conditions"
+
+schedule ML_ADM_CheckBoundaries at BASEGRID
+{
+  LANG: C
+  OPTIONS: meta
+} "check boundaries treatment"
+
+schedule group ApplyBCs as ML_ADM_ApplyBCs in MoL_PostStep  after ML_ADM_ApplyBoundConds
+{
+  # no language specified
+  
+} "Apply boundary conditions controlled by thorn Boundary"

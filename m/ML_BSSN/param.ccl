@@ -1,0 +1,122 @@
+# File produced by user eschnett
+# Produced with Mathematica Version 6.0 for Mac OS X x86 (32-bit) (April 20, 2007)
+
+# Mathematica script written by Ian Hinder and Sascha Husa
+
+
+shares: ADMBase
+
+USES CCTK_KEYWORD initial_data
+
+
+shares: GenericFD
+
+USES CCTK_INT stencil_width
+USES CCTK_INT stencil_width_x
+USES CCTK_INT stencil_width_y
+USES CCTK_INT stencil_width_z
+USES CCTK_INT boundary_width
+
+
+shares: MethodOfLines
+
+USES CCTK_INT MoL_Num_Evolved_Vars
+USES CCTK_INT MoL_Num_Constrained_Vars
+
+restricted:
+CCTK_REAL verbose "verbose"
+{
+  "*:*" :: "no restrictions"
+} 0
+
+private:
+KEYWORD my_initial_data "my_initial_data"
+{
+  "ADMBase" :: "ADMBase"
+  "Minkowski" :: "Minkowski"
+} "ADMBase"
+
+restricted:
+CCTK_INT ML_BSSN_MaxNumEvolvedVars "Number of evolved variables used by this thorn" ACCUMULATOR-BASE=MethodofLines::MoL_Num_Evolved_Vars
+{
+  0:0 :: "Number of evolved variables used by this thorn"
+} 0
+
+restricted:
+CCTK_INT ML_BSSN_MaxNumConstrainedVars "Number of constrained variables used by this thorn" ACCUMULATOR-BASE=MethodofLines::MoL_Num_Constrained_Vars
+{
+  58:58 :: "Number of constrained variables used by this thorn"
+} 58
+
+restricted:
+CCTK_INT ML_BSSN_Minkowski_calc_every "ML_BSSN_Minkowski_calc_every"
+{
+  *:* :: "no restrictions"
+} 1
+
+restricted:
+CCTK_INT ML_BSSN_convertFromADMBase_calc_every "ML_BSSN_convertFromADMBase_calc_every"
+{
+  *:* :: "no restrictions"
+} 1
+
+restricted:
+CCTK_INT ML_BSSN_convertFromADMBaseGamma_calc_every "ML_BSSN_convertFromADMBaseGamma_calc_every"
+{
+  *:* :: "no restrictions"
+} 1
+
+restricted:
+CCTK_INT ML_BSSN_enforce_calc_every "ML_BSSN_enforce_calc_every"
+{
+  *:* :: "no restrictions"
+} 1
+
+restricted:
+CCTK_INT ML_BSSN_convertToADMBase_calc_every "ML_BSSN_convertToADMBase_calc_every"
+{
+  *:* :: "no restrictions"
+} 1
+
+restricted:
+CCTK_INT ML_BSSN_constraints_calc_every "ML_BSSN_constraints_calc_every"
+{
+  *:* :: "no restrictions"
+} 1
+
+restricted:
+CCTK_INT ML_BSSN_Minkowski_calc_offset "ML_BSSN_Minkowski_calc_offset"
+{
+  *:* :: "no restrictions"
+} 0
+
+restricted:
+CCTK_INT ML_BSSN_convertFromADMBase_calc_offset "ML_BSSN_convertFromADMBase_calc_offset"
+{
+  *:* :: "no restrictions"
+} 0
+
+restricted:
+CCTK_INT ML_BSSN_convertFromADMBaseGamma_calc_offset "ML_BSSN_convertFromADMBaseGamma_calc_offset"
+{
+  *:* :: "no restrictions"
+} 0
+
+restricted:
+CCTK_INT ML_BSSN_enforce_calc_offset "ML_BSSN_enforce_calc_offset"
+{
+  *:* :: "no restrictions"
+} 0
+
+restricted:
+CCTK_INT ML_BSSN_convertToADMBase_calc_offset "ML_BSSN_convertToADMBase_calc_offset"
+{
+  *:* :: "no restrictions"
+} 0
+
+restricted:
+CCTK_INT ML_BSSN_constraints_calc_offset "ML_BSSN_constraints_calc_offset"
+{
+  *:* :: "no restrictions"
+} 0
+

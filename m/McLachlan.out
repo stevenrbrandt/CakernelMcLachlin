@@ -1,0 +1,755 @@
+Mathematica 6.0 for Mac OS X x86 (32-bit)
+Copyright 1988-2007 Wolfram Research, Inc.
+
+In[1]:= 
+In[2]:= 
+In[2]:= 
+In[3]:= 
+In[3]:= 
+Set::wrsym: Symbol Quiet is Protected.
+
+General::obspkg: 
+   LinearAlgebra`MatrixManipulation`
+     is now obsolete. The legacy version being loaded may conflict with
+     current Mathematica functionality. See the Compatibility Guide for
+     updating information.
+
+In[4]:= 
+In[4]:= 
+In[5]:= User set source language to C
+
+In[6]:= 
+In[6]:= 
+In[7]:= 
+In[8]:= 
+In[9]:= 
+In[9]:= 
+Syntax::newl: The newline character after 
+    "  PDstandard4th[i_, j_] -> StandardCe<<11>>renceOperator[1,2,i]"
+     is understood as a multiplication operator.
+
+
+In[10]:= 
+In[10]:= 
+In[11]:= 
+In[11]:= 
+In[12]:= 
+In[12]:= 
+In[13]:= 
+In[14]:= 
+In[15]:= 
+In[15]:= 
+In[16]:= 
+In[17]:= 
+In[18]:= 
+In[18]:= 
+In[19]:= 
+In[20]:= 
+In[21]:= 
+In[22]:= 
+In[23]:= 
+In[24]:= 
+In[24]:= 
+In[25]:= 
+In[26]:= 
+In[26]:= 
+In[27]:= 
+In[27]:= 
+In[28]:= 
+In[29]:= 
+In[30]:= 
+In[30]:= 
+In[31]:= 
+In[32]:= 
+In[32]:= 
+In[33]:= 
+In[34]:= 
+In[34]:= 
+In[35]:= 
+In[36]:= 
+In[37]:= 
+In[37]:= 
+In[38]:= 
+In[39]:= 
+In[39]:= 
+In[40]:= 
+In[41]:= 
+In[41]:= 
+In[42]:= 
+In[43]:= 
+In[43]:= 
+In[44]:= 
+In[45]:= 
+In[45]:= 
+In[45]:= 
+In[45]:= 
+In[46]:= 
+In[46]:= 
+In[46]:= 
+In[46]:= 
+In[47]:= 
+In[48]:= 
+In[48]:= 
+In[49]:= 
+In[50]:= 
+In[51]:= 
+In[51]:= 
+Out[51]= {Name -> ML_ADM_Minkowski, Schedule -> {IN ADMBase_InitialData}, 
+ 
+>    ConditionalOnKeyword -> {my_initial_data, Minkowski}, 
+ 
+>    Equations -> 
+ 
+>     {g   -> KroneckerDelta[ ,  ], K   -> 0, alpha -> 1, 
+           a   b                      a     b       a   b
+ 
+              a
+>      beta  -> 0}}
+
+In[52]:= 
+In[52]:= 
+Out[52]= {Name -> ML_BSSN_Minkowski, Schedule -> {IN ADMBase_InitialData}, 
+ 
+>    ConditionalOnKeyword -> {my_initial_data, Minkowski}, 
+ 
+>    Equations -> 
+ 
+>     {phi -> 0, gt   -> KroneckerDelta[ ,  ], trK -> 0, 
+                      a   b                      a     b
+ 
+                             a                                        a
+>      At   -> 0, Xt  -> 0, alpha -> 1, dtalpha -> 0, beta  -> 0, 
+            a   b
+ 
+                a
+>      dtbeta  -> 0}}
+
+In[53]:= 
+In[53]:= 
+In[54]:= 
+In[55]:= 
+In[56]:= 
+In[56]:= 
+Out[56]= {Name -> ML_ADM_convertFromADMBase, 
+ 
+>    Schedule -> {AT initial, AFTER ADMBase_PostInitial}, 
+ 
+>    ConditionalOnKeyword -> {my_initial_data, ADMBase}, 
+ 
+>    Equations -> 
+ 
+>     {g11 -> gxx, g21 -> gxy, g31 -> gxz, g22 -> gyy, g32 -> gyz, 
+ 
+>      g33 -> gzz, K11 -> kxx, K21 -> kxy, K31 -> kxz, K22 -> kyy, 
+ 
+>      K32 -> kyz, K33 -> kzz, alpha -> alp, beta1 -> betax, beta2 -> betay, 
+ 
+>      beta3 -> betaz}}
+
+In[57]:= 
+In[57]:= 
+Syntax::bktwrn: 
+   "em4phi (K[la,lb] - (1/3) g[la,lb] trK)" represents multiplication; use 
+    "em4phi [K[la,lb] - (1/3) g[la,lb] trK]" to represent a function.
+
+
+Out[57]= {Name -> ML_BSSN_convertFromADMBase, 
+ 
+>    Schedule -> {AT initial, AFTER ADMBase_PostInitial}, 
+ 
+>    ConditionalOnKeyword -> {my_initial_data, ADMBase}, 
+ 
+>    Shorthands -> 
+ 
+                             a   b                          a
+>     {g  , detg, gu  , em4phi, K  , Km  }, 
+           a   b                                a   b           b
+ 
+>    Equations -> 
+ 
+>     {g11 -> gxx, g21 -> gxy, g31 -> gxz, g22 -> gyy, g32 -> gyz, 
+ 
+>      g33 -> gzz, detg -> 
+ 
+                 2                           2      2
+>       -(g22 g31 ) + 2 g21 g31 g32 - g11 g32  - g21  g33 + g11 g22 g33, 
+ 
+            a   b
+>      gu   -> 
+ 
+                   2                           2      2
+>       ((-(g22 g31 ) + 2 g21 g31 g32 - g11 g32  - g21  g33 + g11 g22 g33) 
+ 
+                             a   b                         -3
+>          MatrixInverse[g  ]) / detg, em4phi -> detg  , 
+ 
+              Log[detg]
+>      phi -> ---------, gt   -> em4phi g  , K11 -> kxx, 
+                 12           a   b               a   b
+ 
+>      K21 -> kxy, K31 -> kxz, K22 -> kyy, K32 -> kyz, K33 -> kzz, 
+ 
+            a                       a   c              a
+>      Km   -> K   gu  , trK -> Km  , 
+                b        c   b                             a
+ 
+                             -trK
+>      At   -> em4phi (---- g   + K  ), alpha -> alp, 
+            a   b             3       a   b       a   b
+ 
+>      dtalpha -> dtalp, beta1 -> betax, beta2 -> betay, beta3 -> betaz, 
+ 
+>      dtbeta1 -> dtbetax, dtbeta2 -> dtbetay, dtbeta3 -> dtbetaz}}
+
+In[58]:= 
+In[58]:= 
+Out[58]= {Name -> ML_BSSN_convertFromADMBaseGamma, 
+ 
+>    Schedule -> {AT initial, AFTER ML_BSSN_convertFromADMBase}, 
+ 
+>    ConditionalOnKeyword -> {my_initial_data, ADMBase}, Where -> Interior, 
+ 
+                                 a   b       a
+>    Shorthands -> {detgt, gtu  , Gt   }, 
+                                                 b   c
+ 
+>    Equations -> 
+ 
+>     {detgt -> 
+ 
+                   2                                2       2
+>       -(gt22 gt31 ) + 2 gt21 gt31 gt32 - gt11 gt32  - gt21  gt33 + 
+ 
+                               a   b
+>        gt11 gt22 gt33, gtu   -> 
+ 
+                     2                                2       2
+>       ((-(gt22 gt31 ) + 2 gt21 gt31 gt32 - gt11 gt32  - gt21  gt33 + 
+ 
+                                                a   b
+>            gt11 gt22 gt33) MatrixInverse[gt  ]) / detgt, 
+ 
+            a
+>      Gt    -> 
+                b   c
+ 
+>       (-PDstandard4th[gt  ,  ] + PDstandard4th[gt  ,  ] + 
+                             b   c     d                       b   d     c
+ 
+                                                       a   d
+>           PDstandard4th[gt  ,  ]) / 2 gtu  , 
+                               c   d     b
+ 
+            a         a               b   c
+>      Xt  -> Gt    gtu  }}
+                          b   c
+
+In[59]:= 
+In[59]:= 
+In[60]:= 
+In[61]:= 
+In[62]:= 
+In[62]:= 
+Out[62]= {Name -> ML_ADM_convertToADMBase, 
+ 
+>    Schedule -> {IN MoL_PostStep, AFTER ADM_ApplyBoundConds}, 
+ 
+>    Equations -> 
+ 
+>     {gxx -> g11, gxy -> g21, gxz -> g31, gyy -> g22, gyz -> g32, 
+ 
+>      gzz -> g33, kxx -> K11, kxy -> K21, kxz -> K31, kyy -> K22, 
+ 
+>      kyz -> K32, kzz -> K33, alp -> alpha, dtalp -> 0, betax -> beta1, 
+ 
+>      betay -> beta2, betaz -> beta3, dtbetax -> 0, dtbetay -> 0, 
+ 
+>      dtbetaz -> 0}}
+
+In[63]:= 
+In[63]:= 
+Out[63]= {Name -> ML_BSSN_convertToADMBase, 
+ 
+>    Schedule -> {IN MoL_PostStep, AFTER ML_ADM_ApplyBoundConds}, 
+ 
+>    Shorthands -> {e4phi, g  , K  }, 
+                               a   b      a   b
+ 
+>    Equations -> 
+ 
+                 4 phi
+>     {e4phi -> E     , g   -> e4phi gt  , gxx -> g11, 
+                            a   b               a   b
+ 
+>      gxy -> g21, gxz -> g31, gyy -> g22, gyz -> g32, gzz -> g33, 
+ 
+                                       trK
+>      K   -> e4phi At   + --- g  , kxx -> K11, kxy -> K21, 
+           a   b               a   b    3      a   b
+ 
+>      kxz -> K31, kyy -> K22, kyz -> K32, kzz -> K33, alp -> alpha, 
+ 
+>      dtalp -> dtalpha, betax -> beta1, betay -> beta2, betaz -> beta3, 
+ 
+>      dtbetax -> dtbeta1, dtbetay -> dtbeta2, dtbetaz -> dtbeta3}}
+
+In[64]:= 
+In[64]:= 
+In[65]:= 
+In[66]:= 
+In[67]:= 
+In[67]:= 
+Syntax::bktwrn: 
+   "alpha (+ R[la,lb] + K[la,lb] trK - 2 K[la,lc] Km[uc,lb])"
+     represents multiplication; use 
+    "alpha [+ R[la,lb] + K[la,lb] trK - 2 K[la,lc] Km[uc,lb]]"
+     to represent a function.
+
+
+Out[67]= {Name -> ML_ADM_RHS, Schedule -> {IN MoL_CalcRHS}, 
+ 
+>    Shorthands -> 
+ 
+                  a   b      a                          a
+>     {detg, gu  , G   , R  , Km  , trK}, 
+                                 b   c      a   b           b
+ 
+>    Equations -> 
+ 
+                        2                           2      2
+>     {detg -> -(g22 g31 ) + 2 g21 g31 g32 - g11 g32  - g21  g33 + 
+ 
+                           a   b
+>        g11 g22 g33, gu   -> 
+ 
+                   2                           2      2
+>       ((-(g22 g31 ) + 2 g21 g31 g32 - g11 g32  - g21  g33 + g11 g22 g33) 
+ 
+                             a   b
+>          MatrixInverse[g  ]) / detg, 
+ 
+           a
+>      G    -> 
+               b   c
+ 
+>       (-PDstandard4th[g  ,  ] + PDstandard4th[g  ,  ] + 
+                            b   c     d                      b   d     c
+ 
+                                                     a   d
+>           PDstandard4th[g  ,  ]) / 2 gu  , 
+                              c   d     b
+ 
+>      R   -> 
+           a   b
+ 
+>       (-PDstandard4th[g  ,  ,  ] + 
+                            1   2     a     b
+ 
+>            PDstandard4th[g  ,  ,  ] + 
+                               1   a     2     b
+ 
+>            PDstandard4th[g  ,  ,  ] - 
+                               2   b     1     a
+ 
+                                                            1   2
+>            PDstandard4th[g  ,  ,  ]) / 2 gu   - 
+                               a   b     1     2
+ 
+             2             1               2             1
+>        G    G    + G    G   , 
+                 1   2         a   b           1   b         2   a
+ 
+            a                       a   c              a
+>      Km   -> K   gu  , trK -> Km  , 
+                b        c   b                             a
+ 
+>      dot[g  ] -> Lie[g  , beta] - 2 alpha K  , 
+               a   b             a   b                      a   b
+ 
+>      dot[K  ] -> 
+               a   b
+ 
+>       -CD[alpha,  ,  ] + Lie[K  , beta] + 
+                      a     b            a   b
+ 
+                                       c
+>        alpha (trK K   - 2 Km   K   + R  ), 
+                        a   b              b     a   c       a   b
+ 
+                                   a
+>      dot[alpha] -> 0, dot[beta ] -> 0}}
+
+In[68]:= 
+In[68]:= 
+Out[68]= {Name -> ML_BSSN_enforce, Schedule -> {IN MoL_PostStep}, 
+ 
+                                 a   b
+>    Shorthands -> {detgt, gtu  , trA}, 
+ 
+>    Equations -> 
+ 
+>     {detgt -> 
+ 
+                   2                                2       2
+>       -(gt22 gt31 ) + 2 gt21 gt31 gt32 - gt11 gt32  - gt21  gt33 + 
+ 
+                               a   b
+>        gt11 gt22 gt33, gtu   -> 
+ 
+                     2                                2       2
+>       ((-(gt22 gt31 ) + 2 gt21 gt31 gt32 - gt11 gt32  - gt21  gt33 + 
+ 
+                                                a   b
+>            gt11 gt22 gt33) MatrixInverse[gt  ]) / detgt, 
+ 
+                    a   b
+>      trA -> gtu   At  , 
+                               a   b
+ 
+                                  trA
+>      At   -> At   - --- gt  }}
+            a   b         a   b    3       a   b
+
+In[69]:= 
+In[69]:= 
+In[70]:= 
+In[71]:= 
+In[72]:= 
+In[72]:= 
+Out[72]= {Name -> ML_ADM_constraints, Schedule -> {AT analysis}, 
+ 
+>    Where -> Interior, Shorthands -> 
+ 
+                  a   b      a                               a
+>     {detg, gu  , G   , R  , trR, Km  , trK}, 
+                                 b   c      a   b                b
+ 
+>    Equations -> 
+ 
+                        2                           2      2
+>     {detg -> -(g22 g31 ) + 2 g21 g31 g32 - g11 g32  - g21  g33 + 
+ 
+                           a   b
+>        g11 g22 g33, gu   -> 
+ 
+                   2                           2      2
+>       ((-(g22 g31 ) + 2 g21 g31 g32 - g11 g32  - g21  g33 + g11 g22 g33) 
+ 
+                             a   b
+>          MatrixInverse[g  ]) / detg, 
+ 
+           a
+>      G    -> 
+               b   c
+ 
+>       (-PDstandard4th[g  ,  ] + PDstandard4th[g  ,  ] + 
+                            b   c     d                      b   d     c
+ 
+                                                     a   d
+>           PDstandard4th[g  ,  ]) / 2 gu  , 
+                              c   d     b
+ 
+>      R   -> 
+           a   b
+ 
+>       (-PDstandard4th[g  ,  ,  ] + 
+                            1   2     a     b
+ 
+>            PDstandard4th[g  ,  ,  ] + 
+                               1   a     2     b
+ 
+>            PDstandard4th[g  ,  ,  ] - 
+                               2   b     1     a
+ 
+                                                            1   2
+>            PDstandard4th[g  ,  ,  ]) / 2 gu   + 
+                               a   b     1     2
+ 
+             1                     2       1                     2
+>        G    G    - G    G   , 
+                 2   a     1   b               a   b     1   2
+ 
+                             a   b       a                       a   c
+>      trR -> R   gu  , Km   -> K   gu  , 
+                  a   b                      b        c   b
+ 
+                   a              2              b          a
+>      trK -> Km  , H -> trK  + trR - Km   Km  , 
+                       a                             a          b
+ 
+                                                               b   c
+>      M  -> CD[K  ,  ] - CD[K  ,  ] gu  }}
+           a           c   a     b           c   b     a
+
+In[73]:= 
+In[73]:= 
+Out[73]= {Name -> ML_BSSN_constraints, Schedule -> {AT analysis}, 
+ 
+>    Where -> Interior, Shorthands -> 
+ 
+                                a   b       a
+>     {detgt, ddetgt , gtu  , Gt   , e4phi, g  , 
+                       a                        b   c             a   b
+ 
+                  a   b                 a
+>      detg, gu  , ddetg , G   , Rt  , Rphi  , 
+                                 a          b   c       a   b         a   b
+ 
+>      R  , trR, K  , Km  , gK   }, 
+           a   b           a   b       a   b       a   b   c
+ 
+>    Equations -> 
+ 
+>     {detgt -> 
+ 
+                   2                                2       2
+>       -(gt22 gt31 ) + 2 gt21 gt31 gt32 - gt11 gt32  - gt21  gt33 + 
+ 
+>        gt11 gt22 gt33, ddetgt  -> 
+                                  a
+ 
+              2
+>       (-gt32  + gt22 gt33) PDstandard4th[gt11,  ] + 
+                                                    a
+ 
+>        (2 gt31 gt32 - 2 gt21 gt33) PDstandard4th[gt21,  ] + 
+                                                            a
+ 
+               2
+>        (-gt31  + gt11 gt33) PDstandard4th[gt22,  ] + 
+                                                     a
+ 
+>        (-2 gt22 gt31 + 2 gt21 gt32) PDstandard4th[gt31,  ] + 
+                                                             a
+ 
+>        (2 gt21 gt31 - 2 gt11 gt32) PDstandard4th[gt32,  ] + 
+                                                            a
+ 
+               2
+>        (-gt21  + gt11 gt22) PDstandard4th[gt33,  ], 
+                                                     a
+ 
+             a   b
+>      gtu   -> 
+ 
+                     2                                2       2
+>       ((-(gt22 gt31 ) + 2 gt21 gt31 gt32 - gt11 gt32  - gt21  gt33 + 
+ 
+                                                a   b
+>            gt11 gt22 gt33) MatrixInverse[gt  ]) / detgt, 
+ 
+            a
+>      Gt    -> 
+                b   c
+ 
+>       (-PDstandard4th[gt  ,  ] + PDstandard4th[gt  ,  ] + 
+                             b   c     d                       b   d     c
+ 
+                                                       a   d
+>           PDstandard4th[gt  ,  ]) / 2 gtu  , 
+                               c   d     b
+ 
+                 4 phi
+>      e4phi -> E     , g   -> e4phi gt  , 
+                            a   b               a   b
+ 
+                        2                           2      2
+>      detg -> -(g22 g31 ) + 2 g21 g31 g32 - g11 g32  - g21  g33 + 
+ 
+                           a   b
+>        g11 g22 g33, gu   -> 
+ 
+                   2                           2      2
+>       ((-(g22 g31 ) + 2 g21 g31 g32 - g11 g32  - g21  g33 + g11 g22 g33) 
+ 
+                             a   b
+>          MatrixInverse[g  ]) / detg, 
+ 
+>      ddetg  -> 
+               a
+ 
+>       4 detgt e4phi PDstandard4th[phi,  ] + e4phi ddetgt , 
+                                            a                   a
+ 
+           a
+>      G    -> 
+               b   c
+ 
+                           a
+>       (KroneckerDelta[ ,  ] ddetg  + 
+                                 c          b
+ 
+                              a
+>           KroneckerDelta[ ,  ] ddetg  - 
+                                    b          c
+ 
+            1      a   d                                        a
+>           - gu   g   ddetg ) / (2 detg) + Gt   , 
+            3                b   c         d                        b   c
+ 
+>      Rt   -> 
+            i   j
+ 
+                           k
+>       PDstandard4th[Xt ,  ] gt   + 
+                                 j       k   i
+ 
+                            k
+>        PDstandard4th[Xt ,  ] gt   - 
+                                  i       k   j
+ 
+         PDstandard4th[gt  ,  ,  ]
+                            i   j     l     m        l   m
+>        ------------------------------------- gtu   + 
+                           2
+ 
+              n                         k
+>        Gt    gt   Xt  + 
+                  i   k      j   n
+ 
+              n                         k
+>        Gt    gt   Xt  + 
+                  j   k      i   n
+ 
+                n              k
+>        2 Gt    Gt    gt   + 
+                    k   m          l   i      j   n
+ 
+                  n              k
+>          2 Gt    Gt    gt   + 
+                      k   m          l   j      i   n
+ 
+                n              k                          l   m
+>          Gt    Gt    gt   gtu  , 
+                    l   j          i   m      k   n
+ 
+>      Rphi   -> 
+              i   j
+ 
+>       4 CDt[phi,  ] CDt[phi,  ] - 2 CDt[phi,  ,  ] - 
+                      i              j                  j     i
+ 
+                                               l   n
+>        4 CDt[phi,  ] CDt[phi,  ] gtu   gt   - 
+                       l              n                   i   j
+ 
+                                      l   n
+>        2 CDt[phi,  ,  ] gtu   gt  , 
+                       l     n                   i   j
+ 
+                                                                     a   b
+>      R   -> Rphi   + Rt  , trR -> R   gu  , 
+           a   b           a   b        a   b             a   b
+ 
+                                       trK
+>      K   -> e4phi At   + --- g  , 
+           a   b               a   b    3      a   b
+ 
+            a                       a   c
+>      Km   -> K   gu  , 
+                b        c   b
+ 
+               2              b          a
+>      H -> trK  + trR - Km   Km  , 
+                                  a          b
+ 
+>      gK    -> 
+            a   b   c
+ 
+>       e4phi CD[At  ,  ] + 
+                      a   b     c
+ 
+>        4 e4phi PDstandard4th[phi,  ] At   + 
+                                       c       a   b
+ 
+         PDstandard4th[trK,  ]
+                               c
+>        ------------------------ g  , 
+                    3                 a   b
+ 
+                                                     b   c
+>      M  -> gK    - gK    gu  , cS -> Log[detgt], 
+           a         c   a   b        c   b   a
+ 
+             a            a        a               b   c
+>      cXt  -> -1 Xt  + Gt    gtu  , 
+                                       b   c
+ 
+                   a   b
+>      cA -> gtu   At  }}
+                              a   b
+
+In[74]:= 
+In[74]:= 
+In[75]:= 
+In[76]:= 
+In[77]:= 
+In[77]:= 
+In[78]:= 
+In[78]:= 
+In[79]:= 
+In[80]:= 
+In[81]:= 
+In[81]:= 
+In[82]:= 
+In[82]:= 
+In[83]:= 
+In[83]:= 
+In[84]:= 
+In[84]:= 
+In[85]:= 
+In[86]:= 
+In[87]:= 
+In[87]:= 
+In[88]:= 
+In[88]:= Processing tensorial arguments
+Computing reflection symmetries
+Creating (component-based) Kranc thorn
+Processing arguments to CreateKrancThorn
+Verifying arguments
+Creating startup file
+Creating configuration file
+Creating interface file
+Creating param file
+Creating schedule file
+Creating MoL registration file
+Creating symmetry registration file
+Creating differencing header file
+Creating calculation source files
+Creating calculation function: ML_ADM_Minkowski
+Creating calculation function: ML_ADM_convertFromADMBase
+Creating calculation function: ML_ADM_RHS
+Creating calculation function: ML_ADM_convertToADMBase
+Creating calculation function: ML_ADM_constraints
+Creating make file
+Creating thorn
+Creating thorns in directory ./ML_ADM
+
+In[89]:= 
+In[89]:= 
+In[90]:= 
+In[90]:= Processing tensorial arguments
+Computing reflection symmetries
+Creating (component-based) Kranc thorn
+Processing arguments to CreateKrancThorn
+Verifying arguments
+Creating startup file
+Creating configuration file
+Creating interface file
+Creating param file
+Creating schedule file
+Creating MoL registration file
+Creating symmetry registration file
+Creating differencing header file
+Creating calculation source files
+Creating calculation function: ML_BSSN_Minkowski
+Creating calculation function: ML_BSSN_convertFromADMBase
+Creating calculation function: ML_BSSN_convertFromADMBaseGamma
+Creating calculation function: ML_BSSN_enforce
+Creating calculation function: ML_BSSN_convertToADMBase
+Creating calculation function: ML_BSSN_constraints
+Creating make file
+Creating thorn
+Creating thorns in directory ./ML_BSSN
+
+In[91]:= 
