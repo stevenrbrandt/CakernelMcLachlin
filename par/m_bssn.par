@@ -1,0 +1,37 @@
+ActiveThorns = "
+        Boundary CartGrid3D CoordBase IOUtil InitBase MoL SymBase
+        ADMBase
+        NaNChecker
+        Carpet CarpetIOASCII CarpetIOBasic CarpetIOScalar CarpetLib CarpetReduce LoopControl
+        GSL
+        GenericFD
+        ML_BSSN
+"
+
+
+
+Cactus::cctk_itlast = 0
+
+CoordBase::boundary_size_x_lower = 2
+CoordBase::boundary_size_y_lower = 2
+CoordBase::boundary_size_z_lower = 2
+CoordBase::boundary_size_x_upper = 2
+CoordBase::boundary_size_y_upper = 2
+CoordBase::boundary_size_z_upper = 2
+
+driver::ghost_size = 2
+
+ADMBase::initial_shift   = "zero"
+ADMBase::initial_dtlapse = "zero"
+ADMBase::initial_dtshift = "zero"
+
+ML_BSSN::my_initial_data = "Minkowski"
+
+IOBasic::outInfo_every = 1
+IOBasic::outInfo_vars = "
+        ML_BSSN::Ham
+        ML_BSSN::mom
+        ML_BSSN::cons_detg
+        ML_BSSN::cons_Gamma
+        ML_BSSN::cons_traceA
+"
