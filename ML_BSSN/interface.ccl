@@ -1,0 +1,135 @@
+# File produced by user eschnett
+# Produced with Mathematica Version 6.0 for Mac OS X x86 (32-bit) (April 20, 2007)
+
+# Mathematica script written by Ian Hinder and Sascha Husa
+
+implements: ML_BSSN
+
+inherits:   ADMBase Grid GenericFD Boundary
+
+
+
+USES INCLUDE: GenericFD.h
+USES INCLUDE: Symmetry.h
+USES INCLUDE: sbp_calc_coeffs.h
+USES INCLUDE: Boundary.h
+USES INCLUDE: loopcontrol.h
+
+CCTK_INT FUNCTION MoLRegisterEvolved(CCTK_INT IN EvolvedIndex, CCTK_INT IN RHSIndex)
+USES FUNCTION MoLRegisterEvolved
+
+CCTK_INT FUNCTION MoLRegisterConstrained(CCTK_INT IN ConstrainedIndex)
+USES FUNCTION MoLRegisterConstrained
+
+SUBROUTINE Diff_coeff(CCTK_POINTER_TO_CONST IN cctkGH, CCTK_INT IN dir, CCTK_INT IN nsize, CCTK_INT OUT ARRAY imin, CCTK_INT OUT ARRAY imax, CCTK_REAL OUT ARRAY q, CCTK_INT IN table_handle)
+USES FUNCTION Diff_coeff
+
+CCTK_INT FUNCTION Boundary_SelectGroupForBC(CCTK_POINTER_TO_CONST IN GH, CCTK_INT IN faces, CCTK_INT IN boundary_width, CCTK_INT IN table_handle, CCTK_STRING IN group_name, CCTK_STRING IN bc_name)
+USES FUNCTION Boundary_SelectGroupForBC
+
+CCTK_INT FUNCTION Boundary_SelectVarForBC(CCTK_POINTER_TO_CONST IN GH, CCTK_INT IN faces, CCTK_INT IN boundary_width, CCTK_INT IN table_handle, CCTK_STRING IN var_name, CCTK_STRING IN bc_name)
+USES FUNCTION Boundary_SelectVarForBC
+
+public:
+CCTK_REAL cons_detg type=GF timelevels=1 tags='tensortypealias="Scalar" tensorweight=1.0000000000000000000'
+{
+  cS
+} "cons_detg"
+
+public:
+CCTK_REAL cons_Gamma type=GF timelevels=1 tags='tensortypealias="U" tensorweight=1.0000000000000000000'
+{
+  cXt1,
+  cXt2,
+  cXt3
+} "cons_Gamma"
+
+public:
+CCTK_REAL cons_traceA type=GF timelevels=1 tags='tensortypealias="Scalar" tensorweight=1.0000000000000000000'
+{
+  cA
+} "cons_traceA"
+
+public:
+CCTK_REAL curv type=GF timelevels=1 tags='tensortypealias="DD_sym" tensorweight=1.0000000000000000000'
+{
+  At11,
+  At21,
+  At31,
+  At22,
+  At32,
+  At33
+} "curv"
+
+public:
+CCTK_REAL dtlapse type=GF timelevels=1 tags='tensortypealias="Scalar" tensorweight=1.0000000000000000000'
+{
+  dtalpha
+} "dtlapse"
+
+public:
+CCTK_REAL dtshift type=GF timelevels=1 tags='tensortypealias="U" tensorweight=1.0000000000000000000'
+{
+  dtbeta1,
+  dtbeta2,
+  dtbeta3
+} "dtshift"
+
+public:
+CCTK_REAL Gamma type=GF timelevels=1 tags='tensortypealias="U" tensorweight=1.0000000000000000000'
+{
+  Xt1,
+  Xt2,
+  Xt3
+} "Gamma"
+
+public:
+CCTK_REAL Ham type=GF timelevels=1 tags='tensortypealias="Scalar" tensorweight=1.0000000000000000000'
+{
+  H
+} "Ham"
+
+public:
+CCTK_REAL lapse type=GF timelevels=1 tags='tensortypealias="Scalar" tensorweight=1.0000000000000000000'
+{
+  alpha
+} "lapse"
+
+public:
+CCTK_REAL log_confac type=GF timelevels=1 tags='tensortypealias="Scalar" tensorweight=1.0000000000000000000'
+{
+  phi
+} "log_confac"
+
+public:
+CCTK_REAL metric type=GF timelevels=1 tags='tensortypealias="DD_sym" tensorweight=1.0000000000000000000'
+{
+  gt11,
+  gt21,
+  gt31,
+  gt22,
+  gt32,
+  gt33
+} "metric"
+
+public:
+CCTK_REAL mom type=GF timelevels=1 tags='tensortypealias="D" tensorweight=1.0000000000000000000'
+{
+  M1,
+  M2,
+  M3
+} "mom"
+
+public:
+CCTK_REAL shift type=GF timelevels=1 tags='tensortypealias="U" tensorweight=1.0000000000000000000'
+{
+  beta1,
+  beta2,
+  beta3
+} "shift"
+
+public:
+CCTK_REAL trace_curv type=GF timelevels=1 tags='tensortypealias="Scalar" tensorweight=1.0000000000000000000'
+{
+  trK
+} "trace_curv"
