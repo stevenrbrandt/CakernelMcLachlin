@@ -3,7 +3,7 @@ ActiveThorns = "
         ADMBase
         NaNChecker
         Carpet CarpetIOASCII CarpetIOBasic CarpetIOScalar CarpetLib CarpetReduce LoopControl
-        GSL
+        Formaline GSL
         GenericFD
         ML_BSSN
 "
@@ -21,17 +21,48 @@ CoordBase::boundary_size_z_upper = 2
 
 driver::ghost_size = 2
 
+
+
 ADMBase::initial_shift   = "zero"
 ADMBase::initial_dtlapse = "zero"
 ADMBase::initial_dtshift = "zero"
 
 ML_BSSN::my_initial_data = "Minkowski"
 
+
+
+IO::out_dir = $parfile
+
 IOBasic::outInfo_every = 1
 IOBasic::outInfo_vars = "
+        ML_BSSN::H
+        ML_BSSN::trKrhs
+"
+
+IOScalar::outScalar_every = 1
+IOScalar::outScalar_vars = "
         ML_BSSN::Ham
         ML_BSSN::mom
         ML_BSSN::cons_detg
         ML_BSSN::cons_Gamma
         ML_BSSN::cons_traceA
+        ML_BSSN::log_confacrhs
+        ML_BSSN::metricrhs
+        ML_BSSN::Gammarhs
+        ML_BSSN::trace_curvrhs
+        ML_BSSN::curvrhs
+"
+
+IOASCII::out1D_every = 1
+IOASCII::out1D_vars = "
+        ML_BSSN::Ham
+        ML_BSSN::mom
+        ML_BSSN::cons_detg
+        ML_BSSN::cons_Gamma
+        ML_BSSN::cons_traceA
+        ML_BSSN::log_confacrhs
+        ML_BSSN::metricrhs
+        ML_BSSN::Gammarhs
+        ML_BSSN::trace_curvrhs
+        ML_BSSN::curvrhs
 "

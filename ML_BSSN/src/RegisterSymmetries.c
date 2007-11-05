@@ -22,31 +22,6 @@ void ML_BSSN_RegisterSymmetries(CCTK_ARGUMENTS)
   sym[0] = 1;
   sym[1] = 1;
   sym[2] = 1;
-  SetCartSymVN(cctkGH, sym, "ML_BSSN::cS");
-  
-  sym[0] = -1;
-  sym[1] = 1;
-  sym[2] = 1;
-  SetCartSymVN(cctkGH, sym, "ML_BSSN::cXt1");
-  
-  sym[0] = 1;
-  sym[1] = -1;
-  sym[2] = 1;
-  SetCartSymVN(cctkGH, sym, "ML_BSSN::cXt2");
-  
-  sym[0] = 1;
-  sym[1] = 1;
-  sym[2] = -1;
-  SetCartSymVN(cctkGH, sym, "ML_BSSN::cXt3");
-  
-  sym[0] = 1;
-  sym[1] = 1;
-  sym[2] = 1;
-  SetCartSymVN(cctkGH, sym, "ML_BSSN::cA");
-  
-  sym[0] = 1;
-  sym[1] = 1;
-  sym[2] = 1;
   SetCartSymVN(cctkGH, sym, "ML_BSSN::At11");
   
   sym[0] = -1;
@@ -112,11 +87,6 @@ void ML_BSSN_RegisterSymmetries(CCTK_ARGUMENTS)
   sym[0] = 1;
   sym[1] = 1;
   sym[2] = 1;
-  SetCartSymVN(cctkGH, sym, "ML_BSSN::H");
-  
-  sym[0] = 1;
-  sym[1] = 1;
-  sym[2] = 1;
   SetCartSymVN(cctkGH, sym, "ML_BSSN::alpha");
   
   sym[0] = 1;
@@ -157,21 +127,6 @@ void ML_BSSN_RegisterSymmetries(CCTK_ARGUMENTS)
   sym[0] = -1;
   sym[1] = 1;
   sym[2] = 1;
-  SetCartSymVN(cctkGH, sym, "ML_BSSN::M1");
-  
-  sym[0] = 1;
-  sym[1] = -1;
-  sym[2] = 1;
-  SetCartSymVN(cctkGH, sym, "ML_BSSN::M2");
-  
-  sym[0] = 1;
-  sym[1] = 1;
-  sym[2] = -1;
-  SetCartSymVN(cctkGH, sym, "ML_BSSN::M3");
-  
-  sym[0] = -1;
-  sym[1] = 1;
-  sym[2] = 1;
   SetCartSymVN(cctkGH, sym, "ML_BSSN::beta1");
   
   sym[0] = 1;
@@ -188,5 +143,50 @@ void ML_BSSN_RegisterSymmetries(CCTK_ARGUMENTS)
   sym[1] = 1;
   sym[2] = 1;
   SetCartSymVN(cctkGH, sym, "ML_BSSN::trK");
+  
+  sym[0] = 1;
+  sym[1] = 1;
+  sym[2] = 1;
+  SetCartSymVN(cctkGH, sym, "ML_BSSN::cS");
+  
+  sym[0] = -1;
+  sym[1] = 1;
+  sym[2] = 1;
+  SetCartSymVN(cctkGH, sym, "ML_BSSN::cXt1");
+  
+  sym[0] = 1;
+  sym[1] = -1;
+  sym[2] = 1;
+  SetCartSymVN(cctkGH, sym, "ML_BSSN::cXt2");
+  
+  sym[0] = 1;
+  sym[1] = 1;
+  sym[2] = -1;
+  SetCartSymVN(cctkGH, sym, "ML_BSSN::cXt3");
+  
+  sym[0] = 1;
+  sym[1] = 1;
+  sym[2] = 1;
+  SetCartSymVN(cctkGH, sym, "ML_BSSN::cA");
+  
+  sym[0] = 1;
+  sym[1] = 1;
+  sym[2] = 1;
+  SetCartSymVN(cctkGH, sym, "ML_BSSN::H");
+  
+  sym[0] = -1;
+  sym[1] = 1;
+  sym[2] = 1;
+  SetCartSymVN(cctkGH, sym, "ML_BSSN::M1");
+  
+  sym[0] = 1;
+  sym[1] = -1;
+  sym[2] = 1;
+  SetCartSymVN(cctkGH, sym, "ML_BSSN::M2");
+  
+  sym[0] = 1;
+  sym[1] = 1;
+  sym[2] = -1;
+  SetCartSymVN(cctkGH, sym, "ML_BSSN::M3");
   
 }

@@ -3,4 +3,4 @@
 
 # Mathematica script written by Ian Hinder and Sascha Husa
 
-SRCS = Startup.c RegisterMoL.c RegisterSymmetries.c ML_BSSN_Minkowski.c ML_BSSN_convertFromADMBase.c ML_BSSN_convertFromADMBaseGamma.c ML_BSSN_enforce.c ML_BSSN_convertToADMBase.c ML_BSSN_constraints.c Boundaries.c 
+SRCS = Startup.c RegisterMoL.c RegisterSymmetries.c ML_BSSN_Minkowski.c ML_BSSN_convertFromADMBase.c ML_BSSN_convertFromADMBaseGamma.c ML_BSSN_RHS.c ML_BSSN_enforce.c ML_BSSN_convertToADMBase.c ML_BSSN_constraints.c Boundaries.c 

@@ -55,17 +55,7 @@ if (CCTK_EQUALS(my_initial_data, "Minkowski"))
 
 if (CCTK_EQUALS(my_initial_data, "ADMBase"))
 {
-  schedule ML_ADM_convertFromADMBase AT initial
-  {
-    LANG: C
-    
-  } "ML_ADM_convertFromADMBase"
-}
-
-
-if (CCTK_EQUALS(my_initial_data, "ADMBase"))
-{
-  schedule ML_ADM_convertFromADMBase AFTER ADMBase_PostInitial
+  schedule ML_ADM_convertFromADMBase AT initial AFTER ADMBase_PostInitial
   {
     LANG: C
     
@@ -78,13 +68,17 @@ schedule ML_ADM_RHS IN MoL_CalcRHS
   
 } "ML_ADM_RHS"
 
-schedule ML_ADM_convertToADMBase IN MoL_PostStep
+schedule ML_ADM_RHS AT analysis
 {
   LANG: C
   
-} "ML_ADM_convertToADMBase"
+  SYNC: curvrhs
+  SYNC: lapserhs
+  SYNC: metricrhs
+  SYNC: shiftrhs
+} "ML_ADM_RHS"
 
-schedule ML_ADM_convertToADMBase AFTER ADM_ApplyBoundConds
+schedule ML_ADM_convertToADMBase IN MoL_PostStep AFTER ADM_ApplyBoundConds
 {
   LANG: C
   

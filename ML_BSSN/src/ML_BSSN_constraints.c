@@ -371,22 +371,13 @@ void ML_BSSN_constraints_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCTK_REA
     /* Precompute derivatives (old style) */
     
     /* Calculate temporaries and grid functions */
-    detgt  =  2*gt21L*gt31L*gt32L + gt33L*(gt11L*gt22L - SQR(gt21L)) - gt22L*SQR(gt31L) - gt11L*SQR(gt32L);
+    detgt  =  1;
     
-    ddetgt1  =  (-2*gt22L*gt31L + 2*gt21L*gt32L)*PDstandard4th1gt31 + 
-        2*((gt31L*gt32L - gt21L*gt33L)*PDstandard4th1gt21 + (gt21L*gt31L - gt11L*gt32L)*PDstandard4th1gt32) + 
-        PDstandard4th1gt33*(gt11L*gt22L - SQR(gt21L)) + PDstandard4th1gt22*(gt11L*gt33L - SQR(gt31L)) + 
-        PDstandard4th1gt11*(gt22L*gt33L - SQR(gt32L));
+    ddetgt1  =  0;
     
-    ddetgt2  =  (-2*gt22L*gt31L + 2*gt21L*gt32L)*PDstandard4th2gt31 + 
-        2*((gt31L*gt32L - gt21L*gt33L)*PDstandard4th2gt21 + (gt21L*gt31L - gt11L*gt32L)*PDstandard4th2gt32) + 
-        PDstandard4th2gt33*(gt11L*gt22L - SQR(gt21L)) + PDstandard4th2gt22*(gt11L*gt33L - SQR(gt31L)) + 
-        PDstandard4th2gt11*(gt22L*gt33L - SQR(gt32L));
+    ddetgt2  =  0;
     
-    ddetgt3  =  (-2*gt22L*gt31L + 2*gt21L*gt32L)*PDstandard4th3gt31 + 
-        2*((gt31L*gt32L - gt21L*gt33L)*PDstandard4th3gt21 + (gt21L*gt31L - gt11L*gt32L)*PDstandard4th3gt32) + 
-        PDstandard4th3gt33*(gt11L*gt22L - SQR(gt21L)) + PDstandard4th3gt22*(gt11L*gt33L - SQR(gt31L)) + 
-        PDstandard4th3gt11*(gt22L*gt33L - SQR(gt32L));
+    ddetgt3  =  0;
     
     gtu11  =  INV(detgt)*(gt22L*gt33L - SQR(gt32L));
     

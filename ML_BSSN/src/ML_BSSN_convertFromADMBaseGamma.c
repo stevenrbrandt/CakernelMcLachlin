@@ -160,7 +160,7 @@ void ML_BSSN_convertFromADMBaseGamma_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT fa
     /* Precompute derivatives (old style) */
     
     /* Calculate temporaries and grid functions */
-    detgt  =  2*gt21L*gt31L*gt32L + gt33L*(gt11L*gt22L - SQR(gt21L)) - gt22L*SQR(gt31L) - gt11L*SQR(gt32L);
+    detgt  =  1;
     
     gtu11  =  INV(detgt)*(gt22L*gt33L - SQR(gt32L));
     

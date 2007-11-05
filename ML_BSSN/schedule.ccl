@@ -10,27 +10,45 @@ STORAGE: cons_Gamma[1]
 
 STORAGE: cons_traceA[1]
 
-STORAGE: curv[1]
-
-STORAGE: dtlapse[1]
-
-STORAGE: dtshift[1]
-
-STORAGE: Gamma[1]
-
 STORAGE: Ham[1]
-
-STORAGE: lapse[1]
-
-STORAGE: log_confac[1]
-
-STORAGE: metric[1]
 
 STORAGE: mom[1]
 
-STORAGE: shift[1]
+STORAGE: curvrhs[1]
 
-STORAGE: trace_curv[1]
+STORAGE: dtlapserhs[1]
+
+STORAGE: dtshiftrhs[1]
+
+STORAGE: Gammarhs[1]
+
+STORAGE: lapserhs[1]
+
+STORAGE: log_confacrhs[1]
+
+STORAGE: metricrhs[1]
+
+STORAGE: shiftrhs[1]
+
+STORAGE: trace_curvrhs[1]
+
+STORAGE: curv[3]
+
+STORAGE: dtlapse[3]
+
+STORAGE: dtshift[3]
+
+STORAGE: Gamma[3]
+
+STORAGE: lapse[3]
+
+STORAGE: log_confac[3]
+
+STORAGE: metric[3]
+
+STORAGE: shift[3]
+
+STORAGE: trace_curv[3]
 
 schedule ML_BSSN_Startup at STARTUP
 {
@@ -63,7 +81,7 @@ if (CCTK_EQUALS(my_initial_data, "Minkowski"))
 
 if (CCTK_EQUALS(my_initial_data, "ADMBase"))
 {
-  schedule ML_BSSN_convertFromADMBase AT initial
+  schedule ML_BSSN_convertFromADMBase AT initial AFTER ADMBase_PostInitial
   {
     LANG: C
     
@@ -73,17 +91,7 @@ if (CCTK_EQUALS(my_initial_data, "ADMBase"))
 
 if (CCTK_EQUALS(my_initial_data, "ADMBase"))
 {
-  schedule ML_BSSN_convertFromADMBase AFTER ADMBase_PostInitial
-  {
-    LANG: C
-    
-  } "ML_BSSN_convertFromADMBase"
-}
-
-
-if (CCTK_EQUALS(my_initial_data, "ADMBase"))
-{
-  schedule ML_BSSN_convertFromADMBaseGamma AT initial
+  schedule ML_BSSN_convertFromADMBaseGamma AT initial AFTER ML_BSSN_convertFromADMBase
   {
     LANG: C
     
@@ -91,30 +99,34 @@ if (CCTK_EQUALS(my_initial_data, "ADMBase"))
   } "ML_BSSN_convertFromADMBaseGamma"
 }
 
-
-if (CCTK_EQUALS(my_initial_data, "ADMBase"))
+schedule ML_BSSN_RHS IN MoL_CalcRHS
 {
-  schedule ML_BSSN_convertFromADMBaseGamma AFTER ML_BSSN_convertFromADMBase
-  {
-    LANG: C
-    
-    SYNC: Gamma
-  } "ML_BSSN_convertFromADMBaseGamma"
-}
+  LANG: C
+  
+} "ML_BSSN_RHS"
 
-schedule ML_BSSN_enforce IN MoL_PostStep
+schedule ML_BSSN_RHS AT analysis
+{
+  LANG: C
+  
+  SYNC: curvrhs
+  SYNC: dtlapserhs
+  SYNC: dtshiftrhs
+  SYNC: Gammarhs
+  SYNC: lapserhs
+  SYNC: log_confacrhs
+  SYNC: metricrhs
+  SYNC: shiftrhs
+  SYNC: trace_curvrhs
+} "ML_BSSN_RHS"
+
+schedule ML_BSSN_enforce IN MoL_PostStep AFTER BSSN_ApplyBoundConds
 {
   LANG: C
   
 } "ML_BSSN_enforce"
 
-schedule ML_BSSN_convertToADMBase IN MoL_PostStep
-{
-  LANG: C
-  
-} "ML_BSSN_convertToADMBase"
-
-schedule ML_BSSN_convertToADMBase AFTER ML_ADM_ApplyBoundConds
+schedule ML_BSSN_convertToADMBase IN MoL_PostStep AFTER ML_BSSN_ApplyBoundConds AFTER ML_BSSN_enforce
 {
   LANG: C
   
@@ -135,6 +147,15 @@ schedule ML_BSSN_ApplyBoundConds in MoL_PostStep
 {
   LANG: C
   OPTIONS: level
+  SYNC: curv
+  SYNC: dtlapse
+  SYNC: dtshift
+  SYNC: Gamma
+  SYNC: lapse
+  SYNC: log_confac
+  SYNC: metric
+  SYNC: shift
+  SYNC: trace_curv
 } "apply boundary conditions"
 
 schedule ML_BSSN_CheckBoundaries at BASEGRID

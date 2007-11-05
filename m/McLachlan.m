@@ -1,5 +1,3 @@
-(* < McLachlan.m /Applications/Mathematica.app/Contents/MacOS/MathKernel | tee McLachlan.out *)
-
 $Path = Join[$Path, {"~/Calpha/Kranc-devel/Tools/CodeGen",
                      "~/Calpha/Kranc-devel/Tools/MathematicaMisc"}];
 
@@ -45,9 +43,17 @@ KD = KroneckerDelta;
 (* Register the tensor quantities with the TensorTools package *)
 Map [DefineTensor,
      {g, K, alpha, beta, H, M, detg, gu, G, R, trR, Km, trK,
-      phi, gt, At, Xt, dtalpha, dtbeta, trA, cXt, cS, cA,
-      e4phi, em4phi, gtu, ddetg, ddetgt, Gt, Rt, Rphi, gK}];
-(* SetTensorAttribute[g, TensorWeight, 0]; *)
+      phi, gt, At, Xt, dtalpha, dtbeta, Atm, Atu, trA, cXt, cS, cA,
+      e4phi, em4phi, ddetg, detgt, gtu, ddetgt, dgtu, ddgtu, Gt, Rt, Rphi, gK}];
+
+(* NOTE: It seems as if Lie[.,.] did not take these tensor weights
+   into account.  Presumably, CD[.,.] and CDt[.,.] don't do this either.  *)
+SetTensorAttribute[phi, TensorWeight, +1/6];
+SetTensorAttribute[gt,  TensorWeight, -2/3];
+SetTensorAttribute[Xt,  TensorWeight, +2/3];
+SetTensorAttribute[At,  TensorWeight, -2/3];
+SetTensorAttribute[cXt, TensorWeight, +2/3];
+SetTensorAttribute[cS,  TensorWeight, +2  ];
 
 Map [AssertSymmetricDecreasing,
      {g[la,lb], K[la,lb], R[la,lb],
@@ -55,8 +61,10 @@ Map [AssertSymmetricDecreasing,
 AssertSymmetricDecreasing [G[ua,lb,lc], lb, lc];
 AssertSymmetricDecreasing [Gt[ua,lb,lc], lb, lc];
 AssertSymmetricDecreasing [gK[la,lb,lc], la, lb];
-Map [AssertSymmetricIncreasing, {gu[ua,ub]}];
-Map [AssertSymmetricIncreasing, {gtu[ua,ub]}];
+Map [AssertSymmetricIncreasing, {gu[ua,ub], gtu[ua,ub], Atu[ua,ub]}];
+AssertSymmetricIncreasing [dgtu[ua,ub,lc], ua, ub];
+AssertSymmetricIncreasing [ddgtu[ua,ub,lc,ld], ua, ub];
+AssertSymmetricDecreasing [ddgtu[ua,ub,lc,ld], lc, ld];
 
 DefineConnection [CD, PD, G];
 DefineConnection [CDt, PD, Gt];
@@ -182,7 +190,7 @@ initialCalcBSSN =
 convertFromADMBaseCalc =
 {
   Name -> "ML_ADM_convertFromADMBase",
-  Schedule -> {"AT initial", "AFTER ADMBase_PostInitial"},
+  Schedule -> {"AT initial AFTER ADMBase_PostInitial"},
   ConditionalOnKeyword -> {"my_initial_data", "ADMBase"},
   Equations -> 
   {
@@ -209,7 +217,7 @@ convertFromADMBaseCalc =
 convertFromADMBaseCalcBSSN =
 {
   Name -> "ML_BSSN_convertFromADMBase",
-  Schedule -> {"AT initial", "AFTER ADMBase_PostInitial"},
+  Schedule -> {"AT initial AFTER ADMBase_PostInitial"},
   ConditionalOnKeyword -> {"my_initial_data", "ADMBase"},
   Shorthands -> {g[la,lb], detg, gu[ua,ub], em4phi, K[la,lb], Km[ua,lb]},
   Equations -> 
@@ -256,13 +264,13 @@ convertFromADMBaseCalcBSSN =
 convertFromADMBaseCalcBSSNGamma =
 {
   Name -> "ML_BSSN_convertFromADMBaseGamma",
-  Schedule -> {"AT initial", "AFTER ML_BSSN_convertFromADMBase"},
+  Schedule -> {"AT initial AFTER ML_BSSN_convertFromADMBase"},
   ConditionalOnKeyword -> {"my_initial_data", "ADMBase"},
   Where -> Interior,
   Shorthands -> {detgt, gtu[ua,ub], Gt[ua,lb,lc]},
   Equations -> 
   {
-    detgt        -> detgtExpr,
+    detgt        -> 1 (* detgtExpr *),
     gtu[ua,ub]   -> 1/detgt detgtExpr MatrixInverse [gt[ua,ub]],
     Gt[ua,lb,lc] -> 1/2 gtu[ua,ud]
                     (PD[gt[lb,ld],lc] + PD[gt[lc,ld],lb] - PD[gt[lb,lc],ld]),
@@ -277,7 +285,7 @@ convertFromADMBaseCalcBSSNGamma =
 convertToADMBaseCalc =
 {
   Name -> "ML_ADM_convertToADMBase",
-  Schedule -> {"IN MoL_PostStep", "AFTER ADM_ApplyBoundConds"},
+  Schedule -> {"IN MoL_PostStep AFTER ADM_ApplyBoundConds"},
   Equations -> 
   {
     gxx     -> g11,
@@ -307,7 +315,7 @@ convertToADMBaseCalc =
 convertToADMBaseCalcBSSN =
 {
   Name -> "ML_BSSN_convertToADMBase",
-  Schedule -> {"IN MoL_PostStep", "AFTER ML_ADM_ApplyBoundConds"},
+  Schedule -> {"IN MoL_PostStep AFTER ML_BSSN_ApplyBoundConds AFTER ML_BSSN_enforce"},
   Shorthands -> {e4phi, g[la,lb], K[la,lb]},
   Equations -> 
   {
@@ -344,7 +352,8 @@ convertToADMBaseCalcBSSN =
 evolCalc =
 {
   Name -> "ML_ADM_RHS",
-  Schedule -> {"IN MoL_CalcRHS"},
+  Schedule -> {"IN MoL_CalcRHS", "AT analysis"},
+  Where -> Interior,
   Shorthands -> {detg, gu[ua,ub], G[ua,lb,lc], R[la,lb], Km[ua,lb], trK},
   Equations -> 
   {
@@ -368,14 +377,110 @@ evolCalc =
   }
 }
 
+evolCalcBSSN =
+{
+  Name -> "ML_BSSN_RHS",
+  Schedule -> {"IN MoL_CalcRHS", "AT analysis"},
+  Where -> Interior,
+  Shorthands -> {detgt, ddetgt[la], gtu[ua,ub],
+                 dgtu[ua,ub,lc], ddgtu[ua,ub,lc,ld], Gt[ua,lb,lc],
+                 Rt[la,lb], Rphi[la,lb], R[la,lb],
+                 Atm[ua,lb], Atu[ua,ub],
+                 e4phi, em4phi, g[la,lb], detg,
+                 ddetg[la], gu[ua,ub], G[ua,lb,lc]},
+  Equations -> 
+  {
+    detgt        -> 1 (* detgtExpr *),
+    ddetgt[la]   -> 0 (* ddetgtExpr[la] *),
+    gtu[ua,ub]   -> 1/detgt detgtExpr MatrixInverse [gt[ua,ub]],
+    dgtu[ua,ub,lc] -> - gtu[ua,ud] gtu[ub,ue] PD[gt[ld,le],lc],
+    ddgtu[ua,ub,lc,ld] -> - dgtu[ua,ue,ld] gtu[ub,uf] PD[gt[le,lf],lc]
+                          - gtu[ua,ue] dgtu[ub,uf,ld] PD[gt[le,lf],lc]
+                          - gtu[ua,ue] gtu[ub,uf] PD[gt[le,lf],lc,ld],
+    Gt[ua,lb,lc] -> 1/2 gtu[ua,ud]
+                    (PD[gt[lb,ld],lc] + PD[gt[lc,ld],lb] - PD[gt[lb,lc],ld]),
+    
+    (* PRD 62, 044034 (2000), eqn. (18) *)
+    Rt[li,lj] -> - (1/2) gtu[ul,um] PD[gt[li,lj],ll,lm]
+                 + gt[lk,li] PD[Xt[uk],lj] + gt[lk,lj] PD[Xt[uk],li]
+                 + Xt[uk] gt[li,ln] Gt[un,lj,lk] + Xt[uk] gt[lj,ln] Gt[un,li,lk]
+                 + gtu[ul,um] (+ 2 Gt[uk,ll,li] gt[lj,ln] Gt[un,lk,lm]
+                               + 2 Gt[uk,ll,lj] gt[li,ln] Gt[un,lk,lm]
+                               + Gt[uk,li,lm] gt[lk,ln] Gt[un,ll,lj]),
+    (* PRD 62, 044034 (2000), eqn. (15) *)
+    (* TODO: Check that CDt takes the tensor weight of phi into account *)
+    Rphi[li,lj] -> - 2 CDt[phi,lj,li]
+                   - 2 gt[li,lj] gtu[ul,un] CDt[phi,ll,ln]
+                   + 4 CDt[phi,li] CDt[phi,lj]
+                   - 4 gt[li,lj] gtu[ul,un] CDt[phi,ln] CDt[phi,ll],
+    
+    R[la,lb] -> Rt[la,lb] + Rphi[la,lb],
+    
+    Atm[ua,lb] -> gtu[ua,uc] At[lc,lb],
+    Atu[ua,ub] -> Atm[ua,lc] gtu[ub,uc],
+    
+    e4phi       -> Exp [4 phi],
+    em4phi      -> 1 / e4phi,
+    g[la,lb]    -> e4phi gt[la,lb],
+    detg        -> detgExpr,
+    (* gu[ua,ub] -> 1/detg detgExpr MatrixInverse [g[ua,ub]], *)
+    gu[ua,ub]   -> em4phi gtu[ua,ub],
+    (* ddetg[la] -> PD[e4phi detg,la], *)
+    ddetg[la]   -> e4phi ddetgt[la] + 4 detgt e4phi PD[phi,la],
+    G[ua,lb,lc] -> Gt[ua,lb,lc]
+                   + 1/(2 detg) (+ KD[ua,lb] ddetg[lc] + KD[ua,lc] ddetg[lb]
+                                 - (1/3) g[lb,lc] gu[ua,ud] ddetg[ld]),
+    
+    (* PRD 62, 044034 (2000), eqn. (10) *)
+    dot[phi]       -> - (1/6) alpha trK
+                      + Lie[phi, beta] + (1/6) phi PD[beta[ua],la],
+    (* PRD 62, 044034 (2000), eqn. (9) *)
+    dot[gt[la,lb]] -> - 2 alpha At[la,lb]
+                      + Lie[gt[la,lb], beta] - (2/3) gt[la,lb] PD[beta[uc],lc],
+    (* PRD 62, 044034 (2000), eqn. (20) *)
+    dot[Xt[ui]]    -> - 2 Atu[ui,uj] PD[alpha,lj]
+                      + 2 alpha (+ Gt[ui,lj,lk] Atu[uk,uj]
+                                 - (2/3) gtu[ui,uj] PD[trK,lj]
+                                 + 6 Atu[ui,uj] PD[phi,lj])
+                      - (+ (+ PD[beta[ul],lj] dgtu[ui,uj,ll]
+                            + beta[ul] ddgtu[ui,uj,ll,lj])
+                         - 2 (+ dgtu[um,uj,lj] PD[beta[ui],lm]
+                              + dgtu[um,ui,lj] PD[beta[uj],lm]
+                              + gtu[um,uj] PD[beta[ui],lm,lj]
+                              + gtu[um,ui] PD[beta[uj],lm,lj])
+                         + (2/3) (+ dgtu[ui,uj,lj] PD[beta[ul],ll]
+                                  + gtu[ui,uj] PD[beta[ul],ll,lj])),
+    
+    (* PRD 62, 044034 (2000), eqn. (11) *)
+    dot[trK]       -> - gu[ua,ub] CD[alpha,la,lb]
+                      + alpha (Atm[ua,lb] Atm[ub,la] + (1/3) trK^2)
+                      + Lie[trK, beta],
+    (* PRD 62, 044034 (2000), eqn. (12) *)
+    dot[At[la,lb]] -> + em4phi (+ (- CD[alpha,la,lb] + alpha R[la,lb])
+                                - (1/3) g[la,lb] gu[uc,ud]
+                                        (- CD[alpha,lc,ld] + alpha R[lc,ld]))
+                      + alpha (trK At[la,lb] - 2 At[la,lc] Atm[uc,lb])
+                      + Lie[At[la,lb], beta] - (2/3) At[la,lb] PD[beta[uc],lc],
+    
+    dot[alpha]      -> (* TODO *)
+                       + Lie[alpha, beta],
+    dot[dtalpha]    -> (* TODO *)
+                       + Lie[dtalpha, beta],
+    dot[beta[ua]]   -> (* TODO *)
+                       + Lie[beta[ua], beta],
+    dot[dtbeta[ua]] -> (* TODO *)
+                       + Lie[dtbeta[ua], beta]
+  }
+}
+
 enforceCalcBSSN =
 {
   Name -> "ML_BSSN_enforce",
-  Schedule -> {"IN MoL_PostStep"},
+  Schedule -> {"IN MoL_PostStep AFTER BSSN_ApplyBoundConds"},
   Shorthands -> {detgt, gtu[ua,ub], trA},
   Equations -> 
   {
-    detgt -> detgtExpr,
+    detgt -> 1 (* detgtExpr *),
     gtu[ua,ub] -> 1/detgt detgtExpr MatrixInverse [gt[ua,ub]],
     
     trA -> gtu[ua,ub] At[la,lb],
@@ -423,8 +528,8 @@ constraintsCalcBSSN =
                  K[la,lb], Km[la,lb], gK[la,lb,lc]},
   Equations -> 
   {
-    detgt -> detgtExpr,
-    ddetgt[la] -> ddetgtExpr[la],
+    detgt        -> 1 (* detgtExpr *),
+    ddetgt[la]   -> 0 (* ddetgtExpr[la] *),
     gtu[ua,ub]   -> 1/detgt detgtExpr MatrixInverse [gt[ua,ub]],
     Gt[ua,lb,lc] -> 1/2 gtu[ua,ud]
                     (PD[gt[lb,ld],lc] + PD[gt[lc,ld],lb] - PD[gt[lb,lc],ld]),
@@ -528,6 +633,7 @@ calculationsBSSN =
   initialCalcBSSN,
   convertFromADMBaseCalcBSSN,
   convertFromADMBaseCalcBSSNGamma,
+  evolCalcBSSN,
   enforceCalcBSSN,
   convertToADMBaseCalcBSSN,
   constraintsCalcBSSN

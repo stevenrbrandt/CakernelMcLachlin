@@ -6,9 +6,26 @@
 
 MATHEMATICA="/Applications/Mathematica.app/Contents/MacOS/MathKernel"
 
+# Remove old output
+rm -rf ML_ADM ML_BSSN
+
 # Run Mathematica to regenerate the code
 < McLachlan.m "$MATHEMATICA" | tee McLachlan.out
+
+if grep 'KrancError' McLachlan.out > /dev/null 2>&1; then
+    echo
+    echo "There was an error when running Kranc."
+    echo "The file McLachlan.out contains details."
+    echo
+    echo "*** The Cactus thorns have NOT been updated. ***"
+    echo
+    exit 1
+fi
 
 # Copy the source trees
 ./copy-if-changed.sh ML_ADM ../ML_ADM
 ./copy-if-changed.sh ML_BSSN ../ML_BSSN
+
+echo
+echo "The Cactus thorns have been successfully regenerated."
+echo

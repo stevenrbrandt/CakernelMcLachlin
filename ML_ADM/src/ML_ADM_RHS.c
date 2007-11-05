@@ -532,5 +532,5 @@ void ML_ADM_RHS(CCTK_ARGUMENTS)
   DECLARE_CCTK_ARGUMENTS
   DECLARE_CCTK_PARAMETERS
   
-  GenericFD_LoopOverEverything(cctkGH, &ML_ADM_RHS_Body);
+  GenericFD_LoopOverInterior(cctkGH, &ML_ADM_RHS_Body);
 }
