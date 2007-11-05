@@ -1,9 +1,11 @@
 ActiveThorns = "
         Boundary CartGrid3D CoordBase IOUtil InitBase MoL SymBase
-        ADMBase
+        ADMBase ADMCoupling CoordGauge StaticConformal
         NaNChecker
         Carpet CarpetIOASCII CarpetIOBasic CarpetIOScalar CarpetLib CarpetReduce LoopControl
-        Formaline GSL
+        ReflectionSymmetry
+        Exact Formaline GSL
+        Slab
         GenericFD
         ML_BSSN
 "
@@ -12,6 +14,29 @@ ActiveThorns = "
 
 Cactus::cctk_itlast = 0
 
+grid::type = "CoordBase"
+
+CoordBase::domainsize = "minmax"
+
+CoordBase::xmax = 4.0
+CoordBase::ymax = 4.0
+CoordBase::zmax = 4.0
+CoordBase::dx   = 0.1
+CoordBase::dy   = 0.1
+CoordBase::dz   = 0.1
+
+ReflectionSymmetry::reflection_x = yes
+ReflectionSymmetry::reflection_y = yes
+ReflectionSymmetry::reflection_z = yes
+
+CoordBase::boundary_shiftout_x_lower = 1
+CoordBase::boundary_shiftout_y_lower = 1
+CoordBase::boundary_shiftout_z_lower = 1
+
+Carpet::domain_from_coordbase = yes
+driver::ghost_size            = 2
+Carpet::use_buffer_zones      = yes
+
 CoordBase::boundary_size_x_lower = 2
 CoordBase::boundary_size_y_lower = 2
 CoordBase::boundary_size_z_lower = 2
@@ -19,15 +44,17 @@ CoordBase::boundary_size_x_upper = 2
 CoordBase::boundary_size_y_upper = 2
 CoordBase::boundary_size_z_upper = 2
 
-driver::ghost_size = 2
 
 
-
-ADMBase::initial_shift   = "zero"
+ADMBase::initial_data    = "exact"
+ADMBase::initial_lapse   = "exact"
+ADMBase::initial_shift   = "exact"
 ADMBase::initial_dtlapse = "zero"
 ADMBase::initial_dtshift = "zero"
 
-ML_BSSN::my_initial_data = "Minkowski"
+Exact::exact_model = "Kerr/Kerr-Schild"
+Exact::Kerr_KerrSchild__mass = 1.0
+Exact::Kerr_KerrSchild__spin = 0.0
 
 ML_BSSN::harmonicN       = 0      # 1+log
 ML_BSSN::harmonicF       = 2.0    # 1+log
@@ -44,8 +71,13 @@ IOBasic::outInfo_vars = "
         ML_BSSN::trKrhs
 "
 
-IOScalar::outScalar_every = 1
-IOScalar::outScalar_vars = "
+IOScalar::one_file_per_group = yes
+IOScalar::outScalar_every    = 1
+IOScalar::outScalar_vars     = "
+        ADMBase::metric
+        ADMBase::curv
+        ADMBase::lapse
+        ADMBase::shift
         ML_BSSN::Ham
         ML_BSSN::mom
         ML_BSSN::cons_detg
@@ -58,8 +90,13 @@ IOScalar::outScalar_vars = "
         ML_BSSN::curvrhs
 "
 
-IOASCII::out1D_every = 1
-IOASCII::out1D_vars = "
+IOASCII::one_file_per_group = yes
+IOASCII::out1D_every        = 1
+IOASCII::out1D_vars         = "
+        ADMBase::metric
+        ADMBase::curv
+        ADMBase::lapse
+        ADMBase::shift
         ML_BSSN::Ham
         ML_BSSN::mom
         ML_BSSN::cons_detg
