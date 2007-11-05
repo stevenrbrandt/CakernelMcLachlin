@@ -106,14 +106,14 @@ void ML_ADM_convertToADMBase_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCTK
     CCTK_REAL dtbetaxL = INITVALUE;
     CCTK_REAL dtbetayL = INITVALUE;
     CCTK_REAL dtbetazL = INITVALUE;
-    CCTK_REAL g11L = INITVALUE, g21L = INITVALUE, g22L = INITVALUE, g31L = INITVALUE, g32L = INITVALUE, g33L = INITVALUE;
+    CCTK_REAL g11L = INITVALUE, g12L = INITVALUE, g13L = INITVALUE, g22L = INITVALUE, g23L = INITVALUE, g33L = INITVALUE;
     CCTK_REAL gxxL = INITVALUE;
     CCTK_REAL gxyL = INITVALUE;
     CCTK_REAL gxzL = INITVALUE;
     CCTK_REAL gyyL = INITVALUE;
     CCTK_REAL gyzL = INITVALUE;
     CCTK_REAL gzzL = INITVALUE;
-    CCTK_REAL K11L = INITVALUE, K21L = INITVALUE, K22L = INITVALUE, K31L = INITVALUE, K32L = INITVALUE, K33L = INITVALUE;
+    CCTK_REAL K11L = INITVALUE, K12L = INITVALUE, K13L = INITVALUE, K22L = INITVALUE, K23L = INITVALUE, K33L = INITVALUE;
     CCTK_REAL kxxL = INITVALUE;
     CCTK_REAL kxyL = INITVALUE;
     CCTK_REAL kxzL = INITVALUE;
@@ -130,16 +130,16 @@ void ML_ADM_convertToADMBase_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCTK
     beta2L = beta2[index];
     beta3L = beta3[index];
     g11L = g11[index];
-    g21L = g21[index];
+    g12L = g12[index];
+    g13L = g13[index];
     g22L = g22[index];
-    g31L = g31[index];
-    g32L = g32[index];
+    g23L = g23[index];
     g33L = g33[index];
     K11L = K11[index];
-    K21L = K21[index];
+    K12L = K12[index];
+    K13L = K13[index];
     K22L = K22[index];
-    K31L = K31[index];
-    K32L = K32[index];
+    K23L = K23[index];
     K33L = K33[index];
     
     /* Assign local copies of subblock grid functions */
@@ -153,25 +153,25 @@ void ML_ADM_convertToADMBase_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCTK
     /* Calculate temporaries and grid functions */
     gxxL  =  g11L;
     
-    gxyL  =  g21L;
+    gxyL  =  g12L;
     
-    gxzL  =  g31L;
+    gxzL  =  g13L;
     
     gyyL  =  g22L;
     
-    gyzL  =  g32L;
+    gyzL  =  g23L;
     
     gzzL  =  g33L;
     
     kxxL  =  K11L;
     
-    kxyL  =  K21L;
+    kxyL  =  K12L;
     
-    kxzL  =  K31L;
+    kxzL  =  K13L;
     
     kyyL  =  K22L;
     
-    kyzL  =  K32L;
+    kyzL  =  K23L;
     
     kzzL  =  K33L;
     

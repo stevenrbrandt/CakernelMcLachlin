@@ -1,12 +1,40 @@
 ActiveThorns = "
-        Boundary CartGrid3D CoordBase IOUtil InitBase MoL SymBase
-        ADMBase ADMCoupling CoordGauge StaticConformal
+        Boundary
+        CartGrid3D
+        CoordBase
+        IOUtil
+        InitBase
+        MoL
+        SymBase
+
+        ADMBase
+        ADMConstraints
+        ADMCoupling
+        ADMMacros
+        CoordGauge
+        SpaceMask
+        StaticConformal
+
         NaNChecker
-        Carpet CarpetIOASCII CarpetIOBasic CarpetIOScalar CarpetLib CarpetReduce LoopControl
+
+        Carpet
+        CarpetIOASCII
+        CarpetIOBasic
+        CarpetIOScalar
+        CarpetLib
+        CarpetReduce
+        LoopControl
+
         ReflectionSymmetry
-        Exact Formaline GSL
+
+        Exact
+        Formaline
+        GSL
+
         Slab
+
         GenericFD
+
         ML_BSSN
 "
 
@@ -25,9 +53,12 @@ CoordBase::dx   = 0.1
 CoordBase::dy   = 0.1
 CoordBase::dz   = 0.1
 
-ReflectionSymmetry::reflection_x = yes
-ReflectionSymmetry::reflection_y = yes
-ReflectionSymmetry::reflection_z = yes
+ReflectionSymmetry::reflection_x   = yes
+ReflectionSymmetry::reflection_y   = yes
+ReflectionSymmetry::reflection_z   = yes
+ReflectionSymmetry::avoid_origin_x = no
+ReflectionSymmetry::avoid_origin_y = no
+ReflectionSymmetry::avoid_origin_z = no
 
 CoordBase::boundary_shiftout_x_lower = 1
 CoordBase::boundary_shiftout_y_lower = 1
@@ -61,6 +92,8 @@ ML_BSSN::harmonicF       = 2.0    # 1+log
 ML_BSSN::ShiftGammaCoeff = 0.75
 ML_BSSN::BetaDriver      = 0.5
 
+ADMMacros::spatial_order = 4
+
 
 
 IO::out_dir = $parfile
@@ -78,6 +111,15 @@ IOScalar::outScalar_vars     = "
         ADMBase::curv
         ADMBase::lapse
         ADMBase::shift
+        ADMAnalysis::trace_of_K
+        ADMAnalysis::ricci_scalar
+        ADMConstraints::Hamiltonian
+        ADMConstraints::momentum
+        ML_BSSN::log_confac
+        ML_BSSN::metric
+        ML_BSSN::trace_curv
+        ML_BSSN::curv
+        ML_BSSN::Gamma
         ML_BSSN::Ham
         ML_BSSN::mom
         ML_BSSN::cons_detg
@@ -97,6 +139,15 @@ IOASCII::out1D_vars         = "
         ADMBase::curv
         ADMBase::lapse
         ADMBase::shift
+        ADMAnalysis::trace_of_K
+        ADMAnalysis::ricci_scalar
+        ADMConstraints::Hamiltonian
+        ADMConstraints::momentum
+        ML_BSSN::log_confac
+        ML_BSSN::metric
+        ML_BSSN::trace_curv
+        ML_BSSN::curv
+        ML_BSSN::Gamma
         ML_BSSN::Ham
         ML_BSSN::mom
         ML_BSSN::cons_detg

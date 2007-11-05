@@ -98,8 +98,8 @@ void ML_ADM_Minkowski_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCTK_REAL n
     /* Declare local copies of grid functions */
     CCTK_REAL alphaL = INITVALUE;
     CCTK_REAL beta1L = INITVALUE, beta2L = INITVALUE, beta3L = INITVALUE;
-    CCTK_REAL g11L = INITVALUE, g21L = INITVALUE, g22L = INITVALUE, g31L = INITVALUE, g32L = INITVALUE, g33L = INITVALUE;
-    CCTK_REAL K11L = INITVALUE, K21L = INITVALUE, K22L = INITVALUE, K31L = INITVALUE, K32L = INITVALUE, K33L = INITVALUE;
+    CCTK_REAL g11L = INITVALUE, g12L = INITVALUE, g13L = INITVALUE, g22L = INITVALUE, g23L = INITVALUE, g33L = INITVALUE;
+    CCTK_REAL K11L = INITVALUE, K12L = INITVALUE, K13L = INITVALUE, K22L = INITVALUE, K23L = INITVALUE, K33L = INITVALUE;
     /* Declare precomputed derivatives*/
     
     /* Declare derivatives */
@@ -117,25 +117,25 @@ void ML_ADM_Minkowski_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCTK_REAL n
     /* Calculate temporaries and grid functions */
     g11L  =  1;
     
-    g21L  =  0;
+    g12L  =  0;
     
-    g31L  =  0;
+    g13L  =  0;
     
     g22L  =  1;
     
-    g32L  =  0;
+    g23L  =  0;
     
     g33L  =  1;
     
     K11L  =  0;
     
-    K21L  =  0;
+    K12L  =  0;
     
-    K31L  =  0;
+    K13L  =  0;
     
     K22L  =  0;
     
-    K32L  =  0;
+    K23L  =  0;
     
     K33L  =  0;
     
@@ -154,16 +154,16 @@ void ML_ADM_Minkowski_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCTK_REAL n
     beta2[index] = beta2L;
     beta3[index] = beta3L;
     g11[index] = g11L;
-    g21[index] = g21L;
+    g12[index] = g12L;
+    g13[index] = g13L;
     g22[index] = g22L;
-    g31[index] = g31L;
-    g32[index] = g32L;
+    g23[index] = g23L;
     g33[index] = g33L;
     K11[index] = K11L;
-    K21[index] = K21L;
+    K12[index] = K12L;
+    K13[index] = K13L;
     K22[index] = K22L;
-    K31[index] = K31L;
-    K32[index] = K32L;
+    K23[index] = K23L;
     K33[index] = K33L;
     
     /* Copy local copies back to subblock grid functions */

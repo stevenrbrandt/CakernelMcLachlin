@@ -97,11 +97,11 @@ void ML_BSSN_Minkowski_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCTK_REAL 
     
     /* Declare local copies of grid functions */
     CCTK_REAL alphaL = INITVALUE;
-    CCTK_REAL At11L = INITVALUE, At21L = INITVALUE, At22L = INITVALUE, At31L = INITVALUE, At32L = INITVALUE, At33L = INITVALUE;
+    CCTK_REAL At11L = INITVALUE, At12L = INITVALUE, At13L = INITVALUE, At22L = INITVALUE, At23L = INITVALUE, At33L = INITVALUE;
     CCTK_REAL beta1L = INITVALUE, beta2L = INITVALUE, beta3L = INITVALUE;
     CCTK_REAL dtalphaL = INITVALUE;
     CCTK_REAL dtbeta1L = INITVALUE, dtbeta2L = INITVALUE, dtbeta3L = INITVALUE;
-    CCTK_REAL gt11L = INITVALUE, gt21L = INITVALUE, gt22L = INITVALUE, gt31L = INITVALUE, gt32L = INITVALUE, gt33L = INITVALUE;
+    CCTK_REAL gt11L = INITVALUE, gt12L = INITVALUE, gt13L = INITVALUE, gt22L = INITVALUE, gt23L = INITVALUE, gt33L = INITVALUE;
     CCTK_REAL phiL = INITVALUE;
     CCTK_REAL trKL = INITVALUE;
     CCTK_REAL Xt1L = INITVALUE, Xt2L = INITVALUE, Xt3L = INITVALUE;
@@ -124,13 +124,13 @@ void ML_BSSN_Minkowski_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCTK_REAL 
     
     gt11L  =  1;
     
-    gt21L  =  0;
+    gt12L  =  0;
     
-    gt31L  =  0;
+    gt13L  =  0;
     
     gt22L  =  1;
     
-    gt32L  =  0;
+    gt23L  =  0;
     
     gt33L  =  1;
     
@@ -138,13 +138,13 @@ void ML_BSSN_Minkowski_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCTK_REAL 
     
     At11L  =  0;
     
-    At21L  =  0;
+    At12L  =  0;
     
-    At31L  =  0;
+    At13L  =  0;
     
     At22L  =  0;
     
-    At32L  =  0;
+    At23L  =  0;
     
     At33L  =  0;
     
@@ -174,10 +174,10 @@ void ML_BSSN_Minkowski_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCTK_REAL 
     /* Copy local copies back to grid functions */
     alpha[index] = alphaL;
     At11[index] = At11L;
-    At21[index] = At21L;
+    At12[index] = At12L;
+    At13[index] = At13L;
     At22[index] = At22L;
-    At31[index] = At31L;
-    At32[index] = At32L;
+    At23[index] = At23L;
     At33[index] = At33L;
     beta1[index] = beta1L;
     beta2[index] = beta2L;
@@ -187,10 +187,10 @@ void ML_BSSN_Minkowski_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCTK_REAL 
     dtbeta2[index] = dtbeta2L;
     dtbeta3[index] = dtbeta3L;
     gt11[index] = gt11L;
-    gt21[index] = gt21L;
+    gt12[index] = gt12L;
+    gt13[index] = gt13L;
     gt22[index] = gt22L;
-    gt31[index] = gt31L;
-    gt32[index] = gt32L;
+    gt23[index] = gt23L;
     gt33[index] = gt33L;
     phi[index] = phiL;
     trK[index] = trKL;

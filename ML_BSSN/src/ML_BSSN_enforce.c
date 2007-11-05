@@ -95,28 +95,28 @@ void ML_BSSN_enforce_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCTK_REAL no
     
     /* Declare shorthands */
     CCTK_REAL detgt = INITVALUE;
-    CCTK_REAL gtu11 = INITVALUE, gtu12 = INITVALUE, gtu13 = INITVALUE, gtu22 = INITVALUE, gtu23 = INITVALUE, gtu33 = INITVALUE;
+    CCTK_REAL gtu11 = INITVALUE, gtu21 = INITVALUE, gtu22 = INITVALUE, gtu31 = INITVALUE, gtu32 = INITVALUE, gtu33 = INITVALUE;
     CCTK_REAL trA = INITVALUE;
     
     /* Declare local copies of grid functions */
-    CCTK_REAL At11L = INITVALUE, At21L = INITVALUE, At22L = INITVALUE, At31L = INITVALUE, At32L = INITVALUE, At33L = INITVALUE;
-    CCTK_REAL gt11L = INITVALUE, gt21L = INITVALUE, gt22L = INITVALUE, gt31L = INITVALUE, gt32L = INITVALUE, gt33L = INITVALUE;
+    CCTK_REAL At11L = INITVALUE, At12L = INITVALUE, At13L = INITVALUE, At22L = INITVALUE, At23L = INITVALUE, At33L = INITVALUE;
+    CCTK_REAL gt11L = INITVALUE, gt12L = INITVALUE, gt13L = INITVALUE, gt22L = INITVALUE, gt23L = INITVALUE, gt33L = INITVALUE;
     /* Declare precomputed derivatives*/
     
     /* Declare derivatives */
     
     /* Assign local copies of grid functions */
     At11L = At11[index];
-    At21L = At21[index];
+    At12L = At12[index];
+    At13L = At13[index];
     At22L = At22[index];
-    At31L = At31[index];
-    At32L = At32[index];
+    At23L = At23[index];
     At33L = At33[index];
     gt11L = gt11[index];
-    gt21L = gt21[index];
+    gt12L = gt12[index];
+    gt13L = gt13[index];
     gt22L = gt22[index];
-    gt31L = gt31[index];
-    gt32L = gt32[index];
+    gt23L = gt23[index];
     gt33L = gt33[index];
     
     /* Assign local copies of subblock grid functions */
@@ -130,39 +130,39 @@ void ML_BSSN_enforce_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCTK_REAL no
     /* Calculate temporaries and grid functions */
     detgt  =  1;
     
-    gtu11  =  INV(detgt)*(gt22L*gt33L - SQR(gt32L));
+    gtu11  =  INV(detgt)*(gt22L*gt33L - SQR(gt23L));
     
-    gtu12  =  (gt31L*gt32L - gt21L*gt33L)*INV(detgt);
+    gtu21  =  (gt13L*gt23L - gt12L*gt33L)*INV(detgt);
     
-    gtu13  =  (-(gt22L*gt31L) + gt21L*gt32L)*INV(detgt);
+    gtu31  =  (-(gt13L*gt22L) + gt12L*gt23L)*INV(detgt);
     
-    gtu22  =  INV(detgt)*(gt11L*gt33L - SQR(gt31L));
+    gtu22  =  INV(detgt)*(gt11L*gt33L - SQR(gt13L));
     
-    gtu23  =  (gt21L*gt31L - gt11L*gt32L)*INV(detgt);
+    gtu32  =  (gt12L*gt13L - gt11L*gt23L)*INV(detgt);
     
-    gtu33  =  INV(detgt)*(gt11L*gt22L - SQR(gt21L));
+    gtu33  =  INV(detgt)*(gt11L*gt22L - SQR(gt12L));
     
-    trA  =  At11L*gtu11 + At22L*gtu22 + 2*(At21L*gtu12 + At31L*gtu13 + At32L*gtu23) + At33L*gtu33;
+    trA  =  At11L*gtu11 + At22L*gtu22 + 2*(At12L*gtu21 + At13L*gtu31 + At23L*gtu32) + At33L*gtu33;
     
     At11L  =  At11L - gt11L*kthird*trA;
     
-    At21L  =  At21L - gt21L*kthird*trA;
+    At12L  =  At12L - gt12L*kthird*trA;
     
-    At31L  =  At31L - gt31L*kthird*trA;
+    At13L  =  At13L - gt13L*kthird*trA;
     
     At22L  =  At22L - gt22L*kthird*trA;
     
-    At32L  =  At32L - gt32L*kthird*trA;
+    At23L  =  At23L - gt23L*kthird*trA;
     
     At33L  =  At33L - gt33L*kthird*trA;
     
     
     /* Copy local copies back to grid functions */
     At11[index] = At11L;
-    At21[index] = At21L;
+    At12[index] = At12L;
+    At13[index] = At13L;
     At22[index] = At22L;
-    At31[index] = At31L;
-    At32[index] = At32L;
+    At23[index] = At23L;
     At33[index] = At33L;
     
     /* Copy local copies back to subblock grid functions */

@@ -95,13 +95,13 @@ void ML_BSSN_convertToADMBase_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCT
     
     /* Declare shorthands */
     CCTK_REAL e4phi = INITVALUE;
-    CCTK_REAL g11 = INITVALUE, g21 = INITVALUE, g22 = INITVALUE, g31 = INITVALUE, g32 = INITVALUE, g33 = INITVALUE;
-    CCTK_REAL K11 = INITVALUE, K21 = INITVALUE, K22 = INITVALUE, K31 = INITVALUE, K32 = INITVALUE, K33 = INITVALUE;
+    CCTK_REAL g11 = INITVALUE, g12 = INITVALUE, g13 = INITVALUE, g22 = INITVALUE, g23 = INITVALUE, g33 = INITVALUE;
+    CCTK_REAL K11 = INITVALUE, K12 = INITVALUE, K13 = INITVALUE, K22 = INITVALUE, K23 = INITVALUE, K33 = INITVALUE;
     
     /* Declare local copies of grid functions */
     CCTK_REAL alpL = INITVALUE;
     CCTK_REAL alphaL = INITVALUE;
-    CCTK_REAL At11L = INITVALUE, At21L = INITVALUE, At22L = INITVALUE, At31L = INITVALUE, At32L = INITVALUE, At33L = INITVALUE;
+    CCTK_REAL At11L = INITVALUE, At12L = INITVALUE, At13L = INITVALUE, At22L = INITVALUE, At23L = INITVALUE, At33L = INITVALUE;
     CCTK_REAL beta1L = INITVALUE, beta2L = INITVALUE, beta3L = INITVALUE;
     CCTK_REAL betaxL = INITVALUE;
     CCTK_REAL betayL = INITVALUE;
@@ -112,7 +112,7 @@ void ML_BSSN_convertToADMBase_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCT
     CCTK_REAL dtbetaxL = INITVALUE;
     CCTK_REAL dtbetayL = INITVALUE;
     CCTK_REAL dtbetazL = INITVALUE;
-    CCTK_REAL gt11L = INITVALUE, gt21L = INITVALUE, gt22L = INITVALUE, gt31L = INITVALUE, gt32L = INITVALUE, gt33L = INITVALUE;
+    CCTK_REAL gt11L = INITVALUE, gt12L = INITVALUE, gt13L = INITVALUE, gt22L = INITVALUE, gt23L = INITVALUE, gt33L = INITVALUE;
     CCTK_REAL gxxL = INITVALUE;
     CCTK_REAL gxyL = INITVALUE;
     CCTK_REAL gxzL = INITVALUE;
@@ -134,10 +134,10 @@ void ML_BSSN_convertToADMBase_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCT
     /* Assign local copies of grid functions */
     alphaL = alpha[index];
     At11L = At11[index];
-    At21L = At21[index];
+    At12L = At12[index];
+    At13L = At13[index];
     At22L = At22[index];
-    At31L = At31[index];
-    At32L = At32[index];
+    At23L = At23[index];
     At33L = At33[index];
     beta1L = beta1[index];
     beta2L = beta2[index];
@@ -147,10 +147,10 @@ void ML_BSSN_convertToADMBase_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCT
     dtbeta2L = dtbeta2[index];
     dtbeta3L = dtbeta3[index];
     gt11L = gt11[index];
-    gt21L = gt21[index];
+    gt12L = gt12[index];
+    gt13L = gt13[index];
     gt22L = gt22[index];
-    gt31L = gt31[index];
-    gt32L = gt32[index];
+    gt23L = gt23[index];
     gt33L = gt33[index];
     phiL = phi[index];
     trKL = trK[index];
@@ -168,49 +168,49 @@ void ML_BSSN_convertToADMBase_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCT
     
     g11  =  e4phi*gt11L;
     
-    g21  =  e4phi*gt21L;
+    g12  =  e4phi*gt12L;
     
-    g31  =  e4phi*gt31L;
+    g13  =  e4phi*gt13L;
     
     g22  =  e4phi*gt22L;
     
-    g32  =  e4phi*gt32L;
+    g23  =  e4phi*gt23L;
     
     g33  =  e4phi*gt33L;
     
     gxxL  =  g11;
     
-    gxyL  =  g21;
+    gxyL  =  g12;
     
-    gxzL  =  g31;
+    gxzL  =  g13;
     
     gyyL  =  g22;
     
-    gyzL  =  g32;
+    gyzL  =  g23;
     
     gzzL  =  g33;
     
     K11  =  At11L*e4phi + g11*kthird*trKL;
     
-    K21  =  At21L*e4phi + g21*kthird*trKL;
+    K12  =  At12L*e4phi + g12*kthird*trKL;
     
-    K31  =  At31L*e4phi + g31*kthird*trKL;
+    K13  =  At13L*e4phi + g13*kthird*trKL;
     
     K22  =  At22L*e4phi + g22*kthird*trKL;
     
-    K32  =  At32L*e4phi + g32*kthird*trKL;
+    K23  =  At23L*e4phi + g23*kthird*trKL;
     
     K33  =  At33L*e4phi + g33*kthird*trKL;
     
     kxxL  =  K11;
     
-    kxyL  =  K21;
+    kxyL  =  K12;
     
-    kxzL  =  K31;
+    kxzL  =  K13;
     
     kyyL  =  K22;
     
-    kyzL  =  K32;
+    kyzL  =  K23;
     
     kzzL  =  K33;
     

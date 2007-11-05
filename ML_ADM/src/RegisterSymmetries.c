@@ -27,12 +27,12 @@ void ML_ADM_RegisterSymmetries(CCTK_ARGUMENTS)
   sym[0] = -1;
   sym[1] = -1;
   sym[2] = 1;
-  SetCartSymVN(cctkGH, sym, "ML_ADM::K21");
+  SetCartSymVN(cctkGH, sym, "ML_ADM::K12");
   
   sym[0] = -1;
   sym[1] = 1;
   sym[2] = -1;
-  SetCartSymVN(cctkGH, sym, "ML_ADM::K31");
+  SetCartSymVN(cctkGH, sym, "ML_ADM::K13");
   
   sym[0] = 1;
   sym[1] = 1;
@@ -42,7 +42,7 @@ void ML_ADM_RegisterSymmetries(CCTK_ARGUMENTS)
   sym[0] = 1;
   sym[1] = -1;
   sym[2] = -1;
-  SetCartSymVN(cctkGH, sym, "ML_ADM::K32");
+  SetCartSymVN(cctkGH, sym, "ML_ADM::K23");
   
   sym[0] = 1;
   sym[1] = 1;
@@ -62,12 +62,12 @@ void ML_ADM_RegisterSymmetries(CCTK_ARGUMENTS)
   sym[0] = -1;
   sym[1] = -1;
   sym[2] = 1;
-  SetCartSymVN(cctkGH, sym, "ML_ADM::g21");
+  SetCartSymVN(cctkGH, sym, "ML_ADM::g12");
   
   sym[0] = -1;
   sym[1] = 1;
   sym[2] = -1;
-  SetCartSymVN(cctkGH, sym, "ML_ADM::g31");
+  SetCartSymVN(cctkGH, sym, "ML_ADM::g13");
   
   sym[0] = 1;
   sym[1] = 1;
@@ -77,7 +77,7 @@ void ML_ADM_RegisterSymmetries(CCTK_ARGUMENTS)
   sym[0] = 1;
   sym[1] = -1;
   sym[2] = -1;
-  SetCartSymVN(cctkGH, sym, "ML_ADM::g32");
+  SetCartSymVN(cctkGH, sym, "ML_ADM::g23");
   
   sym[0] = 1;
   sym[1] = 1;

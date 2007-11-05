@@ -181,7 +181,7 @@ KEYWORD At11_bound "Boundary condition to implement"
 } "skip"
 
 private:
-KEYWORD At21_bound "Boundary condition to implement"
+KEYWORD At12_bound "Boundary condition to implement"
 {
   "flat" :: "Flat boundary condition"
   "none" :: "No boundary condition"
@@ -193,7 +193,7 @@ KEYWORD At21_bound "Boundary condition to implement"
 } "skip"
 
 private:
-KEYWORD At31_bound "Boundary condition to implement"
+KEYWORD At13_bound "Boundary condition to implement"
 {
   "flat" :: "Flat boundary condition"
   "none" :: "No boundary condition"
@@ -217,7 +217,7 @@ KEYWORD At22_bound "Boundary condition to implement"
 } "skip"
 
 private:
-KEYWORD At32_bound "Boundary condition to implement"
+KEYWORD At23_bound "Boundary condition to implement"
 {
   "flat" :: "Flat boundary condition"
   "none" :: "No boundary condition"
@@ -361,7 +361,7 @@ KEYWORD gt11_bound "Boundary condition to implement"
 } "skip"
 
 private:
-KEYWORD gt21_bound "Boundary condition to implement"
+KEYWORD gt12_bound "Boundary condition to implement"
 {
   "flat" :: "Flat boundary condition"
   "none" :: "No boundary condition"
@@ -373,7 +373,7 @@ KEYWORD gt21_bound "Boundary condition to implement"
 } "skip"
 
 private:
-KEYWORD gt31_bound "Boundary condition to implement"
+KEYWORD gt13_bound "Boundary condition to implement"
 {
   "flat" :: "Flat boundary condition"
   "none" :: "No boundary condition"
@@ -397,7 +397,7 @@ KEYWORD gt22_bound "Boundary condition to implement"
 } "skip"
 
 private:
-KEYWORD gt32_bound "Boundary condition to implement"
+KEYWORD gt23_bound "Boundary condition to implement"
 {
   "flat" :: "Flat boundary condition"
   "none" :: "No boundary condition"
@@ -583,13 +583,13 @@ CCTK_REAL At11_bound_speed "characteristic speed at boundary"
 } 1.
 
 private:
-CCTK_REAL At21_bound_speed "characteristic speed at boundary"
+CCTK_REAL At12_bound_speed "characteristic speed at boundary"
 {
   "0:*" :: "outgoing characteristic speed > 0"
 } 1.
 
 private:
-CCTK_REAL At31_bound_speed "characteristic speed at boundary"
+CCTK_REAL At13_bound_speed "characteristic speed at boundary"
 {
   "0:*" :: "outgoing characteristic speed > 0"
 } 1.
@@ -601,7 +601,7 @@ CCTK_REAL At22_bound_speed "characteristic speed at boundary"
 } 1.
 
 private:
-CCTK_REAL At32_bound_speed "characteristic speed at boundary"
+CCTK_REAL At23_bound_speed "characteristic speed at boundary"
 {
   "0:*" :: "outgoing characteristic speed > 0"
 } 1.
@@ -673,13 +673,13 @@ CCTK_REAL gt11_bound_speed "characteristic speed at boundary"
 } 1.
 
 private:
-CCTK_REAL gt21_bound_speed "characteristic speed at boundary"
+CCTK_REAL gt12_bound_speed "characteristic speed at boundary"
 {
   "0:*" :: "outgoing characteristic speed > 0"
 } 1.
 
 private:
-CCTK_REAL gt31_bound_speed "characteristic speed at boundary"
+CCTK_REAL gt13_bound_speed "characteristic speed at boundary"
 {
   "0:*" :: "outgoing characteristic speed > 0"
 } 1.
@@ -691,7 +691,7 @@ CCTK_REAL gt22_bound_speed "characteristic speed at boundary"
 } 1.
 
 private:
-CCTK_REAL gt32_bound_speed "characteristic speed at boundary"
+CCTK_REAL gt23_bound_speed "characteristic speed at boundary"
 {
   "0:*" :: "outgoing characteristic speed > 0"
 } 1.
@@ -787,13 +787,13 @@ CCTK_REAL At11_bound_limit "limit value for r -> infinity"
 } 0.
 
 private:
-CCTK_REAL At21_bound_limit "limit value for r -> infinity"
+CCTK_REAL At12_bound_limit "limit value for r -> infinity"
 {
   "*:*" :: "value of limit value is unrestricted"
 } 0.
 
 private:
-CCTK_REAL At31_bound_limit "limit value for r -> infinity"
+CCTK_REAL At13_bound_limit "limit value for r -> infinity"
 {
   "*:*" :: "value of limit value is unrestricted"
 } 0.
@@ -805,7 +805,7 @@ CCTK_REAL At22_bound_limit "limit value for r -> infinity"
 } 0.
 
 private:
-CCTK_REAL At32_bound_limit "limit value for r -> infinity"
+CCTK_REAL At23_bound_limit "limit value for r -> infinity"
 {
   "*:*" :: "value of limit value is unrestricted"
 } 0.
@@ -877,13 +877,13 @@ CCTK_REAL gt11_bound_limit "limit value for r -> infinity"
 } 0.
 
 private:
-CCTK_REAL gt21_bound_limit "limit value for r -> infinity"
+CCTK_REAL gt12_bound_limit "limit value for r -> infinity"
 {
   "*:*" :: "value of limit value is unrestricted"
 } 0.
 
 private:
-CCTK_REAL gt31_bound_limit "limit value for r -> infinity"
+CCTK_REAL gt13_bound_limit "limit value for r -> infinity"
 {
   "*:*" :: "value of limit value is unrestricted"
 } 0.
@@ -895,7 +895,7 @@ CCTK_REAL gt22_bound_limit "limit value for r -> infinity"
 } 0.
 
 private:
-CCTK_REAL gt32_bound_limit "limit value for r -> infinity"
+CCTK_REAL gt23_bound_limit "limit value for r -> infinity"
 {
   "*:*" :: "value of limit value is unrestricted"
 } 0.
@@ -991,13 +991,13 @@ CCTK_REAL At11_bound_scalar "Dirichlet boundary value"
 } 0.
 
 private:
-CCTK_REAL At21_bound_scalar "Dirichlet boundary value"
+CCTK_REAL At12_bound_scalar "Dirichlet boundary value"
 {
   "*:*" :: "unrestricted"
 } 0.
 
 private:
-CCTK_REAL At31_bound_scalar "Dirichlet boundary value"
+CCTK_REAL At13_bound_scalar "Dirichlet boundary value"
 {
   "*:*" :: "unrestricted"
 } 0.
@@ -1009,7 +1009,7 @@ CCTK_REAL At22_bound_scalar "Dirichlet boundary value"
 } 0.
 
 private:
-CCTK_REAL At32_bound_scalar "Dirichlet boundary value"
+CCTK_REAL At23_bound_scalar "Dirichlet boundary value"
 {
   "*:*" :: "unrestricted"
 } 0.
@@ -1081,13 +1081,13 @@ CCTK_REAL gt11_bound_scalar "Dirichlet boundary value"
 } 0.
 
 private:
-CCTK_REAL gt21_bound_scalar "Dirichlet boundary value"
+CCTK_REAL gt12_bound_scalar "Dirichlet boundary value"
 {
   "*:*" :: "unrestricted"
 } 0.
 
 private:
-CCTK_REAL gt31_bound_scalar "Dirichlet boundary value"
+CCTK_REAL gt13_bound_scalar "Dirichlet boundary value"
 {
   "*:*" :: "unrestricted"
 } 0.
@@ -1099,7 +1099,7 @@ CCTK_REAL gt22_bound_scalar "Dirichlet boundary value"
 } 0.
 
 private:
-CCTK_REAL gt32_bound_scalar "Dirichlet boundary value"
+CCTK_REAL gt23_bound_scalar "Dirichlet boundary value"
 {
   "*:*" :: "unrestricted"
 } 0.

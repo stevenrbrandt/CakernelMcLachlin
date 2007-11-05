@@ -95,13 +95,13 @@ void ML_BSSN_convertFromADMBaseGamma_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT fa
     
     /* Declare shorthands */
     CCTK_REAL detgt = INITVALUE;
-    CCTK_REAL Gt111 = INITVALUE, Gt121 = INITVALUE, Gt122 = INITVALUE, Gt131 = INITVALUE, Gt132 = INITVALUE, Gt133 = INITVALUE;
-    CCTK_REAL Gt211 = INITVALUE, Gt221 = INITVALUE, Gt222 = INITVALUE, Gt231 = INITVALUE, Gt232 = INITVALUE, Gt233 = INITVALUE;
-    CCTK_REAL Gt311 = INITVALUE, Gt321 = INITVALUE, Gt322 = INITVALUE, Gt331 = INITVALUE, Gt332 = INITVALUE, Gt333 = INITVALUE;
-    CCTK_REAL gtu11 = INITVALUE, gtu12 = INITVALUE, gtu13 = INITVALUE, gtu22 = INITVALUE, gtu23 = INITVALUE, gtu33 = INITVALUE;
+    CCTK_REAL Gt111 = INITVALUE, Gt112 = INITVALUE, Gt113 = INITVALUE, Gt122 = INITVALUE, Gt123 = INITVALUE, Gt133 = INITVALUE;
+    CCTK_REAL Gt211 = INITVALUE, Gt212 = INITVALUE, Gt213 = INITVALUE, Gt222 = INITVALUE, Gt223 = INITVALUE, Gt233 = INITVALUE;
+    CCTK_REAL Gt311 = INITVALUE, Gt312 = INITVALUE, Gt313 = INITVALUE, Gt322 = INITVALUE, Gt323 = INITVALUE, Gt333 = INITVALUE;
+    CCTK_REAL gtu11 = INITVALUE, gtu21 = INITVALUE, gtu22 = INITVALUE, gtu31 = INITVALUE, gtu32 = INITVALUE, gtu33 = INITVALUE;
     
     /* Declare local copies of grid functions */
-    CCTK_REAL gt11L = INITVALUE, gt21L = INITVALUE, gt22L = INITVALUE, gt31L = INITVALUE, gt32L = INITVALUE, gt33L = INITVALUE;
+    CCTK_REAL gt11L = INITVALUE, gt12L = INITVALUE, gt13L = INITVALUE, gt22L = INITVALUE, gt23L = INITVALUE, gt33L = INITVALUE;
     CCTK_REAL Xt1L = INITVALUE, Xt2L = INITVALUE, Xt3L = INITVALUE;
     /* Declare precomputed derivatives*/
     
@@ -109,28 +109,28 @@ void ML_BSSN_convertFromADMBaseGamma_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT fa
     CCTK_REAL PDstandard4th1gt11 = INITVALUE;
     CCTK_REAL PDstandard4th2gt11 = INITVALUE;
     CCTK_REAL PDstandard4th3gt11 = INITVALUE;
-    CCTK_REAL PDstandard4th1gt21 = INITVALUE;
-    CCTK_REAL PDstandard4th2gt21 = INITVALUE;
-    CCTK_REAL PDstandard4th3gt21 = INITVALUE;
+    CCTK_REAL PDstandard4th1gt12 = INITVALUE;
+    CCTK_REAL PDstandard4th2gt12 = INITVALUE;
+    CCTK_REAL PDstandard4th3gt12 = INITVALUE;
+    CCTK_REAL PDstandard4th1gt13 = INITVALUE;
+    CCTK_REAL PDstandard4th2gt13 = INITVALUE;
+    CCTK_REAL PDstandard4th3gt13 = INITVALUE;
     CCTK_REAL PDstandard4th1gt22 = INITVALUE;
     CCTK_REAL PDstandard4th2gt22 = INITVALUE;
     CCTK_REAL PDstandard4th3gt22 = INITVALUE;
-    CCTK_REAL PDstandard4th1gt31 = INITVALUE;
-    CCTK_REAL PDstandard4th2gt31 = INITVALUE;
-    CCTK_REAL PDstandard4th3gt31 = INITVALUE;
-    CCTK_REAL PDstandard4th1gt32 = INITVALUE;
-    CCTK_REAL PDstandard4th2gt32 = INITVALUE;
-    CCTK_REAL PDstandard4th3gt32 = INITVALUE;
+    CCTK_REAL PDstandard4th1gt23 = INITVALUE;
+    CCTK_REAL PDstandard4th2gt23 = INITVALUE;
+    CCTK_REAL PDstandard4th3gt23 = INITVALUE;
     CCTK_REAL PDstandard4th1gt33 = INITVALUE;
     CCTK_REAL PDstandard4th2gt33 = INITVALUE;
     CCTK_REAL PDstandard4th3gt33 = INITVALUE;
     
     /* Assign local copies of grid functions */
     gt11L = gt11[index];
-    gt21L = gt21[index];
+    gt12L = gt12[index];
+    gt13L = gt13[index];
     gt22L = gt22[index];
-    gt31L = gt31[index];
-    gt32L = gt32[index];
+    gt23L = gt23[index];
     gt33L = gt33[index];
     
     /* Assign local copies of subblock grid functions */
@@ -141,18 +141,18 @@ void ML_BSSN_convertFromADMBaseGamma_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT fa
     PDstandard4th1gt11 = PDstandard4th1(gt11, i, j, k);
     PDstandard4th2gt11 = PDstandard4th2(gt11, i, j, k);
     PDstandard4th3gt11 = PDstandard4th3(gt11, i, j, k);
-    PDstandard4th1gt21 = PDstandard4th1(gt21, i, j, k);
-    PDstandard4th2gt21 = PDstandard4th2(gt21, i, j, k);
-    PDstandard4th3gt21 = PDstandard4th3(gt21, i, j, k);
+    PDstandard4th1gt12 = PDstandard4th1(gt12, i, j, k);
+    PDstandard4th2gt12 = PDstandard4th2(gt12, i, j, k);
+    PDstandard4th3gt12 = PDstandard4th3(gt12, i, j, k);
+    PDstandard4th1gt13 = PDstandard4th1(gt13, i, j, k);
+    PDstandard4th2gt13 = PDstandard4th2(gt13, i, j, k);
+    PDstandard4th3gt13 = PDstandard4th3(gt13, i, j, k);
     PDstandard4th1gt22 = PDstandard4th1(gt22, i, j, k);
     PDstandard4th2gt22 = PDstandard4th2(gt22, i, j, k);
     PDstandard4th3gt22 = PDstandard4th3(gt22, i, j, k);
-    PDstandard4th1gt31 = PDstandard4th1(gt31, i, j, k);
-    PDstandard4th2gt31 = PDstandard4th2(gt31, i, j, k);
-    PDstandard4th3gt31 = PDstandard4th3(gt31, i, j, k);
-    PDstandard4th1gt32 = PDstandard4th1(gt32, i, j, k);
-    PDstandard4th2gt32 = PDstandard4th2(gt32, i, j, k);
-    PDstandard4th3gt32 = PDstandard4th3(gt32, i, j, k);
+    PDstandard4th1gt23 = PDstandard4th1(gt23, i, j, k);
+    PDstandard4th2gt23 = PDstandard4th2(gt23, i, j, k);
+    PDstandard4th3gt23 = PDstandard4th3(gt23, i, j, k);
     PDstandard4th1gt33 = PDstandard4th1(gt33, i, j, k);
     PDstandard4th2gt33 = PDstandard4th2(gt33, i, j, k);
     PDstandard4th3gt33 = PDstandard4th3(gt33, i, j, k);
@@ -162,77 +162,77 @@ void ML_BSSN_convertFromADMBaseGamma_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT fa
     /* Calculate temporaries and grid functions */
     detgt  =  1;
     
-    gtu11  =  INV(detgt)*(gt22L*gt33L - SQR(gt32L));
+    gtu11  =  INV(detgt)*(gt22L*gt33L - SQR(gt23L));
     
-    gtu12  =  (gt31L*gt32L - gt21L*gt33L)*INV(detgt);
+    gtu21  =  (gt13L*gt23L - gt12L*gt33L)*INV(detgt);
     
-    gtu13  =  (-(gt22L*gt31L) + gt21L*gt32L)*INV(detgt);
+    gtu31  =  (-(gt13L*gt22L) + gt12L*gt23L)*INV(detgt);
     
-    gtu22  =  INV(detgt)*(gt11L*gt33L - SQR(gt31L));
+    gtu22  =  INV(detgt)*(gt11L*gt33L - SQR(gt13L));
     
-    gtu23  =  (gt21L*gt31L - gt11L*gt32L)*INV(detgt);
+    gtu32  =  (gt12L*gt13L - gt11L*gt23L)*INV(detgt);
     
-    gtu33  =  INV(detgt)*(gt11L*gt22L - SQR(gt21L));
+    gtu33  =  INV(detgt)*(gt11L*gt22L - SQR(gt12L));
     
-    Gt111  =  khalf*(gtu11*PDstandard4th1gt11 + 2*(gtu12*PDstandard4th1gt21 + gtu13*PDstandard4th1gt31) - 
-          gtu12*PDstandard4th2gt11 - gtu13*PDstandard4th3gt11);
+    Gt111  =  khalf*(gtu11*PDstandard4th1gt11 + 2*(gtu21*PDstandard4th1gt12 + gtu31*PDstandard4th1gt13) - 
+          gtu21*PDstandard4th2gt11 - gtu31*PDstandard4th3gt11);
     
-    Gt211  =  khalf*(gtu12*PDstandard4th1gt11 + 2*(gtu22*PDstandard4th1gt21 + gtu23*PDstandard4th1gt31) - 
-          gtu22*PDstandard4th2gt11 - gtu23*PDstandard4th3gt11);
+    Gt211  =  khalf*(gtu21*PDstandard4th1gt11 + 2*(gtu22*PDstandard4th1gt12 + gtu32*PDstandard4th1gt13) - 
+          gtu22*PDstandard4th2gt11 - gtu32*PDstandard4th3gt11);
     
-    Gt311  =  khalf*(gtu13*PDstandard4th1gt11 + 2*(gtu23*PDstandard4th1gt21 + gtu33*PDstandard4th1gt31) - 
-          gtu23*PDstandard4th2gt11 - gtu33*PDstandard4th3gt11);
+    Gt311  =  khalf*(gtu31*PDstandard4th1gt11 + 2*(gtu32*PDstandard4th1gt12 + gtu33*PDstandard4th1gt13) - 
+          gtu32*PDstandard4th2gt11 - gtu33*PDstandard4th3gt11);
     
-    Gt121  =  khalf*(gtu12*PDstandard4th1gt22 + gtu11*PDstandard4th2gt11 + 
-          gtu13*(PDstandard4th1gt32 + PDstandard4th2gt31 - PDstandard4th3gt21));
+    Gt112  =  khalf*(gtu21*PDstandard4th1gt22 + gtu11*PDstandard4th2gt11 + 
+          gtu31*(PDstandard4th1gt23 + PDstandard4th2gt13 - PDstandard4th3gt12));
     
-    Gt221  =  khalf*(gtu22*PDstandard4th1gt22 + gtu12*PDstandard4th2gt11 + 
-          gtu23*(PDstandard4th1gt32 + PDstandard4th2gt31 - PDstandard4th3gt21));
+    Gt212  =  khalf*(gtu22*PDstandard4th1gt22 + gtu21*PDstandard4th2gt11 + 
+          gtu32*(PDstandard4th1gt23 + PDstandard4th2gt13 - PDstandard4th3gt12));
     
-    Gt321  =  khalf*(gtu23*PDstandard4th1gt22 + gtu13*PDstandard4th2gt11 + 
-          gtu33*(PDstandard4th1gt32 + PDstandard4th2gt31 - PDstandard4th3gt21));
+    Gt312  =  khalf*(gtu32*PDstandard4th1gt22 + gtu31*PDstandard4th2gt11 + 
+          gtu33*(PDstandard4th1gt23 + PDstandard4th2gt13 - PDstandard4th3gt12));
     
-    Gt131  =  khalf*(gtu13*PDstandard4th1gt33 + gtu11*PDstandard4th3gt11 + 
-          gtu12*(PDstandard4th1gt32 - PDstandard4th2gt31 + PDstandard4th3gt21));
+    Gt113  =  khalf*(gtu31*PDstandard4th1gt33 + gtu11*PDstandard4th3gt11 + 
+          gtu21*(PDstandard4th1gt23 - PDstandard4th2gt13 + PDstandard4th3gt12));
     
-    Gt231  =  khalf*(gtu23*PDstandard4th1gt33 + gtu12*PDstandard4th3gt11 + 
-          gtu22*(PDstandard4th1gt32 - PDstandard4th2gt31 + PDstandard4th3gt21));
+    Gt213  =  khalf*(gtu32*PDstandard4th1gt33 + gtu21*PDstandard4th3gt11 + 
+          gtu22*(PDstandard4th1gt23 - PDstandard4th2gt13 + PDstandard4th3gt12));
     
-    Gt331  =  khalf*(gtu33*PDstandard4th1gt33 + gtu13*PDstandard4th3gt11 + 
-          gtu23*(PDstandard4th1gt32 - PDstandard4th2gt31 + PDstandard4th3gt21));
+    Gt313  =  khalf*(gtu33*PDstandard4th1gt33 + gtu31*PDstandard4th3gt11 + 
+          gtu32*(PDstandard4th1gt23 - PDstandard4th2gt13 + PDstandard4th3gt12));
     
-    Gt122  =  khalf*(gtu11*(-PDstandard4th1gt22 + 2*PDstandard4th2gt21) + gtu12*PDstandard4th2gt22 + 
-          gtu13*(2*PDstandard4th2gt32 - PDstandard4th3gt22));
+    Gt122  =  khalf*(gtu11*(-PDstandard4th1gt22 + 2*PDstandard4th2gt12) + gtu21*PDstandard4th2gt22 + 
+          gtu31*(2*PDstandard4th2gt23 - PDstandard4th3gt22));
     
-    Gt222  =  khalf*(gtu12*(-PDstandard4th1gt22 + 2*PDstandard4th2gt21) + gtu22*PDstandard4th2gt22 + 
-          gtu23*(2*PDstandard4th2gt32 - PDstandard4th3gt22));
+    Gt222  =  khalf*(gtu21*(-PDstandard4th1gt22 + 2*PDstandard4th2gt12) + gtu22*PDstandard4th2gt22 + 
+          gtu32*(2*PDstandard4th2gt23 - PDstandard4th3gt22));
     
-    Gt322  =  khalf*(gtu13*(-PDstandard4th1gt22 + 2*PDstandard4th2gt21) + gtu23*PDstandard4th2gt22 + 
-          gtu33*(2*PDstandard4th2gt32 - PDstandard4th3gt22));
+    Gt322  =  khalf*(gtu31*(-PDstandard4th1gt22 + 2*PDstandard4th2gt12) + gtu32*PDstandard4th2gt22 + 
+          gtu33*(2*PDstandard4th2gt23 - PDstandard4th3gt22));
     
-    Gt132  =  khalf*(gtu13*PDstandard4th2gt33 + gtu11*(-PDstandard4th1gt32 + PDstandard4th2gt31 + PDstandard4th3gt21) + 
-          gtu12*PDstandard4th3gt22);
+    Gt123  =  khalf*(gtu31*PDstandard4th2gt33 + gtu11*(-PDstandard4th1gt23 + PDstandard4th2gt13 + PDstandard4th3gt12) + 
+          gtu21*PDstandard4th3gt22);
     
-    Gt232  =  khalf*(gtu23*PDstandard4th2gt33 + gtu12*(-PDstandard4th1gt32 + PDstandard4th2gt31 + PDstandard4th3gt21) + 
+    Gt223  =  khalf*(gtu32*PDstandard4th2gt33 + gtu21*(-PDstandard4th1gt23 + PDstandard4th2gt13 + PDstandard4th3gt12) + 
           gtu22*PDstandard4th3gt22);
     
-    Gt332  =  khalf*(gtu33*PDstandard4th2gt33 + gtu13*(-PDstandard4th1gt32 + PDstandard4th2gt31 + PDstandard4th3gt21) + 
-          gtu23*PDstandard4th3gt22);
+    Gt323  =  khalf*(gtu33*PDstandard4th2gt33 + gtu31*(-PDstandard4th1gt23 + PDstandard4th2gt13 + PDstandard4th3gt12) + 
+          gtu32*PDstandard4th3gt22);
     
-    Gt133  =  khalf*(-(gtu11*PDstandard4th1gt33) - gtu12*PDstandard4th2gt33 + 2*gtu11*PDstandard4th3gt31 + 
-          2*gtu12*PDstandard4th3gt32 + gtu13*PDstandard4th3gt33);
+    Gt133  =  khalf*(-(gtu11*PDstandard4th1gt33) - gtu21*PDstandard4th2gt33 + 2*gtu11*PDstandard4th3gt13 + 
+          2*gtu21*PDstandard4th3gt23 + gtu31*PDstandard4th3gt33);
     
-    Gt233  =  khalf*(-(gtu12*PDstandard4th1gt33) - gtu22*PDstandard4th2gt33 + 2*gtu12*PDstandard4th3gt31 + 
-          2*gtu22*PDstandard4th3gt32 + gtu23*PDstandard4th3gt33);
+    Gt233  =  khalf*(-(gtu21*PDstandard4th1gt33) - gtu22*PDstandard4th2gt33 + 2*gtu21*PDstandard4th3gt13 + 
+          2*gtu22*PDstandard4th3gt23 + gtu32*PDstandard4th3gt33);
     
-    Gt333  =  khalf*(-(gtu13*PDstandard4th1gt33) - gtu23*PDstandard4th2gt33 + 2*gtu13*PDstandard4th3gt31 + 
-          2*gtu23*PDstandard4th3gt32 + gtu33*PDstandard4th3gt33);
+    Gt333  =  khalf*(-(gtu31*PDstandard4th1gt33) - gtu32*PDstandard4th2gt33 + 2*gtu31*PDstandard4th3gt13 + 
+          2*gtu32*PDstandard4th3gt23 + gtu33*PDstandard4th3gt33);
     
-    Xt1L  =  Gt111*gtu11 + Gt122*gtu22 + 2*(Gt121*gtu12 + Gt131*gtu13 + Gt132*gtu23) + Gt133*gtu33;
+    Xt1L  =  Gt111*gtu11 + Gt122*gtu22 + 2*(Gt112*gtu21 + Gt113*gtu31 + Gt123*gtu32) + Gt133*gtu33;
     
-    Xt2L  =  Gt211*gtu11 + Gt222*gtu22 + 2*(Gt221*gtu12 + Gt231*gtu13 + Gt232*gtu23) + Gt233*gtu33;
+    Xt2L  =  Gt211*gtu11 + Gt222*gtu22 + 2*(Gt212*gtu21 + Gt213*gtu31 + Gt223*gtu32) + Gt233*gtu33;
     
-    Xt3L  =  Gt311*gtu11 + Gt322*gtu22 + 2*(Gt321*gtu12 + Gt331*gtu13 + Gt332*gtu23) + Gt333*gtu33;
+    Xt3L  =  Gt311*gtu11 + Gt322*gtu22 + 2*(Gt312*gtu21 + Gt313*gtu31 + Gt323*gtu32) + Gt333*gtu33;
     
     
     /* Copy local copies back to grid functions */

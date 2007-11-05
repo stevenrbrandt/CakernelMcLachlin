@@ -145,26 +145,26 @@ void ML_BSSN_ApplyBoundConds(CCTK_ARGUMENTS)
        CCTK_WARN(-1, "Failed to register At11_bound BC for ML_BSSN::At11!");
   }
   
-  if (CCTK_EQUALS(At21_bound, "none"  ) ||
-      CCTK_EQUALS(At21_bound, "static") ||
-      CCTK_EQUALS(At21_bound, "flat"  ) ||
-      CCTK_EQUALS(At21_bound, "zero"  ) ) 
+  if (CCTK_EQUALS(At12_bound, "none"  ) ||
+      CCTK_EQUALS(At12_bound, "static") ||
+      CCTK_EQUALS(At12_bound, "flat"  ) ||
+      CCTK_EQUALS(At12_bound, "zero"  ) ) 
   {
     ierr = Boundary_SelectVarForBC(cctkGH, CCTK_ALL_FACES, 1, -1, 
-                      "ML_BSSN::At21", At21_bound);
+                      "ML_BSSN::At12", At12_bound);
     if (ierr < 0)
-       CCTK_WARN(-1, "Failed to register At21_bound BC for ML_BSSN::At21!");
+       CCTK_WARN(-1, "Failed to register At12_bound BC for ML_BSSN::At12!");
   }
   
-  if (CCTK_EQUALS(At31_bound, "none"  ) ||
-      CCTK_EQUALS(At31_bound, "static") ||
-      CCTK_EQUALS(At31_bound, "flat"  ) ||
-      CCTK_EQUALS(At31_bound, "zero"  ) ) 
+  if (CCTK_EQUALS(At13_bound, "none"  ) ||
+      CCTK_EQUALS(At13_bound, "static") ||
+      CCTK_EQUALS(At13_bound, "flat"  ) ||
+      CCTK_EQUALS(At13_bound, "zero"  ) ) 
   {
     ierr = Boundary_SelectVarForBC(cctkGH, CCTK_ALL_FACES, 1, -1, 
-                      "ML_BSSN::At31", At31_bound);
+                      "ML_BSSN::At13", At13_bound);
     if (ierr < 0)
-       CCTK_WARN(-1, "Failed to register At31_bound BC for ML_BSSN::At31!");
+       CCTK_WARN(-1, "Failed to register At13_bound BC for ML_BSSN::At13!");
   }
   
   if (CCTK_EQUALS(At22_bound, "none"  ) ||
@@ -178,15 +178,15 @@ void ML_BSSN_ApplyBoundConds(CCTK_ARGUMENTS)
        CCTK_WARN(-1, "Failed to register At22_bound BC for ML_BSSN::At22!");
   }
   
-  if (CCTK_EQUALS(At32_bound, "none"  ) ||
-      CCTK_EQUALS(At32_bound, "static") ||
-      CCTK_EQUALS(At32_bound, "flat"  ) ||
-      CCTK_EQUALS(At32_bound, "zero"  ) ) 
+  if (CCTK_EQUALS(At23_bound, "none"  ) ||
+      CCTK_EQUALS(At23_bound, "static") ||
+      CCTK_EQUALS(At23_bound, "flat"  ) ||
+      CCTK_EQUALS(At23_bound, "zero"  ) ) 
   {
     ierr = Boundary_SelectVarForBC(cctkGH, CCTK_ALL_FACES, 1, -1, 
-                      "ML_BSSN::At32", At32_bound);
+                      "ML_BSSN::At23", At23_bound);
     if (ierr < 0)
-       CCTK_WARN(-1, "Failed to register At32_bound BC for ML_BSSN::At32!");
+       CCTK_WARN(-1, "Failed to register At23_bound BC for ML_BSSN::At23!");
   }
   
   if (CCTK_EQUALS(At33_bound, "none"  ) ||
@@ -310,26 +310,26 @@ void ML_BSSN_ApplyBoundConds(CCTK_ARGUMENTS)
        CCTK_WARN(-1, "Failed to register gt11_bound BC for ML_BSSN::gt11!");
   }
   
-  if (CCTK_EQUALS(gt21_bound, "none"  ) ||
-      CCTK_EQUALS(gt21_bound, "static") ||
-      CCTK_EQUALS(gt21_bound, "flat"  ) ||
-      CCTK_EQUALS(gt21_bound, "zero"  ) ) 
+  if (CCTK_EQUALS(gt12_bound, "none"  ) ||
+      CCTK_EQUALS(gt12_bound, "static") ||
+      CCTK_EQUALS(gt12_bound, "flat"  ) ||
+      CCTK_EQUALS(gt12_bound, "zero"  ) ) 
   {
     ierr = Boundary_SelectVarForBC(cctkGH, CCTK_ALL_FACES, 1, -1, 
-                      "ML_BSSN::gt21", gt21_bound);
+                      "ML_BSSN::gt12", gt12_bound);
     if (ierr < 0)
-       CCTK_WARN(-1, "Failed to register gt21_bound BC for ML_BSSN::gt21!");
+       CCTK_WARN(-1, "Failed to register gt12_bound BC for ML_BSSN::gt12!");
   }
   
-  if (CCTK_EQUALS(gt31_bound, "none"  ) ||
-      CCTK_EQUALS(gt31_bound, "static") ||
-      CCTK_EQUALS(gt31_bound, "flat"  ) ||
-      CCTK_EQUALS(gt31_bound, "zero"  ) ) 
+  if (CCTK_EQUALS(gt13_bound, "none"  ) ||
+      CCTK_EQUALS(gt13_bound, "static") ||
+      CCTK_EQUALS(gt13_bound, "flat"  ) ||
+      CCTK_EQUALS(gt13_bound, "zero"  ) ) 
   {
     ierr = Boundary_SelectVarForBC(cctkGH, CCTK_ALL_FACES, 1, -1, 
-                      "ML_BSSN::gt31", gt31_bound);
+                      "ML_BSSN::gt13", gt13_bound);
     if (ierr < 0)
-       CCTK_WARN(-1, "Failed to register gt31_bound BC for ML_BSSN::gt31!");
+       CCTK_WARN(-1, "Failed to register gt13_bound BC for ML_BSSN::gt13!");
   }
   
   if (CCTK_EQUALS(gt22_bound, "none"  ) ||
@@ -343,15 +343,15 @@ void ML_BSSN_ApplyBoundConds(CCTK_ARGUMENTS)
        CCTK_WARN(-1, "Failed to register gt22_bound BC for ML_BSSN::gt22!");
   }
   
-  if (CCTK_EQUALS(gt32_bound, "none"  ) ||
-      CCTK_EQUALS(gt32_bound, "static") ||
-      CCTK_EQUALS(gt32_bound, "flat"  ) ||
-      CCTK_EQUALS(gt32_bound, "zero"  ) ) 
+  if (CCTK_EQUALS(gt23_bound, "none"  ) ||
+      CCTK_EQUALS(gt23_bound, "static") ||
+      CCTK_EQUALS(gt23_bound, "flat"  ) ||
+      CCTK_EQUALS(gt23_bound, "zero"  ) ) 
   {
     ierr = Boundary_SelectVarForBC(cctkGH, CCTK_ALL_FACES, 1, -1, 
-                      "ML_BSSN::gt32", gt32_bound);
+                      "ML_BSSN::gt23", gt23_bound);
     if (ierr < 0)
-       CCTK_WARN(-1, "Failed to register gt32_bound BC for ML_BSSN::gt32!");
+       CCTK_WARN(-1, "Failed to register gt23_bound BC for ML_BSSN::gt23!");
   }
   
   if (CCTK_EQUALS(gt33_bound, "none"  ) ||
@@ -589,39 +589,39 @@ void ML_BSSN_ApplyBoundConds(CCTK_ARGUMENTS)
   
   }
   
-  if (CCTK_EQUALS(At21_bound, "radiative"))
+  if (CCTK_EQUALS(At12_bound, "radiative"))
   {
    /* apply radiation boundary condition */
-    CCTK_INT handle_At21_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
-    if (handle_At21_bound < 0) CCTK_WARN(-1, "could not create table!");
-    if (Util_TableSetReal(handle_At21_bound , At21_bound_limit, "LIMIT") < 0)
+    CCTK_INT handle_At12_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
+    if (handle_At12_bound < 0) CCTK_WARN(-1, "could not create table!");
+    if (Util_TableSetReal(handle_At12_bound , At12_bound_limit, "LIMIT") < 0)
        CCTK_WARN(-1, "could not set LIMIT value in table!");
-    if (Util_TableSetReal(handle_At21_bound ,At21_bound_speed, "SPEED") < 0)
+    if (Util_TableSetReal(handle_At12_bound ,At12_bound_speed, "SPEED") < 0)
         CCTK_WARN(-1, "could not set SPEED value in table!");
   
-    ierr = Boundary_SelectVarForBC(cctkGH, CCTK_ALL_FACES, 1, handle_At21_bound, 
-                      "ML_BSSN::At21", "Radiation");
+    ierr = Boundary_SelectVarForBC(cctkGH, CCTK_ALL_FACES, 1, handle_At12_bound, 
+                      "ML_BSSN::At12", "Radiation");
   
     if (ierr < 0)
-       CCTK_WARN(-1, "Failed to register Radiation BC for ML_BSSN::At21!");
+       CCTK_WARN(-1, "Failed to register Radiation BC for ML_BSSN::At12!");
   
   }
   
-  if (CCTK_EQUALS(At31_bound, "radiative"))
+  if (CCTK_EQUALS(At13_bound, "radiative"))
   {
    /* apply radiation boundary condition */
-    CCTK_INT handle_At31_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
-    if (handle_At31_bound < 0) CCTK_WARN(-1, "could not create table!");
-    if (Util_TableSetReal(handle_At31_bound , At31_bound_limit, "LIMIT") < 0)
+    CCTK_INT handle_At13_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
+    if (handle_At13_bound < 0) CCTK_WARN(-1, "could not create table!");
+    if (Util_TableSetReal(handle_At13_bound , At13_bound_limit, "LIMIT") < 0)
        CCTK_WARN(-1, "could not set LIMIT value in table!");
-    if (Util_TableSetReal(handle_At31_bound ,At31_bound_speed, "SPEED") < 0)
+    if (Util_TableSetReal(handle_At13_bound ,At13_bound_speed, "SPEED") < 0)
         CCTK_WARN(-1, "could not set SPEED value in table!");
   
-    ierr = Boundary_SelectVarForBC(cctkGH, CCTK_ALL_FACES, 1, handle_At31_bound, 
-                      "ML_BSSN::At31", "Radiation");
+    ierr = Boundary_SelectVarForBC(cctkGH, CCTK_ALL_FACES, 1, handle_At13_bound, 
+                      "ML_BSSN::At13", "Radiation");
   
     if (ierr < 0)
-       CCTK_WARN(-1, "Failed to register Radiation BC for ML_BSSN::At31!");
+       CCTK_WARN(-1, "Failed to register Radiation BC for ML_BSSN::At13!");
   
   }
   
@@ -643,21 +643,21 @@ void ML_BSSN_ApplyBoundConds(CCTK_ARGUMENTS)
   
   }
   
-  if (CCTK_EQUALS(At32_bound, "radiative"))
+  if (CCTK_EQUALS(At23_bound, "radiative"))
   {
    /* apply radiation boundary condition */
-    CCTK_INT handle_At32_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
-    if (handle_At32_bound < 0) CCTK_WARN(-1, "could not create table!");
-    if (Util_TableSetReal(handle_At32_bound , At32_bound_limit, "LIMIT") < 0)
+    CCTK_INT handle_At23_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
+    if (handle_At23_bound < 0) CCTK_WARN(-1, "could not create table!");
+    if (Util_TableSetReal(handle_At23_bound , At23_bound_limit, "LIMIT") < 0)
        CCTK_WARN(-1, "could not set LIMIT value in table!");
-    if (Util_TableSetReal(handle_At32_bound ,At32_bound_speed, "SPEED") < 0)
+    if (Util_TableSetReal(handle_At23_bound ,At23_bound_speed, "SPEED") < 0)
         CCTK_WARN(-1, "could not set SPEED value in table!");
   
-    ierr = Boundary_SelectVarForBC(cctkGH, CCTK_ALL_FACES, 1, handle_At32_bound, 
-                      "ML_BSSN::At32", "Radiation");
+    ierr = Boundary_SelectVarForBC(cctkGH, CCTK_ALL_FACES, 1, handle_At23_bound, 
+                      "ML_BSSN::At23", "Radiation");
   
     if (ierr < 0)
-       CCTK_WARN(-1, "Failed to register Radiation BC for ML_BSSN::At32!");
+       CCTK_WARN(-1, "Failed to register Radiation BC for ML_BSSN::At23!");
   
   }
   
@@ -859,39 +859,39 @@ void ML_BSSN_ApplyBoundConds(CCTK_ARGUMENTS)
   
   }
   
-  if (CCTK_EQUALS(gt21_bound, "radiative"))
+  if (CCTK_EQUALS(gt12_bound, "radiative"))
   {
    /* apply radiation boundary condition */
-    CCTK_INT handle_gt21_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
-    if (handle_gt21_bound < 0) CCTK_WARN(-1, "could not create table!");
-    if (Util_TableSetReal(handle_gt21_bound , gt21_bound_limit, "LIMIT") < 0)
+    CCTK_INT handle_gt12_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
+    if (handle_gt12_bound < 0) CCTK_WARN(-1, "could not create table!");
+    if (Util_TableSetReal(handle_gt12_bound , gt12_bound_limit, "LIMIT") < 0)
        CCTK_WARN(-1, "could not set LIMIT value in table!");
-    if (Util_TableSetReal(handle_gt21_bound ,gt21_bound_speed, "SPEED") < 0)
+    if (Util_TableSetReal(handle_gt12_bound ,gt12_bound_speed, "SPEED") < 0)
         CCTK_WARN(-1, "could not set SPEED value in table!");
   
-    ierr = Boundary_SelectVarForBC(cctkGH, CCTK_ALL_FACES, 1, handle_gt21_bound, 
-                      "ML_BSSN::gt21", "Radiation");
+    ierr = Boundary_SelectVarForBC(cctkGH, CCTK_ALL_FACES, 1, handle_gt12_bound, 
+                      "ML_BSSN::gt12", "Radiation");
   
     if (ierr < 0)
-       CCTK_WARN(-1, "Failed to register Radiation BC for ML_BSSN::gt21!");
+       CCTK_WARN(-1, "Failed to register Radiation BC for ML_BSSN::gt12!");
   
   }
   
-  if (CCTK_EQUALS(gt31_bound, "radiative"))
+  if (CCTK_EQUALS(gt13_bound, "radiative"))
   {
    /* apply radiation boundary condition */
-    CCTK_INT handle_gt31_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
-    if (handle_gt31_bound < 0) CCTK_WARN(-1, "could not create table!");
-    if (Util_TableSetReal(handle_gt31_bound , gt31_bound_limit, "LIMIT") < 0)
+    CCTK_INT handle_gt13_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
+    if (handle_gt13_bound < 0) CCTK_WARN(-1, "could not create table!");
+    if (Util_TableSetReal(handle_gt13_bound , gt13_bound_limit, "LIMIT") < 0)
        CCTK_WARN(-1, "could not set LIMIT value in table!");
-    if (Util_TableSetReal(handle_gt31_bound ,gt31_bound_speed, "SPEED") < 0)
+    if (Util_TableSetReal(handle_gt13_bound ,gt13_bound_speed, "SPEED") < 0)
         CCTK_WARN(-1, "could not set SPEED value in table!");
   
-    ierr = Boundary_SelectVarForBC(cctkGH, CCTK_ALL_FACES, 1, handle_gt31_bound, 
-                      "ML_BSSN::gt31", "Radiation");
+    ierr = Boundary_SelectVarForBC(cctkGH, CCTK_ALL_FACES, 1, handle_gt13_bound, 
+                      "ML_BSSN::gt13", "Radiation");
   
     if (ierr < 0)
-       CCTK_WARN(-1, "Failed to register Radiation BC for ML_BSSN::gt31!");
+       CCTK_WARN(-1, "Failed to register Radiation BC for ML_BSSN::gt13!");
   
   }
   
@@ -913,21 +913,21 @@ void ML_BSSN_ApplyBoundConds(CCTK_ARGUMENTS)
   
   }
   
-  if (CCTK_EQUALS(gt32_bound, "radiative"))
+  if (CCTK_EQUALS(gt23_bound, "radiative"))
   {
    /* apply radiation boundary condition */
-    CCTK_INT handle_gt32_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
-    if (handle_gt32_bound < 0) CCTK_WARN(-1, "could not create table!");
-    if (Util_TableSetReal(handle_gt32_bound , gt32_bound_limit, "LIMIT") < 0)
+    CCTK_INT handle_gt23_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
+    if (handle_gt23_bound < 0) CCTK_WARN(-1, "could not create table!");
+    if (Util_TableSetReal(handle_gt23_bound , gt23_bound_limit, "LIMIT") < 0)
        CCTK_WARN(-1, "could not set LIMIT value in table!");
-    if (Util_TableSetReal(handle_gt32_bound ,gt32_bound_speed, "SPEED") < 0)
+    if (Util_TableSetReal(handle_gt23_bound ,gt23_bound_speed, "SPEED") < 0)
         CCTK_WARN(-1, "could not set SPEED value in table!");
   
-    ierr = Boundary_SelectVarForBC(cctkGH, CCTK_ALL_FACES, 1, handle_gt32_bound, 
-                      "ML_BSSN::gt32", "Radiation");
+    ierr = Boundary_SelectVarForBC(cctkGH, CCTK_ALL_FACES, 1, handle_gt23_bound, 
+                      "ML_BSSN::gt23", "Radiation");
   
     if (ierr < 0)
-       CCTK_WARN(-1, "Failed to register Radiation BC for ML_BSSN::gt32!");
+       CCTK_WARN(-1, "Failed to register Radiation BC for ML_BSSN::gt23!");
   
   }
   
@@ -1181,35 +1181,35 @@ void ML_BSSN_ApplyBoundConds(CCTK_ARGUMENTS)
   
   }
   
-  if (CCTK_EQUALS(At21_bound, "scalar"))
+  if (CCTK_EQUALS(At12_bound, "scalar"))
   {
    /* apply scalar boundary condition */
-    CCTK_INT handle_At21_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
-    if (handle_At21_bound < 0) CCTK_WARN(-1, "could not create table!");
-    if (Util_TableSetReal(handle_At21_bound ,At21_bound_scalar, "SCALAR") < 0)
+    CCTK_INT handle_At12_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
+    if (handle_At12_bound < 0) CCTK_WARN(-1, "could not create table!");
+    if (Util_TableSetReal(handle_At12_bound ,At12_bound_scalar, "SCALAR") < 0)
       CCTK_WARN(-1, "could not set SCALAR value in table!");
   
-    ierr = Boundary_SelectVarForBC(cctkGH, CCTK_ALL_FACES, 1, handle_At21_bound, 
-                      "ML_BSSN::At21", "scalar");
+    ierr = Boundary_SelectVarForBC(cctkGH, CCTK_ALL_FACES, 1, handle_At12_bound, 
+                      "ML_BSSN::At12", "scalar");
   
     if (ierr < 0)
-       CCTK_WARN(-1, "Error in registering Scalar BC for ML_BSSN::At21!");
+       CCTK_WARN(-1, "Error in registering Scalar BC for ML_BSSN::At12!");
   
   }
   
-  if (CCTK_EQUALS(At31_bound, "scalar"))
+  if (CCTK_EQUALS(At13_bound, "scalar"))
   {
    /* apply scalar boundary condition */
-    CCTK_INT handle_At31_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
-    if (handle_At31_bound < 0) CCTK_WARN(-1, "could not create table!");
-    if (Util_TableSetReal(handle_At31_bound ,At31_bound_scalar, "SCALAR") < 0)
+    CCTK_INT handle_At13_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
+    if (handle_At13_bound < 0) CCTK_WARN(-1, "could not create table!");
+    if (Util_TableSetReal(handle_At13_bound ,At13_bound_scalar, "SCALAR") < 0)
       CCTK_WARN(-1, "could not set SCALAR value in table!");
   
-    ierr = Boundary_SelectVarForBC(cctkGH, CCTK_ALL_FACES, 1, handle_At31_bound, 
-                      "ML_BSSN::At31", "scalar");
+    ierr = Boundary_SelectVarForBC(cctkGH, CCTK_ALL_FACES, 1, handle_At13_bound, 
+                      "ML_BSSN::At13", "scalar");
   
     if (ierr < 0)
-       CCTK_WARN(-1, "Error in registering Scalar BC for ML_BSSN::At31!");
+       CCTK_WARN(-1, "Error in registering Scalar BC for ML_BSSN::At13!");
   
   }
   
@@ -1229,19 +1229,19 @@ void ML_BSSN_ApplyBoundConds(CCTK_ARGUMENTS)
   
   }
   
-  if (CCTK_EQUALS(At32_bound, "scalar"))
+  if (CCTK_EQUALS(At23_bound, "scalar"))
   {
    /* apply scalar boundary condition */
-    CCTK_INT handle_At32_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
-    if (handle_At32_bound < 0) CCTK_WARN(-1, "could not create table!");
-    if (Util_TableSetReal(handle_At32_bound ,At32_bound_scalar, "SCALAR") < 0)
+    CCTK_INT handle_At23_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
+    if (handle_At23_bound < 0) CCTK_WARN(-1, "could not create table!");
+    if (Util_TableSetReal(handle_At23_bound ,At23_bound_scalar, "SCALAR") < 0)
       CCTK_WARN(-1, "could not set SCALAR value in table!");
   
-    ierr = Boundary_SelectVarForBC(cctkGH, CCTK_ALL_FACES, 1, handle_At32_bound, 
-                      "ML_BSSN::At32", "scalar");
+    ierr = Boundary_SelectVarForBC(cctkGH, CCTK_ALL_FACES, 1, handle_At23_bound, 
+                      "ML_BSSN::At23", "scalar");
   
     if (ierr < 0)
-       CCTK_WARN(-1, "Error in registering Scalar BC for ML_BSSN::At32!");
+       CCTK_WARN(-1, "Error in registering Scalar BC for ML_BSSN::At23!");
   
   }
   
@@ -1421,35 +1421,35 @@ void ML_BSSN_ApplyBoundConds(CCTK_ARGUMENTS)
   
   }
   
-  if (CCTK_EQUALS(gt21_bound, "scalar"))
+  if (CCTK_EQUALS(gt12_bound, "scalar"))
   {
    /* apply scalar boundary condition */
-    CCTK_INT handle_gt21_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
-    if (handle_gt21_bound < 0) CCTK_WARN(-1, "could not create table!");
-    if (Util_TableSetReal(handle_gt21_bound ,gt21_bound_scalar, "SCALAR") < 0)
+    CCTK_INT handle_gt12_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
+    if (handle_gt12_bound < 0) CCTK_WARN(-1, "could not create table!");
+    if (Util_TableSetReal(handle_gt12_bound ,gt12_bound_scalar, "SCALAR") < 0)
       CCTK_WARN(-1, "could not set SCALAR value in table!");
   
-    ierr = Boundary_SelectVarForBC(cctkGH, CCTK_ALL_FACES, 1, handle_gt21_bound, 
-                      "ML_BSSN::gt21", "scalar");
+    ierr = Boundary_SelectVarForBC(cctkGH, CCTK_ALL_FACES, 1, handle_gt12_bound, 
+                      "ML_BSSN::gt12", "scalar");
   
     if (ierr < 0)
-       CCTK_WARN(-1, "Error in registering Scalar BC for ML_BSSN::gt21!");
+       CCTK_WARN(-1, "Error in registering Scalar BC for ML_BSSN::gt12!");
   
   }
   
-  if (CCTK_EQUALS(gt31_bound, "scalar"))
+  if (CCTK_EQUALS(gt13_bound, "scalar"))
   {
    /* apply scalar boundary condition */
-    CCTK_INT handle_gt31_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
-    if (handle_gt31_bound < 0) CCTK_WARN(-1, "could not create table!");
-    if (Util_TableSetReal(handle_gt31_bound ,gt31_bound_scalar, "SCALAR") < 0)
+    CCTK_INT handle_gt13_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
+    if (handle_gt13_bound < 0) CCTK_WARN(-1, "could not create table!");
+    if (Util_TableSetReal(handle_gt13_bound ,gt13_bound_scalar, "SCALAR") < 0)
       CCTK_WARN(-1, "could not set SCALAR value in table!");
   
-    ierr = Boundary_SelectVarForBC(cctkGH, CCTK_ALL_FACES, 1, handle_gt31_bound, 
-                      "ML_BSSN::gt31", "scalar");
+    ierr = Boundary_SelectVarForBC(cctkGH, CCTK_ALL_FACES, 1, handle_gt13_bound, 
+                      "ML_BSSN::gt13", "scalar");
   
     if (ierr < 0)
-       CCTK_WARN(-1, "Error in registering Scalar BC for ML_BSSN::gt31!");
+       CCTK_WARN(-1, "Error in registering Scalar BC for ML_BSSN::gt13!");
   
   }
   
@@ -1469,19 +1469,19 @@ void ML_BSSN_ApplyBoundConds(CCTK_ARGUMENTS)
   
   }
   
-  if (CCTK_EQUALS(gt32_bound, "scalar"))
+  if (CCTK_EQUALS(gt23_bound, "scalar"))
   {
    /* apply scalar boundary condition */
-    CCTK_INT handle_gt32_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
-    if (handle_gt32_bound < 0) CCTK_WARN(-1, "could not create table!");
-    if (Util_TableSetReal(handle_gt32_bound ,gt32_bound_scalar, "SCALAR") < 0)
+    CCTK_INT handle_gt23_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
+    if (handle_gt23_bound < 0) CCTK_WARN(-1, "could not create table!");
+    if (Util_TableSetReal(handle_gt23_bound ,gt23_bound_scalar, "SCALAR") < 0)
       CCTK_WARN(-1, "could not set SCALAR value in table!");
   
-    ierr = Boundary_SelectVarForBC(cctkGH, CCTK_ALL_FACES, 1, handle_gt32_bound, 
-                      "ML_BSSN::gt32", "scalar");
+    ierr = Boundary_SelectVarForBC(cctkGH, CCTK_ALL_FACES, 1, handle_gt23_bound, 
+                      "ML_BSSN::gt23", "scalar");
   
     if (ierr < 0)
-       CCTK_WARN(-1, "Error in registering Scalar BC for ML_BSSN::gt32!");
+       CCTK_WARN(-1, "Error in registering Scalar BC for ML_BSSN::gt23!");
   
   }
   
@@ -1620,25 +1620,25 @@ void ML_BSSN_ApplyBoundConds(CCTK_ARGUMENTS)
 #$bound$#ML_BSSN::At11_bound_limit = 0.0
 #$bound$#ML_BSSN::At11_bound_scalar = 0.0
 
-#$bound$#ML_BSSN::At21_bound       = "skip"
-#$bound$#ML_BSSN::At21_bound_speed = 1.0
-#$bound$#ML_BSSN::At21_bound_limit = 0.0
-#$bound$#ML_BSSN::At21_bound_scalar = 0.0
+#$bound$#ML_BSSN::At12_bound       = "skip"
+#$bound$#ML_BSSN::At12_bound_speed = 1.0
+#$bound$#ML_BSSN::At12_bound_limit = 0.0
+#$bound$#ML_BSSN::At12_bound_scalar = 0.0
 
-#$bound$#ML_BSSN::At31_bound       = "skip"
-#$bound$#ML_BSSN::At31_bound_speed = 1.0
-#$bound$#ML_BSSN::At31_bound_limit = 0.0
-#$bound$#ML_BSSN::At31_bound_scalar = 0.0
+#$bound$#ML_BSSN::At13_bound       = "skip"
+#$bound$#ML_BSSN::At13_bound_speed = 1.0
+#$bound$#ML_BSSN::At13_bound_limit = 0.0
+#$bound$#ML_BSSN::At13_bound_scalar = 0.0
 
 #$bound$#ML_BSSN::At22_bound       = "skip"
 #$bound$#ML_BSSN::At22_bound_speed = 1.0
 #$bound$#ML_BSSN::At22_bound_limit = 0.0
 #$bound$#ML_BSSN::At22_bound_scalar = 0.0
 
-#$bound$#ML_BSSN::At32_bound       = "skip"
-#$bound$#ML_BSSN::At32_bound_speed = 1.0
-#$bound$#ML_BSSN::At32_bound_limit = 0.0
-#$bound$#ML_BSSN::At32_bound_scalar = 0.0
+#$bound$#ML_BSSN::At23_bound       = "skip"
+#$bound$#ML_BSSN::At23_bound_speed = 1.0
+#$bound$#ML_BSSN::At23_bound_limit = 0.0
+#$bound$#ML_BSSN::At23_bound_scalar = 0.0
 
 #$bound$#ML_BSSN::At33_bound       = "skip"
 #$bound$#ML_BSSN::At33_bound_speed = 1.0
@@ -1695,25 +1695,25 @@ void ML_BSSN_ApplyBoundConds(CCTK_ARGUMENTS)
 #$bound$#ML_BSSN::gt11_bound_limit = 0.0
 #$bound$#ML_BSSN::gt11_bound_scalar = 0.0
 
-#$bound$#ML_BSSN::gt21_bound       = "skip"
-#$bound$#ML_BSSN::gt21_bound_speed = 1.0
-#$bound$#ML_BSSN::gt21_bound_limit = 0.0
-#$bound$#ML_BSSN::gt21_bound_scalar = 0.0
+#$bound$#ML_BSSN::gt12_bound       = "skip"
+#$bound$#ML_BSSN::gt12_bound_speed = 1.0
+#$bound$#ML_BSSN::gt12_bound_limit = 0.0
+#$bound$#ML_BSSN::gt12_bound_scalar = 0.0
 
-#$bound$#ML_BSSN::gt31_bound       = "skip"
-#$bound$#ML_BSSN::gt31_bound_speed = 1.0
-#$bound$#ML_BSSN::gt31_bound_limit = 0.0
-#$bound$#ML_BSSN::gt31_bound_scalar = 0.0
+#$bound$#ML_BSSN::gt13_bound       = "skip"
+#$bound$#ML_BSSN::gt13_bound_speed = 1.0
+#$bound$#ML_BSSN::gt13_bound_limit = 0.0
+#$bound$#ML_BSSN::gt13_bound_scalar = 0.0
 
 #$bound$#ML_BSSN::gt22_bound       = "skip"
 #$bound$#ML_BSSN::gt22_bound_speed = 1.0
 #$bound$#ML_BSSN::gt22_bound_limit = 0.0
 #$bound$#ML_BSSN::gt22_bound_scalar = 0.0
 
-#$bound$#ML_BSSN::gt32_bound       = "skip"
-#$bound$#ML_BSSN::gt32_bound_speed = 1.0
-#$bound$#ML_BSSN::gt32_bound_limit = 0.0
-#$bound$#ML_BSSN::gt32_bound_scalar = 0.0
+#$bound$#ML_BSSN::gt23_bound       = "skip"
+#$bound$#ML_BSSN::gt23_bound_speed = 1.0
+#$bound$#ML_BSSN::gt23_bound_limit = 0.0
+#$bound$#ML_BSSN::gt23_bound_scalar = 0.0
 
 #$bound$#ML_BSSN::gt33_bound       = "skip"
 #$bound$#ML_BSSN::gt33_bound_speed = 1.0

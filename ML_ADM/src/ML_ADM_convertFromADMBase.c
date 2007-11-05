@@ -102,14 +102,14 @@ void ML_ADM_convertFromADMBase_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CC
     CCTK_REAL betaxL = INITVALUE;
     CCTK_REAL betayL = INITVALUE;
     CCTK_REAL betazL = INITVALUE;
-    CCTK_REAL g11L = INITVALUE, g21L = INITVALUE, g22L = INITVALUE, g31L = INITVALUE, g32L = INITVALUE, g33L = INITVALUE;
+    CCTK_REAL g11L = INITVALUE, g12L = INITVALUE, g13L = INITVALUE, g22L = INITVALUE, g23L = INITVALUE, g33L = INITVALUE;
     CCTK_REAL gxxL = INITVALUE;
     CCTK_REAL gxyL = INITVALUE;
     CCTK_REAL gxzL = INITVALUE;
     CCTK_REAL gyyL = INITVALUE;
     CCTK_REAL gyzL = INITVALUE;
     CCTK_REAL gzzL = INITVALUE;
-    CCTK_REAL K11L = INITVALUE, K21L = INITVALUE, K22L = INITVALUE, K31L = INITVALUE, K32L = INITVALUE, K33L = INITVALUE;
+    CCTK_REAL K11L = INITVALUE, K12L = INITVALUE, K13L = INITVALUE, K22L = INITVALUE, K23L = INITVALUE, K33L = INITVALUE;
     CCTK_REAL kxxL = INITVALUE;
     CCTK_REAL kxyL = INITVALUE;
     CCTK_REAL kxzL = INITVALUE;
@@ -149,25 +149,25 @@ void ML_ADM_convertFromADMBase_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CC
     /* Calculate temporaries and grid functions */
     g11L  =  gxxL;
     
-    g21L  =  gxyL;
+    g12L  =  gxyL;
     
-    g31L  =  gxzL;
+    g13L  =  gxzL;
     
     g22L  =  gyyL;
     
-    g32L  =  gyzL;
+    g23L  =  gyzL;
     
     g33L  =  gzzL;
     
     K11L  =  kxxL;
     
-    K21L  =  kxyL;
+    K12L  =  kxyL;
     
-    K31L  =  kxzL;
+    K13L  =  kxzL;
     
     K22L  =  kyyL;
     
-    K32L  =  kyzL;
+    K23L  =  kyzL;
     
     K33L  =  kzzL;
     
@@ -186,16 +186,16 @@ void ML_ADM_convertFromADMBase_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CC
     beta2[index] = beta2L;
     beta3[index] = beta3L;
     g11[index] = g11L;
-    g21[index] = g21L;
+    g12[index] = g12L;
+    g13[index] = g13L;
     g22[index] = g22L;
-    g31[index] = g31L;
-    g32[index] = g32L;
+    g23[index] = g23L;
     g33[index] = g33L;
     K11[index] = K11L;
-    K21[index] = K21L;
+    K12[index] = K12L;
+    K13[index] = K13L;
     K22[index] = K22L;
-    K31[index] = K31L;
-    K32[index] = K32L;
+    K23[index] = K23L;
     K33[index] = K33L;
     
     /* Copy local copies back to subblock grid functions */

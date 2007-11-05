@@ -68,10 +68,10 @@ public:
 CCTK_REAL curvrhs type=GF timelevels=1 tags='tensortypealias="DD_sym" tensorweight=-0.66666666666666666667'
 {
   At11rhs,
-  At21rhs,
-  At31rhs,
+  At12rhs,
+  At13rhs,
   At22rhs,
-  At32rhs,
+  At23rhs,
   At33rhs
 } "curvrhs"
 
@@ -113,10 +113,10 @@ public:
 CCTK_REAL metricrhs type=GF timelevels=1 tags='tensortypealias="DD_sym" tensorweight=-0.66666666666666666667'
 {
   gt11rhs,
-  gt21rhs,
-  gt31rhs,
+  gt12rhs,
+  gt13rhs,
   gt22rhs,
-  gt32rhs,
+  gt23rhs,
   gt33rhs
 } "metricrhs"
 
@@ -138,10 +138,10 @@ public:
 CCTK_REAL curv type=GF timelevels=3 tags='tensortypealias="DD_sym" tensorweight=-0.66666666666666666667'
 {
   At11,
-  At21,
-  At31,
+  At12,
+  At13,
   At22,
-  At32,
+  At23,
   At33
 } "curv"
 
@@ -183,10 +183,10 @@ public:
 CCTK_REAL metric type=GF timelevels=3 tags='tensortypealias="DD_sym" tensorweight=-0.66666666666666666667'
 {
   gt11,
-  gt21,
-  gt31,
+  gt12,
+  gt13,
   gt22,
-  gt32,
+  gt23,
   gt33
 } "metric"
 

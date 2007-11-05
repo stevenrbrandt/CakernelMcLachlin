@@ -27,12 +27,12 @@ void ML_BSSN_RegisterSymmetries(CCTK_ARGUMENTS)
   sym[0] = -1;
   sym[1] = -1;
   sym[2] = 1;
-  SetCartSymVN(cctkGH, sym, "ML_BSSN::At21");
+  SetCartSymVN(cctkGH, sym, "ML_BSSN::At12");
   
   sym[0] = -1;
   sym[1] = 1;
   sym[2] = -1;
-  SetCartSymVN(cctkGH, sym, "ML_BSSN::At31");
+  SetCartSymVN(cctkGH, sym, "ML_BSSN::At13");
   
   sym[0] = 1;
   sym[1] = 1;
@@ -42,7 +42,7 @@ void ML_BSSN_RegisterSymmetries(CCTK_ARGUMENTS)
   sym[0] = 1;
   sym[1] = -1;
   sym[2] = -1;
-  SetCartSymVN(cctkGH, sym, "ML_BSSN::At32");
+  SetCartSymVN(cctkGH, sym, "ML_BSSN::At23");
   
   sym[0] = 1;
   sym[1] = 1;
@@ -102,12 +102,12 @@ void ML_BSSN_RegisterSymmetries(CCTK_ARGUMENTS)
   sym[0] = -1;
   sym[1] = -1;
   sym[2] = 1;
-  SetCartSymVN(cctkGH, sym, "ML_BSSN::gt21");
+  SetCartSymVN(cctkGH, sym, "ML_BSSN::gt12");
   
   sym[0] = -1;
   sym[1] = 1;
   sym[2] = -1;
-  SetCartSymVN(cctkGH, sym, "ML_BSSN::gt31");
+  SetCartSymVN(cctkGH, sym, "ML_BSSN::gt13");
   
   sym[0] = 1;
   sym[1] = 1;
@@ -117,7 +117,7 @@ void ML_BSSN_RegisterSymmetries(CCTK_ARGUMENTS)
   sym[0] = 1;
   sym[1] = -1;
   sym[2] = -1;
-  SetCartSymVN(cctkGH, sym, "ML_BSSN::gt32");
+  SetCartSymVN(cctkGH, sym, "ML_BSSN::gt23");
   
   sym[0] = 1;
   sym[1] = 1;

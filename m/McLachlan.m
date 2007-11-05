@@ -55,16 +55,16 @@ SetTensorAttribute[At,  TensorWeight, -2/3];
 SetTensorAttribute[cXt, TensorWeight, +2/3];
 SetTensorAttribute[cS,  TensorWeight, +2  ];
 
-Map [AssertSymmetricDecreasing,
+Map [AssertSymmetricIncreasing,
      {g[la,lb], K[la,lb], R[la,lb],
       gt[la,lb], At[la,lb], Rt[la,lb], Rphi[la,lb]}];
-AssertSymmetricDecreasing [G[ua,lb,lc], lb, lc];
-AssertSymmetricDecreasing [Gt[ua,lb,lc], lb, lc];
-AssertSymmetricDecreasing [gK[la,lb,lc], la, lb];
-Map [AssertSymmetricIncreasing, {gu[ua,ub], gtu[ua,ub], Atu[ua,ub]}];
-AssertSymmetricIncreasing [dgtu[ua,ub,lc], ua, ub];
-AssertSymmetricIncreasing [ddgtu[ua,ub,lc,ld], ua, ub];
-AssertSymmetricDecreasing [ddgtu[ua,ub,lc,ld], lc, ld];
+AssertSymmetricIncreasing [G[ua,lb,lc], lb, lc];
+AssertSymmetricIncreasing [Gt[ua,lb,lc], lb, lc];
+AssertSymmetricIncreasing [gK[la,lb,lc], la, lb];
+Map [AssertSymmetricDecreasing, {gu[ua,ub], gtu[ua,ub], Atu[ua,ub]}];
+AssertSymmetricDecreasing [dgtu[ua,ub,lc], ua, ub];
+AssertSymmetricDecreasing [ddgtu[ua,ub,lc,ld], ua, ub];
+AssertSymmetricIncreasing [ddgtu[ua,ub,lc,ld], lc, ld];
 
 DefineConnection [CD, PD, G];
 DefineConnection [CDt, PD, Gt];
@@ -195,16 +195,16 @@ convertFromADMBaseCalc =
   Equations -> 
   {
     g11   -> gxx,
-    g21   -> gxy,
-    g31   -> gxz,
+    g12   -> gxy,
+    g13   -> gxz,
     g22   -> gyy,
-    g32   -> gyz,
+    g23   -> gyz,
     g33   -> gzz,
     K11   -> kxx,
-    K21   -> kxy,
-    K31   -> kxz,
+    K12   -> kxy,
+    K13   -> kxz,
     K22   -> kyy,
-    K32   -> kyz,
+    K23   -> kyz,
     K33   -> kzz,
     (* TODO: this is incomplete; it ignores dtalp and dtbeta^i *)
     alpha -> alp,
@@ -219,36 +219,35 @@ convertFromADMBaseCalcBSSN =
   Name -> "ML_BSSN_convertFromADMBase",
   Schedule -> {"AT initial AFTER ADMBase_PostInitial"},
   ConditionalOnKeyword -> {"my_initial_data", "ADMBase"},
-  Shorthands -> {g[la,lb], detg, gu[ua,ub], em4phi, K[la,lb], Km[ua,lb]},
+  Shorthands -> {g[la,lb], detg, gu[ua,ub], em4phi, K[la,lb]},
   Equations -> 
   {
     g11 -> gxx,
-    g21 -> gxy,
-    g31 -> gxz,
+    g12 -> gxy,
+    g13 -> gxz,
     g22 -> gyy,
-    g32 -> gyz,
+    g23 -> gyz,
     g33 -> gzz,
     
     detg      -> detgExpr,
     gu[ua,ub] -> 1/detg detgExpr MatrixInverse [g[ua,ub]],
     
-    (* em4phi -> Exp [-4 phi], *)
-    em4phi    -> 1 / detg^3,
-    phi        -> Log [detg] / 12,
-    gt[la,lb]  -> em4phi g[la,lb],
+    phi       -> Log [detg] / 12,
+    em4phi    -> Exp [-4 phi],
+    gt[la,lb] -> em4phi g[la,lb],
     
     K11 -> kxx,
-    K21 -> kxy,
-    K31 -> kxz,
+    K12 -> kxy,
+    K13 -> kxz,
     K22 -> kyy,
-    K32 -> kyz,
+    K23 -> kyz,
     K33 -> kzz,
     
-    Km[ua,lb] -> gu[ua,uc] K[lc,lb],
-    trK       -> Km[ua,la],
+    trK       -> gu[ua,ub] K[la,lb],
     At[la,lb] -> em4phi (K[la,lb] - (1/3) g[la,lb] trK),
     
     alpha   -> alp,
+    (* TODO: this is wrong *)
     dtalpha -> dtalp,
     
     beta1   -> betax,
@@ -289,16 +288,16 @@ convertToADMBaseCalc =
   Equations -> 
   {
     gxx     -> g11,
-    gxy     -> g21,
-    gxz     -> g31,
+    gxy     -> g12,
+    gxz     -> g13,
     gyy     -> g22,
-    gyz     -> g32,
+    gyz     -> g23,
     gzz     -> g33,
     kxx     -> K11,
-    kxy     -> K21,
-    kxz     -> K31,
+    kxy     -> K12,
+    kxz     -> K13,
     kyy     -> K22,
-    kyz     -> K32,
+    kyz     -> K23,
     kzz     -> K33,
     (* TODO: this is wrong; it sets dtalp and dtbeta^i incorrectly *)
     alp     -> alpha,
@@ -322,23 +321,25 @@ convertToADMBaseCalcBSSN =
     e4phi    -> Exp [4 phi],
     g[la,lb] -> e4phi gt[la,lb],
     gxx      -> g11,
-    gxy      -> g21,
-    gxz      -> g31,
+    gxy      -> g12,
+    gxz      -> g13,
     gyy      -> g22,
-    gyz      -> g32,
+    gyz      -> g23,
     gzz      -> g33,
     K[la,lb] -> e4phi At[la,lb] + (1/3) g[la,lb] trK,
     kxx      -> K11,
-    kxy      -> K21,
-    kxz      -> K31,
+    kxy      -> K12,
+    kxz      -> K13,
     kyy      -> K22,
-    kyz      -> K32,
+    kyz      -> K23,
     kzz      -> K33,
     alp      -> alpha,
+    (* TODO: this is wrong *)
     dtalp    -> dtalpha,
     betax    -> beta1,
     betay    -> beta2,
     betaz    -> beta3,
+    (* TODO: this is wrong *)
     dtbetax  -> dtbeta1,
     dtbetay  -> dtbeta2,
     dtbetaz  -> dtbeta3
@@ -414,8 +415,6 @@ evolCalcBSSN =
                    + 4 CDt[phi,li] CDt[phi,lj]
                    - 4 gt[li,lj] gtu[ul,un] CDt[phi,ln] CDt[phi,ll],
     
-    R[la,lb] -> Rt[la,lb] + Rphi[la,lb],
-    
     Atm[ua,lb] -> gtu[ua,uc] At[lc,lb],
     Atu[ua,ub] -> Atm[ua,lc] gtu[ub,uc],
     
@@ -430,6 +429,8 @@ evolCalcBSSN =
     G[ua,lb,lc] -> Gt[ua,lb,lc]
                    + 1/(2 detg) (+ KD[ua,lb] ddetg[lc] + KD[ua,lc] ddetg[lb]
                                  - (1/3) g[lb,lc] gu[ua,ud] ddetg[ld]),
+    
+    R[la,lb] -> Rt[la,lb] + Rphi[la,lb],
     
     (* PRD 62, 044034 (2000), eqn. (10) *)
     dot[phi]       -> - (1/6) alpha trK
@@ -456,6 +457,7 @@ evolCalcBSSN =
                       + alpha (Atm[ua,lb] Atm[ub,la] + (1/3) trK^2)
                       + Lie[trK, beta],
     (* PRD 62, 044034 (2000), eqn. (12) *)
+    (* TODO: use Hamiltonian constraint to make tracefree *)
     dot[At[la,lb]] -> + em4phi (+ (- CD[alpha,la,lb] + alpha R[la,lb])
                                 - (1/3) g[la,lb] gu[uc,ud]
                                         (- CD[alpha,lc,ld] + alpha R[lc,ld]))
@@ -521,10 +523,10 @@ constraintsCalcBSSN =
   Name -> "ML_BSSN_constraints",
   Schedule -> {"AT analysis"},
   Where -> Interior,
-  Shorthands -> {detgt, ddetgt[la], gtu[ua,ub], Gt[ua,lb,lc], e4phi,
+  Shorthands -> {detgt, ddetgt[la], gtu[ua,ub], Gt[ua,lb,lc], e4phi, em4phi,
                  g[la,lb], detg, gu[ua,ub], ddetg[la], G[ua,lb,lc],
-                 Rt[la,lb], Rphi[la,lb], R[la,lb], trR,
-                 K[la,lb], Km[la,lb], gK[la,lb,lc]},
+                 Rt[la,lb], Rphi[la,lb], R[la,lb], trR, Atm[la,lb],
+                 gK[la,lb,lc]},
   Equations -> 
   {
     detgt        -> 1 (* detgtExpr *),
@@ -533,16 +535,6 @@ constraintsCalcBSSN =
     Gt[ua,lb,lc] -> 1/2 gtu[ua,ud]
                     (PD[gt[lb,ld],lc] + PD[gt[lc,ld],lb] - PD[gt[lb,lc],ld]),
     
-    e4phi     -> Exp [4 phi],
-    g[la,lb]  -> e4phi gt[la,lb],
-    detg      -> detgExpr,
-    gu[ua,ub] -> 1/detg detgExpr MatrixInverse [g[ua,ub]],
-    (* ddetg[la] -> PD[e4phi detg,la], *)
-    ddetg[la] -> e4phi ddetgt[la] + 4 detgt e4phi PD[phi,la],
-    G[ua,lb,lc] -> Gt[ua,lb,lc]
-                   + 1/(2 detg) (+ KD[ua,lb] ddetg[lc] + KD[ua,lc] ddetg[lb]
-                                 - (1/3) g[lb,lc] gu[ua,ud] ddetg[ld]),
-
     (* PRD 62, 044034 (2000), eqn. (18) *)
     Rt[li,lj] -> - (1/2) gtu[ul,um] PD[gt[li,lj],ll,lm]
                  + gt[lk,li] PD[Xt[uk],lj] + gt[lk,lj] PD[Xt[uk],li]
@@ -551,19 +543,35 @@ constraintsCalcBSSN =
                                + 2 Gt[uk,ll,lj] gt[li,ln] Gt[un,lk,lm]
                                + Gt[uk,li,lm] gt[lk,ln] Gt[un,ll,lj]),
     (* PRD 62, 044034 (2000), eqn. (15) *)
-    (* TODO: Check that CDt takes the tensor weight of phi into account *)
+    (* TODO: this term seems to be wrong;
+       the Ricci scalar is not zero for BL data *)
     Rphi[li,lj] -> - 2 CDt[phi,lj,li]
                    - 2 gt[li,lj] gtu[ul,un] CDt[phi,ll,ln]
                    + 4 CDt[phi,li] CDt[phi,lj]
                    - 4 gt[li,lj] gtu[ul,un] CDt[phi,ln] CDt[phi,ll],
     
+    e4phi       -> Exp [4 phi],
+    em4phi      -> 1 / e4phi,
+    g[la,lb]    -> e4phi gt[la,lb],
+    (* detg      -> detgExpr, *)
+    (* gu[ua,ub] -> 1/detg detgExpr MatrixInverse [g[ua,ub]], *)
+    detg        -> e4phi^3,
+    gu[ua,ub]   -> em4phi gtu[ua,ub],
+    (* ddetg[la] -> PD[e4phi detg,la], *)
+    ddetg[la]   -> e4phi ddetgt[la] + 4 detgt e4phi PD[phi,la],
+    G[ua,lb,lc] -> Gt[ua,lb,lc]
+                   + 1/(2 detg) (+ KD[ua,lb] ddetg[lc] + KD[ua,lc] ddetg[lb]
+                                 - (1/3) g[lb,lc] gu[ua,ud] ddetg[ld]),
+    
     R[la,lb] -> Rt[la,lb] + Rphi[la,lb],
     trR -> gu[ua,ub] R[la,lb],
     
-    K[la,lb] -> e4phi At[la,lb] + (1/3) g[la,lb] trK,
-    Km[ua,lb] -> gu[ua,uc] K[lc,lb],
+    (* K[la,lb] -> e4phi At[la,lb] + (1/3) g[la,lb] trK, *)
+    (* Km[ua,lb] -> gu[ua,uc] K[lc,lb], *)
+    Atm[ua,lb] -> gtu[ua,uc] At[lc,lb],
     
-    H -> trR - Km[ua,lb] Km[ub,la] + trK^2,
+    (* H -> trR - Km[ua,lb] Km[ub,la] + trK^2, *)
+    H -> trR - Atm[ua,lb] Atm[ub,la] + (2/3) trK^2,
     
     (* gK[la,lb,lc] -> CD[K[la,lb],lc], *)
     gK[la,lb,lc] -> + 4 e4phi PD[phi,lc] At[la,lb] + e4phi CD[At[la,lb],lc]
@@ -571,7 +579,9 @@ constraintsCalcBSSN =
     M[la] -> gu[ub,uc] (gK[lc,la,lb] - gK[lc,lb,la]),
     
     (* det gamma-tilde *)
-    cS -> Log [detgt],
+    (* TODO cS -> Log [detgt], *)
+    (* TODO: output the Ricci scalar for debugging *)
+    cS -> trR,
     
     (* Gamma constraint *)
     cXt[ua] -> gtu[ub,uc] Gt[ua,lb,lc] - Xt[ua],
