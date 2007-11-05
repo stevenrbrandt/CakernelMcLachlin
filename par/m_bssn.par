@@ -29,6 +29,11 @@ ADMBase::initial_dtshift = "zero"
 
 ML_BSSN::my_initial_data = "Minkowski"
 
+ML_BSSN::harmonic_n      = 0      # 1+log
+ML_BSSN::harmonic_f      = 2.0    # 1+log
+ML_BSSN::ShiftGammaCoeff = 0.75
+ML_BSSN::BetaDriver      = 0.5
+
 
 
 IO::out_dir = $parfile

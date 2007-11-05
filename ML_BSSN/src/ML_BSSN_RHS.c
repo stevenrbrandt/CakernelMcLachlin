@@ -212,18 +212,6 @@ void ML_BSSN_RHS_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCTK_REAL normal
     CCTK_REAL PDstandard4th23beta3 = INITVALUE;
     CCTK_REAL PDstandard4th31beta3 = INITVALUE;
     CCTK_REAL PDstandard4th32beta3 = INITVALUE;
-    CCTK_REAL PDstandard4th1dtalpha = INITVALUE;
-    CCTK_REAL PDstandard4th2dtalpha = INITVALUE;
-    CCTK_REAL PDstandard4th3dtalpha = INITVALUE;
-    CCTK_REAL PDstandard4th1dtbeta1 = INITVALUE;
-    CCTK_REAL PDstandard4th2dtbeta1 = INITVALUE;
-    CCTK_REAL PDstandard4th3dtbeta1 = INITVALUE;
-    CCTK_REAL PDstandard4th1dtbeta2 = INITVALUE;
-    CCTK_REAL PDstandard4th2dtbeta2 = INITVALUE;
-    CCTK_REAL PDstandard4th3dtbeta2 = INITVALUE;
-    CCTK_REAL PDstandard4th1dtbeta3 = INITVALUE;
-    CCTK_REAL PDstandard4th2dtbeta3 = INITVALUE;
-    CCTK_REAL PDstandard4th3dtbeta3 = INITVALUE;
     CCTK_REAL PDstandard4th1gt11 = INITVALUE;
     CCTK_REAL PDstandard4th2gt11 = INITVALUE;
     CCTK_REAL PDstandard4th3gt11 = INITVALUE;
@@ -344,9 +332,13 @@ void ML_BSSN_RHS_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCTK_REAL normal
     gt33L = gt33[index];
     phiL = phi[index];
     trKL = trK[index];
+    trKrhsL = trKrhs[index];
     Xt1L = Xt1[index];
+    Xt1rhsL = Xt1rhs[index];
     Xt2L = Xt2[index];
+    Xt2rhsL = Xt2rhs[index];
     Xt3L = Xt3[index];
+    Xt3rhsL = Xt3rhs[index];
     
     /* Assign local copies of subblock grid functions */
     
@@ -407,18 +399,6 @@ void ML_BSSN_RHS_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCTK_REAL normal
     PDstandard4th12beta3 = PDstandard4th12(beta3, i, j, k);
     PDstandard4th13beta3 = PDstandard4th13(beta3, i, j, k);
     PDstandard4th23beta3 = PDstandard4th23(beta3, i, j, k);
-    PDstandard4th1dtalpha = PDstandard4th1(dtalpha, i, j, k);
-    PDstandard4th2dtalpha = PDstandard4th2(dtalpha, i, j, k);
-    PDstandard4th3dtalpha = PDstandard4th3(dtalpha, i, j, k);
-    PDstandard4th1dtbeta1 = PDstandard4th1(dtbeta1, i, j, k);
-    PDstandard4th2dtbeta1 = PDstandard4th2(dtbeta1, i, j, k);
-    PDstandard4th3dtbeta1 = PDstandard4th3(dtbeta1, i, j, k);
-    PDstandard4th1dtbeta2 = PDstandard4th1(dtbeta2, i, j, k);
-    PDstandard4th2dtbeta2 = PDstandard4th2(dtbeta2, i, j, k);
-    PDstandard4th3dtbeta2 = PDstandard4th3(dtbeta2, i, j, k);
-    PDstandard4th1dtbeta3 = PDstandard4th1(dtbeta3, i, j, k);
-    PDstandard4th2dtbeta3 = PDstandard4th2(dtbeta3, i, j, k);
-    PDstandard4th3dtbeta3 = PDstandard4th3(dtbeta3, i, j, k);
     PDstandard4th1gt11 = PDstandard4th1(gt11, i, j, k);
     PDstandard4th2gt11 = PDstandard4th2(gt11, i, j, k);
     PDstandard4th3gt11 = PDstandard4th3(gt11, i, j, k);
@@ -1448,24 +1428,22 @@ void ML_BSSN_RHS_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCTK_REAL normal
            2*alphaL*g33*gu23*R32 - 3*alphaL*R33 + alphaL*g33*gu33*R33) + 
         alphaL*(-2*(At31L*Atm13 + At32L*Atm23 + At33L*Atm33) + At33L*trKL);
     
-    alpharhsL  =  beta1L*PDstandard4th1alpha + beta2L*PDstandard4th2alpha + beta3L*PDstandard4th3alpha;
+    alpharhsL  =  beta1L*PDstandard4th1alpha + beta2L*PDstandard4th2alpha + beta3L*PDstandard4th3alpha - 
+        dtalphaL*harmonicF*pow(alphaL,harmonicN);
     
-    dtalpharhsL  =  beta1L*PDstandard4th1dtalpha + beta2L*PDstandard4th2dtalpha + beta3L*PDstandard4th3dtalpha;
+    dtalpharhsL  =  -(AlphaDriver*dtalphaL) + trKrhsL;
     
-    beta1rhsL  =  0;
+    beta1rhsL  =  dtbeta1L*ShiftGammaCoeff*pow(alphaL,ShiftAlphaPower);
     
-    beta2rhsL  =  0;
+    beta2rhsL  =  dtbeta2L*ShiftGammaCoeff*pow(alphaL,ShiftAlphaPower);
     
-    beta3rhsL  =  0;
+    beta3rhsL  =  dtbeta3L*ShiftGammaCoeff*pow(alphaL,ShiftAlphaPower);
     
-    dtbeta1rhsL  =  -(dtbeta1L*PDstandard4th1beta1) + beta1L*PDstandard4th1dtbeta1 - dtbeta2L*PDstandard4th2beta1 + 
-        beta2L*PDstandard4th2dtbeta1 - dtbeta3L*PDstandard4th3beta1 + beta3L*PDstandard4th3dtbeta1;
+    dtbeta1rhsL  =  -(BetaDriver*dtbeta1L) + Xt1rhsL;
     
-    dtbeta2rhsL  =  -(dtbeta1L*PDstandard4th1beta2) + beta1L*PDstandard4th1dtbeta2 - dtbeta2L*PDstandard4th2beta2 + 
-        beta2L*PDstandard4th2dtbeta2 - dtbeta3L*PDstandard4th3beta2 + beta3L*PDstandard4th3dtbeta2;
+    dtbeta2rhsL  =  -(BetaDriver*dtbeta2L) + Xt2rhsL;
     
-    dtbeta3rhsL  =  -(dtbeta1L*PDstandard4th1beta3) + beta1L*PDstandard4th1dtbeta3 - dtbeta2L*PDstandard4th2beta3 + 
-        beta2L*PDstandard4th2dtbeta3 - dtbeta3L*PDstandard4th3beta3 + beta3L*PDstandard4th3dtbeta3;
+    dtbeta3rhsL  =  -(BetaDriver*dtbeta3L) + Xt3rhsL;
     
     
     /* Copy local copies back to grid functions */

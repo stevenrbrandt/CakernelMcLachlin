@@ -462,14 +462,13 @@ evolCalcBSSN =
                       + alpha (trK At[la,lb] - 2 At[la,lc] Atm[uc,lb])
                       + Lie[At[la,lb], beta] - (2/3) At[la,lb] PD[beta[uc],lc],
     
-    dot[alpha]      -> (* TODO *)
+    (* dot[alpha] -> - harmonicF alpha^harmonicN trK, *)
+    dot[alpha]      -> - harmonicF alpha^harmonicN dtalpha
                        + Lie[alpha, beta],
-    dot[dtalpha]    -> (* TODO *)
-                       + Lie[dtalpha, beta],
-    dot[beta[ua]]   -> (* TODO *)
-                       + Lie[beta[ua], beta],
-    dot[dtbeta[ua]] -> (* TODO *)
-                       + Lie[dtbeta[ua], beta]
+    dot[dtalpha]    -> dot[trK] - AlphaDriver dtalpha,
+    (* dot[beta[ua]] -> eta Xt[ua], *)
+    dot[beta[ua]]   -> ShiftGammaCoeff alpha^ShiftAlphaPower dtbeta[ua],
+    dot[dtbeta[ua]] -> dot[Xt[ua]] - BetaDriver dtbeta[ua]
   }
 }
 
@@ -595,15 +594,49 @@ inheritedImplementations = {"ADMBase"};
 inheritedKeywordParameters = {"ADMBase::initial_data"};
 
 keywordParameters =
-{{
-  Name -> "my_initial_data",
-  (* Visibility -> "restricted", *)
-  (* Description -> "ddd", *)
-  AllowedValues -> {"ADMBase", "Minkowski"},
-  Default -> "ADMBase"
-}};
+{
+  {
+    Name -> "my_initial_data",
+    (* Visibility -> "restricted", *)
+    (* Description -> "ddd", *)
+    AllowedValues -> {"ADMBase", "Minkowski"},
+    Default -> "ADMBase"
+  }
+};
 
-realParameters = {};
+intParameters =
+{
+  {
+    Name -> harmonicN,
+    Description -> "d/dt alpha = - f alpha^n K  (harmonic=1, 1+log=0)",
+    Default -> 1
+  },
+  {
+    Name -> ShiftAlphaPower,
+    Default -> 0
+  }
+};
+
+realParameters =
+{
+  {
+    Name -> harmonicF,
+    Description -> "d/dt alpha = - f alpha^n K   (harmonic=1, 1+log=2)",
+    Default -> 1
+  },
+  {
+    Name -> AlphaDriver,
+    Default -> 0
+  },
+  {
+    Name -> ShiftGammaCoeff,
+    Default -> 0
+  },
+  {
+    Name -> BetaDriver,
+    Default -> 0
+  }
+};
 
 (******************************************************************************)
 (* Construct the thorns *)
@@ -624,8 +657,7 @@ CreateKrancThornTT [groups, ".", "ML_ADM",
   PartialDerivatives -> derivatives,
   InheritedImplementations -> inheritedImplementations,
   InheritedKeywordParameters -> inheritedKeywordParameters,
-  KeywordParameters -> keywordParameters,
-  RealParameters -> realParameters
+  KeywordParameters -> keywordParameters
 ];
 
 calculationsBSSN = 
@@ -646,5 +678,6 @@ CreateKrancThornTT [groupsBSSN, ".", "ML_BSSN",
   InheritedImplementations -> inheritedImplementations,
   InheritedKeywordParameters -> inheritedKeywordParameters,
   KeywordParameters -> keywordParameters,
+  IntParameters -> intParameters,
   RealParameters -> realParameters
 ];

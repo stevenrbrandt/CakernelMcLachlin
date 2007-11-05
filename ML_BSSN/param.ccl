@@ -29,6 +29,42 @@ CCTK_REAL verbose "verbose"
   "*:*" :: "no restrictions"
 } 0
 
+restricted:
+CCTK_REAL harmonicF "harmonicF"
+{
+  "*:*" :: "no restrictions"
+} 1
+
+restricted:
+CCTK_REAL AlphaDriver "AlphaDriver"
+{
+  "*:*" :: "no restrictions"
+} 0
+
+restricted:
+CCTK_REAL ShiftGammaCoeff "ShiftGammaCoeff"
+{
+  "*:*" :: "no restrictions"
+} 0
+
+restricted:
+CCTK_REAL BetaDriver "BetaDriver"
+{
+  "*:*" :: "no restrictions"
+} 0
+
+restricted:
+CCTK_INT harmonicN "harmonicN"
+{
+  *:* :: "no restrictions"
+} 1
+
+restricted:
+CCTK_INT ShiftAlphaPower "ShiftAlphaPower"
+{
+  *:* :: "no restrictions"
+} 0
+
 private:
 KEYWORD my_initial_data "my_initial_data"
 {
