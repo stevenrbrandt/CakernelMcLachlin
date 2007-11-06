@@ -335,6 +335,7 @@ convertToADMBaseCalcBSSN =
     kzz      -> K33,
     alp      -> alpha,
     (* TODO: this is wrong *)
+    (* TODO: rename dtalp->A, dtbeta->B *)
     dtalp    -> dtalpha,
     betax    -> beta1,
     betay    -> beta2,
@@ -543,8 +544,6 @@ constraintsCalcBSSN =
                                + 2 Gt[uk,ll,lj] gt[li,ln] Gt[un,lk,lm]
                                + Gt[uk,li,lm] gt[lk,ln] Gt[un,ll,lj]),
     (* PRD 62, 044034 (2000), eqn. (15) *)
-    (* TODO: this term seems to be wrong;
-       the Ricci scalar is not zero for BL data *)
     Rphi[li,lj] -> - 2 CDt[phi,lj,li]
                    - 2 gt[li,lj] gtu[ul,un] CDt[phi,ll,ln]
                    + 4 CDt[phi,li] CDt[phi,lj]
@@ -579,9 +578,7 @@ constraintsCalcBSSN =
     M[la] -> gu[ub,uc] (gK[lc,la,lb] - gK[lc,lb,la]),
     
     (* det gamma-tilde *)
-    (* TODO cS -> Log [detgt], *)
-    (* TODO: output the Ricci scalar for debugging *)
-    cS -> trR,
+    cS -> Log [detgt],
     
     (* Gamma constraint *)
     cXt[ua] -> gtu[ub,uc] Gt[ua,lb,lc] - Xt[ua],

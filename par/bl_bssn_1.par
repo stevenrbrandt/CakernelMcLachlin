@@ -50,9 +50,9 @@ CoordBase::domainsize = "minmax"
 CoordBase::xmax = 4.0
 CoordBase::ymax = 4.0
 CoordBase::zmax = 4.0
-CoordBase::dx   = 0.1
-CoordBase::dy   = 0.1
-CoordBase::dz   = 0.1
+CoordBase::dx   = 0.2
+CoordBase::dy   = 0.2
+CoordBase::dz   = 0.2
 
 ReflectionSymmetry::reflection_x   = yes
 ReflectionSymmetry::reflection_y   = yes
@@ -84,9 +84,8 @@ ADMBase::initial_shift   = "exact"
 ADMBase::initial_dtlapse = "zero"
 ADMBase::initial_dtshift = "zero"
 
-Exact::exact_model = "Kerr/Kerr-Schild"
-Exact::Kerr_KerrSchild__mass = 1.0
-Exact::Kerr_KerrSchild__spin = 0.0
+Exact::exact_model = "Schwarzschild/BL"
+Exact::Schwarzschild_BL__mass = 1.0
 
 ML_BSSN::harmonicN       = 0      # 1+log
 ML_BSSN::harmonicF       = 2.0    # 1+log

@@ -927,7 +927,7 @@ void ML_BSSN_constraints_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCTK_REA
     M3L  =  (-gK113 + gK131)*gu11 + (-2*gK123 + gK132 + gK231)*gu21 + (-gK223 + gK232)*gu22 + (-gK133 + gK331)*gu31 + 
         (-gK233 + gK332)*gu32;
     
-    cSL  =  trR;
+    cSL  =  Log(detgt);
     
     cXt1L  =  Gt111*gtu11 + Gt122*gtu22 + 2*(Gt112*gtu21 + Gt113*gtu31 + Gt123*gtu32) + Gt133*gtu33 - Xt1L;
     
