@@ -93,6 +93,16 @@ ML_BSSN::harmonicF       = 2.0    # 1+log
 ML_BSSN::ShiftGammaCoeff = 0.75
 ML_BSSN::BetaDriver      = 0.5
 
+ML_BSSN::log_confac_bound = "none"
+ML_BSSN::metric_bound     = "none"
+ML_BSSN::Gamma_bound      = "none"
+ML_BSSN::trace_curv_bound = "none"
+ML_BSSN::curv_bound       = "none"
+ML_BSSN::lapse_bound      = "none"
+ML_BSSN::dtlapse_bound    = "none"
+ML_BSSN::shift_bound      = "none"
+ML_BSSN::dtshift_bound    = "none"
+
 ADMMacros::spatial_order = 4
 
 
