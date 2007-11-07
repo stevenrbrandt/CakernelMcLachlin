@@ -4,6 +4,9 @@
 # It re-generates the Cactus thorns trees and copies them if they have
 # changed.
 
+# Abort on errors
+set -e
+
 MATHEMATICA="/Applications/Mathematica.app/Contents/MacOS/MathKernel"
 
 # Remove old output
@@ -27,5 +30,5 @@ fi
 ./copy-if-changed.sh ML_BSSN ../ML_BSSN
 
 echo
-echo "The Cactus thorns have been successfully regenerated."
+echo "The Cactus thorns have been regenerated successfully."
 echo
