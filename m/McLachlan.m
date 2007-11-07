@@ -622,16 +622,22 @@ constraintsCalcBSSN =
     Atm[ua,lb] -> gtu[ua,uc] At[lc,lb],
     
     (* H -> trR - Km[ua,lb] Km[ub,la] + trK^2, *)
+    (* PRD 67, 084023 (2003), eqn. (19) *)
     H -> trR - Atm[ua,lb] Atm[ub,la] + (2/3) trK^2,
     
     (* gK[la,lb,lc] -> CD[K[la,lb],lc], *)
     gK[la,lb,lc] -> + 4 e4phi PD[phi,lc] At[la,lb] + e4phi CD[At[la,lb],lc]
                     + (1/3) g[la,lb] PD[trK,lc],
+    (*
+    gK[la,lb,lc] -> + 4 e4phi (PD[phi,lc] + YYY e4phi Gt[ud,ld,lc]) At[la,lb]
+                    + e4phi (CD[At[la,lb],lc] + XXX At[la,lb] Gt[ud,ld,lc])
+                    + (1/3) g[la,lb] PD[trK,lc],
+    *)
     M[la] -> gu[ub,uc] (gK[lc,la,lb] - gK[lc,lb,la]),
+    (* TODO: use PRD 67, 084023 (2003), eqn. (20) *)
     
     (* det gamma-tilde *)
-    (* TODO cS -> Log [detgt], *)
-    cS -> trR,
+    cS -> Log [detgt],
     
     (* Gamma constraint *)
     cXt[ua] -> gtu[ub,uc] Gt[ua,lb,lc] - Xt[ua],
