@@ -10,29 +10,31 @@ SetSourceLanguage["C"];
 (* Derivatives *)
 (******************************************************************************)
 
+derivOrder = 4;
+
 derivatives =
 {
   (*
   PDstandard2nd[i_]     -> StandardCenteredDifferenceOperator[1,1,i],
   PDstandard2nd[i_, i_] -> StandardCenteredDifferenceOperator[2,1,i],
   PDstandard2nd[i_, j_] -> StandardCenteredDifferenceOperator[1,1,i]
-                           StandardCenteredDifferenceOperator[1,1,j],
+                           StandardCenteredDifferenceOperator[1,1,j]
   *)
 
+  (*
   PDstandard4th[i_]     -> StandardCenteredDifferenceOperator[1,2,i],
   PDstandard4th[i_, i_] -> StandardCenteredDifferenceOperator[2,2,i],
   PDstandard4th[i_, j_] -> StandardCenteredDifferenceOperator[1,2,i]
                            StandardCenteredDifferenceOperator[1,2,j]
-
-  (*
-  PDstandard6th[i_]     -> StandardCenteredDifferenceOperator[1,3,i],
-  PDstandard6th[i_, i_] -> StandardCenteredDifferenceOperator[2,3,i],
-  PDstandard6th[i_, j_] -> StandardCenteredDifferenceOperator[1,3,i]
-                           StandardCenteredDifferenceOperator[1,3,j]
   *)
+
+  PDstandardNth[i_]     -> StandardCenteredDifferenceOperator[1,derivOrder/2,i],
+  PDstandardNth[i_, i_] -> StandardCenteredDifferenceOperator[2,derivOrder/2,i],
+  PDstandardNth[i_, j_] -> StandardCenteredDifferenceOperator[1,derivOrder/2,i]
+                           StandardCenteredDifferenceOperator[1,derivOrder/2,j]
 };
 
-PD = PDstandard4th;
+PD = PDstandardNth;
 
 KD = KroneckerDelta;
 
