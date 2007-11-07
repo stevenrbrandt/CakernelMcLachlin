@@ -78,15 +78,15 @@ CCTK_REAL curvrhs type=GF timelevels=1 tags='tensortypealias="DD_sym" tensorweig
 public:
 CCTK_REAL dtlapserhs type=GF timelevels=1 tags='tensortypealias="Scalar" tensorweight=1.0000000000000000000'
 {
-  dtalpharhs
+  Arhs
 } "dtlapserhs"
 
 public:
 CCTK_REAL dtshiftrhs type=GF timelevels=1 tags='tensortypealias="U" tensorweight=1.0000000000000000000'
 {
-  dtbeta1rhs,
-  dtbeta2rhs,
-  dtbeta3rhs
+  B1rhs,
+  B2rhs,
+  B3rhs
 } "dtshiftrhs"
 
 public:
@@ -148,15 +148,15 @@ CCTK_REAL curv type=GF timelevels=3 tags='tensortypealias="DD_sym" tensorweight=
 public:
 CCTK_REAL dtlapse type=GF timelevels=3 tags='tensortypealias="Scalar" tensorweight=1.0000000000000000000'
 {
-  dtalpha
+  A
 } "dtlapse"
 
 public:
 CCTK_REAL dtshift type=GF timelevels=3 tags='tensortypealias="U" tensorweight=1.0000000000000000000'
 {
-  dtbeta1,
-  dtbeta2,
-  dtbeta3
+  B1,
+  B2,
+  B3
 } "dtshift"
 
 public:

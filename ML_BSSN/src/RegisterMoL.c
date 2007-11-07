@@ -21,10 +21,10 @@ void ML_BSSN_RegisterVars(CCTK_ARGUMENTS)
   ierr += MoLRegisterEvolved(CCTK_VarIndex("ML_BSSN::At22"),  CCTK_VarIndex("ML_BSSN::At22rhs"));
   ierr += MoLRegisterEvolved(CCTK_VarIndex("ML_BSSN::At23"),  CCTK_VarIndex("ML_BSSN::At23rhs"));
   ierr += MoLRegisterEvolved(CCTK_VarIndex("ML_BSSN::At33"),  CCTK_VarIndex("ML_BSSN::At33rhs"));
-  ierr += MoLRegisterEvolved(CCTK_VarIndex("ML_BSSN::dtalpha"),  CCTK_VarIndex("ML_BSSN::dtalpharhs"));
-  ierr += MoLRegisterEvolved(CCTK_VarIndex("ML_BSSN::dtbeta1"),  CCTK_VarIndex("ML_BSSN::dtbeta1rhs"));
-  ierr += MoLRegisterEvolved(CCTK_VarIndex("ML_BSSN::dtbeta2"),  CCTK_VarIndex("ML_BSSN::dtbeta2rhs"));
-  ierr += MoLRegisterEvolved(CCTK_VarIndex("ML_BSSN::dtbeta3"),  CCTK_VarIndex("ML_BSSN::dtbeta3rhs"));
+  ierr += MoLRegisterEvolved(CCTK_VarIndex("ML_BSSN::A"),  CCTK_VarIndex("ML_BSSN::Arhs"));
+  ierr += MoLRegisterEvolved(CCTK_VarIndex("ML_BSSN::B1"),  CCTK_VarIndex("ML_BSSN::B1rhs"));
+  ierr += MoLRegisterEvolved(CCTK_VarIndex("ML_BSSN::B2"),  CCTK_VarIndex("ML_BSSN::B2rhs"));
+  ierr += MoLRegisterEvolved(CCTK_VarIndex("ML_BSSN::B3"),  CCTK_VarIndex("ML_BSSN::B3rhs"));
   ierr += MoLRegisterEvolved(CCTK_VarIndex("ML_BSSN::Xt1"),  CCTK_VarIndex("ML_BSSN::Xt1rhs"));
   ierr += MoLRegisterEvolved(CCTK_VarIndex("ML_BSSN::Xt2"),  CCTK_VarIndex("ML_BSSN::Xt2rhs"));
   ierr += MoLRegisterEvolved(CCTK_VarIndex("ML_BSSN::Xt3"),  CCTK_VarIndex("ML_BSSN::Xt3rhs"));

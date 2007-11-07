@@ -78,7 +78,7 @@ schedule ML_ADM_RHS AT analysis
   SYNC: shiftrhs
 } "ML_ADM_RHS"
 
-schedule ML_ADM_convertToADMBase IN MoL_PostStep AFTER ADM_ApplyBoundConds
+schedule ML_ADM_convertToADMBase IN MoL_PostStep AFTER ML_ADM_ApplyBCs
 {
   LANG: C
   

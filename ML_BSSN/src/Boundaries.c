@@ -200,48 +200,48 @@ void ML_BSSN_ApplyBoundConds(CCTK_ARGUMENTS)
        CCTK_WARN(-1, "Failed to register At33_bound BC for ML_BSSN::At33!");
   }
   
-  if (CCTK_EQUALS(dtalpha_bound, "none"  ) ||
-      CCTK_EQUALS(dtalpha_bound, "static") ||
-      CCTK_EQUALS(dtalpha_bound, "flat"  ) ||
-      CCTK_EQUALS(dtalpha_bound, "zero"  ) ) 
+  if (CCTK_EQUALS(A_bound, "none"  ) ||
+      CCTK_EQUALS(A_bound, "static") ||
+      CCTK_EQUALS(A_bound, "flat"  ) ||
+      CCTK_EQUALS(A_bound, "zero"  ) ) 
   {
     ierr = Boundary_SelectVarForBC(cctkGH, CCTK_ALL_FACES, 1, -1, 
-                      "ML_BSSN::dtalpha", dtalpha_bound);
+                      "ML_BSSN::A", A_bound);
     if (ierr < 0)
-       CCTK_WARN(-1, "Failed to register dtalpha_bound BC for ML_BSSN::dtalpha!");
+       CCTK_WARN(-1, "Failed to register A_bound BC for ML_BSSN::A!");
   }
   
-  if (CCTK_EQUALS(dtbeta1_bound, "none"  ) ||
-      CCTK_EQUALS(dtbeta1_bound, "static") ||
-      CCTK_EQUALS(dtbeta1_bound, "flat"  ) ||
-      CCTK_EQUALS(dtbeta1_bound, "zero"  ) ) 
+  if (CCTK_EQUALS(B1_bound, "none"  ) ||
+      CCTK_EQUALS(B1_bound, "static") ||
+      CCTK_EQUALS(B1_bound, "flat"  ) ||
+      CCTK_EQUALS(B1_bound, "zero"  ) ) 
   {
     ierr = Boundary_SelectVarForBC(cctkGH, CCTK_ALL_FACES, 1, -1, 
-                      "ML_BSSN::dtbeta1", dtbeta1_bound);
+                      "ML_BSSN::B1", B1_bound);
     if (ierr < 0)
-       CCTK_WARN(-1, "Failed to register dtbeta1_bound BC for ML_BSSN::dtbeta1!");
+       CCTK_WARN(-1, "Failed to register B1_bound BC for ML_BSSN::B1!");
   }
   
-  if (CCTK_EQUALS(dtbeta2_bound, "none"  ) ||
-      CCTK_EQUALS(dtbeta2_bound, "static") ||
-      CCTK_EQUALS(dtbeta2_bound, "flat"  ) ||
-      CCTK_EQUALS(dtbeta2_bound, "zero"  ) ) 
+  if (CCTK_EQUALS(B2_bound, "none"  ) ||
+      CCTK_EQUALS(B2_bound, "static") ||
+      CCTK_EQUALS(B2_bound, "flat"  ) ||
+      CCTK_EQUALS(B2_bound, "zero"  ) ) 
   {
     ierr = Boundary_SelectVarForBC(cctkGH, CCTK_ALL_FACES, 1, -1, 
-                      "ML_BSSN::dtbeta2", dtbeta2_bound);
+                      "ML_BSSN::B2", B2_bound);
     if (ierr < 0)
-       CCTK_WARN(-1, "Failed to register dtbeta2_bound BC for ML_BSSN::dtbeta2!");
+       CCTK_WARN(-1, "Failed to register B2_bound BC for ML_BSSN::B2!");
   }
   
-  if (CCTK_EQUALS(dtbeta3_bound, "none"  ) ||
-      CCTK_EQUALS(dtbeta3_bound, "static") ||
-      CCTK_EQUALS(dtbeta3_bound, "flat"  ) ||
-      CCTK_EQUALS(dtbeta3_bound, "zero"  ) ) 
+  if (CCTK_EQUALS(B3_bound, "none"  ) ||
+      CCTK_EQUALS(B3_bound, "static") ||
+      CCTK_EQUALS(B3_bound, "flat"  ) ||
+      CCTK_EQUALS(B3_bound, "zero"  ) ) 
   {
     ierr = Boundary_SelectVarForBC(cctkGH, CCTK_ALL_FACES, 1, -1, 
-                      "ML_BSSN::dtbeta3", dtbeta3_bound);
+                      "ML_BSSN::B3", B3_bound);
     if (ierr < 0)
-       CCTK_WARN(-1, "Failed to register dtbeta3_bound BC for ML_BSSN::dtbeta3!");
+       CCTK_WARN(-1, "Failed to register B3_bound BC for ML_BSSN::B3!");
   }
   
   if (CCTK_EQUALS(Xt1_bound, "none"  ) ||
@@ -679,75 +679,75 @@ void ML_BSSN_ApplyBoundConds(CCTK_ARGUMENTS)
   
   }
   
-  if (CCTK_EQUALS(dtalpha_bound, "radiative"))
+  if (CCTK_EQUALS(A_bound, "radiative"))
   {
    /* apply radiation boundary condition */
-    CCTK_INT handle_dtalpha_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
-    if (handle_dtalpha_bound < 0) CCTK_WARN(-1, "could not create table!");
-    if (Util_TableSetReal(handle_dtalpha_bound , dtalpha_bound_limit, "LIMIT") < 0)
+    CCTK_INT handle_A_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
+    if (handle_A_bound < 0) CCTK_WARN(-1, "could not create table!");
+    if (Util_TableSetReal(handle_A_bound , A_bound_limit, "LIMIT") < 0)
        CCTK_WARN(-1, "could not set LIMIT value in table!");
-    if (Util_TableSetReal(handle_dtalpha_bound ,dtalpha_bound_speed, "SPEED") < 0)
+    if (Util_TableSetReal(handle_A_bound ,A_bound_speed, "SPEED") < 0)
         CCTK_WARN(-1, "could not set SPEED value in table!");
   
-    ierr = Boundary_SelectVarForBC(cctkGH, CCTK_ALL_FACES, 1, handle_dtalpha_bound, 
-                      "ML_BSSN::dtalpha", "Radiation");
+    ierr = Boundary_SelectVarForBC(cctkGH, CCTK_ALL_FACES, 1, handle_A_bound, 
+                      "ML_BSSN::A", "Radiation");
   
     if (ierr < 0)
-       CCTK_WARN(-1, "Failed to register Radiation BC for ML_BSSN::dtalpha!");
+       CCTK_WARN(-1, "Failed to register Radiation BC for ML_BSSN::A!");
   
   }
   
-  if (CCTK_EQUALS(dtbeta1_bound, "radiative"))
+  if (CCTK_EQUALS(B1_bound, "radiative"))
   {
    /* apply radiation boundary condition */
-    CCTK_INT handle_dtbeta1_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
-    if (handle_dtbeta1_bound < 0) CCTK_WARN(-1, "could not create table!");
-    if (Util_TableSetReal(handle_dtbeta1_bound , dtbeta1_bound_limit, "LIMIT") < 0)
+    CCTK_INT handle_B1_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
+    if (handle_B1_bound < 0) CCTK_WARN(-1, "could not create table!");
+    if (Util_TableSetReal(handle_B1_bound , B1_bound_limit, "LIMIT") < 0)
        CCTK_WARN(-1, "could not set LIMIT value in table!");
-    if (Util_TableSetReal(handle_dtbeta1_bound ,dtbeta1_bound_speed, "SPEED") < 0)
+    if (Util_TableSetReal(handle_B1_bound ,B1_bound_speed, "SPEED") < 0)
         CCTK_WARN(-1, "could not set SPEED value in table!");
   
-    ierr = Boundary_SelectVarForBC(cctkGH, CCTK_ALL_FACES, 1, handle_dtbeta1_bound, 
-                      "ML_BSSN::dtbeta1", "Radiation");
+    ierr = Boundary_SelectVarForBC(cctkGH, CCTK_ALL_FACES, 1, handle_B1_bound, 
+                      "ML_BSSN::B1", "Radiation");
   
     if (ierr < 0)
-       CCTK_WARN(-1, "Failed to register Radiation BC for ML_BSSN::dtbeta1!");
+       CCTK_WARN(-1, "Failed to register Radiation BC for ML_BSSN::B1!");
   
   }
   
-  if (CCTK_EQUALS(dtbeta2_bound, "radiative"))
+  if (CCTK_EQUALS(B2_bound, "radiative"))
   {
    /* apply radiation boundary condition */
-    CCTK_INT handle_dtbeta2_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
-    if (handle_dtbeta2_bound < 0) CCTK_WARN(-1, "could not create table!");
-    if (Util_TableSetReal(handle_dtbeta2_bound , dtbeta2_bound_limit, "LIMIT") < 0)
+    CCTK_INT handle_B2_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
+    if (handle_B2_bound < 0) CCTK_WARN(-1, "could not create table!");
+    if (Util_TableSetReal(handle_B2_bound , B2_bound_limit, "LIMIT") < 0)
        CCTK_WARN(-1, "could not set LIMIT value in table!");
-    if (Util_TableSetReal(handle_dtbeta2_bound ,dtbeta2_bound_speed, "SPEED") < 0)
+    if (Util_TableSetReal(handle_B2_bound ,B2_bound_speed, "SPEED") < 0)
         CCTK_WARN(-1, "could not set SPEED value in table!");
   
-    ierr = Boundary_SelectVarForBC(cctkGH, CCTK_ALL_FACES, 1, handle_dtbeta2_bound, 
-                      "ML_BSSN::dtbeta2", "Radiation");
+    ierr = Boundary_SelectVarForBC(cctkGH, CCTK_ALL_FACES, 1, handle_B2_bound, 
+                      "ML_BSSN::B2", "Radiation");
   
     if (ierr < 0)
-       CCTK_WARN(-1, "Failed to register Radiation BC for ML_BSSN::dtbeta2!");
+       CCTK_WARN(-1, "Failed to register Radiation BC for ML_BSSN::B2!");
   
   }
   
-  if (CCTK_EQUALS(dtbeta3_bound, "radiative"))
+  if (CCTK_EQUALS(B3_bound, "radiative"))
   {
    /* apply radiation boundary condition */
-    CCTK_INT handle_dtbeta3_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
-    if (handle_dtbeta3_bound < 0) CCTK_WARN(-1, "could not create table!");
-    if (Util_TableSetReal(handle_dtbeta3_bound , dtbeta3_bound_limit, "LIMIT") < 0)
+    CCTK_INT handle_B3_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
+    if (handle_B3_bound < 0) CCTK_WARN(-1, "could not create table!");
+    if (Util_TableSetReal(handle_B3_bound , B3_bound_limit, "LIMIT") < 0)
        CCTK_WARN(-1, "could not set LIMIT value in table!");
-    if (Util_TableSetReal(handle_dtbeta3_bound ,dtbeta3_bound_speed, "SPEED") < 0)
+    if (Util_TableSetReal(handle_B3_bound ,B3_bound_speed, "SPEED") < 0)
         CCTK_WARN(-1, "could not set SPEED value in table!");
   
-    ierr = Boundary_SelectVarForBC(cctkGH, CCTK_ALL_FACES, 1, handle_dtbeta3_bound, 
-                      "ML_BSSN::dtbeta3", "Radiation");
+    ierr = Boundary_SelectVarForBC(cctkGH, CCTK_ALL_FACES, 1, handle_B3_bound, 
+                      "ML_BSSN::B3", "Radiation");
   
     if (ierr < 0)
-       CCTK_WARN(-1, "Failed to register Radiation BC for ML_BSSN::dtbeta3!");
+       CCTK_WARN(-1, "Failed to register Radiation BC for ML_BSSN::B3!");
   
   }
   
@@ -1261,67 +1261,67 @@ void ML_BSSN_ApplyBoundConds(CCTK_ARGUMENTS)
   
   }
   
-  if (CCTK_EQUALS(dtalpha_bound, "scalar"))
+  if (CCTK_EQUALS(A_bound, "scalar"))
   {
    /* apply scalar boundary condition */
-    CCTK_INT handle_dtalpha_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
-    if (handle_dtalpha_bound < 0) CCTK_WARN(-1, "could not create table!");
-    if (Util_TableSetReal(handle_dtalpha_bound ,dtalpha_bound_scalar, "SCALAR") < 0)
+    CCTK_INT handle_A_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
+    if (handle_A_bound < 0) CCTK_WARN(-1, "could not create table!");
+    if (Util_TableSetReal(handle_A_bound ,A_bound_scalar, "SCALAR") < 0)
       CCTK_WARN(-1, "could not set SCALAR value in table!");
   
-    ierr = Boundary_SelectVarForBC(cctkGH, CCTK_ALL_FACES, 1, handle_dtalpha_bound, 
-                      "ML_BSSN::dtalpha", "scalar");
+    ierr = Boundary_SelectVarForBC(cctkGH, CCTK_ALL_FACES, 1, handle_A_bound, 
+                      "ML_BSSN::A", "scalar");
   
     if (ierr < 0)
-       CCTK_WARN(-1, "Error in registering Scalar BC for ML_BSSN::dtalpha!");
+       CCTK_WARN(-1, "Error in registering Scalar BC for ML_BSSN::A!");
   
   }
   
-  if (CCTK_EQUALS(dtbeta1_bound, "scalar"))
+  if (CCTK_EQUALS(B1_bound, "scalar"))
   {
    /* apply scalar boundary condition */
-    CCTK_INT handle_dtbeta1_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
-    if (handle_dtbeta1_bound < 0) CCTK_WARN(-1, "could not create table!");
-    if (Util_TableSetReal(handle_dtbeta1_bound ,dtbeta1_bound_scalar, "SCALAR") < 0)
+    CCTK_INT handle_B1_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
+    if (handle_B1_bound < 0) CCTK_WARN(-1, "could not create table!");
+    if (Util_TableSetReal(handle_B1_bound ,B1_bound_scalar, "SCALAR") < 0)
       CCTK_WARN(-1, "could not set SCALAR value in table!");
   
-    ierr = Boundary_SelectVarForBC(cctkGH, CCTK_ALL_FACES, 1, handle_dtbeta1_bound, 
-                      "ML_BSSN::dtbeta1", "scalar");
+    ierr = Boundary_SelectVarForBC(cctkGH, CCTK_ALL_FACES, 1, handle_B1_bound, 
+                      "ML_BSSN::B1", "scalar");
   
     if (ierr < 0)
-       CCTK_WARN(-1, "Error in registering Scalar BC for ML_BSSN::dtbeta1!");
+       CCTK_WARN(-1, "Error in registering Scalar BC for ML_BSSN::B1!");
   
   }
   
-  if (CCTK_EQUALS(dtbeta2_bound, "scalar"))
+  if (CCTK_EQUALS(B2_bound, "scalar"))
   {
    /* apply scalar boundary condition */
-    CCTK_INT handle_dtbeta2_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
-    if (handle_dtbeta2_bound < 0) CCTK_WARN(-1, "could not create table!");
-    if (Util_TableSetReal(handle_dtbeta2_bound ,dtbeta2_bound_scalar, "SCALAR") < 0)
+    CCTK_INT handle_B2_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
+    if (handle_B2_bound < 0) CCTK_WARN(-1, "could not create table!");
+    if (Util_TableSetReal(handle_B2_bound ,B2_bound_scalar, "SCALAR") < 0)
       CCTK_WARN(-1, "could not set SCALAR value in table!");
   
-    ierr = Boundary_SelectVarForBC(cctkGH, CCTK_ALL_FACES, 1, handle_dtbeta2_bound, 
-                      "ML_BSSN::dtbeta2", "scalar");
+    ierr = Boundary_SelectVarForBC(cctkGH, CCTK_ALL_FACES, 1, handle_B2_bound, 
+                      "ML_BSSN::B2", "scalar");
   
     if (ierr < 0)
-       CCTK_WARN(-1, "Error in registering Scalar BC for ML_BSSN::dtbeta2!");
+       CCTK_WARN(-1, "Error in registering Scalar BC for ML_BSSN::B2!");
   
   }
   
-  if (CCTK_EQUALS(dtbeta3_bound, "scalar"))
+  if (CCTK_EQUALS(B3_bound, "scalar"))
   {
    /* apply scalar boundary condition */
-    CCTK_INT handle_dtbeta3_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
-    if (handle_dtbeta3_bound < 0) CCTK_WARN(-1, "could not create table!");
-    if (Util_TableSetReal(handle_dtbeta3_bound ,dtbeta3_bound_scalar, "SCALAR") < 0)
+    CCTK_INT handle_B3_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
+    if (handle_B3_bound < 0) CCTK_WARN(-1, "could not create table!");
+    if (Util_TableSetReal(handle_B3_bound ,B3_bound_scalar, "SCALAR") < 0)
       CCTK_WARN(-1, "could not set SCALAR value in table!");
   
-    ierr = Boundary_SelectVarForBC(cctkGH, CCTK_ALL_FACES, 1, handle_dtbeta3_bound, 
-                      "ML_BSSN::dtbeta3", "scalar");
+    ierr = Boundary_SelectVarForBC(cctkGH, CCTK_ALL_FACES, 1, handle_B3_bound, 
+                      "ML_BSSN::B3", "scalar");
   
     if (ierr < 0)
-       CCTK_WARN(-1, "Error in registering Scalar BC for ML_BSSN::dtbeta3!");
+       CCTK_WARN(-1, "Error in registering Scalar BC for ML_BSSN::B3!");
   
   }
   
@@ -1645,25 +1645,25 @@ void ML_BSSN_ApplyBoundConds(CCTK_ARGUMENTS)
 #$bound$#ML_BSSN::At33_bound_limit = 0.0
 #$bound$#ML_BSSN::At33_bound_scalar = 0.0
 
-#$bound$#ML_BSSN::dtalpha_bound       = "skip"
-#$bound$#ML_BSSN::dtalpha_bound_speed = 1.0
-#$bound$#ML_BSSN::dtalpha_bound_limit = 0.0
-#$bound$#ML_BSSN::dtalpha_bound_scalar = 0.0
+#$bound$#ML_BSSN::A_bound       = "skip"
+#$bound$#ML_BSSN::A_bound_speed = 1.0
+#$bound$#ML_BSSN::A_bound_limit = 0.0
+#$bound$#ML_BSSN::A_bound_scalar = 0.0
 
-#$bound$#ML_BSSN::dtbeta1_bound       = "skip"
-#$bound$#ML_BSSN::dtbeta1_bound_speed = 1.0
-#$bound$#ML_BSSN::dtbeta1_bound_limit = 0.0
-#$bound$#ML_BSSN::dtbeta1_bound_scalar = 0.0
+#$bound$#ML_BSSN::B1_bound       = "skip"
+#$bound$#ML_BSSN::B1_bound_speed = 1.0
+#$bound$#ML_BSSN::B1_bound_limit = 0.0
+#$bound$#ML_BSSN::B1_bound_scalar = 0.0
 
-#$bound$#ML_BSSN::dtbeta2_bound       = "skip"
-#$bound$#ML_BSSN::dtbeta2_bound_speed = 1.0
-#$bound$#ML_BSSN::dtbeta2_bound_limit = 0.0
-#$bound$#ML_BSSN::dtbeta2_bound_scalar = 0.0
+#$bound$#ML_BSSN::B2_bound       = "skip"
+#$bound$#ML_BSSN::B2_bound_speed = 1.0
+#$bound$#ML_BSSN::B2_bound_limit = 0.0
+#$bound$#ML_BSSN::B2_bound_scalar = 0.0
 
-#$bound$#ML_BSSN::dtbeta3_bound       = "skip"
-#$bound$#ML_BSSN::dtbeta3_bound_speed = 1.0
-#$bound$#ML_BSSN::dtbeta3_bound_limit = 0.0
-#$bound$#ML_BSSN::dtbeta3_bound_scalar = 0.0
+#$bound$#ML_BSSN::B3_bound       = "skip"
+#$bound$#ML_BSSN::B3_bound_speed = 1.0
+#$bound$#ML_BSSN::B3_bound_limit = 0.0
+#$bound$#ML_BSSN::B3_bound_scalar = 0.0
 
 #$bound$#ML_BSSN::Xt1_bound       = "skip"
 #$bound$#ML_BSSN::Xt1_bound_speed = 1.0

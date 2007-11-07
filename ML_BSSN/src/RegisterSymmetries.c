@@ -52,22 +52,22 @@ void ML_BSSN_RegisterSymmetries(CCTK_ARGUMENTS)
   sym[0] = 1;
   sym[1] = 1;
   sym[2] = 1;
-  SetCartSymVN(cctkGH, sym, "ML_BSSN::dtalpha");
+  SetCartSymVN(cctkGH, sym, "ML_BSSN::A");
   
   sym[0] = -1;
   sym[1] = 1;
   sym[2] = 1;
-  SetCartSymVN(cctkGH, sym, "ML_BSSN::dtbeta1");
+  SetCartSymVN(cctkGH, sym, "ML_BSSN::B1");
   
   sym[0] = 1;
   sym[1] = -1;
   sym[2] = 1;
-  SetCartSymVN(cctkGH, sym, "ML_BSSN::dtbeta2");
+  SetCartSymVN(cctkGH, sym, "ML_BSSN::B2");
   
   sym[0] = 1;
   sym[1] = 1;
   sym[2] = -1;
-  SetCartSymVN(cctkGH, sym, "ML_BSSN::dtbeta3");
+  SetCartSymVN(cctkGH, sym, "ML_BSSN::B3");
   
   sym[0] = -1;
   sym[1] = 1;

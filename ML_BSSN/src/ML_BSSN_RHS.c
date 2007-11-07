@@ -132,12 +132,13 @@ void ML_BSSN_RHS_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCTK_REAL normal
     CCTK_REAL Rt11 = INITVALUE, Rt12 = INITVALUE, Rt13 = INITVALUE, Rt22 = INITVALUE, Rt23 = INITVALUE, Rt33 = INITVALUE;
     
     /* Declare local copies of grid functions */
+    CCTK_REAL AL = INITVALUE;
     CCTK_REAL alphaL = INITVALUE, alpharhsL = INITVALUE;
+    CCTK_REAL ArhsL = INITVALUE;
     CCTK_REAL At11L = INITVALUE, At11rhsL = INITVALUE, At12L = INITVALUE, At12rhsL = INITVALUE, At13L = INITVALUE, At13rhsL = INITVALUE;
     CCTK_REAL At22L = INITVALUE, At22rhsL = INITVALUE, At23L = INITVALUE, At23rhsL = INITVALUE, At33L = INITVALUE, At33rhsL = INITVALUE;
+    CCTK_REAL B1L = INITVALUE, B1rhsL = INITVALUE, B2L = INITVALUE, B2rhsL = INITVALUE, B3L = INITVALUE, B3rhsL = INITVALUE;
     CCTK_REAL beta1L = INITVALUE, beta1rhsL = INITVALUE, beta2L = INITVALUE, beta2rhsL = INITVALUE, beta3L = INITVALUE, beta3rhsL = INITVALUE;
-    CCTK_REAL dtalphaL = INITVALUE, dtalpharhsL = INITVALUE;
-    CCTK_REAL dtbeta1L = INITVALUE, dtbeta1rhsL = INITVALUE, dtbeta2L = INITVALUE, dtbeta2rhsL = INITVALUE, dtbeta3L = INITVALUE, dtbeta3rhsL = INITVALUE;
     CCTK_REAL gt11L = INITVALUE, gt11rhsL = INITVALUE, gt12L = INITVALUE, gt12rhsL = INITVALUE, gt13L = INITVALUE, gt13rhsL = INITVALUE;
     CCTK_REAL gt22L = INITVALUE, gt22rhsL = INITVALUE, gt23L = INITVALUE, gt23rhsL = INITVALUE, gt33L = INITVALUE, gt33rhsL = INITVALUE;
     CCTK_REAL phiL = INITVALUE, phirhsL = INITVALUE;
@@ -310,6 +311,7 @@ void ML_BSSN_RHS_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCTK_REAL normal
     CCTK_REAL PDstandard4th3Xt3 = INITVALUE;
     
     /* Assign local copies of grid functions */
+    AL = A[index];
     alphaL = alpha[index];
     At11L = At11[index];
     At12L = At12[index];
@@ -317,13 +319,12 @@ void ML_BSSN_RHS_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCTK_REAL normal
     At22L = At22[index];
     At23L = At23[index];
     At33L = At33[index];
+    B1L = B1[index];
+    B2L = B2[index];
+    B3L = B3[index];
     beta1L = beta1[index];
     beta2L = beta2[index];
     beta3L = beta3[index];
-    dtalphaL = dtalpha[index];
-    dtbeta1L = dtbeta1[index];
-    dtbeta2L = dtbeta2[index];
-    dtbeta3L = dtbeta3[index];
     gt11L = gt11[index];
     gt12L = gt12[index];
     gt13L = gt13[index];
@@ -1431,38 +1432,38 @@ void ML_BSSN_RHS_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCTK_REAL normal
         alphaL*(-2*(At13L*Atm13 + At23L*Atm23 + At33L*Atm33) + At33L*trKL);
     
     alpharhsL  =  beta1L*PDstandard4th1alpha + beta2L*PDstandard4th2alpha + beta3L*PDstandard4th3alpha - 
-        dtalphaL*harmonicF*pow(alphaL,harmonicN);
+        AL*harmonicF*pow(alphaL,harmonicN);
     
-    dtalpharhsL  =  -(AlphaDriver*dtalphaL) + trKrhsL;
+    ArhsL  =  -(AL*AlphaDriver) + trKrhsL;
     
-    beta1rhsL  =  dtbeta1L*ShiftGammaCoeff*pow(alphaL,ShiftAlphaPower);
+    beta1rhsL  =  B1L*ShiftGammaCoeff*pow(alphaL,ShiftAlphaPower);
     
-    beta2rhsL  =  dtbeta2L*ShiftGammaCoeff*pow(alphaL,ShiftAlphaPower);
+    beta2rhsL  =  B2L*ShiftGammaCoeff*pow(alphaL,ShiftAlphaPower);
     
-    beta3rhsL  =  dtbeta3L*ShiftGammaCoeff*pow(alphaL,ShiftAlphaPower);
+    beta3rhsL  =  B3L*ShiftGammaCoeff*pow(alphaL,ShiftAlphaPower);
     
-    dtbeta1rhsL  =  -(BetaDriver*dtbeta1L) + Xt1rhsL;
+    B1rhsL  =  -(B1L*BetaDriver) + Xt1rhsL;
     
-    dtbeta2rhsL  =  -(BetaDriver*dtbeta2L) + Xt2rhsL;
+    B2rhsL  =  -(B2L*BetaDriver) + Xt2rhsL;
     
-    dtbeta3rhsL  =  -(BetaDriver*dtbeta3L) + Xt3rhsL;
+    B3rhsL  =  -(B3L*BetaDriver) + Xt3rhsL;
     
     
     /* Copy local copies back to grid functions */
     alpharhs[index] = alpharhsL;
+    Arhs[index] = ArhsL;
     At11rhs[index] = At11rhsL;
     At12rhs[index] = At12rhsL;
     At13rhs[index] = At13rhsL;
     At22rhs[index] = At22rhsL;
     At23rhs[index] = At23rhsL;
     At33rhs[index] = At33rhsL;
+    B1rhs[index] = B1rhsL;
+    B2rhs[index] = B2rhsL;
+    B3rhs[index] = B3rhsL;
     beta1rhs[index] = beta1rhsL;
     beta2rhs[index] = beta2rhsL;
     beta3rhs[index] = beta3rhsL;
-    dtalpharhs[index] = dtalpharhsL;
-    dtbeta1rhs[index] = dtbeta1rhsL;
-    dtbeta2rhs[index] = dtbeta2rhsL;
-    dtbeta3rhs[index] = dtbeta3rhsL;
     gt11rhs[index] = gt11rhsL;
     gt12rhs[index] = gt12rhsL;
     gt13rhs[index] = gt13rhsL;
