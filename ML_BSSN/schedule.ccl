@@ -120,13 +120,13 @@ schedule ML_BSSN_RHS AT analysis
   SYNC: trace_curvrhs
 } "ML_BSSN_RHS"
 
-schedule ML_BSSN_enforce IN MoL_PostStep AFTER BSSN_ApplyBoundConds
+schedule ML_BSSN_enforce IN MoL_PostStep BEFORE ML_BSSN_BoundConds
 {
   LANG: C
   
 } "ML_BSSN_enforce"
 
-schedule ML_BSSN_convertToADMBase IN MoL_PostStep AFTER ML_BSSN_ApplyBoundConds AFTER ML_BSSN_enforce
+schedule ML_BSSN_convertToADMBase IN MoL_PostStep AFTER ML_BSSN_ApplyBCs AFTER ML_BSSN_enforce
 {
   LANG: C
   

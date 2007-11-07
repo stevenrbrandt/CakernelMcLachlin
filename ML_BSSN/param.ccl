@@ -241,7 +241,7 @@ KEYWORD At33_bound "Boundary condition to implement"
 } "skip"
 
 private:
-KEYWORD dtalpha_bound "Boundary condition to implement"
+KEYWORD A_bound "Boundary condition to implement"
 {
   "flat" :: "Flat boundary condition"
   "none" :: "No boundary condition"
@@ -253,7 +253,7 @@ KEYWORD dtalpha_bound "Boundary condition to implement"
 } "skip"
 
 private:
-KEYWORD dtbeta1_bound "Boundary condition to implement"
+KEYWORD B1_bound "Boundary condition to implement"
 {
   "flat" :: "Flat boundary condition"
   "none" :: "No boundary condition"
@@ -265,7 +265,7 @@ KEYWORD dtbeta1_bound "Boundary condition to implement"
 } "skip"
 
 private:
-KEYWORD dtbeta2_bound "Boundary condition to implement"
+KEYWORD B2_bound "Boundary condition to implement"
 {
   "flat" :: "Flat boundary condition"
   "none" :: "No boundary condition"
@@ -277,7 +277,7 @@ KEYWORD dtbeta2_bound "Boundary condition to implement"
 } "skip"
 
 private:
-KEYWORD dtbeta3_bound "Boundary condition to implement"
+KEYWORD B3_bound "Boundary condition to implement"
 {
   "flat" :: "Flat boundary condition"
   "none" :: "No boundary condition"
@@ -613,25 +613,25 @@ CCTK_REAL At33_bound_speed "characteristic speed at boundary"
 } 1.
 
 private:
-CCTK_REAL dtalpha_bound_speed "characteristic speed at boundary"
+CCTK_REAL A_bound_speed "characteristic speed at boundary"
 {
   "0:*" :: "outgoing characteristic speed > 0"
 } 1.
 
 private:
-CCTK_REAL dtbeta1_bound_speed "characteristic speed at boundary"
+CCTK_REAL B1_bound_speed "characteristic speed at boundary"
 {
   "0:*" :: "outgoing characteristic speed > 0"
 } 1.
 
 private:
-CCTK_REAL dtbeta2_bound_speed "characteristic speed at boundary"
+CCTK_REAL B2_bound_speed "characteristic speed at boundary"
 {
   "0:*" :: "outgoing characteristic speed > 0"
 } 1.
 
 private:
-CCTK_REAL dtbeta3_bound_speed "characteristic speed at boundary"
+CCTK_REAL B3_bound_speed "characteristic speed at boundary"
 {
   "0:*" :: "outgoing characteristic speed > 0"
 } 1.
@@ -817,25 +817,25 @@ CCTK_REAL At33_bound_limit "limit value for r -> infinity"
 } 0.
 
 private:
-CCTK_REAL dtalpha_bound_limit "limit value for r -> infinity"
+CCTK_REAL A_bound_limit "limit value for r -> infinity"
 {
   "*:*" :: "value of limit value is unrestricted"
 } 0.
 
 private:
-CCTK_REAL dtbeta1_bound_limit "limit value for r -> infinity"
+CCTK_REAL B1_bound_limit "limit value for r -> infinity"
 {
   "*:*" :: "value of limit value is unrestricted"
 } 0.
 
 private:
-CCTK_REAL dtbeta2_bound_limit "limit value for r -> infinity"
+CCTK_REAL B2_bound_limit "limit value for r -> infinity"
 {
   "*:*" :: "value of limit value is unrestricted"
 } 0.
 
 private:
-CCTK_REAL dtbeta3_bound_limit "limit value for r -> infinity"
+CCTK_REAL B3_bound_limit "limit value for r -> infinity"
 {
   "*:*" :: "value of limit value is unrestricted"
 } 0.
@@ -1021,25 +1021,25 @@ CCTK_REAL At33_bound_scalar "Dirichlet boundary value"
 } 0.
 
 private:
-CCTK_REAL dtalpha_bound_scalar "Dirichlet boundary value"
+CCTK_REAL A_bound_scalar "Dirichlet boundary value"
 {
   "*:*" :: "unrestricted"
 } 0.
 
 private:
-CCTK_REAL dtbeta1_bound_scalar "Dirichlet boundary value"
+CCTK_REAL B1_bound_scalar "Dirichlet boundary value"
 {
   "*:*" :: "unrestricted"
 } 0.
 
 private:
-CCTK_REAL dtbeta2_bound_scalar "Dirichlet boundary value"
+CCTK_REAL B2_bound_scalar "Dirichlet boundary value"
 {
   "*:*" :: "unrestricted"
 } 0.
 
 private:
-CCTK_REAL dtbeta3_bound_scalar "Dirichlet boundary value"
+CCTK_REAL B3_bound_scalar "Dirichlet boundary value"
 {
   "*:*" :: "unrestricted"
 } 0.

@@ -28,15 +28,13 @@ ActiveThorns = "
 
         ReflectionSymmetry
 
+        BSSN_MoL
         Exact
         Formaline
+        Fortran
         GSL
 
         Slab
-
-        GenericFD
-
-        ML_BSSN
 "
 
 
@@ -88,31 +86,29 @@ Exact::exact_model = "Kerr/Kerr-Schild"
 Exact::Kerr_KerrSchild__mass = 1.0
 Exact::Kerr_KerrSchild__spin = 0.0
 
-ML_BSSN::harmonicN       = 0      # 1+log
-ML_BSSN::harmonicF       = 2.0    # 1+log
-ML_BSSN::ShiftGammaCoeff = 0.75
-ML_BSSN::BetaDriver      = 0.5
+ADM_BSSN::timelevels = 3
 
-ML_BSSN::log_confac_bound = "none"
-ML_BSSN::metric_bound     = "none"
-ML_BSSN::Gamma_bound      = "none"
-ML_BSSN::trace_curv_bound = "none"
-ML_BSSN::curv_bound       = "none"
-ML_BSSN::lapse_bound      = "none"
-ML_BSSN::dtlapse_bound    = "none"
-ML_BSSN::shift_bound      = "none"
-ML_BSSN::dtshift_bound    = "none"
+ADMBase::evolution_method = "ADM_BSSN"
+ADM_BSSN::bound           = "newrad"
+ADM_BSSN::stencil_size    = 2
+
+ADMBase::lapse_evolution_method = "1+log"
+ADM_BSSN::lapsesource           = "modified"
+ADM_BSSN::harmonic_f            = 2.0
+
+ADMBase::shift_evolution_method = "gamma2"
+ADM_BSSN::ShiftGammaCoeff       = 0.75
+ADM_BSSN::BetaDriver            = 2
 
 ADMMacros::spatial_order = 4
-
 
 
 IO::out_dir = $parfile
 
 IOBasic::outInfo_every = 1
 IOBasic::outInfo_vars = "
-        ML_BSSN::H
-        ML_BSSN::trKrhs
+        ADMConstraints::Hamiltonian
+        ADM_BSSN::ADM_BS_sK
 "
 
 IOScalar::one_file_per_group = yes
@@ -126,21 +122,13 @@ IOScalar::outScalar_vars     = "
         ADMAnalysis::ricci_scalar
         ADMConstraints::Hamiltonian
         ADMConstraints::momentum
-        ML_BSSN::log_confac
-        ML_BSSN::metric
-        ML_BSSN::trace_curv
-        ML_BSSN::curv
-        ML_BSSN::Gamma
-        ML_BSSN::Ham
-        ML_BSSN::mom
-        ML_BSSN::cons_detg
-        ML_BSSN::cons_Gamma
-        ML_BSSN::cons_traceA
-        ML_BSSN::log_confacrhs
-        ML_BSSN::metricrhs
-        ML_BSSN::Gammarhs
-        ML_BSSN::trace_curvrhs
-        ML_BSSN::curvrhs
+        ADM_BSSN::ADM_BSSN_phi
+        ADM_BSSN::ADM_BSSN_metric
+        ADM_BSSN::ADM_BSSN_gamma
+        ADM_BSSN::ADM_BSSN_K
+        ADM_BSSN::ADM_BSSN_curv
+        ADM_BSSN::ADM_BSSN_dtlapse
+        ADM_BSSN::ADM_BSSN_B
 "
 
 IOASCII::one_file_per_group = yes
@@ -154,19 +142,11 @@ IOASCII::out1D_vars         = "
         ADMAnalysis::ricci_scalar
         ADMConstraints::Hamiltonian
         ADMConstraints::momentum
-        ML_BSSN::log_confac
-        ML_BSSN::metric
-        ML_BSSN::trace_curv
-        ML_BSSN::curv
-        ML_BSSN::Gamma
-        ML_BSSN::Ham
-        ML_BSSN::mom
-        ML_BSSN::cons_detg
-        ML_BSSN::cons_Gamma
-        ML_BSSN::cons_traceA
-        ML_BSSN::log_confacrhs
-        ML_BSSN::metricrhs
-        ML_BSSN::Gammarhs
-        ML_BSSN::trace_curvrhs
-        ML_BSSN::curvrhs
+        ADM_BSSN::ADM_BSSN_phi
+        ADM_BSSN::ADM_BSSN_metric
+        ADM_BSSN::ADM_BSSN_gamma
+        ADM_BSSN::ADM_BSSN_K
+        ADM_BSSN::ADM_BSSN_curv
+        ADM_BSSN::ADM_BSSN_dtlapse
+        ADM_BSSN::ADM_BSSN_B
 "

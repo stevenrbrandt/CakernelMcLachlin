@@ -43,7 +43,7 @@ KD = KroneckerDelta;
 (* Register the tensor quantities with the TensorTools package *)
 Map [DefineTensor,
      {g, K, alpha, beta, H, M, detg, gu, G, R, trR, Km, trK,
-      phi, gt, At, Xt, dtalpha, dtbeta, Atm, Atu, trA, cXt, cS, cA,
+      phi, gt, At, Xt, A, B, Atm, Atu, trA, cXt, cS, cA,
       e4phi, em4phi, ddetg, detgt, gtu, ddetgt, dgtu, ddgtu, Gt, Rt, Rphi, gK}];
 
 (* NOTE: It seems as if Lie[.,.] did not take these tensor weights
@@ -108,15 +108,15 @@ declaredGroups = Join [evolvedGroups, evaluatedGroups];
 declaredGroupNames = Map [First, declaredGroups];
 
 evolvedGroupsBSSN =
-  {SetGroupName [CreateGroupFromTensor [phi       ], "log_confac"],
-   SetGroupName [CreateGroupFromTensor [gt[la,lb] ], "metric"    ],
-   SetGroupName [CreateGroupFromTensor [Xt[ua]    ], "Gamma"     ],
-   SetGroupName [CreateGroupFromTensor [trK       ], "trace_curv"],
-   SetGroupName [CreateGroupFromTensor [At[la,lb] ], "curv"      ],
-   SetGroupName [CreateGroupFromTensor [alpha     ], "lapse"     ],
-   SetGroupName [CreateGroupFromTensor [dtalpha   ], "dtlapse"   ],
-   SetGroupName [CreateGroupFromTensor [beta[ua]  ], "shift"     ],
-   SetGroupName [CreateGroupFromTensor [dtbeta[ua]], "dtshift"   ]};
+  {SetGroupName [CreateGroupFromTensor [phi      ], "log_confac"],
+   SetGroupName [CreateGroupFromTensor [gt[la,lb]], "metric"    ],
+   SetGroupName [CreateGroupFromTensor [Xt[ua]   ], "Gamma"     ],
+   SetGroupName [CreateGroupFromTensor [trK      ], "trace_curv"],
+   SetGroupName [CreateGroupFromTensor [At[la,lb]], "curv"      ],
+   SetGroupName [CreateGroupFromTensor [alpha    ], "lapse"     ],
+   SetGroupName [CreateGroupFromTensor [A        ], "dtlapse"   ],
+   SetGroupName [CreateGroupFromTensor [beta[ua] ], "shift"     ],
+   SetGroupName [CreateGroupFromTensor [B[ua]    ], "dtshift"   ]};
 evaluatedGroupsBSSN =
   {SetGroupName [CreateGroupFromTensor [H      ], "Ham"],
    SetGroupName [CreateGroupFromTensor [M[la]  ], "mom"],
@@ -171,15 +171,15 @@ initialCalcBSSN =
   (* Where -> Interior, *)
   Equations -> 
   {
-    phi        -> 0,
-    gt[la,lb]  -> KD[la,lb],
-    trK        -> 0,
-    At[la,lb]  -> 0,
-    Xt[ua]     -> 0,
-    alpha      -> 1,
-    dtalpha    -> 0,
-    beta[ua]   -> 0,
-    dtbeta[ua] -> 0
+    phi       -> 0,
+    gt[la,lb] -> KD[la,lb],
+    trK       -> 0,
+    At[la,lb] -> 0,
+    Xt[ua]    -> 0,
+    alpha     -> 1,
+    A         -> 0,
+    beta[ua]  -> 0,
+    B[ua]     -> 0
   }
 }
 
@@ -246,17 +246,17 @@ convertFromADMBaseCalcBSSN =
     trK       -> gu[ua,ub] K[la,lb],
     At[la,lb] -> em4phi (K[la,lb] - (1/3) g[la,lb] trK),
     
-    alpha   -> alp,
+    alpha -> alp,
     (* TODO: this is wrong *)
-    dtalpha -> dtalp,
+    A     -> dtalp,
     
-    beta1   -> betax,
-    beta2   -> betay,
-    beta3   -> betaz,
+    beta1 -> betax,
+    beta2 -> betay,
+    beta3 -> betaz,
     (* TODO: this is wrong *)
-    dtbeta1 -> dtbetax,
-    dtbeta2 -> dtbetay,
-    dtbeta3 -> dtbetaz
+    B1    -> dtbetax,
+    B2    -> dtbetay,
+    B3    -> dtbetaz
   }
 }
 
@@ -284,7 +284,7 @@ convertFromADMBaseCalcBSSNGamma =
 convertToADMBaseCalc =
 {
   Name -> "ML_ADM_convertToADMBase",
-  Schedule -> {"IN MoL_PostStep AFTER ADM_ApplyBoundConds"},
+  Schedule -> {"IN MoL_PostStep AFTER ML_ADM_ApplyBCs"},
   Equations -> 
   {
     gxx     -> g11,
@@ -314,7 +314,7 @@ convertToADMBaseCalc =
 convertToADMBaseCalcBSSN =
 {
   Name -> "ML_BSSN_convertToADMBase",
-  Schedule -> {"IN MoL_PostStep AFTER ML_BSSN_ApplyBoundConds AFTER ML_BSSN_enforce"},
+  Schedule -> {"IN MoL_PostStep AFTER ML_BSSN_ApplyBCs AFTER ML_BSSN_enforce"},
   Shorthands -> {e4phi, g[la,lb], K[la,lb]},
   Equations -> 
   {
@@ -336,14 +336,14 @@ convertToADMBaseCalcBSSN =
     alp      -> alpha,
     (* TODO: this is wrong *)
     (* TODO: rename dtalp->A, dtbeta->B *)
-    dtalp    -> dtalpha,
+    dtalp    -> A,
     betax    -> beta1,
     betay    -> beta2,
     betaz    -> beta3,
     (* TODO: this is wrong *)
-    dtbetax  -> dtbeta1,
-    dtbetay  -> dtbeta2,
-    dtbetaz  -> dtbeta3
+    dtbetax  -> B1,
+    dtbetay  -> B2,
+    dtbetaz  -> B3
   }
 }
 
@@ -406,10 +406,12 @@ evolCalcBSSN =
     
     (* PRD 62, 044034 (2000), eqn. (18) *)
     Rt[li,lj] -> - (1/2) gtu[ul,um] PD[gt[li,lj],ll,lm]
-                 + gt[lk,li] PD[Xt[uk],lj] + gt[lk,lj] PD[Xt[uk],li]
-                 + Xt[uk] gt[li,ln] Gt[un,lj,lk] + Xt[uk] gt[lj,ln] Gt[un,li,lk]
-                 + gtu[ul,um] (+ 2 Gt[uk,ll,li] gt[lj,ln] Gt[un,lk,lm]
-                               + 2 Gt[uk,ll,lj] gt[li,ln] Gt[un,lk,lm]
+                 + (1/2) gt[lk,li] PD[Xt[uk],lj]
+                 + (1/2) gt[lk,lj] PD[Xt[uk],li]
+                 + (1/2) Xt[uk] gt[li,ln] Gt[un,lj,lk]
+                 + (1/2) Xt[uk] gt[lj,ln] Gt[un,li,lk]
+                 + gtu[ul,um] (+ Gt[uk,ll,li] gt[lj,ln] Gt[un,lk,lm]
+                               + Gt[uk,ll,lj] gt[li,ln] Gt[un,lk,lm]
                                + Gt[uk,li,lm] gt[lk,ln] Gt[un,ll,lj]),
 (*    Rt[li,lj] -> (1/2) ( - gtu[ul,um] PD[gt[li,lj],ll,lm]
                            + gt[lk,li] PD[Xt[uk],lj] +
@@ -485,19 +487,19 @@ evolCalcBSSN =
                       + Lie[At[la,lb], beta] - (2/3) At[la,lb] PD[beta[uc],lc],
     
     (* dot[alpha] -> - harmonicF alpha^harmonicN trK, *)
-    dot[alpha]      -> - harmonicF alpha^harmonicN dtalpha
+    dot[alpha] -> - harmonicF alpha^harmonicN A
                        + Lie[alpha, beta],
-    dot[dtalpha]    -> dot[trK] - AlphaDriver dtalpha,
+    dot[A]    -> dot[trK] - AlphaDriver A,
     (* dot[beta[ua]] -> eta Xt[ua], *)
-    dot[beta[ua]]   -> ShiftGammaCoeff alpha^ShiftAlphaPower dtbeta[ua],
-    dot[dtbeta[ua]] -> dot[Xt[ua]] - BetaDriver dtbeta[ua]
+    dot[beta[ua]] -> ShiftGammaCoeff alpha^ShiftAlphaPower B[ua],
+    dot[B[ua]]    -> dot[Xt[ua]] - BetaDriver B[ua]
   }
 }
 
 enforceCalcBSSN =
 {
   Name -> "ML_BSSN_enforce",
-  Schedule -> {"IN MoL_PostStep AFTER BSSN_ApplyBoundConds"},
+  Schedule -> {"IN MoL_PostStep BEFORE ML_BSSN_BoundConds"},
   Shorthands -> {detgt, gtu[ua,ub], trA},
   Equations -> 
   {
@@ -556,12 +558,40 @@ constraintsCalcBSSN =
                     (PD[gt[lb,ld],lc] + PD[gt[lc,ld],lb] - PD[gt[lb,lc],ld]),
     
     (* PRD 62, 044034 (2000), eqn. (18) *)
+    (* Note: This differs from the Goddard formulation,
+             which is e.g. described in PRD 70 (2004) 124025, eqn. (6).
+             Goddard has a Gamma^k replaced by its definition in terms
+             of metric derivatives.  *)
     Rt[li,lj] -> - (1/2) gtu[ul,um] PD[gt[li,lj],ll,lm]
-                 + gt[lk,li] PD[Xt[uk],lj] + gt[lk,lj] PD[Xt[uk],li]
-                 + Xt[uk] gt[li,ln] Gt[un,lj,lk] + Xt[uk] gt[lj,ln] Gt[un,li,lk]
-                 + gtu[ul,um] (+ 2 Gt[uk,ll,li] gt[lj,ln] Gt[un,lk,lm]
-                               + 2 Gt[uk,ll,lj] gt[li,ln] Gt[un,lk,lm]
+                 + (1/2) gt[lk,li] PD[Xt[uk],lj]
+                 + (1/2) gt[lk,lj] PD[Xt[uk],li]
+                 + (1/2) Xt[uk] gt[li,ln] Gt[un,lj,lk]
+                 + (1/2) Xt[uk] gt[lj,ln] Gt[un,li,lk]
+                 + gtu[ul,um] (+ Gt[uk,ll,li] gt[lj,ln] Gt[un,lk,lm]
+                               + Gt[uk,ll,lj] gt[li,ln] Gt[un,lk,lm]
                                + Gt[uk,li,lm] gt[lk,ln] Gt[un,ll,lj]),
+
+    (* From the long turducken paper.
+       This expression seems to give the same result as the one from 044034.  *)
+    (* TODO: symmetrise correctly: (ij) = (1/2) [i+j] *)
+(*
+    Rt[li,lj] -> - (1/2) gtu[uk,ul] PD[gt[li,lj],lk,ll]
+                 + gt[lk,li] PD[Xt[uk],lj] + gt[lk,lj] PD[Xt[uk],li]
+                 + gt[li,ln] Gt[un,lj,lk] gtu[um,ua] gtu[uk,ub] PD[gt[la,lb],lm]
+                 + gt[lj,ln] Gt[un,li,lk] gtu[um,ua] gtu[uk,ub] PD[gt[la,lb],lm]
+                 + gtu[ul,us] (+ 2 Gt[uk,ll,li] gt[lj,ln] Gt[un,lk,ls]
+                               + 2 Gt[uk,ll,lj] gt[li,ln] Gt[un,lk,ls]
+                               + Gt[uk,li,ls] gt[lk,ln] Gt[un,ll,lj]),
+*)
+
+    (* Below would be a straightforward calculation,
+       without taking any Gamma^i into account.
+       This expression gives a different answer!  *)
+(*
+    Rt[la,lb] -> + Gt[u1,l2,la] Gt[l1,lb,u2] - Gt[u1,la,lb] Gt[l1,l2,u2]
+                 + 1/2 gtu[u1,u2] (- PD[gt[l1,l2],la,lb] + PD[gt[l1,la],l2,lb]
+                                   - PD[gt[la,lb],l1,l2] + PD[gt[l2,lb],l1,la]),
+*)
     (* PRD 62, 044034 (2000), eqn. (15) *)
     Rphi[li,lj] -> - 2 CDt[phi,lj,li]
                    - 2 gt[li,lj] gtu[ul,un] CDt[phi,ll,ln]
@@ -577,12 +607,13 @@ constraintsCalcBSSN =
     gu[ua,ub]   -> em4phi gtu[ua,ub],
     (* ddetg[la] -> PD[e4phi detg,la], *)
     ddetg[la]   -> e4phi ddetgt[la] + 4 detgt e4phi PD[phi,la],
+    (* TODO: check this equation, maybe simplify it by omitting ddetg *)
     G[ua,lb,lc] -> Gt[ua,lb,lc]
                    + 1/(2 detg) (+ KD[ua,lb] ddetg[lc] + KD[ua,lc] ddetg[lb]
                                  - (1/3) g[lb,lc] gu[ua,ud] ddetg[ld]),
     
     R[la,lb] -> Rt[la,lb] + Rphi[la,lb],
-    trR -> gu[ua,ub] R[la,lb],
+    trR      -> gu[ua,ub] R[la,lb],
     
     (* K[la,lb] -> e4phi At[la,lb] + (1/3) g[la,lb] trK, *)
     (* Km[ua,lb] -> gu[ua,uc] K[lc,lb], *)
@@ -597,7 +628,8 @@ constraintsCalcBSSN =
     M[la] -> gu[ub,uc] (gK[lc,la,lb] - gK[lc,lb,la]),
     
     (* det gamma-tilde *)
-    cS -> Log [detgt],
+    (* TODO cS -> Log [detgt], *)
+    cS -> trR,
     
     (* Gamma constraint *)
     cXt[ua] -> gtu[ub,uc] Gt[ua,lb,lc] - Xt[ua],
