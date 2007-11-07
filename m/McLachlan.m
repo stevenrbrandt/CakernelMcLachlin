@@ -394,6 +394,8 @@ evolCalcBSSN =
   {
     detgt        -> 1 (* detgtExpr *),
     ddetgt[la]   -> 0 (* ddetgtExpr[la] *),
+    
+    (* This leads to simpler code... *)
     gtu[ua,ub]   -> 1/detgt detgtExpr MatrixInverse [gt[ua,ub]],
     dgtu[ua,ub,lc] -> - gtu[ua,ud] gtu[ub,ue] PD[gt[ld,le],lc],
     ddgtu[ua,ub,lc,ld] -> - dgtu[ua,ue,ld] gtu[ub,uf] PD[gt[le,lf],lc]
@@ -409,6 +411,14 @@ evolCalcBSSN =
                  + gtu[ul,um] (+ 2 Gt[uk,ll,li] gt[lj,ln] Gt[un,lk,lm]
                                + 2 Gt[uk,ll,lj] gt[li,ln] Gt[un,lk,lm]
                                + Gt[uk,li,lm] gt[lk,ln] Gt[un,ll,lj]),
+(*    Rt[li,lj] -> (1/2) ( - gtu[ul,um] PD[gt[li,lj],ll,lm]
+                           + gt[lk,li] PD[Xt[uk],lj] +
+                           + gt[lk,lj] PD[Xt[uk],li] 
+                           + Xt[uk] gt[li,ln] Gt[un,lj,lk]
+                           + Xt[uk] gt[lj,ln] Gt[un,li,lk] )
+                 + gtu[ul,um] (+ Gt[uk,ll,li] gt[lj,ln] Gt[un,lk,lm]
+                               + Gt[uk,ll,lj] gt[li,ln] Gt[un,lk,lm]
+                               + Gt[uk,li,lm] gt[lk,ln] Gt[un,ll,lj]), *)
     (* PRD 62, 044034 (2000), eqn. (15) *)
     (* TODO: Check that CDt takes the tensor weight of phi into account *)
     Rphi[li,lj] -> - 2 CDt[phi,lj,li]
@@ -452,6 +462,15 @@ evolCalcBSSN =
                               + gtu[um,ui] PD[beta[uj],lm,lj])
                          + (2/3) (+ dgtu[ui,uj,lj] PD[beta[ul],ll]
                                   + gtu[ui,uj] PD[beta[ul],ll,lj])),
+    
+(*    dot[Xt[ui]]    -> - 2 Atu[ui,uj] PD[alpha,lj]
+                      + 2 alpha (+ Gt[ui,lj,lk] Atu[uk,uj]
+                                 - (2/3) gtu[ui,uj] PD[trK,lj]
+                      + gtu[uj,ul] PD[beta[ui],lj,ll]
+                      + (1/3) gtu[ui,uj] PD[beta[ul],li,lj]
+                      + beta[uj] PD[Xt[ui],lj]
+                      + PD[gtu[ul,uj],ll] PD[beta[ui],lj]
+                      - (2/3) PD[gtu[ui,uj],lj] PD[beta[ul],ll] *)
     
     (* PRD 62, 044034 (2000), eqn. (11) *)
     dot[trK]       -> - gu[ua,ub] CD[alpha,la,lb]
