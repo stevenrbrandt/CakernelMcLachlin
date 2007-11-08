@@ -1,5 +1,5 @@
-# File produced by user eschnett
-# Produced with Mathematica Version 6.0 for Mac OS X x86 (32-bit) (April 20, 2007)
+# File produced by user diener
+# Produced with Mathematica Version 6.0 for Linux x86 (32-bit) (April 20, 2007)
 
 # Mathematica script written by Ian Hinder and Sascha Husa
 
@@ -8,21 +8,21 @@ STORAGE: Ham[1]
 
 STORAGE: mom[1]
 
-STORAGE: curvrhs[1]
+STORAGE: ml_curvrhs[1]
 
-STORAGE: lapserhs[1]
+STORAGE: ml_lapserhs[1]
 
-STORAGE: metricrhs[1]
+STORAGE: ml_metricrhs[1]
 
-STORAGE: shiftrhs[1]
+STORAGE: ml_shiftrhs[1]
 
-STORAGE: curv[3]
+STORAGE: ml_curv[3]
 
-STORAGE: lapse[3]
+STORAGE: ml_lapse[3]
 
-STORAGE: metric[3]
+STORAGE: ml_metric[3]
 
-STORAGE: shift[3]
+STORAGE: ml_shift[3]
 
 schedule ML_ADM_Startup at STARTUP
 {
@@ -72,10 +72,10 @@ schedule ML_ADM_RHS AT analysis
 {
   LANG: C
   
-  SYNC: curvrhs
-  SYNC: lapserhs
-  SYNC: metricrhs
-  SYNC: shiftrhs
+  SYNC: ml_curvrhs
+  SYNC: ml_lapserhs
+  SYNC: ml_metricrhs
+  SYNC: ml_shiftrhs
 } "ML_ADM_RHS"
 
 schedule ML_ADM_convertToADMBase IN MoL_PostStep AFTER ML_ADM_ApplyBCs
@@ -96,10 +96,10 @@ schedule ML_ADM_ApplyBoundConds in MoL_PostStep
 {
   LANG: C
   OPTIONS: level
-  SYNC: curv
-  SYNC: lapse
-  SYNC: metric
-  SYNC: shift
+  SYNC: ml_curv
+  SYNC: ml_lapse
+  SYNC: ml_metric
+  SYNC: ml_shift
 } "apply boundary conditions"
 
 schedule ML_ADM_CheckBoundaries at BASEGRID

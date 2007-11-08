@@ -1,5 +1,5 @@
-# File produced by user eschnett
-# Produced with Mathematica Version 6.0 for Mac OS X x86 (32-bit) (April 20, 2007)
+# File produced by user diener
+# Produced with Mathematica Version 6.0 for Linux x86 (32-bit) (April 20, 2007)
 
 # Mathematica script written by Ian Hinder and Sascha Husa
 
@@ -14,41 +14,41 @@ STORAGE: Ham[1]
 
 STORAGE: mom[1]
 
-STORAGE: curvrhs[1]
+STORAGE: ML_curvrhs[1]
 
-STORAGE: dtlapserhs[1]
+STORAGE: ML_dtlapserhs[1]
 
-STORAGE: dtshiftrhs[1]
+STORAGE: ML_dtshiftrhs[1]
 
-STORAGE: Gammarhs[1]
+STORAGE: ML_Gammarhs[1]
 
-STORAGE: lapserhs[1]
+STORAGE: ML_lapserhs[1]
 
-STORAGE: log_confacrhs[1]
+STORAGE: ML_log_confacrhs[1]
 
-STORAGE: metricrhs[1]
+STORAGE: ML_metricrhs[1]
 
-STORAGE: shiftrhs[1]
+STORAGE: ML_shiftrhs[1]
 
-STORAGE: trace_curvrhs[1]
+STORAGE: ML_trace_curvrhs[1]
 
-STORAGE: curv[3]
+STORAGE: ML_curv[3]
 
-STORAGE: dtlapse[3]
+STORAGE: ML_dtlapse[3]
 
-STORAGE: dtshift[3]
+STORAGE: ML_dtshift[3]
 
-STORAGE: Gamma[3]
+STORAGE: ML_Gamma[3]
 
-STORAGE: lapse[3]
+STORAGE: ML_lapse[3]
 
-STORAGE: log_confac[3]
+STORAGE: ML_log_confac[3]
 
-STORAGE: metric[3]
+STORAGE: ML_metric[3]
 
-STORAGE: shift[3]
+STORAGE: ML_shift[3]
 
-STORAGE: trace_curv[3]
+STORAGE: ML_trace_curv[3]
 
 schedule ML_BSSN_Startup at STARTUP
 {
@@ -95,7 +95,7 @@ if (CCTK_EQUALS(my_initial_data, "ADMBase"))
   {
     LANG: C
     
-    SYNC: Gamma
+    SYNC: ML_Gamma
   } "ML_BSSN_convertFromADMBaseGamma"
 }
 
@@ -109,15 +109,15 @@ schedule ML_BSSN_RHS AT analysis
 {
   LANG: C
   
-  SYNC: curvrhs
-  SYNC: dtlapserhs
-  SYNC: dtshiftrhs
-  SYNC: Gammarhs
-  SYNC: lapserhs
-  SYNC: log_confacrhs
-  SYNC: metricrhs
-  SYNC: shiftrhs
-  SYNC: trace_curvrhs
+  SYNC: ML_curvrhs
+  SYNC: ML_dtlapserhs
+  SYNC: ML_dtshiftrhs
+  SYNC: ML_Gammarhs
+  SYNC: ML_lapserhs
+  SYNC: ML_log_confacrhs
+  SYNC: ML_metricrhs
+  SYNC: ML_shiftrhs
+  SYNC: ML_trace_curvrhs
 } "ML_BSSN_RHS"
 
 schedule ML_BSSN_enforce IN MoL_PostStep BEFORE ML_BSSN_BoundConds
@@ -147,15 +147,15 @@ schedule ML_BSSN_ApplyBoundConds in MoL_PostStep
 {
   LANG: C
   OPTIONS: level
-  SYNC: curv
-  SYNC: dtlapse
-  SYNC: dtshift
-  SYNC: Gamma
-  SYNC: lapse
-  SYNC: log_confac
-  SYNC: metric
-  SYNC: shift
-  SYNC: trace_curv
+  SYNC: ML_curv
+  SYNC: ML_dtlapse
+  SYNC: ML_dtshift
+  SYNC: ML_Gamma
+  SYNC: ML_lapse
+  SYNC: ML_log_confac
+  SYNC: ML_metric
+  SYNC: ML_shift
+  SYNC: ML_trace_curv
 } "apply boundary conditions"
 
 schedule ML_BSSN_CheckBoundaries at BASEGRID

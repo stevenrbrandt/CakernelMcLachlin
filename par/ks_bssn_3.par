@@ -50,9 +50,9 @@ CoordBase::domainsize = "minmax"
 CoordBase::xmax = 4.0
 CoordBase::ymax = 4.0
 CoordBase::zmax = 4.0
-CoordBase::dx   = 0.2
-CoordBase::dy   = 0.2
-CoordBase::dz   = 0.2
+CoordBase::dx   = 0.05
+CoordBase::dy   = 0.05
+CoordBase::dz   = 0.05
 
 ReflectionSymmetry::reflection_x   = yes
 ReflectionSymmetry::reflection_y   = yes

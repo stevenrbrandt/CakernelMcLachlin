@@ -1,5 +1,5 @@
-/*  File produced by user eschnett */
-/*  Produced with Mathematica Version 6.0 for Mac OS X x86 (32-bit) (April 20, 2007) */
+/*  File produced by user diener */
+/*  Produced with Mathematica Version 6.0 for Linux x86 (32-bit) (April 20, 2007) */
 
 /*  Mathematica script written by Ian Hinder and Sascha Husa */
 
@@ -96,27 +96,9 @@ void ML_BSSN_constraints_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCTK_REA
     /* Declare shorthands */
     CCTK_REAL Atm11 = INITVALUE, Atm12 = INITVALUE, Atm13 = INITVALUE, Atm21 = INITVALUE, Atm22 = INITVALUE, Atm23 = INITVALUE;
     CCTK_REAL Atm31 = INITVALUE, Atm32 = INITVALUE, Atm33 = INITVALUE;
-    CCTK_REAL ddetg1 = INITVALUE, ddetg2 = INITVALUE, ddetg3 = INITVALUE;
-    CCTK_REAL ddetgt1 = INITVALUE, ddetgt2 = INITVALUE, ddetgt3 = INITVALUE;
-    CCTK_REAL detg = INITVALUE;
     CCTK_REAL detgt = INITVALUE;
     CCTK_REAL e4phi = INITVALUE;
     CCTK_REAL em4phi = INITVALUE;
-    CCTK_REAL g11 = INITVALUE;
-    CCTK_REAL G111 = INITVALUE, G112 = INITVALUE, G113 = INITVALUE;
-    CCTK_REAL g12 = INITVALUE;
-    CCTK_REAL G122 = INITVALUE, G123 = INITVALUE;
-    CCTK_REAL g13 = INITVALUE;
-    CCTK_REAL G133 = INITVALUE, G211 = INITVALUE, G212 = INITVALUE, G213 = INITVALUE;
-    CCTK_REAL g22 = INITVALUE;
-    CCTK_REAL G222 = INITVALUE, G223 = INITVALUE;
-    CCTK_REAL g23 = INITVALUE;
-    CCTK_REAL G233 = INITVALUE, G311 = INITVALUE, G312 = INITVALUE, G313 = INITVALUE, G322 = INITVALUE, G323 = INITVALUE;
-    CCTK_REAL g33 = INITVALUE;
-    CCTK_REAL G333 = INITVALUE;
-    CCTK_REAL gK112 = INITVALUE, gK113 = INITVALUE, gK121 = INITVALUE, gK122 = INITVALUE, gK123 = INITVALUE, gK131 = INITVALUE;
-    CCTK_REAL gK132 = INITVALUE, gK133 = INITVALUE, gK221 = INITVALUE, gK223 = INITVALUE, gK231 = INITVALUE, gK232 = INITVALUE;
-    CCTK_REAL gK233 = INITVALUE, gK331 = INITVALUE, gK332 = INITVALUE;
     CCTK_REAL Gt111 = INITVALUE, Gt112 = INITVALUE, Gt113 = INITVALUE, Gt122 = INITVALUE, Gt123 = INITVALUE, Gt133 = INITVALUE;
     CCTK_REAL Gt211 = INITVALUE, Gt212 = INITVALUE, Gt213 = INITVALUE, Gt222 = INITVALUE, Gt223 = INITVALUE, Gt233 = INITVALUE;
     CCTK_REAL Gt311 = INITVALUE, Gt312 = INITVALUE, Gt313 = INITVALUE, Gt322 = INITVALUE, Gt323 = INITVALUE, Gt333 = INITVALUE;
@@ -141,6 +123,7 @@ void ML_BSSN_constraints_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCTK_REA
     /* Declare precomputed derivatives*/
     
     /* Declare derivatives */
+    CCTK_REAL PDstandard4th1At11 = INITVALUE;
     CCTK_REAL PDstandard4th2At11 = INITVALUE;
     CCTK_REAL PDstandard4th3At11 = INITVALUE;
     CCTK_REAL PDstandard4th1At12 = INITVALUE;
@@ -150,12 +133,14 @@ void ML_BSSN_constraints_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCTK_REA
     CCTK_REAL PDstandard4th2At13 = INITVALUE;
     CCTK_REAL PDstandard4th3At13 = INITVALUE;
     CCTK_REAL PDstandard4th1At22 = INITVALUE;
+    CCTK_REAL PDstandard4th2At22 = INITVALUE;
     CCTK_REAL PDstandard4th3At22 = INITVALUE;
     CCTK_REAL PDstandard4th1At23 = INITVALUE;
     CCTK_REAL PDstandard4th2At23 = INITVALUE;
     CCTK_REAL PDstandard4th3At23 = INITVALUE;
     CCTK_REAL PDstandard4th1At33 = INITVALUE;
     CCTK_REAL PDstandard4th2At33 = INITVALUE;
+    CCTK_REAL PDstandard4th3At33 = INITVALUE;
     CCTK_REAL PDstandard4th1gt11 = INITVALUE;
     CCTK_REAL PDstandard4th2gt11 = INITVALUE;
     CCTK_REAL PDstandard4th3gt11 = INITVALUE;
@@ -277,6 +262,7 @@ void ML_BSSN_constraints_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCTK_REA
     /* Include user supplied include files */
     
     /* Precompute derivatives (new style) */
+    PDstandard4th1At11 = PDstandard4th1(At11, i, j, k);
     PDstandard4th2At11 = PDstandard4th2(At11, i, j, k);
     PDstandard4th3At11 = PDstandard4th3(At11, i, j, k);
     PDstandard4th1At12 = PDstandard4th1(At12, i, j, k);
@@ -286,12 +272,14 @@ void ML_BSSN_constraints_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCTK_REA
     PDstandard4th2At13 = PDstandard4th2(At13, i, j, k);
     PDstandard4th3At13 = PDstandard4th3(At13, i, j, k);
     PDstandard4th1At22 = PDstandard4th1(At22, i, j, k);
+    PDstandard4th2At22 = PDstandard4th2(At22, i, j, k);
     PDstandard4th3At22 = PDstandard4th3(At22, i, j, k);
     PDstandard4th1At23 = PDstandard4th1(At23, i, j, k);
     PDstandard4th2At23 = PDstandard4th2(At23, i, j, k);
     PDstandard4th3At23 = PDstandard4th3(At23, i, j, k);
     PDstandard4th1At33 = PDstandard4th1(At33, i, j, k);
     PDstandard4th2At33 = PDstandard4th2(At33, i, j, k);
+    PDstandard4th3At33 = PDstandard4th3(At33, i, j, k);
     PDstandard4th1gt11 = PDstandard4th1(gt11, i, j, k);
     PDstandard4th2gt11 = PDstandard4th2(gt11, i, j, k);
     PDstandard4th3gt11 = PDstandard4th3(gt11, i, j, k);
@@ -372,12 +360,6 @@ void ML_BSSN_constraints_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCTK_REA
     
     /* Calculate temporaries and grid functions */
     detgt  =  1;
-    
-    ddetgt1  =  0;
-    
-    ddetgt2  =  0;
-    
-    ddetgt3  =  0;
     
     gtu11  =  INV(detgt)*(gt22L*gt33L - SQR(gt23L));
     
@@ -773,20 +755,6 @@ void ML_BSSN_constraints_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCTK_REA
     
     em4phi  =  INV(e4phi);
     
-    g11  =  e4phi*gt11L;
-    
-    g12  =  e4phi*gt12L;
-    
-    g13  =  e4phi*gt13L;
-    
-    g22  =  e4phi*gt22L;
-    
-    g23  =  e4phi*gt23L;
-    
-    g33  =  e4phi*gt33L;
-    
-    detg  =  CUB(e4phi);
-    
     gu11  =  em4phi*gtu11;
     
     gu21  =  em4phi*gtu21;
@@ -798,48 +766,6 @@ void ML_BSSN_constraints_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCTK_REA
     gu32  =  em4phi*gtu32;
     
     gu33  =  em4phi*gtu33;
-    
-    ddetg1  =  e4phi*(ddetgt1 + 4*detgt*PDstandard4th1phi);
-    
-    ddetg2  =  e4phi*(ddetgt2 + 4*detgt*PDstandard4th2phi);
-    
-    ddetg3  =  e4phi*(ddetgt3 + 4*detgt*PDstandard4th3phi);
-    
-    G111  =  -((-6*detg*Gt111 + ddetg1*(-6 + g11*gu11) + g11*(ddetg2*gu21 + ddetg3*gu31))*INV(detg))/6.;
-    
-    G211  =  ((6*detg*Gt211 - g11*(ddetg1*gu21 + ddetg2*gu22 + ddetg3*gu32))*INV(detg))/6.;
-    
-    G311  =  ((6*detg*Gt311 - g11*(ddetg1*gu31 + ddetg2*gu32 + ddetg3*gu33))*INV(detg))/6.;
-    
-    G112  =  -((-6*detg*Gt112 + ddetg2*(-3 + g12*gu21) + g12*(ddetg1*gu11 + ddetg3*gu31))*INV(detg))/6.;
-    
-    G212  =  -((-6*detg*Gt212 + ddetg1*(-3 + g12*gu21) + g12*(ddetg2*gu22 + ddetg3*gu32))*INV(detg))/6.;
-    
-    G312  =  ((6*detg*Gt312 - g12*(ddetg1*gu31 + ddetg2*gu32 + ddetg3*gu33))*INV(detg))/6.;
-    
-    G113  =  -((-6*detg*Gt113 + g13*(ddetg1*gu11 + ddetg2*gu21) + ddetg3*(-3 + g13*gu31))*INV(detg))/6.;
-    
-    G213  =  ((6*detg*Gt213 - g13*(ddetg1*gu21 + ddetg2*gu22 + ddetg3*gu32))*INV(detg))/6.;
-    
-    G313  =  -((-6*detg*Gt313 + ddetg1*(-3 + g13*gu31) + g13*(ddetg2*gu32 + ddetg3*gu33))*INV(detg))/6.;
-    
-    G122  =  ((6*detg*Gt122 - g22*(ddetg1*gu11 + ddetg2*gu21 + ddetg3*gu31))*INV(detg))/6.;
-    
-    G222  =  -((-6*detg*Gt222 + ddetg2*(-6 + g22*gu22) + g22*(ddetg1*gu21 + ddetg3*gu32))*INV(detg))/6.;
-    
-    G322  =  ((6*detg*Gt322 - g22*(ddetg1*gu31 + ddetg2*gu32 + ddetg3*gu33))*INV(detg))/6.;
-    
-    G123  =  ((6*detg*Gt123 - g23*(ddetg1*gu11 + ddetg2*gu21 + ddetg3*gu31))*INV(detg))/6.;
-    
-    G223  =  -((-6*detg*Gt223 + g23*(ddetg1*gu21 + ddetg2*gu22) + ddetg3*(-3 + g23*gu32))*INV(detg))/6.;
-    
-    G323  =  -((-6*detg*Gt323 + ddetg2*(-3 + g23*gu32) + g23*(ddetg1*gu31 + ddetg3*gu33))*INV(detg))/6.;
-    
-    G133  =  ((6*detg*Gt133 - g33*(ddetg1*gu11 + ddetg2*gu21 + ddetg3*gu31))*INV(detg))/6.;
-    
-    G233  =  ((6*detg*Gt233 - g33*(ddetg1*gu21 + ddetg2*gu22 + ddetg3*gu32))*INV(detg))/6.;
-    
-    G333  =  -((-6*detg*Gt333 + g33*(ddetg1*gu31 + ddetg2*gu32) + ddetg3*(-6 + g33*gu33))*INV(detg))/6.;
     
     R11  =  Rphi11 + Rt11;
     
@@ -875,59 +801,47 @@ void ML_BSSN_constraints_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCTK_REA
     
     HL  =  -2*(Atm12*Atm21 + Atm13*Atm31 + Atm23*Atm32) + trR - SQR(Atm11) - SQR(Atm22) - SQR(Atm33) + ktwothird*SQR(trKL);
     
-    gK112  =  e4phi*(-2*(At11L*G112 + At12L*G212 + At13L*G312) + PDstandard4th2At11 + 4*At11L*PDstandard4th2phi) + 
-        g11*kthird*PDstandard4th2trK;
+    M1L  =  -(At12L*Gt112*gtu22) - At11L*Gt122*gtu22 - At22L*Gt212*gtu22 - At12L*Gt222*gtu22 - At23L*Gt312*gtu22 - 
+        At13L*Gt322*gtu22 - At13L*Gt111*gtu31 - 3*At11L*Gt113*gtu31 - At23L*Gt211*gtu31 - 3*At12L*Gt213*gtu31 - 
+        At33L*Gt311*gtu31 - 3*At13L*Gt313*gtu31 - At13L*Gt112*gtu32 - At12L*Gt113*gtu32 - At23L*Gt212*gtu32 - 
+        At22L*Gt213*gtu32 - 2*At12L*Gt223*gtu32 - At33L*Gt312*gtu32 - At23L*Gt313*gtu32 - 2*At13L*Gt323*gtu32 - 
+        2*(At11L*Gt111*gtu11 + At12L*Gt211*gtu11 + At13L*Gt311*gtu11 + At11L*Gt123*gtu32) - At13L*Gt113*gtu33 - 
+        At11L*Gt133*gtu33 - At23L*Gt213*gtu33 - At12L*Gt233*gtu33 - At33L*Gt313*gtu33 - At13L*Gt333*gtu33 + 
+        gtu11*PDstandard4th1At11 + gtu21*(-(At12L*Gt111) - 3*At11L*Gt112 - At22L*Gt211 - 3*At12L*Gt212 - At23L*Gt311 - 
+           3*At13L*Gt312 + PDstandard4th1At12) + gtu31*PDstandard4th1At13 + 6*At11L*gtu11*PDstandard4th1phi + 
+        6*At12L*gtu21*PDstandard4th1phi + 6*At13L*gtu31*PDstandard4th1phi - ktwothird*PDstandard4th1trK + 
+        gtu21*PDstandard4th2At11 + gtu22*PDstandard4th2At12 + gtu32*PDstandard4th2At13 + 6*At11L*gtu21*PDstandard4th2phi + 
+        6*At12L*gtu22*PDstandard4th2phi + 6*At13L*gtu32*PDstandard4th2phi + gtu31*PDstandard4th3At11 + 
+        gtu32*PDstandard4th3At12 + gtu33*PDstandard4th3At13 + 6*At11L*gtu31*PDstandard4th3phi + 
+        6*At12L*gtu32*PDstandard4th3phi + 6*At13L*gtu33*PDstandard4th3phi;
     
-    gK113  =  e4phi*(-2*(At11L*G113 + At12L*G213 + At13L*G313) + PDstandard4th3At11 + 4*At11L*PDstandard4th3phi) + 
-        g11*kthird*PDstandard4th3trK;
+    M2L  =  -(At12L*Gt111*gtu11) - At11L*Gt112*gtu11 - At22L*Gt211*gtu11 - At12L*Gt212*gtu11 - At23L*Gt311*gtu11 - 
+        At13L*Gt312*gtu11 - 3*At12L*Gt112*gtu21 - At11L*Gt122*gtu21 - 3*At22L*Gt212*gtu21 - At12L*Gt222*gtu21 - 
+        3*At23L*Gt312*gtu21 - At13L*Gt322*gtu21 - 2*At12L*Gt122*gtu22 - 2*At22L*Gt222*gtu22 - 2*At23L*Gt322*gtu22 - 
+        At13L*Gt112*gtu31 - 2*At12L*Gt113*gtu31 - At11L*Gt123*gtu31 - At23L*Gt212*gtu31 - 2*At22L*Gt213*gtu31 - 
+        At12L*Gt223*gtu31 - At33L*Gt312*gtu31 - 2*At23L*Gt313*gtu31 - At13L*Gt323*gtu31 - At13L*Gt122*gtu32 - 
+        3*At12L*Gt123*gtu32 - At23L*Gt222*gtu32 - 3*At22L*Gt223*gtu32 - At33L*Gt322*gtu32 - 3*At23L*Gt323*gtu32 - 
+        At13L*Gt123*gtu33 - At12L*Gt133*gtu33 - At23L*Gt223*gtu33 - At22L*Gt233*gtu33 - At33L*Gt323*gtu33 - 
+        At23L*Gt333*gtu33 + gtu11*PDstandard4th1At12 + gtu21*PDstandard4th1At22 + gtu31*PDstandard4th1At23 + 
+        6*At12L*gtu11*PDstandard4th1phi + 6*At22L*gtu21*PDstandard4th1phi + 6*At23L*gtu31*PDstandard4th1phi + 
+        gtu21*PDstandard4th2At12 + gtu22*PDstandard4th2At22 + gtu32*PDstandard4th2At23 + 6*At12L*gtu21*PDstandard4th2phi + 
+        6*At22L*gtu22*PDstandard4th2phi + 6*At23L*gtu32*PDstandard4th2phi - ktwothird*PDstandard4th2trK + 
+        gtu31*PDstandard4th3At12 + gtu32*PDstandard4th3At22 + gtu33*PDstandard4th3At23 + 6*At12L*gtu31*PDstandard4th3phi + 
+        6*At22L*gtu32*PDstandard4th3phi + 6*At23L*gtu33*PDstandard4th3phi;
     
-    gK121  =  e4phi*(-(At11L*G112) - At22L*G211 - At12L*(G111 + G212) - At23L*G311 - At13L*G312 + PDstandard4th1At12 + 
-           4*At12L*PDstandard4th1phi) + g12*kthird*PDstandard4th1trK;
-    
-    gK122  =  e4phi*(-(At11L*G122) - At22L*G212 - At12L*(G112 + G222) - At23L*G312 - At13L*G322 + PDstandard4th2At12 + 
-           4*At12L*PDstandard4th2phi) + g12*kthird*PDstandard4th2trK;
-    
-    gK123  =  e4phi*(-(At11L*G123) - At22L*G213 - At12L*(G113 + G223) - At23L*G313 - At13L*G323 + PDstandard4th3At12 + 
-           4*At12L*PDstandard4th3phi) + g12*kthird*PDstandard4th3trK;
-    
-    gK131  =  e4phi*(-(At11L*G113) - At23L*G211 - At12L*G213 - At33L*G311 - At13L*(G111 + G313) + PDstandard4th1At13 + 
-           4*At13L*PDstandard4th1phi) + g13*kthird*PDstandard4th1trK;
-    
-    gK132  =  e4phi*(-(At11L*G123) - At23L*G212 - At12L*G223 - At33L*G312 - At13L*(G112 + G323) + PDstandard4th2At13 + 
-           4*At13L*PDstandard4th2phi) + g13*kthird*PDstandard4th2trK;
-    
-    gK133  =  e4phi*(-(At11L*G133) - At23L*G213 - At12L*G233 - At33L*G313 - At13L*(G113 + G333) + PDstandard4th3At13 + 
-           4*At13L*PDstandard4th3phi) + g13*kthird*PDstandard4th3trK;
-    
-    gK221  =  e4phi*(-2*(At12L*G112 + At22L*G212 + At23L*G312) + PDstandard4th1At22 + 4*At22L*PDstandard4th1phi) + 
-        g22*kthird*PDstandard4th1trK;
-    
-    gK223  =  e4phi*(-2*(At12L*G123 + At22L*G223 + At23L*G323) + PDstandard4th3At22 + 4*At22L*PDstandard4th3phi) + 
-        g22*kthird*PDstandard4th3trK;
-    
-    gK231  =  e4phi*(-(At13L*G112) - At12L*G113 - At23L*G212 - At22L*G213 - At33L*G312 - At23L*G313 + PDstandard4th1At23 + 
-           4*At23L*PDstandard4th1phi) + g23*kthird*PDstandard4th1trK;
-    
-    gK232  =  e4phi*(-(At13L*G122) - At12L*G123 - At23L*G222 - At22L*G223 - At33L*G322 - At23L*G323 + PDstandard4th2At23 + 
-           4*At23L*PDstandard4th2phi) + g23*kthird*PDstandard4th2trK;
-    
-    gK233  =  e4phi*(-(At13L*G123) - At12L*G133 - At23L*G223 - At22L*G233 - At33L*G323 - At23L*G333 + PDstandard4th3At23 + 
-           4*At23L*PDstandard4th3phi) + g23*kthird*PDstandard4th3trK;
-    
-    gK331  =  e4phi*(-2*(At13L*G113 + At23L*G213 + At33L*G313) + PDstandard4th1At33 + 4*At33L*PDstandard4th1phi) + 
-        g33*kthird*PDstandard4th1trK;
-    
-    gK332  =  e4phi*(-2*(At13L*G123 + At23L*G223 + At33L*G323) + PDstandard4th2At33 + 4*At33L*PDstandard4th2phi) + 
-        g33*kthird*PDstandard4th2trK;
-    
-    M1L  =  (gK112 - gK121)*gu21 + (gK122 - gK221)*gu22 + (gK113 - gK131)*gu31 + (gK123 + gK132 - 2*gK231)*gu32 + 
-        (gK133 - gK331)*gu33;
-    
-    M2L  =  (-gK112 + gK121)*gu11 + (-gK122 + gK221)*gu21 + (gK123 - 2*gK132 + gK231)*gu31 + (gK223 - gK232)*gu32 + 
-        (gK233 - gK332)*gu33;
-    
-    M3L  =  (-gK113 + gK131)*gu11 + (-2*gK123 + gK132 + gK231)*gu21 + (-gK223 + gK232)*gu22 + (-gK133 + gK331)*gu31 + 
-        (-gK233 + gK332)*gu32;
+    M3L  =  -(At13L*Gt111*gtu11) - At11L*Gt113*gtu11 - At23L*Gt211*gtu11 - At12L*Gt213*gtu11 - At33L*Gt311*gtu11 - 
+        At13L*Gt313*gtu11 - 2*At13L*Gt112*gtu21 - At12L*Gt113*gtu21 - At11L*Gt123*gtu21 - 2*At23L*Gt212*gtu21 - 
+        At22L*Gt213*gtu21 - At12L*Gt223*gtu21 - 2*At33L*Gt312*gtu21 - At23L*Gt313*gtu21 - At13L*Gt323*gtu21 - 
+        At13L*Gt122*gtu22 - At12L*Gt123*gtu22 - At23L*Gt222*gtu22 - At22L*Gt223*gtu22 - At33L*Gt322*gtu22 - 
+        At23L*Gt323*gtu22 - 3*At13L*Gt113*gtu31 - At11L*Gt133*gtu31 - 3*At23L*Gt213*gtu31 - At12L*Gt233*gtu31 - 
+        3*At33L*Gt313*gtu31 - At13L*Gt333*gtu31 - 3*At13L*Gt123*gtu32 - At12L*Gt133*gtu32 - 3*At23L*Gt223*gtu32 - 
+        At22L*Gt233*gtu32 - 3*At33L*Gt323*gtu32 - At23L*Gt333*gtu32 - 2*At13L*Gt133*gtu33 - 2*At23L*Gt233*gtu33 - 
+        2*At33L*Gt333*gtu33 + gtu11*PDstandard4th1At13 + gtu21*PDstandard4th1At23 + gtu31*PDstandard4th1At33 + 
+        6*At13L*gtu11*PDstandard4th1phi + 6*At23L*gtu21*PDstandard4th1phi + 6*At33L*gtu31*PDstandard4th1phi + 
+        gtu21*PDstandard4th2At13 + gtu22*PDstandard4th2At23 + gtu32*PDstandard4th2At33 + 6*At13L*gtu21*PDstandard4th2phi + 
+        6*At23L*gtu22*PDstandard4th2phi + 6*At33L*gtu32*PDstandard4th2phi + gtu31*PDstandard4th3At13 + 
+        gtu32*PDstandard4th3At23 + gtu33*PDstandard4th3At33 + 6*At13L*gtu31*PDstandard4th3phi + 
+        6*At23L*gtu32*PDstandard4th3phi + 6*At33L*gtu33*PDstandard4th3phi - ktwothird*PDstandard4th3trK;
     
     cSL  =  trR;
     

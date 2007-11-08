@@ -96,10 +96,10 @@ ddetgtExpr[la_] =
 (******************************************************************************)
 
 evolvedGroups =
-  {SetGroupName [CreateGroupFromTensor [g[la,lb]], "metric"],
-   SetGroupName [CreateGroupFromTensor [K[la,lb]], "curv"  ],
-   SetGroupName [CreateGroupFromTensor [alpha   ], "lapse" ],
-   SetGroupName [CreateGroupFromTensor [beta[ua]], "shift" ]};
+  {SetGroupName [CreateGroupFromTensor [g[la,lb]], "ml_metric"],
+   SetGroupName [CreateGroupFromTensor [K[la,lb]], "ml_curv"  ],
+   SetGroupName [CreateGroupFromTensor [alpha   ], "ml_lapse" ],
+   SetGroupName [CreateGroupFromTensor [beta[ua]], "ml_shift" ]};
 evaluatedGroups =
   {SetGroupName [CreateGroupFromTensor [H    ], "Ham"],
    SetGroupName [CreateGroupFromTensor [M[la]], "mom"]};
@@ -108,15 +108,15 @@ declaredGroups = Join [evolvedGroups, evaluatedGroups];
 declaredGroupNames = Map [First, declaredGroups];
 
 evolvedGroupsBSSN =
-  {SetGroupName [CreateGroupFromTensor [phi      ], "log_confac"],
-   SetGroupName [CreateGroupFromTensor [gt[la,lb]], "metric"    ],
-   SetGroupName [CreateGroupFromTensor [Xt[ua]   ], "Gamma"     ],
-   SetGroupName [CreateGroupFromTensor [trK      ], "trace_curv"],
-   SetGroupName [CreateGroupFromTensor [At[la,lb]], "curv"      ],
-   SetGroupName [CreateGroupFromTensor [alpha    ], "lapse"     ],
-   SetGroupName [CreateGroupFromTensor [A        ], "dtlapse"   ],
-   SetGroupName [CreateGroupFromTensor [beta[ua] ], "shift"     ],
-   SetGroupName [CreateGroupFromTensor [B[ua]    ], "dtshift"   ]};
+  {SetGroupName [CreateGroupFromTensor [phi      ], "ML_log_confac"],
+   SetGroupName [CreateGroupFromTensor [gt[la,lb]], "ML_metric"    ],
+   SetGroupName [CreateGroupFromTensor [Xt[ua]   ], "ML_Gamma"     ],
+   SetGroupName [CreateGroupFromTensor [trK      ], "ML_trace_curv"],
+   SetGroupName [CreateGroupFromTensor [At[la,lb]], "ML_curv"      ],
+   SetGroupName [CreateGroupFromTensor [alpha    ], "ML_lapse"     ],
+   SetGroupName [CreateGroupFromTensor [A        ], "ML_dtlapse"   ],
+   SetGroupName [CreateGroupFromTensor [beta[ua] ], "ML_shift"     ],
+   SetGroupName [CreateGroupFromTensor [B[ua]    ], "ML_dtshift"   ]};
 evaluatedGroupsBSSN =
   {SetGroupName [CreateGroupFromTensor [H      ], "Ham"],
    SetGroupName [CreateGroupFromTensor [M[la]  ], "mom"],
@@ -468,8 +468,9 @@ evolCalcBSSN =
 (*    dot[Xt[ui]]    -> - 2 Atu[ui,uj] PD[alpha,lj]
                       + 2 alpha (+ Gt[ui,lj,lk] Atu[uk,uj]
                                  - (2/3) gtu[ui,uj] PD[trK,lj]
+                                 + 6 Atu[ui,uj] PD[phi,lj])
                       + gtu[uj,ul] PD[beta[ui],lj,ll]
-                      + (1/3) gtu[ui,uj] PD[beta[ul],li,lj]
+                      + (1/3) gtu[ui,uj] PD[beta[ul],lj,ll]
                       + beta[uj] PD[Xt[ui],lj]
                       + PD[gtu[ul,uj],ll] PD[beta[ui],lj]
                       - (2/3) PD[gtu[ui,uj],lj] PD[beta[ul],ll] *)
@@ -622,11 +623,13 @@ constraintsCalcBSSN =
     (* H -> trR - Km[ua,lb] Km[ub,la] + trK^2, *)
     H -> trR - Atm[ua,lb] Atm[ub,la] + (2/3) trK^2,
     
-    (* gK[la,lb,lc] -> CD[K[la,lb],lc], *)
+(*    (* gK[la,lb,lc] -> CD[K[la,lb],lc], *)
     gK[la,lb,lc] -> + 4 e4phi PD[phi,lc] At[la,lb] + e4phi CD[At[la,lb],lc]
                     + (1/3) g[la,lb] PD[trK,lc],
-    M[la] -> gu[ub,uc] (gK[lc,la,lb] - gK[lc,lb,la]),
-    
+    M[la] -> gu[ub,uc] (gK[lc,la,lb] - gK[lc,lb,la]), *)
+
+    M[li] -> + gtu[uj,uk] ( CDt[At[li,lj],lk] + 6 At[li,lj] PD[phi,lk] )
+             - (2/3) PD[trK,li],
     (* det gamma-tilde *)
     (* TODO cS -> Log [detgt], *)
     cS -> trR,
