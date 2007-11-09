@@ -7,6 +7,9 @@
 #MATHEMATICA="/Applications/Mathematica.app/Contents/MacOS/MathKernel"
 MATHEMATICA="math"
 
+# Abort on errors
+set -e
+
 # Remove old output
 rm -rf ML_ADM ML_BSSN
 
@@ -28,5 +31,5 @@ fi
 ./copy-if-changed.sh ML_BSSN ../ML_BSSN
 
 echo
-echo "The Cactus thorns have been successfully regenerated."
+echo "The Cactus thorns have been regenerated successfully."
 echo

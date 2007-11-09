@@ -10,29 +10,31 @@ SetSourceLanguage["C"];
 (* Derivatives *)
 (******************************************************************************)
 
+derivOrder = 4;
+
 derivatives =
 {
   (*
   PDstandard2nd[i_]     -> StandardCenteredDifferenceOperator[1,1,i],
   PDstandard2nd[i_, i_] -> StandardCenteredDifferenceOperator[2,1,i],
   PDstandard2nd[i_, j_] -> StandardCenteredDifferenceOperator[1,1,i]
-                           StandardCenteredDifferenceOperator[1,1,j],
+                           StandardCenteredDifferenceOperator[1,1,j]
   *)
 
+  (*
   PDstandard4th[i_]     -> StandardCenteredDifferenceOperator[1,2,i],
   PDstandard4th[i_, i_] -> StandardCenteredDifferenceOperator[2,2,i],
   PDstandard4th[i_, j_] -> StandardCenteredDifferenceOperator[1,2,i]
                            StandardCenteredDifferenceOperator[1,2,j]
-
-  (*
-  PDstandard6th[i_]     -> StandardCenteredDifferenceOperator[1,3,i],
-  PDstandard6th[i_, i_] -> StandardCenteredDifferenceOperator[2,3,i],
-  PDstandard6th[i_, j_] -> StandardCenteredDifferenceOperator[1,3,i]
-                           StandardCenteredDifferenceOperator[1,3,j]
   *)
+
+  PDstandardNth[i_]     -> StandardCenteredDifferenceOperator[1,derivOrder/2,i],
+  PDstandardNth[i_, i_] -> StandardCenteredDifferenceOperator[2,derivOrder/2,i],
+  PDstandardNth[i_, j_] -> StandardCenteredDifferenceOperator[1,derivOrder/2,i]
+                           StandardCenteredDifferenceOperator[1,derivOrder/2,j]
 };
 
-PD = PDstandard4th;
+PD = PDstandardNth;
 
 KD = KroneckerDelta;
 
@@ -621,18 +623,21 @@ constraintsCalcBSSN =
     Atm[ua,lb] -> gtu[ua,uc] At[lc,lb],
     
     (* H -> trR - Km[ua,lb] Km[ub,la] + trK^2, *)
+    (* PRD 67, 084023 (2003), eqn. (19) *)
     H -> trR - Atm[ua,lb] Atm[ub,la] + (2/3) trK^2,
     
 (*    (* gK[la,lb,lc] -> CD[K[la,lb],lc], *)
     gK[la,lb,lc] -> + 4 e4phi PD[phi,lc] At[la,lb] + e4phi CD[At[la,lb],lc]
                     + (1/3) g[la,lb] PD[trK,lc],
+
     M[la] -> gu[ub,uc] (gK[lc,la,lb] - gK[lc,lb,la]), *)
 
     M[li] -> + gtu[uj,uk] ( CDt[At[li,lj],lk] + 6 At[li,lj] PD[phi,lk] )
              - (2/3) PD[trK,li],
+    (* TODO: use PRD 67, 084023 (2003), eqn. (20) *)
+    
     (* det gamma-tilde *)
-    (* TODO cS -> Log [detgt], *)
-    cS -> trR,
+    cS -> Log [detgt],
     
     (* Gamma constraint *)
     cXt[ua] -> gtu[ub,uc] Gt[ua,lb,lc] - Xt[ua],
