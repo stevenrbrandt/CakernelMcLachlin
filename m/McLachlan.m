@@ -448,8 +448,9 @@ evolCalcBSSN =
     R[la,lb] -> Rt[la,lb] + Rphi[la,lb],
     
     (* PRD 62, 044034 (2000), eqn. (10) *)
-    dot[phi]       -> - (1/6) alpha trK
-                      + Lie[phi, beta] + (1/6) phi PD[beta[ua],la],
+    (* PRD 67 084023 (2003), eqn. (16) and (23) *)  
+    dot[phi]       -> - (1/6) alpha trK 
+                      + Lie[phi, beta] + (1/6) PD[beta[ua],la],
     (* PRD 62, 044034 (2000), eqn. (9) *)
     dot[gt[la,lb]] -> - 2 alpha At[la,lb]
                       + Lie[gt[la,lb], beta] - (2/3) gt[la,lb] PD[beta[uc],lc],
