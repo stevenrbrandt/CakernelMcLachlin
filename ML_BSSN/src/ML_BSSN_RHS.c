@@ -98,7 +98,6 @@ void ML_BSSN_RHS_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCTK_REAL normal
     CCTK_REAL Atm31 = INITVALUE, Atm32 = INITVALUE, Atm33 = INITVALUE;
     CCTK_REAL Atu11 = INITVALUE, Atu21 = INITVALUE, Atu22 = INITVALUE, Atu31 = INITVALUE, Atu32 = INITVALUE, Atu33 = INITVALUE;
     CCTK_REAL ddetg1 = INITVALUE, ddetg2 = INITVALUE, ddetg3 = INITVALUE;
-    CCTK_REAL ddetgt1 = INITVALUE, ddetgt2 = INITVALUE, ddetgt3 = INITVALUE;
     CCTK_REAL ddgtu1111 = INITVALUE, ddgtu1112 = INITVALUE, ddgtu1113 = INITVALUE, ddgtu2111 = INITVALUE, ddgtu2112 = INITVALUE, ddgtu2113 = INITVALUE;
     CCTK_REAL ddgtu2122 = INITVALUE, ddgtu2123 = INITVALUE, ddgtu2212 = INITVALUE, ddgtu2222 = INITVALUE, ddgtu2223 = INITVALUE, ddgtu3111 = INITVALUE;
     CCTK_REAL ddgtu3112 = INITVALUE, ddgtu3113 = INITVALUE, ddgtu3123 = INITVALUE, ddgtu3133 = INITVALUE, ddgtu3212 = INITVALUE, ddgtu3213 = INITVALUE;
@@ -480,12 +479,6 @@ void ML_BSSN_RHS_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCTK_REAL normal
     
     /* Calculate temporaries and grid functions */
     detgt  =  1;
-    
-    ddetgt1  =  0;
-    
-    ddetgt2  =  0;
-    
-    ddetgt3  =  0;
     
     gtu11  =  INV(detgt)*(gt22L*gt33L - SQR(gt23L));
     
@@ -1204,47 +1197,47 @@ void ML_BSSN_RHS_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCTK_REAL normal
     
     gu33  =  em4phi*gtu33;
     
-    ddetg1  =  e4phi*(ddetgt1 + 4*detgt*PDstandardNth1phi);
+    ddetg1  =  12*detg*PDstandardNth1phi;
     
-    ddetg2  =  e4phi*(ddetgt2 + 4*detgt*PDstandardNth2phi);
+    ddetg2  =  12*detg*PDstandardNth2phi;
     
-    ddetg3  =  e4phi*(ddetgt3 + 4*detgt*PDstandardNth3phi);
+    ddetg3  =  12*detg*PDstandardNth3phi;
     
-    G111  =  -((-6*detg*Gt111 + ddetg1*(-6 + g11*gu11) + g11*(ddetg2*gu21 + ddetg3*gu31))*INV(detg))/6.;
+    G111  =  Gt111 - ((ddetg1*(-2 + gt11L*gtu11) + gt11L*(ddetg2*gtu21 + ddetg3*gtu31))*INV(detg))/6.;
     
-    G211  =  ((6*detg*Gt211 - g11*(ddetg1*gu21 + ddetg2*gu22 + ddetg3*gu32))*INV(detg))/6.;
+    G211  =  ((6*detg*Gt211 - gt11L*(ddetg1*gtu21 + ddetg2*gtu22 + ddetg3*gtu32))*INV(detg))/6.;
     
-    G311  =  ((6*detg*Gt311 - g11*(ddetg1*gu31 + ddetg2*gu32 + ddetg3*gu33))*INV(detg))/6.;
+    G311  =  ((6*detg*Gt311 - gt11L*(ddetg1*gtu31 + ddetg2*gtu32 + ddetg3*gtu33))*INV(detg))/6.;
     
-    G112  =  -((-6*detg*Gt112 + ddetg2*(-3 + g12*gu21) + g12*(ddetg1*gu11 + ddetg3*gu31))*INV(detg))/6.;
+    G112  =  Gt112 + ((ddetg2 - ddetg2*gt12L*gtu21 - gt12L*(ddetg1*gtu11 + ddetg3*gtu31))*INV(detg))/6.;
     
-    G212  =  -((-6*detg*Gt212 + ddetg1*(-3 + g12*gu21) + g12*(ddetg2*gu22 + ddetg3*gu32))*INV(detg))/6.;
+    G212  =  Gt212 + ((ddetg1 - ddetg1*gt12L*gtu21 - gt12L*(ddetg2*gtu22 + ddetg3*gtu32))*INV(detg))/6.;
     
-    G312  =  ((6*detg*Gt312 - g12*(ddetg1*gu31 + ddetg2*gu32 + ddetg3*gu33))*INV(detg))/6.;
+    G312  =  ((6*detg*Gt312 - gt12L*(ddetg1*gtu31 + ddetg2*gtu32 + ddetg3*gtu33))*INV(detg))/6.;
     
-    G113  =  -((-6*detg*Gt113 + g13*(ddetg1*gu11 + ddetg2*gu21) + ddetg3*(-3 + g13*gu31))*INV(detg))/6.;
+    G113  =  Gt113 + ((ddetg3 - gt13L*(ddetg1*gtu11 + ddetg2*gtu21) - ddetg3*gt13L*gtu31)*INV(detg))/6.;
     
-    G213  =  ((6*detg*Gt213 - g13*(ddetg1*gu21 + ddetg2*gu22 + ddetg3*gu32))*INV(detg))/6.;
+    G213  =  ((6*detg*Gt213 - gt13L*(ddetg1*gtu21 + ddetg2*gtu22 + ddetg3*gtu32))*INV(detg))/6.;
     
-    G313  =  -((-6*detg*Gt313 + ddetg1*(-3 + g13*gu31) + g13*(ddetg2*gu32 + ddetg3*gu33))*INV(detg))/6.;
+    G313  =  Gt313 + ((ddetg1 - ddetg1*gt13L*gtu31 - gt13L*(ddetg2*gtu32 + ddetg3*gtu33))*INV(detg))/6.;
     
-    G122  =  ((6*detg*Gt122 - g22*(ddetg1*gu11 + ddetg2*gu21 + ddetg3*gu31))*INV(detg))/6.;
+    G122  =  ((6*detg*Gt122 - gt22L*(ddetg1*gtu11 + ddetg2*gtu21 + ddetg3*gtu31))*INV(detg))/6.;
     
-    G222  =  -((-6*detg*Gt222 + ddetg2*(-6 + g22*gu22) + g22*(ddetg1*gu21 + ddetg3*gu32))*INV(detg))/6.;
+    G222  =  Gt222 - ((ddetg2*(-2 + gt22L*gtu22) + gt22L*(ddetg1*gtu21 + ddetg3*gtu32))*INV(detg))/6.;
     
-    G322  =  ((6*detg*Gt322 - g22*(ddetg1*gu31 + ddetg2*gu32 + ddetg3*gu33))*INV(detg))/6.;
+    G322  =  ((6*detg*Gt322 - gt22L*(ddetg1*gtu31 + ddetg2*gtu32 + ddetg3*gtu33))*INV(detg))/6.;
     
-    G123  =  ((6*detg*Gt123 - g23*(ddetg1*gu11 + ddetg2*gu21 + ddetg3*gu31))*INV(detg))/6.;
+    G123  =  ((6*detg*Gt123 - gt23L*(ddetg1*gtu11 + ddetg2*gtu21 + ddetg3*gtu31))*INV(detg))/6.;
     
-    G223  =  -((-6*detg*Gt223 + g23*(ddetg1*gu21 + ddetg2*gu22) + ddetg3*(-3 + g23*gu32))*INV(detg))/6.;
+    G223  =  Gt223 + ((ddetg3 - gt23L*(ddetg1*gtu21 + ddetg2*gtu22) - ddetg3*gt23L*gtu32)*INV(detg))/6.;
     
-    G323  =  -((-6*detg*Gt323 + ddetg2*(-3 + g23*gu32) + g23*(ddetg1*gu31 + ddetg3*gu33))*INV(detg))/6.;
+    G323  =  Gt323 + ((ddetg2 - ddetg2*gt23L*gtu32 - gt23L*(ddetg1*gtu31 + ddetg3*gtu33))*INV(detg))/6.;
     
-    G133  =  ((6*detg*Gt133 - g33*(ddetg1*gu11 + ddetg2*gu21 + ddetg3*gu31))*INV(detg))/6.;
+    G133  =  ((6*detg*Gt133 - gt33L*(ddetg1*gtu11 + ddetg2*gtu21 + ddetg3*gtu31))*INV(detg))/6.;
     
-    G233  =  ((6*detg*Gt233 - g33*(ddetg1*gu21 + ddetg2*gu22 + ddetg3*gu32))*INV(detg))/6.;
+    G233  =  ((6*detg*Gt233 - gt33L*(ddetg1*gtu21 + ddetg2*gtu22 + ddetg3*gtu32))*INV(detg))/6.;
     
-    G333  =  -((-6*detg*Gt333 + g33*(ddetg1*gu31 + ddetg2*gu32) + ddetg3*(-6 + g33*gu33))*INV(detg))/6.;
+    G333  =  Gt333 - ((gt33L*(ddetg1*gtu31 + ddetg2*gtu32) + ddetg3*(-2 + gt33L*gtu33))*INV(detg))/6.;
     
     R11  =  Rphi11 + Rt11;
     
@@ -1258,8 +1251,8 @@ void ML_BSSN_RHS_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCTK_REAL normal
     
     R33  =  Rphi33 + Rt33;
     
-    phirhsL  =  beta1L*PDstandardNth1phi + beta2L*PDstandardNth2phi + beta3L*PDstandardNth3phi + 
-        ((PDstandardNth1beta1 + PDstandardNth2beta2 + PDstandardNth3beta3)*phiL)/6. - (alphaL*trKL)/6.;
+    phirhsL  =  (PDstandardNth1beta1 + PDstandardNth2beta2 + PDstandardNth3beta3 + 
+          6*(beta1L*PDstandardNth1phi + beta2L*PDstandardNth2phi + beta3L*PDstandardNth3phi) - alphaL*trKL)/6.;
     
     gt11rhsL  =  -2*alphaL*At11L + 2*(gt11L*PDstandardNth1beta1 + gt12L*PDstandardNth1beta2 + gt13L*PDstandardNth1beta3) + 
         beta1L*PDstandardNth1gt11 + beta2L*PDstandardNth2gt11 - 
