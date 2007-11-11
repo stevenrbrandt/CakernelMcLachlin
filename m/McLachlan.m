@@ -439,11 +439,10 @@ evolCalcBSSN =
     detg        -> detgExpr,
     (* gu[ua,ub] -> 1/detg detgExpr MatrixInverse [g[ua,ub]], *)
     gu[ua,ub]   -> em4phi gtu[ua,ub],
-    (* ddetg[la] -> PD[e4phi detg,la], *)
-    ddetg[la]   -> e4phi ddetgt[la] + 4 detgt e4phi PD[phi,la],
+    ddetg[la]   -> 12 detg PD[phi,la],
     G[ua,lb,lc] -> Gt[ua,lb,lc]
-                   + 1/(2 detg) (+ KD[ua,lb] ddetg[lc] + KD[ua,lc] ddetg[lb]
-                                 - (1/3) g[lb,lc] gu[ua,ud] ddetg[ld]),
+                   + 1/(6 detg) ( KD[ua,lb] ddetg[lc] + KD[ua,lc] ddetg[lb]
+                                  - gtu[ua,ud] gt[lb,lc] ddetg[ld] ),
     
     R[la,lb] -> Rt[la,lb] + Rphi[la,lb],
     
@@ -476,12 +475,13 @@ evolCalcBSSN =
                       + (1/3) gtu[ui,uj] PD[beta[ul],lj,ll]
                       + beta[uj] PD[Xt[ui],lj]
                       + PD[gtu[ul,uj],ll] PD[beta[ui],lj]
-                      - (2/3) PD[gtu[ui,uj],lj] PD[beta[ul],ll] *)
+                      - (2/3) PD[gtu[ui,uj],lj] PD[beta[ul],ll], *)
     
     (* PRD 62, 044034 (2000), eqn. (11) *)
     dot[trK]       -> - gu[ua,ub] CD[alpha,la,lb]
                       + alpha (Atm[ua,lb] Atm[ub,la] + (1/3) trK^2)
                       + Lie[trK, beta],
+
     (* PRD 62, 044034 (2000), eqn. (12) *)
     (* TODO: use Hamiltonian constraint to make tracefree *)
     dot[At[la,lb]] -> + em4phi (+ (- CD[alpha,la,lb] + alpha R[la,lb])
