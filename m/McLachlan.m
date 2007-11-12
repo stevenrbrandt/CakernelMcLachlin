@@ -45,7 +45,7 @@ KD = KroneckerDelta;
 (* Register the tensor quantities with the TensorTools package *)
 Map [DefineTensor,
      {g, K, alpha, beta, H, M, detg, gu, G, R, trR, Km, trK,
-      phi, gt, At, Xt, A, B, Atm, Atu, trA, cXt, cS, cA,
+      phi, gt, At, Xt, A, B, Atm, Atu, trA, Ats, trAts, cXt, cS, cA,
       e4phi, em4phi, ddetg, detgt, gtu, ddetgt, dgtu, ddgtu, Gt, Rt, Rphi, gK}];
 
 (* NOTE: It seems as if Lie[.,.] did not take these tensor weights
@@ -59,7 +59,7 @@ SetTensorAttribute[cS,  TensorWeight, +2  ];
 
 Map [AssertSymmetricIncreasing,
      {g[la,lb], K[la,lb], R[la,lb],
-      gt[la,lb], At[la,lb], Rt[la,lb], Rphi[la,lb]}];
+      gt[la,lb], At[la,lb], Ats[la,lb], Rt[la,lb], Rphi[la,lb]}];
 AssertSymmetricIncreasing [G[ua,lb,lc], lb, lc];
 AssertSymmetricIncreasing [Gt[ua,lb,lc], lb, lc];
 AssertSymmetricIncreasing [gK[la,lb,lc], la, lb];
@@ -391,7 +391,7 @@ evolCalcBSSN =
                  Rt[la,lb], Rphi[la,lb], R[la,lb],
                  Atm[ua,lb], Atu[ua,ub],
                  e4phi, em4phi, g[la,lb], detg,
-                 ddetg[la], gu[ua,ub], G[ua,lb,lc]},
+                 ddetg[la], gu[ua,ub], G[ua,lb,lc], Ats[la,lb], trAts},
   Equations -> 
   {
     detgt        -> 1 (* detgtExpr *),
@@ -439,10 +439,13 @@ evolCalcBSSN =
     detg        -> detgExpr,
     (* gu[ua,ub] -> 1/detg detgExpr MatrixInverse [g[ua,ub]], *)
     gu[ua,ub]   -> em4phi gtu[ua,ub],
-    ddetg[la]   -> 12 detg PD[phi,la],
+(*    ddetg[la]   -> 12 detg PD[phi,la],
     G[ua,lb,lc] -> Gt[ua,lb,lc]
                    + 1/(6 detg) ( KD[ua,lb] ddetg[lc] + KD[ua,lc] ddetg[lb]
-                                  - gtu[ua,ud] gt[lb,lc] ddetg[ld] ),
+                                  - gtu[ua,ud] gt[lb,lc] ddetg[ld] ), *)
+    G[ua,lb,lc] -> Gt[ua,lb,lc]
+                   + 2 ( KD[ua,lb] PD[phi,lc] + KD[ua,lc] PD[phi,lb] 
+                                  - gtu[ua,ud] gt[lb,lc] PD[phi,ld] ),
     
     R[la,lb] -> Rt[la,lb] + Rphi[la,lb],
     
@@ -484,11 +487,16 @@ evolCalcBSSN =
 
     (* PRD 62, 044034 (2000), eqn. (12) *)
     (* TODO: use Hamiltonian constraint to make tracefree *)
-    dot[At[la,lb]] -> + em4phi (+ (- CD[alpha,la,lb] + alpha R[la,lb])
+    Ats[la,lb]     -> - CD[alpha,la,lb] + alpha R[la,lb],
+    trAts          -> gu[ua,ub] Ats[la,lb],
+    dot[At[la,lb]] -> + em4phi (+ Ats[la,lb] - (1/3) g[la,lb] trAts )
+                      + alpha (trK At[la,lb] - 2 At[la,lc] Atm[uc,lb])
+                      + Lie[At[la,lb], beta] - (2/3) At[la,lb] PD[beta[uc],lc],
+(*    dot[At[la,lb]] -> + em4phi (+ (- CD[alpha,la,lb] + alpha R[la,lb])
                                 - (1/3) g[la,lb] gu[uc,ud]
                                         (- CD[alpha,lc,ld] + alpha R[lc,ld]))
                       + alpha (trK At[la,lb] - 2 At[la,lc] Atm[uc,lb])
-                      + Lie[At[la,lb], beta] - (2/3) At[la,lb] PD[beta[uc],lc],
+                      + Lie[At[la,lb], beta] - (2/3) At[la,lb] PD[beta[uc],lc], *)
     
     (* dot[alpha] -> - harmonicF alpha^harmonicN trK, *)
     dot[alpha] -> - harmonicF alpha^harmonicN A
