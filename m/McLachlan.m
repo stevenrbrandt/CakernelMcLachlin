@@ -454,7 +454,7 @@ evolCalcBSSN =
     dot[gt[la,lb]] -> - 2 alpha At[la,lb]
                       + Lie[gt[la,lb], beta] - (2/3) gt[la,lb] PD[beta[uc],lc],
     (* PRD 62, 044034 (2000), eqn. (20) *)
-    dot[Xt[ui]]    -> - 2 Atu[ui,uj] PD[alpha,lj]
+(*    dot[Xt[ui]]    -> - 2 Atu[ui,uj] PD[alpha,lj]
                       + 2 alpha (+ Gt[ui,lj,lk] Atu[uk,uj]
                                  - (2/3) gtu[ui,uj] PD[trK,lj]
                                  + 6 Atu[ui,uj] PD[phi,lj])
@@ -465,17 +465,17 @@ evolCalcBSSN =
                               + gtu[um,uj] PD[beta[ui],lm,lj]
                               + gtu[um,ui] PD[beta[uj],lm,lj])
                          + (2/3) (+ dgtu[ui,uj,lj] PD[beta[ul],ll]
-                                  + gtu[ui,uj] PD[beta[ul],ll,lj])),
-    
-(*    dot[Xt[ui]]    -> - 2 Atu[ui,uj] PD[alpha,lj]
+                                  + gtu[ui,uj] PD[beta[ul],ll,lj])), *)
+    (* PRD 67 084023 (2003), eqn (26) *)    
+    dot[Xt[ui]]    -> - 2 Atu[ui,uj] PD[alpha,lj]
                       + 2 alpha (+ Gt[ui,lj,lk] Atu[uk,uj]
                                  - (2/3) gtu[ui,uj] PD[trK,lj]
                                  + 6 Atu[ui,uj] PD[phi,lj])
                       + gtu[uj,ul] PD[beta[ui],lj,ll]
                       + (1/3) gtu[ui,uj] PD[beta[ul],lj,ll]
                       + beta[uj] PD[Xt[ui],lj]
-                      + PD[gtu[ul,uj],ll] PD[beta[ui],lj]
-                      - (2/3) PD[gtu[ui,uj],lj] PD[beta[ul],ll], *)
+                      + dgtu[ul,uj,ll] PD[beta[ui],lj]
+                      - (2/3) dgtu[ui,uj,lj] PD[beta[ul],ll],
     
     (* PRD 62, 044034 (2000), eqn. (11) *)
     dot[trK]       -> - gu[ua,ub] CD[alpha,la,lb]
