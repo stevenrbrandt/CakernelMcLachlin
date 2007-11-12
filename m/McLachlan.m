@@ -45,7 +45,7 @@ KD = KroneckerDelta;
 (* Register the tensor quantities with the TensorTools package *)
 Map [DefineTensor,
      {g, K, alpha, beta, H, M, detg, gu, G, R, trR, Km, trK,
-      phi, gt, At, Xt, A, B, Atm, Atu, trA, Ats, trAts, cXt, cS, cA,
+      phi, gt, At, Xt, Xtn, A, B, Atm, Atu, trA, Ats, trAts, cXt, cS, cA,
       e4phi, em4phi, ddetg, detgt, gtu, ddetgt, dgtu, ddgtu, Gt, Rt, Rphi, gK}];
 
 (* NOTE: It seems as if Lie[.,.] did not take these tensor weights
@@ -388,7 +388,7 @@ evolCalcBSSN =
   Where -> Interior,
   Shorthands -> {detgt, ddetgt[la], gtu[ua,ub],
                  dgtu[ua,ub,lc], ddgtu[ua,ub,lc,ld], Gt[ua,lb,lc],
-                 Rt[la,lb], Rphi[la,lb], R[la,lb],
+                 Xtn[ua], Rt[la,lb], Rphi[la,lb], R[la,lb],
                  Atm[ua,lb], Atu[ua,ub],
                  e4phi, em4phi, g[la,lb], detg,
                  ddetg[la], gu[ua,ub], G[ua,lb,lc], Ats[la,lb], trAts},
@@ -406,20 +406,24 @@ evolCalcBSSN =
     Gt[ua,lb,lc] -> 1/2 gtu[ua,ud]
                     (PD[gt[lb,ld],lc] + PD[gt[lc,ld],lb] - PD[gt[lb,lc],ld]),
     
+    (* The conformal connection functions calculated from the conformal metric,
+       used instead of Xt where no derivatives of Xt are taken *)
+    Xtn[ui]   -> gtu[uj,uk] Gt[ui,lj,lk],
+
     (* PRD 62, 044034 (2000), eqn. (18) *)
     Rt[li,lj] -> - (1/2) gtu[ul,um] PD[gt[li,lj],ll,lm]
                  + (1/2) gt[lk,li] PD[Xt[uk],lj]
                  + (1/2) gt[lk,lj] PD[Xt[uk],li]
-                 + (1/2) Xt[uk] gt[li,ln] Gt[un,lj,lk]
-                 + (1/2) Xt[uk] gt[lj,ln] Gt[un,li,lk]
+                 + (1/2) Xtn[uk] gt[li,ln] Gt[un,lj,lk]
+                 + (1/2) Xtn[uk] gt[lj,ln] Gt[un,li,lk]
                  + gtu[ul,um] (+ Gt[uk,ll,li] gt[lj,ln] Gt[un,lk,lm]
                                + Gt[uk,ll,lj] gt[li,ln] Gt[un,lk,lm]
                                + Gt[uk,li,lm] gt[lk,ln] Gt[un,ll,lj]),
 (*    Rt[li,lj] -> (1/2) ( - gtu[ul,um] PD[gt[li,lj],ll,lm]
                            + gt[lk,li] PD[Xt[uk],lj] +
                            + gt[lk,lj] PD[Xt[uk],li] 
-                           + Xt[uk] gt[li,ln] Gt[un,lj,lk]
-                           + Xt[uk] gt[lj,ln] Gt[un,li,lk] )
+                           + Xtn[uk] gt[li,ln] Gt[un,lj,lk]
+                           + Xtn[uk] gt[lj,ln] Gt[un,li,lk] )
                  + gtu[ul,um] (+ Gt[uk,ll,li] gt[lj,ln] Gt[un,lk,lm]
                                + Gt[uk,ll,lj] gt[li,ln] Gt[un,lk,lm]
                                + Gt[uk,li,lm] gt[lk,ln] Gt[un,ll,lj]), *)
@@ -477,8 +481,8 @@ evolCalcBSSN =
                       + gtu[uj,ul] PD[beta[ui],lj,ll]
                       + (1/3) gtu[ui,uj] PD[beta[ul],lj,ll]
                       + beta[uj] PD[Xt[ui],lj]
-                      + dgtu[ul,uj,ll] PD[beta[ui],lj]
-                      - (2/3) dgtu[ui,uj,lj] PD[beta[ul],ll],
+                      - Xtn[uj] PD[beta[ui],lj] 
+                      + (2/3) Xtn[ui] PD[beta[uj],lj],
     
     (* PRD 62, 044034 (2000), eqn. (11) *)
     dot[trK]       -> - gu[ua,ub] CD[alpha,la,lb]
