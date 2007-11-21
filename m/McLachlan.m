@@ -46,7 +46,8 @@ KD = KroneckerDelta;
 Map [DefineTensor,
      {g, K, alpha, beta, H, M, detg, gu, G, R, trR, Km, trK,
       phi, gt, At, Xt, Xtn, A, B, Atm, Atu, trA, Ats, trAts, cXt, cS, cA,
-      e4phi, em4phi, ddetg, detgt, gtu, ddetgt, dgtu, ddgtu, Gt, Rt, Rphi, gK}];
+      e4phi, em4phi, ddetg, detgt, gtu, ddetgt, dgtu, ddgtu, Gt, Rt, Rphi, gK,
+      "Tmunu_tt", "Tmunu_ti", "Tmunu_ij"}];
 
 (* NOTE: It seems as if Lie[.,.] did not take these tensor weights
    into account.  Presumably, CD[.,.] and CDt[.,.] don't do this either.  *)
@@ -137,7 +138,11 @@ extraGroups =
    {"ADMBase::lapse",    {alp}},
    {"ADMBase::dtlapse",  {dtalp}},
    {"ADMBase::shift",    {betax, betay, betaz}},
-   {"ADMBase::dtshift",  {dtbetax, dtbetay, dtbetaz}}};
+   {"ADMBase::dtshift",  {dtbetax, dtbetay, dtbetaz}},
+   {"TmunuBase::stress_energy_scalar", {"Tmunu_tt"}},
+   {"TmunuBase::stress_energy_vector", {"Tmunu_tx", "Tmunu_ty", "Tmunu_tz"}},
+   {"TmunuBase::stress_energy_tensor", {"Tmunu_xx", "Tmunu_xy", "Tmunu_xz",
+                                        "Tmunu_yy", "Tmunu_yz", "Tmunu_zz"}}};
 
 
 
@@ -503,12 +508,13 @@ evolCalcBSSN =
                       + Lie[At[la,lb], beta] - (2/3) At[la,lb] PD[beta[uc],lc], *)
     
     (* dot[alpha] -> - harmonicF alpha^harmonicN trK, *)
-    dot[alpha] -> - harmonicF alpha^harmonicN A
-                       + Lie[alpha, beta],
-    dot[A]    -> dot[trK] - AlphaDriver A,
+    dot[alpha] -> - harmonicF alpha^harmonicN A + Lie[alpha, beta],
+    (* TODO: is the above Lie derivative correct? *)
+    dot[A]     -> dot[trK] - AlphaDriver A,
     (* dot[beta[ua]] -> eta Xt[ua], *)
     dot[beta[ua]] -> ShiftGammaCoeff alpha^ShiftAlphaPower B[ua],
     dot[B[ua]]    -> dot[Xt[ua]] - BetaDriver B[ua]
+    (* TODO: is there a Lie derivative of the shift missing? *)
   }
 }
 
@@ -664,7 +670,7 @@ constraintsCalcBSSN =
 (* Implementations *)
 (******************************************************************************)
 
-inheritedImplementations = {"ADMBase"};
+inheritedImplementations = {"ADMBase", "TmunuBase"};
 
 (******************************************************************************)
 (* Parameters *)

@@ -1,5 +1,5 @@
-# File produced by user diener
-# Produced with Mathematica Version 6.0 for Linux x86 (32-bit) (April 20, 2007)
+# File produced by user eschnett
+# Produced with Mathematica Version 6.0 for Mac OS X x86 (32-bit) (April 20, 2007)
 
 # Mathematica script written by Ian Hinder and Sascha Husa
 
@@ -45,8 +45,8 @@ CCTK_INT ML_ADM_MaxNumEvolvedVars "Number of evolved variables used by this thor
 restricted:
 CCTK_INT ML_ADM_MaxNumConstrainedVars "Number of constrained variables used by this thorn" ACCUMULATOR-BASE=MethodofLines::MoL_Num_Constrained_Vars
 {
-  28:28 :: "Number of constrained variables used by this thorn"
-} 28
+  38:38 :: "Number of constrained variables used by this thorn"
+} 38
 
 restricted:
 CCTK_INT ML_ADM_Minkowski_calc_every "ML_ADM_Minkowski_calc_every"

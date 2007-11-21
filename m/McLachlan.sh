@@ -4,11 +4,10 @@
 # It re-generates the Cactus thorns trees and copies them if they have
 # changed.
 
-#MATHEMATICA="/Applications/Mathematica.app/Contents/MacOS/MathKernel"
-MATHEMATICA="math"
-
 # Abort on errors
 set -e
+
+MATHEMATICA="math"
 
 # Remove old output
 rm -rf ML_ADM ML_BSSN
