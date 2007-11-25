@@ -5,16 +5,13 @@
 
 #define KRANC_C
 
+#include <math.h>
 #include "cctk.h"
 #include "cctk_Arguments.h"
 #include "cctk_Parameters.h"
 #include "GenericFD.h"
 #include "Differencing.h"
 #include "loopcontrol.h"
-#include <math.h>
-#ifdef HAVE_TGMATH_H
-#  include <tgmath.h>
-#endif
 
 /* Define macros used in calculations */
 #define INITVALUE  (42)
