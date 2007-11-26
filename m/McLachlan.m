@@ -47,7 +47,7 @@ Map [DefineTensor,
      {g, K, alpha, beta, H, M, detg, gu, G, R, trR, Km, trK,
       phi, gt, At, Xt, Xtn, A, B, Atm, Atu, trA, Ats, trAts, cXt, cS, cA,
       e4phi, em4phi, ddetg, detgt, gtu, ddetgt, dgtu, ddgtu, Gt, Rt, Rphi, gK,
-      "Tmunu_tt", "Tmunu_ti", "Tmunu_ij"}];
+      T00, T0, T}];
 
 (* NOTE: It seems as if Lie[.,.] did not take these tensor weights
    into account.  Presumably, CD[.,.] and CDt[.,.] don't do this either.  *)
@@ -396,9 +396,21 @@ evolCalcBSSN =
                  Xtn[ua], Rt[la,lb], Rphi[la,lb], R[la,lb],
                  Atm[ua,lb], Atu[ua,ub],
                  e4phi, em4phi, g[la,lb], detg,
-                 ddetg[la], gu[ua,ub], G[ua,lb,lc], Ats[la,lb], trAts},
+                 ddetg[la], gu[ua,ub], G[ua,lb,lc], Ats[la,lb], trAts,
+                 T00, T0[la], T[la,lb]},
   Equations -> 
   {
+    T00 -> "Tmunu_tt",
+    T01 -> "Tmunu_tx",
+    T02 -> "Tmunu_ty",
+    T03 -> "Tmunu_tz",
+    T11 -> "Tmunu_xx",
+    T12 -> "Tmunu_xy",
+    T13 -> "Tmunu_xz",
+    T22 -> "Tmunu_yy",
+    T23 -> "Tmunu_yz",
+    T33 -> "Tmunu_zz",
+    
     detgt        -> 1 (* detgtExpr *),
     ddetgt[la]   -> 0 (* ddetgtExpr[la] *),
     
