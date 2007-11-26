@@ -139,10 +139,9 @@ extraGroups =
    {"ADMBase::dtlapse",  {dtalp}},
    {"ADMBase::shift",    {betax, betay, betaz}},
    {"ADMBase::dtshift",  {dtbetax, dtbetay, dtbetaz}},
-   {"TmunuBase::stress_energy_scalar", {"Tmunu_tt"}},
-   {"TmunuBase::stress_energy_vector", {"Tmunu_tx", "Tmunu_ty", "Tmunu_tz"}},
-   {"TmunuBase::stress_energy_tensor", {"Tmunu_xx", "Tmunu_xy", "Tmunu_xz",
-                                        "Tmunu_yy", "Tmunu_yz", "Tmunu_zz"}}};
+   {"TmunuBase::stress_energy_scalar", {eTtt}},
+   {"TmunuBase::stress_energy_vector", {eTtx, eTty, eTtz}},
+   {"TmunuBase::stress_energy_tensor", {eTxx, eTxy, eTxz, eTyy, eTyz, eTzz}}};
 
 
 
@@ -400,16 +399,16 @@ evolCalcBSSN =
                  T00, T0[la], T[la,lb]},
   Equations -> 
   {
-    T00 -> "Tmunu_tt",
-    T01 -> "Tmunu_tx",
-    T02 -> "Tmunu_ty",
-    T03 -> "Tmunu_tz",
-    T11 -> "Tmunu_xx",
-    T12 -> "Tmunu_xy",
-    T13 -> "Tmunu_xz",
-    T22 -> "Tmunu_yy",
-    T23 -> "Tmunu_yz",
-    T33 -> "Tmunu_zz",
+    T00 -> eTtt,
+    T01 -> eTtx,
+    T02 -> eTty,
+    T03 -> eTtz,
+    T11 -> eTxx,
+    T12 -> eTxy,
+    T13 -> eTxz,
+    T22 -> eTyy,
+    T23 -> eTyz,
+    T33 -> eTzz,
     
     detgt        -> 1 (* detgtExpr *),
     ddetgt[la]   -> 0 (* ddetgtExpr[la] *),
