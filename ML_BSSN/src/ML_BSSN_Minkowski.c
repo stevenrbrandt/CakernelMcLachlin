@@ -1,20 +1,17 @@
-/*  File produced by user eschnett */
-/*  Produced with Mathematica Version 6.0 for Mac OS X x86 (32-bit) (April 20, 2007) */
+/*  File produced by user diener */
+/*  Produced with Mathematica Version 6.0 for Linux x86 (32-bit) (April 20, 2007) */
 
 /*  Mathematica script written by Ian Hinder and Sascha Husa */
 
 #define KRANC_C
 
+#include <math.h>
 #include "cctk.h"
 #include "cctk_Arguments.h"
 #include "cctk_Parameters.h"
 #include "GenericFD.h"
 #include "Differencing.h"
 #include "loopcontrol.h"
-#include <math.h>
-#ifdef HAVE_TGMATH_H
-#  include <tgmath.h>
-#endif
 
 /* Define macros used in calculations */
 #define INITVALUE  (42)
