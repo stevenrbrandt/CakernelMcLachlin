@@ -47,7 +47,7 @@ Map [DefineTensor,
      {g, K, alpha, beta, H, M, detg, gu, G, R, trR, Km, trK,
       phi, gt, At, Xt, Xtn, A, B, Atm, Atu, trA, Ats, trAts, cXt, cS, cA,
       e4phi, em4phi, ddetg, detgt, gtu, ddetgt, dgtu, ddgtu, Gt, Rt, Rphi, gK,
-      T00, T0, T}];
+      T00, T0, T, rho, S}];
 
 (* NOTE: It seems as if Lie[.,.] did not take these tensor weights
    into account.  Presumably, CD[.,.] and CDt[.,.] don't do this either.  *)
@@ -60,7 +60,7 @@ SetTensorAttribute[cS,  TensorWeight, +2  ];
 
 Map [AssertSymmetricIncreasing,
      {g[la,lb], K[la,lb], R[la,lb],
-      gt[la,lb], At[la,lb], Ats[la,lb], Rt[la,lb], Rphi[la,lb]}];
+      gt[la,lb], At[la,lb], Ats[la,lb], Rt[la,lb], Rphi[la,lb], T[la,lb]}];
 AssertSymmetricIncreasing [G[ua,lb,lc], lb, lc];
 AssertSymmetricIncreasing [Gt[ua,lb,lc], lb, lc];
 AssertSymmetricIncreasing [gK[la,lb,lc], la, lb];
@@ -530,6 +530,45 @@ evolCalcBSSN =
   }
 }
 
+addMatterBSSN =
+{
+  Name -> "ML_BSSN_matter",
+  Schedule -> {"IN MoL_PostStep AFTER SetTmunu"},
+  ConditionalOnParameterTextual -> {"SpaceTime", "Space+Matter"},
+  Where -> Interior,
+  Shorthands -> {T00, T0[la], T[la,lb], rho, S[la], trS,
+                 detgt, gtu[ua,ub], em4phi, gu[ua,ub], },
+  Equations -> 
+  {
+    T00 -> "Tmunu_tt",
+    T01 -> "Tmunu_tx",
+    T02 -> "Tmunu_ty",
+    T03 -> "Tmunu_tz",
+    T11 -> "Tmunu_xx",
+    T12 -> "Tmunu_xy",
+    T13 -> "Tmunu_xz",
+    T22 -> "Tmunu_yy",
+    T23 -> "Tmunu_yz",
+    T33 -> "Tmunu_zz",
+
+    (* rho = n^a n^b T_ab *)
+    rho -> 1/alpha^2 (T00 - 2 beta[ui] T0[li] + beta[ui] beta[uj] T[li,lj]),
+
+    (* S_i = -p^a_i n^b T_ab, where p^a_i = delta^a_i + n^a n_i *)
+    S[li] -> -1/alpha ( T0[li] - beta[uj] T[li,lj] ),
+
+    (* trS = gamma^ij T_ij  *)
+    detgt        -> 1,
+    gtu[ua,ub]   -> 1/detgt detgtExpr MatrixInverse [gt[ua,ub]],
+    em4phi       -> 1 / Exp [4 phi],
+    gu[ua,ub] -> em4phi gtu[ua,ub],
+    trS -> gu[ui,uj] T[li,lj],
+
+    dot[trK] -> dot[trK] + 4 Pi alpha ( rho + trS )
+(*    rho -> 1/alpha^2 *)
+  }
+}
+
 enforceCalcBSSN =
 {
   Name -> "ML_BSSN_enforce",
@@ -698,6 +737,13 @@ keywordParameters =
     (* Description -> "ddd", *)
     AllowedValues -> {"ADMBase", "Minkowski"},
     Default -> "ADMBase"
+  },
+  {
+    Name -> "SpaceTime",
+    (* Visibility -> "restricted", *)
+    (* Description -> "ddd", *)
+    AllowedValues -> {"Space", "Space+Matter"},
+    Default -> "Space"
   }
 };
 
@@ -763,6 +809,7 @@ calculationsBSSN =
   convertFromADMBaseCalcBSSN,
   convertFromADMBaseCalcBSSNGamma,
   evolCalcBSSN,
+  addMatterBSSN,
   enforceCalcBSSN,
   convertToADMBaseCalcBSSN,
   constraintsCalcBSSN

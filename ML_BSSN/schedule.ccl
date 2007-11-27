@@ -120,6 +120,13 @@ schedule ML_BSSN_RHS AT analysis
   SYNC: ML_trace_curvrhs
 } "ML_BSSN_RHS"
 
+schedule ML_BSSN_matter IN MoL_PostStep AFTER SetTmunu
+{
+  LANG: C
+  
+  SYNC: ML_trace_curvrhs
+} "ML_BSSN_matter"
+
 schedule ML_BSSN_enforce IN MoL_PostStep BEFORE ML_BSSN_BoundConds
 {
   LANG: C

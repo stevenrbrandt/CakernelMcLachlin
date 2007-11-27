@@ -36,6 +36,13 @@ KEYWORD my_initial_data "my_initial_data"
   "Minkowski" :: "Minkowski"
 } "ADMBase"
 
+private:
+KEYWORD SpaceTime "SpaceTime"
+{
+  "Space" :: "Space"
+  "Space+Matter" :: "Space+Matter"
+} "Space"
+
 restricted:
 CCTK_INT ML_ADM_MaxNumEvolvedVars "Number of evolved variables used by this thorn" ACCUMULATOR-BASE=MethodofLines::MoL_Num_Evolved_Vars
 {
