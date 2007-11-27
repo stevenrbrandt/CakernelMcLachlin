@@ -140,6 +140,12 @@ CCTK_INT ML_BSSN_constraints_calc_every "ML_BSSN_constraints_calc_every"
 } 1
 
 restricted:
+CCTK_INT ML_BSSN_matter_constraints_calc_every "ML_BSSN_matter_constraints_calc_every"
+{
+  *:* :: "no restrictions"
+} 1
+
+restricted:
 CCTK_INT ML_BSSN_Minkowski_calc_offset "ML_BSSN_Minkowski_calc_offset"
 {
   *:* :: "no restrictions"
@@ -183,6 +189,12 @@ CCTK_INT ML_BSSN_convertToADMBase_calc_offset "ML_BSSN_convertToADMBase_calc_off
 
 restricted:
 CCTK_INT ML_BSSN_constraints_calc_offset "ML_BSSN_constraints_calc_offset"
+{
+  *:* :: "no restrictions"
+} 0
+
+restricted:
+CCTK_INT ML_BSSN_matter_constraints_calc_offset "ML_BSSN_matter_constraints_calc_offset"
 {
   *:* :: "no restrictions"
 } 0
