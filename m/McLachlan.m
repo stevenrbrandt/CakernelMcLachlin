@@ -537,8 +537,9 @@ evolCalcBSSN =
 addMatterBSSN =
 {
   Name -> "ML_BSSN_matter",
-  Schedule -> {"IN MoL_PostStep AFTER ML_BSSN_RHS"},
-  ConditionalOnParameterTextual -> {"SpaceTime", "Space+Matter"},
+  Schedule -> {"IN MoL_CalcRHS AFTER ML_BSSN_RHS",
+               "AT analysis AFTER ML_BSSN_RHS"},
+  ConditionalOnKeyword -> {"SpaceTime", "Space+Matter"},
   Where -> Interior,
   Shorthands -> {T00, T0[la], T[la,lb], rho, S[la], trS,
                  detgt, gtu[ua,ub], e4phi, em4phi, g[la,lb], gu[ua,ub]},
@@ -734,8 +735,8 @@ constraintsCalcBSSN =
 constraintsMatterBSSN =
 {
   Name -> "ML_BSSN_matter_constraints",
-  Schedule -> {"IN MoL_PostStep AFTER ML_BSSN_constraints"},
-  ConditionalOnParameterTextual -> {"SpaceTime", "Space+Matter"},
+  Schedule -> {"AT analysis AFTER ML_BSSN_constraints"},
+  ConditionalOnKeyword -> {"SpaceTime", "Space+Matter"},
   Where -> Interior,
   Shorthands -> {T00, T0[la], T[la,lb], rho, S[la]},
   Equations -> 

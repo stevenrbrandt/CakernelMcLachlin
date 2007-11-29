@@ -120,14 +120,28 @@ schedule ML_BSSN_RHS AT analysis
   SYNC: ML_trace_curvrhs
 } "ML_BSSN_RHS"
 
-schedule ML_BSSN_matter IN MoL_PostStep AFTER ML_BSSN_RHS
+
+if (CCTK_EQUALS(SpaceTime, "Space+Matter"))
 {
-  LANG: C
-  
-  SYNC: ML_curvrhs
-  SYNC: ML_Gammarhs
-  SYNC: ML_trace_curvrhs
-} "ML_BSSN_matter"
+  schedule ML_BSSN_matter IN MoL_CalcRHS AFTER ML_BSSN_RHS
+  {
+    LANG: C
+    
+  } "ML_BSSN_matter"
+}
+
+
+if (CCTK_EQUALS(SpaceTime, "Space+Matter"))
+{
+  schedule ML_BSSN_matter AT analysis AFTER ML_BSSN_RHS
+  {
+    LANG: C
+    
+    SYNC: ML_curvrhs
+    SYNC: ML_Gammarhs
+    SYNC: ML_trace_curvrhs
+  } "ML_BSSN_matter"
+}
 
 schedule ML_BSSN_enforce IN MoL_PostStep BEFORE ML_BSSN_BoundConds
 {
@@ -152,13 +166,17 @@ schedule ML_BSSN_constraints AT analysis
   SYNC: mom
 } "ML_BSSN_constraints"
 
-schedule ML_BSSN_matter_constraints IN MoL_PostStep AFTER ML_BSSN_constraints
+
+if (CCTK_EQUALS(SpaceTime, "Space+Matter"))
 {
-  LANG: C
-  
-  SYNC: Ham
-  SYNC: mom
-} "ML_BSSN_matter_constraints"
+  schedule ML_BSSN_matter_constraints IN MoL_PostStep AFTER ML_BSSN_constraints
+  {
+    LANG: C
+    
+    SYNC: Ham
+    SYNC: mom
+  } "ML_BSSN_matter_constraints"
+}
 
 schedule ML_BSSN_ApplyBoundConds in MoL_PostStep
 {
