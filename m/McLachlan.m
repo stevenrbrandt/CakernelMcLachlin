@@ -47,7 +47,7 @@ Map [DefineTensor,
      {g, K, alpha, beta, H, M, detg, gu, G, R, trR, Km, trK,
       phi, gt, At, Xt, Xtn, A, B, Atm, Atu, trA, Ats, trAts, cXt, cS, cA,
       e4phi, em4phi, ddetg, detgt, gtu, ddetgt, dgtu, ddgtu, Gt, Rt, Rphi, gK,
-      T00, T0, T}];
+      T00, T0, T, rho, S}];
 
 (* NOTE: It seems as if Lie[.,.] did not take these tensor weights
    into account.  Presumably, CD[.,.] and CDt[.,.] don't do this either.  *)
@@ -60,7 +60,7 @@ SetTensorAttribute[cS,  TensorWeight, +2  ];
 
 Map [AssertSymmetricIncreasing,
      {g[la,lb], K[la,lb], R[la,lb],
-      gt[la,lb], At[la,lb], Ats[la,lb], Rt[la,lb], Rphi[la,lb]}];
+      gt[la,lb], At[la,lb], Ats[la,lb], Rt[la,lb], Rphi[la,lb], T[la,lb]}];
 AssertSymmetricIncreasing [G[ua,lb,lc], lb, lc];
 AssertSymmetricIncreasing [Gt[ua,lb,lc], lb, lc];
 AssertSymmetricIncreasing [gK[la,lb,lc], la, lb];
@@ -78,7 +78,10 @@ Map [DefineTensor,
       alp,
       dtalp,
       betax, betay, betaz,
-      dtbetax, dtbetay, dtbetaz}];
+      dtbetax, dtbetay, dtbetaz,
+      eTtt,
+      eTtx, eTty, eTtz,
+      eTxx, eTxy, eTxz, eTyy, eTyz, eTzz}];
 
 (******************************************************************************)
 (* Expressions *)
@@ -93,6 +96,8 @@ detgtExpr = Det [MatrixOfComponents [gt[la,lb]]];
 ddetgtExpr[la_] =
   Sum [D[Det[MatrixOfComponents[gt[la, lb]]], X] PD[X, la],
        {X, Union[Flatten[MatrixOfComponents[gt[la, lb]]]]}];
+
+pi = N[Pi,40]; 
 
 (******************************************************************************)
 (* Groups *)
@@ -529,6 +534,56 @@ evolCalcBSSN =
   }
 }
 
+addMatterBSSN =
+{
+  Name -> "ML_BSSN_matter",
+  Schedule -> {"IN MoL_CalcRHS AFTER ML_BSSN_RHS",
+               "AT analysis AFTER ML_BSSN_RHS"},
+  ConditionalOnKeyword -> {"SpaceTime", "Space+Matter"},
+  Where -> Interior,
+  Shorthands -> {T00, T0[la], T[la,lb], rho, S[la], trS,
+                 detgt, gtu[ua,ub], e4phi, em4phi, g[la,lb], gu[ua,ub]},
+  Equations -> 
+  {
+
+    T00 -> eTtt,
+    T01 -> eTtx,
+    T02 -> eTty,
+    T03 -> eTtz,
+    T11 -> eTxx,
+    T12 -> eTxy,
+    T13 -> eTxz,
+    T22 -> eTyy,
+    T23 -> eTyz,
+    T33 -> eTzz,
+
+    (* rho = n^a n^b T_ab *)
+    rho -> 1/alpha^2 (T00 - 2 beta[ui] T0[li] + beta[ui] beta[uj] T[li,lj]),
+
+    (* S_i = -p^a_i n^b T_ab, where p^a_i = delta^a_i + n^a n_i *)
+    S[li] -> -1/alpha ( T0[li] - beta[uj] T[li,lj] ),
+
+    (* trS = gamma^ij T_ij  *)
+    detgt        -> 1,
+    gtu[ua,ub]   -> 1/detgt detgtExpr MatrixInverse [gt[ua,ub]],
+    e4phi       -> Exp [4 phi],
+    em4phi       -> 1 / e4phi,
+    g[la,lb]    -> e4phi gt[la,lb],
+    gu[ua,ub] -> em4phi gtu[ua,ub],
+    trS -> gu[ui,uj] T[li,lj],
+
+    (* Equation (4.21) in Baumgarte & Shapiro (Phys.Rept. 376 (2003) 41-131) *)
+    dot[trK] -> dot[trK] + 4 pi alpha ( rho + trS ),
+
+    (* Equation (4.23) in Baumgarte & Shapiro (Phys.Rept. 376 (2003) 41-131) *)
+    dot[At[la,lb]] -> dot[At[la,lb]] - 
+                      em4phi alpha 8 pi ( T[la,lb] - (1/3) g[la,lb] trS ),
+
+    (* Equation (4.28) in Baumgarte & Shapiro (Phys.Rept. 376 (2003) 41-131) *)
+    dot[Xt[ui]] -> dot[Xt[ui]] - 16 pi alpha gtu[ui,uj] S[lj]
+  }
+}
+
 enforceCalcBSSN =
 {
   Name -> "ML_BSSN_enforce",
@@ -677,6 +732,39 @@ constraintsCalcBSSN =
   }
 }
 
+constraintsMatterBSSN =
+{
+  Name -> "ML_BSSN_matter_constraints",
+  Schedule -> {"AT analysis AFTER ML_BSSN_constraints"},
+  ConditionalOnKeyword -> {"SpaceTime", "Space+Matter"},
+  Where -> Interior,
+  Shorthands -> {T00, T0[la], T[la,lb], rho, S[la]},
+  Equations -> 
+  {
+
+    T00 -> eTtt,
+    T01 -> eTtx,
+    T02 -> eTty,
+    T03 -> eTtz,
+    T11 -> eTxx,
+    T12 -> eTxy,
+    T13 -> eTxz,
+    T22 -> eTyy,
+    T23 -> eTyz,
+    T33 -> eTzz,
+
+    (* rho = n^a n^b T_ab *)
+    rho -> 1/alpha^2 (T00 - 2 beta[ui] T0[li] + beta[ui] beta[uj] T[li,lj]),
+
+    (* S_i = -p^a_i n^b T_ab, where p^a_i = delta^a_i + n^a n_i *)
+    S[li] -> -1/alpha ( T0[li] - beta[uj] T[li,lj] ),
+
+    H -> H - 16 pi rho,
+
+    M[li] -> M[li] - 8 pi S[li]
+  }
+}
+
 (******************************************************************************)
 (* Implementations *)
 (******************************************************************************)
@@ -697,6 +785,13 @@ keywordParameters =
     (* Description -> "ddd", *)
     AllowedValues -> {"ADMBase", "Minkowski"},
     Default -> "ADMBase"
+  },
+  {
+    Name -> "SpaceTime",
+    (* Visibility -> "restricted", *)
+    (* Description -> "ddd", *)
+    AllowedValues -> {"Space", "Space+Matter"},
+    Default -> "Space"
   }
 };
 
@@ -762,9 +857,11 @@ calculationsBSSN =
   convertFromADMBaseCalcBSSN,
   convertFromADMBaseCalcBSSNGamma,
   evolCalcBSSN,
+  addMatterBSSN,
   enforceCalcBSSN,
   convertToADMBaseCalcBSSN,
-  constraintsCalcBSSN
+  constraintsCalcBSSN,
+  constraintsMatterBSSN
 };
 
 CreateKrancThornTT [groupsBSSN, ".", "ML_BSSN",

@@ -1,5 +1,5 @@
-# File produced by user eschnett
-# Produced with Mathematica Version 6.0 for Mac OS X x86 (32-bit) (April 20, 2007)
+# File produced by user diener
+# Produced with Mathematica Version 6.0 for Linux x86 (32-bit) (April 20, 2007)
 
 # Mathematica script written by Ian Hinder and Sascha Husa
 
@@ -72,6 +72,13 @@ KEYWORD my_initial_data "my_initial_data"
   "Minkowski" :: "Minkowski"
 } "ADMBase"
 
+private:
+KEYWORD SpaceTime "SpaceTime"
+{
+  "Space" :: "Space"
+  "Space+Matter" :: "Space+Matter"
+} "Space"
+
 restricted:
 CCTK_INT ML_BSSN_MaxNumEvolvedVars "Number of evolved variables used by this thorn" ACCUMULATOR-BASE=MethodofLines::MoL_Num_Evolved_Vars
 {
@@ -109,6 +116,12 @@ CCTK_INT ML_BSSN_RHS_calc_every "ML_BSSN_RHS_calc_every"
 } 1
 
 restricted:
+CCTK_INT ML_BSSN_matter_calc_every "ML_BSSN_matter_calc_every"
+{
+  *:* :: "no restrictions"
+} 1
+
+restricted:
 CCTK_INT ML_BSSN_enforce_calc_every "ML_BSSN_enforce_calc_every"
 {
   *:* :: "no restrictions"
@@ -122,6 +135,12 @@ CCTK_INT ML_BSSN_convertToADMBase_calc_every "ML_BSSN_convertToADMBase_calc_ever
 
 restricted:
 CCTK_INT ML_BSSN_constraints_calc_every "ML_BSSN_constraints_calc_every"
+{
+  *:* :: "no restrictions"
+} 1
+
+restricted:
+CCTK_INT ML_BSSN_matter_constraints_calc_every "ML_BSSN_matter_constraints_calc_every"
 {
   *:* :: "no restrictions"
 } 1
@@ -151,6 +170,12 @@ CCTK_INT ML_BSSN_RHS_calc_offset "ML_BSSN_RHS_calc_offset"
 } 0
 
 restricted:
+CCTK_INT ML_BSSN_matter_calc_offset "ML_BSSN_matter_calc_offset"
+{
+  *:* :: "no restrictions"
+} 0
+
+restricted:
 CCTK_INT ML_BSSN_enforce_calc_offset "ML_BSSN_enforce_calc_offset"
 {
   *:* :: "no restrictions"
@@ -164,6 +189,12 @@ CCTK_INT ML_BSSN_convertToADMBase_calc_offset "ML_BSSN_convertToADMBase_calc_off
 
 restricted:
 CCTK_INT ML_BSSN_constraints_calc_offset "ML_BSSN_constraints_calc_offset"
+{
+  *:* :: "no restrictions"
+} 0
+
+restricted:
+CCTK_INT ML_BSSN_matter_constraints_calc_offset "ML_BSSN_matter_constraints_calc_offset"
 {
   *:* :: "no restrictions"
 } 0
