@@ -84,7 +84,7 @@ void ML_BSSN_convertToADMBase_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCT
   pm1o12dz2 = -pow(dz,-2)/12.;
   
   /* Loop over the grid points */
-  LC_LOOP3 (somename,
+  LC_LOOP3 (ML_BSSN_convertToADMBase,
             i,j,k, min[0],min[1],min[2], max[0],max[1],max[2],
             cctk_lsh[0],cctk_lsh[1],cctk_lsh[2])
   {
@@ -255,7 +255,7 @@ void ML_BSSN_convertToADMBase_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCT
     
     /* Copy local copies back to subblock grid functions */
   }
-  LC_ENDLOOP3 (somename);
+  LC_ENDLOOP3 (ML_BSSN_convertToADMBase);
 }
 
 void ML_BSSN_convertToADMBase(CCTK_ARGUMENTS)
