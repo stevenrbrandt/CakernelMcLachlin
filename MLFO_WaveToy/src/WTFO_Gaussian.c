@@ -20,7 +20,7 @@
 #define CUB(x) ((x) * (x) * (x))
 #define QAD(x) ((x) * (x) * (x) * (x))
 
-void ML_BSSN_enforce_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCTK_REAL normal[3], CCTK_REAL tangentA[3], CCTK_REAL tangentB[3], CCTK_INT min[3], CCTK_INT max[3], CCTK_INT n_subblock_gfs, CCTK_REAL *subblock_gfs[])
+void WTFO_Gaussian_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCTK_REAL normal[3], CCTK_REAL tangentA[3], CCTK_REAL tangentB[3], CCTK_INT min[3], CCTK_INT max[3], CCTK_INT n_subblock_gfs, CCTK_REAL *subblock_gfs[])
 {
   DECLARE_CCTK_ARGUMENTS
   DECLARE_CCTK_PARAMETERS
@@ -46,10 +46,10 @@ void ML_BSSN_enforce_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCTK_REAL no
   
   if (verbose > 1)
   {
-    CCTK_VInfo(CCTK_THORNSTRING,"Entering ML_BSSN_enforce_Body");
+    CCTK_VInfo(CCTK_THORNSTRING,"Entering WTFO_Gaussian_Body");
   }
   
-  if (cctk_iteration % ML_BSSN_enforce_calc_every != ML_BSSN_enforce_calc_offset)
+  if (cctk_iteration % WTFO_Gaussian_calc_every != WTFO_Gaussian_calc_offset)
   {
     return;
   }
@@ -84,7 +84,7 @@ void ML_BSSN_enforce_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCTK_REAL no
   pm1o12dz2 = -pow(dz,-2)/12.;
   
   /* Loop over the grid points */
-  LC_LOOP3 (ML_BSSN_enforce,
+  LC_LOOP3 (WTFO_Gaussian,
             i,j,k, min[0],min[1],min[2], max[0],max[1],max[2],
             cctk_lsh[0],cctk_lsh[1],cctk_lsh[2])
   {
@@ -94,30 +94,16 @@ void ML_BSSN_enforce_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCTK_REAL no
     subblock_index = i - min[0] + (max[0] - min[0]) * (j - min[1] + (max[1]-min[1]) * (k - min[2]));
     
     /* Declare shorthands */
-    CCTK_REAL detgt = INITVALUE;
-    CCTK_REAL gtu11 = INITVALUE, gtu21 = INITVALUE, gtu22 = INITVALUE, gtu31 = INITVALUE, gtu32 = INITVALUE, gtu33 = INITVALUE;
-    CCTK_REAL trA = INITVALUE;
     
     /* Declare local copies of grid functions */
-    CCTK_REAL At11L = INITVALUE, At12L = INITVALUE, At13L = INITVALUE, At22L = INITVALUE, At23L = INITVALUE, At33L = INITVALUE;
-    CCTK_REAL gt11L = INITVALUE, gt12L = INITVALUE, gt13L = INITVALUE, gt22L = INITVALUE, gt23L = INITVALUE, gt33L = INITVALUE;
+    CCTK_REAL rhoL = INITVALUE;
+    CCTK_REAL uL = INITVALUE;
+    CCTK_REAL v1L = INITVALUE, v2L = INITVALUE, v3L = INITVALUE;
     /* Declare precomputed derivatives*/
     
     /* Declare derivatives */
     
     /* Assign local copies of grid functions */
-    At11L = At11[index];
-    At12L = At12[index];
-    At13L = At13[index];
-    At22L = At22[index];
-    At23L = At23[index];
-    At33L = At33[index];
-    gt11L = gt11[index];
-    gt12L = gt12[index];
-    gt13L = gt13[index];
-    gt22L = gt22[index];
-    gt23L = gt23[index];
-    gt33L = gt33[index];
     
     /* Assign local copies of subblock grid functions */
     
@@ -128,52 +114,33 @@ void ML_BSSN_enforce_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCTK_REAL no
     /* Precompute derivatives (old style) */
     
     /* Calculate temporaries and grid functions */
-    detgt  =  1;
+    uL  =  0;
     
-    gtu11  =  INV(detgt)*(gt22L*gt33L - SQR(gt23L));
+    v1L  =  0;
     
-    gtu21  =  (gt13L*gt23L - gt12L*gt33L)*INV(detgt);
+    v2L  =  0;
     
-    gtu31  =  (-(gt13L*gt22L) + gt12L*gt23L)*INV(detgt);
+    v3L  =  0;
     
-    gtu22  =  INV(detgt)*(gt11L*gt33L - SQR(gt13L));
-    
-    gtu32  =  (gt12L*gt13L - gt11L*gt23L)*INV(detgt);
-    
-    gtu33  =  INV(detgt)*(gt11L*gt22L - SQR(gt12L));
-    
-    trA  =  At11L*gtu11 + At22L*gtu22 + 2*(At12L*gtu21 + At13L*gtu31 + At23L*gtu32) + At33L*gtu33;
-    
-    At11L  =  At11L - gt11L*kthird*trA;
-    
-    At12L  =  At12L - gt12L*kthird*trA;
-    
-    At13L  =  At13L - gt13L*kthird*trA;
-    
-    At22L  =  At22L - gt22L*kthird*trA;
-    
-    At23L  =  At23L - gt23L*kthird*trA;
-    
-    At33L  =  At33L - gt33L*kthird*trA;
+    rhoL  =  0;
     
     
     /* Copy local copies back to grid functions */
-    At11[index] = At11L;
-    At12[index] = At12L;
-    At13[index] = At13L;
-    At22[index] = At22L;
-    At23[index] = At23L;
-    At33[index] = At33L;
+    rho[index] = rhoL;
+    u[index] = uL;
+    v1[index] = v1L;
+    v2[index] = v2L;
+    v3[index] = v3L;
     
     /* Copy local copies back to subblock grid functions */
   }
-  LC_ENDLOOP3 (ML_BSSN_enforce);
+  LC_ENDLOOP3 (WTFO_Gaussian);
 }
 
-void ML_BSSN_enforce(CCTK_ARGUMENTS)
+void WTFO_Gaussian(CCTK_ARGUMENTS)
 {
   DECLARE_CCTK_ARGUMENTS
   DECLARE_CCTK_PARAMETERS
   
-  GenericFD_LoopOverEverything(cctkGH, &ML_BSSN_enforce_Body);
+  GenericFD_LoopOverEverything(cctkGH, &WTFO_Gaussian_Body);
 }

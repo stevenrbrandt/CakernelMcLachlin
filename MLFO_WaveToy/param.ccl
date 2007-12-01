@@ -1,0 +1,314 @@
+# File produced by user eschnett
+# Produced with Mathematica Version 6.0 for Mac OS X x86 (32-bit) (April 20, 2007)
+
+# Mathematica script written by Ian Hinder and Sascha Husa
+
+
+shares: GenericFD
+
+USES CCTK_INT stencil_width
+USES CCTK_INT stencil_width_x
+USES CCTK_INT stencil_width_y
+USES CCTK_INT stencil_width_z
+USES CCTK_INT boundary_width
+
+
+shares: MethodOfLines
+
+USES CCTK_INT MoL_Num_Evolved_Vars
+USES CCTK_INT MoL_Num_Constrained_Vars
+
+restricted:
+CCTK_REAL verbose "verbose"
+{
+  "*:*" :: "no restrictions"
+} 0
+
+restricted:
+CCTK_INT MLFO_WaveToy_MaxNumEvolvedVars "Number of evolved variables used by this thorn" ACCUMULATOR-BASE=MethodofLines::MoL_Num_Evolved_Vars
+{
+  5:5 :: "Number of evolved variables used by this thorn"
+} 5
+
+restricted:
+CCTK_INT MLFO_WaveToy_MaxNumConstrainedVars "Number of constrained variables used by this thorn" ACCUMULATOR-BASE=MethodofLines::MoL_Num_Constrained_Vars
+{
+  61:61 :: "Number of constrained variables used by this thorn"
+} 61
+
+restricted:
+CCTK_INT WTFO_Gaussian_calc_every "WTFO_Gaussian_calc_every"
+{
+  *:* :: "no restrictions"
+} 1
+
+restricted:
+CCTK_INT WTFO_RHS_calc_every "WTFO_RHS_calc_every"
+{
+  *:* :: "no restrictions"
+} 1
+
+restricted:
+CCTK_INT WTFO_constraints_calc_every "WTFO_constraints_calc_every"
+{
+  *:* :: "no restrictions"
+} 1
+
+restricted:
+CCTK_INT WTFO_Gaussian_calc_offset "WTFO_Gaussian_calc_offset"
+{
+  *:* :: "no restrictions"
+} 0
+
+restricted:
+CCTK_INT WTFO_RHS_calc_offset "WTFO_RHS_calc_offset"
+{
+  *:* :: "no restrictions"
+} 0
+
+restricted:
+CCTK_INT WTFO_constraints_calc_offset "WTFO_constraints_calc_offset"
+{
+  *:* :: "no restrictions"
+} 0
+
+private:
+KEYWORD rho_bound "Boundary condition to implement"
+{
+  "flat" :: "Flat boundary condition"
+  "none" :: "No boundary condition"
+  "static" :: "Boundaries held fixed"
+  "radiative" :: "Radiation boundary condition"
+  "scalar" :: "Dirichlet boundary condition"
+  "newrad" :: "Improved radiative boundary condition"
+  "skip" :: "skip boundary condition code"
+} "skip"
+
+private:
+KEYWORD u_bound "Boundary condition to implement"
+{
+  "flat" :: "Flat boundary condition"
+  "none" :: "No boundary condition"
+  "static" :: "Boundaries held fixed"
+  "radiative" :: "Radiation boundary condition"
+  "scalar" :: "Dirichlet boundary condition"
+  "newrad" :: "Improved radiative boundary condition"
+  "skip" :: "skip boundary condition code"
+} "skip"
+
+private:
+KEYWORD v1_bound "Boundary condition to implement"
+{
+  "flat" :: "Flat boundary condition"
+  "none" :: "No boundary condition"
+  "static" :: "Boundaries held fixed"
+  "radiative" :: "Radiation boundary condition"
+  "scalar" :: "Dirichlet boundary condition"
+  "newrad" :: "Improved radiative boundary condition"
+  "skip" :: "skip boundary condition code"
+} "skip"
+
+private:
+KEYWORD v2_bound "Boundary condition to implement"
+{
+  "flat" :: "Flat boundary condition"
+  "none" :: "No boundary condition"
+  "static" :: "Boundaries held fixed"
+  "radiative" :: "Radiation boundary condition"
+  "scalar" :: "Dirichlet boundary condition"
+  "newrad" :: "Improved radiative boundary condition"
+  "skip" :: "skip boundary condition code"
+} "skip"
+
+private:
+KEYWORD v3_bound "Boundary condition to implement"
+{
+  "flat" :: "Flat boundary condition"
+  "none" :: "No boundary condition"
+  "static" :: "Boundaries held fixed"
+  "radiative" :: "Radiation boundary condition"
+  "scalar" :: "Dirichlet boundary condition"
+  "newrad" :: "Improved radiative boundary condition"
+  "skip" :: "skip boundary condition code"
+} "skip"
+
+private:
+KEYWORD WT_rho_bound "Boundary condition to implement"
+{
+  "flat" :: "Flat boundary condition"
+  "none" :: "No boundary condition"
+  "static" :: "Boundaries held fixed"
+  "radiative" :: "Radiation boundary condition"
+  "scalar" :: "Dirichlet boundary condition"
+  "newrad" :: "Improved radiative boundary condition"
+  "skip" :: "skip boundary condition code"
+} "skip"
+
+private:
+KEYWORD WT_u_bound "Boundary condition to implement"
+{
+  "flat" :: "Flat boundary condition"
+  "none" :: "No boundary condition"
+  "static" :: "Boundaries held fixed"
+  "radiative" :: "Radiation boundary condition"
+  "scalar" :: "Dirichlet boundary condition"
+  "newrad" :: "Improved radiative boundary condition"
+  "skip" :: "skip boundary condition code"
+} "skip"
+
+private:
+KEYWORD WT_v_bound "Boundary condition to implement"
+{
+  "flat" :: "Flat boundary condition"
+  "none" :: "No boundary condition"
+  "static" :: "Boundaries held fixed"
+  "radiative" :: "Radiation boundary condition"
+  "scalar" :: "Dirichlet boundary condition"
+  "newrad" :: "Improved radiative boundary condition"
+  "skip" :: "skip boundary condition code"
+} "skip"
+
+private:
+CCTK_REAL rho_bound_speed "characteristic speed at boundary"
+{
+  "0:*" :: "outgoing characteristic speed > 0"
+} 1.
+
+private:
+CCTK_REAL u_bound_speed "characteristic speed at boundary"
+{
+  "0:*" :: "outgoing characteristic speed > 0"
+} 1.
+
+private:
+CCTK_REAL v1_bound_speed "characteristic speed at boundary"
+{
+  "0:*" :: "outgoing characteristic speed > 0"
+} 1.
+
+private:
+CCTK_REAL v2_bound_speed "characteristic speed at boundary"
+{
+  "0:*" :: "outgoing characteristic speed > 0"
+} 1.
+
+private:
+CCTK_REAL v3_bound_speed "characteristic speed at boundary"
+{
+  "0:*" :: "outgoing characteristic speed > 0"
+} 1.
+
+private:
+CCTK_REAL WT_rho_bound_speed "characteristic speed at boundary"
+{
+  "0:*" :: "outgoing characteristic speed > 0"
+} 1.
+
+private:
+CCTK_REAL WT_u_bound_speed "characteristic speed at boundary"
+{
+  "0:*" :: "outgoing characteristic speed > 0"
+} 1.
+
+private:
+CCTK_REAL WT_v_bound_speed "characteristic speed at boundary"
+{
+  "0:*" :: "outgoing characteristic speed > 0"
+} 1.
+
+private:
+CCTK_REAL rho_bound_limit "limit value for r -> infinity"
+{
+  "*:*" :: "value of limit value is unrestricted"
+} 0.
+
+private:
+CCTK_REAL u_bound_limit "limit value for r -> infinity"
+{
+  "*:*" :: "value of limit value is unrestricted"
+} 0.
+
+private:
+CCTK_REAL v1_bound_limit "limit value for r -> infinity"
+{
+  "*:*" :: "value of limit value is unrestricted"
+} 0.
+
+private:
+CCTK_REAL v2_bound_limit "limit value for r -> infinity"
+{
+  "*:*" :: "value of limit value is unrestricted"
+} 0.
+
+private:
+CCTK_REAL v3_bound_limit "limit value for r -> infinity"
+{
+  "*:*" :: "value of limit value is unrestricted"
+} 0.
+
+private:
+CCTK_REAL WT_rho_bound_limit "limit value for r -> infinity"
+{
+  "*:*" :: "value of limit value is unrestricted"
+} 0.
+
+private:
+CCTK_REAL WT_u_bound_limit "limit value for r -> infinity"
+{
+  "*:*" :: "value of limit value is unrestricted"
+} 0.
+
+private:
+CCTK_REAL WT_v_bound_limit "limit value for r -> infinity"
+{
+  "*:*" :: "value of limit value is unrestricted"
+} 0.
+
+private:
+CCTK_REAL rho_bound_scalar "Dirichlet boundary value"
+{
+  "*:*" :: "unrestricted"
+} 0.
+
+private:
+CCTK_REAL u_bound_scalar "Dirichlet boundary value"
+{
+  "*:*" :: "unrestricted"
+} 0.
+
+private:
+CCTK_REAL v1_bound_scalar "Dirichlet boundary value"
+{
+  "*:*" :: "unrestricted"
+} 0.
+
+private:
+CCTK_REAL v2_bound_scalar "Dirichlet boundary value"
+{
+  "*:*" :: "unrestricted"
+} 0.
+
+private:
+CCTK_REAL v3_bound_scalar "Dirichlet boundary value"
+{
+  "*:*" :: "unrestricted"
+} 0.
+
+private:
+CCTK_REAL WT_rho_bound_scalar "Dirichlet boundary value"
+{
+  "*:*" :: "unrestricted"
+} 0.
+
+private:
+CCTK_REAL WT_u_bound_scalar "Dirichlet boundary value"
+{
+  "*:*" :: "unrestricted"
+} 0.
+
+private:
+CCTK_REAL WT_v_bound_scalar "Dirichlet boundary value"
+{
+  "*:*" :: "unrestricted"
+} 0.
+

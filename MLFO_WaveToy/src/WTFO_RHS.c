@@ -20,7 +20,7 @@
 #define CUB(x) ((x) * (x) * (x))
 #define QAD(x) ((x) * (x) * (x) * (x))
 
-void WT_RHS_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCTK_REAL normal[3], CCTK_REAL tangentA[3], CCTK_REAL tangentB[3], CCTK_INT min[3], CCTK_INT max[3], CCTK_INT n_subblock_gfs, CCTK_REAL *subblock_gfs[])
+void WTFO_RHS_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCTK_REAL normal[3], CCTK_REAL tangentA[3], CCTK_REAL tangentB[3], CCTK_INT min[3], CCTK_INT max[3], CCTK_INT n_subblock_gfs, CCTK_REAL *subblock_gfs[])
 {
   DECLARE_CCTK_ARGUMENTS
   DECLARE_CCTK_PARAMETERS
@@ -46,10 +46,10 @@ void WT_RHS_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCTK_REAL normal[3], 
   
   if (verbose > 1)
   {
-    CCTK_VInfo(CCTK_THORNSTRING,"Entering WT_RHS_Body");
+    CCTK_VInfo(CCTK_THORNSTRING,"Entering WTFO_RHS_Body");
   }
   
-  if (cctk_iteration % WT_RHS_calc_every != WT_RHS_calc_offset)
+  if (cctk_iteration % WTFO_RHS_calc_every != WTFO_RHS_calc_offset)
   {
     return;
   }
@@ -84,7 +84,7 @@ void WT_RHS_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCTK_REAL normal[3], 
   pm1o12dz2 = -pow(dz,-2)/12.;
   
   /* Loop over the grid points */
-  LC_LOOP3 (WT_RHS,
+  LC_LOOP3 (WTFO_RHS,
             i,j,k, min[0],min[1],min[2], max[0],max[1],max[2],
             cctk_lsh[0],cctk_lsh[1],cctk_lsh[2])
   {
@@ -94,8 +94,6 @@ void WT_RHS_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCTK_REAL normal[3], 
     subblock_index = i - min[0] + (max[0] - min[0]) * (j - min[1] + (max[1]-min[1]) * (k - min[2]));
     
     /* Declare shorthands */
-    CCTK_REAL dJinv111 = INITVALUE, dJinv122 = INITVALUE, dJinv133 = INITVALUE, dJinv211 = INITVALUE, dJinv222 = INITVALUE, dJinv233 = INITVALUE;
-    CCTK_REAL dJinv311 = INITVALUE, dJinv322 = INITVALUE, dJinv333 = INITVALUE;
     CCTK_REAL Jinv11 = INITVALUE, Jinv12 = INITVALUE, Jinv13 = INITVALUE, Jinv21 = INITVALUE, Jinv22 = INITVALUE, Jinv23 = INITVALUE;
     CCTK_REAL Jinv31 = INITVALUE, Jinv32 = INITVALUE, Jinv33 = INITVALUE;
     
@@ -109,26 +107,24 @@ void WT_RHS_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCTK_REAL normal[3], 
     CCTK_REAL dcdxL = INITVALUE;
     CCTK_REAL dcdyL = INITVALUE;
     CCTK_REAL dcdzL = INITVALUE;
-    CCTK_REAL ddadxdxL = INITVALUE;
-    CCTK_REAL ddadydyL = INITVALUE;
-    CCTK_REAL ddadzdzL = INITVALUE;
     CCTK_REAL rhoL = INITVALUE, rhorhsL = INITVALUE;
-    CCTK_REAL uL = INITVALUE, urhsL = INITVALUE;
+    CCTK_REAL urhsL = INITVALUE;
+    CCTK_REAL v1L = INITVALUE, v1rhsL = INITVALUE, v2L = INITVALUE, v2rhsL = INITVALUE, v3L = INITVALUE, v3rhsL = INITVALUE;
     /* Declare precomputed derivatives*/
     
     /* Declare derivatives */
-    CCTK_REAL PDstandardNth1u = INITVALUE;
-    CCTK_REAL PDstandardNth2u = INITVALUE;
-    CCTK_REAL PDstandardNth3u = INITVALUE;
-    CCTK_REAL PDstandardNth11u = INITVALUE;
-    CCTK_REAL PDstandardNth22u = INITVALUE;
-    CCTK_REAL PDstandardNth33u = INITVALUE;
-    CCTK_REAL PDstandardNth12u = INITVALUE;
-    CCTK_REAL PDstandardNth13u = INITVALUE;
-    CCTK_REAL PDstandardNth21u = INITVALUE;
-    CCTK_REAL PDstandardNth23u = INITVALUE;
-    CCTK_REAL PDstandardNth31u = INITVALUE;
-    CCTK_REAL PDstandardNth32u = INITVALUE;
+    CCTK_REAL PDstandardNth1rho = INITVALUE;
+    CCTK_REAL PDstandardNth2rho = INITVALUE;
+    CCTK_REAL PDstandardNth3rho = INITVALUE;
+    CCTK_REAL PDstandardNth1v1 = INITVALUE;
+    CCTK_REAL PDstandardNth2v1 = INITVALUE;
+    CCTK_REAL PDstandardNth3v1 = INITVALUE;
+    CCTK_REAL PDstandardNth1v2 = INITVALUE;
+    CCTK_REAL PDstandardNth2v2 = INITVALUE;
+    CCTK_REAL PDstandardNth3v2 = INITVALUE;
+    CCTK_REAL PDstandardNth1v3 = INITVALUE;
+    CCTK_REAL PDstandardNth2v3 = INITVALUE;
+    CCTK_REAL PDstandardNth3v3 = INITVALUE;
     
     /* Assign local copies of grid functions */
     dadxL = dadx[index];
@@ -140,26 +136,28 @@ void WT_RHS_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCTK_REAL normal[3], 
     dcdxL = dcdx[index];
     dcdyL = dcdy[index];
     dcdzL = dcdz[index];
-    ddadxdxL = ddadxdx[index];
-    ddadydyL = ddadydy[index];
-    ddadzdzL = ddadzdz[index];
     rhoL = rho[index];
-    uL = u[index];
+    v1L = v1[index];
+    v2L = v2[index];
+    v3L = v3[index];
     
     /* Assign local copies of subblock grid functions */
     
     /* Include user supplied include files */
     
     /* Precompute derivatives (new style) */
-    PDstandardNth1u = PDstandardNth1(u, i, j, k);
-    PDstandardNth2u = PDstandardNth2(u, i, j, k);
-    PDstandardNth3u = PDstandardNth3(u, i, j, k);
-    PDstandardNth11u = PDstandardNth11(u, i, j, k);
-    PDstandardNth22u = PDstandardNth22(u, i, j, k);
-    PDstandardNth33u = PDstandardNth33(u, i, j, k);
-    PDstandardNth12u = PDstandardNth12(u, i, j, k);
-    PDstandardNth13u = PDstandardNth13(u, i, j, k);
-    PDstandardNth23u = PDstandardNth23(u, i, j, k);
+    PDstandardNth1rho = PDstandardNth1(rho, i, j, k);
+    PDstandardNth2rho = PDstandardNth2(rho, i, j, k);
+    PDstandardNth3rho = PDstandardNth3(rho, i, j, k);
+    PDstandardNth1v1 = PDstandardNth1(v1, i, j, k);
+    PDstandardNth2v1 = PDstandardNth2(v1, i, j, k);
+    PDstandardNth3v1 = PDstandardNth3(v1, i, j, k);
+    PDstandardNth1v2 = PDstandardNth1(v2, i, j, k);
+    PDstandardNth2v2 = PDstandardNth2(v2, i, j, k);
+    PDstandardNth3v2 = PDstandardNth3(v2, i, j, k);
+    PDstandardNth1v3 = PDstandardNth1(v3, i, j, k);
+    PDstandardNth2v3 = PDstandardNth2(v3, i, j, k);
+    PDstandardNth3v3 = PDstandardNth3(v3, i, j, k);
     
     /* Precompute derivatives (old style) */
     
@@ -182,49 +180,35 @@ void WT_RHS_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCTK_REAL normal[3], 
     
     Jinv33  =  dcdzL;
     
-    dJinv111  =  ddadxdxL;
-    
-    dJinv122  =  ddadydyL;
-    
-    dJinv133  =  ddadzdzL;
-    
-    dJinv211  =  ddadxdxL;
-    
-    dJinv222  =  ddadydyL;
-    
-    dJinv233  =  ddadzdzL;
-    
-    dJinv311  =  ddadxdxL;
-    
-    dJinv322  =  ddadydyL;
-    
-    dJinv333  =  ddadzdzL;
-    
     urhsL  =  rhoL;
     
-    rhorhsL  =  (dJinv111 + dJinv122 + dJinv133)*PDstandardNth1u + 
-        2*((Jinv11*Jinv21 + Jinv12*Jinv22 + Jinv13*Jinv23)*PDstandardNth12u + 
-           (Jinv11*Jinv31 + Jinv12*Jinv32 + Jinv13*Jinv33)*PDstandardNth13u + 
-           (Jinv21*Jinv31 + Jinv22*Jinv32 + Jinv23*Jinv33)*PDstandardNth23u) + 
-        (dJinv211 + dJinv222 + dJinv233)*PDstandardNth2u + (dJinv311 + dJinv322 + dJinv333)*PDstandardNth3u + 
-        PDstandardNth11u*(SQR(Jinv11) + SQR(Jinv12) + SQR(Jinv13)) + 
-        PDstandardNth22u*(SQR(Jinv21) + SQR(Jinv22) + SQR(Jinv23)) + 
-        PDstandardNth33u*(SQR(Jinv31) + SQR(Jinv32) + SQR(Jinv33));
+    rhorhsL  =  Jinv11*PDstandardNth1v1 + Jinv12*PDstandardNth1v2 + Jinv13*PDstandardNth1v3 + Jinv21*PDstandardNth2v1 + 
+        Jinv22*PDstandardNth2v2 + Jinv23*PDstandardNth2v3 + Jinv31*PDstandardNth3v1 + Jinv32*PDstandardNth3v2 + 
+        Jinv33*PDstandardNth3v3;
+    
+    v1rhsL  =  Jinv11*PDstandardNth1rho + Jinv21*PDstandardNth2rho + Jinv31*PDstandardNth3rho;
+    
+    v2rhsL  =  Jinv12*PDstandardNth1rho + Jinv22*PDstandardNth2rho + Jinv32*PDstandardNth3rho;
+    
+    v3rhsL  =  Jinv13*PDstandardNth1rho + Jinv23*PDstandardNth2rho + Jinv33*PDstandardNth3rho;
     
     
     /* Copy local copies back to grid functions */
     rhorhs[index] = rhorhsL;
     urhs[index] = urhsL;
+    v1rhs[index] = v1rhsL;
+    v2rhs[index] = v2rhsL;
+    v3rhs[index] = v3rhsL;
     
     /* Copy local copies back to subblock grid functions */
   }
-  LC_ENDLOOP3 (WT_RHS);
+  LC_ENDLOOP3 (WTFO_RHS);
 }
 
-void WT_RHS(CCTK_ARGUMENTS)
+void WTFO_RHS(CCTK_ARGUMENTS)
 {
   DECLARE_CCTK_ARGUMENTS
   DECLARE_CCTK_PARAMETERS
   
-  GenericFD_LoopOverInterior(cctkGH, &WT_RHS_Body);
+  GenericFD_LoopOverInterior(cctkGH, &WTFO_RHS_Body);
 }

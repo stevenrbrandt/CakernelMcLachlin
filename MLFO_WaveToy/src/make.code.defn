@@ -3,4 +3,4 @@
 
 # Mathematica script written by Ian Hinder and Sascha Husa
 
-REQUIRES LoopControl
+SRCS = Startup.c RegisterMoL.c RegisterSymmetries.c WTFO_Gaussian.c WTFO_RHS.c WTFO_constraints.c Boundaries.c 

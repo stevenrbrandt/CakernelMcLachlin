@@ -1,5 +1,5 @@
-/*  File produced by user diener */
-/*  Produced with Mathematica Version 6.0 for Linux x86 (32-bit) (April 20, 2007) */
+/*  File produced by user eschnett */
+/*  Produced with Mathematica Version 6.0 for Mac OS X x86 (32-bit) (April 20, 2007) */
 
 /*  Mathematica script written by Ian Hinder and Sascha Husa */
 
@@ -84,7 +84,7 @@ void ML_BSSN_matter_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCTK_REAL nor
   pm1o12dz2 = -pow(dz,-2)/12.;
   
   /* Loop over the grid points */
-  LC_LOOP3 (somename,
+  LC_LOOP3 (ML_BSSN_matter,
             i,j,k, min[0],min[1],min[2], max[0],max[1],max[2],
             cctk_lsh[0],cctk_lsh[1],cctk_lsh[2])
   {
@@ -285,7 +285,7 @@ void ML_BSSN_matter_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCTK_REAL nor
     
     /* Copy local copies back to subblock grid functions */
   }
-  LC_ENDLOOP3 (somename);
+  LC_ENDLOOP3 (ML_BSSN_matter);
 }
 
 void ML_BSSN_matter(CCTK_ARGUMENTS)

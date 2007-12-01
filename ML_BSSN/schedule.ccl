@@ -1,5 +1,5 @@
-# File produced by user diener
-# Produced with Mathematica Version 6.0 for Linux x86 (32-bit) (April 20, 2007)
+# File produced by user eschnett
+# Produced with Mathematica Version 6.0 for Mac OS X x86 (32-bit) (April 20, 2007)
 
 # Mathematica script written by Ian Hinder and Sascha Husa
 
@@ -169,7 +169,7 @@ schedule ML_BSSN_constraints AT analysis
 
 if (CCTK_EQUALS(SpaceTime, "Space+Matter"))
 {
-  schedule ML_BSSN_matter_constraints IN MoL_PostStep AFTER ML_BSSN_constraints
+  schedule ML_BSSN_matter_constraints AT analysis AFTER ML_BSSN_constraints
   {
     LANG: C
     

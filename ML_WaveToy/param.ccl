@@ -33,8 +33,8 @@ CCTK_INT ML_WaveToy_MaxNumEvolvedVars "Number of evolved variables used by this 
 restricted:
 CCTK_INT ML_WaveToy_MaxNumConstrainedVars "Number of constrained variables used by this thorn" ACCUMULATOR-BASE=MethodofLines::MoL_Num_Constrained_Vars
 {
-  4:4 :: "Number of constrained variables used by this thorn"
-} 4
+  58:58 :: "Number of constrained variables used by this thorn"
+} 58
 
 restricted:
 CCTK_INT WT_Gaussian_calc_every "WT_Gaussian_calc_every"
