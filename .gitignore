@@ -1,6 +1,7 @@
 # Lines starting with '#' are considered comments.
 
-m/ML_*
+m/ML*
+m/*.err
 m/*.out
 
 *.[oa]
