@@ -210,6 +210,12 @@ constraintsCalcFO =
 }
 
 (******************************************************************************)
+(* Implementations *)
+(******************************************************************************)
+
+inheritedImplementations = {"MultiPatch"};
+
+(******************************************************************************)
 (* Construct the thorns *)
 (******************************************************************************)
 
@@ -222,7 +228,8 @@ calculations =
 CreateKrancThornTT [groups, ".", "ML_WaveToy",
   Calculations -> calculations,
   DeclaredGroups -> declaredGroupNames,
-  PartialDerivatives -> derivatives
+  PartialDerivatives -> derivatives,
+  InheritedImplementations -> inheritedImplementations
 ];
 
 calculationsFO = 
@@ -235,5 +242,6 @@ calculationsFO =
 CreateKrancThornTT [groupsFO, ".", "ML_FOWaveToy",
   Calculations -> calculationsFO,
   DeclaredGroups -> declaredGroupNamesFO,
-  PartialDerivatives -> derivatives
+  PartialDerivatives -> derivatives,
+  InheritedImplementations -> inheritedImplementations
 ];

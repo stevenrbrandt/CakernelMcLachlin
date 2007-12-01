@@ -5,7 +5,7 @@
 
 implements: ML_WaveToy
 
-inherits:   Grid GenericFD Boundary
+inherits:   MultiPatch Grid GenericFD Boundary
 
 
 
