@@ -8,7 +8,7 @@
 #include "cctk_Parameters.h"
 #include "Symmetry.h"
 
-void MLFO_WaveToy_RegisterSymmetries(CCTK_ARGUMENTS)
+void ML_FOWaveToy_RegisterSymmetries(CCTK_ARGUMENTS)
 {
   DECLARE_CCTK_ARGUMENTS
   DECLARE_CCTK_PARAMETERS
@@ -22,41 +22,41 @@ void MLFO_WaveToy_RegisterSymmetries(CCTK_ARGUMENTS)
   sym[0] = 1;
   sym[1] = 1;
   sym[2] = 1;
-  SetCartSymVN(cctkGH, sym, "MLFO_WaveToy::rho");
+  SetCartSymVN(cctkGH, sym, "ML_FOWaveToy::rho");
   
   sym[0] = 1;
   sym[1] = 1;
   sym[2] = 1;
-  SetCartSymVN(cctkGH, sym, "MLFO_WaveToy::u");
+  SetCartSymVN(cctkGH, sym, "ML_FOWaveToy::u");
   
   sym[0] = -1;
   sym[1] = 1;
   sym[2] = 1;
-  SetCartSymVN(cctkGH, sym, "MLFO_WaveToy::v1");
+  SetCartSymVN(cctkGH, sym, "ML_FOWaveToy::v1");
   
   sym[0] = 1;
   sym[1] = -1;
   sym[2] = 1;
-  SetCartSymVN(cctkGH, sym, "MLFO_WaveToy::v2");
+  SetCartSymVN(cctkGH, sym, "ML_FOWaveToy::v2");
   
   sym[0] = 1;
   sym[1] = 1;
   sym[2] = -1;
-  SetCartSymVN(cctkGH, sym, "MLFO_WaveToy::v3");
+  SetCartSymVN(cctkGH, sym, "ML_FOWaveToy::v3");
   
   sym[0] = -1;
   sym[1] = 1;
   sym[2] = 1;
-  SetCartSymVN(cctkGH, sym, "MLFO_WaveToy::w1");
+  SetCartSymVN(cctkGH, sym, "ML_FOWaveToy::w1");
   
   sym[0] = 1;
   sym[1] = -1;
   sym[2] = 1;
-  SetCartSymVN(cctkGH, sym, "MLFO_WaveToy::w2");
+  SetCartSymVN(cctkGH, sym, "ML_FOWaveToy::w2");
   
   sym[0] = 1;
   sym[1] = 1;
   sym[2] = -1;
-  SetCartSymVN(cctkGH, sym, "MLFO_WaveToy::w3");
+  SetCartSymVN(cctkGH, sym, "ML_FOWaveToy::w3");
   
 }

@@ -11,12 +11,12 @@ McLachlan.out: McLachlan.m
 	for thorn in ML_ADM ML_BSSN; do ./copy-if-changed.sh $$thorn ../$$thorn; done
 
 WaveToy.out: WaveToy.m
-	rm -rf ML_WaveToy MLFO_Wavetoy
+	rm -rf ML_WaveToy ML_FOWavetoy
 	./runmath.sh $^
-	for thorn in ML_WaveToy MLFO_Wavetoy; do ./copy-if-changed.sh $$thorn ../$$thorn; done
+	for thorn in ML_WaveToy ML_FOWavetoy; do ./copy-if-changed.sh $$thorn ../$$thorn; done
 
 clean:
 	rm -rf McLachlan.out McLachlan.err ML_ADM ML_BSSN
-	rm -rf Wavetoy.out Wavetoy.err ML_WaveToy MLFO_Wavetoy
+	rm -rf Wavetoy.out Wavetoy.err ML_WaveToy ML_FOWavetoy
 
 .PHONY: all clean

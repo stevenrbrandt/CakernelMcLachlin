@@ -18,19 +18,19 @@ STORAGE: WT_u[3]
 
 STORAGE: WT_v[3]
 
-schedule MLFO_WaveToy_Startup at STARTUP
+schedule ML_FOWaveToy_Startup at STARTUP
 {
   LANG: C
   OPTIONS: meta
 } "create banner"
 
-schedule MLFO_WaveToy_RegisterVars in MoL_Register
+schedule ML_FOWaveToy_RegisterVars in MoL_Register
 {
   LANG: C
   OPTIONS: meta
 } "Register Variables for MoL"
 
-schedule MLFO_WaveToy_RegisterSymmetries at BASEGRID
+schedule ML_FOWaveToy_RegisterSymmetries at BASEGRID
 {
   LANG: C
   OPTIONS: meta
@@ -64,7 +64,7 @@ schedule WTFO_constraints AT analysis
   SYNC: WT_w
 } "WTFO_constraints"
 
-schedule MLFO_WaveToy_ApplyBoundConds in MoL_PostStep
+schedule ML_FOWaveToy_ApplyBoundConds in MoL_PostStep
 {
   LANG: C
   OPTIONS: level
@@ -73,13 +73,13 @@ schedule MLFO_WaveToy_ApplyBoundConds in MoL_PostStep
   SYNC: WT_v
 } "apply boundary conditions"
 
-schedule MLFO_WaveToy_CheckBoundaries at BASEGRID
+schedule ML_FOWaveToy_CheckBoundaries at BASEGRID
 {
   LANG: C
   OPTIONS: meta
 } "check boundaries treatment"
 
-schedule group ApplyBCs as MLFO_WaveToy_ApplyBCs in MoL_PostStep  after MLFO_WaveToy_ApplyBoundConds
+schedule group ApplyBCs as ML_FOWaveToy_ApplyBCs in MoL_PostStep  after ML_FOWaveToy_ApplyBoundConds
 {
   # no language specified
   

@@ -232,7 +232,7 @@ calculationsFO =
   constraintsCalcFO
 };
 
-CreateKrancThornTT [groupsFO, ".", "MLFO_WaveToy",
+CreateKrancThornTT [groupsFO, ".", "ML_FOWaveToy",
   Calculations -> calculationsFO,
   DeclaredGroups -> declaredGroupNamesFO,
   PartialDerivatives -> derivatives

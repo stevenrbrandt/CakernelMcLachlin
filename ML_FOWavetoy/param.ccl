@@ -25,13 +25,13 @@ CCTK_REAL verbose "verbose"
 } 0
 
 restricted:
-CCTK_INT MLFO_WaveToy_MaxNumEvolvedVars "Number of evolved variables used by this thorn" ACCUMULATOR-BASE=MethodofLines::MoL_Num_Evolved_Vars
+CCTK_INT ML_FOWaveToy_MaxNumEvolvedVars "Number of evolved variables used by this thorn" ACCUMULATOR-BASE=MethodofLines::MoL_Num_Evolved_Vars
 {
   5:5 :: "Number of evolved variables used by this thorn"
 } 5
 
 restricted:
-CCTK_INT MLFO_WaveToy_MaxNumConstrainedVars "Number of constrained variables used by this thorn" ACCUMULATOR-BASE=MethodofLines::MoL_Num_Constrained_Vars
+CCTK_INT ML_FOWaveToy_MaxNumConstrainedVars "Number of constrained variables used by this thorn" ACCUMULATOR-BASE=MethodofLines::MoL_Num_Constrained_Vars
 {
   61:61 :: "Number of constrained variables used by this thorn"
 } 61

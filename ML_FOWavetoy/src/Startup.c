@@ -5,9 +5,9 @@
 
 #include "cctk.h"
 
-int MLFO_WaveToy_Startup(void)
+int ML_FOWaveToy_Startup(void)
 {
-  const char * banner = "MLFO_WaveToy";
+  const char * banner = "ML_FOWaveToy";
   CCTK_RegisterBanner(banner);
   return 0;
 }

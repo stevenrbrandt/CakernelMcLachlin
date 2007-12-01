@@ -3,7 +3,7 @@
 
 # Mathematica script written by Ian Hinder and Sascha Husa
 
-implements: MLFO_WaveToy
+implements: ML_FOWaveToy
 
 inherits:   Grid GenericFD Boundary
 
