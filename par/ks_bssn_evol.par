@@ -1,0 +1,254 @@
+ActiveThorns = "
+        Boundary
+        CartGrid3D
+        CoordBase
+        IOUtil
+        InitBase
+        MoL
+	time
+        SymBase
+
+        ADMAnalysis
+        ADMBase
+        ADMConstraints
+        ADMCoupling
+        ADMMacros
+        CoordGauge
+        SpaceMask
+        StaticConformal
+
+        NaNChecker
+
+        Carpet
+        CarpetIOASCII
+        CarpetIOBasic
+        CarpetIOScalar
+        CarpetLib
+        CarpetReduce
+	CarpetRegrid
+        LoopControl
+
+        ReflectionSymmetry
+
+        Exact
+        Formaline
+        GSL
+
+        Slab
+
+        GenericFD
+
+        ML_BSSN
+	SphericalSurface
+	TmunuBase
+	Dissipation
+
+	nanchecker
+"
+
+# output
+
+IO::out_dir = $parfile
+
+IOBasic::outInfo_every = 1
+IOBasic::outInfo_vars = "
+        ML_BSSN::H
+        ML_BSSN::trKrhs
+"
+
+IOScalar::one_file_per_group = yes
+IOScalar::outScalar_every    = 1
+IOScalar::outScalar_vars     = "
+        ADMBase::metric
+        ADMBase::curv
+        ADMBase::lapse
+        ADMBase::shift
+        ADMAnalysis::trace_of_K
+        ADMAnalysis::ricci_scalar
+        ADMConstraints::Hamiltonian
+        ADMConstraints::momentum
+        ML_BSSN::ML_log_confac
+        ML_BSSN::ML_metric
+        ML_BSSN::ML_trace_curv
+        ML_BSSN::ML_curv
+        ML_BSSN::ML_Gamma
+        ML_BSSN::Ham
+        ML_BSSN::mom
+        ML_BSSN::cons_detg
+        ML_BSSN::cons_Gamma
+        ML_BSSN::cons_traceA
+"
+
+IOASCII::one_file_per_group = yes
+IOASCII::out1D_every        = 32
+IOASCII::out1D_vars         = "
+        ADMBase::metric
+        ADMBase::curv
+        ADMBase::lapse
+        ADMBase::shift
+        ADMAnalysis::trace_of_K
+        ADMAnalysis::ricci_scalar
+        ADMConstraints::Hamiltonian
+        ADMConstraints::momentum
+        ML_BSSN::ML_log_confac
+        ML_BSSN::ML_metric
+        ML_BSSN::ML_trace_curv
+        ML_BSSN::ML_curv
+        ML_BSSN::ML_Gamma
+        ML_BSSN::Ham
+        ML_BSSN::mom
+        ML_BSSN::cons_detg
+        ML_BSSN::cons_Gamma
+        ML_BSSN::cons_traceA
+        ML_BSSN::ML_log_confacrhs
+        ML_BSSN::ML_metricrhs
+        ML_BSSN::ML_Gammarhs
+        ML_BSSN::ML_trace_curvrhs
+        ML_BSSN::ML_curvrhs
+"
+
+
+#--- driver
+
+Cactus::cctk_itlast = 1024
+Carpet::use_buffer_zones      = yes
+
+CarpetLib::interleave_communications = yes
+CarpetLib::vary_tags                 = yes
+CarpetLib::combine_sends             = yes
+CarpetLib::reduce_mpi_waitall        = yes
+CarpetLib::print_memstats_every      = 1024
+Carpet::regrid_in_level_mode         = no
+Carpet::output_timers_every          = 1024
+CarpetLib::print_timestats_every     = 1024
+Carpet::print_timestats_every        = 1
+
+carpet::verbose = no
+carpet::veryverbose = no
+
+#--- Carpet prolongation order settings
+
+Carpet::prolongation_order_space                = 3
+Carpet::prolongation_order_time                 = 2
+
+
+# MoL time integration
+
+MoL::ODE_Method = RK4
+Carpet::num_integrator_substeps = 4
+
+#mol::ode_method				=	"generic"
+#mol::generic_type				=	"RK"
+MoL::MoL_Intermediate_Steps 			= 	4
+MoL::MoL_Num_Scratch_Levels			=	1
+time::dtfac                             	= 	0.25
+
+#--- grid and symmetries
+
+driver::ghost_size            = 3
+grid::type = "CoordBase"
+CoordBase::domainsize = "minmax"
+CoordBase::xmax = 96.0
+CoordBase::ymax = 96.0
+CoordBase::zmax = 96.0
+CoordBase::dx   = 1.28
+CoordBase::dy   = 1.28
+CoordBase::dz   = 1.28
+
+ReflectionSymmetry::reflection_x   = yes
+ReflectionSymmetry::reflection_y   = yes
+ReflectionSymmetry::reflection_z   = yes
+ReflectionSymmetry::avoid_origin_x = no
+ReflectionSymmetry::avoid_origin_y = no
+ReflectionSymmetry::avoid_origin_z = no
+
+CoordBase::boundary_shiftout_x_lower = 1
+CoordBase::boundary_shiftout_y_lower = 1
+CoordBase::boundary_shiftout_z_lower = 1
+
+Carpet::domain_from_coordbase = yes
+
+CoordBase::boundary_size_x_lower = 3
+CoordBase::boundary_size_y_lower = 3
+CoordBase::boundary_size_z_lower = 3
+CoordBase::boundary_size_x_upper = 3
+CoordBase::boundary_size_y_upper = 3
+CoordBase::boundary_size_z_upper = 3
+
+
+carpetregrid::refined_regions = "manual-coordinate-list"
+
+carpetregrid::coordinates = "
+        [ [ ([0,0,0]:[32.0,32.0,32.0]:[0.64,0.64,0.64]) ],
+	  [ ([0,0,0]:[16.0,16.0,16.0]:[0.32,0.32,0.32]) ],
+          [ ([0,0,0]:[8.0,8.0,8.0]:[0.16,0.16,0.16]) ],
+          [ ([0,0,0]:[4.0,4.0,4.0]:[0.08,0.08,0.08]) ],
+          [ ([0,0,0]:[2.0,2.0,2.0]:[0.04,0.04,0.04]) ],
+          [ ([0,0,0]:[1.0,1.0,1.0]:[0.02,0.02,0.02]) ]]
+"
+
+carpetregrid::smart_outer_boundaries 		= "yes"
+carpet::max_refinement_levels           	= 7
+carpetregrid::refinement_levels         	= 7
+
+#--- initial data
+
+ADMBase::initial_data      = "exact"
+ADMBase::initial_lapse     = "exact"
+ADMBase::initial_shift     = "exact"
+ADMBase::initial_dtlapse   = "zero"
+ADMBase::initial_dtshift   = "zero"
+ADMBase::lapse_timelevels  = 3
+ADMBase::shift_timelevels  = 3
+ADMBase::metric_timelevels = 3
+
+Exact::exact_model = "Kerr/Kerr-Schild"
+Exact::Kerr_KerrSchild__mass = 1.0
+Exact::Kerr_KerrSchild__spin = 0.0
+#Exact::Kerr_KerrSchild__epsilon = 1.0e-4
+Exact::Kerr_KerrSchild__parabolic = yes
+Exact::Kerr_KerrSchild__power     = 8
+Exact::Kerr_KerrSchild__epsilon   = 1.0
+
+
+#--- ML_BSSN
+
+ML_BSSN::harmonicN       = 0      # 1+log
+ML_BSSN::harmonicF       = 2.0    # 1+log
+ML_BSSN::ShiftGammaCoeff = 0.75
+ML_BSSN::BetaDriver      = 0.5
+
+ML_BSSN::ML_log_confac_bound = "radiative"
+ML_BSSN::ML_metric_bound     = "radiative"
+ML_BSSN::ML_Gamma_bound      = "radiative"
+ML_BSSN::ML_trace_curv_bound = "radiative"
+ML_BSSN::ML_curv_bound       = "radiative"
+ML_BSSN::ML_lapse_bound      = "radiative"
+ML_BSSN::ML_dtlapse_bound    = "radiative"
+ML_BSSN::ML_shift_bound      = "radiative"
+ML_BSSN::ML_dtshift_bound    = "radiative"
+
+ADMMacros::spatial_order = 4
+
+#--- Dissipation
+
+Dissipation::vars = "
+	ML_BSSN::ML_Gamma
+  	ML_BSSN::ML_lapse
+  	ML_BSSN::ML_shift
+  	ML_BSSN::ML_log_confac
+  	ML_BSSN::ML_metric
+  	ML_BSSN::ML_trace_curv
+  	ML_BSSN::ML_curv
+"
+
+#--- Analysis
+
+admconstraints::constraints_timelevels          =       3
+admconstraints::constraints_persist             =       yes
+admconstraints::bound                           =       "static"
+
+nanchecker::check_every                         =       1
+nanchecker::check_vars                          =       "admbase::gxx"
+nanchecker::action_if_found                     =       "terminate"
+
