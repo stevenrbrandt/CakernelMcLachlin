@@ -101,11 +101,22 @@ void ML_BSSN_convertFromADMBaseGamma_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT fa
     CCTK_REAL gtu11 = INITVALUE, gtu21 = INITVALUE, gtu22 = INITVALUE, gtu31 = INITVALUE, gtu32 = INITVALUE, gtu33 = INITVALUE;
     
     /* Declare local copies of grid functions */
+    CCTK_REAL AL = INITVALUE;
+    CCTK_REAL alphaL = INITVALUE;
+    CCTK_REAL B1L = INITVALUE, B2L = INITVALUE, B3L = INITVALUE;
+    CCTK_REAL beta1L = INITVALUE, beta2L = INITVALUE, beta3L = INITVALUE;
+    CCTK_REAL dtalpL = INITVALUE;
+    CCTK_REAL dtbetaxL = INITVALUE;
+    CCTK_REAL dtbetayL = INITVALUE;
+    CCTK_REAL dtbetazL = INITVALUE;
     CCTK_REAL gt11L = INITVALUE, gt12L = INITVALUE, gt13L = INITVALUE, gt22L = INITVALUE, gt23L = INITVALUE, gt33L = INITVALUE;
     CCTK_REAL Xt1L = INITVALUE, Xt2L = INITVALUE, Xt3L = INITVALUE;
     /* Declare precomputed derivatives*/
     
     /* Declare derivatives */
+    CCTK_REAL PDstandardNth1alpha = INITVALUE;
+    CCTK_REAL PDstandardNth2alpha = INITVALUE;
+    CCTK_REAL PDstandardNth3alpha = INITVALUE;
     CCTK_REAL PDstandardNth1gt11 = INITVALUE;
     CCTK_REAL PDstandardNth2gt11 = INITVALUE;
     CCTK_REAL PDstandardNth3gt11 = INITVALUE;
@@ -126,6 +137,14 @@ void ML_BSSN_convertFromADMBaseGamma_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT fa
     CCTK_REAL PDstandardNth3gt33 = INITVALUE;
     
     /* Assign local copies of grid functions */
+    alphaL = alpha[index];
+    beta1L = beta1[index];
+    beta2L = beta2[index];
+    beta3L = beta3[index];
+    dtalpL = dtalp[index];
+    dtbetaxL = dtbetax[index];
+    dtbetayL = dtbetay[index];
+    dtbetazL = dtbetaz[index];
     gt11L = gt11[index];
     gt12L = gt12[index];
     gt13L = gt13[index];
@@ -138,6 +157,9 @@ void ML_BSSN_convertFromADMBaseGamma_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT fa
     /* Include user supplied include files */
     
     /* Precompute derivatives (new style) */
+    PDstandardNth1alpha = PDstandardNth1(alpha, i, j, k);
+    PDstandardNth2alpha = PDstandardNth2(alpha, i, j, k);
+    PDstandardNth3alpha = PDstandardNth3(alpha, i, j, k);
     PDstandardNth1gt11 = PDstandardNth1(gt11, i, j, k);
     PDstandardNth2gt11 = PDstandardNth2(gt11, i, j, k);
     PDstandardNth3gt11 = PDstandardNth3(gt11, i, j, k);
@@ -234,8 +256,21 @@ void ML_BSSN_convertFromADMBaseGamma_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT fa
     
     Xt3L  =  Gt311*gtu11 + Gt322*gtu22 + 2*(Gt312*gtu21 + Gt313*gtu31 + Gt323*gtu32) + Gt333*gtu33;
     
+    AL  =  (-dtalpL + beta1L*PDstandardNth1alpha + beta2L*PDstandardNth2alpha + beta3L*PDstandardNth3alpha)*INV(harmonicF)*
+        pow(alphaL,-harmonicN);
+    
+    B1L  =  dtbetaxL*ShiftGammaCoeff*INV(1.e-100 + SQR(ShiftGammaCoeff))*pow(alphaL,-ShiftAlphaPower);
+    
+    B2L  =  dtbetayL*ShiftGammaCoeff*INV(1.e-100 + SQR(ShiftGammaCoeff))*pow(alphaL,-ShiftAlphaPower);
+    
+    B3L  =  dtbetazL*ShiftGammaCoeff*INV(1.e-100 + SQR(ShiftGammaCoeff))*pow(alphaL,-ShiftAlphaPower);
+    
     
     /* Copy local copies back to grid functions */
+    A[index] = AL;
+    B1[index] = B1L;
+    B2[index] = B2L;
+    B3[index] = B3L;
     Xt1[index] = Xt1L;
     Xt2[index] = Xt2L;
     Xt3[index] = Xt3L;

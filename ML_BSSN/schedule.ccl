@@ -95,6 +95,8 @@ if (CCTK_EQUALS(my_initial_data, "ADMBase"))
   {
     LANG: C
     
+    SYNC: ML_dtlapse
+    SYNC: ML_dtshift
     SYNC: ML_Gamma
   } "ML_BSSN_convertFromADMBaseGamma"
 }
@@ -153,6 +155,12 @@ schedule ML_BSSN_convertToADMBase IN MoL_PostStep AFTER ML_BSSN_ApplyBCs AFTER M
 {
   LANG: C
   
+  SYNC: ADMBase::curv
+  SYNC: ADMBase::dtlapse
+  SYNC: ADMBase::dtshift
+  SYNC: ADMBase::lapse
+  SYNC: ADMBase::metric
+  SYNC: ADMBase::shift
 } "ML_BSSN_convertToADMBase"
 
 schedule ML_BSSN_constraints AT analysis

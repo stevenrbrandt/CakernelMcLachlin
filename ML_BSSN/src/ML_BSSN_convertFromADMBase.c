@@ -101,19 +101,13 @@ void ML_BSSN_convertFromADMBase_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, C
     CCTK_REAL K11 = INITVALUE, K12 = INITVALUE, K13 = INITVALUE, K22 = INITVALUE, K23 = INITVALUE, K33 = INITVALUE;
     
     /* Declare local copies of grid functions */
-    CCTK_REAL AL = INITVALUE;
     CCTK_REAL alpL = INITVALUE;
     CCTK_REAL alphaL = INITVALUE;
     CCTK_REAL At11L = INITVALUE, At12L = INITVALUE, At13L = INITVALUE, At22L = INITVALUE, At23L = INITVALUE, At33L = INITVALUE;
-    CCTK_REAL B1L = INITVALUE, B2L = INITVALUE, B3L = INITVALUE;
     CCTK_REAL beta1L = INITVALUE, beta2L = INITVALUE, beta3L = INITVALUE;
     CCTK_REAL betaxL = INITVALUE;
     CCTK_REAL betayL = INITVALUE;
     CCTK_REAL betazL = INITVALUE;
-    CCTK_REAL dtalpL = INITVALUE;
-    CCTK_REAL dtbetaxL = INITVALUE;
-    CCTK_REAL dtbetayL = INITVALUE;
-    CCTK_REAL dtbetazL = INITVALUE;
     CCTK_REAL gt11L = INITVALUE, gt12L = INITVALUE, gt13L = INITVALUE, gt22L = INITVALUE, gt23L = INITVALUE, gt33L = INITVALUE;
     CCTK_REAL gxxL = INITVALUE;
     CCTK_REAL gxyL = INITVALUE;
@@ -138,10 +132,6 @@ void ML_BSSN_convertFromADMBase_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, C
     betaxL = betax[index];
     betayL = betay[index];
     betazL = betaz[index];
-    dtalpL = dtalp[index];
-    dtbetaxL = dtbetax[index];
-    dtbetayL = dtbetay[index];
-    dtbetazL = dtbetaz[index];
     gxxL = gxx[index];
     gxyL = gxy[index];
     gxzL = gxz[index];
@@ -236,23 +226,14 @@ void ML_BSSN_convertFromADMBase_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, C
     
     alphaL  =  alpL;
     
-    AL  =  dtalpL;
-    
     beta1L  =  betaxL;
     
     beta2L  =  betayL;
     
     beta3L  =  betazL;
     
-    B1L  =  dtbetaxL;
-    
-    B2L  =  dtbetayL;
-    
-    B3L  =  dtbetazL;
-    
     
     /* Copy local copies back to grid functions */
-    A[index] = AL;
     alpha[index] = alphaL;
     At11[index] = At11L;
     At12[index] = At12L;
@@ -260,9 +241,6 @@ void ML_BSSN_convertFromADMBase_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, C
     At22[index] = At22L;
     At23[index] = At23L;
     At33[index] = At33L;
-    B1[index] = B1L;
-    B2[index] = B2L;
-    B3[index] = B3L;
     beta1[index] = beta1L;
     beta2[index] = beta2L;
     beta3[index] = beta3L;
