@@ -17,6 +17,6 @@ WaveToy.out: WaveToy.m
 
 clean:
 	rm -rf McLachlan.out McLachlan.err ML_ADM ML_BSSN
-	rm -rf Wavetoy.out Wavetoy.err ML_WaveToy ML_FOWavetoy
+	rm -rf WaveToy.out WaveToy.err ML_WaveToy ML_FOWavetoy
 
 .PHONY: all clean
