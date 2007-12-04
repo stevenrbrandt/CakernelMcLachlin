@@ -34,7 +34,16 @@ derivatives =
                            StandardCenteredDifferenceOperator[1,derivOrder/2,j]
 };
 
-PD = PDstandardNth;
+(* local derivatives *)
+PDloc = PDstandardNth;
+
+(* global derivatives *)
+PDglob[var_,lx_] := Jinv[u1,lx] PDloc[var,l1];
+PDglob[var_,lx_,ly_] :=
+  dJinv[u1,lx,ly] PDloc[var,l1] + Jinv[u1,lx] Jinv[u2,ly] PDloc[var,l1,l2];
+
+UseGlobalDerivs = False;
+PD := If [UseGlobalDerivs, PDglob, PDloc];
 
 KD = KroneckerDelta;
 

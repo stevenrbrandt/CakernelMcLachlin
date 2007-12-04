@@ -20,16 +20,16 @@ derivatives =
                            StandardCenteredDifferenceOperator[1,derivOrder/2,j]
 };
 
-PD = PDstandardNth;
-CD = PD;
+(* local derivatives *)
+PDloc = PDstandardNth;
 
 (* global derivatives *)
-gPD[var_,lx_] := Jinv[u1,lx] PD[var,l1];
-gPD[var_,lx_,ly_] :=
-  dJinv[u1,lx,ly] PD[var,l1] + Jinv[u1,lx] Jinv[u2,ly] PD[var,l1,l2];
+PDglob[var_,lx_] := Jinv[u1,lx] PDloc[var,l1];
+PDglob[var_,lx_,ly_] :=
+  dJinv[u1,lx,ly] PDloc[var,l1] + Jinv[u1,lx] Jinv[u2,ly] PDloc[var,l1,l2];
 
-(* gCD[var_,lx_] = Jinv[uz,lx] CD[var,lz]; *)
-(* gCD[var_,lx_,ly_] = Jinv[uy,lx] Jinv[uz,ly] CD[var,ly,lz]; *)
+UseGlobalDerivs = True;
+PD := If [UseGlobalDerivs, PDglob, PDloc];
 
 KD = KroneckerDelta;
 
@@ -157,7 +157,7 @@ evolCalc =
     dJinv323 -> ddadydz,
     dJinv333 -> ddadzdz,
     dot[u] -> rho,
-    dot[rho] -> KD[ua,ub] gPD[u,la,lb]
+    dot[rho] -> KD[ua,ub] PD[u,la,lb]
   }
 }
 
@@ -179,8 +179,8 @@ evolCalcFO =
     Jinv32 -> dcdy,
     Jinv33 -> dcdz,
     dot[u] -> rho,
-    dot[rho] -> KD[ua,ub] gPD[v[la],lb],
-    dot[v[la]] -> gPD[rho,la]
+    dot[rho] -> KD[ua,ub] PD[v[la],lb],
+    dot[v[la]] -> PD[rho,la]
   }
 }
 
@@ -205,7 +205,7 @@ constraintsCalcFO =
     Jinv31 -> dcdx,
     Jinv32 -> dcdy,
     Jinv33 -> dcdz,
-    w[ua] -> Eps[ua,ub,uc] gPD[v[lb],lc]
+    w[ua] -> Eps[ua,ub,uc] PD[v[lb],lc]
   }
 }
 
@@ -231,6 +231,8 @@ CreateKrancThornTT [groups, ".", "ML_WaveToy",
   PartialDerivatives -> derivatives,
   InheritedImplementations -> inheritedImplementations
 ];
+
+
 
 calculationsFO = 
 {
