@@ -130,6 +130,9 @@ void ML_BSSN_convertToADMBase_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCT
     /* Declare precomputed derivatives*/
     
     /* Declare derivatives */
+    CCTK_REAL PDstandardNth1alpha = INITVALUE;
+    CCTK_REAL PDstandardNth2alpha = INITVALUE;
+    CCTK_REAL PDstandardNth3alpha = INITVALUE;
     
     /* Assign local copies of grid functions */
     AL = A[index];
@@ -160,6 +163,9 @@ void ML_BSSN_convertToADMBase_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCT
     /* Include user supplied include files */
     
     /* Precompute derivatives (new style) */
+    PDstandardNth1alpha = PDstandardNth1(alpha, i, j, k);
+    PDstandardNth2alpha = PDstandardNth2(alpha, i, j, k);
+    PDstandardNth3alpha = PDstandardNth3(alpha, i, j, k);
     
     /* Precompute derivatives (old style) */
     
@@ -216,19 +222,20 @@ void ML_BSSN_convertToADMBase_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCT
     
     alpL  =  alphaL;
     
-    dtalpL  =  AL;
-    
     betaxL  =  beta1L;
     
     betayL  =  beta2L;
     
     betazL  =  beta3L;
     
-    dtbetaxL  =  B1L;
+    dtalpL  =  beta1L*PDstandardNth1alpha + beta2L*PDstandardNth2alpha + beta3L*PDstandardNth3alpha - 
+        AL*harmonicF*pow(alphaL,harmonicN);
     
-    dtbetayL  =  B2L;
+    dtbetaxL  =  B1L*ShiftGammaCoeff*pow(alphaL,ShiftAlphaPower);
     
-    dtbetazL  =  B3L;
+    dtbetayL  =  B2L*ShiftGammaCoeff*pow(alphaL,ShiftAlphaPower);
+    
+    dtbetazL  =  B3L*ShiftGammaCoeff*pow(alphaL,ShiftAlphaPower);
     
     
     /* Copy local copies back to grid functions */
@@ -263,5 +270,5 @@ void ML_BSSN_convertToADMBase(CCTK_ARGUMENTS)
   DECLARE_CCTK_ARGUMENTS
   DECLARE_CCTK_PARAMETERS
   
-  GenericFD_LoopOverEverything(cctkGH, &ML_BSSN_convertToADMBase_Body);
+  GenericFD_LoopOverInterior(cctkGH, &ML_BSSN_convertToADMBase_Body);
 }

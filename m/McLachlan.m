@@ -258,16 +258,10 @@ convertFromADMBaseCalcBSSN =
     At[la,lb] -> em4phi (K[la,lb] - (1/3) g[la,lb] trK),
     
     alpha -> alp,
-    (* TODO: this is wrong *)
-    A     -> dtalp,
     
     beta1 -> betax,
     beta2 -> betay,
-    beta3 -> betaz,
-    (* TODO: this is wrong *)
-    B1    -> dtbetax,
-    B2    -> dtbetay,
-    B3    -> dtbetaz
+    beta3 -> betaz
   }
 }
 
@@ -284,7 +278,18 @@ convertFromADMBaseCalcBSSNGamma =
     gtu[ua,ub]   -> 1/detgt detgtExpr MatrixInverse [gt[ua,ub]],
     Gt[ua,lb,lc] -> 1/2 gtu[ua,ud]
                     (PD[gt[lb,ld],lc] + PD[gt[lc,ld],lb] - PD[gt[lb,lc],ld]),
-    Xt[ua] -> gtu[ub,uc] Gt[ua,lb,lc]
+    Xt[ua] -> gtu[ub,uc] Gt[ua,lb,lc],
+    
+    (* TODO: check this *)
+    A -> - (dtalp - Lie[alpha, beta]) / (harmonicF alpha^harmonicN),
+    
+    (* TODO: check this *)
+    (* B1 -> dtbetax / (ShiftGammaCoeff alpha^ShiftAlphaPower) *)
+    (* B2 -> dtbetay / (ShiftGammaCoeff alpha^ShiftAlphaPower) *)
+    (* B3 -> dtbetaz / (ShiftGammaCoeff alpha^ShiftAlphaPower) *)
+    B1 -> ShiftGammaCoeff dtbetax / ((ShiftGammaCoeff^2 + 1.0*^-100) alpha^ShiftAlphaPower),
+    B2 -> ShiftGammaCoeff dtbetay / ((ShiftGammaCoeff^2 + 1.0*^-100) alpha^ShiftAlphaPower),
+    B3 -> ShiftGammaCoeff dtbetaz / ((ShiftGammaCoeff^2 + 1.0*^-100) alpha^ShiftAlphaPower)
   }
 }
 
@@ -326,6 +331,7 @@ convertToADMBaseCalcBSSN =
 {
   Name -> "ML_BSSN_convertToADMBase",
   Schedule -> {"IN MoL_PostStep AFTER ML_BSSN_ApplyBCs AFTER ML_BSSN_enforce"},
+  Where -> Interior,
   Shorthands -> {e4phi, g[la,lb], K[la,lb]},
   Equations -> 
   {
@@ -345,16 +351,14 @@ convertToADMBaseCalcBSSN =
     kyz      -> K23,
     kzz      -> K33,
     alp      -> alpha,
-    (* TODO: this is wrong *)
-    (* TODO: rename dtalp->A, dtbeta->B *)
-    dtalp    -> A,
     betax    -> beta1,
     betay    -> beta2,
     betaz    -> beta3,
-    (* TODO: this is wrong *)
-    dtbetax  -> B1,
-    dtbetay  -> B2,
-    dtbetaz  -> B3
+    (* see RHS *)
+    dtalp    -> - harmonicF alpha^harmonicN A + Lie[alpha, beta],
+    dtbetax  -> ShiftGammaCoeff alpha^ShiftAlphaPower B1,
+    dtbetay  -> ShiftGammaCoeff alpha^ShiftAlphaPower B2,
+    dtbetaz  -> ShiftGammaCoeff alpha^ShiftAlphaPower B3
   }
 }
 
