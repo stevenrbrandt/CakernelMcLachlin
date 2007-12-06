@@ -5,12 +5,10 @@ ActiveThorns = "
         IOUtil
         InitBase
         MoL
-	time
         SymBase
+	Time
 
-        ADMAnalysis
         ADMBase
-        ADMConstraints
         ADMCoupling
         ADMMacros
         CoordGauge
@@ -23,27 +21,29 @@ ActiveThorns = "
         CarpetIOASCII
         CarpetIOBasic
         CarpetIOScalar
+        CarpetInterp
         CarpetLib
         CarpetReduce
 	CarpetRegrid
         LoopControl
 
+        IsolatedHorizon
         ReflectionSymmetry
 
+        AEILocalInterp
+        AHFinderDirect
+	Dissipation
         Exact
         Formaline
         GSL
+	SphericalSurface
 
         Slab
 
         GenericFD
 
         ML_BSSN
-	SphericalSurface
 	TmunuBase
-	Dissipation
-
-	nanchecker
 "
 
 # output
@@ -57,91 +57,130 @@ IOBasic::outInfo_vars = "
 "
 
 IOScalar::one_file_per_group = yes
-IOScalar::outScalar_every    = 1
+IOScalar::outScalar_every    = 32
 IOScalar::outScalar_vars     = "
         ADMBase::metric
         ADMBase::curv
         ADMBase::lapse
         ADMBase::shift
-        ADMAnalysis::trace_of_K
-        ADMAnalysis::ricci_scalar
-        ADMConstraints::Hamiltonian
-        ADMConstraints::momentum
-        ML_BSSN::ML_log_confac
-        ML_BSSN::ML_metric
-        ML_BSSN::ML_trace_curv
-        ML_BSSN::ML_curv
-        ML_BSSN::ML_Gamma
         ML_BSSN::Ham
         ML_BSSN::mom
         ML_BSSN::cons_detg
         ML_BSSN::cons_Gamma
         ML_BSSN::cons_traceA
 "
+#        ML_BSSN::ML_log_confac
+#        ML_BSSN::ML_metric
+#        ML_BSSN::ML_trace_curv
+#        ML_BSSN::ML_curv
+#        ML_BSSN::ML_Gamma
+#        ML_BSSN::ML_lapse
+#        ML_BSSN::ML_dtlapse
+#        ML_BSSN::ML_shift
+#        ML_BSSN::ML_dtshift
+#        ML_BSSN::ML_log_confacrhs
+#        ML_BSSN::ML_metricrhs
+#        ML_BSSN::ML_Gammarhs
+#        ML_BSSN::ML_trace_curvrhs
+#        ML_BSSN::ML_curvrhs
+#        ML_BSSN::ML_curvrhs
+#        ML_BSSN::ML_lapserhs
+#        ML_BSSN::ML_dtlapserhs
+#        ML_BSSN::ML_shiftrhs
+#        ML_BSSN::ML_dtshiftrhs
 
 IOASCII::one_file_per_group = yes
+IOASCII::out0D_every        = 32
+IOASCII::out0D_vars         = "
+        IsolatedHorizon::ih_shapes
+        IsolatedHorizon::ih_state
+        IsolatedHorizon::ih_grid_int
+        IsolatedHorizon::ih_grid_real
+        IsolatedHorizon::ih_shapes
+        IsolatedHorizon::ih_coordinates
+        IsolatedHorizon::ih_tetrad_l
+        IsolatedHorizon::ih_tetrad_n
+        IsolatedHorizon::ih_tetrad_m
+        IsolatedHorizon::ih_newman_penrose
+        IsolatedHorizon::ih_weyl_scalars
+        IsolatedHorizon::ih_twometric
+        IsolatedHorizon::ih_killing_vector
+        IsolatedHorizon::ih_killed_twometric
+        IsolatedHorizon::ih_scalars
+        IsolatedHorizon::ih_invariant_coordinates
+        IsolatedHorizon::ih_multipole_moments
+        IsolatedHorizon::ih_3determinant
+"
+
 IOASCII::out1D_every        = 32
 IOASCII::out1D_vars         = "
         ADMBase::metric
         ADMBase::curv
         ADMBase::lapse
         ADMBase::shift
-        ADMAnalysis::trace_of_K
-        ADMAnalysis::ricci_scalar
-        ADMConstraints::Hamiltonian
-        ADMConstraints::momentum
-        ML_BSSN::ML_log_confac
-        ML_BSSN::ML_metric
-        ML_BSSN::ML_trace_curv
-        ML_BSSN::ML_curv
-        ML_BSSN::ML_Gamma
         ML_BSSN::Ham
         ML_BSSN::mom
         ML_BSSN::cons_detg
         ML_BSSN::cons_Gamma
         ML_BSSN::cons_traceA
-        ML_BSSN::ML_log_confacrhs
-        ML_BSSN::ML_metricrhs
-        ML_BSSN::ML_Gammarhs
-        ML_BSSN::ML_trace_curvrhs
-        ML_BSSN::ML_curvrhs
+        IsolatedHorizon::ih_shapes
+        IsolatedHorizon::ih_newman_penrose
+        IsolatedHorizon::ih_weyl_scalars
+        IsolatedHorizon::ih_killing_vector
+        IsolatedHorizon::ih_killed_twometric
+        IsolatedHorizon::ih_3determinant
 "
+#        ML_BSSN::ML_log_confac
+#        ML_BSSN::ML_metric
+#        ML_BSSN::ML_trace_curv
+#        ML_BSSN::ML_curv
+#        ML_BSSN::ML_Gamma
+#        ML_BSSN::ML_lapse
+#        ML_BSSN::ML_dtlapse
+#        ML_BSSN::ML_shift
+#        ML_BSSN::ML_dtshift
+#        ML_BSSN::ML_log_confacrhs
+#        ML_BSSN::ML_metricrhs
+#        ML_BSSN::ML_Gammarhs
+#        ML_BSSN::ML_trace_curvrhs
+#        ML_BSSN::ML_curvrhs
+#        ML_BSSN::ML_curvrhs
+#        ML_BSSN::ML_lapserhs
+#        ML_BSSN::ML_dtlapserhs
+#        ML_BSSN::ML_shiftrhs
+#        ML_BSSN::ML_dtshiftrhs
 
 
 #--- driver
 
+Carpet::init_fill_timelevels = yes
+
 Cactus::cctk_itlast = 1024
 Carpet::use_buffer_zones      = yes
+Carpet::use_tapered_grids     = yes
 
-CarpetLib::interleave_communications = yes
-CarpetLib::vary_tags                 = yes
-CarpetLib::combine_sends             = yes
-CarpetLib::reduce_mpi_waitall        = yes
 CarpetLib::print_memstats_every      = 1024
-Carpet::regrid_in_level_mode         = no
-Carpet::output_timers_every          = 1024
 CarpetLib::print_timestats_every     = 1024
-Carpet::print_timestats_every        = 1
+Carpet::output_timers_every          = 1024
+Carpet::print_timestats_every        = 1024
 
-carpet::verbose = no
+carpet::verbose = yes
 carpet::veryverbose = no
 
 #--- Carpet prolongation order settings
 
-Carpet::prolongation_order_space                = 3
-Carpet::prolongation_order_time                 = 2
+Carpet::prolongation_order_space                = 5
+Carpet::prolongation_order_time                 = 0
+
 
 
 # MoL time integration
 
-MoL::ODE_Method = RK4
-Carpet::num_integrator_substeps = 4
+MoL::ODE_Method             = "RK4"
+MoL::MoL_Intermediate_Steps = 4
+MoL::MoL_Num_Scratch_Levels = 1
 
-#mol::ode_method				=	"generic"
-#mol::generic_type				=	"RK"
-MoL::MoL_Intermediate_Steps 			= 	4
-MoL::MoL_Num_Scratch_Levels			=	1
-time::dtfac                             	= 	0.25
+Time::dtfac = 0.25
 
 #--- grid and symmetries
 
@@ -196,11 +235,8 @@ carpetregrid::refinement_levels         	= 7
 ADMBase::initial_data      = "exact"
 ADMBase::initial_lapse     = "exact"
 ADMBase::initial_shift     = "exact"
-ADMBase::initial_dtlapse   = "zero"
-ADMBase::initial_dtshift   = "zero"
-ADMBase::lapse_timelevels  = 3
-ADMBase::shift_timelevels  = 3
-ADMBase::metric_timelevels = 3
+ADMBase::initial_dtlapse   = "exact"
+ADMBase::initial_dtshift   = "exact"
 
 Exact::exact_model = "Kerr/Kerr-Schild"
 Exact::Kerr_KerrSchild__mass = 1.0
@@ -213,7 +249,7 @@ Exact::Kerr_KerrSchild__epsilon   = 1.0
 
 #--- ML_BSSN
 
-ML_BSSN::harmonicN       = 0      # 1+log
+ML_BSSN::harmonicN       = 1      # 1+log
 ML_BSSN::harmonicF       = 2.0    # 1+log
 ML_BSSN::ShiftGammaCoeff = 0.75
 ML_BSSN::BetaDriver      = 0.5
@@ -228,11 +264,11 @@ ML_BSSN::ML_dtlapse_bound    = "radiative"
 ML_BSSN::ML_shift_bound      = "radiative"
 ML_BSSN::ML_dtshift_bound    = "radiative"
 
-ADMMacros::spatial_order = 4
-
 #--- Dissipation
 
-Dissipation::vars = "
+Dissipation::order  = 5
+Dissipation::epsdis = 0.3
+Dissipation::vars   = "
 	ML_BSSN::ML_Gamma
   	ML_BSSN::ML_lapse
   	ML_BSSN::ML_shift
@@ -244,11 +280,39 @@ Dissipation::vars = "
 
 #--- Analysis
 
-admconstraints::constraints_timelevels          =       3
-admconstraints::constraints_persist             =       yes
-admconstraints::bound                           =       "static"
-
 nanchecker::check_every                         =       1
 nanchecker::check_vars                          =       "admbase::gxx"
 nanchecker::action_if_found                     =       "terminate"
 
+#--- Horizons
+
+SphericalSurface::nsurfaces = 1
+SphericalSurface::maxntheta = 39
+SphericalSurface::maxnphi   = 76
+
+SphericalSurface::ntheta      [0] = 39
+SphericalSurface::nphi        [0] = 76
+SphericalSurface::nghoststheta[0] = 2
+SphericalSurface::nghostsphi  [0] = 2
+
+AHFinderDirect::find_every = 32
+AHFinderDirect::run_at_CCTK_POST_RECOVER_VARIABLES = no
+
+AHFinderDirect::geometry_interpolator_name = "Lagrange polynomial interpolation"
+AHFinderDirect::geometry_interpolator_pars = "order=4"
+AHFinderDirect::surface_interpolator_name  = "Lagrange polynomial interpolation"
+AHFinderDirect::surface_interpolator_pars  = "order=4"
+
+AHFinderDirect::N_horizons = 1
+
+AHFinderDirect::initial_guess__coord_sphere__radius  [1] = 2.0
+AHFinderDirect::which_surface_to_store_info          [1] = 0
+AHFinderDirect::reset_horizon_after_not_finding      [1] = no
+
+IsolatedHorizon::verbose              = yes
+IsolatedHorizon::interpolator         = "Lagrange polynomial interpolation"
+IsolatedHorizon::interpolator_options = "order=4"
+IsolatedHorizon::spatial_order        = 4
+
+IsolatedHorizon::num_horizons     = 1
+IsolatedHorizon::surface_index[0] = 0
