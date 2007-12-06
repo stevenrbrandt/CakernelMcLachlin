@@ -812,8 +812,8 @@ intParameters =
 {
   {
     Name -> harmonicN,
-    Description -> "d/dt alpha = - f alpha^n K  (harmonic=1, 1+log=0)",
-    Default -> 1
+    Description -> "d/dt alpha = - f alpha^n K  (harmonic=2, 1+log=1)",
+    Default -> 2
   },
   {
     Name -> ShiftAlphaPower,
