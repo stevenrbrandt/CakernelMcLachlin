@@ -69,7 +69,7 @@ restricted:
 CCTK_INT harmonicN "harmonicN"
 {
   *:* :: "no restrictions"
-} 1
+} 2
 
 restricted:
 CCTK_INT ShiftAlphaPower "ShiftAlphaPower"
