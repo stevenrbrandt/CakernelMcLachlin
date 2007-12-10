@@ -54,6 +54,18 @@ CCTK_REAL BetaDriver "BetaDriver"
 } 0
 
 restricted:
+CCTK_REAL LapseAdvectionCoeff "LapseAdvectionCoeff"
+{
+  "*:*" :: "no restrictions"
+} 1.
+
+restricted:
+CCTK_REAL ShiftAdvectionCoeff "ShiftAdvectionCoeff"
+{
+  "*:*" :: "no restrictions"
+} 1.
+
+restricted:
 CCTK_INT harmonicN "harmonicN"
 {
   *:* :: "no restrictions"

@@ -99,6 +99,7 @@ void ML_BSSN_enforce_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCTK_REAL no
     CCTK_REAL trA = INITVALUE;
     
     /* Declare local copies of grid functions */
+    CCTK_REAL alphaL = INITVALUE;
     CCTK_REAL At11L = INITVALUE, At12L = INITVALUE, At13L = INITVALUE, At22L = INITVALUE, At23L = INITVALUE, At33L = INITVALUE;
     CCTK_REAL gt11L = INITVALUE, gt12L = INITVALUE, gt13L = INITVALUE, gt22L = INITVALUE, gt23L = INITVALUE, gt33L = INITVALUE;
     /* Declare precomputed derivatives*/
@@ -106,6 +107,7 @@ void ML_BSSN_enforce_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCTK_REAL no
     /* Declare derivatives */
     
     /* Assign local copies of grid functions */
+    alphaL = alpha[index];
     At11L = At11[index];
     At12L = At12[index];
     At13L = At13[index];
@@ -156,8 +158,11 @@ void ML_BSSN_enforce_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCTK_REAL no
     
     At33L  =  At33L - gt33L*kthird*trA;
     
+    alphaL  =  fmax(1.e-10,alphaL);
+    
     
     /* Copy local copies back to grid functions */
+    alpha[index] = alphaL;
     At11[index] = At11L;
     At12[index] = At12L;
     At13[index] = At13L;

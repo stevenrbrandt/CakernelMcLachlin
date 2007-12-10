@@ -133,6 +133,9 @@ void ML_BSSN_convertToADMBase_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCT
     CCTK_REAL PDstandardNth1alpha = INITVALUE;
     CCTK_REAL PDstandardNth2alpha = INITVALUE;
     CCTK_REAL PDstandardNth3alpha = INITVALUE;
+    CCTK_REAL PDstandardNth1beta1 = INITVALUE;
+    CCTK_REAL PDstandardNth2beta1 = INITVALUE;
+    CCTK_REAL PDstandardNth3beta1 = INITVALUE;
     
     /* Assign local copies of grid functions */
     AL = A[index];
@@ -166,6 +169,9 @@ void ML_BSSN_convertToADMBase_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCT
     PDstandardNth1alpha = PDstandardNth1(alpha, i, j, k);
     PDstandardNth2alpha = PDstandardNth2(alpha, i, j, k);
     PDstandardNth3alpha = PDstandardNth3(alpha, i, j, k);
+    PDstandardNth1beta1 = PDstandardNth1(beta1, i, j, k);
+    PDstandardNth2beta1 = PDstandardNth2(beta1, i, j, k);
+    PDstandardNth3beta1 = PDstandardNth3(beta1, i, j, k);
     
     /* Precompute derivatives (old style) */
     
@@ -228,14 +234,17 @@ void ML_BSSN_convertToADMBase_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCT
     
     betazL  =  beta3L;
     
-    dtalpL  =  beta1L*PDstandardNth1alpha + beta2L*PDstandardNth2alpha + beta3L*PDstandardNth3alpha - 
-        AL*harmonicF*pow(alphaL,harmonicN);
+    dtalpL  =  LapseAdvectionCoeff*(beta1L*PDstandardNth1alpha + beta2L*PDstandardNth2alpha + beta3L*PDstandardNth3alpha) + 
+        harmonicF*(AL*(-1 + LapseAdvectionCoeff) - LapseAdvectionCoeff*trKL)*pow(alphaL,harmonicN);
     
-    dtbetaxL  =  B1L*ShiftGammaCoeff*pow(alphaL,ShiftAlphaPower);
+    dtbetaxL  =  (beta1L*PDstandardNth1beta1 + beta2L*PDstandardNth2beta1 + beta3L*PDstandardNth3beta1)*
+         ShiftAdvectionCoeff + B1L*ShiftGammaCoeff;
     
-    dtbetayL  =  B2L*ShiftGammaCoeff*pow(alphaL,ShiftAlphaPower);
+    dtbetayL  =  (beta1L*PDstandardNth1beta1 + beta2L*PDstandardNth2beta1 + beta3L*PDstandardNth3beta1)*
+         ShiftAdvectionCoeff + B2L*ShiftGammaCoeff;
     
-    dtbetazL  =  B3L*ShiftGammaCoeff*pow(alphaL,ShiftAlphaPower);
+    dtbetazL  =  (beta1L*PDstandardNth1beta1 + beta2L*PDstandardNth2beta1 + beta3L*PDstandardNth3beta1)*
+         ShiftAdvectionCoeff + B3L*ShiftGammaCoeff;
     
     
     /* Copy local copies back to grid functions */

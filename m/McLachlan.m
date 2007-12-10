@@ -281,15 +281,22 @@ convertFromADMBaseCalcBSSNGamma =
     Xt[ua] -> gtu[ub,uc] Gt[ua,lb,lc],
     
     (* TODO: check this *)
-    A -> - (dtalp - Lie[alpha, beta]) / (harmonicF alpha^harmonicN),
-    
+    (* A -> - (dtalp - Lie[alpha, beta]) / (harmonicF alpha^harmonicN), *)
+    A -> - dtalp / (harmonicF alpha^harmonicN) ( LapseAdvectionCoeff - 1.0 ),
+
     (* TODO: check this *)
     (* B1 -> dtbetax / (ShiftGammaCoeff alpha^ShiftAlphaPower) *)
     (* B2 -> dtbetay / (ShiftGammaCoeff alpha^ShiftAlphaPower) *)
     (* B3 -> dtbetaz / (ShiftGammaCoeff alpha^ShiftAlphaPower) *)
-    B1 -> ShiftGammaCoeff dtbetax / ((ShiftGammaCoeff^2 + 1.0*^-100) alpha^ShiftAlphaPower),
+    (* B1 -> ShiftGammaCoeff dtbetax / ((ShiftGammaCoeff^2 + 1.0*^-100) alpha^ShiftAlphaPower),
     B2 -> ShiftGammaCoeff dtbetay / ((ShiftGammaCoeff^2 + 1.0*^-100) alpha^ShiftAlphaPower),
-    B3 -> ShiftGammaCoeff dtbetaz / ((ShiftGammaCoeff^2 + 1.0*^-100) alpha^ShiftAlphaPower)
+    B3 -> ShiftGammaCoeff dtbetaz / ((ShiftGammaCoeff^2 + 1.0*^-100) alpha^ShiftAlphaPower) *)
+    B1    -> 1/ShiftGammaCoeff ( + dtbetax
+                                 - ShiftAdvectionCoeff beta[ua] PD[B1,la] ),
+    B2    -> 1/ShiftGammaCoeff ( + dtbetay
+                                 - ShiftAdvectionCoeff beta[ua] PD[B2,la] ),
+    B3    -> 1/ShiftGammaCoeff ( + dtbetaz
+                                 - ShiftAdvectionCoeff beta[ua] PD[B3,la] )
   }
 }
 
@@ -355,10 +362,20 @@ convertToADMBaseCalcBSSN =
     betay    -> beta2,
     betaz    -> beta3,
     (* see RHS *)
-    dtalp    -> - harmonicF alpha^harmonicN A + Lie[alpha, beta],
+(*    dtalp    -> - harmonicF alpha^harmonicN A + Lie[alpha, beta],
     dtbetax  -> ShiftGammaCoeff alpha^ShiftAlphaPower B1,
     dtbetay  -> ShiftGammaCoeff alpha^ShiftAlphaPower B2,
-    dtbetaz  -> ShiftGammaCoeff alpha^ShiftAlphaPower B3
+    dtbetaz  -> ShiftGammaCoeff alpha^ShiftAlphaPower B3 *)
+    
+    dtalp    -> - harmonicF alpha^harmonicN (
+                  ( 1 - LapseAdvectionCoeff) A + LapseAdvectionCoeff trK )
+                + LapseAdvectionCoeff beta[ua] PD[alpha,la],
+    dtbetax  -> + ShiftGammaCoeff B1
+                + ShiftAdvectionCoeff beta[ub] PD[beta[ua],lb],
+    dtbetay  -> + ShiftGammaCoeff  B2
+                + ShiftAdvectionCoeff beta[ub] PD[beta[ua],lb],
+    dtbetaz  -> + ShiftGammaCoeff B3
+                + ShiftAdvectionCoeff beta[ub] PD[beta[ua],lb]
   }
 }
 
@@ -528,12 +545,22 @@ evolCalcBSSN =
                       + Lie[At[la,lb], beta] - (2/3) At[la,lb] PD[beta[uc],lc], *)
     
     (* dot[alpha] -> - harmonicF alpha^harmonicN trK, *)
-    dot[alpha] -> - harmonicF alpha^harmonicN A + Lie[alpha, beta],
+    (* dot[alpha] -> - harmonicF alpha^harmonicN A + Lie[alpha, beta], *)
+    dot[alpha] -> - harmonicF alpha^harmonicN ( 
+                    ( 1 - LapseAdvectionCoeff) A + LapseAdvectionCoeff trK )
+                  + LapseAdvectionCoeff beta[ua] PD[alpha,la],
     (* TODO: is the above Lie derivative correct? *)
-    dot[A]     -> dot[trK] - AlphaDriver A,
+
+    dot[A]     -> ( 1 - LapseAdvectionCoeff ) ( dot[trK] - AlphaDriver A ),
     (* dot[beta[ua]] -> eta Xt[ua], *)
-    dot[beta[ua]] -> ShiftGammaCoeff alpha^ShiftAlphaPower B[ua],
-    dot[B[ua]]    -> dot[Xt[ua]] - BetaDriver B[ua]
+    (* dot[beta[ua]] -> ShiftGammaCoeff alpha^ShiftAlphaPower B[ua], *)
+
+    dot[beta[ua]] -> + ShiftGammaCoeff B[ua]
+                     + ShiftAdvectionCoeff beta[ub] PD[beta[ua],lb],
+
+    dot[B[ua]]    -> + dot[Xt[ua]] - BetaDriver B[ua]
+                     + ShiftAdvectionCoeff beta[ub] ( + PD[B[ua],lb]
+                                                      - PD[Xt[ua],lb] )
     (* TODO: is there a Lie derivative of the shift missing? *)
   }
 }
@@ -600,7 +627,9 @@ enforceCalcBSSN =
     
     trA -> gtu[ua,ub] At[la,lb],
     
-    At[la,lb] -> At[la,lb] - (1/3) gt[la,lb] trA
+    At[la,lb] -> At[la,lb] - (1/3) gt[la,lb] trA,
+
+    alpha -> Max[alpha,10^(-10)]
   }
 }
 
@@ -830,8 +859,19 @@ realParameters =
   {
     Name -> BetaDriver,
     Default -> 0
+  },
+  {
+    Name -> LapseAdvectionCoeff,
+    Description -> "Factor in front of the shift advection terms in 1+log",
+    Default -> 1.
+  },
+  {
+    Name -> ShiftAdvectionCoeff,
+    Description -> "Factor in front of the shift advection terms in gamma driver",
+    Default -> 1.
   }
 };
+
 
 (******************************************************************************)
 (* Construct the thorns *)
