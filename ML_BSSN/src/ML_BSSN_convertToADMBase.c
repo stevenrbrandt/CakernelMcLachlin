@@ -279,5 +279,5 @@ void ML_BSSN_convertToADMBase(CCTK_ARGUMENTS)
   DECLARE_CCTK_ARGUMENTS
   DECLARE_CCTK_PARAMETERS
   
-  GenericFD_LoopOverInterior(cctkGH, &ML_BSSN_convertToADMBase_Body);
+  GenericFD_LoopOverEverything(cctkGH, &ML_BSSN_convertToADMBase_Body);
 }

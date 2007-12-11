@@ -347,7 +347,6 @@ convertToADMBaseCalcBSSN =
 {
   Name -> "ML_BSSN_convertToADMBase",
   Schedule -> {"IN MoL_PostStep AFTER ML_BSSN_ApplyBCs AFTER ML_BSSN_enforce"},
-  Where -> Interior,
   Shorthands -> {e4phi, g[la,lb], K[la,lb]},
   Equations -> 
   {
