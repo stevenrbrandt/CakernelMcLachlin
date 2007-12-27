@@ -1,5 +1,5 @@
-/*  File produced by user diener */
-/*  Produced with Mathematica Version 6.0 for Linux x86 (32-bit) (April 20, 2007) */
+/*  File produced by user eschnett */
+/*  Produced with Mathematica Version 6.0 for Mac OS X x86 (32-bit) (April 20, 2007) */
 
 /*  Mathematica script written by Ian Hinder and Sascha Husa */
 
@@ -34,15 +34,15 @@ void ML_ADM_constraints_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCTK_REAL
   
   
   /* Declare predefined quantities */
-  CCTK_REAL qp1o12dx = INITVALUE;
-  CCTK_REAL qp1o12dy = INITVALUE;
-  CCTK_REAL qp1o12dz = INITVALUE;
-  CCTK_REAL qp1o144dxdy = INITVALUE;
-  CCTK_REAL qp1o144dxdz = INITVALUE;
-  CCTK_REAL qp1o144dydz = INITVALUE;
-  CCTK_REAL qpm1o12dx2 = INITVALUE;
-  CCTK_REAL qpm1o12dy2 = INITVALUE;
-  CCTK_REAL qpm1o12dz2 = INITVALUE;
+  CCTK_REAL p1o12dx = INITVALUE;
+  CCTK_REAL p1o12dy = INITVALUE;
+  CCTK_REAL p1o12dz = INITVALUE;
+  CCTK_REAL p1o144dxdy = INITVALUE;
+  CCTK_REAL p1o144dxdz = INITVALUE;
+  CCTK_REAL p1o144dydz = INITVALUE;
+  CCTK_REAL pm1o12dx2 = INITVALUE;
+  CCTK_REAL pm1o12dy2 = INITVALUE;
+  CCTK_REAL pm1o12dz2 = INITVALUE;
   
   if (verbose > 1)
   {
@@ -73,15 +73,15 @@ void ML_ADM_constraints_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCTK_REAL
   hdzi = 0.5 * dzi;
   
   /* Initialize predefined quantities */
-  qp1o12dx = INV(dx)/12.;
-  qp1o12dy = INV(dy)/12.;
-  qp1o12dz = INV(dz)/12.;
-  qp1o144dxdy = (INV(dx)*INV(dy))/144.;
-  qp1o144dxdz = (INV(dx)*INV(dz))/144.;
-  qp1o144dydz = (INV(dy)*INV(dz))/144.;
-  qpm1o12dx2 = -pow(dx,-2)/12.;
-  qpm1o12dy2 = -pow(dy,-2)/12.;
-  qpm1o12dz2 = -pow(dz,-2)/12.;
+  p1o12dx = INV(dx)/12.;
+  p1o12dy = INV(dy)/12.;
+  p1o12dz = INV(dz)/12.;
+  p1o144dxdy = (INV(dx)*INV(dy))/144.;
+  p1o144dxdz = (INV(dx)*INV(dz))/144.;
+  p1o144dydz = (INV(dy)*INV(dz))/144.;
+  pm1o12dx2 = -pow(dx,-2)/12.;
+  pm1o12dy2 = -pow(dy,-2)/12.;
+  pm1o12dz2 = -pow(dz,-2)/12.;
   
   /* Loop over the grid points */
   LC_LOOP3 (ML_ADM_constraints,
