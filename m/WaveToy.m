@@ -17,7 +17,22 @@ derivatives =
   PDstandardNth[i_]     -> StandardCenteredDifferenceOperator[1,derivOrder/2,i],
   PDstandardNth[i_, i_] -> StandardCenteredDifferenceOperator[2,derivOrder/2,i],
   PDstandardNth[i_, j_] -> StandardCenteredDifferenceOperator[1,derivOrder/2,i]
-                           StandardCenteredDifferenceOperator[1,derivOrder/2,j]
+                           StandardCenteredDifferenceOperator[1,derivOrder/2,j],
+  PDstandardNth[i_, i_, i_] ->
+    StandardCenteredDifferenceOperator[3,derivOrder/2,i],
+  PDstandardNth[i_, i_, j_] ->
+    StandardCenteredDifferenceOperator[2,derivOrder/2,i]
+    StandardCenteredDifferenceOperator[1,derivOrder/2,j],
+  PDstandardNth[i_, j_, i_] ->
+    StandardCenteredDifferenceOperator[2,derivOrder/2,i]
+    StandardCenteredDifferenceOperator[1,derivOrder/2,j],
+  PDstandardNth[j_, i_, i_] ->
+    StandardCenteredDifferenceOperator[2,derivOrder/2,i]
+    StandardCenteredDifferenceOperator[1,derivOrder/2,j],
+  PDstandardNth[i_, j_, k_] ->
+    StandardCenteredDifferenceOperator[1,derivOrder/2,i]
+    StandardCenteredDifferenceOperator[1,derivOrder/2,j]
+    StandardCenteredDifferenceOperator[1,derivOrder/2,k]
 };
 
 (* local derivatives *)
@@ -30,6 +45,9 @@ PDglob[var_,lx_,ly_] :=
 
 UseGlobalDerivs = True;
 PD := If [UseGlobalDerivs, PDglob, PDloc];
+
+(* timelevels *)
+evolutionTimelevels = 2;
 
 KD = KroneckerDelta;
 
@@ -229,6 +247,7 @@ CreateKrancThornTT [groups, ".", "ML_WaveToy",
   Calculations -> calculations,
   DeclaredGroups -> declaredGroupNames,
   PartialDerivatives -> derivatives,
+  EvolutionTimelevels -> evolutionTimelevels,
   InheritedImplementations -> inheritedImplementations
 ];
 
@@ -245,5 +264,6 @@ CreateKrancThornTT [groupsFO, ".", "ML_FOWaveToy",
   Calculations -> calculationsFO,
   DeclaredGroups -> declaredGroupNamesFO,
   PartialDerivatives -> derivatives,
+  EvolutionTimelevels -> evolutionTimelevels,
   InheritedImplementations -> inheritedImplementations
 ];

@@ -43,13 +43,13 @@ CCTK_REAL WT_urhs type=GF timelevels=1 tags='tensortypealias="Scalar" tensorweig
 } "WT_urhs"
 
 public:
-CCTK_REAL WT_rho type=GF timelevels=3 tags='tensortypealias="Scalar" tensorweight=1.0000000000000000000'
+CCTK_REAL WT_rho type=GF timelevels=2 tags='tensortypealias="Scalar" tensorweight=1.0000000000000000000'
 {
   rho
 } "WT_rho"
 
 public:
-CCTK_REAL WT_u type=GF timelevels=3 tags='tensortypealias="Scalar" tensorweight=1.0000000000000000000'
+CCTK_REAL WT_u type=GF timelevels=2 tags='tensortypealias="Scalar" tensorweight=1.0000000000000000000'
 {
   u
 } "WT_u"

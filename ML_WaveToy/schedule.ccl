@@ -8,9 +8,9 @@ STORAGE: WT_rhorhs[1]
 
 STORAGE: WT_urhs[1]
 
-STORAGE: WT_rho[3]
+STORAGE: WT_rho[2]
 
-STORAGE: WT_u[3]
+STORAGE: WT_u[2]
 
 schedule ML_WaveToy_Startup at STARTUP
 {
