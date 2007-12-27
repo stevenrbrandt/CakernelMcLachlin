@@ -1,5 +1,5 @@
-/*  File produced by user eschnett */
-/*  Produced with Mathematica Version 6.0 for Mac OS X x86 (32-bit) (April 20, 2007) */
+/*  File produced by user diener */
+/*  Produced with Mathematica Version 6.0 for Linux x86 (32-bit) (April 20, 2007) */
 
 /*  Mathematica script written by Ian Hinder and Sascha Husa */
 
@@ -170,6 +170,15 @@ void ML_BSSN_RHS_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCTK_REAL normal
     CCTK_REAL PDstandardNth1At33 = INITVALUE;
     CCTK_REAL PDstandardNth2At33 = INITVALUE;
     CCTK_REAL PDstandardNth3At33 = INITVALUE;
+    CCTK_REAL PDstandardNth1B1 = INITVALUE;
+    CCTK_REAL PDstandardNth2B1 = INITVALUE;
+    CCTK_REAL PDstandardNth3B1 = INITVALUE;
+    CCTK_REAL PDstandardNth1B2 = INITVALUE;
+    CCTK_REAL PDstandardNth2B2 = INITVALUE;
+    CCTK_REAL PDstandardNth3B2 = INITVALUE;
+    CCTK_REAL PDstandardNth1B3 = INITVALUE;
+    CCTK_REAL PDstandardNth2B3 = INITVALUE;
+    CCTK_REAL PDstandardNth3B3 = INITVALUE;
     CCTK_REAL PDstandardNth1beta1 = INITVALUE;
     CCTK_REAL PDstandardNth2beta1 = INITVALUE;
     CCTK_REAL PDstandardNth3beta1 = INITVALUE;
@@ -366,6 +375,15 @@ void ML_BSSN_RHS_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCTK_REAL normal
     PDstandardNth1At33 = PDstandardNth1(At33, i, j, k);
     PDstandardNth2At33 = PDstandardNth2(At33, i, j, k);
     PDstandardNth3At33 = PDstandardNth3(At33, i, j, k);
+    PDstandardNth1B1 = PDstandardNth1(B1, i, j, k);
+    PDstandardNth2B1 = PDstandardNth2(B1, i, j, k);
+    PDstandardNth3B1 = PDstandardNth3(B1, i, j, k);
+    PDstandardNth1B2 = PDstandardNth1(B2, i, j, k);
+    PDstandardNth2B2 = PDstandardNth2(B2, i, j, k);
+    PDstandardNth3B2 = PDstandardNth3(B2, i, j, k);
+    PDstandardNth1B3 = PDstandardNth1(B3, i, j, k);
+    PDstandardNth2B3 = PDstandardNth2(B3, i, j, k);
+    PDstandardNth3B3 = PDstandardNth3(B3, i, j, k);
     PDstandardNth1beta1 = PDstandardNth1(beta1, i, j, k);
     PDstandardNth2beta1 = PDstandardNth2(beta1, i, j, k);
     PDstandardNth3beta1 = PDstandardNth3(beta1, i, j, k);
@@ -1112,22 +1130,32 @@ void ML_BSSN_RHS_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCTK_REAL normal
         2*(At13L*PDstandardNth3beta1 + At23L*PDstandardNth3beta2 + At33L*PDstandardNth3beta3) + 
         em4phi*(Ats33 - g33*kthird*trAts) + alphaL*(-2*(At13L*Atm13 + At23L*Atm23 + At33L*Atm33) + At33L*trKL);
     
-    alpharhsL  =  beta1L*PDstandardNth1alpha + beta2L*PDstandardNth2alpha + beta3L*PDstandardNth3alpha - 
-        AL*harmonicF*pow(alphaL,harmonicN);
+    alpharhsL  =  LapseAdvectionCoeff*(beta1L*PDstandardNth1alpha + beta2L*PDstandardNth2alpha + 
+           beta3L*PDstandardNth3alpha) + harmonicF*(AL*(-1 + LapseAdvectionCoeff) - LapseAdvectionCoeff*trKL)*
+         pow(alphaL,harmonicN);
     
-    ArhsL  =  -(AL*AlphaDriver) + trKrhsL;
+    ArhsL  =  (-1 + LapseAdvectionCoeff)*(AL*AlphaDriver - trKrhsL);
     
-    beta1rhsL  =  B1L*ShiftGammaCoeff*pow(alphaL,ShiftAlphaPower);
+    beta1rhsL  =  (beta1L*PDstandardNth1beta1 + beta2L*PDstandardNth2beta1 + beta3L*PDstandardNth3beta1)*
+         ShiftAdvectionCoeff + B1L*ShiftGammaCoeff;
     
-    beta2rhsL  =  B2L*ShiftGammaCoeff*pow(alphaL,ShiftAlphaPower);
+    beta2rhsL  =  (beta1L*PDstandardNth1beta2 + beta2L*PDstandardNth2beta2 + beta3L*PDstandardNth3beta2)*
+         ShiftAdvectionCoeff + B2L*ShiftGammaCoeff;
     
-    beta3rhsL  =  B3L*ShiftGammaCoeff*pow(alphaL,ShiftAlphaPower);
+    beta3rhsL  =  (beta1L*PDstandardNth1beta3 + beta2L*PDstandardNth2beta3 + beta3L*PDstandardNth3beta3)*
+         ShiftAdvectionCoeff + B3L*ShiftGammaCoeff;
     
-    B1rhsL  =  -(B1L*BetaDriver) + Xt1rhsL;
+    B1rhsL  =  -(B1L*BetaDriver) + (beta1L*(PDstandardNth1B1 - PDstandardNth1Xt1) + 
+           beta2L*(PDstandardNth2B1 - PDstandardNth2Xt1) + beta3L*(PDstandardNth3B1 - PDstandardNth3Xt1))*
+         ShiftAdvectionCoeff + Xt1rhsL;
     
-    B2rhsL  =  -(B2L*BetaDriver) + Xt2rhsL;
+    B2rhsL  =  -(B2L*BetaDriver) + (beta1L*(PDstandardNth1B2 - PDstandardNth1Xt2) + 
+           beta2L*(PDstandardNth2B2 - PDstandardNth2Xt2) + beta3L*(PDstandardNth3B2 - PDstandardNth3Xt2))*
+         ShiftAdvectionCoeff + Xt2rhsL;
     
-    B3rhsL  =  -(B3L*BetaDriver) + Xt3rhsL;
+    B3rhsL  =  -(B3L*BetaDriver) + (beta1L*(PDstandardNth1B3 - PDstandardNth1Xt3) + 
+           beta2L*(PDstandardNth2B3 - PDstandardNth2Xt3) + beta3L*(PDstandardNth3B3 - PDstandardNth3Xt3))*
+         ShiftAdvectionCoeff + Xt3rhsL;
     
     
     /* Copy local copies back to grid functions */
