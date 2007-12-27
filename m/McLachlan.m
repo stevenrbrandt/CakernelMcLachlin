@@ -45,6 +45,9 @@ PDglob[var_,lx_,ly_] :=
 UseGlobalDerivs = False;
 PD := If [UseGlobalDerivs, PDglob, PDloc];
 
+(* timelevels *)
+evolutionTimelevels = 2;
+
 KD = KroneckerDelta;
 
 (******************************************************************************)
@@ -111,6 +114,8 @@ pi = N[Pi,40];
 (******************************************************************************)
 (* Groups *)
 (******************************************************************************)
+
+SetGroupTimelevels[g_,tl_] = Join[g, {Timelevels -> tl}];
 
 evolvedGroups =
   {SetGroupName [CreateGroupFromTensor [g[la,lb]], "ml_metric"],
@@ -859,6 +864,7 @@ CreateKrancThornTT [groups, ".", "ML_ADM",
   Calculations -> calculations,
   DeclaredGroups -> declaredGroupNames,
   PartialDerivatives -> derivatives,
+  EvolutionTimelevels -> evolutionTimelevels,
   InheritedImplementations -> inheritedImplementations,
   InheritedKeywordParameters -> inheritedKeywordParameters,
   KeywordParameters -> keywordParameters
@@ -881,6 +887,7 @@ CreateKrancThornTT [groupsBSSN, ".", "ML_BSSN",
   Calculations -> calculationsBSSN,
   DeclaredGroups -> declaredGroupNamesBSSN,
   PartialDerivatives -> derivatives,
+  EvolutionTimelevels -> evolutionTimelevels,
   InheritedImplementations -> inheritedImplementations,
   InheritedKeywordParameters -> inheritedKeywordParameters,
   KeywordParameters -> keywordParameters,
