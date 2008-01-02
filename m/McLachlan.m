@@ -191,7 +191,7 @@ initialCalcBSSN =
 {
   Name -> "ML_BSSN_Minkowski",
   Schedule -> {"IN ADMBase_InitialData"},
-  ConditionalOnKeyword -> {"my_initial_data", "Minkowski"},
+  ConditionalOnKeyword -> {"initial_data", "ML_BSSN__Minkowski"},
   (* Where -> Boundary, *)
   (* Where -> Interior, *)
   Equations -> 
@@ -243,6 +243,7 @@ convertFromADMBaseCalcBSSN =
 {
   Name -> "ML_BSSN_convertFromADMBase",
   Schedule -> {"AT initial AFTER ADMBase_PostInitial"},
+  (* Should only happen if ADMBase::initial_data != ML_BSSN *)
   ConditionalOnKeyword -> {"my_initial_data", "ADMBase"},
   Shorthands -> {g[la,lb], detg, gu[ua,ub], em4phi, K[la,lb]},
   Equations -> 
@@ -283,6 +284,7 @@ convertFromADMBaseCalcBSSNGamma =
 {
   Name -> "ML_BSSN_convertFromADMBaseGamma",
   Schedule -> {"AT initial AFTER ML_BSSN_convertFromADMBase"},
+  (* Should only happen if ADMBase::initial_data != ML_BSSN *)
   ConditionalOnKeyword -> {"my_initial_data", "ADMBase"},
   Where -> Interior,
   Shorthands -> {detgt, gtu[ua,ub], Gt[ua,lb,lc]},
@@ -352,6 +354,8 @@ convertToADMBaseCalcBSSN =
 {
   Name -> "ML_BSSN_convertToADMBase",
   Schedule -> {"IN MoL_PostStep AFTER ML_BSSN_ApplyBCs AFTER ML_BSSN_enforce"},
+  ConditionalOnKeyword -> {"evolution_method", "ML_BSSN"},
+  Where -> Interior,
   Shorthands -> {e4phi, g[la,lb], K[la,lb]},
   Equations -> 
   {
@@ -428,6 +432,16 @@ evolCalcBSSN =
 {
   Name -> "ML_BSSN_RHS",
   Schedule -> {"IN MoL_CalcRHS", "AT analysis"},
+  ConditionalOnKeyword -> {"evolution_method", "ML_BSSN"},
+  TriggerGroups -> {"ML_log_confacrhs",
+                    "ML_metricrhs"    ,
+                    "ML_Gammarhs"     ,
+                    "ML_trace_curvrhs",
+                    "ML_curvrhs"      ,
+                    "ML_lapserhs"     ,
+                    "ML_dtlapserhs"   ,
+                    "ML_shiftrhs"     ,
+                    "ML_dtshiftrhs"   },
   Where -> Interior,
   Shorthands -> {detgt, ddetgt[la], gtu[ua,ub],
                  dgtu[ua,ub,lc], ddgtu[ua,ub,lc,ld], Gt[ua,lb,lc],
@@ -581,9 +595,19 @@ evolCalcBSSN =
 addMatterBSSN =
 {
   Name -> "ML_BSSN_matter",
-  Schedule -> {"IN MoL_CalcRHS AFTER ML_BSSN_RHS",
-               "AT analysis AFTER ML_BSSN_RHS"},
+  Schedule -> {"IN MoL_CalcRHS AFTER ML_BSSN_RHS"},
+  (* ConditionalOnKeyword -> {"evolution_method", "ML_BSSN"}, *)
   ConditionalOnKeyword -> {"SpaceTime", "Space+Matter"},
+  (* Conditional -> {Textual -> "stress_energy_storage && stress_energy_at_RHS"}, *)
+  (*TriggerGroups -> {"ML_log_confacrhs",
+                    "ML_metricrhs"    ,
+                    "ML_Gammarhs"     ,
+                    "ML_trace_curvrhs",
+                    "ML_curvrhs"      ,
+                    "ML_lapserhs"     ,
+                    "ML_dtlapserhs"   ,
+                    "ML_shiftrhs"     ,
+                    "ML_dtshiftrhs"   },*)
   Where -> Interior,
   Shorthands -> {T00, T0[la], T[la,lb], rho, S[la], trS,
                  detgt, gtu[ua,ub], e4phi, em4phi, g[la,lb], gu[ua,ub]},
@@ -628,10 +652,24 @@ addMatterBSSN =
   }
 }
 
+(*
+evolCalcAnalysisBSSN =
+  evolCalcBSSN
+  // DeleteCases [#, Schedule -> _] &
+  // Join [#, { Schedule -> {"AT analysis"},
+                TriggerGroups -> {"ML_metricrhs"}}] &;
+*)
+
+(*
+addMatterAnalysisBSSN =
+               "AT analysis AFTER ML_BSSN_RHS"},
+ *)
+
 enforceCalcBSSN =
 {
   Name -> "ML_BSSN_enforce",
   Schedule -> {"IN MoL_PostStep BEFORE ML_BSSN_BoundConds"},
+  ConditionalOnKeyword -> {"evolution_method", "ML_BSSN"},
   Shorthands -> {detgt, gtu[ua,ub], trA},
   Equations -> 
   {
@@ -678,6 +716,8 @@ constraintsCalcBSSN =
 {
   Name -> "ML_BSSN_constraints",
   Schedule -> {"AT analysis"},
+  ConditionalOnKeyword -> {"evolution_method", "ML_BSSN"},
+  TriggerGroups -> {"Ham", "mom"},
   Where -> Interior,
   Shorthands -> {detgt, ddetgt[la], gtu[ua,ub], Gt[ua,lb,lc], e4phi, em4phi,
                  g[la,lb], detg, gu[ua,ub], ddetg[la], G[ua,lb,lc],
@@ -782,7 +822,9 @@ constraintsMatterBSSN =
 {
   Name -> "ML_BSSN_matter_constraints",
   Schedule -> {"AT analysis AFTER ML_BSSN_constraints"},
+  (* ConditionalOnKeyword -> {"evolution_method", "ML_BSSN"}, *)
   ConditionalOnKeyword -> {"SpaceTime", "Space+Matter"},
+  TriggerGroups -> {"Ham", "mom"},
   Where -> Interior,
   Shorthands -> {T00, T0[la], T[la,lb], rho, S[la]},
   Equations -> 
@@ -821,7 +863,44 @@ inheritedImplementations = {"ADMBase", "TmunuBase"};
 (* Parameters *)
 (******************************************************************************)
 
-inheritedKeywordParameters = {"ADMBase::initial_data"};
+(* inheritedKeywordParameters = { "ADMBase::initial_data" }; *)
+inheritedKeywordParameters = {};
+
+extendedKeywordParameters =
+{
+  {
+    Name -> "ADMBase::initial_data",
+    AllowedValues -> {"ML_BSSN__Minkowski"}
+  },
+  {
+    Name -> "ADMBase::initial_lapse",
+    AllowedValues -> {"ML_BSSN__Minkowski"}
+  },
+  {
+    Name -> "ADMBase::initial_shift",
+    AllowedValues -> {"ML_BSSN__Minkowski"}
+  },
+  {
+    Name -> "ADMBase::initial_dtlapse",
+    AllowedValues -> {"ML_BSSN__Minkowski"}
+  },
+  {
+    Name -> "ADMBase::initial_dtshift",
+    AllowedValues -> {"ML_BSSN__Minkowski"}
+  },
+  {
+    Name -> "ADMBase::evolution_method",
+    AllowedValues -> {"ML_BSSN"}
+  },
+  {
+    Name -> "ADMBase::lapse_evolution_method",
+    AllowedValues -> {"ML_BSSN"}
+  },
+  {
+    Name -> "ADMBase::shift_evolution_method",
+    AllowedValues -> {"ML_BSSN"}
+  }
+};
 
 keywordParameters =
 {
@@ -830,7 +909,7 @@ keywordParameters =
     (* Visibility -> "restricted", *)
     (* Description -> "ddd", *)
     AllowedValues -> {"ADMBase", "Minkowski"},
-    Default -> "ADMBase"
+    Default -> "Minkowski"
   },
   {
     Name -> "SpaceTime",
@@ -929,6 +1008,7 @@ CreateKrancThornTT [groupsBSSN, ".", "ML_BSSN",
   EvolutionTimelevels -> evolutionTimelevels,
   InheritedImplementations -> inheritedImplementations,
   InheritedKeywordParameters -> inheritedKeywordParameters,
+  ExtendedKeywordParameters -> extendedKeywordParameters,
   KeywordParameters -> keywordParameters,
   IntParameters -> intParameters,
   RealParameters -> realParameters
