@@ -4,11 +4,6 @@
 # Mathematica script written by Ian Hinder and Sascha Husa
 
 
-shares: ADMBase
-
-USES CCTK_KEYWORD initial_data
-
-
 shares: GenericFD
 
 USES CCTK_INT stencil_width
@@ -26,7 +21,7 @@ USES CCTK_INT MoL_Num_Constrained_Vars
 restricted:
 CCTK_REAL verbose "verbose"
 {
-  "*:*" :: "no restrictions"
+  "*:*" :: ""
 } 0
 
 private:
@@ -34,7 +29,7 @@ KEYWORD my_initial_data "my_initial_data"
 {
   "ADMBase" :: "ADMBase"
   "Minkowski" :: "Minkowski"
-} "ADMBase"
+} "Minkowski"
 
 private:
 KEYWORD SpaceTime "SpaceTime"
@@ -58,61 +53,61 @@ CCTK_INT ML_ADM_MaxNumConstrainedVars "Number of constrained variables used by t
 restricted:
 CCTK_INT ML_ADM_Minkowski_calc_every "ML_ADM_Minkowski_calc_every"
 {
-  *:* :: "no restrictions"
+  *:* :: ""
 } 1
 
 restricted:
 CCTK_INT ML_ADM_convertFromADMBase_calc_every "ML_ADM_convertFromADMBase_calc_every"
 {
-  *:* :: "no restrictions"
+  *:* :: ""
 } 1
 
 restricted:
 CCTK_INT ML_ADM_RHS_calc_every "ML_ADM_RHS_calc_every"
 {
-  *:* :: "no restrictions"
+  *:* :: ""
 } 1
 
 restricted:
 CCTK_INT ML_ADM_convertToADMBase_calc_every "ML_ADM_convertToADMBase_calc_every"
 {
-  *:* :: "no restrictions"
+  *:* :: ""
 } 1
 
 restricted:
 CCTK_INT ML_ADM_constraints_calc_every "ML_ADM_constraints_calc_every"
 {
-  *:* :: "no restrictions"
+  *:* :: ""
 } 1
 
 restricted:
 CCTK_INT ML_ADM_Minkowski_calc_offset "ML_ADM_Minkowski_calc_offset"
 {
-  *:* :: "no restrictions"
+  *:* :: ""
 } 0
 
 restricted:
 CCTK_INT ML_ADM_convertFromADMBase_calc_offset "ML_ADM_convertFromADMBase_calc_offset"
 {
-  *:* :: "no restrictions"
+  *:* :: ""
 } 0
 
 restricted:
 CCTK_INT ML_ADM_RHS_calc_offset "ML_ADM_RHS_calc_offset"
 {
-  *:* :: "no restrictions"
+  *:* :: ""
 } 0
 
 restricted:
 CCTK_INT ML_ADM_convertToADMBase_calc_offset "ML_ADM_convertToADMBase_calc_offset"
 {
-  *:* :: "no restrictions"
+  *:* :: ""
 } 0
 
 restricted:
 CCTK_INT ML_ADM_constraints_calc_offset "ML_ADM_constraints_calc_offset"
 {
-  *:* :: "no restrictions"
+  *:* :: ""
 } 0
 
 private:

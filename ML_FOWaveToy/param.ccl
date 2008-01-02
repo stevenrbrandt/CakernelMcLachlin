@@ -21,7 +21,7 @@ USES CCTK_INT MoL_Num_Constrained_Vars
 restricted:
 CCTK_REAL verbose "verbose"
 {
-  "*:*" :: "no restrictions"
+  "*:*" :: ""
 } 0
 
 restricted:
@@ -39,37 +39,37 @@ CCTK_INT ML_FOWaveToy_MaxNumConstrainedVars "Number of constrained variables use
 restricted:
 CCTK_INT WTFO_Gaussian_calc_every "WTFO_Gaussian_calc_every"
 {
-  *:* :: "no restrictions"
+  *:* :: ""
 } 1
 
 restricted:
 CCTK_INT WTFO_RHS_calc_every "WTFO_RHS_calc_every"
 {
-  *:* :: "no restrictions"
+  *:* :: ""
 } 1
 
 restricted:
 CCTK_INT WTFO_constraints_calc_every "WTFO_constraints_calc_every"
 {
-  *:* :: "no restrictions"
+  *:* :: ""
 } 1
 
 restricted:
 CCTK_INT WTFO_Gaussian_calc_offset "WTFO_Gaussian_calc_offset"
 {
-  *:* :: "no restrictions"
+  *:* :: ""
 } 0
 
 restricted:
 CCTK_INT WTFO_RHS_calc_offset "WTFO_RHS_calc_offset"
 {
-  *:* :: "no restrictions"
+  *:* :: ""
 } 0
 
 restricted:
 CCTK_INT WTFO_constraints_calc_offset "WTFO_constraints_calc_offset"
 {
-  *:* :: "no restrictions"
+  *:* :: ""
 } 0
 
 private:

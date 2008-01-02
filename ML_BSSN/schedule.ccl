@@ -69,7 +69,7 @@ schedule ML_BSSN_RegisterSymmetries at BASEGRID
 } "register symmetries"
 
 
-if (CCTK_EQUALS(my_initial_data, "Minkowski"))
+if (CCTK_EQUALS(initial_data, "ML_BSSN__Minkowski"))
 {
   schedule ML_BSSN_Minkowski IN ADMBase_InitialData
   {
@@ -101,26 +101,52 @@ if (CCTK_EQUALS(my_initial_data, "ADMBase"))
   } "ML_BSSN_convertFromADMBaseGamma"
 }
 
-schedule ML_BSSN_RHS IN MoL_CalcRHS
-{
-  LANG: C
-  
-} "ML_BSSN_RHS"
 
-schedule ML_BSSN_RHS AT analysis
+if (CCTK_EQUALS(evolution_method, "ML_BSSN"))
 {
-  LANG: C
-  
-  SYNC: ML_curvrhs
-  SYNC: ML_dtlapserhs
-  SYNC: ML_dtshiftrhs
-  SYNC: ML_Gammarhs
-  SYNC: ML_lapserhs
-  SYNC: ML_log_confacrhs
-  SYNC: ML_metricrhs
-  SYNC: ML_shiftrhs
-  SYNC: ML_trace_curvrhs
-} "ML_BSSN_RHS"
+  schedule ML_BSSN_RHS IN MoL_CalcRHS
+  {
+    LANG: C
+    
+    TRIGGERS: ML_log_confacrhs
+    TRIGGERS: ML_metricrhs
+    TRIGGERS: ML_Gammarhs
+    TRIGGERS: ML_trace_curvrhs
+    TRIGGERS: ML_curvrhs
+    TRIGGERS: ML_lapserhs
+    TRIGGERS: ML_dtlapserhs
+    TRIGGERS: ML_shiftrhs
+    TRIGGERS: ML_dtshiftrhs
+  } "ML_BSSN_RHS"
+}
+
+
+if (CCTK_EQUALS(evolution_method, "ML_BSSN"))
+{
+  schedule ML_BSSN_RHS AT analysis
+  {
+    LANG: C
+    
+    SYNC: ML_curvrhs
+    SYNC: ML_dtlapserhs
+    SYNC: ML_dtshiftrhs
+    SYNC: ML_Gammarhs
+    SYNC: ML_lapserhs
+    SYNC: ML_log_confacrhs
+    SYNC: ML_metricrhs
+    SYNC: ML_shiftrhs
+    SYNC: ML_trace_curvrhs
+    TRIGGERS: ML_log_confacrhs
+    TRIGGERS: ML_metricrhs
+    TRIGGERS: ML_Gammarhs
+    TRIGGERS: ML_trace_curvrhs
+    TRIGGERS: ML_curvrhs
+    TRIGGERS: ML_lapserhs
+    TRIGGERS: ML_dtlapserhs
+    TRIGGERS: ML_shiftrhs
+    TRIGGERS: ML_dtshiftrhs
+  } "ML_BSSN_RHS"
+}
 
 
 if (CCTK_EQUALS(SpaceTime, "Space+Matter"))
@@ -133,40 +159,47 @@ if (CCTK_EQUALS(SpaceTime, "Space+Matter"))
 }
 
 
-if (CCTK_EQUALS(SpaceTime, "Space+Matter"))
+if (CCTK_EQUALS(evolution_method, "ML_BSSN"))
 {
-  schedule ML_BSSN_matter AT analysis AFTER ML_BSSN_RHS
+  schedule ML_BSSN_enforce IN MoL_PostStep BEFORE ML_BSSN_BoundConds
   {
     LANG: C
     
-    SYNC: ML_curvrhs
-    SYNC: ML_Gammarhs
-    SYNC: ML_trace_curvrhs
-  } "ML_BSSN_matter"
+  } "ML_BSSN_enforce"
 }
 
-schedule ML_BSSN_enforce IN MoL_PostStep BEFORE ML_BSSN_BoundConds
-{
-  LANG: C
-  
-} "ML_BSSN_enforce"
 
-schedule ML_BSSN_convertToADMBase IN MoL_PostStep AFTER ML_BSSN_ApplyBCs AFTER ML_BSSN_enforce
+if (CCTK_EQUALS(evolution_method, "ML_BSSN"))
 {
-  LANG: C
-  
-} "ML_BSSN_convertToADMBase"
+  schedule ML_BSSN_convertToADMBase IN MoL_PostStep AFTER ML_BSSN_ApplyBCs AFTER ML_BSSN_enforce
+  {
+    LANG: C
+    
+    SYNC: ADMBase::curv
+    SYNC: ADMBase::dtlapse
+    SYNC: ADMBase::dtshift
+    SYNC: ADMBase::lapse
+    SYNC: ADMBase::metric
+    SYNC: ADMBase::shift
+  } "ML_BSSN_convertToADMBase"
+}
 
-schedule ML_BSSN_constraints AT analysis
+
+if (CCTK_EQUALS(evolution_method, "ML_BSSN"))
 {
-  LANG: C
-  
-  SYNC: cons_detg
-  SYNC: cons_Gamma
-  SYNC: cons_traceA
-  SYNC: Ham
-  SYNC: mom
-} "ML_BSSN_constraints"
+  schedule ML_BSSN_constraints AT analysis
+  {
+    LANG: C
+    
+    SYNC: cons_detg
+    SYNC: cons_Gamma
+    SYNC: cons_traceA
+    SYNC: Ham
+    SYNC: mom
+    TRIGGERS: Ham
+    TRIGGERS: mom
+  } "ML_BSSN_constraints"
+}
 
 
 if (CCTK_EQUALS(SpaceTime, "Space+Matter"))
@@ -177,6 +210,8 @@ if (CCTK_EQUALS(SpaceTime, "Space+Matter"))
     
     SYNC: Ham
     SYNC: mom
+    TRIGGERS: Ham
+    TRIGGERS: mom
   } "ML_BSSN_matter_constraints"
 }
 
