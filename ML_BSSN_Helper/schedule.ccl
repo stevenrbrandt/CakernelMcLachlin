@@ -1,0 +1,7 @@
+if (CCTK_EQUALS (evolution_method, "ML_BSSN")) {
+  SCHEDULE ML_BSSN_UnsetCheckpointTags AT basegrid
+  {
+    LANG: C
+    OPTIONS: global
+  } "Don't checkpoint ADMBase variables"
+}
