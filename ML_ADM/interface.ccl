@@ -81,7 +81,7 @@ CCTK_REAL ml_shiftrhs type=GF timelevels=1 tags='tensortypealias="U" tensorweigh
 } "ml_shiftrhs"
 
 public:
-CCTK_REAL ml_curv type=GF timelevels=2 tags='tensortypealias="DD_sym" tensorweight=1.0000000000000000000'
+CCTK_REAL ml_curv type=GF timelevels=3 tags='tensortypealias="DD_sym" tensorweight=1.0000000000000000000'
 {
   K11,
   K12,
@@ -92,13 +92,13 @@ CCTK_REAL ml_curv type=GF timelevels=2 tags='tensortypealias="DD_sym" tensorweig
 } "ml_curv"
 
 public:
-CCTK_REAL ml_lapse type=GF timelevels=2 tags='tensortypealias="Scalar" tensorweight=1.0000000000000000000'
+CCTK_REAL ml_lapse type=GF timelevels=3 tags='tensortypealias="Scalar" tensorweight=1.0000000000000000000'
 {
   alpha
 } "ml_lapse"
 
 public:
-CCTK_REAL ml_metric type=GF timelevels=2 tags='tensortypealias="DD_sym" tensorweight=1.0000000000000000000'
+CCTK_REAL ml_metric type=GF timelevels=3 tags='tensortypealias="DD_sym" tensorweight=1.0000000000000000000'
 {
   g11,
   g12,
@@ -109,7 +109,7 @@ CCTK_REAL ml_metric type=GF timelevels=2 tags='tensortypealias="DD_sym" tensorwe
 } "ml_metric"
 
 public:
-CCTK_REAL ml_shift type=GF timelevels=2 tags='tensortypealias="U" tensorweight=1.0000000000000000000'
+CCTK_REAL ml_shift type=GF timelevels=3 tags='tensortypealias="U" tensorweight=1.0000000000000000000'
 {
   beta1,
   beta2,

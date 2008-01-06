@@ -46,7 +46,7 @@ UseGlobalDerivs = False;
 PD := If [UseGlobalDerivs, PDglob, PDloc];
 
 (* timelevels *)
-evolutionTimelevels = 2;
+evolutionTimelevels = 3;
 
 KD = KroneckerDelta;
 
@@ -909,7 +909,7 @@ keywordParameters =
     (* Visibility -> "restricted", *)
     (* Description -> "ddd", *)
     AllowedValues -> {"ADMBase", "Minkowski"},
-    Default -> "Minkowski"
+    Default -> "ADMBase"
   },
   {
     Name -> "SpaceTime",

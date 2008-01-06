@@ -29,7 +29,7 @@ KEYWORD my_initial_data "my_initial_data"
 {
   "ADMBase" :: "ADMBase"
   "Minkowski" :: "Minkowski"
-} "Minkowski"
+} "ADMBase"
 
 private:
 KEYWORD SpaceTime "SpaceTime"
