@@ -43,6 +43,7 @@ ActiveThorns = "
         GenericFD
 
         ML_BSSN
+        ML_BSSN_Helper
 	TmunuBase
 "
 
@@ -249,20 +250,26 @@ Exact::Kerr_KerrSchild__epsilon   = 1.0
 
 #--- ML_BSSN
 
+ADMBase::evolution_method       = "ML_BSSN"
+ADMBase::lapse_evolution_method = "ML_BSSN"
+ADMBase::shift_evolution_method = "ML_BSSN"
+
+ML_BSSN::my_boundary_condition = "Minkowski"
+
 ML_BSSN::harmonicN       = 1      # 1+log
 ML_BSSN::harmonicF       = 2.0    # 1+log
 ML_BSSN::ShiftGammaCoeff = 0.75
 ML_BSSN::BetaDriver      = 0.5
 
-ML_BSSN::ML_log_confac_bound = "radiative"
-ML_BSSN::ML_metric_bound     = "radiative"
-ML_BSSN::ML_Gamma_bound      = "radiative"
-ML_BSSN::ML_trace_curv_bound = "radiative"
-ML_BSSN::ML_curv_bound       = "radiative"
-ML_BSSN::ML_lapse_bound      = "radiative"
-ML_BSSN::ML_dtlapse_bound    = "radiative"
-ML_BSSN::ML_shift_bound      = "radiative"
-ML_BSSN::ML_dtshift_bound    = "radiative"
+#ML_BSSN::ML_log_confac_bound = "radiative"
+#ML_BSSN::ML_metric_bound     = "radiative"
+#ML_BSSN::ML_Gamma_bound      = "radiative"
+#ML_BSSN::ML_trace_curv_bound = "radiative"
+#ML_BSSN::ML_curv_bound       = "radiative"
+#ML_BSSN::ML_lapse_bound      = "radiative"
+#ML_BSSN::ML_dtlapse_bound    = "radiative"
+#ML_BSSN::ML_shift_bound      = "radiative"
+#ML_BSSN::ML_dtshift_bound    = "radiative"
 
 #--- Dissipation
 
