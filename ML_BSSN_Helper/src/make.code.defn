@@ -1,2 +1,2 @@
 # -*-Makefile-*-
-SRCS = UnsetCheckpointTags.c
+SRCS = RegisterSlicing.c UnsetCheckpointTags.c

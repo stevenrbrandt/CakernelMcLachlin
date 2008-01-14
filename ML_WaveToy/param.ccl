@@ -36,6 +36,12 @@ CCTK_INT ML_WaveToy_MaxNumConstrainedVars "Number of constrained variables used 
   58:58 :: "Number of constrained variables used by this thorn"
 } 58
 
+private:
+CCTK_INT timelevels "Number of active timelevels"
+{
+  0:2 :: ""
+} 2
+
 restricted:
 CCTK_INT WT_Gaussian_calc_every "WT_Gaussian_calc_every"
 {

@@ -115,15 +115,15 @@ void ML_BSSN_convertFromADMBaseGamma_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT fa
     /* Declare precomputed derivatives*/
     
     /* Declare derivatives */
-    CCTK_REAL PDstandardNth1B1 = INITVALUE;
-    CCTK_REAL PDstandardNth2B1 = INITVALUE;
-    CCTK_REAL PDstandardNth3B1 = INITVALUE;
-    CCTK_REAL PDstandardNth1B2 = INITVALUE;
-    CCTK_REAL PDstandardNth2B2 = INITVALUE;
-    CCTK_REAL PDstandardNth3B2 = INITVALUE;
-    CCTK_REAL PDstandardNth1B3 = INITVALUE;
-    CCTK_REAL PDstandardNth2B3 = INITVALUE;
-    CCTK_REAL PDstandardNth3B3 = INITVALUE;
+    CCTK_REAL PDstandardNth1beta1 = INITVALUE;
+    CCTK_REAL PDstandardNth2beta1 = INITVALUE;
+    CCTK_REAL PDstandardNth3beta1 = INITVALUE;
+    CCTK_REAL PDstandardNth1beta2 = INITVALUE;
+    CCTK_REAL PDstandardNth2beta2 = INITVALUE;
+    CCTK_REAL PDstandardNth3beta2 = INITVALUE;
+    CCTK_REAL PDstandardNth1beta3 = INITVALUE;
+    CCTK_REAL PDstandardNth2beta3 = INITVALUE;
+    CCTK_REAL PDstandardNth3beta3 = INITVALUE;
     CCTK_REAL PDstandardNth1gt11 = INITVALUE;
     CCTK_REAL PDstandardNth2gt11 = INITVALUE;
     CCTK_REAL PDstandardNth3gt11 = INITVALUE;
@@ -145,9 +145,6 @@ void ML_BSSN_convertFromADMBaseGamma_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT fa
     
     /* Assign local copies of grid functions */
     alphaL = alpha[index];
-    B1L = B1[index];
-    B2L = B2[index];
-    B3L = B3[index];
     beta1L = beta1[index];
     beta2L = beta2[index];
     beta3L = beta3[index];
@@ -167,15 +164,15 @@ void ML_BSSN_convertFromADMBaseGamma_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT fa
     /* Include user supplied include files */
     
     /* Precompute derivatives (new style) */
-    PDstandardNth1B1 = PDstandardNth1(B1, i, j, k);
-    PDstandardNth2B1 = PDstandardNth2(B1, i, j, k);
-    PDstandardNth3B1 = PDstandardNth3(B1, i, j, k);
-    PDstandardNth1B2 = PDstandardNth1(B2, i, j, k);
-    PDstandardNth2B2 = PDstandardNth2(B2, i, j, k);
-    PDstandardNth3B2 = PDstandardNth3(B2, i, j, k);
-    PDstandardNth1B3 = PDstandardNth1(B3, i, j, k);
-    PDstandardNth2B3 = PDstandardNth2(B3, i, j, k);
-    PDstandardNth3B3 = PDstandardNth3(B3, i, j, k);
+    PDstandardNth1beta1 = PDstandardNth1(beta1, i, j, k);
+    PDstandardNth2beta1 = PDstandardNth2(beta1, i, j, k);
+    PDstandardNth3beta1 = PDstandardNth3(beta1, i, j, k);
+    PDstandardNth1beta2 = PDstandardNth1(beta2, i, j, k);
+    PDstandardNth2beta2 = PDstandardNth2(beta2, i, j, k);
+    PDstandardNth3beta2 = PDstandardNth3(beta2, i, j, k);
+    PDstandardNth1beta3 = PDstandardNth1(beta3, i, j, k);
+    PDstandardNth2beta3 = PDstandardNth2(beta3, i, j, k);
+    PDstandardNth3beta3 = PDstandardNth3(beta3, i, j, k);
     PDstandardNth1gt11 = PDstandardNth1(gt11, i, j, k);
     PDstandardNth2gt11 = PDstandardNth2(gt11, i, j, k);
     PDstandardNth3gt11 = PDstandardNth3(gt11, i, j, k);
@@ -272,16 +269,16 @@ void ML_BSSN_convertFromADMBaseGamma_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT fa
     
     Xt3L  =  Gt311*gtu11 + Gt322*gtu22 + 2*(Gt312*gtu21 + Gt313*gtu31 + Gt323*gtu32) + Gt333*gtu33;
     
-    AL  =  -1.*dtalpL*(-1. + LapseAdvectionCoeff)*INV(harmonicF)*pow(alphaL,-harmonicN);
+    AL  =  -(dtalpL*(-1 + LapseAdvectionCoeff)*INV(harmonicF)*pow(alphaL,-harmonicN));
     
-    B1L  =  (dtbetaxL - (beta1L*PDstandardNth1B1 + beta2L*PDstandardNth2B1 + beta3L*PDstandardNth3B1)*ShiftAdvectionCoeff)*
-        INV(ShiftGammaCoeff);
+    B1L  =  (dtbetaxL - (beta1L*PDstandardNth1beta1 + beta2L*PDstandardNth2beta1 + beta3L*PDstandardNth3beta1)*
+           ShiftAdvectionCoeff)*INV(ShiftGammaCoeff);
     
-    B2L  =  (dtbetayL - (beta1L*PDstandardNth1B2 + beta2L*PDstandardNth2B2 + beta3L*PDstandardNth3B2)*ShiftAdvectionCoeff)*
-        INV(ShiftGammaCoeff);
+    B2L  =  (dtbetayL - (beta1L*PDstandardNth1beta2 + beta2L*PDstandardNth2beta2 + beta3L*PDstandardNth3beta2)*
+           ShiftAdvectionCoeff)*INV(ShiftGammaCoeff);
     
-    B3L  =  (dtbetazL - (beta1L*PDstandardNth1B3 + beta2L*PDstandardNth2B3 + beta3L*PDstandardNth3B3)*ShiftAdvectionCoeff)*
-        INV(ShiftGammaCoeff);
+    B3L  =  (dtbetazL - (beta1L*PDstandardNth1beta3 + beta2L*PDstandardNth2beta3 + beta3L*PDstandardNth3beta3)*
+           ShiftAdvectionCoeff)*INV(ShiftGammaCoeff);
     
     
     /* Copy local copies back to grid functions */

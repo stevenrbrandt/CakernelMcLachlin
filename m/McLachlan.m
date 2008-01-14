@@ -10,24 +10,13 @@ SetSourceLanguage["C"];
 (* Derivatives *)
 (******************************************************************************)
 
+KD = KroneckerDelta;
+
+(* derivative order: 2, 4, 6, 8, ... *)
 derivOrder = 4;
 
 derivatives =
 {
-  (*
-  PDstandard2nd[i_]     -> StandardCenteredDifferenceOperator[1,1,i],
-  PDstandard2nd[i_, i_] -> StandardCenteredDifferenceOperator[2,1,i],
-  PDstandard2nd[i_, j_] -> StandardCenteredDifferenceOperator[1,1,i]
-                           StandardCenteredDifferenceOperator[1,1,j]
-  *)
-
-  (*
-  PDstandard4th[i_]     -> StandardCenteredDifferenceOperator[1,2,i],
-  PDstandard4th[i_, i_] -> StandardCenteredDifferenceOperator[2,2,i],
-  PDstandard4th[i_, j_] -> StandardCenteredDifferenceOperator[1,2,i]
-                           StandardCenteredDifferenceOperator[1,2,j]
-  *)
-
   PDstandardNth[i_]     -> StandardCenteredDifferenceOperator[1,derivOrder/2,i],
   PDstandardNth[i_, i_] -> StandardCenteredDifferenceOperator[2,derivOrder/2,i],
   PDstandardNth[i_, j_] -> StandardCenteredDifferenceOperator[1,derivOrder/2,i]
@@ -45,10 +34,11 @@ PDglob[var_,lx_,ly_] :=
 UseGlobalDerivs = False;
 PD := If [UseGlobalDerivs, PDglob, PDloc];
 
-(* timelevels *)
+(* timelevels: 2 or 3 *)
 evolutionTimelevels = 3;
 
-KD = KroneckerDelta;
+(* matter: 0 or 1 *)
+addMatter = 0;
 
 (******************************************************************************)
 (* Tensors *)
@@ -176,8 +166,6 @@ initialCalc =
   Name -> "ML_ADM_Minkowski",
   Schedule -> {"IN ADMBase_InitialData"},
   ConditionalOnKeyword -> {"my_initial_data", "Minkowski"},
-  (* Where -> Boundary, *)
-  (* Where -> Interior, *)
   Equations -> 
   {
     g[la,lb] -> KD[la,lb],
@@ -191,9 +179,7 @@ initialCalcBSSN =
 {
   Name -> "ML_BSSN_Minkowski",
   Schedule -> {"IN ADMBase_InitialData"},
-  ConditionalOnKeyword -> {"initial_data", "ML_BSSN__Minkowski"},
-  (* Where -> Boundary, *)
-  (* Where -> Interior, *)
+  ConditionalOnKeyword -> {"my_initial_data", "Minkowski"},
   Equations -> 
   {
     phi       -> 0,
@@ -243,7 +229,6 @@ convertFromADMBaseCalcBSSN =
 {
   Name -> "ML_BSSN_convertFromADMBase",
   Schedule -> {"AT initial AFTER ADMBase_PostInitial"},
-  (* Should only happen if ADMBase::initial_data != ML_BSSN *)
   ConditionalOnKeyword -> {"my_initial_data", "ADMBase"},
   Shorthands -> {g[la,lb], detg, gu[ua,ub], em4phi, K[la,lb]},
   Equations -> 
@@ -284,7 +269,6 @@ convertFromADMBaseCalcBSSNGamma =
 {
   Name -> "ML_BSSN_convertFromADMBaseGamma",
   Schedule -> {"AT initial AFTER ML_BSSN_convertFromADMBase"},
-  (* Should only happen if ADMBase::initial_data != ML_BSSN *)
   ConditionalOnKeyword -> {"my_initial_data", "ADMBase"},
   Where -> Interior,
   Shorthands -> {detgt, gtu[ua,ub], Gt[ua,lb,lc]},
@@ -296,23 +280,14 @@ convertFromADMBaseCalcBSSNGamma =
                     (PD[gt[lb,ld],lc] + PD[gt[lc,ld],lb] - PD[gt[lb,lc],ld]),
     Xt[ua] -> gtu[ub,uc] Gt[ua,lb,lc],
     
-    (* TODO: check this *)
-    (* A -> - (dtalp - Lie[alpha, beta]) / (harmonicF alpha^harmonicN), *)
-    A -> - dtalp / (harmonicF alpha^harmonicN) ( LapseAdvectionCoeff - 1.0 ),
-
-    (* TODO: check this *)
-    (* B1 -> dtbetax / (ShiftGammaCoeff alpha^ShiftAlphaPower) *)
-    (* B2 -> dtbetay / (ShiftGammaCoeff alpha^ShiftAlphaPower) *)
-    (* B3 -> dtbetaz / (ShiftGammaCoeff alpha^ShiftAlphaPower) *)
-    (* B1 -> ShiftGammaCoeff dtbetax / ((ShiftGammaCoeff^2 + 1.0*^-100) alpha^ShiftAlphaPower),
-    B2 -> ShiftGammaCoeff dtbetay / ((ShiftGammaCoeff^2 + 1.0*^-100) alpha^ShiftAlphaPower),
-    B3 -> ShiftGammaCoeff dtbetaz / ((ShiftGammaCoeff^2 + 1.0*^-100) alpha^ShiftAlphaPower) *)
-    B1    -> 1/ShiftGammaCoeff ( + dtbetax
-                                 - ShiftAdvectionCoeff beta[ua] PD[B1,la] ),
-    B2    -> 1/ShiftGammaCoeff ( + dtbetay
-                                 - ShiftAdvectionCoeff beta[ua] PD[B2,la] ),
-    B3    -> 1/ShiftGammaCoeff ( + dtbetaz
-                                 - ShiftAdvectionCoeff beta[ua] PD[B3,la] )
+    A -> - dtalp / (harmonicF alpha^harmonicN) (LapseAdvectionCoeff - 1),
+    
+    B1 -> 1/ShiftGammaCoeff
+          (dtbetax - ShiftAdvectionCoeff beta[ua] PD[beta1,la]),
+    B2 -> 1/ShiftGammaCoeff
+          (dtbetay - ShiftAdvectionCoeff beta[ua] PD[beta2,la]),
+    B3 -> 1/ShiftGammaCoeff
+          (dtbetaz - ShiftAdvectionCoeff beta[ua] PD[beta3,la])
   }
 }
 
@@ -323,7 +298,7 @@ convertFromADMBaseCalcBSSNGamma =
 convertToADMBaseCalc =
 {
   Name -> "ML_ADM_convertToADMBase",
-  Schedule -> {"IN MoL_PostStep AFTER ML_ADM_ApplyBCs"},
+  Schedule -> {"IN MoL_PostStep AFTER (ML_ADM_ApplyBCs ML_ADM_boundary)"},
   Equations -> 
   {
     gxx     -> g11,
@@ -353,7 +328,7 @@ convertToADMBaseCalc =
 convertToADMBaseCalcBSSN =
 {
   Name -> "ML_BSSN_convertToADMBase",
-  Schedule -> {"IN MoL_PostStep AFTER ML_BSSN_ApplyBCs AFTER ML_BSSN_enforce"},
+  Schedule -> {"IN MoL_PostStep AFTER (ML_BSSN_ApplyBCs ML_BSSN_boundary ML_BSSN_enforce)"},
   ConditionalOnKeyword -> {"evolution_method", "ML_BSSN"},
   Where -> Interior,
   Shorthands -> {e4phi, g[la,lb], K[la,lb]},
@@ -379,13 +354,8 @@ convertToADMBaseCalcBSSN =
     betay    -> beta2,
     betaz    -> beta3,
     (* see RHS *)
-(*    dtalp    -> - harmonicF alpha^harmonicN A + Lie[alpha, beta],
-    dtbetax  -> ShiftGammaCoeff alpha^ShiftAlphaPower B1,
-    dtbetay  -> ShiftGammaCoeff alpha^ShiftAlphaPower B2,
-    dtbetaz  -> ShiftGammaCoeff alpha^ShiftAlphaPower B3 *)
-    
-    dtalp    -> - harmonicF alpha^harmonicN (
-                  ( 1 - LapseAdvectionCoeff) A + LapseAdvectionCoeff trK )
+    dtalp    -> - harmonicF alpha^harmonicN
+                  ((1 - LapseAdvectionCoeff) A + LapseAdvectionCoeff trK)
                 + LapseAdvectionCoeff beta[ua] PD[alpha,la],
     dtbetax  -> + ShiftGammaCoeff B1
                 + ShiftAdvectionCoeff beta[ub] PD[beta[ua],lb],
@@ -431,17 +401,7 @@ evolCalc =
 evolCalcBSSN =
 {
   Name -> "ML_BSSN_RHS",
-  Schedule -> {"IN MoL_CalcRHS", "AT analysis"},
-  ConditionalOnKeyword -> {"evolution_method", "ML_BSSN"},
-  TriggerGroups -> {"ML_log_confacrhs",
-                    "ML_metricrhs"    ,
-                    "ML_Gammarhs"     ,
-                    "ML_trace_curvrhs",
-                    "ML_curvrhs"      ,
-                    "ML_lapserhs"     ,
-                    "ML_dtlapserhs"   ,
-                    "ML_shiftrhs"     ,
-                    "ML_dtshiftrhs"   },
+  Schedule -> {"IN ML_BSSN_evolCalcGroup"},
   Where -> Interior,
   Shorthands -> {detgt, ddetgt[la], gtu[ua,ub],
                  dgtu[ua,ub,lc], ddgtu[ua,ub,lc,ld], Gt[ua,lb,lc],
@@ -449,20 +409,9 @@ evolCalcBSSN =
                  Atm[ua,lb], Atu[ua,ub],
                  e4phi, em4phi, g[la,lb], detg,
                  ddetg[la], gu[ua,ub], G[ua,lb,lc], Ats[la,lb], trAts,
-                 T00, T0[la], T[la,lb]},
+                 T00, T0[la], T[la,lb], rho, S[la], trS},
   Equations -> 
   {
-    T00 -> eTtt,
-    T01 -> eTtx,
-    T02 -> eTty,
-    T03 -> eTtz,
-    T11 -> eTxx,
-    T12 -> eTxy,
-    T13 -> eTxz,
-    T22 -> eTyy,
-    T23 -> eTyz,
-    T33 -> eTzz,
-    
     detgt        -> 1 (* detgtExpr *),
     ddetgt[la]   -> 0 (* ddetgtExpr[la] *),
     
@@ -488,11 +437,11 @@ evolCalcBSSN =
                  + gtu[ul,um] (+ Gt[uk,ll,li] gt[lj,ln] Gt[un,lk,lm]
                                + Gt[uk,ll,lj] gt[li,ln] Gt[un,lk,lm]
                                + Gt[uk,li,lm] gt[lk,ln] Gt[un,ll,lj]),
-(*    Rt[li,lj] -> (1/2) ( - gtu[ul,um] PD[gt[li,lj],ll,lm]
-                           + gt[lk,li] PD[Xt[uk],lj] +
-                           + gt[lk,lj] PD[Xt[uk],li] 
-                           + Xtn[uk] gt[li,ln] Gt[un,lj,lk]
-                           + Xtn[uk] gt[lj,ln] Gt[un,li,lk] )
+(*    Rt[li,lj] -> (1/2) (- gtu[ul,um] PD[gt[li,lj],ll,lm]
+                          + gt[lk,li] PD[Xt[uk],lj] +
+                          + gt[lk,lj] PD[Xt[uk],li] 
+                          + Xtn[uk] gt[li,ln] Gt[un,lj,lk]
+                          + Xtn[uk] gt[lj,ln] Gt[un,li,lk])
                  + gtu[ul,um] (+ Gt[uk,ll,li] gt[lj,ln] Gt[un,lk,lm]
                                + Gt[uk,ll,lj] gt[li,ln] Gt[un,lk,lm]
                                + Gt[uk,li,lm] gt[lk,ln] Gt[un,ll,lj]), *)
@@ -514,13 +463,38 @@ evolCalcBSSN =
     gu[ua,ub]   -> em4phi gtu[ua,ub],
 (*    ddetg[la]   -> 12 detg PD[phi,la],
     G[ua,lb,lc] -> Gt[ua,lb,lc]
-                   + 1/(6 detg) ( KD[ua,lb] ddetg[lc] + KD[ua,lc] ddetg[lb]
-                                  - gtu[ua,ud] gt[lb,lc] ddetg[ld] ), *)
+                   + 1/(6 detg) (KD[ua,lb] ddetg[lc] + KD[ua,lc] ddetg[lb]
+                                 - gtu[ua,ud] gt[lb,lc] ddetg[ld]), *)
     G[ua,lb,lc] -> Gt[ua,lb,lc]
-                   + 2 ( KD[ua,lb] PD[phi,lc] + KD[ua,lc] PD[phi,lb] 
-                                  - gtu[ua,ud] gt[lb,lc] PD[phi,ld] ),
+                   + 2 (KD[ua,lb] PD[phi,lc] + KD[ua,lc] PD[phi,lb] 
+                        - gtu[ua,ud] gt[lb,lc] PD[phi,ld]),
     
     R[la,lb] -> Rt[la,lb] + Rphi[la,lb],
+    
+    (* Matter terms *)
+    
+    T00 -> addMatter eTtt,
+    T01 -> addMatter eTtx,
+    T02 -> addMatter eTty,
+    T03 -> addMatter eTtz,
+    T11 -> addMatter eTxx,
+    T12 -> addMatter eTxy,
+    T13 -> addMatter eTxz,
+    T22 -> addMatter eTyy,
+    T23 -> addMatter eTyz,
+    T33 -> addMatter eTzz,
+    
+    (* rho = n^a n^b T_ab *)
+    rho -> addMatter
+           (1/alpha^2 (T00 - 2 beta[ui] T0[li] + beta[ui] beta[uj] T[li,lj])),
+    
+    (* S_i = -p^a_i n^b T_ab, where p^a_i = delta^a_i + n^a n_i *)
+    S[li] -> addMatter (-1/alpha (T0[li] - beta[uj] T[li,lj])),
+    
+    (* trS = gamma^ij T_ij  *)
+    trS -> addMatter (gu[ui,uj] T[li,lj]),
+    
+    (* RHS terms *)
     
     (* PRD 62, 044034 (2000), eqn. (10) *)
     (* PRD 67 084023 (2003), eqn. (16) and (23) *)  
@@ -551,34 +525,36 @@ evolCalcBSSN =
                       + (1/3) gtu[ui,uj] PD[beta[ul],lj,ll]
                       + beta[uj] PD[Xt[ui],lj]
                       - Xtn[uj] PD[beta[ui],lj] 
-                      + (2/3) Xtn[ui] PD[beta[uj],lj],
+                      + (2/3) Xtn[ui] PD[beta[uj],lj]
+    (* Equation (4.28) in Baumgarte & Shapiro (Phys. Rept. 376 (2003) 41-131) *)
+                      + addMatter (- 16 pi alpha gtu[ui,uj] S[lj]),
     
     (* PRD 62, 044034 (2000), eqn. (11) *)
     dot[trK]       -> - gu[ua,ub] CD[alpha,la,lb]
                       + alpha (Atm[ua,lb] Atm[ub,la] + (1/3) trK^2)
-                      + Lie[trK, beta],
-
+                      + Lie[trK, beta]
+    (* Equation (4.21) in Baumgarte & Shapiro (Phys. Rept. 376 (2003) 41-131) *)
+                      + addMatter (4 pi alpha (rho + trS)),
+    
     (* PRD 62, 044034 (2000), eqn. (12) *)
     (* TODO: use Hamiltonian constraint to make tracefree *)
     Ats[la,lb]     -> - CD[alpha,la,lb] + alpha R[la,lb],
     trAts          -> gu[ua,ub] Ats[la,lb],
     dot[At[la,lb]] -> + em4phi (+ Ats[la,lb] - (1/3) g[la,lb] trAts )
                       + alpha (trK At[la,lb] - 2 At[la,lc] Atm[uc,lb])
-                      + Lie[At[la,lb], beta] - (2/3) At[la,lb] PD[beta[uc],lc],
-(*    dot[At[la,lb]] -> + em4phi (+ (- CD[alpha,la,lb] + alpha R[la,lb])
-                                - (1/3) g[la,lb] gu[uc,ud]
-                                        (- CD[alpha,lc,ld] + alpha R[lc,ld]))
-                      + alpha (trK At[la,lb] - 2 At[la,lc] Atm[uc,lb])
-                      + Lie[At[la,lb], beta] - (2/3) At[la,lb] PD[beta[uc],lc], *)
+                      + Lie[At[la,lb], beta] - (2/3) At[la,lb] PD[beta[uc],lc]
+    (* Equation (4.23) in Baumgarte & Shapiro (Phys. Rept. 376 (2003) 41-131) *)
+                      + addMatter (- em4phi alpha 8 pi
+                                     (T[la,lb] - (1/3) g[la,lb] trS)),
     
     (* dot[alpha] -> - harmonicF alpha^harmonicN trK, *)
     (* dot[alpha] -> - harmonicF alpha^harmonicN A + Lie[alpha, beta], *)
-    dot[alpha] -> - harmonicF alpha^harmonicN ( 
-                    ( 1 - LapseAdvectionCoeff) A + LapseAdvectionCoeff trK )
+    dot[alpha] -> - harmonicF alpha^harmonicN (
+                    (1 - LapseAdvectionCoeff) A + LapseAdvectionCoeff trK)
                   + LapseAdvectionCoeff beta[ua] PD[alpha,la],
     (* TODO: is the above Lie derivative correct? *)
 
-    dot[A]     -> ( 1 - LapseAdvectionCoeff ) ( dot[trK] - AlphaDriver A ),
+    dot[A]     -> (1 - LapseAdvectionCoeff) (dot[trK] - AlphaDriver A),
     (* dot[beta[ua]] -> eta Xt[ua], *)
     (* dot[beta[ua]] -> ShiftGammaCoeff alpha^ShiftAlphaPower B[ua], *)
 
@@ -586,84 +562,11 @@ evolCalcBSSN =
                      + ShiftAdvectionCoeff beta[ub] PD[beta[ua],lb],
 
     dot[B[ua]]    -> + dot[Xt[ua]] - BetaDriver B[ua]
-                     + ShiftAdvectionCoeff beta[ub] ( + PD[B[ua],lb]
-                                                      - PD[Xt[ua],lb] )
+                     + ShiftAdvectionCoeff beta[ub] (+ PD[B[ua],lb]
+                                                     - PD[Xt[ua],lb])
     (* TODO: is there a Lie derivative of the shift missing? *)
   }
 }
-
-addMatterBSSN =
-{
-  Name -> "ML_BSSN_matter",
-  Schedule -> {"IN MoL_CalcRHS AFTER ML_BSSN_RHS"},
-  (* ConditionalOnKeyword -> {"evolution_method", "ML_BSSN"}, *)
-  ConditionalOnKeyword -> {"SpaceTime", "Space+Matter"},
-  (* Conditional -> {Textual -> "stress_energy_storage && stress_energy_at_RHS"}, *)
-  (*TriggerGroups -> {"ML_log_confacrhs",
-                    "ML_metricrhs"    ,
-                    "ML_Gammarhs"     ,
-                    "ML_trace_curvrhs",
-                    "ML_curvrhs"      ,
-                    "ML_lapserhs"     ,
-                    "ML_dtlapserhs"   ,
-                    "ML_shiftrhs"     ,
-                    "ML_dtshiftrhs"   },*)
-  Where -> Interior,
-  Shorthands -> {T00, T0[la], T[la,lb], rho, S[la], trS,
-                 detgt, gtu[ua,ub], e4phi, em4phi, g[la,lb], gu[ua,ub]},
-  Equations -> 
-  {
-
-    T00 -> eTtt,
-    T01 -> eTtx,
-    T02 -> eTty,
-    T03 -> eTtz,
-    T11 -> eTxx,
-    T12 -> eTxy,
-    T13 -> eTxz,
-    T22 -> eTyy,
-    T23 -> eTyz,
-    T33 -> eTzz,
-
-    (* rho = n^a n^b T_ab *)
-    rho -> 1/alpha^2 (T00 - 2 beta[ui] T0[li] + beta[ui] beta[uj] T[li,lj]),
-
-    (* S_i = -p^a_i n^b T_ab, where p^a_i = delta^a_i + n^a n_i *)
-    S[li] -> -1/alpha ( T0[li] - beta[uj] T[li,lj] ),
-
-    (* trS = gamma^ij T_ij  *)
-    detgt        -> 1,
-    gtu[ua,ub]   -> 1/detgt detgtExpr MatrixInverse [gt[ua,ub]],
-    e4phi       -> Exp [4 phi],
-    em4phi       -> 1 / e4phi,
-    g[la,lb]    -> e4phi gt[la,lb],
-    gu[ua,ub] -> em4phi gtu[ua,ub],
-    trS -> gu[ui,uj] T[li,lj],
-
-    (* Equation (4.21) in Baumgarte & Shapiro (Phys.Rept. 376 (2003) 41-131) *)
-    dot[trK] -> dot[trK] + 4 pi alpha ( rho + trS ),
-
-    (* Equation (4.23) in Baumgarte & Shapiro (Phys.Rept. 376 (2003) 41-131) *)
-    dot[At[la,lb]] -> dot[At[la,lb]] - 
-                      em4phi alpha 8 pi ( T[la,lb] - (1/3) g[la,lb] trS ),
-
-    (* Equation (4.28) in Baumgarte & Shapiro (Phys.Rept. 376 (2003) 41-131) *)
-    dot[Xt[ui]] -> dot[Xt[ui]] - 16 pi alpha gtu[ui,uj] S[lj]
-  }
-}
-
-(*
-evolCalcAnalysisBSSN =
-  evolCalcBSSN
-  // DeleteCases [#, Schedule -> _] &
-  // Join [#, { Schedule -> {"AT analysis"},
-                TriggerGroups -> {"ML_metricrhs"}}] &;
-*)
-
-(*
-addMatterAnalysisBSSN =
-               "AT analysis AFTER ML_BSSN_RHS"},
- *)
 
 enforceCalcBSSN =
 {
@@ -685,6 +588,45 @@ enforceCalcBSSN =
 }
 
 (******************************************************************************)
+(* Boundary conditions *)
+(******************************************************************************)
+
+boundaryCalc =
+{
+  Name -> "ML_ADM_boundary",
+  Schedule -> {"IN MoL_PostStep"},
+  ConditionalOnKeyword -> {"my_boundary_condition", "Minkowski"},
+  Where -> Boundary,
+  Equations -> 
+  {
+    g[la,lb] -> KD[la,lb],
+    K[la,lb] -> 0,
+    alpha    -> 1,
+    beta[ua] -> 0
+  }
+}
+
+boundaryCalcBSSN =
+{
+  Name -> "ML_BSSN_boundary",
+  Schedule -> {"IN MoL_PostStep"},
+  ConditionalOnKeyword -> {"my_boundary_condition", "Minkowski"},
+  Where -> Boundary,
+  Equations -> 
+  {
+    phi       -> 0,
+    gt[la,lb] -> KD[la,lb],
+    trK       -> 0,
+    At[la,lb] -> 0,
+    Xt[ua]    -> 0,
+    alpha     -> 1,
+    A         -> 0,
+    beta[ua]  -> 0,
+    B[ua]     -> 0
+  }
+}
+
+(******************************************************************************)
 (* Constraint equations *)
 (******************************************************************************)
 
@@ -692,6 +634,7 @@ constraintsCalc =
 {
   Name -> "ML_ADM_constraints",
   Schedule -> {"AT analysis"},
+  TriggerGroups -> {"Ham", "mom"},
   Where -> Interior,
   Shorthands -> {detg, gu[ua,ub], G[ua,lb,lc], R[la,lb], trR, Km[ua,lb], trK},
   Equations -> 
@@ -712,17 +655,29 @@ constraintsCalc =
   }
 }
 
+constraintsBoundaryCalc =
+{
+  Name -> "ML_ADM_constraints_boundary",
+  Schedule -> {"AT analysis AFTER ML_ADM_constraints"},
+  (* TriggerGroups -> {"Ham", "mom"}, *)
+  Where -> Boundary,
+  Equations -> 
+  {
+    H     -> 0,
+    M[la] -> 0
+  }
+}
+
 constraintsCalcBSSN =
 {
   Name -> "ML_BSSN_constraints",
-  Schedule -> {"AT analysis"},
-  ConditionalOnKeyword -> {"evolution_method", "ML_BSSN"},
-  TriggerGroups -> {"Ham", "mom"},
+  Schedule -> {"IN ML_BSSN_constraintsCalcGroup"},
   Where -> Interior,
   Shorthands -> {detgt, ddetgt[la], gtu[ua,ub], Gt[ua,lb,lc], e4phi, em4phi,
                  g[la,lb], detg, gu[ua,ub], ddetg[la], G[ua,lb,lc],
                  Rt[la,lb], Rphi[la,lb], R[la,lb], trR, Atm[la,lb],
-                 gK[la,lb,lc]},
+                 gK[la,lb,lc],
+                 T00, T0[la], T[la,lb], rho, S[la]},
   Equations -> 
   {
     detgt        -> 1 (* detgtExpr *),
@@ -793,18 +748,40 @@ constraintsCalcBSSN =
     (* Km[ua,lb] -> gu[ua,uc] K[lc,lb], *)
     Atm[ua,lb] -> gtu[ua,uc] At[lc,lb],
     
+    (* Matter terms *)
+    
+    T00 -> eTtt,
+    T01 -> eTtx,
+    T02 -> eTty,
+    T03 -> eTtz,
+    T11 -> eTxx,
+    T12 -> eTxy,
+    T13 -> eTxz,
+    T22 -> eTyy,
+    T23 -> eTyz,
+    T33 -> eTzz,
+    
+    (* rho = n^a n^b T_ab *)
+    rho -> 1/alpha^2 (T00 - 2 beta[ui] T0[li] + beta[ui] beta[uj] T[li,lj]),
+    
+    (* S_i = -p^a_i n^b T_ab, where p^a_i = delta^a_i + n^a n_i *)
+    S[li] -> -1/alpha (T0[li] - beta[uj] T[li,lj]),
+    
+    (* Constraints *)
+    
     (* H -> trR - Km[ua,lb] Km[ub,la] + trK^2, *)
     (* PRD 67, 084023 (2003), eqn. (19) *)
-    H -> trR - Atm[ua,lb] Atm[ub,la] + (2/3) trK^2,
+    H -> trR - Atm[ua,lb] Atm[ub,la] + (2/3) trK^2 - addMatter 16 pi rho,
     
-(*    (* gK[la,lb,lc] -> CD[K[la,lb],lc], *)
-    gK[la,lb,lc] -> + 4 e4phi PD[phi,lc] At[la,lb] + e4phi CD[At[la,lb],lc]
+    (* gK[la,lb,lc] -> CD[K[la,lb],lc], *)
+(*    gK[la,lb,lc] -> + 4 e4phi PD[phi,lc] At[la,lb] + e4phi CD[At[la,lb],lc]
                     + (1/3) g[la,lb] PD[trK,lc],
 
     M[la] -> gu[ub,uc] (gK[lc,la,lb] - gK[lc,lb,la]), *)
 
-    M[li] -> + gtu[uj,uk] ( CDt[At[li,lj],lk] + 6 At[li,lj] PD[phi,lk] )
-             - (2/3) PD[trK,li],
+    M[li] -> + gtu[uj,uk] (CDt[At[li,lj],lk] + 6 At[li,lj] PD[phi,lk])
+             - (2/3) PD[trK,li]
+             - addMatter 8 pi S[li],
     (* TODO: use PRD 67, 084023 (2003), eqn. (20) *)
     
     (* det gamma-tilde *)
@@ -818,38 +795,15 @@ constraintsCalcBSSN =
   }
 }
 
-constraintsMatterBSSN =
+constraintsBoundaryCalcBSSN =
 {
-  Name -> "ML_BSSN_matter_constraints",
-  Schedule -> {"AT analysis AFTER ML_BSSN_constraints"},
-  (* ConditionalOnKeyword -> {"evolution_method", "ML_BSSN"}, *)
-  ConditionalOnKeyword -> {"SpaceTime", "Space+Matter"},
-  TriggerGroups -> {"Ham", "mom"},
-  Where -> Interior,
-  Shorthands -> {T00, T0[la], T[la,lb], rho, S[la]},
+  Name -> "ML_BSSN_constraints_boundary",
+  Schedule -> {"IN ML_BSSN_constraintsCalcGroup AFTER ML_BSSN_constraints"},
+  Where -> Boundary,
   Equations -> 
   {
-
-    T00 -> eTtt,
-    T01 -> eTtx,
-    T02 -> eTty,
-    T03 -> eTtz,
-    T11 -> eTxx,
-    T12 -> eTxy,
-    T13 -> eTxz,
-    T22 -> eTyy,
-    T23 -> eTyz,
-    T33 -> eTzz,
-
-    (* rho = n^a n^b T_ab *)
-    rho -> 1/alpha^2 (T00 - 2 beta[ui] T0[li] + beta[ui] beta[uj] T[li,lj]),
-
-    (* S_i = -p^a_i n^b T_ab, where p^a_i = delta^a_i + n^a n_i *)
-    S[li] -> -1/alpha ( T0[li] - beta[uj] T[li,lj] ),
-
-    H -> H - 16 pi rho,
-
-    M[li] -> M[li] - 8 pi S[li]
+    H     -> 0,
+    M[la] -> 0
   }
 }
 
@@ -863,31 +817,10 @@ inheritedImplementations = {"ADMBase", "TmunuBase"};
 (* Parameters *)
 (******************************************************************************)
 
-(* inheritedKeywordParameters = { "ADMBase::initial_data" }; *)
 inheritedKeywordParameters = {};
 
 extendedKeywordParameters =
 {
-  {
-    Name -> "ADMBase::initial_data",
-    AllowedValues -> {"ML_BSSN__Minkowski"}
-  },
-  {
-    Name -> "ADMBase::initial_lapse",
-    AllowedValues -> {"ML_BSSN__Minkowski"}
-  },
-  {
-    Name -> "ADMBase::initial_shift",
-    AllowedValues -> {"ML_BSSN__Minkowski"}
-  },
-  {
-    Name -> "ADMBase::initial_dtlapse",
-    AllowedValues -> {"ML_BSSN__Minkowski"}
-  },
-  {
-    Name -> "ADMBase::initial_dtshift",
-    AllowedValues -> {"ML_BSSN__Minkowski"}
-  },
   {
     Name -> "ADMBase::evolution_method",
     AllowedValues -> {"ML_BSSN"}
@@ -912,11 +845,11 @@ keywordParameters =
     Default -> "ADMBase"
   },
   {
-    Name -> "SpaceTime",
+    Name -> "my_boundary_condition",
     (* Visibility -> "restricted", *)
     (* Description -> "ddd", *)
-    AllowedValues -> {"Space", "Space+Matter"},
-    Default -> "Space"
+    AllowedValues -> {"none", "Minkowski"},
+    Default -> "none"
   }
 };
 
@@ -955,12 +888,12 @@ realParameters =
   {
     Name -> LapseAdvectionCoeff,
     Description -> "Factor in front of the shift advection terms in 1+log",
-    Default -> 1.
+    Default -> 1
   },
   {
     Name -> ShiftAdvectionCoeff,
     Description -> "Factor in front of the shift advection terms in gamma driver",
-    Default -> 1.
+    Default -> 1
   }
 };
 
@@ -974,8 +907,10 @@ calculations =
   initialCalc,
   convertFromADMBaseCalc,
   evolCalc,
+  boundaryCalc,
   convertToADMBaseCalc,
-  constraintsCalc
+  constraintsCalc,
+  constraintsBoundaryCalc
 };
 
 CreateKrancThornTT [groups, ".", "ML_ADM",
@@ -994,11 +929,11 @@ calculationsBSSN =
   convertFromADMBaseCalcBSSN,
   convertFromADMBaseCalcBSSNGamma,
   evolCalcBSSN,
-  addMatterBSSN,
   enforceCalcBSSN,
+  boundaryCalcBSSN,
   convertToADMBaseCalcBSSN,
   constraintsCalcBSSN,
-  constraintsMatterBSSN
+  constraintsBoundaryCalcBSSN
 };
 
 CreateKrancThornTT [groupsBSSN, ".", "ML_BSSN",

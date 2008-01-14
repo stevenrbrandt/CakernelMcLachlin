@@ -36,6 +36,12 @@ CCTK_INT ML_FOWaveToy_MaxNumConstrainedVars "Number of constrained variables use
   61:61 :: "Number of constrained variables used by this thorn"
 } 61
 
+private:
+CCTK_INT timelevels "Number of active timelevels"
+{
+  0:2 :: ""
+} 2
+
 restricted:
 CCTK_INT WTFO_Gaussian_calc_every "WTFO_Gaussian_calc_every"
 {

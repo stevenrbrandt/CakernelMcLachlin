@@ -8,9 +8,23 @@ STORAGE: WT_rhorhs[1]
 
 STORAGE: WT_urhs[1]
 
-STORAGE: WT_rho[2]
+if (timelevels == 1)
+{
+  STORAGE: WT_rho[1]
+}
+if (timelevels == 2)
+{
+  STORAGE: WT_rho[2]
+}
 
-STORAGE: WT_u[2]
+if (timelevels == 1)
+{
+  STORAGE: WT_u[1]
+}
+if (timelevels == 2)
+{
+  STORAGE: WT_u[2]
+}
 
 schedule ML_WaveToy_Startup at STARTUP
 {
@@ -33,19 +47,16 @@ schedule ML_WaveToy_RegisterSymmetries at BASEGRID
 schedule WT_Gaussian AT initial
 {
   LANG: C
-  
 } "WT_Gaussian"
 
 schedule WT_RHS IN MoL_CalcRHS
 {
   LANG: C
-  
 } "WT_RHS"
 
 schedule WT_RHS AT analysis
 {
   LANG: C
-  
   SYNC: WT_rhorhs
   SYNC: WT_urhs
 } "WT_RHS"
@@ -67,5 +78,4 @@ schedule ML_WaveToy_CheckBoundaries at BASEGRID
 schedule group ApplyBCs as ML_WaveToy_ApplyBCs in MoL_PostStep  after ML_WaveToy_ApplyBoundConds
 {
   # no language specified
-  
 } "Apply boundary conditions controlled by thorn Boundary"

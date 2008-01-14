@@ -20,7 +20,7 @@
 #define CUB(x) ((x) * (x) * (x))
 #define QAD(x) ((x) * (x) * (x) * (x))
 
-void ML_BSSN_matter_constraints_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCTK_REAL normal[3], CCTK_REAL tangentA[3], CCTK_REAL tangentB[3], CCTK_INT min[3], CCTK_INT max[3], CCTK_INT n_subblock_gfs, CCTK_REAL *subblock_gfs[])
+void ML_ADM_boundary_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCTK_REAL normal[3], CCTK_REAL tangentA[3], CCTK_REAL tangentB[3], CCTK_INT min[3], CCTK_INT max[3], CCTK_INT n_subblock_gfs, CCTK_REAL *subblock_gfs[])
 {
   DECLARE_CCTK_ARGUMENTS
   DECLARE_CCTK_PARAMETERS
@@ -46,10 +46,10 @@ void ML_BSSN_matter_constraints_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, C
   
   if (verbose > 1)
   {
-    CCTK_VInfo(CCTK_THORNSTRING,"Entering ML_BSSN_matter_constraints_Body");
+    CCTK_VInfo(CCTK_THORNSTRING,"Entering ML_ADM_boundary_Body");
   }
   
-  if (cctk_iteration % ML_BSSN_matter_constraints_calc_every != ML_BSSN_matter_constraints_calc_offset)
+  if (cctk_iteration % ML_ADM_boundary_calc_every != ML_ADM_boundary_calc_offset)
   {
     return;
   }
@@ -85,7 +85,7 @@ void ML_BSSN_matter_constraints_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, C
   
   /* Loop over the grid points */
   _Pragma ("omp parallel")
-  LC_LOOP3 (ML_BSSN_matter_constraints,
+  LC_LOOP3 (ML_ADM_boundary,
             i,j,k, min[0],min[1],min[2], max[0],max[1],max[2],
             cctk_lsh[0],cctk_lsh[1],cctk_lsh[2])
   {
@@ -95,49 +95,17 @@ void ML_BSSN_matter_constraints_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, C
     subblock_index = i - min[0] + (max[0] - min[0]) * (j - min[1] + (max[1]-min[1]) * (k - min[2]));
     
     /* Declare shorthands */
-    CCTK_REAL rho = INITVALUE;
-    CCTK_REAL S1 = INITVALUE, S2 = INITVALUE, S3 = INITVALUE;
-    CCTK_REAL T00 = INITVALUE, T01 = INITVALUE, T02 = INITVALUE, T03 = INITVALUE, T11 = INITVALUE, T12 = INITVALUE;
-    CCTK_REAL T13 = INITVALUE, T22 = INITVALUE, T23 = INITVALUE, T33 = INITVALUE;
     
     /* Declare local copies of grid functions */
     CCTK_REAL alphaL = INITVALUE;
     CCTK_REAL beta1L = INITVALUE, beta2L = INITVALUE, beta3L = INITVALUE;
-    CCTK_REAL eTttL = INITVALUE;
-    CCTK_REAL eTtxL = INITVALUE;
-    CCTK_REAL eTtyL = INITVALUE;
-    CCTK_REAL eTtzL = INITVALUE;
-    CCTK_REAL eTxxL = INITVALUE;
-    CCTK_REAL eTxyL = INITVALUE;
-    CCTK_REAL eTxzL = INITVALUE;
-    CCTK_REAL eTyyL = INITVALUE;
-    CCTK_REAL eTyzL = INITVALUE;
-    CCTK_REAL eTzzL = INITVALUE;
-    CCTK_REAL HL = INITVALUE;
-    CCTK_REAL M1L = INITVALUE, M2L = INITVALUE, M3L = INITVALUE;
+    CCTK_REAL g11L = INITVALUE, g12L = INITVALUE, g13L = INITVALUE, g22L = INITVALUE, g23L = INITVALUE, g33L = INITVALUE;
+    CCTK_REAL K11L = INITVALUE, K12L = INITVALUE, K13L = INITVALUE, K22L = INITVALUE, K23L = INITVALUE, K33L = INITVALUE;
     /* Declare precomputed derivatives*/
     
     /* Declare derivatives */
     
     /* Assign local copies of grid functions */
-    alphaL = alpha[index];
-    beta1L = beta1[index];
-    beta2L = beta2[index];
-    beta3L = beta3[index];
-    eTttL = eTtt[index];
-    eTtxL = eTtx[index];
-    eTtyL = eTty[index];
-    eTtzL = eTtz[index];
-    eTxxL = eTxx[index];
-    eTxyL = eTxy[index];
-    eTxzL = eTxz[index];
-    eTyyL = eTyy[index];
-    eTyzL = eTyz[index];
-    eTzzL = eTzz[index];
-    HL = H[index];
-    M1L = M1[index];
-    M2L = M2[index];
-    M3L = M3[index];
     
     /* Assign local copies of subblock grid functions */
     
@@ -148,60 +116,66 @@ void ML_BSSN_matter_constraints_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, C
     /* Precompute derivatives (old style) */
     
     /* Calculate temporaries and grid functions */
-    T00  =  eTttL;
+    g11L  =  1;
     
-    T01  =  eTtxL;
+    g12L  =  0;
     
-    T02  =  eTtyL;
+    g13L  =  0;
     
-    T03  =  eTtzL;
+    g22L  =  1;
     
-    T11  =  eTxxL;
+    g23L  =  0;
     
-    T12  =  eTxyL;
+    g33L  =  1;
     
-    T13  =  eTxzL;
+    K11L  =  0;
     
-    T22  =  eTyyL;
+    K12L  =  0;
     
-    T23  =  eTyzL;
+    K13L  =  0;
     
-    T33  =  eTzzL;
+    K22L  =  0;
     
-    rho  =  pow(alphaL,-2)*(T00 - 2*(beta2L*T02 + beta3L*T03) + 
-          2*(beta1L*(-T01 + beta2L*T12 + beta3L*T13) + beta2L*beta3L*T23) + T11*SQR(beta1L) + T22*SQR(beta2L) + 
-          T33*SQR(beta3L));
+    K23L  =  0;
     
-    S1  =  (-T01 + beta1L*T11 + beta2L*T12 + beta3L*T13)*INV(alphaL);
+    K33L  =  0;
     
-    S2  =  (-T02 + beta1L*T12 + beta2L*T22 + beta3L*T23)*INV(alphaL);
+    alphaL  =  1;
     
-    S3  =  (-T03 + beta1L*T13 + beta2L*T23 + beta3L*T33)*INV(alphaL);
+    beta1L  =  0;
     
-    HL  =  HL - 50.26548245743669181540229413247204614715*rho;
+    beta2L  =  0;
     
-    M1L  =  M1L - 25.13274122871834590770114706623602307358*S1;
-    
-    M2L  =  M2L - 25.13274122871834590770114706623602307358*S2;
-    
-    M3L  =  M3L - 25.13274122871834590770114706623602307358*S3;
+    beta3L  =  0;
     
     
     /* Copy local copies back to grid functions */
-    H[index] = HL;
-    M1[index] = M1L;
-    M2[index] = M2L;
-    M3[index] = M3L;
+    alpha[index] = alphaL;
+    beta1[index] = beta1L;
+    beta2[index] = beta2L;
+    beta3[index] = beta3L;
+    g11[index] = g11L;
+    g12[index] = g12L;
+    g13[index] = g13L;
+    g22[index] = g22L;
+    g23[index] = g23L;
+    g33[index] = g33L;
+    K11[index] = K11L;
+    K12[index] = K12L;
+    K13[index] = K13L;
+    K22[index] = K22L;
+    K23[index] = K23L;
+    K33[index] = K33L;
     
     /* Copy local copies back to subblock grid functions */
   }
-  LC_ENDLOOP3 (ML_BSSN_matter_constraints);
+  LC_ENDLOOP3 (ML_ADM_boundary);
 }
 
-void ML_BSSN_matter_constraints(CCTK_ARGUMENTS)
+void ML_ADM_boundary(CCTK_ARGUMENTS)
 {
   DECLARE_CCTK_ARGUMENTS
   DECLARE_CCTK_PARAMETERS
   
-  GenericFD_LoopOverInterior(cctkGH, &ML_BSSN_matter_constraints_Body);
+  GenericFD_LoopOverBoundary(cctkGH, &ML_ADM_boundary_Body);
 }
