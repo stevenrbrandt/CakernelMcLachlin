@@ -97,7 +97,7 @@ void ML_BSSN_enforce_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCTK_REAL no
     /* Declare shorthands */
     CCTK_REAL detgt = INITVALUE;
     CCTK_REAL gtu11 = INITVALUE, gtu21 = INITVALUE, gtu22 = INITVALUE, gtu31 = INITVALUE, gtu32 = INITVALUE, gtu33 = INITVALUE;
-    CCTK_REAL trA = INITVALUE;
+    CCTK_REAL trAt = INITVALUE;
     
     /* Declare local copies of grid functions */
     CCTK_REAL alphaL = INITVALUE;
@@ -145,19 +145,19 @@ void ML_BSSN_enforce_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCTK_REAL no
     
     gtu33  =  INV(detgt)*(gt11L*gt22L - SQR(gt12L));
     
-    trA  =  At11L*gtu11 + At22L*gtu22 + 2*(At12L*gtu21 + At13L*gtu31 + At23L*gtu32) + At33L*gtu33;
+    trAt  =  At11L*gtu11 + At22L*gtu22 + 2*(At12L*gtu21 + At13L*gtu31 + At23L*gtu32) + At33L*gtu33;
     
-    At11L  =  At11L - gt11L*kthird*trA;
+    At11L  =  At11L - gt11L*kthird*trAt;
     
-    At12L  =  At12L - gt12L*kthird*trA;
+    At12L  =  At12L - gt12L*kthird*trAt;
     
-    At13L  =  At13L - gt13L*kthird*trA;
+    At13L  =  At13L - gt13L*kthird*trAt;
     
-    At22L  =  At22L - gt22L*kthird*trA;
+    At22L  =  At22L - gt22L*kthird*trAt;
     
-    At23L  =  At23L - gt23L*kthird*trA;
+    At23L  =  At23L - gt23L*kthird*trAt;
     
-    At33L  =  At33L - gt33L*kthird*trA;
+    At33L  =  At33L - gt33L*kthird*trAt;
     
     alphaL  =  fmax(1.e-10,alphaL);
     

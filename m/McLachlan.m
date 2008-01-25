@@ -573,17 +573,17 @@ enforceCalcBSSN =
   Name -> "ML_BSSN_enforce",
   Schedule -> {"IN MoL_PostStep BEFORE ML_BSSN_BoundConds"},
   ConditionalOnKeyword -> {"evolution_method", "ML_BSSN"},
-  Shorthands -> {detgt, gtu[ua,ub], trA},
+  Shorthands -> {detgt, gtu[ua,ub], trAt},
   Equations -> 
   {
     detgt -> 1 (* detgtExpr *),
     gtu[ua,ub] -> 1/detgt detgtExpr MatrixInverse [gt[ua,ub]],
     
-    trA -> gtu[ua,ub] At[la,lb],
+    trAt -> gtu[ua,ub] At[la,lb],
     
-    At[la,lb] -> At[la,lb] - (1/3) gt[la,lb] trA,
+    At[la,lb] -> At[la,lb] - (1/3) gt[la,lb] trAt,
 
-    alpha -> Max[alpha,10^(-10)]
+    alpha -> Max[alpha, 10^(-10)]
   }
 }
 
