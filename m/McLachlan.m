@@ -330,7 +330,7 @@ convertToADMBaseCalcBSSN =
   Name -> "ML_BSSN_convertToADMBase",
   Schedule -> {"IN MoL_PostStep AFTER (ML_BSSN_ApplyBCs ML_BSSN_boundary ML_BSSN_enforce)"},
   ConditionalOnKeyword -> {"evolution_method", "ML_BSSN"},
-  Where -> Interior,
+  (*Where -> Interior, *)
   Shorthands -> {e4phi, g[la,lb], K[la,lb]},
   Equations -> 
   {
