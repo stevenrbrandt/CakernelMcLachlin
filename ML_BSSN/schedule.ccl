@@ -1,5 +1,5 @@
-# File produced by user diener
-# Produced with Mathematica Version 6.0 for Linux x86 (32-bit) (April 20, 2007)
+# File produced by user eschnett
+# Produced with Mathematica Version 6.0 for Mac OS X x86 (32-bit) (April 20, 2007)
 
 # Mathematica script written by Ian Hinder and Sascha Husa
 
@@ -235,7 +235,22 @@ if (CCTK_EQUALS(evolution_method, "ML_BSSN"))
   schedule ML_BSSN_convertToADMBase IN MoL_PostStep AFTER (ML_BSSN_ApplyBCs ML_BSSN_boundary ML_BSSN_enforce)
   {
     LANG: C
+    SYNC: ADMBase::curv
+    SYNC: ADMBase::dtlapse
+    SYNC: ADMBase::dtshift
+    SYNC: ADMBase::lapse
+    SYNC: ADMBase::metric
+    SYNC: ADMBase::shift
   } "ML_BSSN_convertToADMBase"
+}
+
+
+if (CCTK_EQUALS(my_boundary_condition, "Minkowski"))
+{
+  schedule ML_BSSN_ADMBaseBoundary IN MoL_PostStep AFTER ML_BSSN_convertToADMBase
+  {
+    LANG: C
+  } "ML_BSSN_ADMBaseBoundary"
 }
 
 schedule ML_BSSN_constraints IN ML_BSSN_constraintsCalcGroup
