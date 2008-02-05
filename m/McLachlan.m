@@ -581,9 +581,9 @@ enforceCalcBSSN =
     
     trAt -> gtu[ua,ub] At[la,lb],
     
-    At[la,lb] -> At[la,lb] - (1/3) gt[la,lb] trAt,
+    At[la,lb] -> At[la,lb] - (1/3) gt[la,lb] trAt (*,
 
-    alpha -> Max[alpha, 10^(-10)]
+    alpha -> Max[alpha, 10^(-10)] *)
   }
 }
 
