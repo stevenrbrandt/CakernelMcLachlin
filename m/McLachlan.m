@@ -330,7 +330,7 @@ convertToADMBaseCalcBSSN =
   Name -> "ML_BSSN_convertToADMBase",
   Schedule -> {"IN MoL_PostStep AFTER (ML_BSSN_ApplyBCs ML_BSSN_boundary ML_BSSN_enforce)"},
   ConditionalOnKeyword -> {"evolution_method", "ML_BSSN"},
-  (*Where -> Interior, *)
+  Where -> Interior,
   Shorthands -> {e4phi, g[la,lb], K[la,lb]},
   Equations -> 
   {
@@ -363,6 +363,37 @@ convertToADMBaseCalcBSSN =
                 + ShiftAdvectionCoeff beta[ub] PD[beta[ua],lb],
     dtbetaz  -> + ShiftGammaCoeff B3
                 + ShiftAdvectionCoeff beta[ub] PD[beta[ua],lb]
+  }
+}
+
+boundaryCalcADMBaseBSSN =
+{
+  Name -> "ML_BSSN_ADMBaseBoundary",
+  Schedule -> {"IN MoL_PostStep AFTER ML_BSSN_convertToADMBase"},
+  ConditionalOnKeyword -> {"my_boundary_condition", "Minkowski"},
+  Where -> Boundary,
+  Equations -> 
+  {
+    gxx     -> 1,
+    gxy     -> 0,
+    gxz     -> 0,
+    gyy     -> 1,
+    gyz     -> 0,
+    gzz     -> 1,
+    kxx     -> 0,
+    kxy     -> 0,
+    kxz     -> 0,
+    kyy     -> 0,
+    kyz     -> 0,
+    kzz     -> 0,
+    alp     -> 1,
+    dtalp   -> 0,
+    betax   -> 0,
+    betay   -> 0,
+    betaz   -> 0,
+    dtbetax -> 0,
+    dtbetay -> 0,
+    dtbetaz -> 0
   }
 }
 
@@ -932,6 +963,7 @@ calculationsBSSN =
   enforceCalcBSSN,
   boundaryCalcBSSN,
   convertToADMBaseCalcBSSN,
+  boundaryCalcADMBaseBSSN,
   constraintsCalcBSSN,
   constraintsBoundaryCalcBSSN
 };

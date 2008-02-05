@@ -1,3 +1,7 @@
 SHARES: ADMBase
 
 USES KEYWORD evolution_method
+
+SHARES: GenericFD
+
+USES CCTK_INT boundary_width
