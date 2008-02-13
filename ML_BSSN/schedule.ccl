@@ -223,6 +223,15 @@ if (CCTK_EQUALS(evolution_method, "ML_BSSN"))
 
 if (CCTK_EQUALS(my_boundary_condition, "Minkowski"))
 {
+  schedule ML_BSSN_boundary AT initial AFTER ML_BSSN_convertFromADMBaseGamma
+  {
+    LANG: C
+  } "ML_BSSN_boundary"
+}
+
+
+if (CCTK_EQUALS(my_boundary_condition, "Minkowski"))
+{
   schedule ML_BSSN_boundary IN MoL_PostStep
   {
     LANG: C

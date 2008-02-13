@@ -209,5 +209,5 @@ void ML_BSSN_boundary(CCTK_ARGUMENTS)
   DECLARE_CCTK_ARGUMENTS
   DECLARE_CCTK_PARAMETERS
   
-  GenericFD_LoopOverBoundary(cctkGH, &ML_BSSN_boundary_Body);
+  GenericFD_LoopOverBoundaryWithGhosts(cctkGH, &ML_BSSN_boundary_Body);
 }

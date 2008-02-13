@@ -5,3 +5,7 @@ USES KEYWORD evolution_method
 SHARES: GenericFD
 
 USES CCTK_INT boundary_width
+
+SHARES: ML_BSSN
+
+USES CCTK_INT timelevels

@@ -1,5 +1,5 @@
-$Path = Join[$Path, {"~/Calpha/Kranc-devel/Tools/CodeGen",
-                     "~/Calpha/Kranc-devel/Tools/MathematicaMisc"}];
+$Path = Join[$Path, {"~/Calpha/Kranc/Tools/CodeGen",
+                     "~/Calpha/Kranc/Tools/MathematicaMisc"}];
 
 Get["KrancThorn`"];
 
@@ -265,7 +265,7 @@ convertFromADMBaseCalcBSSN =
   }
 }
 
-convertFromADMBaseCalcBSSNGamma =
+convertFromADMBaseGammaCalcBSSN =
 {
   Name -> "ML_BSSN_convertFromADMBaseGamma",
   Schedule -> {"AT initial AFTER ML_BSSN_convertFromADMBase"},
@@ -371,7 +371,7 @@ boundaryCalcADMBaseBSSN =
   Name -> "ML_BSSN_ADMBaseBoundary",
   Schedule -> {"IN MoL_PostStep AFTER ML_BSSN_convertToADMBase"},
   ConditionalOnKeyword -> {"my_boundary_condition", "Minkowski"},
-  Where -> Boundary,
+  Where -> BoundaryWithGhosts,
   Equations -> 
   {
     gxx     -> 1,
@@ -627,7 +627,7 @@ boundaryCalc =
   Name -> "ML_ADM_boundary",
   Schedule -> {"IN MoL_PostStep"},
   ConditionalOnKeyword -> {"my_boundary_condition", "Minkowski"},
-  Where -> Boundary,
+  Where -> BoundaryWithGhosts,
   Equations -> 
   {
     g[la,lb] -> KD[la,lb],
@@ -640,9 +640,10 @@ boundaryCalc =
 boundaryCalcBSSN =
 {
   Name -> "ML_BSSN_boundary",
-  Schedule -> {"IN MoL_PostStep"},
+  Schedule -> {"AT initial AFTER ML_BSSN_convertFromADMBaseGamma",
+               "IN MoL_PostStep"},
   ConditionalOnKeyword -> {"my_boundary_condition", "Minkowski"},
-  Where -> Boundary,
+  Where -> BoundaryWithGhosts,
   Equations -> 
   {
     phi       -> 0,
@@ -691,7 +692,7 @@ constraintsBoundaryCalc =
   Name -> "ML_ADM_constraints_boundary",
   Schedule -> {"AT analysis AFTER ML_ADM_constraints"},
   (* TriggerGroups -> {"Ham", "mom"}, *)
-  Where -> Boundary,
+  Where -> BoundaryWithGhosts,
   Equations -> 
   {
     H     -> 0,
@@ -830,7 +831,7 @@ constraintsBoundaryCalcBSSN =
 {
   Name -> "ML_BSSN_constraints_boundary",
   Schedule -> {"IN ML_BSSN_constraintsCalcGroup AFTER ML_BSSN_constraints"},
-  Where -> Boundary,
+  Where -> BoundaryWithGhosts,
   Equations -> 
   {
     H     -> 0,
@@ -949,6 +950,7 @@ CreateKrancThornTT [groups, ".", "ML_ADM",
   DeclaredGroups -> declaredGroupNames,
   PartialDerivatives -> derivatives,
   EvolutionTimelevels -> evolutionTimelevels,
+  UseLoopControl -> True,
   InheritedImplementations -> inheritedImplementations,
   InheritedKeywordParameters -> inheritedKeywordParameters,
   KeywordParameters -> keywordParameters
@@ -958,7 +960,7 @@ calculationsBSSN =
 {
   initialCalcBSSN,
   convertFromADMBaseCalcBSSN,
-  convertFromADMBaseCalcBSSNGamma,
+  convertFromADMBaseGammaCalcBSSN,
   evolCalcBSSN,
   enforceCalcBSSN,
   boundaryCalcBSSN,
@@ -973,6 +975,7 @@ CreateKrancThornTT [groupsBSSN, ".", "ML_BSSN",
   DeclaredGroups -> declaredGroupNamesBSSN,
   PartialDerivatives -> derivatives,
   EvolutionTimelevels -> evolutionTimelevels,
+  UseLoopControl -> True,
   InheritedImplementations -> inheritedImplementations,
   InheritedKeywordParameters -> inheritedKeywordParameters,
   ExtendedKeywordParameters -> extendedKeywordParameters,
