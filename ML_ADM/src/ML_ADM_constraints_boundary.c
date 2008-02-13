@@ -139,5 +139,5 @@ void ML_ADM_constraints_boundary(CCTK_ARGUMENTS)
   DECLARE_CCTK_ARGUMENTS
   DECLARE_CCTK_PARAMETERS
   
-  GenericFD_LoopOverBoundary(cctkGH, &ML_ADM_constraints_boundary_Body);
+  GenericFD_LoopOverBoundaryWithGhosts(cctkGH, &ML_ADM_constraints_boundary_Body);
 }

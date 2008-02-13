@@ -1,5 +1,5 @@
-/*  File produced by user diener */
-/*  Produced with Mathematica Version 6.0 for Linux x86 (32-bit) (April 20, 2007) */
+/*  File produced by user eschnett */
+/*  Produced with Mathematica Version 6.0 for Mac OS X x86 (32-bit) (April 20, 2007) */
 
 /*  Mathematica script written by Ian Hinder and Sascha Husa */
 
@@ -11,7 +11,6 @@
 #include "cctk_Parameters.h"
 #include "GenericFD.h"
 #include "Differencing.h"
-#include "loopcontrol.h"
 
 /* Define macros used in calculations */
 #define INITVALUE  (42)
@@ -25,6 +24,11 @@ void WTFO_Gaussian_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCTK_REAL norm
   DECLARE_CCTK_ARGUMENTS
   DECLARE_CCTK_PARAMETERS
   
+  
+  /* Declare the variables used for looping over grid points */
+  CCTK_INT i = INITVALUE, j = INITVALUE, k = INITVALUE;
+  CCTK_INT index = INITVALUE;
+  CCTK_INT subblock_index = INITVALUE;
   
   /* Declare finite differencing variables */
   CCTK_REAL dx = INITVALUE, dy = INITVALUE, dz = INITVALUE;
@@ -104,58 +108,58 @@ void WTFO_Gaussian_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCTK_REAL norm
   pm1o12dz2 = -pow(dz,-2)/12.;
   
   /* Loop over the grid points */
-  _Pragma ("omp parallel")
-  LC_LOOP3 (WTFO_Gaussian,
-            i,j,k, min[0],min[1],min[2], max[0],max[1],max[2],
-            cctk_lsh[0],cctk_lsh[1],cctk_lsh[2])
+  for (k = min[2]; k < max[2]; k++)
   {
-    int index = INITVALUE;
-    int subblock_index = INITVALUE;
-    index = CCTK_GFINDEX3D(cctkGH,i,j,k);
-    subblock_index = i - min[0] + (max[0] - min[0]) * (j - min[1] + (max[1]-min[1]) * (k - min[2]));
-    
-    /* Declare shorthands */
-    
-    /* Declare local copies of grid functions */
-    CCTK_REAL rhoL = INITVALUE;
-    CCTK_REAL uL = INITVALUE;
-    CCTK_REAL v1L = INITVALUE, v2L = INITVALUE, v3L = INITVALUE;
-    /* Declare precomputed derivatives*/
-    
-    /* Declare derivatives */
-    
-    /* Assign local copies of grid functions */
-    
-    /* Assign local copies of subblock grid functions */
-    
-    /* Include user supplied include files */
-    
-    /* Precompute derivatives (new style) */
-    
-    /* Precompute derivatives (old style) */
-    
-    /* Calculate temporaries and grid functions */
-    uL  =  0;
-    
-    v1L  =  0;
-    
-    v2L  =  0;
-    
-    v3L  =  0;
-    
-    rhoL  =  0;
-    
-    
-    /* Copy local copies back to grid functions */
-    rho[index] = rhoL;
-    u[index] = uL;
-    v1[index] = v1L;
-    v2[index] = v2L;
-    v3[index] = v3L;
-    
-    /* Copy local copies back to subblock grid functions */
+    for (j = min[1]; j < max[1]; j++)
+    {
+      for (i = min[0]; i < max[0]; i++)
+      {
+         index  =  CCTK_GFINDEX3D(cctkGH,i,j,k) ;
+         subblock_index  =  i - min[0] + (max[0] - min[0]) * (j - min[1] + (max[1]-min[1]) * (k - min[2])) ;
+        
+        /* Declare shorthands */
+        
+        /* Declare local copies of grid functions */
+        CCTK_REAL rhoL = INITVALUE;
+        CCTK_REAL uL = INITVALUE;
+        CCTK_REAL v1L = INITVALUE, v2L = INITVALUE, v3L = INITVALUE;
+        /* Declare precomputed derivatives*/
+        
+        /* Declare derivatives */
+        
+        /* Assign local copies of grid functions */
+        
+        /* Assign local copies of subblock grid functions */
+        
+        /* Include user supplied include files */
+        
+        /* Precompute derivatives (new style) */
+        
+        /* Precompute derivatives (old style) */
+        
+        /* Calculate temporaries and grid functions */
+        uL  =  0;
+        
+        v1L  =  0;
+        
+        v2L  =  0;
+        
+        v3L  =  0;
+        
+        rhoL  =  0;
+        
+        
+        /* Copy local copies back to grid functions */
+        rho[index] = rhoL;
+        u[index] = uL;
+        v1[index] = v1L;
+        v2[index] = v2L;
+        v3[index] = v3L;
+        
+        /* Copy local copies back to subblock grid functions */
+      }
+    }
   }
-  LC_ENDLOOP3 (WTFO_Gaussian);
 }
 
 void WTFO_Gaussian(CCTK_ARGUMENTS)

@@ -1,5 +1,5 @@
-/*  File produced by user diener */
-/*  Produced with Mathematica Version 6.0 for Linux x86 (32-bit) (April 20, 2007) */
+/*  File produced by user eschnett */
+/*  Produced with Mathematica Version 6.0 for Mac OS X x86 (32-bit) (April 20, 2007) */
 
 /*  Mathematica script written by Ian Hinder and Sascha Husa */
 
@@ -11,7 +11,6 @@
 #include "cctk_Parameters.h"
 #include "GenericFD.h"
 #include "Differencing.h"
-#include "loopcontrol.h"
 
 /* Define macros used in calculations */
 #define INITVALUE  (42)
@@ -25,6 +24,11 @@ void WTFO_constraints_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCTK_REAL n
   DECLARE_CCTK_ARGUMENTS
   DECLARE_CCTK_PARAMETERS
   
+  
+  /* Declare the variables used for looping over grid points */
+  CCTK_INT i = INITVALUE, j = INITVALUE, k = INITVALUE;
+  CCTK_INT index = INITVALUE;
+  CCTK_INT subblock_index = INITVALUE;
   
   /* Declare finite differencing variables */
   CCTK_REAL dx = INITVALUE, dy = INITVALUE, dz = INITVALUE;
@@ -104,113 +108,113 @@ void WTFO_constraints_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCTK_REAL n
   pm1o12dz2 = -pow(dz,-2)/12.;
   
   /* Loop over the grid points */
-  _Pragma ("omp parallel")
-  LC_LOOP3 (WTFO_constraints,
-            i,j,k, min[0],min[1],min[2], max[0],max[1],max[2],
-            cctk_lsh[0],cctk_lsh[1],cctk_lsh[2])
+  for (k = min[2]; k < max[2]; k++)
   {
-    int index = INITVALUE;
-    int subblock_index = INITVALUE;
-    index = CCTK_GFINDEX3D(cctkGH,i,j,k);
-    subblock_index = i - min[0] + (max[0] - min[0]) * (j - min[1] + (max[1]-min[1]) * (k - min[2]));
-    
-    /* Declare shorthands */
-    CCTK_REAL Jinv11 = INITVALUE, Jinv12 = INITVALUE, Jinv13 = INITVALUE, Jinv21 = INITVALUE, Jinv22 = INITVALUE, Jinv23 = INITVALUE;
-    CCTK_REAL Jinv31 = INITVALUE, Jinv32 = INITVALUE, Jinv33 = INITVALUE;
-    
-    /* Declare local copies of grid functions */
-    CCTK_REAL dadxL = INITVALUE;
-    CCTK_REAL dadyL = INITVALUE;
-    CCTK_REAL dadzL = INITVALUE;
-    CCTK_REAL dbdxL = INITVALUE;
-    CCTK_REAL dbdyL = INITVALUE;
-    CCTK_REAL dbdzL = INITVALUE;
-    CCTK_REAL dcdxL = INITVALUE;
-    CCTK_REAL dcdyL = INITVALUE;
-    CCTK_REAL dcdzL = INITVALUE;
-    CCTK_REAL v1L = INITVALUE, v2L = INITVALUE, v3L = INITVALUE;
-    CCTK_REAL w1L = INITVALUE, w2L = INITVALUE, w3L = INITVALUE;
-    /* Declare precomputed derivatives*/
-    
-    /* Declare derivatives */
-    CCTK_REAL PDstandardNth1v1 = INITVALUE;
-    CCTK_REAL PDstandardNth2v1 = INITVALUE;
-    CCTK_REAL PDstandardNth3v1 = INITVALUE;
-    CCTK_REAL PDstandardNth1v2 = INITVALUE;
-    CCTK_REAL PDstandardNth2v2 = INITVALUE;
-    CCTK_REAL PDstandardNth3v2 = INITVALUE;
-    CCTK_REAL PDstandardNth1v3 = INITVALUE;
-    CCTK_REAL PDstandardNth2v3 = INITVALUE;
-    CCTK_REAL PDstandardNth3v3 = INITVALUE;
-    
-    /* Assign local copies of grid functions */
-    dadxL = dadx[index];
-    dadyL = dady[index];
-    dadzL = dadz[index];
-    dbdxL = dbdx[index];
-    dbdyL = dbdy[index];
-    dbdzL = dbdz[index];
-    dcdxL = dcdx[index];
-    dcdyL = dcdy[index];
-    dcdzL = dcdz[index];
-    v1L = v1[index];
-    v2L = v2[index];
-    v3L = v3[index];
-    
-    /* Assign local copies of subblock grid functions */
-    
-    /* Include user supplied include files */
-    
-    /* Precompute derivatives (new style) */
-    PDstandardNth1v1 = PDstandardNth1(v1, i, j, k);
-    PDstandardNth2v1 = PDstandardNth2(v1, i, j, k);
-    PDstandardNth3v1 = PDstandardNth3(v1, i, j, k);
-    PDstandardNth1v2 = PDstandardNth1(v2, i, j, k);
-    PDstandardNth2v2 = PDstandardNth2(v2, i, j, k);
-    PDstandardNth3v2 = PDstandardNth3(v2, i, j, k);
-    PDstandardNth1v3 = PDstandardNth1(v3, i, j, k);
-    PDstandardNth2v3 = PDstandardNth2(v3, i, j, k);
-    PDstandardNth3v3 = PDstandardNth3(v3, i, j, k);
-    
-    /* Precompute derivatives (old style) */
-    
-    /* Calculate temporaries and grid functions */
-    Jinv11  =  dadxL;
-    
-    Jinv12  =  dadyL;
-    
-    Jinv13  =  dadzL;
-    
-    Jinv21  =  dbdxL;
-    
-    Jinv22  =  dbdyL;
-    
-    Jinv23  =  dbdzL;
-    
-    Jinv31  =  dcdxL;
-    
-    Jinv32  =  dcdyL;
-    
-    Jinv33  =  dcdzL;
-    
-    w1L  =  Jinv13*PDstandardNth1v2 - Jinv12*PDstandardNth1v3 + Jinv23*PDstandardNth2v2 - Jinv22*PDstandardNth2v3 + 
-        Jinv33*PDstandardNth3v2 - Jinv32*PDstandardNth3v3;
-    
-    w2L  =  -(Jinv13*PDstandardNth1v1) + Jinv11*PDstandardNth1v3 - Jinv23*PDstandardNth2v1 + Jinv21*PDstandardNth2v3 - 
-        Jinv33*PDstandardNth3v1 + Jinv31*PDstandardNth3v3;
-    
-    w3L  =  Jinv12*PDstandardNth1v1 - Jinv11*PDstandardNth1v2 + Jinv22*PDstandardNth2v1 - Jinv21*PDstandardNth2v2 + 
-        Jinv32*PDstandardNth3v1 - Jinv31*PDstandardNth3v2;
-    
-    
-    /* Copy local copies back to grid functions */
-    w1[index] = w1L;
-    w2[index] = w2L;
-    w3[index] = w3L;
-    
-    /* Copy local copies back to subblock grid functions */
+    for (j = min[1]; j < max[1]; j++)
+    {
+      for (i = min[0]; i < max[0]; i++)
+      {
+         index  =  CCTK_GFINDEX3D(cctkGH,i,j,k) ;
+         subblock_index  =  i - min[0] + (max[0] - min[0]) * (j - min[1] + (max[1]-min[1]) * (k - min[2])) ;
+        
+        /* Declare shorthands */
+        CCTK_REAL Jinv11 = INITVALUE, Jinv12 = INITVALUE, Jinv13 = INITVALUE, Jinv21 = INITVALUE, Jinv22 = INITVALUE, Jinv23 = INITVALUE;
+        CCTK_REAL Jinv31 = INITVALUE, Jinv32 = INITVALUE, Jinv33 = INITVALUE;
+        
+        /* Declare local copies of grid functions */
+        CCTK_REAL dadxL = INITVALUE;
+        CCTK_REAL dadyL = INITVALUE;
+        CCTK_REAL dadzL = INITVALUE;
+        CCTK_REAL dbdxL = INITVALUE;
+        CCTK_REAL dbdyL = INITVALUE;
+        CCTK_REAL dbdzL = INITVALUE;
+        CCTK_REAL dcdxL = INITVALUE;
+        CCTK_REAL dcdyL = INITVALUE;
+        CCTK_REAL dcdzL = INITVALUE;
+        CCTK_REAL v1L = INITVALUE, v2L = INITVALUE, v3L = INITVALUE;
+        CCTK_REAL w1L = INITVALUE, w2L = INITVALUE, w3L = INITVALUE;
+        /* Declare precomputed derivatives*/
+        
+        /* Declare derivatives */
+        CCTK_REAL PDstandardNth1v1 = INITVALUE;
+        CCTK_REAL PDstandardNth2v1 = INITVALUE;
+        CCTK_REAL PDstandardNth3v1 = INITVALUE;
+        CCTK_REAL PDstandardNth1v2 = INITVALUE;
+        CCTK_REAL PDstandardNth2v2 = INITVALUE;
+        CCTK_REAL PDstandardNth3v2 = INITVALUE;
+        CCTK_REAL PDstandardNth1v3 = INITVALUE;
+        CCTK_REAL PDstandardNth2v3 = INITVALUE;
+        CCTK_REAL PDstandardNth3v3 = INITVALUE;
+        
+        /* Assign local copies of grid functions */
+        dadxL = dadx[index];
+        dadyL = dady[index];
+        dadzL = dadz[index];
+        dbdxL = dbdx[index];
+        dbdyL = dbdy[index];
+        dbdzL = dbdz[index];
+        dcdxL = dcdx[index];
+        dcdyL = dcdy[index];
+        dcdzL = dcdz[index];
+        v1L = v1[index];
+        v2L = v2[index];
+        v3L = v3[index];
+        
+        /* Assign local copies of subblock grid functions */
+        
+        /* Include user supplied include files */
+        
+        /* Precompute derivatives (new style) */
+        PDstandardNth1v1 = PDstandardNth1(v1, i, j, k);
+        PDstandardNth2v1 = PDstandardNth2(v1, i, j, k);
+        PDstandardNth3v1 = PDstandardNth3(v1, i, j, k);
+        PDstandardNth1v2 = PDstandardNth1(v2, i, j, k);
+        PDstandardNth2v2 = PDstandardNth2(v2, i, j, k);
+        PDstandardNth3v2 = PDstandardNth3(v2, i, j, k);
+        PDstandardNth1v3 = PDstandardNth1(v3, i, j, k);
+        PDstandardNth2v3 = PDstandardNth2(v3, i, j, k);
+        PDstandardNth3v3 = PDstandardNth3(v3, i, j, k);
+        
+        /* Precompute derivatives (old style) */
+        
+        /* Calculate temporaries and grid functions */
+        Jinv11  =  dadxL;
+        
+        Jinv12  =  dadyL;
+        
+        Jinv13  =  dadzL;
+        
+        Jinv21  =  dbdxL;
+        
+        Jinv22  =  dbdyL;
+        
+        Jinv23  =  dbdzL;
+        
+        Jinv31  =  dcdxL;
+        
+        Jinv32  =  dcdyL;
+        
+        Jinv33  =  dcdzL;
+        
+        w1L  =  Jinv13*PDstandardNth1v2 - Jinv12*PDstandardNth1v3 + Jinv23*PDstandardNth2v2 - Jinv22*PDstandardNth2v3 + 
+            Jinv33*PDstandardNth3v2 - Jinv32*PDstandardNth3v3;
+        
+        w2L  =  -(Jinv13*PDstandardNth1v1) + Jinv11*PDstandardNth1v3 - Jinv23*PDstandardNth2v1 + Jinv21*PDstandardNth2v3 - 
+            Jinv33*PDstandardNth3v1 + Jinv31*PDstandardNth3v3;
+        
+        w3L  =  Jinv12*PDstandardNth1v1 - Jinv11*PDstandardNth1v2 + Jinv22*PDstandardNth2v1 - Jinv21*PDstandardNth2v2 + 
+            Jinv32*PDstandardNth3v1 - Jinv31*PDstandardNth3v2;
+        
+        
+        /* Copy local copies back to grid functions */
+        w1[index] = w1L;
+        w2[index] = w2L;
+        w3[index] = w3L;
+        
+        /* Copy local copies back to subblock grid functions */
+      }
+    }
   }
-  LC_ENDLOOP3 (WTFO_constraints);
 }
 
 void WTFO_constraints(CCTK_ARGUMENTS)

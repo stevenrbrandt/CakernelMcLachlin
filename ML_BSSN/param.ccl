@@ -120,7 +120,7 @@ CCTK_INT ML_BSSN_MaxNumConstrainedVars "Number of constrained variables used by 
   43:43 :: "Number of constrained variables used by this thorn"
 } 43
 
-private:
+restricted:
 CCTK_INT timelevels "Number of active timelevels"
 {
   0:3 :: ""

@@ -1,11 +1,27 @@
 if (CCTK_EQUALS (evolution_method, "ML_BSSN")) {
   
-  STORAGE: ADMBase::metric[3]
-  STORAGE: ADMBase::curv[3]
-  STORAGE: ADMBase::lapse[3]
-  STORAGE: ADMBase::shift[3]
-  STORAGE: ADMBase::dtlapse[3]
-  STORAGE: ADMBase::dtshift[3]
+  if (timelevels == 1) {
+    STORAGE: ADMBase::metric[1]
+    STORAGE: ADMBase::curv[1]
+    STORAGE: ADMBase::lapse[1]
+    STORAGE: ADMBase::shift[1]
+    STORAGE: ADMBase::dtlapse[1]
+    STORAGE: ADMBase::dtshift[1]
+  } else if (timelevels == 2) {
+    STORAGE: ADMBase::metric[2]
+    STORAGE: ADMBase::curv[2]
+    STORAGE: ADMBase::lapse[2]
+    STORAGE: ADMBase::shift[2]
+    STORAGE: ADMBase::dtlapse[2]
+    STORAGE: ADMBase::dtshift[2]
+  } else if (timelevels == 3) {
+    STORAGE: ADMBase::metric[3]
+    STORAGE: ADMBase::curv[3]
+    STORAGE: ADMBase::lapse[3]
+    STORAGE: ADMBase::shift[3]
+    STORAGE: ADMBase::dtlapse[3]
+    STORAGE: ADMBase::dtshift[3]
+  }
   
   SCHEDULE ML_BSSN_RegisterSlicing AT startup
   {
