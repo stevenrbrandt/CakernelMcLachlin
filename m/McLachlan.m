@@ -640,8 +640,7 @@ boundaryCalc =
 boundaryCalcBSSN =
 {
   Name -> "ML_BSSN_boundary",
-  Schedule -> {"AT initial AFTER ML_BSSN_convertFromADMBaseGamma",
-               "IN MoL_PostStep"},
+  Schedule -> {"IN MoL_PostStep"},
   ConditionalOnKeyword -> {"my_boundary_condition", "Minkowski"},
   Where -> BoundaryWithGhosts,
   Equations -> 
