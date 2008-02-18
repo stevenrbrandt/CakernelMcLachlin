@@ -9,7 +9,9 @@ inherits:   ADMBase TmunuBase Grid GenericFD Boundary
 
 
 
-USES INCLUDE: GenericFD.hSymmetry.hsbp_calc_coeffs.h
+USES INCLUDE: GenericFD.h
+USES INCLUDE: Symmetry.h
+USES INCLUDE: sbp_calc_coeffs.h
 USES INCLUDE: Boundary.h
 USES INCLUDE: loopcontrol.h
 
