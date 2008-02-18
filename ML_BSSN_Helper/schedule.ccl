@@ -68,6 +68,12 @@ if (CCTK_EQUALS (evolution_method, "ML_BSSN")) {
   {
     LANG: C
     OPTIONS: level
+    SYNC: ADMBase::metric
+    SYNC: ADMBase::curv
+    SYNC: ADMBase::lapse
+    SYNC: ADMBase::shift
+    SYNC: ADMBase::dtlapse
+    SYNC: ADMBase::dtshift
   } "Apply boundary conditions to ADMBase variables"
   
   SCHEDULE GROUP ApplyBCs AS ML_BSSN_ApplyBCsADMBase IN MoL_PostStep AFTER ML_BSSN_SelectBCsADMBase
