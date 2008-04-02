@@ -5,7 +5,10 @@
 
 #define KRANC_C
 
+#include <assert.h>
 #include <math.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include "cctk.h"
 #include "cctk_Arguments.h"
 #include "cctk_Parameters.h"
@@ -118,55 +121,18 @@ void WT_RHS_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCTK_REAL normal[3], 
          subblock_index  =  i - min[0] + (max[0] - min[0]) * (j - min[1] + (max[1]-min[1]) * (k - min[2])) ;
         
         /* Declare shorthands */
-        CCTK_REAL dJinv111 = INITVALUE, dJinv122 = INITVALUE, dJinv133 = INITVALUE, dJinv211 = INITVALUE, dJinv222 = INITVALUE, dJinv233 = INITVALUE;
-        CCTK_REAL dJinv311 = INITVALUE, dJinv322 = INITVALUE, dJinv333 = INITVALUE;
-        CCTK_REAL Jinv11 = INITVALUE, Jinv12 = INITVALUE, Jinv13 = INITVALUE, Jinv21 = INITVALUE, Jinv22 = INITVALUE, Jinv23 = INITVALUE;
-        CCTK_REAL Jinv31 = INITVALUE, Jinv32 = INITVALUE, Jinv33 = INITVALUE;
         
         /* Declare local copies of grid functions */
-        CCTK_REAL dadxL = INITVALUE;
-        CCTK_REAL dadyL = INITVALUE;
-        CCTK_REAL dadzL = INITVALUE;
-        CCTK_REAL dbdxL = INITVALUE;
-        CCTK_REAL dbdyL = INITVALUE;
-        CCTK_REAL dbdzL = INITVALUE;
-        CCTK_REAL dcdxL = INITVALUE;
-        CCTK_REAL dcdyL = INITVALUE;
-        CCTK_REAL dcdzL = INITVALUE;
-        CCTK_REAL ddadxdxL = INITVALUE;
-        CCTK_REAL ddadydyL = INITVALUE;
-        CCTK_REAL ddadzdzL = INITVALUE;
         CCTK_REAL rhoL = INITVALUE, rhorhsL = INITVALUE;
         CCTK_REAL uL = INITVALUE, urhsL = INITVALUE;
         /* Declare precomputed derivatives*/
         
         /* Declare derivatives */
-        CCTK_REAL PDstandardNth1u = INITVALUE;
-        CCTK_REAL PDstandardNth2u = INITVALUE;
-        CCTK_REAL PDstandardNth3u = INITVALUE;
         CCTK_REAL PDstandardNth11u = INITVALUE;
         CCTK_REAL PDstandardNth22u = INITVALUE;
         CCTK_REAL PDstandardNth33u = INITVALUE;
-        CCTK_REAL PDstandardNth12u = INITVALUE;
-        CCTK_REAL PDstandardNth13u = INITVALUE;
-        CCTK_REAL PDstandardNth21u = INITVALUE;
-        CCTK_REAL PDstandardNth23u = INITVALUE;
-        CCTK_REAL PDstandardNth31u = INITVALUE;
-        CCTK_REAL PDstandardNth32u = INITVALUE;
         
         /* Assign local copies of grid functions */
-        dadxL = dadx[index];
-        dadyL = dady[index];
-        dadzL = dadz[index];
-        dbdxL = dbdx[index];
-        dbdyL = dbdy[index];
-        dbdzL = dbdz[index];
-        dcdxL = dcdx[index];
-        dcdyL = dcdy[index];
-        dcdzL = dcdz[index];
-        ddadxdxL = ddadxdx[index];
-        ddadydyL = ddadydy[index];
-        ddadzdzL = ddadzdz[index];
         rhoL = rho[index];
         uL = u[index];
         
@@ -175,65 +141,16 @@ void WT_RHS_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCTK_REAL normal[3], 
         /* Include user supplied include files */
         
         /* Precompute derivatives (new style) */
-        PDstandardNth1u = PDstandardNth1(u, i, j, k);
-        PDstandardNth2u = PDstandardNth2(u, i, j, k);
-        PDstandardNth3u = PDstandardNth3(u, i, j, k);
         PDstandardNth11u = PDstandardNth11(u, i, j, k);
         PDstandardNth22u = PDstandardNth22(u, i, j, k);
         PDstandardNth33u = PDstandardNth33(u, i, j, k);
-        PDstandardNth12u = PDstandardNth12(u, i, j, k);
-        PDstandardNth13u = PDstandardNth13(u, i, j, k);
-        PDstandardNth23u = PDstandardNth23(u, i, j, k);
         
         /* Precompute derivatives (old style) */
         
         /* Calculate temporaries and grid functions */
-        Jinv11  =  dadxL;
-        
-        Jinv12  =  dadyL;
-        
-        Jinv13  =  dadzL;
-        
-        Jinv21  =  dbdxL;
-        
-        Jinv22  =  dbdyL;
-        
-        Jinv23  =  dbdzL;
-        
-        Jinv31  =  dcdxL;
-        
-        Jinv32  =  dcdyL;
-        
-        Jinv33  =  dcdzL;
-        
-        dJinv111  =  ddadxdxL;
-        
-        dJinv122  =  ddadydyL;
-        
-        dJinv133  =  ddadzdzL;
-        
-        dJinv211  =  ddadxdxL;
-        
-        dJinv222  =  ddadydyL;
-        
-        dJinv233  =  ddadzdzL;
-        
-        dJinv311  =  ddadxdxL;
-        
-        dJinv322  =  ddadydyL;
-        
-        dJinv333  =  ddadzdzL;
-        
         urhsL  =  rhoL;
         
-        rhorhsL  =  (dJinv111 + dJinv122 + dJinv133)*PDstandardNth1u + 
-            2*((Jinv11*Jinv21 + Jinv12*Jinv22 + Jinv13*Jinv23)*PDstandardNth12u + 
-               (Jinv11*Jinv31 + Jinv12*Jinv32 + Jinv13*Jinv33)*PDstandardNth13u + 
-               (Jinv21*Jinv31 + Jinv22*Jinv32 + Jinv23*Jinv33)*PDstandardNth23u) + 
-            (dJinv211 + dJinv222 + dJinv233)*PDstandardNth2u + (dJinv311 + dJinv322 + dJinv333)*PDstandardNth3u + 
-            PDstandardNth11u*(SQR(Jinv11) + SQR(Jinv12) + SQR(Jinv13)) + 
-            PDstandardNth22u*(SQR(Jinv21) + SQR(Jinv22) + SQR(Jinv23)) + 
-            PDstandardNth33u*(SQR(Jinv31) + SQR(Jinv32) + SQR(Jinv33));
+        rhorhsL  =  PDstandardNth11u + PDstandardNth22u + PDstandardNth33u;
         
         
         /* Copy local copies back to grid functions */

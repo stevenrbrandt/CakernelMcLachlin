@@ -5,7 +5,10 @@
 
 #define KRANC_C
 
+#include <assert.h>
 #include <math.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include "cctk.h"
 #include "cctk_Arguments.h"
 #include "cctk_Parameters.h"
@@ -84,7 +87,7 @@ void ML_BSSN_convertToADMBase_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCT
   pm1o12dz2 = -pow(dz,-2)/12.;
   
   /* Loop over the grid points */
-  _Pragma ("omp parallel")
+  #pragma omp parallel
   LC_LOOP3 (ML_BSSN_convertToADMBase,
             i,j,k, min[0],min[1],min[2], max[0],max[1],max[2],
             cctk_lsh[0],cctk_lsh[1],cctk_lsh[2])
@@ -135,8 +138,8 @@ void ML_BSSN_convertToADMBase_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCT
     CCTK_REAL PDstandardNth2alpha = INITVALUE;
     CCTK_REAL PDstandardNth3alpha = INITVALUE;
     CCTK_REAL PDstandardNth1beta1 = INITVALUE;
-    CCTK_REAL PDstandardNth2beta1 = INITVALUE;
-    CCTK_REAL PDstandardNth3beta1 = INITVALUE;
+    CCTK_REAL PDstandardNth2beta2 = INITVALUE;
+    CCTK_REAL PDstandardNth3beta3 = INITVALUE;
     
     /* Assign local copies of grid functions */
     AL = A[index];
@@ -171,8 +174,8 @@ void ML_BSSN_convertToADMBase_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCT
     PDstandardNth2alpha = PDstandardNth2(alpha, i, j, k);
     PDstandardNth3alpha = PDstandardNth3(alpha, i, j, k);
     PDstandardNth1beta1 = PDstandardNth1(beta1, i, j, k);
-    PDstandardNth2beta1 = PDstandardNth2(beta1, i, j, k);
-    PDstandardNth3beta1 = PDstandardNth3(beta1, i, j, k);
+    PDstandardNth2beta2 = PDstandardNth2(beta2, i, j, k);
+    PDstandardNth3beta3 = PDstandardNth3(beta3, i, j, k);
     
     /* Precompute derivatives (old style) */
     
@@ -235,17 +238,19 @@ void ML_BSSN_convertToADMBase_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCT
     
     betazL  =  beta3L;
     
-    dtalpL  =  LapseAdvectionCoeff*(beta1L*PDstandardNth1alpha + beta2L*PDstandardNth2alpha + beta3L*PDstandardNth3alpha) + 
-        harmonicF*(AL*(-1 + LapseAdvectionCoeff) - LapseAdvectionCoeff*trKL)*pow(alphaL,harmonicN);
+    dtalpL  =  3*LapseAdvectionCoeff*(beta1L*PDstandardNth1alpha + 
+           beta2L*PDstandardNth2alpha + beta3L*PDstandardNth3alpha) + 
+        harmonicF*(AL*(-1 + LapseAdvectionCoeff) - LapseAdvectionCoeff*trKL)*
+         pow(alphaL,harmonicN);
     
-    dtbetaxL  =  (beta1L*PDstandardNth1beta1 + beta2L*PDstandardNth2beta1 + beta3L*PDstandardNth3beta1)*
-         ShiftAdvectionCoeff + B1L*ShiftGammaCoeff;
+    dtbetaxL  =  beta1L*(PDstandardNth1beta1 + PDstandardNth2beta2 + 
+           PDstandardNth3beta3)*ShiftAdvectionCoeff + B1L*ShiftGammaCoeff;
     
-    dtbetayL  =  (beta1L*PDstandardNth1beta1 + beta2L*PDstandardNth2beta1 + beta3L*PDstandardNth3beta1)*
-         ShiftAdvectionCoeff + B2L*ShiftGammaCoeff;
+    dtbetayL  =  beta1L*(PDstandardNth1beta1 + PDstandardNth2beta2 + 
+           PDstandardNth3beta3)*ShiftAdvectionCoeff + B2L*ShiftGammaCoeff;
     
-    dtbetazL  =  (beta1L*PDstandardNth1beta1 + beta2L*PDstandardNth2beta1 + beta3L*PDstandardNth3beta1)*
-         ShiftAdvectionCoeff + B3L*ShiftGammaCoeff;
+    dtbetazL  =  beta1L*(PDstandardNth1beta1 + PDstandardNth2beta2 + 
+           PDstandardNth3beta3)*ShiftAdvectionCoeff + B3L*ShiftGammaCoeff;
     
     
     /* Copy local copies back to grid functions */

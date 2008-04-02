@@ -5,7 +5,10 @@
 
 #define KRANC_C
 
+#include <assert.h>
 #include <math.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include "cctk.h"
 #include "cctk_Arguments.h"
 #include "cctk_Parameters.h"
@@ -84,7 +87,7 @@ void ML_BSSN_enforce_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCTK_REAL no
   pm1o12dz2 = -pow(dz,-2)/12.;
   
   /* Loop over the grid points */
-  _Pragma ("omp parallel")
+  #pragma omp parallel
   LC_LOOP3 (ML_BSSN_enforce,
             i,j,k, min[0],min[1],min[2], max[0],max[1],max[2],
             cctk_lsh[0],cctk_lsh[1],cctk_lsh[2])
@@ -143,7 +146,8 @@ void ML_BSSN_enforce_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCTK_REAL no
     
     gtu33  =  INV(detgt)*(gt11L*gt22L - SQR(gt12L));
     
-    trAt  =  At11L*gtu11 + At22L*gtu22 + 2*(At12L*gtu21 + At13L*gtu31 + At23L*gtu32) + At33L*gtu33;
+    trAt  =  At11L*gtu11 + At22L*gtu22 + 
+        2*(At12L*gtu21 + At13L*gtu31 + At23L*gtu32) + At33L*gtu33;
     
     At11L  =  At11L - gt11L*kthird*trAt;
     

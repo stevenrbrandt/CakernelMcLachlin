@@ -19,9 +19,9 @@ USES CCTK_INT MoL_Num_Evolved_Vars
 USES CCTK_INT MoL_Num_Constrained_Vars
 
 restricted:
-CCTK_REAL verbose "verbose"
+CCTK_INT verbose "verbose"
 {
-  "*:*" :: ""
+  *:* :: ""
 } 0
 
 private:
@@ -47,8 +47,8 @@ CCTK_INT ML_ADM_MaxNumEvolvedVars "Number of evolved variables used by this thor
 restricted:
 CCTK_INT ML_ADM_MaxNumConstrainedVars "Number of constrained variables used by this thorn" ACCUMULATOR-BASE=MethodofLines::MoL_Num_Constrained_Vars
 {
-  38:38 :: "Number of constrained variables used by this thorn"
-} 38
+  65:65 :: "Number of constrained variables used by this thorn"
+} 65
 
 restricted:
 CCTK_INT timelevels "Number of active timelevels"
@@ -333,7 +333,7 @@ KEYWORD beta3_bound "Boundary condition to implement"
 } "skip"
 
 private:
-KEYWORD ml_curv_bound "Boundary condition to implement"
+KEYWORD ML_curv_bound "Boundary condition to implement"
 {
   "flat" :: "Flat boundary condition"
   "none" :: "No boundary condition"
@@ -345,7 +345,7 @@ KEYWORD ml_curv_bound "Boundary condition to implement"
 } "skip"
 
 private:
-KEYWORD ml_lapse_bound "Boundary condition to implement"
+KEYWORD ML_lapse_bound "Boundary condition to implement"
 {
   "flat" :: "Flat boundary condition"
   "none" :: "No boundary condition"
@@ -357,7 +357,7 @@ KEYWORD ml_lapse_bound "Boundary condition to implement"
 } "skip"
 
 private:
-KEYWORD ml_metric_bound "Boundary condition to implement"
+KEYWORD ML_metric_bound "Boundary condition to implement"
 {
   "flat" :: "Flat boundary condition"
   "none" :: "No boundary condition"
@@ -369,7 +369,7 @@ KEYWORD ml_metric_bound "Boundary condition to implement"
 } "skip"
 
 private:
-KEYWORD ml_shift_bound "Boundary condition to implement"
+KEYWORD ML_shift_bound "Boundary condition to implement"
 {
   "flat" :: "Flat boundary condition"
   "none" :: "No boundary condition"
@@ -477,25 +477,25 @@ CCTK_REAL beta3_bound_speed "characteristic speed at boundary"
 } 1.
 
 private:
-CCTK_REAL ml_curv_bound_speed "characteristic speed at boundary"
+CCTK_REAL ML_curv_bound_speed "characteristic speed at boundary"
 {
   "0:*" :: "outgoing characteristic speed > 0"
 } 1.
 
 private:
-CCTK_REAL ml_lapse_bound_speed "characteristic speed at boundary"
+CCTK_REAL ML_lapse_bound_speed "characteristic speed at boundary"
 {
   "0:*" :: "outgoing characteristic speed > 0"
 } 1.
 
 private:
-CCTK_REAL ml_metric_bound_speed "characteristic speed at boundary"
+CCTK_REAL ML_metric_bound_speed "characteristic speed at boundary"
 {
   "0:*" :: "outgoing characteristic speed > 0"
 } 1.
 
 private:
-CCTK_REAL ml_shift_bound_speed "characteristic speed at boundary"
+CCTK_REAL ML_shift_bound_speed "characteristic speed at boundary"
 {
   "0:*" :: "outgoing characteristic speed > 0"
 } 1.
@@ -597,25 +597,25 @@ CCTK_REAL beta3_bound_limit "limit value for r -> infinity"
 } 0.
 
 private:
-CCTK_REAL ml_curv_bound_limit "limit value for r -> infinity"
+CCTK_REAL ML_curv_bound_limit "limit value for r -> infinity"
 {
   "*:*" :: "value of limit value is unrestricted"
 } 0.
 
 private:
-CCTK_REAL ml_lapse_bound_limit "limit value for r -> infinity"
+CCTK_REAL ML_lapse_bound_limit "limit value for r -> infinity"
 {
   "*:*" :: "value of limit value is unrestricted"
 } 0.
 
 private:
-CCTK_REAL ml_metric_bound_limit "limit value for r -> infinity"
+CCTK_REAL ML_metric_bound_limit "limit value for r -> infinity"
 {
   "*:*" :: "value of limit value is unrestricted"
 } 0.
 
 private:
-CCTK_REAL ml_shift_bound_limit "limit value for r -> infinity"
+CCTK_REAL ML_shift_bound_limit "limit value for r -> infinity"
 {
   "*:*" :: "value of limit value is unrestricted"
 } 0.
@@ -717,25 +717,25 @@ CCTK_REAL beta3_bound_scalar "Dirichlet boundary value"
 } 0.
 
 private:
-CCTK_REAL ml_curv_bound_scalar "Dirichlet boundary value"
+CCTK_REAL ML_curv_bound_scalar "Dirichlet boundary value"
 {
   "*:*" :: "unrestricted"
 } 0.
 
 private:
-CCTK_REAL ml_lapse_bound_scalar "Dirichlet boundary value"
+CCTK_REAL ML_lapse_bound_scalar "Dirichlet boundary value"
 {
   "*:*" :: "unrestricted"
 } 0.
 
 private:
-CCTK_REAL ml_metric_bound_scalar "Dirichlet boundary value"
+CCTK_REAL ML_metric_bound_scalar "Dirichlet boundary value"
 {
   "*:*" :: "unrestricted"
 } 0.
 
 private:
-CCTK_REAL ml_shift_bound_scalar "Dirichlet boundary value"
+CCTK_REAL ML_shift_bound_scalar "Dirichlet boundary value"
 {
   "*:*" :: "unrestricted"
 } 0.

@@ -1,0 +1,295 @@
+# File produced by user eschnett
+# Produced with Mathematica Version 6.0 for Mac OS X x86 (32-bit) (April 20, 2007)
+
+# Mathematica script written by Ian Hinder and Sascha Husa
+
+
+STORAGE: ML_cons_detg[1]
+
+STORAGE: ML_cons_Gamma[1]
+
+STORAGE: ML_cons_traceA[1]
+
+STORAGE: ML_Ham[1]
+
+STORAGE: ML_mom[1]
+
+STORAGE: ML_curvrhs[1]
+
+STORAGE: ML_dtlapserhs[1]
+
+STORAGE: ML_dtshiftrhs[1]
+
+STORAGE: ML_Gammarhs[1]
+
+STORAGE: ML_lapserhs[1]
+
+STORAGE: ML_log_confacrhs[1]
+
+STORAGE: ML_metricrhs[1]
+
+STORAGE: ML_shiftrhs[1]
+
+STORAGE: ML_trace_curvrhs[1]
+
+if (timelevels == 1)
+{
+  STORAGE: ML_curv[1]
+}
+if (timelevels == 2)
+{
+  STORAGE: ML_curv[2]
+}
+if (timelevels == 3)
+{
+  STORAGE: ML_curv[3]
+}
+
+if (timelevels == 1)
+{
+  STORAGE: ML_dtlapse[1]
+}
+if (timelevels == 2)
+{
+  STORAGE: ML_dtlapse[2]
+}
+if (timelevels == 3)
+{
+  STORAGE: ML_dtlapse[3]
+}
+
+if (timelevels == 1)
+{
+  STORAGE: ML_dtshift[1]
+}
+if (timelevels == 2)
+{
+  STORAGE: ML_dtshift[2]
+}
+if (timelevels == 3)
+{
+  STORAGE: ML_dtshift[3]
+}
+
+if (timelevels == 1)
+{
+  STORAGE: ML_Gamma[1]
+}
+if (timelevels == 2)
+{
+  STORAGE: ML_Gamma[2]
+}
+if (timelevels == 3)
+{
+  STORAGE: ML_Gamma[3]
+}
+
+if (timelevels == 1)
+{
+  STORAGE: ML_lapse[1]
+}
+if (timelevels == 2)
+{
+  STORAGE: ML_lapse[2]
+}
+if (timelevels == 3)
+{
+  STORAGE: ML_lapse[3]
+}
+
+if (timelevels == 1)
+{
+  STORAGE: ML_log_confac[1]
+}
+if (timelevels == 2)
+{
+  STORAGE: ML_log_confac[2]
+}
+if (timelevels == 3)
+{
+  STORAGE: ML_log_confac[3]
+}
+
+if (timelevels == 1)
+{
+  STORAGE: ML_metric[1]
+}
+if (timelevels == 2)
+{
+  STORAGE: ML_metric[2]
+}
+if (timelevels == 3)
+{
+  STORAGE: ML_metric[3]
+}
+
+if (timelevels == 1)
+{
+  STORAGE: ML_shift[1]
+}
+if (timelevels == 2)
+{
+  STORAGE: ML_shift[2]
+}
+if (timelevels == 3)
+{
+  STORAGE: ML_shift[3]
+}
+
+if (timelevels == 1)
+{
+  STORAGE: ML_trace_curv[1]
+}
+if (timelevels == 2)
+{
+  STORAGE: ML_trace_curv[2]
+}
+if (timelevels == 3)
+{
+  STORAGE: ML_trace_curv[3]
+}
+
+schedule ML_BSSN_MP_Startup at STARTUP
+{
+  LANG: C
+  OPTIONS: meta
+} "create banner"
+
+schedule ML_BSSN_MP_RegisterVars in MoL_Register
+{
+  LANG: C
+  OPTIONS: meta
+} "Register Variables for MoL"
+
+schedule ML_BSSN_MP_RegisterSymmetries at BASEGRID
+{
+  LANG: C
+  OPTIONS: meta
+} "register symmetries"
+
+
+if (CCTK_EQUALS(my_initial_data, "Minkowski"))
+{
+  schedule ML_BSSN_MP_Minkowski IN ADMBase_InitialData
+  {
+    LANG: C
+  } "ML_BSSN_MP_Minkowski"
+}
+
+
+if (CCTK_EQUALS(my_initial_data, "ADMBase"))
+{
+  schedule ML_BSSN_MP_convertFromADMBase AT initial AFTER ADMBase_PostInitial
+  {
+    LANG: C
+  } "ML_BSSN_MP_convertFromADMBase"
+}
+
+
+if (CCTK_EQUALS(my_initial_data, "ADMBase"))
+{
+  schedule ML_BSSN_MP_convertFromADMBaseGamma AT initial AFTER ML_BSSN_MP_convertFromADMBase
+  {
+    LANG: C
+    SYNC: ML_dtlapse
+    SYNC: ML_dtshift
+    SYNC: ML_Gamma
+  } "ML_BSSN_MP_convertFromADMBaseGamma"
+}
+
+schedule ML_BSSN_MP_RHS IN ML_BSSN_MP_evolCalcGroup
+{
+  LANG: C
+  SYNC: ML_curvrhs
+  SYNC: ML_dtlapserhs
+  SYNC: ML_dtshiftrhs
+  SYNC: ML_Gammarhs
+  SYNC: ML_lapserhs
+  SYNC: ML_log_confacrhs
+  SYNC: ML_metricrhs
+  SYNC: ML_shiftrhs
+  SYNC: ML_trace_curvrhs
+} "ML_BSSN_MP_RHS"
+
+
+if (CCTK_EQUALS(evolution_method, "ML_BSSN_MP"))
+{
+  schedule ML_BSSN_MP_enforce IN MoL_PostStep BEFORE ML_BSSN_MP_BoundConds
+  {
+    LANG: C
+  } "ML_BSSN_MP_enforce"
+}
+
+
+if (CCTK_EQUALS(my_boundary_condition, "Minkowski"))
+{
+  schedule ML_BSSN_MP_boundary IN MoL_PostStep
+  {
+    LANG: C
+  } "ML_BSSN_MP_boundary"
+}
+
+
+if (CCTK_EQUALS(evolution_method, "ML_BSSN_MP"))
+{
+  schedule ML_BSSN_MP_convertToADMBase IN MoL_PostStep AFTER (ML_BSSN_MP_ApplyBCs ML_BSSN_MP_enforce)
+  {
+    LANG: C
+    SYNC: ADMBase::curv
+    SYNC: ADMBase::dtlapse
+    SYNC: ADMBase::dtshift
+    SYNC: ADMBase::lapse
+    SYNC: ADMBase::metric
+    SYNC: ADMBase::shift
+  } "ML_BSSN_MP_convertToADMBase"
+}
+
+
+if (CCTK_EQUALS(my_boundary_condition, "Minkowski"))
+{
+  schedule ML_BSSN_MP_ADMBaseBoundary IN MoL_PostStep AFTER ML_BSSN_MP_convertToADMBase
+  {
+    LANG: C
+  } "ML_BSSN_MP_ADMBaseBoundary"
+}
+
+schedule ML_BSSN_MP_constraints IN ML_BSSN_MP_constraintsCalcGroup
+{
+  LANG: C
+  SYNC: ML_cons_detg
+  SYNC: ML_cons_Gamma
+  SYNC: ML_cons_traceA
+  SYNC: ML_Ham
+  SYNC: ML_mom
+} "ML_BSSN_MP_constraints"
+
+schedule ML_BSSN_MP_constraints_boundary IN ML_BSSN_MP_constraintsCalcGroup AFTER ML_BSSN_MP_constraints
+{
+  LANG: C
+} "ML_BSSN_MP_constraints_boundary"
+
+schedule ML_BSSN_MP_ApplyBoundConds in MoL_PostStep
+{
+  LANG: C
+  OPTIONS: level
+  SYNC: ML_curv
+  SYNC: ML_dtlapse
+  SYNC: ML_dtshift
+  SYNC: ML_Gamma
+  SYNC: ML_lapse
+  SYNC: ML_log_confac
+  SYNC: ML_metric
+  SYNC: ML_shift
+  SYNC: ML_trace_curv
+} "apply boundary conditions"
+
+schedule ML_BSSN_MP_CheckBoundaries at BASEGRID
+{
+  LANG: C
+  OPTIONS: meta
+} "check boundaries treatment"
+
+schedule group ApplyBCs as ML_BSSN_MP_ApplyBCs in MoL_PostStep  after ML_BSSN_MP_ApplyBoundConds
+{
+  # no language specified
+} "Apply boundary conditions controlled by thorn Boundary"

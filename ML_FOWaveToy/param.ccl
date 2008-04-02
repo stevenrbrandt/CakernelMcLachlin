@@ -19,9 +19,9 @@ USES CCTK_INT MoL_Num_Evolved_Vars
 USES CCTK_INT MoL_Num_Constrained_Vars
 
 restricted:
-CCTK_REAL verbose "verbose"
+CCTK_INT verbose "verbose"
 {
-  "*:*" :: ""
+  *:* :: ""
 } 0
 
 restricted:

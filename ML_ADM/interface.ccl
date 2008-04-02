@@ -5,7 +5,7 @@
 
 implements: ML_ADM
 
-inherits:   ADMBase TmunuBase Grid GenericFD Boundary
+inherits:   ADMBase Grid GenericFD Boundary
 
 
 
@@ -31,21 +31,21 @@ CCTK_INT FUNCTION Boundary_SelectVarForBC(CCTK_POINTER_TO_CONST IN GH, CCTK_INT 
 USES FUNCTION Boundary_SelectVarForBC
 
 public:
-CCTK_REAL Ham type=GF timelevels=1 tags='tensortypealias="Scalar" tensorweight=1.0000000000000000000'
+CCTK_REAL ML_Ham type=GF timelevels=1 tags='tensortypealias="Scalar" tensorweight=1.0000000000000000000'
 {
   H
-} "Ham"
+} "ML_Ham"
 
 public:
-CCTK_REAL mom type=GF timelevels=1 tags='tensortypealias="D" tensorweight=1.0000000000000000000'
+CCTK_REAL ML_mom type=GF timelevels=1 tags='tensortypealias="D" tensorweight=1.0000000000000000000'
 {
   M1,
   M2,
   M3
-} "mom"
+} "ML_mom"
 
 public:
-CCTK_REAL ml_curvrhs type=GF timelevels=1 tags='tensortypealias="DD_sym" tensorweight=1.0000000000000000000'
+CCTK_REAL ML_curvrhs type=GF timelevels=1 tags='tensortypealias="DD_sym" tensorweight=1.0000000000000000000'
 {
   K11rhs,
   K12rhs,
@@ -53,16 +53,16 @@ CCTK_REAL ml_curvrhs type=GF timelevels=1 tags='tensortypealias="DD_sym" tensorw
   K22rhs,
   K23rhs,
   K33rhs
-} "ml_curvrhs"
+} "ML_curvrhs"
 
 public:
-CCTK_REAL ml_lapserhs type=GF timelevels=1 tags='tensortypealias="Scalar" tensorweight=1.0000000000000000000'
+CCTK_REAL ML_lapserhs type=GF timelevels=1 tags='tensortypealias="Scalar" tensorweight=1.0000000000000000000'
 {
   alpharhs
-} "ml_lapserhs"
+} "ML_lapserhs"
 
 public:
-CCTK_REAL ml_metricrhs type=GF timelevels=1 tags='tensortypealias="DD_sym" tensorweight=1.0000000000000000000'
+CCTK_REAL ML_metricrhs type=GF timelevels=1 tags='tensortypealias="DD_sym" tensorweight=1.0000000000000000000'
 {
   g11rhs,
   g12rhs,
@@ -70,18 +70,18 @@ CCTK_REAL ml_metricrhs type=GF timelevels=1 tags='tensortypealias="DD_sym" tenso
   g22rhs,
   g23rhs,
   g33rhs
-} "ml_metricrhs"
+} "ML_metricrhs"
 
 public:
-CCTK_REAL ml_shiftrhs type=GF timelevels=1 tags='tensortypealias="U" tensorweight=1.0000000000000000000'
+CCTK_REAL ML_shiftrhs type=GF timelevels=1 tags='tensortypealias="U" tensorweight=1.0000000000000000000'
 {
   beta1rhs,
   beta2rhs,
   beta3rhs
-} "ml_shiftrhs"
+} "ML_shiftrhs"
 
 public:
-CCTK_REAL ml_curv type=GF timelevels=3 tags='tensortypealias="DD_sym" tensorweight=1.0000000000000000000'
+CCTK_REAL ML_curv type=GF timelevels=3 tags='tensortypealias="DD_sym" tensorweight=1.0000000000000000000'
 {
   K11,
   K12,
@@ -89,16 +89,16 @@ CCTK_REAL ml_curv type=GF timelevels=3 tags='tensortypealias="DD_sym" tensorweig
   K22,
   K23,
   K33
-} "ml_curv"
+} "ML_curv"
 
 public:
-CCTK_REAL ml_lapse type=GF timelevels=3 tags='tensortypealias="Scalar" tensorweight=1.0000000000000000000'
+CCTK_REAL ML_lapse type=GF timelevels=3 tags='tensortypealias="Scalar" tensorweight=1.0000000000000000000'
 {
   alpha
-} "ml_lapse"
+} "ML_lapse"
 
 public:
-CCTK_REAL ml_metric type=GF timelevels=3 tags='tensortypealias="DD_sym" tensorweight=1.0000000000000000000'
+CCTK_REAL ML_metric type=GF timelevels=3 tags='tensortypealias="DD_sym" tensorweight=1.0000000000000000000'
 {
   g11,
   g12,
@@ -106,12 +106,12 @@ CCTK_REAL ml_metric type=GF timelevels=3 tags='tensortypealias="DD_sym" tensorwe
   g22,
   g23,
   g33
-} "ml_metric"
+} "ML_metric"
 
 public:
-CCTK_REAL ml_shift type=GF timelevels=3 tags='tensortypealias="U" tensorweight=1.0000000000000000000'
+CCTK_REAL ML_shift type=GF timelevels=3 tags='tensortypealias="U" tensorweight=1.0000000000000000000'
 {
   beta1,
   beta2,
   beta3
-} "ml_shift"
+} "ML_shift"

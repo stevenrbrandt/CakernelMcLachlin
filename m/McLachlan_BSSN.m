@@ -7,13 +7,26 @@ SetEnhancedTimes[False];
 SetSourceLanguage["C"];
 
 (******************************************************************************)
+(* Options *)
+(******************************************************************************)
+
+createCode[derivOrder_, useGlobalDerivs_, evolutionTimelevels_, addMatter_] :=
+Module[{},
+
+prefix = "ML_";
+suffix =
+  If [useGlobalDerivs, "_MP", ""] <>
+  If [derivOrder!=4, "_O" <> ToString[derivOrder], ""] <>
+  If [evolutionTimelevels!=3, "_TL" <> ToString[evolutionTimelevels], ""] <>
+  If [addMatter!=0, "_M", ""];
+
+BSSN = prefix <> "BSSN" <> suffix;
+
+(******************************************************************************)
 (* Derivatives *)
 (******************************************************************************)
 
 KD = KroneckerDelta;
-
-(* derivative order: 2, 4, 6, 8, ... *)
-derivOrder = 4;
 
 derivatives =
 {
@@ -23,22 +36,13 @@ derivatives =
                            StandardCenteredDifferenceOperator[1,derivOrder/2,j]
 };
 
-(* local derivatives *)
-PDloc = PDstandardNth;
+FD = PDstandardNth;
 
-(* global derivatives *)
-PDglob[var_,lx_] := Jinv[u1,lx] PDloc[var,l1];
-PDglob[var_,lx_,ly_] :=
-  dJinv[u1,lx,ly] PDloc[var,l1] + Jinv[u1,lx] Jinv[u2,ly] PDloc[var,l1,l2];
+If [useGlobalDerivs,
+    DefineJacobian[PD, FD, J, dJ],
+    DefineJacobian[PD, FD, KD, Zero3]];
 
-UseGlobalDerivs = False;
-PD := If [UseGlobalDerivs, PDglob, PDloc];
 
-(* timelevels: 2 or 3 *)
-evolutionTimelevels = 3;
-
-(* matter: 0 or 1 *)
-addMatter = 0;
 
 (******************************************************************************)
 (* Tensors *)
@@ -46,10 +50,17 @@ addMatter = 0;
 
 (* Register the tensor quantities with the TensorTools package *)
 Map [DefineTensor,
-     {g, K, alpha, beta, H, M, detg, gu, G, R, trR, Km, trK,
+     {xx, rr, th, ph,
+      J, dJ,
+      g, K, alpha, beta, H, M, detg, gu, G, R, trR, Km, trK,
       phi, gt, At, Xt, Xtn, A, B, Atm, Atu, trA, Ats, trAts, cXt, cS, cA,
       e4phi, em4phi, ddetg, detgt, gtu, ddetgt, dgtu, ddgtu, Gt, Rt, Rphi, gK,
-      T00, T0, T, rho, S}];
+      T00, T0, T, rho, S,
+      Psi0re, Psi0im, Psi1re, Psi1im, Psi2re, Psi2im, Psi3re, Psi3im,
+      Psi4re, Psi4im,
+      er, eth, eph, mm1A, mm1L, mm1, mm2A, mm2B, mm2L, mm2,
+      ssA, ssB, ssC, ssL, ss, ss0, tt, ss0, kk, nn, kk0, nn0, mmre, mmim,
+      EE, BB}];
 
 (* NOTE: It seems as if Lie[.,.] did not take these tensor weights
    into account.  Presumably, CD[.,.] and CDt[.,.] don't do this either.  *)
@@ -63,6 +74,7 @@ SetTensorAttribute[cS,  TensorWeight, +2  ];
 Map [AssertSymmetricIncreasing,
      {g[la,lb], K[la,lb], R[la,lb],
       gt[la,lb], At[la,lb], Ats[la,lb], Rt[la,lb], Rphi[la,lb], T[la,lb]}];
+AssertSymmetricIncreasing [dJ[ua,lb,lc], lb, lc];
 AssertSymmetricIncreasing [G[ua,lb,lc], lb, lc];
 AssertSymmetricIncreasing [Gt[ua,lb,lc], lb, lc];
 AssertSymmetricIncreasing [gK[la,lb,lc], la, lb];
@@ -108,36 +120,24 @@ pi = N[Pi,40];
 SetGroupTimelevels[g_,tl_] = Join[g, {Timelevels -> tl}];
 
 evolvedGroups =
-  {SetGroupName [CreateGroupFromTensor [g[la,lb]], "ml_metric"],
-   SetGroupName [CreateGroupFromTensor [K[la,lb]], "ml_curv"  ],
-   SetGroupName [CreateGroupFromTensor [alpha   ], "ml_lapse" ],
-   SetGroupName [CreateGroupFromTensor [beta[ua]], "ml_shift" ]};
+  {SetGroupName [CreateGroupFromTensor [phi      ], prefix <> "log_confac"],
+   SetGroupName [CreateGroupFromTensor [gt[la,lb]], prefix <> "metric"    ],
+   SetGroupName [CreateGroupFromTensor [Xt[ua]   ], prefix <> "Gamma"     ],
+   SetGroupName [CreateGroupFromTensor [trK      ], prefix <> "trace_curv"],
+   SetGroupName [CreateGroupFromTensor [At[la,lb]], prefix <> "curv"      ],
+   SetGroupName [CreateGroupFromTensor [alpha    ], prefix <> "lapse"     ],
+   SetGroupName [CreateGroupFromTensor [A        ], prefix <> "dtlapse"   ],
+   SetGroupName [CreateGroupFromTensor [beta[ua] ], prefix <> "shift"     ],
+   SetGroupName [CreateGroupFromTensor [B[ua]    ], prefix <> "dtshift"   ]};
 evaluatedGroups =
-  {SetGroupName [CreateGroupFromTensor [H    ], "Ham"],
-   SetGroupName [CreateGroupFromTensor [M[la]], "mom"]};
+  {SetGroupName [CreateGroupFromTensor [H      ], prefix <> "Ham"],
+   SetGroupName [CreateGroupFromTensor [M[la]  ], prefix <> "mom"],
+   SetGroupName [CreateGroupFromTensor [cS     ], prefix <> "cons_detg"],
+   SetGroupName [CreateGroupFromTensor [cXt[ua]], prefix <> "cons_Gamma"],
+   SetGroupName [CreateGroupFromTensor [cA     ], prefix <> "cons_traceA"]};
 
 declaredGroups = Join [evolvedGroups, evaluatedGroups];
 declaredGroupNames = Map [First, declaredGroups];
-
-evolvedGroupsBSSN =
-  {SetGroupName [CreateGroupFromTensor [phi      ], "ML_log_confac"],
-   SetGroupName [CreateGroupFromTensor [gt[la,lb]], "ML_metric"    ],
-   SetGroupName [CreateGroupFromTensor [Xt[ua]   ], "ML_Gamma"     ],
-   SetGroupName [CreateGroupFromTensor [trK      ], "ML_trace_curv"],
-   SetGroupName [CreateGroupFromTensor [At[la,lb]], "ML_curv"      ],
-   SetGroupName [CreateGroupFromTensor [alpha    ], "ML_lapse"     ],
-   SetGroupName [CreateGroupFromTensor [A        ], "ML_dtlapse"   ],
-   SetGroupName [CreateGroupFromTensor [beta[ua] ], "ML_shift"     ],
-   SetGroupName [CreateGroupFromTensor [B[ua]    ], "ML_dtshift"   ]};
-evaluatedGroupsBSSN =
-  {SetGroupName [CreateGroupFromTensor [H      ], "Ham"],
-   SetGroupName [CreateGroupFromTensor [M[la]  ], "mom"],
-   SetGroupName [CreateGroupFromTensor [cS     ], "cons_detg"],
-   SetGroupName [CreateGroupFromTensor [cXt[ua]], "cons_Gamma"],
-   SetGroupName [CreateGroupFromTensor [cA     ], "cons_traceA"]};
-
-declaredGroupsBSSN = Join [evolvedGroupsBSSN, evaluatedGroupsBSSN];
-declaredGroupNamesBSSN = Map [First, declaredGroupsBSSN];
 
 
 
@@ -150,12 +150,16 @@ extraGroups =
    {"ADMBase::dtshift",  {dtbetax, dtbetay, dtbetaz}},
    {"TmunuBase::stress_energy_scalar", {eTtt}},
    {"TmunuBase::stress_energy_vector", {eTtx, eTty, eTtz}},
-   {"TmunuBase::stress_energy_tensor", {eTxx, eTxy, eTxz, eTyy, eTyz, eTzz}}};
+   {"TmunuBase::stress_energy_tensor", {eTxx, eTxy, eTxz, eTyy, eTyz, eTzz}},
+   {"Coordinates::jacobian", {J11, J12, J13, J21, J22, J23, J31, J32, J33}},
+   {"Coordinates::jacobian2", {dJ111, dJ112, dJ113, dJ122, dJ123, dJ133,
+                               dJ211, dJ212, dJ213, dJ222, dJ223, dJ233,
+                               dJ311, dJ312, dJ313, dJ322, dJ323, dJ333}}
+};
 
 
 
 groups = Join [declaredGroups, extraGroups];
-groupsBSSN = Join [declaredGroupsBSSN, extraGroups];
 
 (******************************************************************************)
 (* Initial data *)
@@ -163,21 +167,7 @@ groupsBSSN = Join [declaredGroupsBSSN, extraGroups];
 
 initialCalc =
 {
-  Name -> "ML_ADM_Minkowski",
-  Schedule -> {"IN ADMBase_InitialData"},
-  ConditionalOnKeyword -> {"my_initial_data", "Minkowski"},
-  Equations -> 
-  {
-    g[la,lb] -> KD[la,lb],
-    K[la,lb] -> 0,
-    alpha    -> 1,
-    beta[ua] -> 0
-  }
-}
-
-initialCalcBSSN =
-{
-  Name -> "ML_BSSN_Minkowski",
+  Name -> BSSN <> "_Minkowski",
   Schedule -> {"IN ADMBase_InitialData"},
   ConditionalOnKeyword -> {"my_initial_data", "Minkowski"},
   Equations -> 
@@ -192,7 +182,7 @@ initialCalcBSSN =
     beta[ua]  -> 0,
     B[ua]     -> 0
   }
-}
+};
 
 (******************************************************************************)
 (* Convert from ADMBase *)
@@ -200,34 +190,7 @@ initialCalcBSSN =
 
 convertFromADMBaseCalc =
 {
-  Name -> "ML_ADM_convertFromADMBase",
-  Schedule -> {"AT initial AFTER ADMBase_PostInitial"},
-  ConditionalOnKeyword -> {"my_initial_data", "ADMBase"},
-  Equations -> 
-  {
-    g11   -> gxx,
-    g12   -> gxy,
-    g13   -> gxz,
-    g22   -> gyy,
-    g23   -> gyz,
-    g33   -> gzz,
-    K11   -> kxx,
-    K12   -> kxy,
-    K13   -> kxz,
-    K22   -> kyy,
-    K23   -> kyz,
-    K33   -> kzz,
-    (* TODO: this is incomplete; it ignores dtalp and dtbeta^i *)
-    alpha -> alp,
-    beta1 -> betax,
-    beta2 -> betay,
-    beta3 -> betaz
-  }
-}
-
-convertFromADMBaseCalcBSSN =
-{
-  Name -> "ML_BSSN_convertFromADMBase",
+  Name -> BSSN <> "_convertFromADMBase",
   Schedule -> {"AT initial AFTER ADMBase_PostInitial"},
   ConditionalOnKeyword -> {"my_initial_data", "ADMBase"},
   Shorthands -> {g[la,lb], detg, gu[ua,ub], em4phi, K[la,lb]},
@@ -263,12 +226,12 @@ convertFromADMBaseCalcBSSN =
     beta2 -> betay,
     beta3 -> betaz
   }
-}
+};
 
-convertFromADMBaseGammaCalcBSSN =
+convertFromADMBaseGammaCalc =
 {
-  Name -> "ML_BSSN_convertFromADMBaseGamma",
-  Schedule -> {"AT initial AFTER ML_BSSN_convertFromADMBase"},
+  Name -> BSSN <> "_convertFromADMBaseGamma",
+  Schedule -> {"AT initial AFTER " <> BSSN <> "_convertFromADMBase"},
   ConditionalOnKeyword -> {"my_initial_data", "ADMBase"},
   Where -> Interior,
   Shorthands -> {detgt, gtu[ua,ub], Gt[ua,lb,lc]},
@@ -289,7 +252,7 @@ convertFromADMBaseGammaCalcBSSN =
     B3 -> 1/ShiftGammaCoeff
           (dtbetaz - ShiftAdvectionCoeff beta[ua] PD[beta3,la])
   }
-}
+};
 
 (******************************************************************************)
 (* Convert to ADMBase *)
@@ -297,39 +260,9 @@ convertFromADMBaseGammaCalcBSSN =
 
 convertToADMBaseCalc =
 {
-  Name -> "ML_ADM_convertToADMBase",
-  Schedule -> {"IN MoL_PostStep AFTER (ML_ADM_ApplyBCs ML_ADM_boundary)"},
-  Equations -> 
-  {
-    gxx     -> g11,
-    gxy     -> g12,
-    gxz     -> g13,
-    gyy     -> g22,
-    gyz     -> g23,
-    gzz     -> g33,
-    kxx     -> K11,
-    kxy     -> K12,
-    kxz     -> K13,
-    kyy     -> K22,
-    kyz     -> K23,
-    kzz     -> K33,
-    (* TODO: this is wrong; it sets dtalp and dtbeta^i incorrectly *)
-    alp     -> alpha,
-    dtalp   -> 0,
-    betax   -> beta1,
-    betay   -> beta2,
-    betaz   -> beta3,
-    dtbetax -> 0,
-    dtbetay -> 0,
-    dtbetaz -> 0
-  }
-}
-
-convertToADMBaseCalcBSSN =
-{
-  Name -> "ML_BSSN_convertToADMBase",
-  Schedule -> {"IN MoL_PostStep AFTER (ML_BSSN_ApplyBCs ML_BSSN_boundary ML_BSSN_enforce)"},
-  ConditionalOnKeyword -> {"evolution_method", "ML_BSSN"},
+  Name -> BSSN <> "_convertToADMBase",
+  Schedule -> {"IN MoL_PostStep AFTER (" <> BSSN <> "_ApplyBCs " <> BSSN <> "_enforce)"},
+  ConditionalOnKeyword -> {"evolution_method", BSSN},
   Where -> Interior,
   Shorthands -> {e4phi, g[la,lb], K[la,lb]},
   Equations -> 
@@ -364,12 +297,53 @@ convertToADMBaseCalcBSSN =
     dtbetaz  -> + ShiftGammaCoeff B3
                 + ShiftAdvectionCoeff beta[ub] PD[beta[ua],lb]
   }
-}
+};
 
-boundaryCalcADMBaseBSSN =
+convertToADMBaseLapseShiftCalc =
 {
-  Name -> "ML_BSSN_ADMBaseBoundary",
-  Schedule -> {"IN MoL_PostStep AFTER ML_BSSN_convertToADMBase"},
+  Name -> BSSN <> "_convertToADMBase",
+  Schedule -> {"IN MoL_PostStep AFTER (" <> BSSN <> "_ApplyBCs " <> BSSN <> "_enforce)"},
+  ConditionalOnKeyword -> {"evolution_method", BSSN},
+  Where -> Interior,
+  Shorthands -> {e4phi, g[la,lb], K[la,lb]},
+  Equations -> 
+  {
+    e4phi    -> Exp [4 phi],
+    g[la,lb] -> e4phi gt[la,lb],
+    gxx      -> g11,
+    gxy      -> g12,
+    gxz      -> g13,
+    gyy      -> g22,
+    gyz      -> g23,
+    gzz      -> g33,
+    K[la,lb] -> e4phi At[la,lb] + (1/3) g[la,lb] trK,
+    kxx      -> K11,
+    kxy      -> K12,
+    kxz      -> K13,
+    kyy      -> K22,
+    kyz      -> K23,
+    kzz      -> K33,
+    alp      -> alpha,
+    betax    -> beta1,
+    betay    -> beta2,
+    betaz    -> beta3,
+    (* see RHS *)
+    dtalp    -> - harmonicF alpha^harmonicN
+                  ((1 - LapseAdvectionCoeff) A + LapseAdvectionCoeff trK)
+                + LapseAdvectionCoeff beta[ua] PD[alpha,la],
+    dtbetax  -> + ShiftGammaCoeff B1
+                + ShiftAdvectionCoeff beta[ub] PD[beta[ua],lb],
+    dtbetay  -> + ShiftGammaCoeff  B2
+                + ShiftAdvectionCoeff beta[ub] PD[beta[ua],lb],
+    dtbetaz  -> + ShiftGammaCoeff B3
+                + ShiftAdvectionCoeff beta[ub] PD[beta[ua],lb]
+  }
+};
+
+boundaryCalcADMBase =
+{
+  Name -> BSSN <> "_ADMBaseBoundary",
+  Schedule -> {"IN MoL_PostStep AFTER " <> BSSN <> "_convertToADMBase"},
   ConditionalOnKeyword -> {"my_boundary_condition", "Minkowski"},
   Where -> BoundaryWithGhosts,
   Equations -> 
@@ -395,7 +369,7 @@ boundaryCalcADMBaseBSSN =
     dtbetay -> 0,
     dtbetaz -> 0
   }
-}
+};
 
 (******************************************************************************)
 (* Evolution equations *)
@@ -403,36 +377,8 @@ boundaryCalcADMBaseBSSN =
 
 evolCalc =
 {
-  Name -> "ML_ADM_RHS",
-  Schedule -> {"IN MoL_CalcRHS", "AT analysis"},
-  Where -> Interior,
-  Shorthands -> {detg, gu[ua,ub], G[ua,lb,lc], R[la,lb], Km[ua,lb], trK},
-  Equations -> 
-  {
-    detg -> detgExpr,
-    gu[ua,ub] -> 1/detg detgExpr MatrixInverse [g[ua,ub]],
-    G[ua,lb,lc] -> 1/2 gu[ua,ud]
-                   (PD[g[lb,ld],lc] + PD[g[lc,ld],lb] - PD[g[lb,lc],ld]),
-    R[la,lb] -> G[u1,l2,la] G[u2,l1,lb] - G[u1,la,lb] G[u2,l1,l2]
-                + 1/2 gu[u1,u2] (- PD[g[l1,l2],la,lb] + PD[g[l1,la],l2,lb]
-                                 - PD[g[la,lb],l1,l2] + PD[g[l2,lb],l1,la]),
-    Km[ua,lb] -> gu[ua,uc] K[lc,lb],
-    trK -> Km[ua,la],
-
-    dot[g[la,lb]] -> -2 alpha K[la,lb]
-                     + Lie[g[la,lb], beta],
-    dot[K[la,lb]] -> - CD[alpha,la,lb]
-                     + alpha (+ R[la,lb] + K[la,lb] trK - 2 K[la,lc] Km[uc,lb])
-                     + Lie[K[la,lb], beta],
-    dot[alpha]    -> 0,
-    dot[beta[ua]] -> 0
-  }
-}
-
-evolCalcBSSN =
-{
-  Name -> "ML_BSSN_RHS",
-  Schedule -> {"IN ML_BSSN_evolCalcGroup"},
+  Name -> BSSN <> "_RHS",
+  Schedule -> {"IN " <> BSSN <> "_evolCalcGroup"},
   Where -> Interior,
   Shorthands -> {detgt, ddetgt[la], gtu[ua,ub],
                  dgtu[ua,ub,lc], ddgtu[ua,ub,lc,ld], Gt[ua,lb,lc],
@@ -597,13 +543,13 @@ evolCalcBSSN =
                                                      - PD[Xt[ua],lb])
     (* TODO: is there a Lie derivative of the shift missing? *)
   }
-}
+};
 
-enforceCalcBSSN =
+enforceCalc =
 {
-  Name -> "ML_BSSN_enforce",
-  Schedule -> {"IN MoL_PostStep BEFORE ML_BSSN_BoundConds"},
-  ConditionalOnKeyword -> {"evolution_method", "ML_BSSN"},
+  Name -> BSSN <> "_enforce",
+  Schedule -> {"IN MoL_PostStep BEFORE " <> BSSN <> "_BoundConds"},
+  ConditionalOnKeyword -> {"evolution_method", BSSN},
   Shorthands -> {detgt, gtu[ua,ub], trAt},
   Equations -> 
   {
@@ -616,7 +562,7 @@ enforceCalcBSSN =
 
     alpha -> Max[alpha, 10^(-10)] *)
   }
-}
+};
 
 (******************************************************************************)
 (* Boundary conditions *)
@@ -624,22 +570,7 @@ enforceCalcBSSN =
 
 boundaryCalc =
 {
-  Name -> "ML_ADM_boundary",
-  Schedule -> {"IN MoL_PostStep"},
-  ConditionalOnKeyword -> {"my_boundary_condition", "Minkowski"},
-  Where -> BoundaryWithGhosts,
-  Equations -> 
-  {
-    g[la,lb] -> KD[la,lb],
-    K[la,lb] -> 0,
-    alpha    -> 1,
-    beta[ua] -> 0
-  }
-}
-
-boundaryCalcBSSN =
-{
-  Name -> "ML_BSSN_boundary",
+  Name -> BSSN <> "_boundary",
   Schedule -> {"IN MoL_PostStep"},
   ConditionalOnKeyword -> {"my_boundary_condition", "Minkowski"},
   Where -> BoundaryWithGhosts,
@@ -655,7 +586,7 @@ boundaryCalcBSSN =
     beta[ua]  -> 0,
     B[ua]     -> 0
   }
-}
+};
 
 (******************************************************************************)
 (* Constraint equations *)
@@ -663,46 +594,8 @@ boundaryCalcBSSN =
 
 constraintsCalc =
 {
-  Name -> "ML_ADM_constraints",
-  Schedule -> {"AT analysis"},
-  TriggerGroups -> {"Ham", "mom"},
-  Where -> Interior,
-  Shorthands -> {detg, gu[ua,ub], G[ua,lb,lc], R[la,lb], trR, Km[ua,lb], trK},
-  Equations -> 
-  {
-    detg -> detgExpr,
-    gu[ua,ub] -> 1/detg detgExpr MatrixInverse[g[ua,ub]],
-    G[ua,lb,lc] -> 1/2 gu[ua,ud]
-                   (PD[g[lb,ld],lc] + PD[g[lc,ld],lb] - PD[g[lb,lc],ld]),
-    R[la,lb] -> G[u1,l2,la] G[l1,lb,u2] - G[u1,la,lb] G[l1,l2,u2]
-                + 1/2 gu[u1,u2] (- PD[g[l1,l2],la,lb] + PD[g[l1,la],l2,lb]
-                                 - PD[g[la,lb],l1,l2] + PD[g[l2,lb],l1,la]),
-    trR -> R[la,lb] gu[ua,ub],
-    Km[ua,lb] -> gu[ua,uc] K[lc,lb],
-    trK -> Km[ua,la],
-
-    H -> trR - Km[ua,lb] Km[ub,la] + trK^2,
-    M[la] -> gu[ub,uc] (CD[K[lc,la], lb] - CD[K[lc,lb], la])
-  }
-}
-
-constraintsBoundaryCalc =
-{
-  Name -> "ML_ADM_constraints_boundary",
-  Schedule -> {"AT analysis AFTER ML_ADM_constraints"},
-  (* TriggerGroups -> {"Ham", "mom"}, *)
-  Where -> BoundaryWithGhosts,
-  Equations -> 
-  {
-    H     -> 0,
-    M[la] -> 0
-  }
-}
-
-constraintsCalcBSSN =
-{
-  Name -> "ML_BSSN_constraints",
-  Schedule -> {"IN ML_BSSN_constraintsCalcGroup"},
+  Name -> BSSN <> "_constraints",
+  Schedule -> {"IN " <> BSSN <> "_constraintsCalcGroup"},
   Where -> Interior,
   Shorthands -> {detgt, ddetgt[la], gtu[ua,ub], Gt[ua,lb,lc], e4phi, em4phi,
                  g[la,lb], detg, gu[ua,ub], ddetg[la], G[ua,lb,lc],
@@ -824,25 +717,28 @@ constraintsCalcBSSN =
     (* trace A-tilde *)
     cA -> gtu[ua,ub] At[la,lb]
   }
-}
+};
 
-constraintsBoundaryCalcBSSN =
+constraintsBoundaryCalc =
 {
-  Name -> "ML_BSSN_constraints_boundary",
-  Schedule -> {"IN ML_BSSN_constraintsCalcGroup AFTER ML_BSSN_constraints"},
+  Name -> BSSN <> "_constraints_boundary",
+  Schedule -> {"IN " <> BSSN <> "_constraintsCalcGroup AFTER " <> BSSN <> "_constraints"},
   Where -> BoundaryWithGhosts,
   Equations -> 
   {
     H     -> 0,
     M[la] -> 0
   }
-}
+};
 
 (******************************************************************************)
 (* Implementations *)
 (******************************************************************************)
 
-inheritedImplementations = {"ADMBase", "TmunuBase"};
+inheritedImplementations =
+  Join[{"ADMBase"},
+       If [addMatter!=0, {"TmunuBase"}, {}],
+       If [useGlobalDerivs, {"Coordinates"}, {}]];
 
 (******************************************************************************)
 (* Parameters *)
@@ -854,15 +750,15 @@ extendedKeywordParameters =
 {
   {
     Name -> "ADMBase::evolution_method",
-    AllowedValues -> {"ML_BSSN"}
+    AllowedValues -> {BSSN}
   },
   {
     Name -> "ADMBase::lapse_evolution_method",
-    AllowedValues -> {"ML_BSSN"}
+    AllowedValues -> {BSSN}
   },
   {
     Name -> "ADMBase::shift_evolution_method",
-    AllowedValues -> {"ML_BSSN"}
+    AllowedValues -> {BSSN}
   }
 };
 
@@ -933,45 +829,23 @@ realParameters =
 (* Construct the thorns *)
 (******************************************************************************)
 
-calculations = 
+calculations =
 {
   initialCalc,
   convertFromADMBaseCalc,
+  convertFromADMBaseGammaCalc,
   evolCalc,
+  enforceCalc,
   boundaryCalc,
   convertToADMBaseCalc,
+  boundaryCalcADMBase,
   constraintsCalc,
   constraintsBoundaryCalc
 };
 
-CreateKrancThornTT [groups, ".", "ML_ADM",
+CreateKrancThornTT [groups, ".", BSSN,
   Calculations -> calculations,
   DeclaredGroups -> declaredGroupNames,
-  PartialDerivatives -> derivatives,
-  EvolutionTimelevels -> evolutionTimelevels,
-  UseLoopControl -> True,
-  InheritedImplementations -> inheritedImplementations,
-  InheritedKeywordParameters -> inheritedKeywordParameters,
-  KeywordParameters -> keywordParameters
-];
-
-calculationsBSSN = 
-{
-  initialCalcBSSN,
-  convertFromADMBaseCalcBSSN,
-  convertFromADMBaseGammaCalcBSSN,
-  evolCalcBSSN,
-  enforceCalcBSSN,
-  boundaryCalcBSSN,
-  convertToADMBaseCalcBSSN,
-  boundaryCalcADMBaseBSSN,
-  constraintsCalcBSSN,
-  constraintsBoundaryCalcBSSN
-};
-
-CreateKrancThornTT [groupsBSSN, ".", "ML_BSSN",
-  Calculations -> calculationsBSSN,
-  DeclaredGroups -> declaredGroupNamesBSSN,
   PartialDerivatives -> derivatives,
   EvolutionTimelevels -> evolutionTimelevels,
   UseLoopControl -> True,
@@ -982,3 +856,21 @@ CreateKrancThornTT [groupsBSSN, ".", "ML_BSSN",
   IntParameters -> intParameters,
   RealParameters -> realParameters
 ];
+
+];
+
+
+
+(******************************************************************************)
+(* Options *)
+(******************************************************************************)
+
+(* derivative order: 2, 4, 6, 8, ... *)
+(* useGlobalDerivs: False or True *)
+(* timelevels: 2 or 3
+   (keep this at 3; this is better chosen with a run-time parameter) *)
+(* matter: 0 or 1 *)
+
+createCode[4, False, 3, 0];
+createCode[4, False, 3, 1];
+createCode[4, True,  3, 0];

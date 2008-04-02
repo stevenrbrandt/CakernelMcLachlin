@@ -41,9 +41,9 @@ USES CCTK_INT MoL_Num_Evolved_Vars
 USES CCTK_INT MoL_Num_Constrained_Vars
 
 restricted:
-CCTK_REAL verbose "verbose"
+CCTK_INT verbose "verbose"
 {
-  "*:*" :: ""
+  *:* :: ""
 } 0
 
 restricted:
@@ -117,8 +117,8 @@ CCTK_INT ML_BSSN_MaxNumEvolvedVars "Number of evolved variables used by this tho
 restricted:
 CCTK_INT ML_BSSN_MaxNumConstrainedVars "Number of constrained variables used by this thorn" ACCUMULATOR-BASE=MethodofLines::MoL_Num_Constrained_Vars
 {
-  43:43 :: "Number of constrained variables used by this thorn"
-} 43
+  70:70 :: "Number of constrained variables used by this thorn"
+} 70
 
 restricted:
 CCTK_INT timelevels "Number of active timelevels"
