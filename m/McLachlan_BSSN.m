@@ -18,7 +18,7 @@ suffix =
   If [useGlobalDerivs, "_MP", ""] <>
   If [derivOrder!=4, "_O" <> ToString[derivOrder], ""] <>
   If [evolutionTimelevels!=3, "_TL" <> ToString[evolutionTimelevels], ""] <>
-  If [addMatter!=0, "_M", ""];
+  If [addMatter==0, "_V", ""];
 
 BSSN = prefix <> "BSSN" <> suffix;
 
@@ -33,11 +33,19 @@ derivatives =
   PDstandardNth[i_]     -> StandardCenteredDifferenceOperator[1,derivOrder/2,i],
   PDstandardNth[i_, i_] -> StandardCenteredDifferenceOperator[2,derivOrder/2,i],
   PDstandardNth[i_, j_] -> StandardCenteredDifferenceOperator[1,derivOrder/2,i]
-                           StandardCenteredDifferenceOperator[1,derivOrder/2,j]
+                           StandardCenteredDifferenceOperator[1,derivOrder/2,j],
+  
+(*
+  PDPlus    [i_] -> (+1) (-1 + shift[i]^(+1)) / spacing[i],
+  PDMinus   [i_] -> (-1) (-1 + shift[i]^(-1)) / spacing[i]
+*)
+  PDPlus    [i_] -> StandardUpwindDifferenceOperator[1,0,derivOrder/2,i],
+  PDMinus   [i_] -> StandardUpwindDifferenceOperator[1,derivOrder/2,0,i]
 };
 
 FD = PDstandardNth;
 
+ResetJacobians;
 If [useGlobalDerivs,
     DefineJacobian[PD, FD, J, dJ],
     DefineJacobian[PD, FD, KD, Zero3]];
@@ -50,7 +58,9 @@ If [useGlobalDerivs,
 
 (* Register the tensor quantities with the TensorTools package *)
 Map [DefineTensor,
-     {xx, rr, th, ph,
+     {normal, tangentA, tangentB, dir,
+      nn, nu, nlen, nlen2, su, vg,
+      xx, rr, th, ph,
       J, dJ,
       g, K, alpha, beta, H, M, detg, gu, G, R, trR, Km, trK,
       phi, gt, At, Xt, Xtn, A, B, Atm, Atu, trA, Ats, trAts, cXt, cS, cA,
@@ -414,16 +424,7 @@ evolCalc =
                  + gtu[ul,um] (+ Gt[uk,ll,li] gt[lj,ln] Gt[un,lk,lm]
                                + Gt[uk,ll,lj] gt[li,ln] Gt[un,lk,lm]
                                + Gt[uk,li,lm] gt[lk,ln] Gt[un,ll,lj]),
-(*    Rt[li,lj] -> (1/2) (- gtu[ul,um] PD[gt[li,lj],ll,lm]
-                          + gt[lk,li] PD[Xt[uk],lj] +
-                          + gt[lk,lj] PD[Xt[uk],li] 
-                          + Xtn[uk] gt[li,ln] Gt[un,lj,lk]
-                          + Xtn[uk] gt[lj,ln] Gt[un,li,lk])
-                 + gtu[ul,um] (+ Gt[uk,ll,li] gt[lj,ln] Gt[un,lk,lm]
-                               + Gt[uk,ll,lj] gt[li,ln] Gt[un,lk,lm]
-                               + Gt[uk,li,lm] gt[lk,ln] Gt[un,ll,lj]), *)
     (* PRD 62, 044034 (2000), eqn. (15) *)
-    (* TODO: Check that CDt takes the tensor weight of phi into account *)
     Rphi[li,lj] -> - 2 CDt[phi,lj,li]
                    - 2 gt[li,lj] gtu[ul,un] CDt[phi,ll,ln]
                    + 4 CDt[phi,li] CDt[phi,lj]
@@ -438,10 +439,6 @@ evolCalc =
     detg        -> detgExpr,
     (* gu[ua,ub] -> 1/detg detgExpr MatrixInverse [g[ua,ub]], *)
     gu[ua,ub]   -> em4phi gtu[ua,ub],
-(*    ddetg[la]   -> 12 detg PD[phi,la],
-    G[ua,lb,lc] -> Gt[ua,lb,lc]
-                   + 1/(6 detg) (KD[ua,lb] ddetg[lc] + KD[ua,lc] ddetg[lb]
-                                 - gtu[ua,ud] gt[lb,lc] ddetg[ld]), *)
     G[ua,lb,lc] -> Gt[ua,lb,lc]
                    + 2 (KD[ua,lb] PD[phi,lc] + KD[ua,lc] PD[phi,lb] 
                         - gtu[ua,ud] gt[lb,lc] PD[phi,ld]),
@@ -481,18 +478,6 @@ evolCalc =
     dot[gt[la,lb]] -> - 2 alpha At[la,lb]
                       + Lie[gt[la,lb], beta] - (2/3) gt[la,lb] PD[beta[uc],lc],
     (* PRD 62, 044034 (2000), eqn. (20) *)
-(*    dot[Xt[ui]]    -> - 2 Atu[ui,uj] PD[alpha,lj]
-                      + 2 alpha (+ Gt[ui,lj,lk] Atu[uk,uj]
-                                 - (2/3) gtu[ui,uj] PD[trK,lj]
-                                 + 6 Atu[ui,uj] PD[phi,lj])
-                      - (+ (+ PD[beta[ul],lj] dgtu[ui,uj,ll]
-                            + beta[ul] ddgtu[ui,uj,ll,lj])
-                         - 2 (+ dgtu[um,uj,lj] PD[beta[ui],lm]
-                              + dgtu[um,ui,lj] PD[beta[uj],lm]
-                              + gtu[um,uj] PD[beta[ui],lm,lj]
-                              + gtu[um,ui] PD[beta[uj],lm,lj])
-                         + (2/3) (+ dgtu[ui,uj,lj] PD[beta[ul],ll]
-                                  + gtu[ui,uj] PD[beta[ul],ll,lj])), *)
     (* PRD 67 084023 (2003), eqn (26) *)    
     dot[Xt[ui]]    -> - 2 Atu[ui,uj] PD[alpha,lj]
                       + 2 alpha (+ Gt[ui,lj,lk] Atu[uk,uj]
@@ -512,7 +497,7 @@ evolCalc =
                       + Lie[trK, beta]
     (* Equation (4.21) in Baumgarte & Shapiro (Phys. Rept. 376 (2003) 41-131) *)
                       + addMatter (4 pi alpha (rho + trS)),
-    
+
     (* PRD 62, 044034 (2000), eqn. (12) *)
     (* TODO: use Hamiltonian constraint to make tracefree *)
     Ats[la,lb]     -> - CD[alpha,la,lb] + alpha R[la,lb],
@@ -529,8 +514,6 @@ evolCalc =
     dot[alpha] -> - harmonicF alpha^harmonicN (
                     (1 - LapseAdvectionCoeff) A + LapseAdvectionCoeff trK)
                   + LapseAdvectionCoeff beta[ua] PD[alpha,la],
-    (* TODO: is the above Lie derivative correct? *)
-
     dot[A]     -> (1 - LapseAdvectionCoeff) (dot[trK] - AlphaDriver A),
     (* dot[beta[ua]] -> eta Xt[ua], *)
     (* dot[beta[ua]] -> ShiftGammaCoeff alpha^ShiftAlphaPower B[ua], *)
@@ -541,7 +524,42 @@ evolCalc =
     dot[B[ua]]    -> + dot[Xt[ua]] - BetaDriver B[ua]
                      + ShiftAdvectionCoeff beta[ub] (+ PD[B[ua],lb]
                                                      - PD[Xt[ua],lb])
-    (* TODO: is there a Lie derivative of the shift missing? *)
+  }
+};
+
+RHSBoundaryCalc =
+{
+  Name -> BSSN <> "_RHSBoundary",
+  Schedule -> {"IN MoL_RHSBoundaries"},
+  ConditionalOnKeyword -> {"my_rhs_boundary_condition", "radiative"},
+  Where -> Boundary,
+  Shorthands -> {detgt, gtu[ua,ub], em4phi, gu[ua,ub],
+                 nn[la], nu[ua], nlen, nlen2, su[ua],
+                 vg},
+  Equations -> 
+  {
+    detgt      -> 1 (* detgtExpr *),
+    gtu[ua,ub] -> 1/detgt detgtExpr MatrixInverse [gt[ua,ub]],
+    em4phi     -> Exp [-4 phi],
+    gu[ua,ub]  -> em4phi gtu[ua,ub],
+    
+    nn[la] -> normal[la],
+    nu[ua] -> gu[ua,ub] nn[lb],
+    nlen2  -> nu[ua] nn[la],
+    nlen   -> Sqrt [nlen2],
+    su[ua] -> nu[ua] / nlen,
+    
+    vg -> Sqrt[harmonicF],
+    
+    dot[phi]       -> - vg su[uc] PDMinus[phi      ,lc],
+    dot[gt[la,lb]] -> -    su[uc] PDMinus[gt[la,lb],lc],
+    dot[trK]       -> - vg su[uc] PDMinus[trK      ,lc],
+    dot[At[la,lb]] -> -    su[uc] PDMinus[At[la,lb],lc],
+    dot[Xt[ua]]    -> -    su[uc] PDMinus[Xt[ua]   ,lc],
+    dot[alpha]     -> - vg su[uc] PDMinus[alpha    ,lc],
+    dot[A]         -> - vg su[uc] PDMinus[A        ,lc],
+    dot[beta[ua]]  -> -    su[uc] PDMinus[beta[ua] ,lc],
+    dot[B[ua]]     -> -    su[uc] PDMinus[B[ua]    ,lc]
   }
 };
 
@@ -772,6 +790,13 @@ keywordParameters =
     Default -> "ADMBase"
   },
   {
+    Name -> "my_rhs_boundary_condition",
+    (* Visibility -> "restricted", *)
+    (* Description -> "ddd", *)
+    AllowedValues -> {"none", "radiative"},
+    Default -> "none"
+  },
+  {
     Name -> "my_boundary_condition",
     (* Visibility -> "restricted", *)
     (* Description -> "ddd", *)
@@ -835,6 +860,7 @@ calculations =
   convertFromADMBaseCalc,
   convertFromADMBaseGammaCalc,
   evolCalc,
+  RHSBoundaryCalc,
   enforceCalc,
   boundaryCalc,
   convertToADMBaseCalc,
@@ -869,8 +895,8 @@ CreateKrancThornTT [groups, ".", BSSN,
 (* useGlobalDerivs: False or True *)
 (* timelevels: 2 or 3
    (keep this at 3; this is better chosen with a run-time parameter) *)
-(* matter: 0 or 1 *)
+(* matter: 0 or 1
+   (matter seems cheap; it should be always enabled) *)
 
-createCode[4, False, 3, 0];
 createCode[4, False, 3, 1];
-createCode[4, True,  3, 0];
+createCode[4, True,  3, 1];
