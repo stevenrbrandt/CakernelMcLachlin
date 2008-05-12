@@ -5,7 +5,7 @@
 
 implements: ML_BSSN_MP
 
-inherits:   ADMBase Coordinates Grid GenericFD Boundary
+inherits:   ADMBase TmunuBase Coordinates Grid GenericFD Boundary
 
 
 
