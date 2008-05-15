@@ -1,14 +1,19 @@
 # -*-Makefile-*-
 
-all: McLachlan.out McLachlanW.out WaveToy.out
+all: McLachlan_ADM.out McLachlan_BSSN.out McLachlanW.out WaveToy.out
 	@echo
 	@echo "The Cactus thorns are up to date."
 	@echo
 
-McLachlan.out: McLachlan.m
-	rm -rf ML_ADM ML_BSSN
+McLachlan_ADM.out: McLachlan_ADM.m
+#	rm -rf ML_ADM*
+#	./runmath.sh $^
+#	for thorn in ML_ADM*; do ./copy-if-changed.sh $$thorn ../$$thorn; done
+
+McLachlan_BSSN.out: McLachlan_BSSN.m
+	rm -rf ML_BSSN*
 	./runmath.sh $^
-	for thorn in ML_ADM ML_BSSN; do ./copy-if-changed.sh $$thorn ../$$thorn; done
+	for thorn in ML_BSSN*; do ./copy-if-changed.sh $$thorn ../$$thorn; done
 
 McLachlanW.out: McLachlanW.m
 	rm -rf ML_BSSNW
@@ -31,8 +36,11 @@ WaveToy.out: WaveToy.m
 	for thorn in ML_WaveToy ML_FOWaveToy; do ./copy-if-changed.sh $$thorn ../$$thorn; done
 
 clean:
-	rm -rf McLachlan.out McLachlan.err ML_ADM ML_BSSN
-	rm -rf McLachlanW.out McLachlanW.err ML_BSSNW
+	rm -rf McLachlan_ADM.out McLachlan_ADM.err ML_ADM*
+	rm -rf McLachlan_BSSN.out McLachlan_BSSN.err ML_BSSN*
+	rm -rf McLachlanW.out McLachlanW.err 
+	rm -rf McLachlanUp.out McLachlanUp.err 
+	rm -rf McLachlan6.out McLachlan6.err 
 	rm -rf WaveToy.out WaveToy.err ML_WaveToy ML_FOWaveToy
 
 .PHONY: all clean

@@ -4,15 +4,15 @@
 # Mathematica script written by Ian Hinder and Sascha Husa
 
 
-STORAGE: cons_detg[1]
+STORAGE: ML_cons_detg[1]
 
-STORAGE: cons_Gamma[1]
+STORAGE: ML_cons_Gamma[1]
 
-STORAGE: cons_traceA[1]
+STORAGE: ML_cons_traceA[1]
 
-STORAGE: Ham[1]
+STORAGE: ML_Ham[1]
 
-STORAGE: mom[1]
+STORAGE: ML_mom[1]
 
 STORAGE: ML_curvrhs[1]
 
@@ -212,6 +212,15 @@ schedule ML_BSSN_RHS IN ML_BSSN_evolCalcGroup
 } "ML_BSSN_RHS"
 
 
+if (CCTK_EQUALS(my_rhs_boundary_condition, "radiative"))
+{
+  schedule ML_BSSN_RHSBoundary IN MoL_RHSBoundaries
+  {
+    LANG: C
+  } "ML_BSSN_RHSBoundary"
+}
+
+
 if (CCTK_EQUALS(evolution_method, "ML_BSSN"))
 {
   schedule ML_BSSN_enforce IN MoL_PostStep BEFORE ML_BSSN_BoundConds
@@ -232,7 +241,7 @@ if (CCTK_EQUALS(my_boundary_condition, "Minkowski"))
 
 if (CCTK_EQUALS(evolution_method, "ML_BSSN"))
 {
-  schedule ML_BSSN_convertToADMBase IN MoL_PostStep AFTER (ML_BSSN_ApplyBCs ML_BSSN_boundary ML_BSSN_enforce)
+  schedule ML_BSSN_convertToADMBase IN MoL_PostStep AFTER (ML_BSSN_ApplyBCs ML_BSSN_enforce)
   {
     LANG: C
     SYNC: ADMBase::curv
@@ -256,11 +265,11 @@ if (CCTK_EQUALS(my_boundary_condition, "Minkowski"))
 schedule ML_BSSN_constraints IN ML_BSSN_constraintsCalcGroup
 {
   LANG: C
-  SYNC: cons_detg
-  SYNC: cons_Gamma
-  SYNC: cons_traceA
-  SYNC: Ham
-  SYNC: mom
+  SYNC: ML_cons_detg
+  SYNC: ML_cons_Gamma
+  SYNC: ML_cons_traceA
+  SYNC: ML_Ham
+  SYNC: ML_mom
 } "ML_BSSN_constraints"
 
 schedule ML_BSSN_constraints_boundary IN ML_BSSN_constraintsCalcGroup AFTER ML_BSSN_constraints

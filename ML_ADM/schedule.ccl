@@ -4,68 +4,68 @@
 # Mathematica script written by Ian Hinder and Sascha Husa
 
 
-STORAGE: Ham[1]
+STORAGE: ML_Ham[1]
 
-STORAGE: mom[1]
+STORAGE: ML_mom[1]
 
-STORAGE: ml_curvrhs[1]
+STORAGE: ML_curvrhs[1]
 
-STORAGE: ml_lapserhs[1]
+STORAGE: ML_lapserhs[1]
 
-STORAGE: ml_metricrhs[1]
+STORAGE: ML_metricrhs[1]
 
-STORAGE: ml_shiftrhs[1]
-
-if (timelevels == 1)
-{
-  STORAGE: ml_curv[1]
-}
-if (timelevels == 2)
-{
-  STORAGE: ml_curv[2]
-}
-if (timelevels == 3)
-{
-  STORAGE: ml_curv[3]
-}
+STORAGE: ML_shiftrhs[1]
 
 if (timelevels == 1)
 {
-  STORAGE: ml_lapse[1]
+  STORAGE: ML_curv[1]
 }
 if (timelevels == 2)
 {
-  STORAGE: ml_lapse[2]
+  STORAGE: ML_curv[2]
 }
 if (timelevels == 3)
 {
-  STORAGE: ml_lapse[3]
+  STORAGE: ML_curv[3]
 }
 
 if (timelevels == 1)
 {
-  STORAGE: ml_metric[1]
+  STORAGE: ML_lapse[1]
 }
 if (timelevels == 2)
 {
-  STORAGE: ml_metric[2]
+  STORAGE: ML_lapse[2]
 }
 if (timelevels == 3)
 {
-  STORAGE: ml_metric[3]
+  STORAGE: ML_lapse[3]
 }
 
 if (timelevels == 1)
 {
-  STORAGE: ml_shift[1]
+  STORAGE: ML_metric[1]
 }
 if (timelevels == 2)
 {
-  STORAGE: ml_shift[2]
+  STORAGE: ML_metric[2]
 }
 if (timelevels == 3)
 {
-  STORAGE: ml_shift[3]
+  STORAGE: ML_metric[3]
+}
+
+if (timelevels == 1)
+{
+  STORAGE: ML_shift[1]
+}
+if (timelevels == 2)
+{
+  STORAGE: ML_shift[2]
+}
+if (timelevels == 3)
+{
+  STORAGE: ML_shift[3]
 }
 
 schedule ML_ADM_Startup at STARTUP
@@ -112,10 +112,10 @@ schedule ML_ADM_RHS IN MoL_CalcRHS
 schedule ML_ADM_RHS AT analysis
 {
   LANG: C
-  SYNC: ml_curvrhs
-  SYNC: ml_lapserhs
-  SYNC: ml_metricrhs
-  SYNC: ml_shiftrhs
+  SYNC: ML_curvrhs
+  SYNC: ML_lapserhs
+  SYNC: ML_metricrhs
+  SYNC: ML_shiftrhs
 } "ML_ADM_RHS"
 
 
@@ -127,7 +127,7 @@ if (CCTK_EQUALS(my_boundary_condition, "Minkowski"))
   } "ML_ADM_boundary"
 }
 
-schedule ML_ADM_convertToADMBase IN MoL_PostStep AFTER (ML_ADM_ApplyBCs ML_ADM_boundary)
+schedule ML_ADM_convertToADMBase IN MoL_PostStep AFTER ML_ADM_ApplyBCs
 {
   LANG: C
 } "ML_ADM_convertToADMBase"
@@ -135,10 +135,10 @@ schedule ML_ADM_convertToADMBase IN MoL_PostStep AFTER (ML_ADM_ApplyBCs ML_ADM_b
 schedule ML_ADM_constraints AT analysis
 {
   LANG: C
-  SYNC: Ham
-  SYNC: mom
-  TRIGGERS: Ham
-  TRIGGERS: mom
+  SYNC: ML_Ham
+  SYNC: ML_mom
+  TRIGGERS: ML_Ham
+  TRIGGERS: ML_mom
 } "ML_ADM_constraints"
 
 schedule ML_ADM_constraints_boundary AT analysis AFTER ML_ADM_constraints
@@ -150,10 +150,10 @@ schedule ML_ADM_ApplyBoundConds in MoL_PostStep
 {
   LANG: C
   OPTIONS: level
-  SYNC: ml_curv
-  SYNC: ml_lapse
-  SYNC: ml_metric
-  SYNC: ml_shift
+  SYNC: ML_curv
+  SYNC: ML_lapse
+  SYNC: ML_metric
+  SYNC: ML_shift
 } "apply boundary conditions"
 
 schedule ML_ADM_CheckBoundaries at BASEGRID

@@ -5,7 +5,10 @@
 
 #define KRANC_C
 
+#include <assert.h>
 #include <math.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include "cctk.h"
 #include "cctk_Arguments.h"
 #include "cctk_Parameters.h"
@@ -20,7 +23,7 @@
 #define CUB(x) ((x) * (x) * (x))
 #define QAD(x) ((x) * (x) * (x) * (x))
 
-void ML_BSSN_convertToADMBase_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCTK_REAL normal[3], CCTK_REAL tangentA[3], CCTK_REAL tangentB[3], CCTK_INT min[3], CCTK_INT max[3], CCTK_INT n_subblock_gfs, CCTK_REAL *subblock_gfs[])
+void ML_BSSN_convertToADMBase_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT const face, CCTK_REAL const normal[3], CCTK_REAL const tangentA[3], CCTK_REAL const tangentB[3], CCTK_INT const min[3], CCTK_INT const max[3], CCTK_INT const n_subblock_gfs, CCTK_REAL * const subblock_gfs[])
 {
   DECLARE_CCTK_ARGUMENTS
   DECLARE_CCTK_PARAMETERS
@@ -40,9 +43,15 @@ void ML_BSSN_convertToADMBase_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCT
   CCTK_REAL p1o144dxdy = INITVALUE;
   CCTK_REAL p1o144dxdz = INITVALUE;
   CCTK_REAL p1o144dydz = INITVALUE;
+  CCTK_REAL p1o2dx = INITVALUE;
+  CCTK_REAL p1o2dy = INITVALUE;
+  CCTK_REAL p1o2dz = INITVALUE;
   CCTK_REAL pm1o12dx2 = INITVALUE;
   CCTK_REAL pm1o12dy2 = INITVALUE;
   CCTK_REAL pm1o12dz2 = INITVALUE;
+  CCTK_REAL pm1o2dx = INITVALUE;
+  CCTK_REAL pm1o2dy = INITVALUE;
+  CCTK_REAL pm1o2dz = INITVALUE;
   
   if (verbose > 1)
   {
@@ -79,12 +88,18 @@ void ML_BSSN_convertToADMBase_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCT
   p1o144dxdy = (INV(dx)*INV(dy))/144.;
   p1o144dxdz = (INV(dx)*INV(dz))/144.;
   p1o144dydz = (INV(dy)*INV(dz))/144.;
+  p1o2dx = khalf*INV(dx);
+  p1o2dy = khalf*INV(dy);
+  p1o2dz = khalf*INV(dz);
   pm1o12dx2 = -pow(dx,-2)/12.;
   pm1o12dy2 = -pow(dy,-2)/12.;
   pm1o12dz2 = -pow(dz,-2)/12.;
+  pm1o2dx = -(khalf*INV(dx));
+  pm1o2dy = -(khalf*INV(dy));
+  pm1o2dz = -(khalf*INV(dz));
   
   /* Loop over the grid points */
-  _Pragma ("omp parallel")
+  #pragma omp parallel
   LC_LOOP3 (ML_BSSN_convertToADMBase,
             i,j,k, min[0],min[1],min[2], max[0],max[1],max[2],
             cctk_lsh[0],cctk_lsh[1],cctk_lsh[2])
@@ -235,17 +250,19 @@ void ML_BSSN_convertToADMBase_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCT
     
     betazL  =  beta3L;
     
-    dtalpL  =  LapseAdvectionCoeff*(beta1L*PDstandardNth1alpha + beta2L*PDstandardNth2alpha + beta3L*PDstandardNth3alpha) + 
-        harmonicF*(AL*(-1 + LapseAdvectionCoeff) - LapseAdvectionCoeff*trKL)*pow(alphaL,harmonicN);
+    dtalpL  =  LapseAdvectionCoeff*(beta1L*PDstandardNth1alpha + 
+           beta2L*PDstandardNth2alpha + beta3L*PDstandardNth3alpha) + 
+        harmonicF*(AL*(-1 + LapseAdvectionCoeff) - LapseAdvectionCoeff*trKL)*
+         pow(alphaL,harmonicN);
     
-    dtbetaxL  =  (beta1L*PDstandardNth1beta1 + beta2L*PDstandardNth2beta1 + beta3L*PDstandardNth3beta1)*
-         ShiftAdvectionCoeff + B1L*ShiftGammaCoeff;
+    dtbetaxL  =  (beta1L*PDstandardNth1beta1 + beta2L*PDstandardNth2beta1 + 
+           beta3L*PDstandardNth3beta1)*ShiftAdvectionCoeff + B1L*ShiftGammaCoeff;
     
-    dtbetayL  =  (beta1L*PDstandardNth1beta1 + beta2L*PDstandardNth2beta1 + beta3L*PDstandardNth3beta1)*
-         ShiftAdvectionCoeff + B2L*ShiftGammaCoeff;
+    dtbetayL  =  (beta1L*PDstandardNth1beta1 + beta2L*PDstandardNth2beta1 + 
+           beta3L*PDstandardNth3beta1)*ShiftAdvectionCoeff + B2L*ShiftGammaCoeff;
     
-    dtbetazL  =  (beta1L*PDstandardNth1beta1 + beta2L*PDstandardNth2beta1 + beta3L*PDstandardNth3beta1)*
-         ShiftAdvectionCoeff + B3L*ShiftGammaCoeff;
+    dtbetazL  =  (beta1L*PDstandardNth1beta1 + beta2L*PDstandardNth2beta1 + 
+           beta3L*PDstandardNth3beta1)*ShiftAdvectionCoeff + B3L*ShiftGammaCoeff;
     
     
     /* Copy local copies back to grid functions */

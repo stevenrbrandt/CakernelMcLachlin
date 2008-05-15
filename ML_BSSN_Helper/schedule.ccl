@@ -58,8 +58,8 @@ if (CCTK_EQUALS (evolution_method, "ML_BSSN")) {
   
   SCHEDULE GROUP ML_BSSN_constraintsCalcGroup AT analysis
   {
-    TRIGGERS: ML_BSSN::Ham
-    TRIGGERS: ML_BSSN::mom
+    TRIGGERS: ML_BSSN::ML_Ham
+    TRIGGERS: ML_BSSN::ML_mom
   } "Calculate BSSN constraints"
   
   

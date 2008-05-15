@@ -31,38 +31,38 @@ CCTK_INT FUNCTION Boundary_SelectVarForBC(CCTK_POINTER_TO_CONST IN GH, CCTK_INT 
 USES FUNCTION Boundary_SelectVarForBC
 
 public:
-CCTK_REAL cons_detg type=GF timelevels=1 tags='tensortypealias="Scalar" tensorweight=2.0000000000000000000'
+CCTK_REAL ML_cons_detg type=GF timelevels=1 tags='tensortypealias="Scalar" tensorweight=2.0000000000000000000'
 {
   cS
-} "cons_detg"
+} "ML_cons_detg"
 
 public:
-CCTK_REAL cons_Gamma type=GF timelevels=1 tags='tensortypealias="U" tensorweight=0.66666666666666666667'
+CCTK_REAL ML_cons_Gamma type=GF timelevels=1 tags='tensortypealias="U" tensorweight=0.66666666666666666667'
 {
   cXt1,
   cXt2,
   cXt3
-} "cons_Gamma"
+} "ML_cons_Gamma"
 
 public:
-CCTK_REAL cons_traceA type=GF timelevels=1 tags='tensortypealias="Scalar" tensorweight=1.0000000000000000000'
+CCTK_REAL ML_cons_traceA type=GF timelevels=1 tags='tensortypealias="Scalar" tensorweight=1.0000000000000000000'
 {
   cA
-} "cons_traceA"
+} "ML_cons_traceA"
 
 public:
-CCTK_REAL Ham type=GF timelevels=1 tags='tensortypealias="Scalar" tensorweight=1.0000000000000000000'
+CCTK_REAL ML_Ham type=GF timelevels=1 tags='tensortypealias="Scalar" tensorweight=1.0000000000000000000'
 {
   H
-} "Ham"
+} "ML_Ham"
 
 public:
-CCTK_REAL mom type=GF timelevels=1 tags='tensortypealias="D" tensorweight=1.0000000000000000000'
+CCTK_REAL ML_mom type=GF timelevels=1 tags='tensortypealias="D" tensorweight=1.0000000000000000000'
 {
   M1,
   M2,
   M3
-} "mom"
+} "ML_mom"
 
 public:
 CCTK_REAL ML_curvrhs type=GF timelevels=1 tags='tensortypealias="DD_sym" tensorweight=-0.66666666666666666667'

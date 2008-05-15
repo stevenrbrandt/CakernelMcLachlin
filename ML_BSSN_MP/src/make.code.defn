@@ -1,0 +1,6 @@
+# File produced by user eschnett
+# Produced with Mathematica Version 6.0 for Mac OS X x86 (32-bit) (April 20, 2007)
+
+# Mathematica script written by Ian Hinder and Sascha Husa
+
+SRCS = Startup.c RegisterMoL.c RegisterSymmetries.c ML_BSSN_MP_Minkowski.c ML_BSSN_MP_convertFromADMBase.c ML_BSSN_MP_convertFromADMBaseGamma.c ML_BSSN_MP_RHS.c ML_BSSN_MP_RHSBoundary.c ML_BSSN_MP_enforce.c ML_BSSN_MP_boundary.c ML_BSSN_MP_convertToADMBase.c ML_BSSN_MP_ADMBaseBoundary.c ML_BSSN_MP_constraints.c ML_BSSN_MP_constraints_boundary.c Boundaries.c 

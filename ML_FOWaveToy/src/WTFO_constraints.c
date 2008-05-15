@@ -5,7 +5,10 @@
 
 #define KRANC_C
 
+#include <assert.h>
 #include <math.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include "cctk.h"
 #include "cctk_Arguments.h"
 #include "cctk_Parameters.h"
@@ -118,44 +121,21 @@ void WTFO_constraints_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCTK_REAL n
          subblock_index  =  i - min[0] + (max[0] - min[0]) * (j - min[1] + (max[1]-min[1]) * (k - min[2])) ;
         
         /* Declare shorthands */
-        CCTK_REAL Jinv11 = INITVALUE, Jinv12 = INITVALUE, Jinv13 = INITVALUE, Jinv21 = INITVALUE, Jinv22 = INITVALUE, Jinv23 = INITVALUE;
-        CCTK_REAL Jinv31 = INITVALUE, Jinv32 = INITVALUE, Jinv33 = INITVALUE;
         
         /* Declare local copies of grid functions */
-        CCTK_REAL dadxL = INITVALUE;
-        CCTK_REAL dadyL = INITVALUE;
-        CCTK_REAL dadzL = INITVALUE;
-        CCTK_REAL dbdxL = INITVALUE;
-        CCTK_REAL dbdyL = INITVALUE;
-        CCTK_REAL dbdzL = INITVALUE;
-        CCTK_REAL dcdxL = INITVALUE;
-        CCTK_REAL dcdyL = INITVALUE;
-        CCTK_REAL dcdzL = INITVALUE;
         CCTK_REAL v1L = INITVALUE, v2L = INITVALUE, v3L = INITVALUE;
         CCTK_REAL w1L = INITVALUE, w2L = INITVALUE, w3L = INITVALUE;
         /* Declare precomputed derivatives*/
         
         /* Declare derivatives */
-        CCTK_REAL PDstandardNth1v1 = INITVALUE;
         CCTK_REAL PDstandardNth2v1 = INITVALUE;
         CCTK_REAL PDstandardNth3v1 = INITVALUE;
         CCTK_REAL PDstandardNth1v2 = INITVALUE;
-        CCTK_REAL PDstandardNth2v2 = INITVALUE;
         CCTK_REAL PDstandardNth3v2 = INITVALUE;
         CCTK_REAL PDstandardNth1v3 = INITVALUE;
         CCTK_REAL PDstandardNth2v3 = INITVALUE;
-        CCTK_REAL PDstandardNth3v3 = INITVALUE;
         
         /* Assign local copies of grid functions */
-        dadxL = dadx[index];
-        dadyL = dady[index];
-        dadzL = dadz[index];
-        dbdxL = dbdx[index];
-        dbdyL = dbdy[index];
-        dbdzL = dbdz[index];
-        dcdxL = dcdx[index];
-        dcdyL = dcdy[index];
-        dcdzL = dcdz[index];
         v1L = v1[index];
         v2L = v2[index];
         v3L = v3[index];
@@ -165,45 +145,21 @@ void WTFO_constraints_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCTK_REAL n
         /* Include user supplied include files */
         
         /* Precompute derivatives (new style) */
-        PDstandardNth1v1 = PDstandardNth1(v1, i, j, k);
         PDstandardNth2v1 = PDstandardNth2(v1, i, j, k);
         PDstandardNth3v1 = PDstandardNth3(v1, i, j, k);
         PDstandardNth1v2 = PDstandardNth1(v2, i, j, k);
-        PDstandardNth2v2 = PDstandardNth2(v2, i, j, k);
         PDstandardNth3v2 = PDstandardNth3(v2, i, j, k);
         PDstandardNth1v3 = PDstandardNth1(v3, i, j, k);
         PDstandardNth2v3 = PDstandardNth2(v3, i, j, k);
-        PDstandardNth3v3 = PDstandardNth3(v3, i, j, k);
         
         /* Precompute derivatives (old style) */
         
         /* Calculate temporaries and grid functions */
-        Jinv11  =  dadxL;
+        w1L  =  -PDstandardNth2v3 + PDstandardNth3v2;
         
-        Jinv12  =  dadyL;
+        w2L  =  PDstandardNth1v3 - PDstandardNth3v1;
         
-        Jinv13  =  dadzL;
-        
-        Jinv21  =  dbdxL;
-        
-        Jinv22  =  dbdyL;
-        
-        Jinv23  =  dbdzL;
-        
-        Jinv31  =  dcdxL;
-        
-        Jinv32  =  dcdyL;
-        
-        Jinv33  =  dcdzL;
-        
-        w1L  =  Jinv13*PDstandardNth1v2 - Jinv12*PDstandardNth1v3 + Jinv23*PDstandardNth2v2 - Jinv22*PDstandardNth2v3 + 
-            Jinv33*PDstandardNth3v2 - Jinv32*PDstandardNth3v3;
-        
-        w2L  =  -(Jinv13*PDstandardNth1v1) + Jinv11*PDstandardNth1v3 - Jinv23*PDstandardNth2v1 + Jinv21*PDstandardNth2v3 - 
-            Jinv33*PDstandardNth3v1 + Jinv31*PDstandardNth3v3;
-        
-        w3L  =  Jinv12*PDstandardNth1v1 - Jinv11*PDstandardNth1v2 + Jinv22*PDstandardNth2v1 - Jinv21*PDstandardNth2v2 + 
-            Jinv32*PDstandardNth3v1 - Jinv31*PDstandardNth3v2;
+        w3L  =  -PDstandardNth1v2 + PDstandardNth2v1;
         
         
         /* Copy local copies back to grid functions */
