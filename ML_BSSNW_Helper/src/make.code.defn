@@ -1,0 +1,2 @@
+# -*-Makefile-*-
+SRCS = SelectBCsADMBase.c RegisterSlicing.c UnsetCheckpointTags.c
