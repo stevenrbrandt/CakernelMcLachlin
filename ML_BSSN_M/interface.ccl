@@ -3,9 +3,9 @@
 
 # Mathematica script written by Ian Hinder and Sascha Husa
 
-implements: ML_BSSN
+implements: ML_BSSN_M
 
-inherits:   ADMBase Grid GenericFD Boundary
+inherits:   ADMBase TmunuBase Grid GenericFD Boundary
 
 
 
