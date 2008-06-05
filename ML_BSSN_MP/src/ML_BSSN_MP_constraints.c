@@ -121,34 +121,18 @@ void ML_BSSN_MP_constraints_Body(cGH const * const cctkGH, CCTK_INT const dir, C
     CCTK_REAL gtu11 = INITVALUE, gtu21 = INITVALUE, gtu22 = INITVALUE, gtu31 = INITVALUE, gtu32 = INITVALUE, gtu33 = INITVALUE;
     CCTK_REAL gu11 = INITVALUE, gu21 = INITVALUE, gu22 = INITVALUE, gu31 = INITVALUE, gu32 = INITVALUE, gu33 = INITVALUE;
     CCTK_REAL R11 = INITVALUE, R12 = INITVALUE, R13 = INITVALUE, R22 = INITVALUE, R23 = INITVALUE, R33 = INITVALUE;
-    CCTK_REAL rho = INITVALUE;
     CCTK_REAL Rphi11 = INITVALUE, Rphi12 = INITVALUE, Rphi13 = INITVALUE, Rphi22 = INITVALUE, Rphi23 = INITVALUE, Rphi33 = INITVALUE;
     CCTK_REAL Rt11 = INITVALUE, Rt12 = INITVALUE, Rt13 = INITVALUE, Rt22 = INITVALUE, Rt23 = INITVALUE, Rt33 = INITVALUE;
-    CCTK_REAL S1 = INITVALUE, S2 = INITVALUE, S3 = INITVALUE;
-    CCTK_REAL T00 = INITVALUE, T01 = INITVALUE, T02 = INITVALUE, T03 = INITVALUE, T11 = INITVALUE, T12 = INITVALUE;
-    CCTK_REAL T13 = INITVALUE, T22 = INITVALUE, T23 = INITVALUE, T33 = INITVALUE;
     CCTK_REAL trR = INITVALUE;
     
     /* Declare local copies of grid functions */
-    CCTK_REAL alphaL = INITVALUE;
     CCTK_REAL At11L = INITVALUE, At12L = INITVALUE, At13L = INITVALUE, At22L = INITVALUE, At23L = INITVALUE, At33L = INITVALUE;
-    CCTK_REAL beta1L = INITVALUE, beta2L = INITVALUE, beta3L = INITVALUE;
     CCTK_REAL cAL = INITVALUE;
     CCTK_REAL cSL = INITVALUE;
     CCTK_REAL cXt1L = INITVALUE, cXt2L = INITVALUE, cXt3L = INITVALUE;
     CCTK_REAL dJ111L = INITVALUE, dJ112L = INITVALUE, dJ113L = INITVALUE, dJ122L = INITVALUE, dJ123L = INITVALUE, dJ133L = INITVALUE;
     CCTK_REAL dJ211L = INITVALUE, dJ212L = INITVALUE, dJ213L = INITVALUE, dJ222L = INITVALUE, dJ223L = INITVALUE, dJ233L = INITVALUE;
     CCTK_REAL dJ311L = INITVALUE, dJ312L = INITVALUE, dJ313L = INITVALUE, dJ322L = INITVALUE, dJ323L = INITVALUE, dJ333L = INITVALUE;
-    CCTK_REAL eTttL = INITVALUE;
-    CCTK_REAL eTtxL = INITVALUE;
-    CCTK_REAL eTtyL = INITVALUE;
-    CCTK_REAL eTtzL = INITVALUE;
-    CCTK_REAL eTxxL = INITVALUE;
-    CCTK_REAL eTxyL = INITVALUE;
-    CCTK_REAL eTxzL = INITVALUE;
-    CCTK_REAL eTyyL = INITVALUE;
-    CCTK_REAL eTyzL = INITVALUE;
-    CCTK_REAL eTzzL = INITVALUE;
     CCTK_REAL gt11L = INITVALUE, gt12L = INITVALUE, gt13L = INITVALUE, gt22L = INITVALUE, gt23L = INITVALUE, gt33L = INITVALUE;
     CCTK_REAL HL = INITVALUE;
     CCTK_REAL J11L = INITVALUE, J12L = INITVALUE, J13L = INITVALUE, J21L = INITVALUE, J22L = INITVALUE, J23L = INITVALUE;
@@ -276,16 +260,12 @@ void ML_BSSN_MP_constraints_Body(cGH const * const cctkGH, CCTK_INT const dir, C
     CCTK_REAL PDstandardNth3Xt3 = INITVALUE;
     
     /* Assign local copies of grid functions */
-    alphaL = alpha[index];
     At11L = At11[index];
     At12L = At12[index];
     At13L = At13[index];
     At22L = At22[index];
     At23L = At23[index];
     At33L = At33[index];
-    beta1L = beta1[index];
-    beta2L = beta2[index];
-    beta3L = beta3[index];
     dJ111L = dJ111[index];
     dJ112L = dJ112[index];
     dJ113L = dJ113[index];
@@ -304,16 +284,6 @@ void ML_BSSN_MP_constraints_Body(cGH const * const cctkGH, CCTK_INT const dir, C
     dJ322L = dJ322[index];
     dJ323L = dJ323[index];
     dJ333L = dJ333[index];
-    eTttL = eTtt[index];
-    eTtxL = eTtx[index];
-    eTtyL = eTty[index];
-    eTtzL = eTtz[index];
-    eTxxL = eTxx[index];
-    eTxyL = eTxy[index];
-    eTxzL = eTxz[index];
-    eTyyL = eTyy[index];
-    eTyzL = eTyz[index];
-    eTzzL = eTzz[index];
     gt11L = gt11[index];
     gt12L = gt12[index];
     gt13L = gt13[index];
@@ -1773,40 +1743,8 @@ void ML_BSSN_MP_constraints_Body(cGH const * const cctkGH, CCTK_INT const dir, C
     
     Atm33  =  At13L*gtu31 + At23L*gtu32 + At33L*gtu33;
     
-    T00  =  eTttL;
-    
-    T01  =  eTtxL;
-    
-    T02  =  eTtyL;
-    
-    T03  =  eTtzL;
-    
-    T11  =  eTxxL;
-    
-    T12  =  eTxyL;
-    
-    T13  =  eTxzL;
-    
-    T22  =  eTyyL;
-    
-    T23  =  eTyzL;
-    
-    T33  =  eTzzL;
-    
-    rho  =  pow(alphaL,-2)*(T00 - 2*(beta2L*T02 + beta3L*T03) + 
-          2*(beta1L*(-T01 + beta2L*T12 + beta3L*T13) + beta2L*beta3L*T23) + 
-          T11*SQR(beta1L) + T22*SQR(beta2L) + T33*SQR(beta3L));
-    
-    S1  =  (-T01 + beta1L*T11 + beta2L*T12 + beta3L*T13)*INV(alphaL);
-    
-    S2  =  (-T02 + beta1L*T12 + beta2L*T22 + beta3L*T23)*INV(alphaL);
-    
-    S3  =  (-T03 + beta1L*T13 + beta2L*T23 + beta3L*T33)*INV(alphaL);
-    
-    HL  =  -2.*(Atm12*Atm21 + Atm13*Atm31 + Atm23*Atm32) - 
-        50.26548245743669181540229413247204614715*rho + trR - 
-        1.*(SQR(Atm11) + SQR(Atm22) + SQR(Atm33)) + 
-        0.6666666666666666666666666666666666666667*SQR(trKL);
+    HL  =  -2*(Atm12*Atm21 + Atm13*Atm31 + Atm23*Atm32) + trR - SQR(Atm11) - 
+        SQR(Atm22) - SQR(Atm33) + ktwothird*SQR(trKL);
     
     M1L  =  gtu11*(-2*At11L*Gt111 - 2*At12L*Gt211 - 2*At13L*Gt311 + 
            J11L*PDstandardNth1At11 + 6*At11L*J11L*PDstandardNth1phi + 
@@ -1851,7 +1789,7 @@ void ML_BSSN_MP_constraints_Body(cGH const * const cctkGH, CCTK_INT const dir, C
            6*At13L*J23L*PDstandardNth2phi - J33L*PDstandardNth3At13 - 
            6*At13L*J33L*PDstandardNth3phi) - 
         ktwothird*(J11L*PDstandardNth1trK + J21L*PDstandardNth2trK + 
-           J31L*PDstandardNth3trK) - 25.13274122871834590770114706623602307358*S1;
+           J31L*PDstandardNth3trK);
     
     M2L  =  -(gtu11*(At12L*Gt111 + At11L*Gt112 + At22L*Gt211 + At12L*Gt212 + 
              At23L*Gt311 + At13L*Gt312 - J11L*PDstandardNth1At12 - 
@@ -1896,7 +1834,7 @@ void ML_BSSN_MP_constraints_Body(cGH const * const cctkGH, CCTK_INT const dir, C
            6*At23L*J23L*PDstandardNth2phi - J33L*PDstandardNth3At23 - 
            6*At23L*J33L*PDstandardNth3phi) - 
         ktwothird*(J12L*PDstandardNth1trK + J22L*PDstandardNth2trK + 
-           J32L*PDstandardNth3trK) - 25.13274122871834590770114706623602307358*S2;
+           J32L*PDstandardNth3trK);
     
     M3L  =  -(gtu11*(At13L*Gt111 + At11L*Gt113 + At23L*Gt211 + At12L*Gt213 + 
              At33L*Gt311 + At13L*Gt313 - J11L*PDstandardNth1At13 - 
@@ -1941,7 +1879,7 @@ void ML_BSSN_MP_constraints_Body(cGH const * const cctkGH, CCTK_INT const dir, C
            J23L*PDstandardNth2At33 + 6*At33L*J23L*PDstandardNth2phi + 
            J33L*PDstandardNth3At33 + 6*At33L*J33L*PDstandardNth3phi) - 
         ktwothird*(J13L*PDstandardNth1trK + J23L*PDstandardNth2trK + 
-           J33L*PDstandardNth3trK) - 25.13274122871834590770114706623602307358*S3;
+           J33L*PDstandardNth3trK);
     
     cSL  =  Log(detgt);
     
