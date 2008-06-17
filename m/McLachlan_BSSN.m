@@ -271,8 +271,7 @@ convertFromADMBaseGammaCalc =
 convertToADMBaseCalc =
 {
   Name -> BSSN <> "_convertToADMBase",
-  Schedule -> {"IN MoL_PostStep AFTER (" <> BSSN <> "_ApplyBCs " <> BSSN <> "_enforce)"},
-  ConditionalOnKeyword -> {"evolution_method", BSSN},
+  Schedule -> {"IN ML_BSSN_convertToADMBaseGroup"},
   Where -> Interior,
   Shorthands -> {e4phi, g[la,lb], K[la,lb]},
   Equations -> 
@@ -302,48 +301,7 @@ convertToADMBaseCalc =
                 + LapseAdvectionCoeff beta[ua] PD[alpha,la],
     dtbetax  -> + ShiftGammaCoeff B1
                 + ShiftAdvectionCoeff beta[ub] PD[beta[ua],lb],
-    dtbetay  -> + ShiftGammaCoeff  B2
-                + ShiftAdvectionCoeff beta[ub] PD[beta[ua],lb],
-    dtbetaz  -> + ShiftGammaCoeff B3
-                + ShiftAdvectionCoeff beta[ub] PD[beta[ua],lb]
-  }
-};
-
-convertToADMBaseLapseShiftCalc =
-{
-  Name -> BSSN <> "_convertToADMBase",
-  Schedule -> {"IN MoL_PostStep AFTER (" <> BSSN <> "_ApplyBCs " <> BSSN <> "_enforce)"},
-  ConditionalOnKeyword -> {"evolution_method", BSSN},
-  Where -> Interior,
-  Shorthands -> {e4phi, g[la,lb], K[la,lb]},
-  Equations -> 
-  {
-    e4phi    -> Exp [4 phi],
-    g[la,lb] -> e4phi gt[la,lb],
-    gxx      -> g11,
-    gxy      -> g12,
-    gxz      -> g13,
-    gyy      -> g22,
-    gyz      -> g23,
-    gzz      -> g33,
-    K[la,lb] -> e4phi At[la,lb] + (1/3) g[la,lb] trK,
-    kxx      -> K11,
-    kxy      -> K12,
-    kxz      -> K13,
-    kyy      -> K22,
-    kyz      -> K23,
-    kzz      -> K33,
-    alp      -> alpha,
-    betax    -> beta1,
-    betay    -> beta2,
-    betaz    -> beta3,
-    (* see RHS *)
-    dtalp    -> - harmonicF alpha^harmonicN
-                  ((1 - LapseAdvectionCoeff) A + LapseAdvectionCoeff trK)
-                + LapseAdvectionCoeff beta[ua] PD[alpha,la],
-    dtbetax  -> + ShiftGammaCoeff B1
-                + ShiftAdvectionCoeff beta[ub] PD[beta[ua],lb],
-    dtbetay  -> + ShiftGammaCoeff  B2
+    dtbetay  -> + ShiftGammaCoeff B2
                 + ShiftAdvectionCoeff beta[ub] PD[beta[ua],lb],
     dtbetaz  -> + ShiftGammaCoeff B3
                 + ShiftAdvectionCoeff beta[ub] PD[beta[ua],lb]
@@ -353,7 +311,7 @@ convertToADMBaseLapseShiftCalc =
 boundaryCalcADMBase =
 {
   Name -> BSSN <> "_ADMBaseBoundary",
-  Schedule -> {"IN MoL_PostStep AFTER " <> BSSN <> "_convertToADMBase"},
+  Schedule -> {"IN ML_BSSN_convertToADMBaseGroup AFTER " <> BSSN <> "_convertToADMBase"},
   ConditionalOnKeyword -> {"my_boundary_condition", "Minkowski"},
   Where -> BoundaryWithGhosts,
   Equations -> 
@@ -567,7 +525,6 @@ enforceCalc =
 {
   Name -> BSSN <> "_enforce",
   Schedule -> {"IN MoL_PostStep BEFORE " <> BSSN <> "_BoundConds"},
-  ConditionalOnKeyword -> {"evolution_method", BSSN},
   Shorthands -> {detgt, gtu[ua,ub], trAt},
   Equations -> 
   {
@@ -802,6 +759,13 @@ keywordParameters =
     (* Description -> "ddd", *)
     AllowedValues -> {"none", "Minkowski"},
     Default -> "none"
+  },
+  {
+    Name -> "calculate_ADMBase_variables_at",
+    Visibility -> "restricted",
+    (* Description -> "ddd", *)
+    AllowedValues -> {"MoL_PostStep", "CCTK_EVOL", "CCTK_ANALYSIS"},
+    Default -> "MoL_PostStep"
   }
 };
 

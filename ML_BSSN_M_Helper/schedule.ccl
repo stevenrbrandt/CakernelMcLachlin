@@ -56,6 +56,29 @@ if (CCTK_EQUALS (evolution_method, "ML_BSSN_M")) {
   
   
   
+  if (CCTK_EQUALS (calculate_ADMBase_variables_at, "MoL_PostStep"))
+  {
+    SCHEDULE GROUP ML_BSSN_M_convertToADMBaseGroup IN MoL_PostStep AFTER (ML_BSSN_M_ApplyBCs ML_BSSN_M_enforce)
+    {
+    } "Calculate ADM variables"
+  }
+  else if  (CCTK_EQUALS (calculate_ADMBase_variables_at, "CCTK_EVOL"))
+  {
+    SCHEDULE GROUP ML_BSSN_M_convertToADMBaseGroup AT evol AFTER MoL_Evolution
+    {
+    } "Calculate ADM variables"
+  }
+  else if  (CCTK_EQUALS (calculate_ADMBase_variables_at, "CCTK_ANALYSIS"))
+  {
+    SCHEDULE GROUP ML_BSSN_M_convertToADMBaseGroup AT analysis
+    {
+      TRIGGERS: ML_BSSN_M::ML_Ham
+      TRIGGERS: ML_BSSN_M::ML_mom
+    } "Calculate ADM variables"
+  }
+  
+  
+  
   SCHEDULE GROUP ML_BSSN_M_constraintsCalcGroup AT analysis
   {
     TRIGGERS: ML_BSSN_M::ML_Ham
