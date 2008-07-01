@@ -220,14 +220,10 @@ if (CCTK_EQUALS(my_rhs_boundary_condition, "radiative"))
   } "ML_BSSN_M_RHSBoundary"
 }
 
-
-if (CCTK_EQUALS(evolution_method, "ML_BSSN_M"))
+schedule ML_BSSN_M_enforce IN MoL_PostStep BEFORE ML_BSSN_M_BoundConds
 {
-  schedule ML_BSSN_M_enforce IN MoL_PostStep BEFORE ML_BSSN_M_BoundConds
-  {
-    LANG: C
-  } "ML_BSSN_M_enforce"
-}
+  LANG: C
+} "ML_BSSN_M_enforce"
 
 
 if (CCTK_EQUALS(my_boundary_condition, "Minkowski"))
@@ -238,25 +234,21 @@ if (CCTK_EQUALS(my_boundary_condition, "Minkowski"))
   } "ML_BSSN_M_boundary"
 }
 
-
-if (CCTK_EQUALS(evolution_method, "ML_BSSN_M"))
+schedule ML_BSSN_M_convertToADMBase IN ML_BSSN_convertToADMBaseGroup
 {
-  schedule ML_BSSN_M_convertToADMBase IN MoL_PostStep AFTER (ML_BSSN_M_ApplyBCs ML_BSSN_M_enforce)
-  {
-    LANG: C
-    SYNC: ADMBase::curv
-    SYNC: ADMBase::dtlapse
-    SYNC: ADMBase::dtshift
-    SYNC: ADMBase::lapse
-    SYNC: ADMBase::metric
-    SYNC: ADMBase::shift
-  } "ML_BSSN_M_convertToADMBase"
-}
+  LANG: C
+  SYNC: ADMBase::curv
+  SYNC: ADMBase::dtlapse
+  SYNC: ADMBase::dtshift
+  SYNC: ADMBase::lapse
+  SYNC: ADMBase::metric
+  SYNC: ADMBase::shift
+} "ML_BSSN_M_convertToADMBase"
 
 
 if (CCTK_EQUALS(my_boundary_condition, "Minkowski"))
 {
-  schedule ML_BSSN_M_ADMBaseBoundary IN MoL_PostStep AFTER ML_BSSN_M_convertToADMBase
+  schedule ML_BSSN_M_ADMBaseBoundary IN ML_BSSN_convertToADMBaseGroup AFTER ML_BSSN_M_convertToADMBase
   {
     LANG: C
   } "ML_BSSN_M_ADMBaseBoundary"

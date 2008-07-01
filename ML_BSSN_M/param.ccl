@@ -116,6 +116,14 @@ KEYWORD my_boundary_condition "my_boundary_condition"
 } "none"
 
 restricted:
+KEYWORD calculate_ADMBase_variables_at "calculate_ADMBase_variables_at"
+{
+  "MoL_PostStep" :: "MoL_PostStep"
+  "CCTK_EVOL" :: "CCTK_EVOL"
+  "CCTK_ANALYSIS" :: "CCTK_ANALYSIS"
+} "MoL_PostStep"
+
+restricted:
 CCTK_INT ML_BSSN_M_MaxNumEvolvedVars "Number of evolved variables used by this thorn" ACCUMULATOR-BASE=MethodofLines::MoL_Num_Evolved_Vars
 {
   25:25 :: "Number of evolved variables used by this thorn"
