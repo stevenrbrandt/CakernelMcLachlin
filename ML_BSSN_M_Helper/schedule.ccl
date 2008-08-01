@@ -29,6 +29,12 @@ if (CCTK_EQUALS (evolution_method, "ML_BSSN_M")) {
     OPTIONS: meta
   } "Register slicing"
   
+  SCHEDULE ML_BSSN_M_RegisterSymmetries IN SymmetryRegister
+  {
+    LANG: C
+    OPTIONS: meta
+  } "Register grid function symmetries"
+  
   SCHEDULE ML_BSSN_M_UnsetCheckpointTags AT basegrid
   {
     LANG: C

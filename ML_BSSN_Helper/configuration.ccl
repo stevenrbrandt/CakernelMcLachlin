@@ -1,1 +1,1 @@
-REQUIRES THORNS: CoordGauge
+REQUIRES THORNS: CartGrid3D CoordGauge
