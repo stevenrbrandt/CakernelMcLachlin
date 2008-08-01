@@ -234,7 +234,7 @@ if (CCTK_EQUALS(my_boundary_condition, "Minkowski"))
   } "ML_BSSN_M_boundary"
 }
 
-schedule ML_BSSN_M_convertToADMBase IN ML_BSSN_convertToADMBaseGroup
+schedule ML_BSSN_M_convertToADMBase IN ML_BSSN_M_convertToADMBaseGroup
 {
   LANG: C
   SYNC: ADMBase::curv
@@ -248,7 +248,7 @@ schedule ML_BSSN_M_convertToADMBase IN ML_BSSN_convertToADMBaseGroup
 
 if (CCTK_EQUALS(my_boundary_condition, "Minkowski"))
 {
-  schedule ML_BSSN_M_ADMBaseBoundary IN ML_BSSN_convertToADMBaseGroup AFTER ML_BSSN_M_convertToADMBase
+  schedule ML_BSSN_M_ADMBaseBoundary IN ML_BSSN_M_convertToADMBaseGroup AFTER ML_BSSN_M_convertToADMBase
   {
     LANG: C
   } "ML_BSSN_M_ADMBaseBoundary"
