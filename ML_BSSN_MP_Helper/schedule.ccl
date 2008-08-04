@@ -29,12 +29,6 @@ if (CCTK_EQUALS (evolution_method, "ML_BSSN_MP")) {
     OPTIONS: meta
   } "Register slicing"
   
-  SCHEDULE ML_BSSN_MP_RegisterSymmetries IN SymmetryRegister
-  {
-    LANG: C
-    OPTIONS: meta
-  } "Register grid function symmetries"
-  
   SCHEDULE ML_BSSN_MP_UnsetCheckpointTags AT basegrid
   {
     LANG: C
@@ -64,7 +58,7 @@ if (CCTK_EQUALS (evolution_method, "ML_BSSN_MP")) {
   
   if (CCTK_EQUALS (calculate_ADMBase_variables_at, "MoL_PostStep"))
   {
-    SCHEDULE GROUP ML_BSSN_MP_convertToADMBaseGroup IN MoL_PostStep AFTER (ML_BSSN_MP_ApplyBCs ML_BSSN_MP_enforce)
+    SCHEDULE GROUP ML_BSSN_MP_convertToADMBaseGroup IN MoL_PostStep AFTER (ML_BSSN_MP_ApplyBCs ML_BSSN_MP_enforce) BEFORE Whisky_PostStep
     {
     } "Calculate ADM variables"
   }
