@@ -457,7 +457,7 @@ evolCalc =
                       + addMatter (4 pi alpha (rho + trS)),
 
     (* PRD 62, 044034 (2000), eqn. (12) *)
-    (* TODO: use Hamiltonian constraint to make tracefree *)
+    (* TODO: Should we use the Hamiltonian constraint to make Rij tracefree? *)
     Ats[la,lb]     -> - CD[alpha,la,lb] + alpha R[la,lb],
     trAts          -> gu[ua,ub] Ats[la,lb],
     dot[At[la,lb]] -> + em4phi (+ Ats[la,lb] - (1/3) g[la,lb] trAts )
