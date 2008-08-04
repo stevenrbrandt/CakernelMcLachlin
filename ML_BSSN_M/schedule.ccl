@@ -161,7 +161,7 @@ schedule ML_BSSN_M_RegisterVars in MoL_Register
   OPTIONS: meta
 } "Register Variables for MoL"
 
-schedule ML_BSSN_M_RegisterSymmetries at BASEGRID
+schedule ML_BSSN_M_RegisterSymmetries in SymmetryRegister
 {
   LANG: C
   OPTIONS: meta
