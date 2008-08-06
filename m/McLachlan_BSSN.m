@@ -308,6 +308,9 @@ convertToADMBaseCalc =
   }
 };
 
+(* TODO: Need to apply a boundary condition to the ADM variables in
+   all cases!  *)
+(*
 boundaryCalcADMBase =
 {
   Name -> BSSN <> "_ADMBaseBoundary",
@@ -336,6 +339,43 @@ boundaryCalcADMBase =
     dtbetax -> 0,
     dtbetay -> 0,
     dtbetaz -> 0
+  }
+};
+*)
+
+boundaryCalcADMBase =
+{
+  Name -> BSSN <> "_ADMBaseBoundary",
+  Schedule -> {"IN " <> BSSN <> "_convertToADMBaseGroup AFTER " <> BSSN <> "_convertToADMBase"},
+  Where -> BoundaryWithGhosts,
+  Shorthands -> {e4phi, g[la,lb], K[la,lb]},
+  Equations -> 
+  {
+    e4phi    -> Exp [4 phi],
+    g[la,lb] -> e4phi gt[la,lb],
+    gxx      -> g11,
+    gxy      -> g12,
+    gxz      -> g13,
+    gyy      -> g22,
+    gyz      -> g23,
+    gzz      -> g33,
+    K[la,lb] -> e4phi At[la,lb] + (1/3) g[la,lb] trK,
+    kxx      -> K11,
+    kxy      -> K12,
+    kxz      -> K13,
+    kyy      -> K22,
+    kyz      -> K23,
+    kzz      -> K33,
+    alp      -> alpha,
+    betax    -> beta1,
+    betay    -> beta2,
+    betaz    -> beta3,
+    (* see RHS, but omit derivatives near the boundary *)
+    dtalp    -> - harmonicF alpha^harmonicN
+                  ((1 - LapseAdvectionCoeff) A + LapseAdvectionCoeff trK),
+    dtbetax  -> + ShiftGammaCoeff B1,
+    dtbetay  -> + ShiftGammaCoeff B2,
+    dtbetaz  -> + ShiftGammaCoeff B3
   }
 };
 
