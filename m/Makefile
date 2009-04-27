@@ -1,6 +1,6 @@
 # -*-Makefile-*-
 
-all: McLachlan_ADM.out McLachlan_BSSN.out WaveToy.out
+all: McLachlan_ADM.out McLachlan_BSSN.out WaveToy.out hydro.out
 	@echo
 	@echo "The Cactus thorns are up to date."
 	@echo
@@ -14,10 +14,16 @@ McLachlan_BSSN.out: McLachlan_BSSN.m
 	rm -rf ML_BSSN*
 	./runmath.sh $^
 	for thorn in ML_BSSN*; do ./copy-if-changed.sh $$thorn ../$$thorn; done
+
 WaveToy.out: WaveToy.m
 	rm -rf ML_WaveToy ML_FOWaveToy
 	./runmath.sh $^
 	for thorn in ML_WaveToy ML_FOWaveToy; do ./copy-if-changed.sh $$thorn ../$$thorn; done
+
+hydro.out: hydro.m
+	rm -rf ML_hydro
+	./runmath.sh $^
+	for thorn in ML_hydro; do ./copy-if-changed.sh $$thorn ../$$thorn; done
 
 clean:
 	rm -rf McLachlan_ADM.out McLachlan_ADM.err ML_ADM*
