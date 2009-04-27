@@ -30,10 +30,10 @@ KD = KroneckerDelta;
 
 derivatives =
 {
-  PDstandardNth[i_]     -> StandardCenteredDifferenceOperator[1,derivOrder/2,i],
-  PDstandardNth[i_, i_] -> StandardCenteredDifferenceOperator[2,derivOrder/2,i],
-  PDstandardNth[i_, j_] -> StandardCenteredDifferenceOperator[1,derivOrder/2,i]
-                           StandardCenteredDifferenceOperator[1,derivOrder/2,j],
+  PDstandardNth[i_]    -> StandardCenteredDifferenceOperator[1,derivOrder/2,i],
+  PDstandardNth[i_,i_] -> StandardCenteredDifferenceOperator[2,derivOrder/2,i],
+  PDstandardNth[i_,j_] -> StandardCenteredDifferenceOperator[1,derivOrder/2,i] *
+                          StandardCenteredDifferenceOperator[1,derivOrder/2,j],
   
 (*
   PDPlus    [i_] -> (+1) (-1 + shift[i]^(+1)) / spacing[i],
@@ -194,6 +194,20 @@ initialCalc =
   }
 };
 
+(*
+updateCalc[calc_, name_, value_] :=
+  ReplacePart[calc, Position[calc, name][[1]][[1]] -> (name -> value)]
+
+rhs[list_] := Map[#[[1]]&, list]
+
+duplicateID[name_] := ToExpression[ToString[name] <> "copy"]
+
+vars = rhs[Equations /. initialCalc]
+newVars = Map[duplicateID, vars]
+*)
+
+(* initialCalc = updateCalc[initialCalc, Equations, {phi->1}] *)
+
 (******************************************************************************)
 (* Convert from ADMBase *)
 (******************************************************************************)
@@ -216,8 +230,8 @@ convertFromADMBaseCalc =
     detg      -> detgExpr,
     gu[ua,ub] -> 1/detg detgExpr MatrixInverse [g[ua,ub]],
     
-    phi       -> Log [detg] / 12,
-    em4phi    -> Exp [-4 phi],
+    phi       -> Log[detg] / 12,
+    em4phi    -> Exp[-4 phi],
     gt[la,lb] -> em4phi g[la,lb],
     
     K11 -> kxx,
@@ -244,6 +258,8 @@ convertFromADMBaseGammaCalc =
   Schedule -> {"AT initial AFTER " <> BSSN <> "_convertFromADMBase"},
   ConditionalOnKeyword -> {"my_initial_data", "ADMBase"},
   Where -> Interior,
+  (* should not sync Gamma, since boundary conditions and
+     synchronisation are applied later anyway *)
   Shorthands -> {detgt, gtu[ua,ub], Gt[ua,lb,lc]},
   Equations -> 
   {
@@ -276,7 +292,7 @@ convertToADMBaseCalc =
   Shorthands -> {e4phi, g[la,lb], K[la,lb]},
   Equations -> 
   {
-    e4phi    -> Exp [4 phi],
+    e4phi    -> Exp[4 phi],
     g[la,lb] -> e4phi gt[la,lb],
     gxx      -> g11,
     gxy      -> g12,
@@ -351,7 +367,7 @@ boundaryCalcADMBase =
   Shorthands -> {e4phi, g[la,lb], K[la,lb]},
   Equations -> 
   {
-    e4phi    -> Exp [4 phi],
+    e4phi    -> Exp[4 phi],
     g[la,lb] -> e4phi gt[la,lb],
     gxx      -> g11,
     gxy      -> g12,
@@ -431,7 +447,7 @@ evolCalc =
     Atm[ua,lb] -> gtu[ua,uc] At[lc,lb],
     Atu[ua,ub] -> Atm[ua,lc] gtu[ub,uc],
     
-    e4phi       -> Exp [4 phi],
+    e4phi       -> Exp[4 phi],
     em4phi      -> 1 / e4phi,
     g[la,lb]    -> e4phi gt[la,lb],
     detg        -> detgExpr,
@@ -538,17 +554,20 @@ RHSBoundaryCalc =
   {
     detgt      -> 1 (* detgtExpr *),
     gtu[ua,ub] -> 1/detgt detgtExpr MatrixInverse [gt[ua,ub]],
-    em4phi     -> Exp [-4 phi],
+    em4phi     -> Exp[-4 phi],
     gu[ua,ub]  -> em4phi gtu[ua,ub],
     
     nn[la] -> normal[la],
     nu[ua] -> gu[ua,ub] nn[lb],
     nlen2  -> nu[ua] nn[la],
-    nlen   -> Sqrt [nlen2],
+    nlen   -> Sqrt[nlen2],
     su[ua] -> nu[ua] / nlen,
     
     vg -> Sqrt[harmonicF],
     
+    (* TODO: Use PDPlus at lower boundary *)
+    (* TODO: Use standard PD operators in directions which are not a
+       boundary *)
     dot[phi]       -> - vg su[uc] PDMinus[phi      ,lc],
     dot[gt[la,lb]] -> -    su[uc] PDMinus[gt[la,lb],lc],
     dot[trK]       -> - vg su[uc] PDMinus[trK      ,lc],
@@ -573,9 +592,9 @@ enforceCalc =
     
     trAt -> gtu[ua,ub] At[la,lb],
     
-    At[la,lb] -> At[la,lb] - (1/3) gt[la,lb] trAt (*,
-
-    alpha -> Max[alpha, 10^(-10)] *)
+    At[la,lb] -> At[la,lb] - (1/3) gt[la,lb] trAt
+    
+    (* alpha -> Max[alpha, 10^(-10)] *)
   }
 };
 
@@ -666,7 +685,7 @@ constraintsCalc =
                    + 4 CDt[phi,li] CDt[phi,lj]
                    - 4 gt[li,lj] gtu[ul,un] CDt[phi,ln] CDt[phi,ll],
     
-    e4phi       -> Exp [4 phi],
+    e4phi       -> Exp[4 phi],
     em4phi      -> 1 / e4phi,
     g[la,lb]    -> e4phi gt[la,lb],
     (* detg      -> detgExpr, *)
@@ -724,7 +743,7 @@ constraintsCalc =
     (* TODO: use PRD 67, 084023 (2003), eqn. (20) *)
     
     (* det gamma-tilde *)
-    cS -> Log [detgt],
+    cS -> Log[detgt],
     
     (* Gamma constraint *)
     cXt[ua] -> gtu[ub,uc] Gt[ua,lb,lc] - Xt[ua],
@@ -852,7 +871,6 @@ realParameters =
     Default -> 1
   }
 };
-
 
 (******************************************************************************)
 (* Construct the thorns *)
