@@ -152,7 +152,7 @@ initialCalc =
     alpha    -> 1,
     beta[ua] -> 0
   }
-}
+};
 
 (******************************************************************************)
 (* Convert from ADMBase *)
@@ -183,7 +183,7 @@ convertFromADMBaseCalc =
     beta2 -> betay,
     beta3 -> betaz
   }
-}
+};
 
 (******************************************************************************)
 (* Convert to ADMBase *)
@@ -217,7 +217,7 @@ convertToADMBaseCalc =
     dtbetay -> 0,
     dtbetaz -> 0
   }
-}
+};
 
 (******************************************************************************)
 (* Evolution equations *)
@@ -249,7 +249,7 @@ evolCalc =
     dot[alpha]    -> 0,
     dot[beta[ua]] -> 0
   }
-}
+};
 
 (******************************************************************************)
 (* Boundary conditions *)
@@ -268,7 +268,7 @@ boundaryCalc =
     alpha    -> 1,
     beta[ua] -> 0
   }
-}
+};
 
 (******************************************************************************)
 (* Constraint equations *)
@@ -297,7 +297,7 @@ constraintsCalc =
     H -> trR - Km[ua,lb] Km[ub,la] + trK^2,
     M[la] -> gu[ub,uc] (CD[K[lc,la], lb] - CD[K[lc,lb], la])
   }
-}
+};
 
 constraintsBoundaryCalc =
 {
@@ -310,7 +310,7 @@ constraintsBoundaryCalc =
     H     -> 0,
     M[la] -> 0
   }
-}
+};
 
 (******************************************************************************)
 (* Implementations *)
