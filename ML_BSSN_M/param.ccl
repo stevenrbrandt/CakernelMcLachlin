@@ -38,7 +38,6 @@ USES CCTK_INT boundary_width
 shares: MethodOfLines
 
 USES CCTK_INT MoL_Num_Evolved_Vars
-USES CCTK_INT MoL_Num_Constrained_Vars
 
 restricted:
 CCTK_INT verbose "verbose"
@@ -128,12 +127,6 @@ CCTK_INT ML_BSSN_M_MaxNumEvolvedVars "Number of evolved variables used by this t
 {
   25:25 :: "Number of evolved variables used by this thorn"
 } 25
-
-restricted:
-CCTK_INT ML_BSSN_M_MaxNumConstrainedVars "Number of constrained variables used by this thorn" ACCUMULATOR-BASE=MethodofLines::MoL_Num_Constrained_Vars
-{
-  70:70 :: "Number of constrained variables used by this thorn"
-} 70
 
 restricted:
 CCTK_INT timelevels "Number of active timelevels"

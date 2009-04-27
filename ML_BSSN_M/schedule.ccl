@@ -161,7 +161,7 @@ schedule ML_BSSN_M_RegisterVars in MoL_Register
   OPTIONS: meta
 } "Register Variables for MoL"
 
-schedule ML_BSSN_M_RegisterSymmetries at BASEGRID
+schedule ML_BSSN_M_RegisterSymmetries in SymmetryRegister
 {
   LANG: C
   OPTIONS: meta
@@ -234,7 +234,7 @@ if (CCTK_EQUALS(my_boundary_condition, "Minkowski"))
   } "ML_BSSN_M_boundary"
 }
 
-schedule ML_BSSN_M_convertToADMBase IN ML_BSSN_convertToADMBaseGroup
+schedule ML_BSSN_M_convertToADMBase IN ML_BSSN_M_convertToADMBaseGroup
 {
   LANG: C
   SYNC: ADMBase::curv
@@ -245,14 +245,10 @@ schedule ML_BSSN_M_convertToADMBase IN ML_BSSN_convertToADMBaseGroup
   SYNC: ADMBase::shift
 } "ML_BSSN_M_convertToADMBase"
 
-
-if (CCTK_EQUALS(my_boundary_condition, "Minkowski"))
+schedule ML_BSSN_M_ADMBaseBoundary IN ML_BSSN_M_convertToADMBaseGroup AFTER ML_BSSN_M_convertToADMBase
 {
-  schedule ML_BSSN_M_ADMBaseBoundary IN ML_BSSN_convertToADMBaseGroup AFTER ML_BSSN_M_convertToADMBase
-  {
-    LANG: C
-  } "ML_BSSN_M_ADMBaseBoundary"
-}
+  LANG: C
+} "ML_BSSN_M_ADMBaseBoundary"
 
 schedule ML_BSSN_M_constraints IN ML_BSSN_M_constraintsCalcGroup
 {

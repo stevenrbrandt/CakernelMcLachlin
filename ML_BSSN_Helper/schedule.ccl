@@ -58,7 +58,7 @@ if (CCTK_EQUALS (evolution_method, "ML_BSSN")) {
   
   if (CCTK_EQUALS (calculate_ADMBase_variables_at, "MoL_PostStep"))
   {
-    SCHEDULE GROUP ML_BSSN_convertToADMBaseGroup IN MoL_PostStep AFTER (ML_BSSN_ApplyBCs ML_BSSN_enforce)
+    SCHEDULE GROUP ML_BSSN_convertToADMBaseGroup IN MoL_PostStep AFTER (ML_BSSN_ApplyBCs ML_BSSN_enforce) BEFORE Whisky_PostStep
     {
     } "Calculate ADM variables"
   }
