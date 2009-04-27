@@ -119,7 +119,7 @@ initialCalc =
     u -> 0,
     rho -> 0
   }
-}
+};
 
 initialCalcFO =
 {
@@ -133,7 +133,7 @@ initialCalcFO =
     v[la] -> 0,
     rho -> 0
   }
-}
+};
 
 (******************************************************************************)
 (* Evolution equations *)
@@ -177,7 +177,7 @@ evolCalc =
     dot[u] -> rho,
     dot[rho] -> KD[ua,ub] PD[u,la,lb]
   }
-}
+};
 
 evolCalcFO =
 {
@@ -200,7 +200,7 @@ evolCalcFO =
     dot[rho] -> KD[ua,ub] PD[v[la],lb],
     dot[v[la]] -> PD[rho,la]
   }
-}
+};
 
 (******************************************************************************)
 (* Constraint equations *)
@@ -225,7 +225,7 @@ constraintsCalcFO =
     Jinv33 -> dcdz,
     w[ua] -> Eps[ua,ub,uc] PD[v[lb],lc]
   }
-}
+};
 
 (******************************************************************************)
 (* Implementations *)
@@ -247,6 +247,7 @@ CreateKrancThornTT [groups, ".", "ML_WaveToy",
   Calculations -> calculations,
   DeclaredGroups -> declaredGroupNames,
   PartialDerivatives -> derivatives,
+  UseLoopControl -> True,
   EvolutionTimelevels -> evolutionTimelevels,
   InheritedImplementations -> inheritedImplementations
 ];
@@ -264,6 +265,7 @@ CreateKrancThornTT [groupsFO, ".", "ML_FOWaveToy",
   Calculations -> calculationsFO,
   DeclaredGroups -> declaredGroupNamesFO,
   PartialDerivatives -> derivatives,
+  UseLoopControl -> True,
   EvolutionTimelevels -> evolutionTimelevels,
   InheritedImplementations -> inheritedImplementations
 ];
