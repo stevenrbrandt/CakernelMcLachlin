@@ -1,0 +1,130 @@
+# File produced by user eschnett
+# Produced with Mathematica Version 6.0 for Mac OS X x86 (64-bit) (May 21, 2008)
+
+# Mathematica script written by Ian Hinder and Sascha Husa
+
+implements: ML_hydro
+
+inherits:   Grid GenericFD Boundary
+
+
+
+USES INCLUDE: GenericFD.h
+USES INCLUDE: Symmetry.h
+USES INCLUDE: sbp_calc_coeffs.h
+USES INCLUDE: Boundary.h
+USES INCLUDE: loopcontrol.h
+
+CCTK_INT FUNCTION MoLRegisterEvolved(CCTK_INT IN EvolvedIndex, CCTK_INT IN RHSIndex)
+USES FUNCTION MoLRegisterEvolved
+
+SUBROUTINE Diff_coeff(CCTK_POINTER_TO_CONST IN cctkGH, CCTK_INT IN dir, CCTK_INT IN nsize, CCTK_INT OUT ARRAY imin, CCTK_INT OUT ARRAY imax, CCTK_REAL OUT ARRAY q, CCTK_INT IN table_handle)
+USES FUNCTION Diff_coeff
+
+CCTK_INT FUNCTION Boundary_SelectGroupForBC(CCTK_POINTER_TO_CONST IN GH, CCTK_INT IN faces, CCTK_INT IN boundary_width, CCTK_INT IN table_handle, CCTK_STRING IN group_name, CCTK_STRING IN bc_name)
+USES FUNCTION Boundary_SelectGroupForBC
+
+CCTK_INT FUNCTION Boundary_SelectVarForBC(CCTK_POINTER_TO_CONST IN GH, CCTK_INT IN faces, CCTK_INT IN boundary_width, CCTK_INT IN table_handle, CCTK_STRING IN var_name, CCTK_STRING IN bc_name)
+USES FUNCTION Boundary_SelectVarForBC
+
+public:
+CCTK_REAL eneflux_group type=GF timelevels=1 tags='tensortypealias="U" tensorweight=1.0000000000000000000'
+{
+  eneflux1,
+  eneflux2,
+  eneflux3
+} "eneflux_group"
+
+public:
+CCTK_REAL eps_group type=GF timelevels=1 tags='tensortypealias="Scalar" tensorweight=1.0000000000000000000'
+{
+  eps
+} "eps_group"
+
+public:
+CCTK_REAL massflux_group type=GF timelevels=1 tags='tensortypealias="U" tensorweight=1.0000000000000000000'
+{
+  massflux1,
+  massflux2,
+  massflux3
+} "massflux_group"
+
+public:
+CCTK_REAL momflux_group type=GF timelevels=1 tags='tensortypealias="DU" tensorweight=1.0000000000000000000'
+{
+  momflux11,
+  momflux12,
+  momflux13,
+  momflux21,
+  momflux22,
+  momflux23,
+  momflux31,
+  momflux32,
+  momflux33
+} "momflux_group"
+
+public:
+CCTK_REAL press_group type=GF timelevels=1 tags='tensortypealias="Scalar" tensorweight=1.0000000000000000000'
+{
+  press
+} "press_group"
+
+public:
+CCTK_REAL rho_group type=GF timelevels=1 tags='tensortypealias="Scalar" tensorweight=1.0000000000000000000'
+{
+  rho
+} "rho_group"
+
+public:
+CCTK_REAL vel_group type=GF timelevels=1 tags='tensortypealias="U" tensorweight=1.0000000000000000000'
+{
+  vel1,
+  vel2,
+  vel3
+} "vel_group"
+
+public:
+CCTK_REAL vol_group type=GF timelevels=1 tags='tensortypealias="Scalar" tensorweight=1.0000000000000000000'
+{
+  vol
+} "vol_group"
+
+public:
+CCTK_REAL ene_grouprhs type=GF timelevels=1 tags='tensortypealias="Scalar" tensorweight=1.0000000000000000000'
+{
+  enerhs
+} "ene_grouprhs"
+
+public:
+CCTK_REAL mass_grouprhs type=GF timelevels=1 tags='tensortypealias="Scalar" tensorweight=1.0000000000000000000'
+{
+  massrhs
+} "mass_grouprhs"
+
+public:
+CCTK_REAL mom_grouprhs type=GF timelevels=1 tags='tensortypealias="D" tensorweight=1.0000000000000000000'
+{
+  mom1rhs,
+  mom2rhs,
+  mom3rhs
+} "mom_grouprhs"
+
+public:
+CCTK_REAL ene_group type=GF timelevels=3 tags='tensortypealias="Scalar" tensorweight=1.0000000000000000000'
+{
+  ene
+} "ene_group"
+
+public:
+CCTK_REAL mass_group type=GF timelevels=3 tags='tensortypealias="Scalar" tensorweight=1.0000000000000000000'
+{
+  mass
+} "mass_group"
+
+public:
+CCTK_REAL mom_group type=GF timelevels=3 tags='tensortypealias="D" tensorweight=1.0000000000000000000'
+{
+  mom1,
+  mom2,
+  mom3
+} "mom_group"

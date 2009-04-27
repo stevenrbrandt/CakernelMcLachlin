@@ -1,0 +1,140 @@
+# File produced by user eschnett
+# Produced with Mathematica Version 6.0 for Mac OS X x86 (64-bit) (May 21, 2008)
+
+# Mathematica script written by Ian Hinder and Sascha Husa
+
+
+STORAGE: eneflux_group[1]
+
+STORAGE: eps_group[1]
+
+STORAGE: massflux_group[1]
+
+STORAGE: momflux_group[1]
+
+STORAGE: press_group[1]
+
+STORAGE: rho_group[1]
+
+STORAGE: vel_group[1]
+
+STORAGE: vol_group[1]
+
+STORAGE: ene_grouprhs[1]
+
+STORAGE: mass_grouprhs[1]
+
+STORAGE: mom_grouprhs[1]
+
+if (timelevels == 1)
+{
+  STORAGE: ene_group[1]
+}
+if (timelevels == 2)
+{
+  STORAGE: ene_group[2]
+}
+if (timelevels == 3)
+{
+  STORAGE: ene_group[3]
+}
+
+if (timelevels == 1)
+{
+  STORAGE: mass_group[1]
+}
+if (timelevels == 2)
+{
+  STORAGE: mass_group[2]
+}
+if (timelevels == 3)
+{
+  STORAGE: mass_group[3]
+}
+
+if (timelevels == 1)
+{
+  STORAGE: mom_group[1]
+}
+if (timelevels == 2)
+{
+  STORAGE: mom_group[2]
+}
+if (timelevels == 3)
+{
+  STORAGE: mom_group[3]
+}
+
+schedule ML_hydro_Startup at STARTUP
+{
+  LANG: C
+  OPTIONS: meta
+} "create banner"
+
+schedule ML_hydro_RegisterVars in MoL_Register
+{
+  LANG: C
+  OPTIONS: meta
+} "Register Variables for MoL"
+
+schedule ML_hydro_RegisterSymmetries in SymmetryRegister
+{
+  LANG: C
+  OPTIONS: meta
+} "register symmetries"
+
+
+if (CCTK_EQUALS(initial_data, "vacuum"))
+{
+  schedule hydro_vacuum IN ADMBase_InitialData
+  {
+    LANG: C
+  } "hydro_vacuum"
+}
+
+
+if (CCTK_EQUALS(initial_data, "sound wave"))
+{
+  schedule hydro_soundWave IN ADMBase_InitialData
+  {
+    LANG: C
+  } "hydro_soundWave"
+}
+
+schedule hydro_prim2con AT initial AFTER ADMBase_PostInitial
+{
+  LANG: C
+} "hydro_prim2con"
+
+schedule hydro_con2prim IN hydro_con2primGroup
+{
+  LANG: C
+} "hydro_con2prim"
+
+schedule hydro_RHS IN hydro_evolCalcGroup AFTER hydro_fluxes
+{
+  LANG: C
+  SYNC: ene_grouprhs
+  SYNC: mass_grouprhs
+  SYNC: mom_grouprhs
+} "hydro_RHS"
+
+schedule ML_hydro_ApplyBoundConds in MoL_PostStep
+{
+  LANG: C
+  OPTIONS: level
+  SYNC: ene_group
+  SYNC: mass_group
+  SYNC: mom_group
+} "apply boundary conditions"
+
+schedule ML_hydro_CheckBoundaries at BASEGRID
+{
+  LANG: C
+  OPTIONS: meta
+} "check boundaries treatment"
+
+schedule group ApplyBCs as ML_hydro_ApplyBCs in MoL_PostStep  after ML_hydro_ApplyBoundConds
+{
+  # no language specified
+} "Apply boundary conditions controlled by thorn Boundary"
