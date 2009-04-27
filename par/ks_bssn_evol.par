@@ -229,7 +229,7 @@ carpetregrid::coordinates = "
 
 carpetregrid::smart_outer_boundaries 		= "yes"
 carpet::max_refinement_levels           	= 7
-carpetregrid::refinement_levels         	= 7
+carpetregrid::refinement_levels         	= 3 # 7
 
 #--- initial data
 
@@ -254,7 +254,7 @@ ADMBase::evolution_method       = "ML_BSSN"
 ADMBase::lapse_evolution_method = "ML_BSSN"
 ADMBase::shift_evolution_method = "ML_BSSN"
 
-ML_BSSN_MP_O2::timelevels = 2
+ML_BSSN::timelevels = 2
 
 ML_BSSN::my_boundary_condition = "Minkowski"
 

@@ -1,5 +1,5 @@
-/*  File produced by user eschnett */
-/*  Produced with Mathematica Version 6.0 for Mac OS X x86 (32-bit) (April 20, 2007) */
+/*  File produced by user diener */
+/*  Produced with Mathematica Version 6.0 for Linux x86 (32-bit) (April 20, 2007) */
 
 /*  Mathematica script written by Ian Hinder and Sascha Husa */
 
@@ -102,7 +102,7 @@ void ML_BSSN_MP_enforce_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_
   #pragma omp parallel
   LC_LOOP3 (ML_BSSN_MP_enforce,
             i,j,k, min[0],min[1],min[2], max[0],max[1],max[2],
-            cctk_lssh[CCTK_LSSH_IDX(0,0)],cctk_lssh[CCTK_LSSH_IDX(0,1)],cctk_lssh[CCTK_LSSH_IDX(0,2)])
+            cctk_lsh[0],cctk_lsh[1],cctk_lsh[2])
   {
     int index = INITVALUE;
     int subblock_index = INITVALUE;
@@ -158,8 +158,7 @@ void ML_BSSN_MP_enforce_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_
     
     gtu33  =  INV(detgt)*(gt11L*gt22L - SQR(gt12L));
     
-    trAt  =  At11L*gtu11 + At22L*gtu22 + 
-        2*(At12L*gtu21 + At13L*gtu31 + At23L*gtu32) + At33L*gtu33;
+    trAt  =  At11L*gtu11 + At22L*gtu22 + 2*(At12L*gtu21 + At13L*gtu31 + At23L*gtu32) + At33L*gtu33;
     
     At11L  =  At11L - gt11L*kthird*trAt;
     

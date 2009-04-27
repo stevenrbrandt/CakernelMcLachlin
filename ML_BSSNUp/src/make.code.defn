@@ -1,0 +1,6 @@
+# File produced by user diener
+# Produced with Mathematica Version 6.0 for Linux x86 (32-bit) (April 20, 2007)
+
+# Mathematica script written by Ian Hinder and Sascha Husa
+
+SRCS = Startup.c RegisterMoL.c RegisterSymmetries.c ML_BSSNUp_Minkowski.c ML_BSSNUp_convertFromADMBase.c ML_BSSNUp_convertFromADMBaseGamma.c ML_BSSNUp_RHS.c ML_BSSNUp_enforce.c ML_BSSNUp_boundary.c ML_BSSNUp_convertToADMBase.c ML_BSSNUp_ADMBaseBoundary.c ML_BSSNUp_constraints.c ML_BSSNUp_constraints_boundary.c Boundaries.c 
