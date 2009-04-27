@@ -1,5 +1,5 @@
-/*  File produced by user diener */
-/*  Produced with Mathematica Version 6.0 for Linux x86 (32-bit) (April 20, 2007) */
+/*  File produced by user eschnett */
+/*  Produced with Mathematica Version 6.0 for Mac OS X x86 (64-bit) (May 21, 2008) */
 
 /*  Mathematica script written by Ian Hinder and Sascha Husa */
 
@@ -14,6 +14,7 @@
 #include "cctk_Parameters.h"
 #include "GenericFD.h"
 #include "Differencing.h"
+#include "loopcontrol.h"
 
 /* Define macros used in calculations */
 #define INITVALUE  (42)
@@ -22,16 +23,11 @@
 #define CUB(x) ((x) * (x) * (x))
 #define QAD(x) ((x) * (x) * (x) * (x))
 
-void WTFO_RHS_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCTK_REAL normal[3], CCTK_REAL tangentA[3], CCTK_REAL tangentB[3], CCTK_INT min[3], CCTK_INT max[3], CCTK_INT n_subblock_gfs, CCTK_REAL *subblock_gfs[])
+void WTFO_RHS_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT const face, CCTK_REAL const normal[3], CCTK_REAL const tangentA[3], CCTK_REAL const tangentB[3], CCTK_INT const min[3], CCTK_INT const max[3], CCTK_INT const n_subblock_gfs, CCTK_REAL * const subblock_gfs[])
 {
-  DECLARE_CCTK_ARGUMENTS
-  DECLARE_CCTK_PARAMETERS
+  DECLARE_CCTK_ARGUMENTS;
+  DECLARE_CCTK_PARAMETERS;
   
-  
-  /* Declare the variables used for looping over grid points */
-  CCTK_INT i = INITVALUE, j = INITVALUE, k = INITVALUE;
-  CCTK_INT index = INITVALUE;
-  CCTK_INT subblock_index = INITVALUE;
   
   /* Declare finite differencing variables */
   CCTK_REAL dx = INITVALUE, dy = INITVALUE, dz = INITVALUE;
@@ -111,80 +107,80 @@ void WTFO_RHS_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCTK_REAL normal[3]
   pm1o12dz2 = -pow(dz,-2)/12.;
   
   /* Loop over the grid points */
-  for (k = min[2]; k < max[2]; k++)
+  #pragma omp parallel
+  LC_LOOP3 (WTFO_RHS,
+            i,j,k, min[0],min[1],min[2], max[0],max[1],max[2],
+            cctk_lssh[CCTK_LSSH_IDX(0,0)],cctk_lssh[CCTK_LSSH_IDX(0,1)],cctk_lssh[CCTK_LSSH_IDX(0,2)])
   {
-    for (j = min[1]; j < max[1]; j++)
-    {
-      for (i = min[0]; i < max[0]; i++)
-      {
-         index  =  CCTK_GFINDEX3D(cctkGH,i,j,k) ;
-         subblock_index  =  i - min[0] + (max[0] - min[0]) * (j - min[1] + (max[1]-min[1]) * (k - min[2])) ;
-        
-        /* Declare shorthands */
-        
-        /* Declare local copies of grid functions */
-        CCTK_REAL rhoL = INITVALUE, rhorhsL = INITVALUE;
-        CCTK_REAL urhsL = INITVALUE;
-        CCTK_REAL v1L = INITVALUE, v1rhsL = INITVALUE, v2L = INITVALUE, v2rhsL = INITVALUE, v3L = INITVALUE, v3rhsL = INITVALUE;
-        /* Declare precomputed derivatives*/
-        
-        /* Declare derivatives */
-        CCTK_REAL PDstandardNth1rho = INITVALUE;
-        CCTK_REAL PDstandardNth2rho = INITVALUE;
-        CCTK_REAL PDstandardNth3rho = INITVALUE;
-        CCTK_REAL PDstandardNth1v1 = INITVALUE;
-        CCTK_REAL PDstandardNth2v2 = INITVALUE;
-        CCTK_REAL PDstandardNth3v3 = INITVALUE;
-        
-        /* Assign local copies of grid functions */
-        rhoL = rho[index];
-        v1L = v1[index];
-        v2L = v2[index];
-        v3L = v3[index];
-        
-        /* Assign local copies of subblock grid functions */
-        
-        /* Include user supplied include files */
-        
-        /* Precompute derivatives (new style) */
-        PDstandardNth1rho = PDstandardNth1(rho, i, j, k);
-        PDstandardNth2rho = PDstandardNth2(rho, i, j, k);
-        PDstandardNth3rho = PDstandardNth3(rho, i, j, k);
-        PDstandardNth1v1 = PDstandardNth1(v1, i, j, k);
-        PDstandardNth2v2 = PDstandardNth2(v2, i, j, k);
-        PDstandardNth3v3 = PDstandardNth3(v3, i, j, k);
-        
-        /* Precompute derivatives (old style) */
-        
-        /* Calculate temporaries and grid functions */
-        urhsL  =  rhoL;
-        
-        rhorhsL  =  PDstandardNth1v1 + PDstandardNth2v2 + PDstandardNth3v3;
-        
-        v1rhsL  =  PDstandardNth1rho;
-        
-        v2rhsL  =  PDstandardNth2rho;
-        
-        v3rhsL  =  PDstandardNth3rho;
-        
-        
-        /* Copy local copies back to grid functions */
-        rhorhs[index] = rhorhsL;
-        urhs[index] = urhsL;
-        v1rhs[index] = v1rhsL;
-        v2rhs[index] = v2rhsL;
-        v3rhs[index] = v3rhsL;
-        
-        /* Copy local copies back to subblock grid functions */
-      }
-    }
+    int index = INITVALUE;
+    int subblock_index = INITVALUE;
+    index = CCTK_GFINDEX3D(cctkGH,i,j,k);
+    subblock_index = i - min[0] + (max[0] - min[0]) * (j - min[1] + (max[1]-min[1]) * (k - min[2]));
+    
+    /* Declare shorthands */
+    
+    /* Declare local copies of grid functions */
+    CCTK_REAL rhoL = INITVALUE, rhorhsL = INITVALUE;
+    CCTK_REAL urhsL = INITVALUE;
+    CCTK_REAL v1L = INITVALUE, v1rhsL = INITVALUE, v2L = INITVALUE, v2rhsL = INITVALUE, v3L = INITVALUE, v3rhsL = INITVALUE;
+    /* Declare precomputed derivatives*/
+    
+    /* Declare derivatives */
+    CCTK_REAL PDstandardNth1rho = INITVALUE;
+    CCTK_REAL PDstandardNth2rho = INITVALUE;
+    CCTK_REAL PDstandardNth3rho = INITVALUE;
+    CCTK_REAL PDstandardNth1v1 = INITVALUE;
+    CCTK_REAL PDstandardNth2v2 = INITVALUE;
+    CCTK_REAL PDstandardNth3v3 = INITVALUE;
+    
+    /* Assign local copies of grid functions */
+    rhoL = rho[index];
+    v1L = v1[index];
+    v2L = v2[index];
+    v3L = v3[index];
+    
+    /* Assign local copies of subblock grid functions */
+    
+    /* Include user supplied include files */
+    
+    /* Precompute derivatives (new style) */
+    PDstandardNth1rho = PDstandardNth1(rho, i, j, k);
+    PDstandardNth2rho = PDstandardNth2(rho, i, j, k);
+    PDstandardNth3rho = PDstandardNth3(rho, i, j, k);
+    PDstandardNth1v1 = PDstandardNth1(v1, i, j, k);
+    PDstandardNth2v2 = PDstandardNth2(v2, i, j, k);
+    PDstandardNth3v3 = PDstandardNth3(v3, i, j, k);
+    
+    /* Precompute derivatives (old style) */
+    
+    /* Calculate temporaries and grid functions */
+    urhsL  =  rhoL;
+    
+    rhorhsL  =  PDstandardNth1v1 + PDstandardNth2v2 + PDstandardNth3v3;
+    
+    v1rhsL  =  PDstandardNth1rho;
+    
+    v2rhsL  =  PDstandardNth2rho;
+    
+    v3rhsL  =  PDstandardNth3rho;
+    
+    
+    /* Copy local copies back to grid functions */
+    rhorhs[index] = rhorhsL;
+    urhs[index] = urhsL;
+    v1rhs[index] = v1rhsL;
+    v2rhs[index] = v2rhsL;
+    v3rhs[index] = v3rhsL;
+    
+    /* Copy local copies back to subblock grid functions */
   }
+  LC_ENDLOOP3 (WTFO_RHS);
 }
 
 void WTFO_RHS(CCTK_ARGUMENTS)
 {
-  DECLARE_CCTK_ARGUMENTS
-  DECLARE_CCTK_PARAMETERS
+  DECLARE_CCTK_ARGUMENTS;
+  DECLARE_CCTK_PARAMETERS;
   
   GenericFD_LoopOverInterior(cctkGH, &WTFO_RHS_Body);
 }

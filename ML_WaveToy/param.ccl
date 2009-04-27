@@ -1,5 +1,5 @@
-# File produced by user diener
-# Produced with Mathematica Version 6.0 for Linux x86 (32-bit) (April 20, 2007)
+# File produced by user eschnett
+# Produced with Mathematica Version 6.0 for Mac OS X x86 (64-bit) (May 21, 2008)
 
 # Mathematica script written by Ian Hinder and Sascha Husa
 
@@ -16,7 +16,6 @@ USES CCTK_INT boundary_width
 shares: MethodOfLines
 
 USES CCTK_INT MoL_Num_Evolved_Vars
-USES CCTK_INT MoL_Num_Constrained_Vars
 
 restricted:
 CCTK_INT verbose "verbose"
@@ -29,12 +28,6 @@ CCTK_INT ML_WaveToy_MaxNumEvolvedVars "Number of evolved variables used by this 
 {
   2:2 :: "Number of evolved variables used by this thorn"
 } 2
-
-restricted:
-CCTK_INT ML_WaveToy_MaxNumConstrainedVars "Number of constrained variables used by this thorn" ACCUMULATOR-BASE=MethodofLines::MoL_Num_Constrained_Vars
-{
-  58:58 :: "Number of constrained variables used by this thorn"
-} 58
 
 restricted:
 CCTK_INT timelevels "Number of active timelevels"

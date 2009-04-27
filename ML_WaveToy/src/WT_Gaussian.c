@@ -1,5 +1,5 @@
-/*  File produced by user diener */
-/*  Produced with Mathematica Version 6.0 for Linux x86 (32-bit) (April 20, 2007) */
+/*  File produced by user eschnett */
+/*  Produced with Mathematica Version 6.0 for Mac OS X x86 (64-bit) (May 21, 2008) */
 
 /*  Mathematica script written by Ian Hinder and Sascha Husa */
 
@@ -14,6 +14,7 @@
 #include "cctk_Parameters.h"
 #include "GenericFD.h"
 #include "Differencing.h"
+#include "loopcontrol.h"
 
 /* Define macros used in calculations */
 #define INITVALUE  (42)
@@ -22,16 +23,11 @@
 #define CUB(x) ((x) * (x) * (x))
 #define QAD(x) ((x) * (x) * (x) * (x))
 
-void WT_Gaussian_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCTK_REAL normal[3], CCTK_REAL tangentA[3], CCTK_REAL tangentB[3], CCTK_INT min[3], CCTK_INT max[3], CCTK_INT n_subblock_gfs, CCTK_REAL *subblock_gfs[])
+void WT_Gaussian_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT const face, CCTK_REAL const normal[3], CCTK_REAL const tangentA[3], CCTK_REAL const tangentB[3], CCTK_INT const min[3], CCTK_INT const max[3], CCTK_INT const n_subblock_gfs, CCTK_REAL * const subblock_gfs[])
 {
-  DECLARE_CCTK_ARGUMENTS
-  DECLARE_CCTK_PARAMETERS
+  DECLARE_CCTK_ARGUMENTS;
+  DECLARE_CCTK_PARAMETERS;
   
-  
-  /* Declare the variables used for looping over grid points */
-  CCTK_INT i = INITVALUE, j = INITVALUE, k = INITVALUE;
-  CCTK_INT index = INITVALUE;
-  CCTK_INT subblock_index = INITVALUE;
   
   /* Declare finite differencing variables */
   CCTK_REAL dx = INITVALUE, dy = INITVALUE, dz = INITVALUE;
@@ -111,54 +107,54 @@ void WT_Gaussian_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCTK_REAL normal
   pm1o12dz2 = -pow(dz,-2)/12.;
   
   /* Loop over the grid points */
-  for (k = min[2]; k < max[2]; k++)
+  #pragma omp parallel
+  LC_LOOP3 (WT_Gaussian,
+            i,j,k, min[0],min[1],min[2], max[0],max[1],max[2],
+            cctk_lssh[CCTK_LSSH_IDX(0,0)],cctk_lssh[CCTK_LSSH_IDX(0,1)],cctk_lssh[CCTK_LSSH_IDX(0,2)])
   {
-    for (j = min[1]; j < max[1]; j++)
-    {
-      for (i = min[0]; i < max[0]; i++)
-      {
-         index  =  CCTK_GFINDEX3D(cctkGH,i,j,k) ;
-         subblock_index  =  i - min[0] + (max[0] - min[0]) * (j - min[1] + (max[1]-min[1]) * (k - min[2])) ;
-        
-        /* Declare shorthands */
-        
-        /* Declare local copies of grid functions */
-        CCTK_REAL rhoL = INITVALUE;
-        CCTK_REAL uL = INITVALUE;
-        /* Declare precomputed derivatives*/
-        
-        /* Declare derivatives */
-        
-        /* Assign local copies of grid functions */
-        
-        /* Assign local copies of subblock grid functions */
-        
-        /* Include user supplied include files */
-        
-        /* Precompute derivatives (new style) */
-        
-        /* Precompute derivatives (old style) */
-        
-        /* Calculate temporaries and grid functions */
-        uL  =  0;
-        
-        rhoL  =  0;
-        
-        
-        /* Copy local copies back to grid functions */
-        rho[index] = rhoL;
-        u[index] = uL;
-        
-        /* Copy local copies back to subblock grid functions */
-      }
-    }
+    int index = INITVALUE;
+    int subblock_index = INITVALUE;
+    index = CCTK_GFINDEX3D(cctkGH,i,j,k);
+    subblock_index = i - min[0] + (max[0] - min[0]) * (j - min[1] + (max[1]-min[1]) * (k - min[2]));
+    
+    /* Declare shorthands */
+    
+    /* Declare local copies of grid functions */
+    CCTK_REAL rhoL = INITVALUE;
+    CCTK_REAL uL = INITVALUE;
+    /* Declare precomputed derivatives*/
+    
+    /* Declare derivatives */
+    
+    /* Assign local copies of grid functions */
+    
+    /* Assign local copies of subblock grid functions */
+    
+    /* Include user supplied include files */
+    
+    /* Precompute derivatives (new style) */
+    
+    /* Precompute derivatives (old style) */
+    
+    /* Calculate temporaries and grid functions */
+    uL  =  0;
+    
+    rhoL  =  0;
+    
+    
+    /* Copy local copies back to grid functions */
+    rho[index] = rhoL;
+    u[index] = uL;
+    
+    /* Copy local copies back to subblock grid functions */
   }
+  LC_ENDLOOP3 (WT_Gaussian);
 }
 
 void WT_Gaussian(CCTK_ARGUMENTS)
 {
-  DECLARE_CCTK_ARGUMENTS
-  DECLARE_CCTK_PARAMETERS
+  DECLARE_CCTK_ARGUMENTS;
+  DECLARE_CCTK_PARAMETERS;
   
   GenericFD_LoopOverEverything(cctkGH, &WT_Gaussian_Body);
 }

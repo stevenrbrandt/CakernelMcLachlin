@@ -1,5 +1,5 @@
-/*  File produced by user diener */
-/*  Produced with Mathematica Version 6.0 for Linux x86 (32-bit) (April 20, 2007) */
+/*  File produced by user eschnett */
+/*  Produced with Mathematica Version 6.0 for Mac OS X x86 (64-bit) (May 21, 2008) */
 
 /*  Mathematica script written by Ian Hinder and Sascha Husa */
 
@@ -22,16 +22,16 @@
 
 void ML_WaveToy_CheckBoundaries(CCTK_ARGUMENTS)
 {
-  DECLARE_CCTK_ARGUMENTS
-  DECLARE_CCTK_PARAMETERS
+  DECLARE_CCTK_ARGUMENTS;
+  DECLARE_CCTK_PARAMETERS;
   
   return;
 }
 
 void ML_WaveToy_ApplyBoundConds(CCTK_ARGUMENTS)
 {
-  DECLARE_CCTK_ARGUMENTS
-  DECLARE_CCTK_PARAMETERS
+  DECLARE_CCTK_ARGUMENTS;
+  DECLARE_CCTK_PARAMETERS;
   
   CCTK_INT ierr = 0;
   
@@ -43,7 +43,7 @@ void ML_WaveToy_ApplyBoundConds(CCTK_ARGUMENTS)
     ierr = Boundary_SelectGroupForBC(cctkGH, CCTK_ALL_FACES, 1, -1, 
                       "ML_WaveToy::WT_rho", WT_rho_bound);
     if (ierr < 0)
-       CCTK_WARN(-1, "Failed to register WT_rho_bound BC for ML_WaveToy::WT_rho!");
+       CCTK_WARN(0, "Failed to register WT_rho_bound BC for ML_WaveToy::WT_rho!");
   }
   
   if (CCTK_EQUALS(WT_u_bound, "none"  ) ||
@@ -54,7 +54,7 @@ void ML_WaveToy_ApplyBoundConds(CCTK_ARGUMENTS)
     ierr = Boundary_SelectGroupForBC(cctkGH, CCTK_ALL_FACES, 1, -1, 
                       "ML_WaveToy::WT_u", WT_u_bound);
     if (ierr < 0)
-       CCTK_WARN(-1, "Failed to register WT_u_bound BC for ML_WaveToy::WT_u!");
+       CCTK_WARN(0, "Failed to register WT_u_bound BC for ML_WaveToy::WT_u!");
   }
   
   if (CCTK_EQUALS(rho_bound, "none"  ) ||
@@ -65,7 +65,7 @@ void ML_WaveToy_ApplyBoundConds(CCTK_ARGUMENTS)
     ierr = Boundary_SelectVarForBC(cctkGH, CCTK_ALL_FACES, 1, -1, 
                       "ML_WaveToy::rho", rho_bound);
     if (ierr < 0)
-       CCTK_WARN(-1, "Failed to register rho_bound BC for ML_WaveToy::rho!");
+       CCTK_WARN(0, "Failed to register rho_bound BC for ML_WaveToy::rho!");
   }
   
   if (CCTK_EQUALS(u_bound, "none"  ) ||
@@ -76,142 +76,150 @@ void ML_WaveToy_ApplyBoundConds(CCTK_ARGUMENTS)
     ierr = Boundary_SelectVarForBC(cctkGH, CCTK_ALL_FACES, 1, -1, 
                       "ML_WaveToy::u", u_bound);
     if (ierr < 0)
-       CCTK_WARN(-1, "Failed to register u_bound BC for ML_WaveToy::u!");
+       CCTK_WARN(0, "Failed to register u_bound BC for ML_WaveToy::u!");
   }
   
   if (CCTK_EQUALS(WT_rho_bound, "radiative"))
   {
    /* apply radiation boundary condition */
-    CCTK_INT handle_WT_rho_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
-    if (handle_WT_rho_bound < 0) CCTK_WARN(-1, "could not create table!");
+    static CCTK_INT handle_WT_rho_bound = -1;
+    if (handle_WT_rho_bound < 0) handle_WT_rho_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
+    if (handle_WT_rho_bound < 0) CCTK_WARN(0, "could not create table!");
     if (Util_TableSetReal(handle_WT_rho_bound , WT_rho_bound_limit, "LIMIT") < 0)
-       CCTK_WARN(-1, "could not set LIMIT value in table!");
+       CCTK_WARN(0, "could not set LIMIT value in table!");
     if (Util_TableSetReal(handle_WT_rho_bound ,WT_rho_bound_speed, "SPEED") < 0)
-       CCTK_WARN(-1, "could not set SPEED value in table!");
+       CCTK_WARN(0, "could not set SPEED value in table!");
   
     ierr = Boundary_SelectGroupForBC(cctkGH, CCTK_ALL_FACES, 1, handle_WT_rho_bound, 
                       "ML_WaveToy::WT_rho", "Radiation");
   
     if (ierr < 0)
-       CCTK_WARN(-1, "Failed to register Radiation BC for ML_WaveToy::WT_rho!");
+       CCTK_WARN(0, "Failed to register Radiation BC for ML_WaveToy::WT_rho!");
   
   }
   
   if (CCTK_EQUALS(WT_u_bound, "radiative"))
   {
    /* apply radiation boundary condition */
-    CCTK_INT handle_WT_u_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
-    if (handle_WT_u_bound < 0) CCTK_WARN(-1, "could not create table!");
+    static CCTK_INT handle_WT_u_bound = -1;
+    if (handle_WT_u_bound < 0) handle_WT_u_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
+    if (handle_WT_u_bound < 0) CCTK_WARN(0, "could not create table!");
     if (Util_TableSetReal(handle_WT_u_bound , WT_u_bound_limit, "LIMIT") < 0)
-       CCTK_WARN(-1, "could not set LIMIT value in table!");
+       CCTK_WARN(0, "could not set LIMIT value in table!");
     if (Util_TableSetReal(handle_WT_u_bound ,WT_u_bound_speed, "SPEED") < 0)
-       CCTK_WARN(-1, "could not set SPEED value in table!");
+       CCTK_WARN(0, "could not set SPEED value in table!");
   
     ierr = Boundary_SelectGroupForBC(cctkGH, CCTK_ALL_FACES, 1, handle_WT_u_bound, 
                       "ML_WaveToy::WT_u", "Radiation");
   
     if (ierr < 0)
-       CCTK_WARN(-1, "Failed to register Radiation BC for ML_WaveToy::WT_u!");
+       CCTK_WARN(0, "Failed to register Radiation BC for ML_WaveToy::WT_u!");
   
   }
   
   if (CCTK_EQUALS(rho_bound, "radiative"))
   {
    /* apply radiation boundary condition */
-    CCTK_INT handle_rho_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
-    if (handle_rho_bound < 0) CCTK_WARN(-1, "could not create table!");
+    static CCTK_INT handle_rho_bound = -1;
+    if (handle_rho_bound < 0) handle_rho_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
+    if (handle_rho_bound < 0) CCTK_WARN(0, "could not create table!");
     if (Util_TableSetReal(handle_rho_bound , rho_bound_limit, "LIMIT") < 0)
-       CCTK_WARN(-1, "could not set LIMIT value in table!");
+       CCTK_WARN(0, "could not set LIMIT value in table!");
     if (Util_TableSetReal(handle_rho_bound ,rho_bound_speed, "SPEED") < 0)
-        CCTK_WARN(-1, "could not set SPEED value in table!");
+        CCTK_WARN(0, "could not set SPEED value in table!");
   
     ierr = Boundary_SelectVarForBC(cctkGH, CCTK_ALL_FACES, 1, handle_rho_bound, 
                       "ML_WaveToy::rho", "Radiation");
   
     if (ierr < 0)
-       CCTK_WARN(-1, "Failed to register Radiation BC for ML_WaveToy::rho!");
+       CCTK_WARN(0, "Failed to register Radiation BC for ML_WaveToy::rho!");
   
   }
   
   if (CCTK_EQUALS(u_bound, "radiative"))
   {
    /* apply radiation boundary condition */
-    CCTK_INT handle_u_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
-    if (handle_u_bound < 0) CCTK_WARN(-1, "could not create table!");
+    static CCTK_INT handle_u_bound = -1;
+    if (handle_u_bound < 0) handle_u_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
+    if (handle_u_bound < 0) CCTK_WARN(0, "could not create table!");
     if (Util_TableSetReal(handle_u_bound , u_bound_limit, "LIMIT") < 0)
-       CCTK_WARN(-1, "could not set LIMIT value in table!");
+       CCTK_WARN(0, "could not set LIMIT value in table!");
     if (Util_TableSetReal(handle_u_bound ,u_bound_speed, "SPEED") < 0)
-        CCTK_WARN(-1, "could not set SPEED value in table!");
+        CCTK_WARN(0, "could not set SPEED value in table!");
   
     ierr = Boundary_SelectVarForBC(cctkGH, CCTK_ALL_FACES, 1, handle_u_bound, 
                       "ML_WaveToy::u", "Radiation");
   
     if (ierr < 0)
-       CCTK_WARN(-1, "Failed to register Radiation BC for ML_WaveToy::u!");
+       CCTK_WARN(0, "Failed to register Radiation BC for ML_WaveToy::u!");
   
   }
   
   if (CCTK_EQUALS(WT_rho_bound, "scalar"))
   {
    /* apply scalar boundary condition */
-    CCTK_INT handle_WT_rho_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
-    if (handle_WT_rho_bound < 0) CCTK_WARN(-1, "could not create table!");
+    static CCTK_INT handle_WT_rho_bound = -1;
+    if (handle_WT_rho_bound < 0) handle_WT_rho_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
+    if (handle_WT_rho_bound < 0) CCTK_WARN(0, "could not create table!");
     if (Util_TableSetReal(handle_WT_rho_bound ,WT_rho_bound_scalar, "SCALAR") < 0)
-        CCTK_WARN(-1, "could not set SCALAR value in table!");
+        CCTK_WARN(0, "could not set SCALAR value in table!");
   
     ierr = Boundary_SelectGroupForBC(cctkGH, CCTK_ALL_FACES, 1, handle_WT_rho_bound, 
                       "ML_WaveToy::WT_rho", "scalar");
   
     if (ierr < 0)
-       CCTK_WARN(-1, "Failed to register Scalar BC for ML_WaveToy::WT_rho!");
+       CCTK_WARN(0, "Failed to register Scalar BC for ML_WaveToy::WT_rho!");
   
   }
   
   if (CCTK_EQUALS(WT_u_bound, "scalar"))
   {
    /* apply scalar boundary condition */
-    CCTK_INT handle_WT_u_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
-    if (handle_WT_u_bound < 0) CCTK_WARN(-1, "could not create table!");
+    static CCTK_INT handle_WT_u_bound = -1;
+    if (handle_WT_u_bound < 0) handle_WT_u_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
+    if (handle_WT_u_bound < 0) CCTK_WARN(0, "could not create table!");
     if (Util_TableSetReal(handle_WT_u_bound ,WT_u_bound_scalar, "SCALAR") < 0)
-        CCTK_WARN(-1, "could not set SCALAR value in table!");
+        CCTK_WARN(0, "could not set SCALAR value in table!");
   
     ierr = Boundary_SelectGroupForBC(cctkGH, CCTK_ALL_FACES, 1, handle_WT_u_bound, 
                       "ML_WaveToy::WT_u", "scalar");
   
     if (ierr < 0)
-       CCTK_WARN(-1, "Failed to register Scalar BC for ML_WaveToy::WT_u!");
+       CCTK_WARN(0, "Failed to register Scalar BC for ML_WaveToy::WT_u!");
   
   }
   
   if (CCTK_EQUALS(rho_bound, "scalar"))
   {
    /* apply scalar boundary condition */
-    CCTK_INT handle_rho_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
-    if (handle_rho_bound < 0) CCTK_WARN(-1, "could not create table!");
+    static CCTK_INT handle_rho_bound = -1;
+    if (handle_rho_bound < 0) handle_rho_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
+    if (handle_rho_bound < 0) CCTK_WARN(0, "could not create table!");
     if (Util_TableSetReal(handle_rho_bound ,rho_bound_scalar, "SCALAR") < 0)
-      CCTK_WARN(-1, "could not set SCALAR value in table!");
+      CCTK_WARN(0, "could not set SCALAR value in table!");
   
     ierr = Boundary_SelectVarForBC(cctkGH, CCTK_ALL_FACES, 1, handle_rho_bound, 
                       "ML_WaveToy::rho", "scalar");
   
     if (ierr < 0)
-       CCTK_WARN(-1, "Error in registering Scalar BC for ML_WaveToy::rho!");
+       CCTK_WARN(0, "Error in registering Scalar BC for ML_WaveToy::rho!");
   
   }
   
   if (CCTK_EQUALS(u_bound, "scalar"))
   {
    /* apply scalar boundary condition */
-    CCTK_INT handle_u_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
-    if (handle_u_bound < 0) CCTK_WARN(-1, "could not create table!");
+    static CCTK_INT handle_u_bound = -1;
+    if (handle_u_bound < 0) handle_u_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
+    if (handle_u_bound < 0) CCTK_WARN(0, "could not create table!");
     if (Util_TableSetReal(handle_u_bound ,u_bound_scalar, "SCALAR") < 0)
-      CCTK_WARN(-1, "could not set SCALAR value in table!");
+      CCTK_WARN(0, "could not set SCALAR value in table!");
   
     ierr = Boundary_SelectVarForBC(cctkGH, CCTK_ALL_FACES, 1, handle_u_bound, 
                       "ML_WaveToy::u", "scalar");
   
     if (ierr < 0)
-       CCTK_WARN(-1, "Error in registering Scalar BC for ML_WaveToy::u!");
+       CCTK_WARN(0, "Error in registering Scalar BC for ML_WaveToy::u!");
   
   }
   return;
