@@ -1,5 +1,5 @@
-/*  File produced by user diener */
-/*  Produced with Mathematica Version 6.0 for Linux x86 (32-bit) (April 20, 2007) */
+/*  File produced by user eschnett */
+/*  Produced with Mathematica Version 6.0 for Mac OS X x86 (64-bit) (May 21, 2008) */
 
 /*  Mathematica script written by Ian Hinder and Sascha Husa */
 
@@ -25,8 +25,8 @@
 
 void ML_BSSN_RHSBoundary_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT const face, CCTK_REAL const normal[3], CCTK_REAL const tangentA[3], CCTK_REAL const tangentB[3], CCTK_INT const min[3], CCTK_INT const max[3], CCTK_INT const n_subblock_gfs, CCTK_REAL * const subblock_gfs[])
 {
-  DECLARE_CCTK_ARGUMENTS
-  DECLARE_CCTK_PARAMETERS
+  DECLARE_CCTK_ARGUMENTS;
+  DECLARE_CCTK_PARAMETERS;
   
   
   /* Declare finite differencing variables */
@@ -102,7 +102,7 @@ void ML_BSSN_RHSBoundary_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK
   #pragma omp parallel
   LC_LOOP3 (ML_BSSN_RHSBoundary,
             i,j,k, min[0],min[1],min[2], max[0],max[1],max[2],
-            cctk_lsh[0],cctk_lsh[1],cctk_lsh[2])
+            cctk_lssh[CCTK_LSSH_IDX(0,0)],cctk_lssh[CCTK_LSSH_IDX(0,1)],cctk_lssh[CCTK_LSSH_IDX(0,2)])
   {
     int index = INITVALUE;
     int subblock_index = INITVALUE;
@@ -325,19 +325,29 @@ void ML_BSSN_RHSBoundary_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK
     /* Calculate temporaries and grid functions */
     detgt  =  1;
     
-    gtu11  =  INV(detgt)*(gt22L*gt33L - SQR(gt23L));
-    
-    gtu21  =  (gt13L*gt23L - gt12L*gt33L)*INV(detgt);
-    
-    gtu31  =  (-(gt13L*gt22L) + gt12L*gt23L)*INV(detgt);
-    
-    gtu22  =  INV(detgt)*(gt11L*gt33L - SQR(gt13L));
-    
-    gtu32  =  (gt12L*gt13L - gt11L*gt23L)*INV(detgt);
-    
-    gtu33  =  INV(detgt)*(gt11L*gt22L - SQR(gt12L));
-    
     em4phi  =  exp(-4*phiL);
+    
+    nn1  =  normal[0];
+    
+    nn2  =  normal[1];
+    
+    nn3  =  normal[2];
+    
+    vg  =  pow(harmonicF,0.5);
+    
+    CCTK_REAL const T1000001  =  INV(detgt);
+    
+    gtu11  =  T1000001*(gt22L*gt33L - SQR(gt23L));
+    
+    gtu21  =  (gt13L*gt23L - gt12L*gt33L)*T1000001;
+    
+    gtu31  =  (-(gt13L*gt22L) + gt12L*gt23L)*T1000001;
+    
+    gtu22  =  T1000001*(gt11L*gt33L - SQR(gt13L));
+    
+    gtu32  =  (gt12L*gt13L - gt11L*gt23L)*T1000001;
+    
+    gtu33  =  T1000001*(gt11L*gt22L - SQR(gt12L));
     
     gu11  =  em4phi*gtu11;
     
@@ -351,12 +361,6 @@ void ML_BSSN_RHSBoundary_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK
     
     gu33  =  em4phi*gtu33;
     
-    nn1  =  normal[0];
-    
-    nn2  =  normal[1];
-    
-    nn3  =  normal[2];
-    
     nu1  =  gu11*nn1 + gu21*nn2 + gu31*nn3;
     
     nu2  =  gu21*nn1 + gu22*nn2 + gu32*nn3;
@@ -367,13 +371,13 @@ void ML_BSSN_RHSBoundary_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK
     
     nlen  =  pow(nlen2,0.5);
     
-    su1  =  nu1*INV(nlen);
+    CCTK_REAL const T1000002  =  INV(nlen);
     
-    su2  =  nu2*INV(nlen);
+    su1  =  nu1*T1000002;
     
-    su3  =  nu3*INV(nlen);
+    su2  =  nu2*T1000002;
     
-    vg  =  pow(harmonicF,0.5);
+    su3  =  nu3*T1000002;
     
     phirhsL  =  -((PDMinus1phi*su1 + PDMinus2phi*su2 + PDMinus3phi*su3)*vg);
     
@@ -460,8 +464,8 @@ void ML_BSSN_RHSBoundary_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK
 
 void ML_BSSN_RHSBoundary(CCTK_ARGUMENTS)
 {
-  DECLARE_CCTK_ARGUMENTS
-  DECLARE_CCTK_PARAMETERS
+  DECLARE_CCTK_ARGUMENTS;
+  DECLARE_CCTK_PARAMETERS;
   
   GenericFD_LoopOverBoundary(cctkGH, &ML_BSSN_RHSBoundary_Body);
 }

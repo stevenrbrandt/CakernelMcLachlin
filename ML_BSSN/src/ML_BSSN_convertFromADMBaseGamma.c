@@ -1,5 +1,5 @@
-/*  File produced by user diener */
-/*  Produced with Mathematica Version 6.0 for Linux x86 (32-bit) (April 20, 2007) */
+/*  File produced by user eschnett */
+/*  Produced with Mathematica Version 6.0 for Mac OS X x86 (64-bit) (May 21, 2008) */
 
 /*  Mathematica script written by Ian Hinder and Sascha Husa */
 
@@ -25,8 +25,8 @@
 
 void ML_BSSN_convertFromADMBaseGamma_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT const face, CCTK_REAL const normal[3], CCTK_REAL const tangentA[3], CCTK_REAL const tangentB[3], CCTK_INT const min[3], CCTK_INT const max[3], CCTK_INT const n_subblock_gfs, CCTK_REAL * const subblock_gfs[])
 {
-  DECLARE_CCTK_ARGUMENTS
-  DECLARE_CCTK_PARAMETERS
+  DECLARE_CCTK_ARGUMENTS;
+  DECLARE_CCTK_PARAMETERS;
   
   
   /* Declare finite differencing variables */
@@ -102,7 +102,7 @@ void ML_BSSN_convertFromADMBaseGamma_Body(cGH const * const cctkGH, CCTK_INT con
   #pragma omp parallel
   LC_LOOP3 (ML_BSSN_convertFromADMBaseGamma,
             i,j,k, min[0],min[1],min[2], max[0],max[1],max[2],
-            cctk_lsh[0],cctk_lsh[1],cctk_lsh[2])
+            cctk_lssh[CCTK_LSSH_IDX(0,0)],cctk_lssh[CCTK_LSSH_IDX(0,1)],cctk_lssh[CCTK_LSSH_IDX(0,2)])
   {
     int index = INITVALUE;
     int subblock_index = INITVALUE;
@@ -131,15 +131,6 @@ void ML_BSSN_convertFromADMBaseGamma_Body(cGH const * const cctkGH, CCTK_INT con
     /* Declare precomputed derivatives*/
     
     /* Declare derivatives */
-    CCTK_REAL PDupwindNth1beta1 = INITVALUE;
-    CCTK_REAL PDupwindNth2beta1 = INITVALUE;
-    CCTK_REAL PDupwindNth3beta1 = INITVALUE;
-    CCTK_REAL PDupwindNth1beta2 = INITVALUE;
-    CCTK_REAL PDupwindNth2beta2 = INITVALUE;
-    CCTK_REAL PDupwindNth3beta2 = INITVALUE;
-    CCTK_REAL PDupwindNth1beta3 = INITVALUE;
-    CCTK_REAL PDupwindNth2beta3 = INITVALUE;
-    CCTK_REAL PDupwindNth3beta3 = INITVALUE;
     CCTK_REAL PDstandardNth1gt11 = INITVALUE;
     CCTK_REAL PDstandardNth2gt11 = INITVALUE;
     CCTK_REAL PDstandardNth3gt11 = INITVALUE;
@@ -202,6 +193,14 @@ void ML_BSSN_convertFromADMBaseGamma_Body(cGH const * const cctkGH, CCTK_INT con
     /* Precompute derivatives (old style) */
     
     /* Calculate temporaries and grid functions */
+    CCTK_REAL const T1000002  =  -PDstandardNth3gt12;
+    
+    CCTK_REAL const T1000004  =  -PDstandardNth2gt13;
+    
+    CCTK_REAL const T1000006  =  -PDstandardNth1gt23;
+    
+    CCTK_REAL const T1000008  =  INV(ShiftGammaCoeff);
+    
     dir1  =  Sign(beta1L);
     
     dir2  =  Sign(beta2L);
@@ -210,17 +209,39 @@ void ML_BSSN_convertFromADMBaseGamma_Body(cGH const * const cctkGH, CCTK_INT con
     
     detgt  =  1;
     
-    gtu11  =  INV(detgt)*(gt22L*gt33L - SQR(gt23L));
+    AL  =  -(dtalpL*(-1 + LapseAdvectionCoeff)*INV(harmonicF)*pow(alphaL,-harmonicN));
     
-    gtu21  =  (gt13L*gt23L - gt12L*gt33L)*INV(detgt);
+    CCTK_REAL const T1000001  =  INV(detgt);
     
-    gtu31  =  (-(gt13L*gt22L) + gt12L*gt23L)*INV(detgt);
+    CCTK_REAL const T1000003  =  PDstandardNth1gt23 + PDstandardNth2gt13 + T1000002;
     
-    gtu22  =  INV(detgt)*(gt11L*gt33L - SQR(gt13L));
+    CCTK_REAL const T1000005  =  PDstandardNth1gt23 + PDstandardNth3gt12 + T1000004;
     
-    gtu32  =  (gt12L*gt13L - gt11L*gt23L)*INV(detgt);
+    CCTK_REAL const T1000007  =  PDstandardNth2gt13 + PDstandardNth3gt12 + T1000006;
     
-    gtu33  =  INV(detgt)*(gt11L*gt22L - SQR(gt12L));
+    B1L  =  (dtbetaxL - (PDupwindNth1(beta1, i, j, k)*beta1L + 
+             PDupwindNth2(beta1, i, j, k)*beta2L + 
+             PDupwindNth3(beta1, i, j, k)*beta3L)*ShiftAdvectionCoeff)*T1000008;
+    
+    B2L  =  (dtbetayL - (PDupwindNth1(beta2, i, j, k)*beta1L + 
+             PDupwindNth2(beta2, i, j, k)*beta2L + 
+             PDupwindNth3(beta2, i, j, k)*beta3L)*ShiftAdvectionCoeff)*T1000008;
+    
+    B3L  =  (dtbetazL - (PDupwindNth1(beta3, i, j, k)*beta1L + 
+             PDupwindNth2(beta3, i, j, k)*beta2L + 
+             PDupwindNth3(beta3, i, j, k)*beta3L)*ShiftAdvectionCoeff)*T1000008;
+    
+    gtu11  =  T1000001*(gt22L*gt33L - SQR(gt23L));
+    
+    gtu21  =  (gt13L*gt23L - gt12L*gt33L)*T1000001;
+    
+    gtu31  =  (-(gt13L*gt22L) + gt12L*gt23L)*T1000001;
+    
+    gtu22  =  T1000001*(gt11L*gt33L - SQR(gt13L));
+    
+    gtu32  =  (gt12L*gt13L - gt11L*gt23L)*T1000001;
+    
+    gtu33  =  T1000001*(gt11L*gt22L - SQR(gt12L));
     
     Gt111  =  khalf*(gtu11*PDstandardNth1gt11 + 
           2*(gtu21*PDstandardNth1gt12 + gtu31*PDstandardNth1gt13) - 
@@ -235,22 +256,22 @@ void ML_BSSN_convertFromADMBaseGamma_Body(cGH const * const cctkGH, CCTK_INT con
           gtu32*PDstandardNth2gt11 - gtu33*PDstandardNth3gt11);
     
     Gt112  =  khalf*(gtu21*PDstandardNth1gt22 + gtu11*PDstandardNth2gt11 + 
-          gtu31*(PDstandardNth1gt23 + PDstandardNth2gt13 - PDstandardNth3gt12));
+          gtu31*T1000003);
     
     Gt212  =  khalf*(gtu22*PDstandardNth1gt22 + gtu21*PDstandardNth2gt11 + 
-          gtu32*(PDstandardNth1gt23 + PDstandardNth2gt13 - PDstandardNth3gt12));
+          gtu32*T1000003);
     
     Gt312  =  khalf*(gtu32*PDstandardNth1gt22 + gtu31*PDstandardNth2gt11 + 
-          gtu33*(PDstandardNth1gt23 + PDstandardNth2gt13 - PDstandardNth3gt12));
+          gtu33*T1000003);
     
     Gt113  =  khalf*(gtu31*PDstandardNth1gt33 + gtu11*PDstandardNth3gt11 + 
-          gtu21*(PDstandardNth1gt23 - PDstandardNth2gt13 + PDstandardNth3gt12));
+          gtu21*T1000005);
     
     Gt213  =  khalf*(gtu32*PDstandardNth1gt33 + gtu21*PDstandardNth3gt11 + 
-          gtu22*(PDstandardNth1gt23 - PDstandardNth2gt13 + PDstandardNth3gt12));
+          gtu22*T1000005);
     
     Gt313  =  khalf*(gtu33*PDstandardNth1gt33 + gtu31*PDstandardNth3gt11 + 
-          gtu32*(PDstandardNth1gt23 - PDstandardNth2gt13 + PDstandardNth3gt12));
+          gtu32*T1000005);
     
     Gt122  =  khalf*(gtu11*(-PDstandardNth1gt22 + 2*PDstandardNth2gt12) + 
           gtu21*PDstandardNth2gt22 + 
@@ -264,17 +285,14 @@ void ML_BSSN_convertFromADMBaseGamma_Body(cGH const * const cctkGH, CCTK_INT con
           gtu32*PDstandardNth2gt22 + 
           gtu33*(2*PDstandardNth2gt23 - PDstandardNth3gt22));
     
-    Gt123  =  khalf*(gtu31*PDstandardNth2gt33 + 
-          gtu11*(-PDstandardNth1gt23 + PDstandardNth2gt13 + PDstandardNth3gt12) + 
-          gtu21*PDstandardNth3gt22);
+    Gt123  =  khalf*(gtu31*PDstandardNth2gt33 + gtu21*PDstandardNth3gt22 + 
+          gtu11*T1000007);
     
-    Gt223  =  khalf*(gtu32*PDstandardNth2gt33 + 
-          gtu21*(-PDstandardNth1gt23 + PDstandardNth2gt13 + PDstandardNth3gt12) + 
-          gtu22*PDstandardNth3gt22);
+    Gt223  =  khalf*(gtu32*PDstandardNth2gt33 + gtu22*PDstandardNth3gt22 + 
+          gtu21*T1000007);
     
-    Gt323  =  khalf*(gtu33*PDstandardNth2gt33 + 
-          gtu31*(-PDstandardNth1gt23 + PDstandardNth2gt13 + PDstandardNth3gt12) + 
-          gtu32*PDstandardNth3gt22);
+    Gt323  =  khalf*(gtu33*PDstandardNth2gt33 + gtu32*PDstandardNth3gt22 + 
+          gtu31*T1000007);
     
     Gt133  =  khalf*(-(gtu11*PDstandardNth1gt33) - gtu21*PDstandardNth2gt33 + 
           2*gtu11*PDstandardNth3gt13 + 2*gtu21*PDstandardNth3gt23 + 
@@ -297,23 +315,6 @@ void ML_BSSN_convertFromADMBaseGamma_Body(cGH const * const cctkGH, CCTK_INT con
     Xt3L  =  Gt311*gtu11 + Gt322*gtu22 + 
         2*(Gt312*gtu21 + Gt313*gtu31 + Gt323*gtu32) + Gt333*gtu33;
     
-    AL  =  -(dtalpL*(-1 + LapseAdvectionCoeff)*INV(harmonicF)*pow(alphaL,-harmonicN));
-    
-    B1L  =  (dtbetaxL - (PDupwindNth1(beta1, i, j, k)*beta1L + 
-             PDupwindNth2(beta1, i, j, k)*beta2L + 
-             PDupwindNth3(beta1, i, j, k)*beta3L)*ShiftAdvectionCoeff)*
-        INV(ShiftGammaCoeff);
-    
-    B2L  =  (dtbetayL - (PDupwindNth1(beta2, i, j, k)*beta1L + 
-             PDupwindNth2(beta2, i, j, k)*beta2L + 
-             PDupwindNth3(beta2, i, j, k)*beta3L)*ShiftAdvectionCoeff)*
-        INV(ShiftGammaCoeff);
-    
-    B3L  =  (dtbetazL - (PDupwindNth1(beta3, i, j, k)*beta1L + 
-             PDupwindNth2(beta3, i, j, k)*beta2L + 
-             PDupwindNth3(beta3, i, j, k)*beta3L)*ShiftAdvectionCoeff)*
-        INV(ShiftGammaCoeff);
-    
     
     /* Copy local copies back to grid functions */
     A[index] = AL;
@@ -331,8 +332,8 @@ void ML_BSSN_convertFromADMBaseGamma_Body(cGH const * const cctkGH, CCTK_INT con
 
 void ML_BSSN_convertFromADMBaseGamma(CCTK_ARGUMENTS)
 {
-  DECLARE_CCTK_ARGUMENTS
-  DECLARE_CCTK_PARAMETERS
+  DECLARE_CCTK_ARGUMENTS;
+  DECLARE_CCTK_PARAMETERS;
   
   GenericFD_LoopOverInterior(cctkGH, &ML_BSSN_convertFromADMBaseGamma_Body);
 }

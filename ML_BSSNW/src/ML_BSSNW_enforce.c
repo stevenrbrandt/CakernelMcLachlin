@@ -1,11 +1,14 @@
-/*  File produced by user diener */
-/*  Produced with Mathematica Version 6.0 for Linux x86 (32-bit) (April 20, 2007) */
+/*  File produced by user eschnett */
+/*  Produced with Mathematica Version 6.0 for Mac OS X x86 (64-bit) (May 21, 2008) */
 
 /*  Mathematica script written by Ian Hinder and Sascha Husa */
 
 #define KRANC_C
 
+#include <assert.h>
 #include <math.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include "cctk.h"
 #include "cctk_Arguments.h"
 #include "cctk_Parameters.h"
@@ -20,10 +23,10 @@
 #define CUB(x) ((x) * (x) * (x))
 #define QAD(x) ((x) * (x) * (x) * (x))
 
-void ML_BSSNW_enforce_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCTK_REAL normal[3], CCTK_REAL tangentA[3], CCTK_REAL tangentB[3], CCTK_INT min[3], CCTK_INT max[3], CCTK_INT n_subblock_gfs, CCTK_REAL *subblock_gfs[])
+void ML_BSSNW_enforce_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT const face, CCTK_REAL const normal[3], CCTK_REAL const tangentA[3], CCTK_REAL const tangentB[3], CCTK_INT const min[3], CCTK_INT const max[3], CCTK_INT const n_subblock_gfs, CCTK_REAL * const subblock_gfs[])
 {
-  DECLARE_CCTK_ARGUMENTS
-  DECLARE_CCTK_PARAMETERS
+  DECLARE_CCTK_ARGUMENTS;
+  DECLARE_CCTK_PARAMETERS;
   
   
   /* Declare finite differencing variables */
@@ -90,10 +93,10 @@ void ML_BSSNW_enforce_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCTK_REAL n
   pm1o12dz2 = -pow(dz,-2)/12.;
   
   /* Loop over the grid points */
-  _Pragma ("omp parallel")
+  #pragma omp parallel
   LC_LOOP3 (ML_BSSNW_enforce,
             i,j,k, min[0],min[1],min[2], max[0],max[1],max[2],
-            cctk_lsh[0],cctk_lsh[1],cctk_lsh[2])
+            cctk_lssh[CCTK_LSSH_IDX(0,0)],cctk_lssh[CCTK_LSSH_IDX(0,1)],cctk_lssh[CCTK_LSSH_IDX(0,2)])
   {
     int index = INITVALUE;
     int subblock_index = INITVALUE;
@@ -137,19 +140,22 @@ void ML_BSSNW_enforce_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCTK_REAL n
     /* Calculate temporaries and grid functions */
     detgt  =  1;
     
-    gtu11  =  INV(detgt)*(gt22L*gt33L - SQR(gt23L));
+    CCTK_REAL const T1000001  =  INV(detgt);
     
-    gtu21  =  (gt13L*gt23L - gt12L*gt33L)*INV(detgt);
+    gtu11  =  T1000001*(gt22L*gt33L - SQR(gt23L));
     
-    gtu31  =  (-(gt13L*gt22L) + gt12L*gt23L)*INV(detgt);
+    gtu21  =  (gt13L*gt23L - gt12L*gt33L)*T1000001;
     
-    gtu22  =  INV(detgt)*(gt11L*gt33L - SQR(gt13L));
+    gtu31  =  (-(gt13L*gt22L) + gt12L*gt23L)*T1000001;
     
-    gtu32  =  (gt12L*gt13L - gt11L*gt23L)*INV(detgt);
+    gtu22  =  T1000001*(gt11L*gt33L - SQR(gt13L));
     
-    gtu33  =  INV(detgt)*(gt11L*gt22L - SQR(gt12L));
+    gtu32  =  (gt12L*gt13L - gt11L*gt23L)*T1000001;
     
-    trAt  =  At11L*gtu11 + At22L*gtu22 + 2*(At12L*gtu21 + At13L*gtu31 + At23L*gtu32) + At33L*gtu33;
+    gtu33  =  T1000001*(gt11L*gt22L - SQR(gt12L));
+    
+    trAt  =  At11L*gtu11 + At22L*gtu22 + 
+        2*(At12L*gtu21 + At13L*gtu31 + At23L*gtu32) + At33L*gtu33;
     
     At11L  =  At11L - gt11L*kthird*trAt;
     
@@ -179,8 +185,8 @@ void ML_BSSNW_enforce_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCTK_REAL n
 
 void ML_BSSNW_enforce(CCTK_ARGUMENTS)
 {
-  DECLARE_CCTK_ARGUMENTS
-  DECLARE_CCTK_PARAMETERS
+  DECLARE_CCTK_ARGUMENTS;
+  DECLARE_CCTK_PARAMETERS;
   
   GenericFD_LoopOverEverything(cctkGH, &ML_BSSNW_enforce_Body);
 }

@@ -1,11 +1,14 @@
-/*  File produced by user diener */
-/*  Produced with Mathematica Version 6.0 for Linux x86 (32-bit) (April 20, 2007) */
+/*  File produced by user eschnett */
+/*  Produced with Mathematica Version 6.0 for Mac OS X x86 (64-bit) (May 21, 2008) */
 
 /*  Mathematica script written by Ian Hinder and Sascha Husa */
 
 #define KRANC_C
 
+#include <assert.h>
 #include <math.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include "cctk.h"
 #include "cctk_Arguments.h"
 #include "cctk_Parameters.h"
@@ -20,10 +23,10 @@
 #define CUB(x) ((x) * (x) * (x))
 #define QAD(x) ((x) * (x) * (x) * (x))
 
-void ML_BSSNW_convertToADMBase_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CCTK_REAL normal[3], CCTK_REAL tangentA[3], CCTK_REAL tangentB[3], CCTK_INT min[3], CCTK_INT max[3], CCTK_INT n_subblock_gfs, CCTK_REAL *subblock_gfs[])
+void ML_BSSNW_convertToADMBase_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT const face, CCTK_REAL const normal[3], CCTK_REAL const tangentA[3], CCTK_REAL const tangentB[3], CCTK_INT const min[3], CCTK_INT const max[3], CCTK_INT const n_subblock_gfs, CCTK_REAL * const subblock_gfs[])
 {
-  DECLARE_CCTK_ARGUMENTS
-  DECLARE_CCTK_PARAMETERS
+  DECLARE_CCTK_ARGUMENTS;
+  DECLARE_CCTK_PARAMETERS;
   
   
   /* Declare finite differencing variables */
@@ -90,10 +93,10 @@ void ML_BSSNW_convertToADMBase_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CC
   pm1o12dz2 = -pow(dz,-2)/12.;
   
   /* Loop over the grid points */
-  _Pragma ("omp parallel")
+  #pragma omp parallel
   LC_LOOP3 (ML_BSSNW_convertToADMBase,
             i,j,k, min[0],min[1],min[2], max[0],max[1],max[2],
-            cctk_lsh[0],cctk_lsh[1],cctk_lsh[2])
+            cctk_lssh[CCTK_LSSH_IDX(0,0)],cctk_lssh[CCTK_LSSH_IDX(0,1)],cctk_lssh[CCTK_LSSH_IDX(0,2)])
   {
     int index = INITVALUE;
     int subblock_index = INITVALUE;
@@ -197,19 +200,33 @@ void ML_BSSNW_convertToADMBase_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CC
     /* Precompute derivatives (old style) */
     
     /* Calculate temporaries and grid functions */
-    betam1  =  khalf*(beta1L - Abs(beta1L));
+    CCTK_REAL const T1000001  =  Abs(beta1L);
     
-    betam2  =  khalf*(beta2L - Abs(beta2L));
+    CCTK_REAL const T1000002  =  Abs(beta2L);
     
-    betam3  =  khalf*(beta3L - Abs(beta3L));
-    
-    betap1  =  khalf*(beta1L + Abs(beta1L));
-    
-    betap2  =  khalf*(beta2L + Abs(beta2L));
-    
-    betap3  =  khalf*(beta3L + Abs(beta3L));
+    CCTK_REAL const T1000003  =  Abs(beta3L);
     
     invW2  =  pow(WL,-2);
+    
+    alpL  =  alphaL;
+    
+    betaxL  =  beta1L;
+    
+    betayL  =  beta2L;
+    
+    betazL  =  beta3L;
+    
+    betam1  =  khalf*(beta1L - T1000001);
+    
+    betam2  =  khalf*(beta2L - T1000002);
+    
+    betam3  =  khalf*(beta3L - T1000003);
+    
+    betap1  =  khalf*(beta1L + T1000001);
+    
+    betap2  =  khalf*(beta2L + T1000002);
+    
+    betap3  =  khalf*(beta3L + T1000003);
     
     g11  =  gt11L*invW2;
     
@@ -222,6 +239,18 @@ void ML_BSSNW_convertToADMBase_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CC
     g23  =  gt23L*invW2;
     
     g33  =  gt33L*invW2;
+    
+    CCTK_REAL const T1000004  =  betam1*PDupwindmNth1beta1;
+    
+    CCTK_REAL const T1000005  =  betam2*PDupwindmNth2beta1;
+    
+    CCTK_REAL const T1000006  =  betam3*PDupwindmNth3beta1;
+    
+    CCTK_REAL const T1000007  =  betap1*PDupwindpNth1beta1;
+    
+    CCTK_REAL const T1000008  =  betap2*PDupwindpNth2beta1;
+    
+    CCTK_REAL const T1000009  =  betap3*PDupwindpNth3beta1;
     
     gxxL  =  g11;
     
@@ -247,6 +276,16 @@ void ML_BSSNW_convertToADMBase_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CC
     
     K33  =  At33L*invW2 + g33*kthird*trKL;
     
+    dtalpL  =  LapseAdvectionCoeff*(betam1*PDupwindmNth1alpha + 
+           betam2*PDupwindmNth2alpha + betam3*PDupwindmNth3alpha + 
+           betap1*PDupwindpNth1alpha + betap2*PDupwindpNth2alpha + 
+           betap3*PDupwindpNth3alpha) + 
+        harmonicF*(AL*(-1 + LapseAdvectionCoeff) - LapseAdvectionCoeff*trKL)*
+         pow(alphaL,harmonicN);
+    
+    CCTK_REAL const T1000010  =  
+       T1000004 + T1000005 + T1000006 + T1000007 + T1000008 + T1000009;
+    
     kxxL  =  K11;
     
     kxyL  =  K12;
@@ -259,29 +298,13 @@ void ML_BSSNW_convertToADMBase_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CC
     
     kzzL  =  K33;
     
-    alpL  =  alphaL;
+    CCTK_REAL const T1000011  =  ShiftAdvectionCoeff*T1000010;
     
-    betaxL  =  beta1L;
+    dtbetaxL  =  B1L*ShiftGammaCoeff + T1000011;
     
-    betayL  =  beta2L;
+    dtbetayL  =  B2L*ShiftGammaCoeff + T1000011;
     
-    betazL  =  beta3L;
-    
-    dtalpL  =  LapseAdvectionCoeff*(betam1*PDupwindmNth1alpha + betam2*PDupwindmNth2alpha + betam3*PDupwindmNth3alpha + 
-           betap1*PDupwindpNth1alpha + betap2*PDupwindpNth2alpha + betap3*PDupwindpNth3alpha) + 
-        harmonicF*(AL*(-1 + LapseAdvectionCoeff) - LapseAdvectionCoeff*trKL)*pow(alphaL,harmonicN);
-    
-    dtbetaxL  =  (betam1*PDupwindmNth1beta1 + betam2*PDupwindmNth2beta1 + betam3*PDupwindmNth3beta1 + 
-           betap1*PDupwindpNth1beta1 + betap2*PDupwindpNth2beta1 + betap3*PDupwindpNth3beta1)*ShiftAdvectionCoeff + 
-        B1L*ShiftGammaCoeff;
-    
-    dtbetayL  =  (betam1*PDupwindmNth1beta1 + betam2*PDupwindmNth2beta1 + betam3*PDupwindmNth3beta1 + 
-           betap1*PDupwindpNth1beta1 + betap2*PDupwindpNth2beta1 + betap3*PDupwindpNth3beta1)*ShiftAdvectionCoeff + 
-        B2L*ShiftGammaCoeff;
-    
-    dtbetazL  =  (betam1*PDupwindmNth1beta1 + betam2*PDupwindmNth2beta1 + betam3*PDupwindmNth3beta1 + 
-           betap1*PDupwindpNth1beta1 + betap2*PDupwindpNth2beta1 + betap3*PDupwindpNth3beta1)*ShiftAdvectionCoeff + 
-        B3L*ShiftGammaCoeff;
+    dtbetazL  =  B3L*ShiftGammaCoeff + T1000011;
     
     
     /* Copy local copies back to grid functions */
@@ -313,8 +336,8 @@ void ML_BSSNW_convertToADMBase_Body(cGH *cctkGH, CCTK_INT dir, CCTK_INT face, CC
 
 void ML_BSSNW_convertToADMBase(CCTK_ARGUMENTS)
 {
-  DECLARE_CCTK_ARGUMENTS
-  DECLARE_CCTK_PARAMETERS
+  DECLARE_CCTK_ARGUMENTS;
+  DECLARE_CCTK_PARAMETERS;
   
   GenericFD_LoopOverInterior(cctkGH, &ML_BSSNW_convertToADMBase_Body);
 }

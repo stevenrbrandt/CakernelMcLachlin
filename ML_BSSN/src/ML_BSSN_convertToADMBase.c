@@ -1,5 +1,5 @@
-/*  File produced by user diener */
-/*  Produced with Mathematica Version 6.0 for Linux x86 (32-bit) (April 20, 2007) */
+/*  File produced by user eschnett */
+/*  Produced with Mathematica Version 6.0 for Mac OS X x86 (64-bit) (May 21, 2008) */
 
 /*  Mathematica script written by Ian Hinder and Sascha Husa */
 
@@ -25,8 +25,8 @@
 
 void ML_BSSN_convertToADMBase_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT const face, CCTK_REAL const normal[3], CCTK_REAL const tangentA[3], CCTK_REAL const tangentB[3], CCTK_INT const min[3], CCTK_INT const max[3], CCTK_INT const n_subblock_gfs, CCTK_REAL * const subblock_gfs[])
 {
-  DECLARE_CCTK_ARGUMENTS
-  DECLARE_CCTK_PARAMETERS
+  DECLARE_CCTK_ARGUMENTS;
+  DECLARE_CCTK_PARAMETERS;
   
   
   /* Declare finite differencing variables */
@@ -102,7 +102,7 @@ void ML_BSSN_convertToADMBase_Body(cGH const * const cctkGH, CCTK_INT const dir,
   #pragma omp parallel
   LC_LOOP3 (ML_BSSN_convertToADMBase,
             i,j,k, min[0],min[1],min[2], max[0],max[1],max[2],
-            cctk_lsh[0],cctk_lsh[1],cctk_lsh[2])
+            cctk_lssh[CCTK_LSSH_IDX(0,0)],cctk_lssh[CCTK_LSSH_IDX(0,1)],cctk_lssh[CCTK_LSSH_IDX(0,2)])
   {
     int index = INITVALUE;
     int subblock_index = INITVALUE;
@@ -147,18 +147,6 @@ void ML_BSSN_convertToADMBase_Body(cGH const * const cctkGH, CCTK_INT const dir,
     /* Declare precomputed derivatives*/
     
     /* Declare derivatives */
-    CCTK_REAL PDupwindNth1alpha = INITVALUE;
-    CCTK_REAL PDupwindNth2alpha = INITVALUE;
-    CCTK_REAL PDupwindNth3alpha = INITVALUE;
-    CCTK_REAL PDupwindNth1beta1 = INITVALUE;
-    CCTK_REAL PDupwindNth2beta1 = INITVALUE;
-    CCTK_REAL PDupwindNth3beta1 = INITVALUE;
-    CCTK_REAL PDupwindNth1beta2 = INITVALUE;
-    CCTK_REAL PDupwindNth2beta2 = INITVALUE;
-    CCTK_REAL PDupwindNth3beta2 = INITVALUE;
-    CCTK_REAL PDupwindNth1beta3 = INITVALUE;
-    CCTK_REAL PDupwindNth2beta3 = INITVALUE;
-    CCTK_REAL PDupwindNth3beta3 = INITVALUE;
     
     /* Assign local copies of grid functions */
     AL = A[index];
@@ -199,7 +187,7 @@ void ML_BSSN_convertToADMBase_Body(cGH const * const cctkGH, CCTK_INT const dir,
     
     dir3  =  Sign(beta3L);
     
-    e4phi  =  exp(4*phiL);
+    e4phi  =  xp(4*phiL);
     
     g11  =  e4phi*gt11L;
     
@@ -308,8 +296,8 @@ void ML_BSSN_convertToADMBase_Body(cGH const * const cctkGH, CCTK_INT const dir,
 
 void ML_BSSN_convertToADMBase(CCTK_ARGUMENTS)
 {
-  DECLARE_CCTK_ARGUMENTS
-  DECLARE_CCTK_PARAMETERS
+  DECLARE_CCTK_ARGUMENTS;
+  DECLARE_CCTK_PARAMETERS;
   
   GenericFD_LoopOverInterior(cctkGH, &ML_BSSN_convertToADMBase_Body);
 }

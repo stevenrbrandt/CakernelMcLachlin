@@ -1,5 +1,5 @@
-/*  File produced by user diener */
-/*  Produced with Mathematica Version 6.0 for Linux x86 (32-bit) (April 20, 2007) */
+/*  File produced by user eschnett */
+/*  Produced with Mathematica Version 6.0 for Mac OS X x86 (64-bit) (May 21, 2008) */
 
 /*  Mathematica script written by Ian Hinder and Sascha Husa */
 
@@ -25,8 +25,8 @@
 
 void ML_BSSN_convertFromADMBase_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT const face, CCTK_REAL const normal[3], CCTK_REAL const tangentA[3], CCTK_REAL const tangentB[3], CCTK_INT const min[3], CCTK_INT const max[3], CCTK_INT const n_subblock_gfs, CCTK_REAL * const subblock_gfs[])
 {
-  DECLARE_CCTK_ARGUMENTS
-  DECLARE_CCTK_PARAMETERS
+  DECLARE_CCTK_ARGUMENTS;
+  DECLARE_CCTK_PARAMETERS;
   
   
   /* Declare finite differencing variables */
@@ -102,7 +102,7 @@ void ML_BSSN_convertFromADMBase_Body(cGH const * const cctkGH, CCTK_INT const di
   #pragma omp parallel
   LC_LOOP3 (ML_BSSN_convertFromADMBase,
             i,j,k, min[0],min[1],min[2], max[0],max[1],max[2],
-            cctk_lsh[0],cctk_lsh[1],cctk_lsh[2])
+            cctk_lssh[CCTK_LSSH_IDX(0,0)],cctk_lssh[CCTK_LSSH_IDX(0,1)],cctk_lssh[CCTK_LSSH_IDX(0,2)])
   {
     int index = INITVALUE;
     int subblock_index = INITVALUE;
@@ -184,21 +184,49 @@ void ML_BSSN_convertFromADMBase_Body(cGH const * const cctkGH, CCTK_INT const di
     
     g33  =  gzzL;
     
-    detg  =  2*g12*g13*g23 + g33*(g11*g22 - SQR(g12)) - g22*SQR(g13) - g11*SQR(g23);
+    K11  =  kxxL;
     
-    gu11  =  INV(detg)*(g22*g33 - SQR(g23));
+    K12  =  kxyL;
     
-    gu21  =  (g13*g23 - g12*g33)*INV(detg);
+    K13  =  kxzL;
     
-    gu31  =  (-(g13*g22) + g12*g23)*INV(detg);
+    K22  =  kyyL;
     
-    gu22  =  INV(detg)*(g11*g33 - SQR(g13));
+    K23  =  kyzL;
     
-    gu32  =  (g12*g13 - g11*g23)*INV(detg);
+    K33  =  kzzL;
     
-    gu33  =  INV(detg)*(g11*g22 - SQR(g12));
+    alphaL  =  alpL;
+    
+    beta1L  =  betaxL;
+    
+    beta2L  =  betayL;
+    
+    beta3L  =  betazL;
+    
+    CCTK_REAL const T1000001  =  SQR(g23);
+    
+    CCTK_REAL const T1000003  =  SQR(g13);
+    
+    CCTK_REAL const T1000004  =  SQR(g12);
+    
+    detg  =  2*g12*g13*g23 + g11*(g22*g33 - T1000001) - g22*T1000003 - g33*T1000004;
+    
+    CCTK_REAL const T1000002  =  INV(detg);
     
     phiL  =  Log(detg)/12.;
+    
+    gu11  =  (g22*g33 - T1000001)*T1000002;
+    
+    gu21  =  (g13*g23 - g12*g33)*T1000002;
+    
+    gu31  =  (-(g13*g22) + g12*g23)*T1000002;
+    
+    gu22  =  T1000002*(g11*g33 - T1000003);
+    
+    gu32  =  (g12*g13 - g11*g23)*T1000002;
+    
+    gu33  =  T1000002*(g11*g22 - T1000004);
     
     em4phi  =  exp(-4*phiL);
     
@@ -214,18 +242,6 @@ void ML_BSSN_convertFromADMBase_Body(cGH const * const cctkGH, CCTK_INT const di
     
     gt33L  =  em4phi*g33;
     
-    K11  =  kxxL;
-    
-    K12  =  kxyL;
-    
-    K13  =  kxzL;
-    
-    K22  =  kyyL;
-    
-    K23  =  kyzL;
-    
-    K33  =  kzzL;
-    
     trKL  =  gu11*K11 + gu22*K22 + 2*(gu21*K12 + gu31*K13 + gu32*K23) + gu33*K33;
     
     At11L  =  em4phi*(K11 - g11*kthird*trKL);
@@ -239,14 +255,6 @@ void ML_BSSN_convertFromADMBase_Body(cGH const * const cctkGH, CCTK_INT const di
     At23L  =  em4phi*(K23 - g23*kthird*trKL);
     
     At33L  =  em4phi*(K33 - g33*kthird*trKL);
-    
-    alphaL  =  alpL;
-    
-    beta1L  =  betaxL;
-    
-    beta2L  =  betayL;
-    
-    beta3L  =  betazL;
     
     
     /* Copy local copies back to grid functions */
@@ -276,8 +284,8 @@ void ML_BSSN_convertFromADMBase_Body(cGH const * const cctkGH, CCTK_INT const di
 
 void ML_BSSN_convertFromADMBase(CCTK_ARGUMENTS)
 {
-  DECLARE_CCTK_ARGUMENTS
-  DECLARE_CCTK_PARAMETERS
+  DECLARE_CCTK_ARGUMENTS;
+  DECLARE_CCTK_PARAMETERS;
   
   GenericFD_LoopOverEverything(cctkGH, &ML_BSSN_convertFromADMBase_Body);
 }
