@@ -9,7 +9,7 @@ copy (cGH const * restrict cctkGH,
       CCTK_REAL * restrict dst, CCTK_REAL const * restrict src);
 
 void
-ML_BSSN_MP_CopyADMBase (CCTK_ARGUMENTS)
+ML_BSSNW_CopyADMBase (CCTK_ARGUMENTS)
 {
   DECLARE_CCTK_ARGUMENTS;
   

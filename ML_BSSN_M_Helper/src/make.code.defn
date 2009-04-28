@@ -1,2 +1,2 @@
 # -*-Makefile-*-
-SRCS = CopyADMBase.c SelectBCsADMBase.c RegisterSlicing.c UnsetCheckpointTags.c
+SRCS = CopyADMBase.c RegisterSlicing.c SelectBCsADMBase.c UnsetCheckpointTags.c

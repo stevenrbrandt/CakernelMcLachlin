@@ -43,15 +43,12 @@ void ML_BSSN_convertFromADMBase_Body(cGH const * const cctkGH, CCTK_INT const di
   CCTK_REAL p1o144dxdy = INITVALUE;
   CCTK_REAL p1o144dxdz = INITVALUE;
   CCTK_REAL p1o144dydz = INITVALUE;
-  CCTK_REAL p1o2dx = INITVALUE;
-  CCTK_REAL p1o2dy = INITVALUE;
-  CCTK_REAL p1o2dz = INITVALUE;
+  CCTK_REAL p1odx = INITVALUE;
+  CCTK_REAL p1ody = INITVALUE;
+  CCTK_REAL p1odz = INITVALUE;
   CCTK_REAL pm1o12dx2 = INITVALUE;
   CCTK_REAL pm1o12dy2 = INITVALUE;
   CCTK_REAL pm1o12dz2 = INITVALUE;
-  CCTK_REAL pm1o2dx = INITVALUE;
-  CCTK_REAL pm1o2dy = INITVALUE;
-  CCTK_REAL pm1o2dz = INITVALUE;
   
   if (verbose > 1)
   {
@@ -88,15 +85,12 @@ void ML_BSSN_convertFromADMBase_Body(cGH const * const cctkGH, CCTK_INT const di
   p1o144dxdy = (INV(dx)*INV(dy))/144.;
   p1o144dxdz = (INV(dx)*INV(dz))/144.;
   p1o144dydz = (INV(dy)*INV(dz))/144.;
-  p1o2dx = khalf*INV(dx);
-  p1o2dy = khalf*INV(dy);
-  p1o2dz = khalf*INV(dz);
+  p1odx = INV(dx);
+  p1ody = INV(dy);
+  p1odz = INV(dz);
   pm1o12dx2 = -pow(dx,-2)/12.;
   pm1o12dy2 = -pow(dy,-2)/12.;
   pm1o12dz2 = -pow(dz,-2)/12.;
-  pm1o2dx = -(khalf*INV(dx));
-  pm1o2dy = -(khalf*INV(dy));
-  pm1o2dz = -(khalf*INV(dz));
   
   /* Loop over the grid points */
   #pragma omp parallel
@@ -184,49 +178,21 @@ void ML_BSSN_convertFromADMBase_Body(cGH const * const cctkGH, CCTK_INT const di
     
     g33  =  gzzL;
     
-    K11  =  kxxL;
+    detg  =  2*g12*g13*g23 + g33*(g11*g22 - SQR(g12)) - g22*SQR(g13) - g11*SQR(g23);
     
-    K12  =  kxyL;
+    gu11  =  INV(detg)*(g22*g33 - SQR(g23));
     
-    K13  =  kxzL;
+    gu21  =  (g13*g23 - g12*g33)*INV(detg);
     
-    K22  =  kyyL;
+    gu31  =  (-(g13*g22) + g12*g23)*INV(detg);
     
-    K23  =  kyzL;
+    gu22  =  INV(detg)*(g11*g33 - SQR(g13));
     
-    K33  =  kzzL;
+    gu32  =  (g12*g13 - g11*g23)*INV(detg);
     
-    alphaL  =  alpL;
-    
-    beta1L  =  betaxL;
-    
-    beta2L  =  betayL;
-    
-    beta3L  =  betazL;
-    
-    CCTK_REAL const T1000001  =  SQR(g23);
-    
-    CCTK_REAL const T1000003  =  SQR(g13);
-    
-    CCTK_REAL const T1000004  =  SQR(g12);
-    
-    detg  =  2*g12*g13*g23 + g11*(g22*g33 - T1000001) - g22*T1000003 - g33*T1000004;
-    
-    CCTK_REAL const T1000002  =  INV(detg);
+    gu33  =  INV(detg)*(g11*g22 - SQR(g12));
     
     phiL  =  Log(detg)/12.;
-    
-    gu11  =  (g22*g33 - T1000001)*T1000002;
-    
-    gu21  =  (g13*g23 - g12*g33)*T1000002;
-    
-    gu31  =  (-(g13*g22) + g12*g23)*T1000002;
-    
-    gu22  =  T1000002*(g11*g33 - T1000003);
-    
-    gu32  =  (g12*g13 - g11*g23)*T1000002;
-    
-    gu33  =  T1000002*(g11*g22 - T1000004);
     
     em4phi  =  exp(-4*phiL);
     
@@ -242,6 +208,18 @@ void ML_BSSN_convertFromADMBase_Body(cGH const * const cctkGH, CCTK_INT const di
     
     gt33L  =  em4phi*g33;
     
+    K11  =  kxxL;
+    
+    K12  =  kxyL;
+    
+    K13  =  kxzL;
+    
+    K22  =  kyyL;
+    
+    K23  =  kyzL;
+    
+    K33  =  kzzL;
+    
     trKL  =  gu11*K11 + gu22*K22 + 2*(gu21*K12 + gu31*K13 + gu32*K23) + gu33*K33;
     
     At11L  =  em4phi*(K11 - g11*kthird*trKL);
@@ -255,6 +233,14 @@ void ML_BSSN_convertFromADMBase_Body(cGH const * const cctkGH, CCTK_INT const di
     At23L  =  em4phi*(K23 - g23*kthird*trKL);
     
     At33L  =  em4phi*(K33 - g33*kthird*trKL);
+    
+    alphaL  =  alpL;
+    
+    beta1L  =  betaxL;
+    
+    beta2L  =  betayL;
+    
+    beta3L  =  betazL;
     
     
     /* Copy local copies back to grid functions */

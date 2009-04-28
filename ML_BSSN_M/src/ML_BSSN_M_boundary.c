@@ -1,5 +1,5 @@
-/*  File produced by user diener */
-/*  Produced with Mathematica Version 6.0 for Linux x86 (32-bit) (April 20, 2007) */
+/*  File produced by user eschnett */
+/*  Produced with Mathematica Version 6.0 for Mac OS X x86 (64-bit) (May 21, 2008) */
 
 /*  Mathematica script written by Ian Hinder and Sascha Husa */
 
@@ -25,8 +25,8 @@
 
 void ML_BSSN_M_boundary_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT const face, CCTK_REAL const normal[3], CCTK_REAL const tangentA[3], CCTK_REAL const tangentB[3], CCTK_INT const min[3], CCTK_INT const max[3], CCTK_INT const n_subblock_gfs, CCTK_REAL * const subblock_gfs[])
 {
-  DECLARE_CCTK_ARGUMENTS
-  DECLARE_CCTK_PARAMETERS
+  DECLARE_CCTK_ARGUMENTS;
+  DECLARE_CCTK_PARAMETERS;
   
   
   /* Declare finite differencing variables */
@@ -43,15 +43,12 @@ void ML_BSSN_M_boundary_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_
   CCTK_REAL p1o144dxdy = INITVALUE;
   CCTK_REAL p1o144dxdz = INITVALUE;
   CCTK_REAL p1o144dydz = INITVALUE;
-  CCTK_REAL p1o2dx = INITVALUE;
-  CCTK_REAL p1o2dy = INITVALUE;
-  CCTK_REAL p1o2dz = INITVALUE;
+  CCTK_REAL p1odx = INITVALUE;
+  CCTK_REAL p1ody = INITVALUE;
+  CCTK_REAL p1odz = INITVALUE;
   CCTK_REAL pm1o12dx2 = INITVALUE;
   CCTK_REAL pm1o12dy2 = INITVALUE;
   CCTK_REAL pm1o12dz2 = INITVALUE;
-  CCTK_REAL pm1o2dx = INITVALUE;
-  CCTK_REAL pm1o2dy = INITVALUE;
-  CCTK_REAL pm1o2dz = INITVALUE;
   
   if (verbose > 1)
   {
@@ -88,21 +85,18 @@ void ML_BSSN_M_boundary_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_
   p1o144dxdy = (INV(dx)*INV(dy))/144.;
   p1o144dxdz = (INV(dx)*INV(dz))/144.;
   p1o144dydz = (INV(dy)*INV(dz))/144.;
-  p1o2dx = khalf*INV(dx);
-  p1o2dy = khalf*INV(dy);
-  p1o2dz = khalf*INV(dz);
+  p1odx = INV(dx);
+  p1ody = INV(dy);
+  p1odz = INV(dz);
   pm1o12dx2 = -pow(dx,-2)/12.;
   pm1o12dy2 = -pow(dy,-2)/12.;
   pm1o12dz2 = -pow(dz,-2)/12.;
-  pm1o2dx = -(khalf*INV(dx));
-  pm1o2dy = -(khalf*INV(dy));
-  pm1o2dz = -(khalf*INV(dz));
   
   /* Loop over the grid points */
   #pragma omp parallel
   LC_LOOP3 (ML_BSSN_M_boundary,
             i,j,k, min[0],min[1],min[2], max[0],max[1],max[2],
-            cctk_lsh[0],cctk_lsh[1],cctk_lsh[2])
+            cctk_lssh[CCTK_LSSH_IDX(0,0)],cctk_lssh[CCTK_LSSH_IDX(0,1)],cctk_lssh[CCTK_LSSH_IDX(0,2)])
   {
     int index = INITVALUE;
     int subblock_index = INITVALUE;
@@ -221,8 +215,8 @@ void ML_BSSN_M_boundary_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_
 
 void ML_BSSN_M_boundary(CCTK_ARGUMENTS)
 {
-  DECLARE_CCTK_ARGUMENTS
-  DECLARE_CCTK_PARAMETERS
+  DECLARE_CCTK_ARGUMENTS;
+  DECLARE_CCTK_PARAMETERS;
   
   GenericFD_LoopOverBoundaryWithGhosts(cctkGH, &ML_BSSN_M_boundary_Body);
 }

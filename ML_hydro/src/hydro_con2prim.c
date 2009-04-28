@@ -140,20 +140,17 @@ void hydro_con2prim_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT 
     /* Precompute derivatives (old style) */
     
     /* Calculate temporaries and grid functions */
-    CCTK_REAL const T1000001  =  INV(massL);
-    
     rhoL  =  massL*INV(volL);
     
-    vel1L  =  mom1L*T1000001;
+    vel1L  =  mom1L*INV(massL);
     
-    vel2L  =  mom2L*T1000001;
+    vel2L  =  mom2L*INV(massL);
     
-    vel3L  =  mom3L*T1000001;
+    vel3L  =  mom3L*INV(massL);
     
-    epsL  =  khalf*T1000001*(2*eneL - massL*(SQR(vel1L) + SQR(vel2L) + SQR(vel3L)));
+    epsL  =  khalf*INV(massL)*(2*eneL - massL*(SQR(vel1L) + SQR(vel2L) + SQR(vel3L)));
     
-    pressL  =  alpha*(PDstandardNth1vel1 + PDstandardNth2vel2 + 
-           PDstandardNth3vel3) + epsL*Gamma*rhoL;
+    pressL  =  alpha*(PDstandardNth1vel1 + PDstandardNth2vel2 + PDstandardNth3vel3) + epsL*Gamma*rhoL;
     
     
     /* Copy local copies back to grid functions */

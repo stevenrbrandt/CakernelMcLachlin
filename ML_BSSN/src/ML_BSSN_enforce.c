@@ -43,15 +43,12 @@ void ML_BSSN_enforce_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT
   CCTK_REAL p1o144dxdy = INITVALUE;
   CCTK_REAL p1o144dxdz = INITVALUE;
   CCTK_REAL p1o144dydz = INITVALUE;
-  CCTK_REAL p1o2dx = INITVALUE;
-  CCTK_REAL p1o2dy = INITVALUE;
-  CCTK_REAL p1o2dz = INITVALUE;
+  CCTK_REAL p1odx = INITVALUE;
+  CCTK_REAL p1ody = INITVALUE;
+  CCTK_REAL p1odz = INITVALUE;
   CCTK_REAL pm1o12dx2 = INITVALUE;
   CCTK_REAL pm1o12dy2 = INITVALUE;
   CCTK_REAL pm1o12dz2 = INITVALUE;
-  CCTK_REAL pm1o2dx = INITVALUE;
-  CCTK_REAL pm1o2dy = INITVALUE;
-  CCTK_REAL pm1o2dz = INITVALUE;
   
   if (verbose > 1)
   {
@@ -88,15 +85,12 @@ void ML_BSSN_enforce_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT
   p1o144dxdy = (INV(dx)*INV(dy))/144.;
   p1o144dxdz = (INV(dx)*INV(dz))/144.;
   p1o144dydz = (INV(dy)*INV(dz))/144.;
-  p1o2dx = khalf*INV(dx);
-  p1o2dy = khalf*INV(dy);
-  p1o2dz = khalf*INV(dz);
+  p1odx = INV(dx);
+  p1ody = INV(dy);
+  p1odz = INV(dz);
   pm1o12dx2 = -pow(dx,-2)/12.;
   pm1o12dy2 = -pow(dy,-2)/12.;
   pm1o12dz2 = -pow(dz,-2)/12.;
-  pm1o2dx = -(khalf*INV(dx));
-  pm1o2dy = -(khalf*INV(dy));
-  pm1o2dz = -(khalf*INV(dz));
   
   /* Loop over the grid points */
   #pragma omp parallel
@@ -146,22 +140,19 @@ void ML_BSSN_enforce_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT
     /* Calculate temporaries and grid functions */
     detgt  =  1;
     
-    CCTK_REAL const T1000001  =  INV(detgt);
+    gtu11  =  INV(detgt)*(gt22L*gt33L - SQR(gt23L));
     
-    gtu11  =  T1000001*(gt22L*gt33L - SQR(gt23L));
+    gtu21  =  (gt13L*gt23L - gt12L*gt33L)*INV(detgt);
     
-    gtu21  =  (gt13L*gt23L - gt12L*gt33L)*T1000001;
+    gtu31  =  (-(gt13L*gt22L) + gt12L*gt23L)*INV(detgt);
     
-    gtu31  =  (-(gt13L*gt22L) + gt12L*gt23L)*T1000001;
+    gtu22  =  INV(detgt)*(gt11L*gt33L - SQR(gt13L));
     
-    gtu22  =  T1000001*(gt11L*gt33L - SQR(gt13L));
+    gtu32  =  (gt12L*gt13L - gt11L*gt23L)*INV(detgt);
     
-    gtu32  =  (gt12L*gt13L - gt11L*gt23L)*T1000001;
+    gtu33  =  INV(detgt)*(gt11L*gt22L - SQR(gt12L));
     
-    gtu33  =  T1000001*(gt11L*gt22L - SQR(gt12L));
-    
-    trAt  =  At11L*gtu11 + At22L*gtu22 + 
-        2*(At12L*gtu21 + At13L*gtu31 + At23L*gtu32) + At33L*gtu33;
+    trAt  =  At11L*gtu11 + At22L*gtu22 + 2*(At12L*gtu21 + At13L*gtu31 + At23L*gtu32) + At33L*gtu33;
     
     At11L  =  At11L - gt11L*kthird*trAt;
     

@@ -56,6 +56,10 @@ if (CCTK_EQUALS (evolution_method, "ML_BSSN_MP")) {
   
   
   
+  SCHEDULE GROUP ML_BSSN_MP_convertToADMBaseGroup IN ML_BSSN_MP_convertToADMBaseGroupWrapper
+  {
+  } "Calculate ADM variables"
+  
   if (CCTK_EQUALS (calculate_ADMBase_variables_at, "MoL_PostStep"))
   {
     if (timelevels > 1)
@@ -65,24 +69,34 @@ if (CCTK_EQUALS (evolution_method, "ML_BSSN_MP")) {
         LANG: C
       } "Copy ADMBase variables to current time level"
     }
-    SCHEDULE GROUP ML_BSSN_MP_convertToADMBaseGroup IN MoL_PostStep AFTER (ML_BSSN_MP_ApplyBCs ML_BSSN_MP_enforce) BEFORE Whisky_PostStep
+    SCHEDULE GROUP ML_BSSN_MP_convertToADMBaseGroupWrapper IN MoL_PostStep AFTER (ML_BSSN_MP_ApplyBCs ML_BSSN_MP_enforce) BEFORE (ADMBase_SetADMVars Whisky_PostStep)
     {
     } "Calculate ADM variables"
   }
   else if  (CCTK_EQUALS (calculate_ADMBase_variables_at, "CCTK_EVOL"))
   {
-    SCHEDULE GROUP ML_BSSN_MP_convertToADMBaseGroup AT evol AFTER MoL_Evolution
+    SCHEDULE GROUP ML_BSSN_MP_convertToADMBaseGroupWrapper AT evol AFTER MoL_Evolution BEFORE (ADMBase_SetADMVars Whisky_PostStep)
     {
     } "Calculate ADM variables"
   }
   else if  (CCTK_EQUALS (calculate_ADMBase_variables_at, "CCTK_ANALYSIS"))
   {
-    SCHEDULE GROUP ML_BSSN_MP_convertToADMBaseGroup AT analysis
+    SCHEDULE GROUP ML_BSSN_MP_convertToADMBaseGroupWrapper AT analysis BEFORE (ADMBase_SetADMVars Whisky_PostStep)
     {
       TRIGGERS: ML_BSSN_MP::ML_Ham
       TRIGGERS: ML_BSSN_MP::ML_mom
     } "Calculate ADM variables"
   }
+  
+  SCHEDULE ML_BSSN_MP_SelectBCsADMBase IN ML_BSSN_MP_convertToADMBaseGroupWrapper AFTER ML_BSSN_MP_convertToADMBaseGroup
+  {
+    LANG: C
+    OPTIONS: level
+  } "Apply boundary conditions to ADMBase variables"
+  
+  SCHEDULE GROUP ApplyBCs AS ML_BSSN_MP_ApplyBCsADMBase IN ML_BSSN_MP_convertToADMBaseGroupWrapper AFTER ML_BSSN_MP_SelectBCsADMBase
+  {
+  } "Apply boundary conditions to ADMBase variables"
   
   
   
@@ -91,23 +105,5 @@ if (CCTK_EQUALS (evolution_method, "ML_BSSN_MP")) {
     TRIGGERS: ML_BSSN_MP::ML_Ham
     TRIGGERS: ML_BSSN_MP::ML_mom
   } "Calculate BSSN constraints"
-  
-  
-  
-  SCHEDULE ML_BSSN_MP_SelectBCsADMBase IN MoL_PostStep AFTER ML_BSSN_MP_convertToADMBase
-  {
-    LANG: C
-    OPTIONS: level
-    SYNC: ADMBase::metric
-    SYNC: ADMBase::curv
-    SYNC: ADMBase::lapse
-    SYNC: ADMBase::shift
-    SYNC: ADMBase::dtlapse
-    SYNC: ADMBase::dtshift
-  } "Apply boundary conditions to ADMBase variables"
-  
-  SCHEDULE GROUP ApplyBCs AS ML_BSSN_MP_ApplyBCsADMBase IN MoL_PostStep AFTER ML_BSSN_MP_SelectBCsADMBase BEFORE ADMBase_SetADMVars
-  {
-  } "Apply boundary conditions to ADMBase variables"
   
 }

@@ -1,5 +1,5 @@
-/*  File produced by user diener */
-/*  Produced with Mathematica Version 6.0 for Linux x86 (32-bit) (April 20, 2007) */
+/*  File produced by user eschnett */
+/*  Produced with Mathematica Version 6.0 for Mac OS X x86 (64-bit) (May 21, 2008) */
 
 /*  Mathematica script written by Ian Hinder and Sascha Husa */
 
@@ -25,8 +25,8 @@
 
 void ML_BSSN_MP_RHS_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT const face, CCTK_REAL const normal[3], CCTK_REAL const tangentA[3], CCTK_REAL const tangentB[3], CCTK_INT const min[3], CCTK_INT const max[3], CCTK_INT const n_subblock_gfs, CCTK_REAL * const subblock_gfs[])
 {
-  DECLARE_CCTK_ARGUMENTS
-  DECLARE_CCTK_PARAMETERS
+  DECLARE_CCTK_ARGUMENTS;
+  DECLARE_CCTK_PARAMETERS;
   
   
   /* Declare finite differencing variables */
@@ -43,15 +43,12 @@ void ML_BSSN_MP_RHS_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT 
   CCTK_REAL p1o144dxdy = INITVALUE;
   CCTK_REAL p1o144dxdz = INITVALUE;
   CCTK_REAL p1o144dydz = INITVALUE;
-  CCTK_REAL p1o2dx = INITVALUE;
-  CCTK_REAL p1o2dy = INITVALUE;
-  CCTK_REAL p1o2dz = INITVALUE;
+  CCTK_REAL p1odx = INITVALUE;
+  CCTK_REAL p1ody = INITVALUE;
+  CCTK_REAL p1odz = INITVALUE;
   CCTK_REAL pm1o12dx2 = INITVALUE;
   CCTK_REAL pm1o12dy2 = INITVALUE;
   CCTK_REAL pm1o12dz2 = INITVALUE;
-  CCTK_REAL pm1o2dx = INITVALUE;
-  CCTK_REAL pm1o2dy = INITVALUE;
-  CCTK_REAL pm1o2dz = INITVALUE;
   
   if (verbose > 1)
   {
@@ -88,21 +85,18 @@ void ML_BSSN_MP_RHS_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT 
   p1o144dxdy = (INV(dx)*INV(dy))/144.;
   p1o144dxdz = (INV(dx)*INV(dz))/144.;
   p1o144dydz = (INV(dy)*INV(dz))/144.;
-  p1o2dx = khalf*INV(dx);
-  p1o2dy = khalf*INV(dy);
-  p1o2dz = khalf*INV(dz);
+  p1odx = INV(dx);
+  p1ody = INV(dy);
+  p1odz = INV(dz);
   pm1o12dx2 = -pow(dx,-2)/12.;
   pm1o12dy2 = -pow(dy,-2)/12.;
   pm1o12dz2 = -pow(dz,-2)/12.;
-  pm1o2dx = -(khalf*INV(dx));
-  pm1o2dy = -(khalf*INV(dy));
-  pm1o2dz = -(khalf*INV(dz));
   
   /* Loop over the grid points */
   #pragma omp parallel
   LC_LOOP3 (ML_BSSN_MP_RHS,
             i,j,k, min[0],min[1],min[2], max[0],max[1],max[2],
-            cctk_lsh[0],cctk_lsh[1],cctk_lsh[2])
+            cctk_lssh[CCTK_LSSH_IDX(0,0)],cctk_lssh[CCTK_LSSH_IDX(0,1)],cctk_lssh[CCTK_LSSH_IDX(0,2)])
   {
     int index = INITVALUE;
     int subblock_index = INITVALUE;
@@ -170,40 +164,7 @@ void ML_BSSN_MP_RHS_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT 
     CCTK_REAL PDstandardNth33alpha = INITVALUE;
     CCTK_REAL PDstandardNth12alpha = INITVALUE;
     CCTK_REAL PDstandardNth13alpha = INITVALUE;
-    CCTK_REAL PDstandardNth21alpha = INITVALUE;
     CCTK_REAL PDstandardNth23alpha = INITVALUE;
-    CCTK_REAL PDstandardNth31alpha = INITVALUE;
-    CCTK_REAL PDstandardNth32alpha = INITVALUE;
-    CCTK_REAL PDupwindNth1alpha = INITVALUE;
-    CCTK_REAL PDupwindNth2alpha = INITVALUE;
-    CCTK_REAL PDupwindNth3alpha = INITVALUE;
-    CCTK_REAL PDupwindNth1At11 = INITVALUE;
-    CCTK_REAL PDupwindNth2At11 = INITVALUE;
-    CCTK_REAL PDupwindNth3At11 = INITVALUE;
-    CCTK_REAL PDupwindNth1At12 = INITVALUE;
-    CCTK_REAL PDupwindNth2At12 = INITVALUE;
-    CCTK_REAL PDupwindNth3At12 = INITVALUE;
-    CCTK_REAL PDupwindNth1At13 = INITVALUE;
-    CCTK_REAL PDupwindNth2At13 = INITVALUE;
-    CCTK_REAL PDupwindNth3At13 = INITVALUE;
-    CCTK_REAL PDupwindNth1At22 = INITVALUE;
-    CCTK_REAL PDupwindNth2At22 = INITVALUE;
-    CCTK_REAL PDupwindNth3At22 = INITVALUE;
-    CCTK_REAL PDupwindNth1At23 = INITVALUE;
-    CCTK_REAL PDupwindNth2At23 = INITVALUE;
-    CCTK_REAL PDupwindNth3At23 = INITVALUE;
-    CCTK_REAL PDupwindNth1At33 = INITVALUE;
-    CCTK_REAL PDupwindNth2At33 = INITVALUE;
-    CCTK_REAL PDupwindNth3At33 = INITVALUE;
-    CCTK_REAL PDupwindNth1B1 = INITVALUE;
-    CCTK_REAL PDupwindNth2B1 = INITVALUE;
-    CCTK_REAL PDupwindNth3B1 = INITVALUE;
-    CCTK_REAL PDupwindNth1B2 = INITVALUE;
-    CCTK_REAL PDupwindNth2B2 = INITVALUE;
-    CCTK_REAL PDupwindNth3B2 = INITVALUE;
-    CCTK_REAL PDupwindNth1B3 = INITVALUE;
-    CCTK_REAL PDupwindNth2B3 = INITVALUE;
-    CCTK_REAL PDupwindNth3B3 = INITVALUE;
     CCTK_REAL PDstandardNth1beta1 = INITVALUE;
     CCTK_REAL PDstandardNth2beta1 = INITVALUE;
     CCTK_REAL PDstandardNth3beta1 = INITVALUE;
@@ -212,13 +173,7 @@ void ML_BSSN_MP_RHS_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT 
     CCTK_REAL PDstandardNth33beta1 = INITVALUE;
     CCTK_REAL PDstandardNth12beta1 = INITVALUE;
     CCTK_REAL PDstandardNth13beta1 = INITVALUE;
-    CCTK_REAL PDstandardNth21beta1 = INITVALUE;
     CCTK_REAL PDstandardNth23beta1 = INITVALUE;
-    CCTK_REAL PDstandardNth31beta1 = INITVALUE;
-    CCTK_REAL PDstandardNth32beta1 = INITVALUE;
-    CCTK_REAL PDupwindNth1beta1 = INITVALUE;
-    CCTK_REAL PDupwindNth2beta1 = INITVALUE;
-    CCTK_REAL PDupwindNth3beta1 = INITVALUE;
     CCTK_REAL PDstandardNth1beta2 = INITVALUE;
     CCTK_REAL PDstandardNth2beta2 = INITVALUE;
     CCTK_REAL PDstandardNth3beta2 = INITVALUE;
@@ -227,13 +182,7 @@ void ML_BSSN_MP_RHS_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT 
     CCTK_REAL PDstandardNth33beta2 = INITVALUE;
     CCTK_REAL PDstandardNth12beta2 = INITVALUE;
     CCTK_REAL PDstandardNth13beta2 = INITVALUE;
-    CCTK_REAL PDstandardNth21beta2 = INITVALUE;
     CCTK_REAL PDstandardNth23beta2 = INITVALUE;
-    CCTK_REAL PDstandardNth31beta2 = INITVALUE;
-    CCTK_REAL PDstandardNth32beta2 = INITVALUE;
-    CCTK_REAL PDupwindNth1beta2 = INITVALUE;
-    CCTK_REAL PDupwindNth2beta2 = INITVALUE;
-    CCTK_REAL PDupwindNth3beta2 = INITVALUE;
     CCTK_REAL PDstandardNth1beta3 = INITVALUE;
     CCTK_REAL PDstandardNth2beta3 = INITVALUE;
     CCTK_REAL PDstandardNth3beta3 = INITVALUE;
@@ -242,13 +191,7 @@ void ML_BSSN_MP_RHS_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT 
     CCTK_REAL PDstandardNth33beta3 = INITVALUE;
     CCTK_REAL PDstandardNth12beta3 = INITVALUE;
     CCTK_REAL PDstandardNth13beta3 = INITVALUE;
-    CCTK_REAL PDstandardNth21beta3 = INITVALUE;
     CCTK_REAL PDstandardNth23beta3 = INITVALUE;
-    CCTK_REAL PDstandardNth31beta3 = INITVALUE;
-    CCTK_REAL PDstandardNth32beta3 = INITVALUE;
-    CCTK_REAL PDupwindNth1beta3 = INITVALUE;
-    CCTK_REAL PDupwindNth2beta3 = INITVALUE;
-    CCTK_REAL PDupwindNth3beta3 = INITVALUE;
     CCTK_REAL PDstandardNth1gt11 = INITVALUE;
     CCTK_REAL PDstandardNth2gt11 = INITVALUE;
     CCTK_REAL PDstandardNth3gt11 = INITVALUE;
@@ -257,13 +200,7 @@ void ML_BSSN_MP_RHS_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT 
     CCTK_REAL PDstandardNth33gt11 = INITVALUE;
     CCTK_REAL PDstandardNth12gt11 = INITVALUE;
     CCTK_REAL PDstandardNth13gt11 = INITVALUE;
-    CCTK_REAL PDstandardNth21gt11 = INITVALUE;
     CCTK_REAL PDstandardNth23gt11 = INITVALUE;
-    CCTK_REAL PDstandardNth31gt11 = INITVALUE;
-    CCTK_REAL PDstandardNth32gt11 = INITVALUE;
-    CCTK_REAL PDupwindNth1gt11 = INITVALUE;
-    CCTK_REAL PDupwindNth2gt11 = INITVALUE;
-    CCTK_REAL PDupwindNth3gt11 = INITVALUE;
     CCTK_REAL PDstandardNth1gt12 = INITVALUE;
     CCTK_REAL PDstandardNth2gt12 = INITVALUE;
     CCTK_REAL PDstandardNth3gt12 = INITVALUE;
@@ -272,13 +209,7 @@ void ML_BSSN_MP_RHS_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT 
     CCTK_REAL PDstandardNth33gt12 = INITVALUE;
     CCTK_REAL PDstandardNth12gt12 = INITVALUE;
     CCTK_REAL PDstandardNth13gt12 = INITVALUE;
-    CCTK_REAL PDstandardNth21gt12 = INITVALUE;
     CCTK_REAL PDstandardNth23gt12 = INITVALUE;
-    CCTK_REAL PDstandardNth31gt12 = INITVALUE;
-    CCTK_REAL PDstandardNth32gt12 = INITVALUE;
-    CCTK_REAL PDupwindNth1gt12 = INITVALUE;
-    CCTK_REAL PDupwindNth2gt12 = INITVALUE;
-    CCTK_REAL PDupwindNth3gt12 = INITVALUE;
     CCTK_REAL PDstandardNth1gt13 = INITVALUE;
     CCTK_REAL PDstandardNth2gt13 = INITVALUE;
     CCTK_REAL PDstandardNth3gt13 = INITVALUE;
@@ -287,13 +218,7 @@ void ML_BSSN_MP_RHS_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT 
     CCTK_REAL PDstandardNth33gt13 = INITVALUE;
     CCTK_REAL PDstandardNth12gt13 = INITVALUE;
     CCTK_REAL PDstandardNth13gt13 = INITVALUE;
-    CCTK_REAL PDstandardNth21gt13 = INITVALUE;
     CCTK_REAL PDstandardNth23gt13 = INITVALUE;
-    CCTK_REAL PDstandardNth31gt13 = INITVALUE;
-    CCTK_REAL PDstandardNth32gt13 = INITVALUE;
-    CCTK_REAL PDupwindNth1gt13 = INITVALUE;
-    CCTK_REAL PDupwindNth2gt13 = INITVALUE;
-    CCTK_REAL PDupwindNth3gt13 = INITVALUE;
     CCTK_REAL PDstandardNth1gt22 = INITVALUE;
     CCTK_REAL PDstandardNth2gt22 = INITVALUE;
     CCTK_REAL PDstandardNth3gt22 = INITVALUE;
@@ -302,13 +227,7 @@ void ML_BSSN_MP_RHS_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT 
     CCTK_REAL PDstandardNth33gt22 = INITVALUE;
     CCTK_REAL PDstandardNth12gt22 = INITVALUE;
     CCTK_REAL PDstandardNth13gt22 = INITVALUE;
-    CCTK_REAL PDstandardNth21gt22 = INITVALUE;
     CCTK_REAL PDstandardNth23gt22 = INITVALUE;
-    CCTK_REAL PDstandardNth31gt22 = INITVALUE;
-    CCTK_REAL PDstandardNth32gt22 = INITVALUE;
-    CCTK_REAL PDupwindNth1gt22 = INITVALUE;
-    CCTK_REAL PDupwindNth2gt22 = INITVALUE;
-    CCTK_REAL PDupwindNth3gt22 = INITVALUE;
     CCTK_REAL PDstandardNth1gt23 = INITVALUE;
     CCTK_REAL PDstandardNth2gt23 = INITVALUE;
     CCTK_REAL PDstandardNth3gt23 = INITVALUE;
@@ -317,13 +236,7 @@ void ML_BSSN_MP_RHS_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT 
     CCTK_REAL PDstandardNth33gt23 = INITVALUE;
     CCTK_REAL PDstandardNth12gt23 = INITVALUE;
     CCTK_REAL PDstandardNth13gt23 = INITVALUE;
-    CCTK_REAL PDstandardNth21gt23 = INITVALUE;
     CCTK_REAL PDstandardNth23gt23 = INITVALUE;
-    CCTK_REAL PDstandardNth31gt23 = INITVALUE;
-    CCTK_REAL PDstandardNth32gt23 = INITVALUE;
-    CCTK_REAL PDupwindNth1gt23 = INITVALUE;
-    CCTK_REAL PDupwindNth2gt23 = INITVALUE;
-    CCTK_REAL PDupwindNth3gt23 = INITVALUE;
     CCTK_REAL PDstandardNth1gt33 = INITVALUE;
     CCTK_REAL PDstandardNth2gt33 = INITVALUE;
     CCTK_REAL PDstandardNth3gt33 = INITVALUE;
@@ -332,13 +245,7 @@ void ML_BSSN_MP_RHS_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT 
     CCTK_REAL PDstandardNth33gt33 = INITVALUE;
     CCTK_REAL PDstandardNth12gt33 = INITVALUE;
     CCTK_REAL PDstandardNth13gt33 = INITVALUE;
-    CCTK_REAL PDstandardNth21gt33 = INITVALUE;
     CCTK_REAL PDstandardNth23gt33 = INITVALUE;
-    CCTK_REAL PDstandardNth31gt33 = INITVALUE;
-    CCTK_REAL PDstandardNth32gt33 = INITVALUE;
-    CCTK_REAL PDupwindNth1gt33 = INITVALUE;
-    CCTK_REAL PDupwindNth2gt33 = INITVALUE;
-    CCTK_REAL PDupwindNth3gt33 = INITVALUE;
     CCTK_REAL PDstandardNth1phi = INITVALUE;
     CCTK_REAL PDstandardNth2phi = INITVALUE;
     CCTK_REAL PDstandardNth3phi = INITVALUE;
@@ -347,37 +254,19 @@ void ML_BSSN_MP_RHS_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT 
     CCTK_REAL PDstandardNth33phi = INITVALUE;
     CCTK_REAL PDstandardNth12phi = INITVALUE;
     CCTK_REAL PDstandardNth13phi = INITVALUE;
-    CCTK_REAL PDstandardNth21phi = INITVALUE;
     CCTK_REAL PDstandardNth23phi = INITVALUE;
-    CCTK_REAL PDstandardNth31phi = INITVALUE;
-    CCTK_REAL PDstandardNth32phi = INITVALUE;
-    CCTK_REAL PDupwindNth1phi = INITVALUE;
-    CCTK_REAL PDupwindNth2phi = INITVALUE;
-    CCTK_REAL PDupwindNth3phi = INITVALUE;
     CCTK_REAL PDstandardNth1trK = INITVALUE;
     CCTK_REAL PDstandardNth2trK = INITVALUE;
     CCTK_REAL PDstandardNth3trK = INITVALUE;
-    CCTK_REAL PDupwindNth1trK = INITVALUE;
-    CCTK_REAL PDupwindNth2trK = INITVALUE;
-    CCTK_REAL PDupwindNth3trK = INITVALUE;
     CCTK_REAL PDstandardNth1Xt1 = INITVALUE;
     CCTK_REAL PDstandardNth2Xt1 = INITVALUE;
     CCTK_REAL PDstandardNth3Xt1 = INITVALUE;
-    CCTK_REAL PDupwindNth1Xt1 = INITVALUE;
-    CCTK_REAL PDupwindNth2Xt1 = INITVALUE;
-    CCTK_REAL PDupwindNth3Xt1 = INITVALUE;
     CCTK_REAL PDstandardNth1Xt2 = INITVALUE;
     CCTK_REAL PDstandardNth2Xt2 = INITVALUE;
     CCTK_REAL PDstandardNth3Xt2 = INITVALUE;
-    CCTK_REAL PDupwindNth1Xt2 = INITVALUE;
-    CCTK_REAL PDupwindNth2Xt2 = INITVALUE;
-    CCTK_REAL PDupwindNth3Xt2 = INITVALUE;
     CCTK_REAL PDstandardNth1Xt3 = INITVALUE;
     CCTK_REAL PDstandardNth2Xt3 = INITVALUE;
     CCTK_REAL PDstandardNth3Xt3 = INITVALUE;
-    CCTK_REAL PDupwindNth1Xt3 = INITVALUE;
-    CCTK_REAL PDupwindNth2Xt3 = INITVALUE;
-    CCTK_REAL PDupwindNth3Xt3 = INITVALUE;
     
     /* Assign local copies of grid functions */
     AL = A[index];
@@ -2024,8 +1913,8 @@ void ML_BSSN_MP_RHS_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT 
 
 void ML_BSSN_MP_RHS(CCTK_ARGUMENTS)
 {
-  DECLARE_CCTK_ARGUMENTS
-  DECLARE_CCTK_PARAMETERS
+  DECLARE_CCTK_ARGUMENTS;
+  DECLARE_CCTK_PARAMETERS;
   
   GenericFD_LoopOverInterior(cctkGH, &ML_BSSN_MP_RHS_Body);
 }

@@ -43,12 +43,15 @@ void ML_BSSNW_enforce_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_IN
   CCTK_REAL p1o144dxdy = INITVALUE;
   CCTK_REAL p1o144dxdz = INITVALUE;
   CCTK_REAL p1o144dydz = INITVALUE;
-  CCTK_REAL pm1o12dx = INITVALUE;
   CCTK_REAL pm1o12dx2 = INITVALUE;
-  CCTK_REAL pm1o12dy = INITVALUE;
   CCTK_REAL pm1o12dy2 = INITVALUE;
-  CCTK_REAL pm1o12dz = INITVALUE;
   CCTK_REAL pm1o12dz2 = INITVALUE;
+  CCTK_REAL Differencing`Private`liName$30259 = INITVALUE;
+  CCTK_REAL Differencing`Private`liName$30283 = INITVALUE;
+  CCTK_REAL Differencing`Private`liName$30307 = INITVALUE;
+  CCTK_REAL Differencing`Private`liName$30331 = INITVALUE;
+  CCTK_REAL Differencing`Private`liName$30355 = INITVALUE;
+  CCTK_REAL Differencing`Private`liName$30379 = INITVALUE;
   
   if (verbose > 1)
   {
@@ -85,12 +88,15 @@ void ML_BSSNW_enforce_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_IN
   p1o144dxdy = (INV(dx)*INV(dy))/144.;
   p1o144dxdz = (INV(dx)*INV(dz))/144.;
   p1o144dydz = (INV(dy)*INV(dz))/144.;
-  pm1o12dx = -INV(dx)/12.;
   pm1o12dx2 = -pow(dx,-2)/12.;
-  pm1o12dy = -INV(dy)/12.;
   pm1o12dy2 = -pow(dy,-2)/12.;
-  pm1o12dz = -INV(dz)/12.;
   pm1o12dz2 = -pow(dz,-2)/12.;
+  Differencing`Private`liName$30259 = Differencing_Private_num$30259*Differencing_Private_ss$30259*INV(Differencing_Private_den$30259);
+  Differencing`Private`liName$30283 = Differencing_Private_num$30283*Differencing_Private_ss$30283*INV(Differencing_Private_den$30283);
+  Differencing`Private`liName$30307 = Differencing_Private_num$30307*Differencing_Private_ss$30307*INV(Differencing_Private_den$30307);
+  Differencing`Private`liName$30331 = Differencing_Private_num$30331*Differencing_Private_ss$30331*INV(Differencing_Private_den$30331);
+  Differencing`Private`liName$30355 = Differencing_Private_num$30355*Differencing_Private_ss$30355*INV(Differencing_Private_den$30355);
+  Differencing`Private`liName$30379 = Differencing_Private_num$30379*Differencing_Private_ss$30379*INV(Differencing_Private_den$30379);
   
   /* Loop over the grid points */
   #pragma omp parallel
@@ -140,22 +146,19 @@ void ML_BSSNW_enforce_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_IN
     /* Calculate temporaries and grid functions */
     detgt  =  1;
     
-    CCTK_REAL const T1000001  =  INV(detgt);
+    gtu11  =  INV(detgt)*(gt22L*gt33L - SQR(gt23L));
     
-    gtu11  =  T1000001*(gt22L*gt33L - SQR(gt23L));
+    gtu21  =  (gt13L*gt23L - gt12L*gt33L)*INV(detgt);
     
-    gtu21  =  (gt13L*gt23L - gt12L*gt33L)*T1000001;
+    gtu31  =  (-(gt13L*gt22L) + gt12L*gt23L)*INV(detgt);
     
-    gtu31  =  (-(gt13L*gt22L) + gt12L*gt23L)*T1000001;
+    gtu22  =  INV(detgt)*(gt11L*gt33L - SQR(gt13L));
     
-    gtu22  =  T1000001*(gt11L*gt33L - SQR(gt13L));
+    gtu32  =  (gt12L*gt13L - gt11L*gt23L)*INV(detgt);
     
-    gtu32  =  (gt12L*gt13L - gt11L*gt23L)*T1000001;
+    gtu33  =  INV(detgt)*(gt11L*gt22L - SQR(gt12L));
     
-    gtu33  =  T1000001*(gt11L*gt22L - SQR(gt12L));
-    
-    trAt  =  At11L*gtu11 + At22L*gtu22 + 
-        2*(At12L*gtu21 + At13L*gtu31 + At23L*gtu32) + At33L*gtu33;
+    trAt  =  At11L*gtu11 + At22L*gtu22 + 2*(At12L*gtu21 + At13L*gtu31 + At23L*gtu32) + At33L*gtu33;
     
     At11L  =  At11L - gt11L*kthird*trAt;
     

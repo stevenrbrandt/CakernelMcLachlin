@@ -1,5 +1,5 @@
-/*  File produced by user diener */
-/*  Produced with Mathematica Version 6.0 for Linux x86 (32-bit) (April 20, 2007) */
+/*  File produced by user eschnett */
+/*  Produced with Mathematica Version 6.0 for Mac OS X x86 (64-bit) (May 21, 2008) */
 
 /*  Mathematica script written by Ian Hinder and Sascha Husa */
 
@@ -25,8 +25,8 @@
 
 void ML_BSSN_M_RHS_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT const face, CCTK_REAL const normal[3], CCTK_REAL const tangentA[3], CCTK_REAL const tangentB[3], CCTK_INT const min[3], CCTK_INT const max[3], CCTK_INT const n_subblock_gfs, CCTK_REAL * const subblock_gfs[])
 {
-  DECLARE_CCTK_ARGUMENTS
-  DECLARE_CCTK_PARAMETERS
+  DECLARE_CCTK_ARGUMENTS;
+  DECLARE_CCTK_PARAMETERS;
   
   
   /* Declare finite differencing variables */
@@ -43,15 +43,12 @@ void ML_BSSN_M_RHS_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT c
   CCTK_REAL p1o144dxdy = INITVALUE;
   CCTK_REAL p1o144dxdz = INITVALUE;
   CCTK_REAL p1o144dydz = INITVALUE;
-  CCTK_REAL p1o2dx = INITVALUE;
-  CCTK_REAL p1o2dy = INITVALUE;
-  CCTK_REAL p1o2dz = INITVALUE;
+  CCTK_REAL p1odx = INITVALUE;
+  CCTK_REAL p1ody = INITVALUE;
+  CCTK_REAL p1odz = INITVALUE;
   CCTK_REAL pm1o12dx2 = INITVALUE;
   CCTK_REAL pm1o12dy2 = INITVALUE;
   CCTK_REAL pm1o12dz2 = INITVALUE;
-  CCTK_REAL pm1o2dx = INITVALUE;
-  CCTK_REAL pm1o2dy = INITVALUE;
-  CCTK_REAL pm1o2dz = INITVALUE;
   
   if (verbose > 1)
   {
@@ -88,21 +85,18 @@ void ML_BSSN_M_RHS_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT c
   p1o144dxdy = (INV(dx)*INV(dy))/144.;
   p1o144dxdz = (INV(dx)*INV(dz))/144.;
   p1o144dydz = (INV(dy)*INV(dz))/144.;
-  p1o2dx = khalf*INV(dx);
-  p1o2dy = khalf*INV(dy);
-  p1o2dz = khalf*INV(dz);
+  p1odx = INV(dx);
+  p1ody = INV(dy);
+  p1odz = INV(dz);
   pm1o12dx2 = -pow(dx,-2)/12.;
   pm1o12dy2 = -pow(dy,-2)/12.;
   pm1o12dz2 = -pow(dz,-2)/12.;
-  pm1o2dx = -(khalf*INV(dx));
-  pm1o2dy = -(khalf*INV(dy));
-  pm1o2dz = -(khalf*INV(dz));
   
   /* Loop over the grid points */
   #pragma omp parallel
   LC_LOOP3 (ML_BSSN_M_RHS,
             i,j,k, min[0],min[1],min[2], max[0],max[1],max[2],
-            cctk_lsh[0],cctk_lsh[1],cctk_lsh[2])
+            cctk_lssh[CCTK_LSSH_IDX(0,0)],cctk_lssh[CCTK_LSSH_IDX(0,1)],cctk_lssh[CCTK_LSSH_IDX(0,2)])
   {
     int index = INITVALUE;
     int subblock_index = INITVALUE;
@@ -114,9 +108,8 @@ void ML_BSSN_M_RHS_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT c
     CCTK_REAL Atm31 = INITVALUE, Atm32 = INITVALUE, Atm33 = INITVALUE;
     CCTK_REAL Ats11 = INITVALUE, Ats12 = INITVALUE, Ats13 = INITVALUE, Ats22 = INITVALUE, Ats23 = INITVALUE, Ats33 = INITVALUE;
     CCTK_REAL Atu11 = INITVALUE, Atu21 = INITVALUE, Atu22 = INITVALUE, Atu31 = INITVALUE, Atu32 = INITVALUE, Atu33 = INITVALUE;
-    CCTK_REAL betam1 = INITVALUE, betam2 = INITVALUE, betam3 = INITVALUE;
-    CCTK_REAL betap1 = INITVALUE, betap2 = INITVALUE, betap3 = INITVALUE;
     CCTK_REAL detgt = INITVALUE;
+    CCTK_REAL dir1 = INITVALUE, dir2 = INITVALUE, dir3 = INITVALUE;
     CCTK_REAL e4phi = INITVALUE;
     CCTK_REAL em4phi = INITVALUE;
     CCTK_REAL g11 = INITVALUE;
@@ -181,37 +174,7 @@ void ML_BSSN_M_RHS_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT c
     CCTK_REAL PDstandardNth33alpha = INITVALUE;
     CCTK_REAL PDstandardNth12alpha = INITVALUE;
     CCTK_REAL PDstandardNth13alpha = INITVALUE;
-    CCTK_REAL PDstandardNth21alpha = INITVALUE;
     CCTK_REAL PDstandardNth23alpha = INITVALUE;
-    CCTK_REAL PDstandardNth31alpha = INITVALUE;
-    CCTK_REAL PDstandardNth32alpha = INITVALUE;
-    CCTK_REAL PDstandardNth1At11 = INITVALUE;
-    CCTK_REAL PDstandardNth2At11 = INITVALUE;
-    CCTK_REAL PDstandardNth3At11 = INITVALUE;
-    CCTK_REAL PDstandardNth1At12 = INITVALUE;
-    CCTK_REAL PDstandardNth2At12 = INITVALUE;
-    CCTK_REAL PDstandardNth3At12 = INITVALUE;
-    CCTK_REAL PDstandardNth1At13 = INITVALUE;
-    CCTK_REAL PDstandardNth2At13 = INITVALUE;
-    CCTK_REAL PDstandardNth3At13 = INITVALUE;
-    CCTK_REAL PDstandardNth1At22 = INITVALUE;
-    CCTK_REAL PDstandardNth2At22 = INITVALUE;
-    CCTK_REAL PDstandardNth3At22 = INITVALUE;
-    CCTK_REAL PDstandardNth1At23 = INITVALUE;
-    CCTK_REAL PDstandardNth2At23 = INITVALUE;
-    CCTK_REAL PDstandardNth3At23 = INITVALUE;
-    CCTK_REAL PDstandardNth1At33 = INITVALUE;
-    CCTK_REAL PDstandardNth2At33 = INITVALUE;
-    CCTK_REAL PDstandardNth3At33 = INITVALUE;
-    CCTK_REAL PDstandardNth1B1 = INITVALUE;
-    CCTK_REAL PDstandardNth2B1 = INITVALUE;
-    CCTK_REAL PDstandardNth3B1 = INITVALUE;
-    CCTK_REAL PDstandardNth1B2 = INITVALUE;
-    CCTK_REAL PDstandardNth2B2 = INITVALUE;
-    CCTK_REAL PDstandardNth3B2 = INITVALUE;
-    CCTK_REAL PDstandardNth1B3 = INITVALUE;
-    CCTK_REAL PDstandardNth2B3 = INITVALUE;
-    CCTK_REAL PDstandardNth3B3 = INITVALUE;
     CCTK_REAL PDstandardNth1beta1 = INITVALUE;
     CCTK_REAL PDstandardNth2beta1 = INITVALUE;
     CCTK_REAL PDstandardNth3beta1 = INITVALUE;
@@ -220,10 +183,7 @@ void ML_BSSN_M_RHS_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT c
     CCTK_REAL PDstandardNth33beta1 = INITVALUE;
     CCTK_REAL PDstandardNth12beta1 = INITVALUE;
     CCTK_REAL PDstandardNth13beta1 = INITVALUE;
-    CCTK_REAL PDstandardNth21beta1 = INITVALUE;
     CCTK_REAL PDstandardNth23beta1 = INITVALUE;
-    CCTK_REAL PDstandardNth31beta1 = INITVALUE;
-    CCTK_REAL PDstandardNth32beta1 = INITVALUE;
     CCTK_REAL PDstandardNth1beta2 = INITVALUE;
     CCTK_REAL PDstandardNth2beta2 = INITVALUE;
     CCTK_REAL PDstandardNth3beta2 = INITVALUE;
@@ -232,10 +192,7 @@ void ML_BSSN_M_RHS_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT c
     CCTK_REAL PDstandardNth33beta2 = INITVALUE;
     CCTK_REAL PDstandardNth12beta2 = INITVALUE;
     CCTK_REAL PDstandardNth13beta2 = INITVALUE;
-    CCTK_REAL PDstandardNth21beta2 = INITVALUE;
     CCTK_REAL PDstandardNth23beta2 = INITVALUE;
-    CCTK_REAL PDstandardNth31beta2 = INITVALUE;
-    CCTK_REAL PDstandardNth32beta2 = INITVALUE;
     CCTK_REAL PDstandardNth1beta3 = INITVALUE;
     CCTK_REAL PDstandardNth2beta3 = INITVALUE;
     CCTK_REAL PDstandardNth3beta3 = INITVALUE;
@@ -244,10 +201,7 @@ void ML_BSSN_M_RHS_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT c
     CCTK_REAL PDstandardNth33beta3 = INITVALUE;
     CCTK_REAL PDstandardNth12beta3 = INITVALUE;
     CCTK_REAL PDstandardNth13beta3 = INITVALUE;
-    CCTK_REAL PDstandardNth21beta3 = INITVALUE;
     CCTK_REAL PDstandardNth23beta3 = INITVALUE;
-    CCTK_REAL PDstandardNth31beta3 = INITVALUE;
-    CCTK_REAL PDstandardNth32beta3 = INITVALUE;
     CCTK_REAL PDstandardNth1gt11 = INITVALUE;
     CCTK_REAL PDstandardNth2gt11 = INITVALUE;
     CCTK_REAL PDstandardNth3gt11 = INITVALUE;
@@ -256,10 +210,7 @@ void ML_BSSN_M_RHS_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT c
     CCTK_REAL PDstandardNth33gt11 = INITVALUE;
     CCTK_REAL PDstandardNth12gt11 = INITVALUE;
     CCTK_REAL PDstandardNth13gt11 = INITVALUE;
-    CCTK_REAL PDstandardNth21gt11 = INITVALUE;
     CCTK_REAL PDstandardNth23gt11 = INITVALUE;
-    CCTK_REAL PDstandardNth31gt11 = INITVALUE;
-    CCTK_REAL PDstandardNth32gt11 = INITVALUE;
     CCTK_REAL PDstandardNth1gt12 = INITVALUE;
     CCTK_REAL PDstandardNth2gt12 = INITVALUE;
     CCTK_REAL PDstandardNth3gt12 = INITVALUE;
@@ -268,10 +219,7 @@ void ML_BSSN_M_RHS_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT c
     CCTK_REAL PDstandardNth33gt12 = INITVALUE;
     CCTK_REAL PDstandardNth12gt12 = INITVALUE;
     CCTK_REAL PDstandardNth13gt12 = INITVALUE;
-    CCTK_REAL PDstandardNth21gt12 = INITVALUE;
     CCTK_REAL PDstandardNth23gt12 = INITVALUE;
-    CCTK_REAL PDstandardNth31gt12 = INITVALUE;
-    CCTK_REAL PDstandardNth32gt12 = INITVALUE;
     CCTK_REAL PDstandardNth1gt13 = INITVALUE;
     CCTK_REAL PDstandardNth2gt13 = INITVALUE;
     CCTK_REAL PDstandardNth3gt13 = INITVALUE;
@@ -280,10 +228,7 @@ void ML_BSSN_M_RHS_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT c
     CCTK_REAL PDstandardNth33gt13 = INITVALUE;
     CCTK_REAL PDstandardNth12gt13 = INITVALUE;
     CCTK_REAL PDstandardNth13gt13 = INITVALUE;
-    CCTK_REAL PDstandardNth21gt13 = INITVALUE;
     CCTK_REAL PDstandardNth23gt13 = INITVALUE;
-    CCTK_REAL PDstandardNth31gt13 = INITVALUE;
-    CCTK_REAL PDstandardNth32gt13 = INITVALUE;
     CCTK_REAL PDstandardNth1gt22 = INITVALUE;
     CCTK_REAL PDstandardNth2gt22 = INITVALUE;
     CCTK_REAL PDstandardNth3gt22 = INITVALUE;
@@ -292,10 +237,7 @@ void ML_BSSN_M_RHS_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT c
     CCTK_REAL PDstandardNth33gt22 = INITVALUE;
     CCTK_REAL PDstandardNth12gt22 = INITVALUE;
     CCTK_REAL PDstandardNth13gt22 = INITVALUE;
-    CCTK_REAL PDstandardNth21gt22 = INITVALUE;
     CCTK_REAL PDstandardNth23gt22 = INITVALUE;
-    CCTK_REAL PDstandardNth31gt22 = INITVALUE;
-    CCTK_REAL PDstandardNth32gt22 = INITVALUE;
     CCTK_REAL PDstandardNth1gt23 = INITVALUE;
     CCTK_REAL PDstandardNth2gt23 = INITVALUE;
     CCTK_REAL PDstandardNth3gt23 = INITVALUE;
@@ -304,10 +246,7 @@ void ML_BSSN_M_RHS_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT c
     CCTK_REAL PDstandardNth33gt23 = INITVALUE;
     CCTK_REAL PDstandardNth12gt23 = INITVALUE;
     CCTK_REAL PDstandardNth13gt23 = INITVALUE;
-    CCTK_REAL PDstandardNth21gt23 = INITVALUE;
     CCTK_REAL PDstandardNth23gt23 = INITVALUE;
-    CCTK_REAL PDstandardNth31gt23 = INITVALUE;
-    CCTK_REAL PDstandardNth32gt23 = INITVALUE;
     CCTK_REAL PDstandardNth1gt33 = INITVALUE;
     CCTK_REAL PDstandardNth2gt33 = INITVALUE;
     CCTK_REAL PDstandardNth3gt33 = INITVALUE;
@@ -316,10 +255,7 @@ void ML_BSSN_M_RHS_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT c
     CCTK_REAL PDstandardNth33gt33 = INITVALUE;
     CCTK_REAL PDstandardNth12gt33 = INITVALUE;
     CCTK_REAL PDstandardNth13gt33 = INITVALUE;
-    CCTK_REAL PDstandardNth21gt33 = INITVALUE;
     CCTK_REAL PDstandardNth23gt33 = INITVALUE;
-    CCTK_REAL PDstandardNth31gt33 = INITVALUE;
-    CCTK_REAL PDstandardNth32gt33 = INITVALUE;
     CCTK_REAL PDstandardNth1phi = INITVALUE;
     CCTK_REAL PDstandardNth2phi = INITVALUE;
     CCTK_REAL PDstandardNth3phi = INITVALUE;
@@ -328,10 +264,7 @@ void ML_BSSN_M_RHS_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT c
     CCTK_REAL PDstandardNth33phi = INITVALUE;
     CCTK_REAL PDstandardNth12phi = INITVALUE;
     CCTK_REAL PDstandardNth13phi = INITVALUE;
-    CCTK_REAL PDstandardNth21phi = INITVALUE;
     CCTK_REAL PDstandardNth23phi = INITVALUE;
-    CCTK_REAL PDstandardNth31phi = INITVALUE;
-    CCTK_REAL PDstandardNth32phi = INITVALUE;
     CCTK_REAL PDstandardNth1trK = INITVALUE;
     CCTK_REAL PDstandardNth2trK = INITVALUE;
     CCTK_REAL PDstandardNth3trK = INITVALUE;
@@ -400,33 +333,6 @@ void ML_BSSN_M_RHS_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT c
     PDstandardNth12alpha = PDstandardNth12(alpha, i, j, k);
     PDstandardNth13alpha = PDstandardNth13(alpha, i, j, k);
     PDstandardNth23alpha = PDstandardNth23(alpha, i, j, k);
-    PDstandardNth1At11 = PDstandardNth1(At11, i, j, k);
-    PDstandardNth2At11 = PDstandardNth2(At11, i, j, k);
-    PDstandardNth3At11 = PDstandardNth3(At11, i, j, k);
-    PDstandardNth1At12 = PDstandardNth1(At12, i, j, k);
-    PDstandardNth2At12 = PDstandardNth2(At12, i, j, k);
-    PDstandardNth3At12 = PDstandardNth3(At12, i, j, k);
-    PDstandardNth1At13 = PDstandardNth1(At13, i, j, k);
-    PDstandardNth2At13 = PDstandardNth2(At13, i, j, k);
-    PDstandardNth3At13 = PDstandardNth3(At13, i, j, k);
-    PDstandardNth1At22 = PDstandardNth1(At22, i, j, k);
-    PDstandardNth2At22 = PDstandardNth2(At22, i, j, k);
-    PDstandardNth3At22 = PDstandardNth3(At22, i, j, k);
-    PDstandardNth1At23 = PDstandardNth1(At23, i, j, k);
-    PDstandardNth2At23 = PDstandardNth2(At23, i, j, k);
-    PDstandardNth3At23 = PDstandardNth3(At23, i, j, k);
-    PDstandardNth1At33 = PDstandardNth1(At33, i, j, k);
-    PDstandardNth2At33 = PDstandardNth2(At33, i, j, k);
-    PDstandardNth3At33 = PDstandardNth3(At33, i, j, k);
-    PDstandardNth1B1 = PDstandardNth1(B1, i, j, k);
-    PDstandardNth2B1 = PDstandardNth2(B1, i, j, k);
-    PDstandardNth3B1 = PDstandardNth3(B1, i, j, k);
-    PDstandardNth1B2 = PDstandardNth1(B2, i, j, k);
-    PDstandardNth2B2 = PDstandardNth2(B2, i, j, k);
-    PDstandardNth3B2 = PDstandardNth3(B2, i, j, k);
-    PDstandardNth1B3 = PDstandardNth1(B3, i, j, k);
-    PDstandardNth2B3 = PDstandardNth2(B3, i, j, k);
-    PDstandardNth3B3 = PDstandardNth3(B3, i, j, k);
     PDstandardNth1beta1 = PDstandardNth1(beta1, i, j, k);
     PDstandardNth2beta1 = PDstandardNth2(beta1, i, j, k);
     PDstandardNth3beta1 = PDstandardNth3(beta1, i, j, k);
@@ -533,17 +439,11 @@ void ML_BSSN_M_RHS_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT c
     /* Precompute derivatives (old style) */
     
     /* Calculate temporaries and grid functions */
-    betam1  =  khalf*(beta1L - Abs(beta1L));
+    dir1  =  Sign(beta1L);
     
-    betam2  =  khalf*(beta2L - Abs(beta2L));
+    dir2  =  Sign(beta2L);
     
-    betam3  =  khalf*(beta3L - Abs(beta3L));
-    
-    betap1  =  khalf*(beta1L + Abs(beta1L));
-    
-    betap2  =  khalf*(beta2L + Abs(beta2L));
-    
-    betap3  =  khalf*(beta3L + Abs(beta3L));
+    dir3  =  Sign(beta3L);
     
     detgt  =  1;
     
@@ -559,16 +459,13 @@ void ML_BSSN_M_RHS_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT c
     
     gtu33  =  INV(detgt)*(gt11L*gt22L - SQR(gt12L));
     
-    Gt111  =  khalf*(gtu11*PDstandardNth1gt11 + 
-          2*(gtu21*PDstandardNth1gt12 + gtu31*PDstandardNth1gt13) - 
+    Gt111  =  khalf*(gtu11*PDstandardNth1gt11 + 2*(gtu21*PDstandardNth1gt12 + gtu31*PDstandardNth1gt13) - 
           gtu21*PDstandardNth2gt11 - gtu31*PDstandardNth3gt11);
     
-    Gt211  =  khalf*(gtu21*PDstandardNth1gt11 + 
-          2*(gtu22*PDstandardNth1gt12 + gtu32*PDstandardNth1gt13) - 
+    Gt211  =  khalf*(gtu21*PDstandardNth1gt11 + 2*(gtu22*PDstandardNth1gt12 + gtu32*PDstandardNth1gt13) - 
           gtu22*PDstandardNth2gt11 - gtu32*PDstandardNth3gt11);
     
-    Gt311  =  khalf*(gtu31*PDstandardNth1gt11 + 
-          2*(gtu32*PDstandardNth1gt12 + gtu33*PDstandardNth1gt13) - 
+    Gt311  =  khalf*(gtu31*PDstandardNth1gt11 + 2*(gtu32*PDstandardNth1gt12 + gtu33*PDstandardNth1gt13) - 
           gtu32*PDstandardNth2gt11 - gtu33*PDstandardNth3gt11);
     
     Gt112  =  khalf*(gtu21*PDstandardNth1gt22 + gtu11*PDstandardNth2gt11 + 
@@ -589,579 +486,362 @@ void ML_BSSN_M_RHS_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT c
     Gt313  =  khalf*(gtu33*PDstandardNth1gt33 + gtu31*PDstandardNth3gt11 + 
           gtu32*(PDstandardNth1gt23 - PDstandardNth2gt13 + PDstandardNth3gt12));
     
-    Gt122  =  khalf*(gtu11*(-PDstandardNth1gt22 + 2*PDstandardNth2gt12) + 
-          gtu21*PDstandardNth2gt22 + 
+    Gt122  =  khalf*(gtu11*(-PDstandardNth1gt22 + 2*PDstandardNth2gt12) + gtu21*PDstandardNth2gt22 + 
           gtu31*(2*PDstandardNth2gt23 - PDstandardNth3gt22));
     
-    Gt222  =  khalf*(gtu21*(-PDstandardNth1gt22 + 2*PDstandardNth2gt12) + 
-          gtu22*PDstandardNth2gt22 + 
+    Gt222  =  khalf*(gtu21*(-PDstandardNth1gt22 + 2*PDstandardNth2gt12) + gtu22*PDstandardNth2gt22 + 
           gtu32*(2*PDstandardNth2gt23 - PDstandardNth3gt22));
     
-    Gt322  =  khalf*(gtu31*(-PDstandardNth1gt22 + 2*PDstandardNth2gt12) + 
-          gtu32*PDstandardNth2gt22 + 
+    Gt322  =  khalf*(gtu31*(-PDstandardNth1gt22 + 2*PDstandardNth2gt12) + gtu32*PDstandardNth2gt22 + 
           gtu33*(2*PDstandardNth2gt23 - PDstandardNth3gt22));
     
-    Gt123  =  khalf*(gtu31*PDstandardNth2gt33 + 
-          gtu11*(-PDstandardNth1gt23 + PDstandardNth2gt13 + PDstandardNth3gt12) + 
+    Gt123  =  khalf*(gtu31*PDstandardNth2gt33 + gtu11*(-PDstandardNth1gt23 + PDstandardNth2gt13 + PDstandardNth3gt12) + 
           gtu21*PDstandardNth3gt22);
     
-    Gt223  =  khalf*(gtu32*PDstandardNth2gt33 + 
-          gtu21*(-PDstandardNth1gt23 + PDstandardNth2gt13 + PDstandardNth3gt12) + 
+    Gt223  =  khalf*(gtu32*PDstandardNth2gt33 + gtu21*(-PDstandardNth1gt23 + PDstandardNth2gt13 + PDstandardNth3gt12) + 
           gtu22*PDstandardNth3gt22);
     
-    Gt323  =  khalf*(gtu33*PDstandardNth2gt33 + 
-          gtu31*(-PDstandardNth1gt23 + PDstandardNth2gt13 + PDstandardNth3gt12) + 
+    Gt323  =  khalf*(gtu33*PDstandardNth2gt33 + gtu31*(-PDstandardNth1gt23 + PDstandardNth2gt13 + PDstandardNth3gt12) + 
           gtu32*PDstandardNth3gt22);
     
-    Gt133  =  khalf*(-(gtu11*PDstandardNth1gt33) - gtu21*PDstandardNth2gt33 + 
-          2*gtu11*PDstandardNth3gt13 + 2*gtu21*PDstandardNth3gt23 + 
-          gtu31*PDstandardNth3gt33);
+    Gt133  =  khalf*(-(gtu11*PDstandardNth1gt33) - gtu21*PDstandardNth2gt33 + 2*gtu11*PDstandardNth3gt13 + 
+          2*gtu21*PDstandardNth3gt23 + gtu31*PDstandardNth3gt33);
     
-    Gt233  =  khalf*(-(gtu21*PDstandardNth1gt33) - gtu22*PDstandardNth2gt33 + 
-          2*gtu21*PDstandardNth3gt13 + 2*gtu22*PDstandardNth3gt23 + 
-          gtu32*PDstandardNth3gt33);
+    Gt233  =  khalf*(-(gtu21*PDstandardNth1gt33) - gtu22*PDstandardNth2gt33 + 2*gtu21*PDstandardNth3gt13 + 
+          2*gtu22*PDstandardNth3gt23 + gtu32*PDstandardNth3gt33);
     
-    Gt333  =  khalf*(-(gtu31*PDstandardNth1gt33) - gtu32*PDstandardNth2gt33 + 
-          2*gtu31*PDstandardNth3gt13 + 2*gtu32*PDstandardNth3gt23 + 
-          gtu33*PDstandardNth3gt33);
+    Gt333  =  khalf*(-(gtu31*PDstandardNth1gt33) - gtu32*PDstandardNth2gt33 + 2*gtu31*PDstandardNth3gt13 + 
+          2*gtu32*PDstandardNth3gt23 + gtu33*PDstandardNth3gt33);
     
-    Xtn1  =  Gt111*gtu11 + Gt122*gtu22 + 
-        2*(Gt112*gtu21 + Gt113*gtu31 + Gt123*gtu32) + Gt133*gtu33;
+    Xtn1  =  Gt111*gtu11 + Gt122*gtu22 + 2*(Gt112*gtu21 + Gt113*gtu31 + Gt123*gtu32) + Gt133*gtu33;
     
-    Xtn2  =  Gt211*gtu11 + Gt222*gtu22 + 
-        2*(Gt212*gtu21 + Gt213*gtu31 + Gt223*gtu32) + Gt233*gtu33;
+    Xtn2  =  Gt211*gtu11 + Gt222*gtu22 + 2*(Gt212*gtu21 + Gt213*gtu31 + Gt223*gtu32) + Gt233*gtu33;
     
-    Xtn3  =  Gt311*gtu11 + Gt322*gtu22 + 
-        2*(Gt312*gtu21 + Gt313*gtu31 + Gt323*gtu32) + Gt333*gtu33;
+    Xtn3  =  Gt311*gtu11 + Gt322*gtu22 + 2*(Gt312*gtu21 + Gt313*gtu31 + Gt323*gtu32) + Gt333*gtu33;
     
-    Rt11  =  -(gtu11*khalf*PDstandardNth11gt11) + 
-        gtu21*(2*Gt211*Gt212*gt22L + 4*Gt112*gt13L*Gt311 + 2*Gt113*gt11L*Gt312 + 
-           2*gt13L*Gt312*Gt313 + 2*gt13L*Gt211*Gt322 + 2*gt13L*Gt311*Gt323 + 
-           2*Gt311*Gt312*gt33L - PDstandardNth12gt11) - gtu31*PDstandardNth13gt11 + 
-        gt11L*PDstandardNth1Xt1 + gt12L*
-         (4*Gt111*Gt212*gtu21 + 2*Gt211*Gt222*gtu21 + 2*Gt212*Gt222*gtu22 + 
-           4*Gt113*Gt211*gtu31 + 4*Gt113*Gt212*gtu32 + 4*Gt113*Gt213*gtu33 + 
-           PDstandardNth1Xt2) + gt13L*
-         (4*Gt111*Gt312*gtu21 + 2*Gt212*Gt312*gtu21 + 4*Gt112*Gt312*gtu22 + 
-           4*Gt113*Gt311*gtu31 + 4*Gt113*Gt312*gtu32 + 4*Gt113*Gt313*gtu33 + 
-           PDstandardNth1Xt3) - gtu22*khalf*PDstandardNth22gt11 - 
+    Rt11  =  -(gtu11*khalf*PDstandardNth11gt11) + gtu21*
+         (2*Gt211*Gt212*gt22L + 4*Gt112*gt13L*Gt311 + 2*Gt113*gt11L*Gt312 + 2*gt13L*Gt312*Gt313 + 2*gt13L*Gt211*Gt322 + 
+           2*gt13L*Gt311*Gt323 + 2*Gt311*Gt312*gt33L - PDstandardNth12gt11) - gtu31*PDstandardNth13gt11 + 
+        gt11L*PDstandardNth1Xt1 + gt12L*(4*Gt111*Gt212*gtu21 + 2*Gt211*Gt222*gtu21 + 2*Gt212*Gt222*gtu22 + 
+           4*Gt113*Gt211*gtu31 + 4*Gt113*Gt212*gtu32 + 4*Gt113*Gt213*gtu33 + PDstandardNth1Xt2) + 
+        gt13L*(4*Gt111*Gt312*gtu21 + 2*Gt212*Gt312*gtu21 + 4*Gt112*Gt312*gtu22 + 4*Gt113*Gt311*gtu31 + 
+           4*Gt113*Gt312*gtu32 + 4*Gt113*Gt313*gtu33 + PDstandardNth1Xt3) - gtu22*khalf*PDstandardNth22gt11 - 
         gtu32*PDstandardNth23gt11 - gtu33*khalf*PDstandardNth33gt11 + 
         Gt111*(6*Gt113*gt11L*gtu31 + 4*gt12L*Gt213*gtu31 + gt11L*Xtn1) + 
-        Gt211*(2*Gt112*gt11L*gtu11 + 4*Gt111*gt12L*gtu11 + 2*gt11L*Gt122*gtu21 + 
-           2*gt11L*Gt123*gtu31 + gt12L*Xtn1) + 
-        Gt311*(4*Gt111*gt13L*gtu11 + 2*gt12L*Gt213*gtu11 + 2*gt13L*Gt313*gtu11 + 
-           2*gt11L*Gt123*gtu21 + 2*gt11L*Gt133*gtu31 + gt13L*Xtn1) + 
-        gt12L*Gt212*Xtn2 + gt13L*Gt312*Xtn2 + 
-        Gt112*(6*Gt111*gt11L*gtu21 + 4*gt12L*Gt211*gtu21 + 4*gt12L*Gt212*gtu22 + 
-           2*gt11L*Gt213*gtu31 + 6*Gt113*gt11L*gtu32 + gt11L*Xtn2) + 
-        Gt113*gt11L*Xtn3 + Gt213*(2*gt11L*Gt122*gtu32 + 4*Gt112*gt12L*gtu32 + 
-           2*gt11L*Gt123*gtu33 + gt12L*Xtn3) + 
-        Gt313*(4*Gt111*gt13L*gtu31 + 2*gt12L*Gt213*gtu31 + 2*gt11L*Gt123*gtu32 + 
-           4*Gt112*gt13L*gtu32 + 2*gt12L*Gt223*gtu32 + 2*gt11L*Gt133*gtu33 + 
-           gt13L*Xtn3) + 3*gt11L*gtu11*SQR(Gt111) + 3*gt11L*gtu22*SQR(Gt112) + 
-        3*gt11L*gtu33*SQR(Gt113) + gt22L*gtu11*SQR(Gt211) + 
-        gt22L*gtu22*SQR(Gt212) + 2*(gt12L*Gt211*Gt212*gtu11 + 
-           Gt113*gt11L*Gt311*gtu11 + Gt211*gt23L*Gt311*gtu11 + 
-           gt13L*Gt211*Gt312*gtu11 + Gt112*gt11L*Gt212*gtu21 + 
-           gt12L*Gt223*Gt311*gtu21 + Gt212*gt23L*Gt311*gtu21 + 
-           gt12L*Gt213*Gt312*gtu21 + Gt211*gt23L*Gt312*gtu21 + 
-           gt11L*Gt122*Gt212*gtu22 + gt11L*Gt123*Gt312*gtu22 + 
-           gt12L*Gt223*Gt312*gtu22 + Gt212*gt23L*Gt312*gtu22 + 
-           gt13L*Gt212*Gt322*gtu22 + gt13L*Gt312*Gt323*gtu22 + 
-           gt12L*Gt212*Gt213*gtu31 + gt12L*Gt211*Gt223*gtu31 + 
-           Gt211*Gt213*gt22L*gtu31 + gt12L*Gt233*Gt311*gtu31 + 
-           Gt213*gt23L*Gt311*gtu31 + gt13L*Gt213*Gt312*gtu31 + 
-           Gt113*gt11L*Gt313*gtu31 + Gt211*gt23L*Gt313*gtu31 + 
-           gt13L*Gt211*Gt323*gtu31 + gt13L*Gt311*Gt333*gtu31 + 
-           Gt311*Gt313*gt33L*gtu31 + gt11L*Gt123*Gt212*gtu32 + 
-           gt12L*Gt213*Gt222*gtu32 + gt12L*Gt212*Gt223*gtu32 + 
-           Gt212*Gt213*gt22L*gtu32 + gt11L*Gt133*Gt312*gtu32 + 
-           gt12L*Gt233*Gt312*gtu32 + Gt213*gt23L*Gt312*gtu32 + 
-           Gt212*gt23L*Gt313*gtu32 + gt13L*Gt213*Gt322*gtu32 + 
-           gt13L*Gt212*Gt323*gtu32 + gt13L*Gt313*Gt323*gtu32 + 
-           gt13L*Gt312*Gt333*gtu32 + Gt312*Gt313*gt33L*gtu32 + 
-           gt12L*Gt213*Gt223*gtu33 + gt12L*Gt233*Gt313*gtu33 + 
-           Gt213*gt23L*Gt313*gtu33 + gt13L*Gt213*Gt323*gtu33 + 
-           gt13L*Gt313*Gt333*gtu33 + gt12L*gtu21*SQR(Gt212)) + 
-        gt22L*gtu33*SQR(Gt213) + gt33L*gtu11*SQR(Gt311) + gt33L*gtu22*SQR(Gt312) + 
+        Gt211*(2*Gt112*gt11L*gtu11 + 4*Gt111*gt12L*gtu11 + 2*gt11L*Gt122*gtu21 + 2*gt11L*Gt123*gtu31 + gt12L*Xtn1) + 
+        Gt311*(4*Gt111*gt13L*gtu11 + 2*gt12L*Gt213*gtu11 + 2*gt13L*Gt313*gtu11 + 2*gt11L*Gt123*gtu21 + 
+           2*gt11L*Gt133*gtu31 + gt13L*Xtn1) + gt12L*Gt212*Xtn2 + gt13L*Gt312*Xtn2 + 
+        Gt112*(6*Gt111*gt11L*gtu21 + 4*gt12L*Gt211*gtu21 + 4*gt12L*Gt212*gtu22 + 2*gt11L*Gt213*gtu31 + 
+           6*Gt113*gt11L*gtu32 + gt11L*Xtn2) + Gt113*gt11L*Xtn3 + 
+        Gt213*(2*gt11L*Gt122*gtu32 + 4*Gt112*gt12L*gtu32 + 2*gt11L*Gt123*gtu33 + gt12L*Xtn3) + 
+        Gt313*(4*Gt111*gt13L*gtu31 + 2*gt12L*Gt213*gtu31 + 2*gt11L*Gt123*gtu32 + 4*Gt112*gt13L*gtu32 + 
+           2*gt12L*Gt223*gtu32 + 2*gt11L*Gt133*gtu33 + gt13L*Xtn3) + 3*gt11L*gtu11*SQR(Gt111) + 3*gt11L*gtu22*SQR(Gt112) + 
+        3*gt11L*gtu33*SQR(Gt113) + gt22L*gtu11*SQR(Gt211) + gt22L*gtu22*SQR(Gt212) + 
+        2*(gt12L*Gt211*Gt212*gtu11 + Gt113*gt11L*Gt311*gtu11 + Gt211*gt23L*Gt311*gtu11 + gt13L*Gt211*Gt312*gtu11 + 
+           Gt112*gt11L*Gt212*gtu21 + gt12L*Gt223*Gt311*gtu21 + Gt212*gt23L*Gt311*gtu21 + gt12L*Gt213*Gt312*gtu21 + 
+           Gt211*gt23L*Gt312*gtu21 + gt11L*Gt122*Gt212*gtu22 + gt11L*Gt123*Gt312*gtu22 + gt12L*Gt223*Gt312*gtu22 + 
+           Gt212*gt23L*Gt312*gtu22 + gt13L*Gt212*Gt322*gtu22 + gt13L*Gt312*Gt323*gtu22 + gt12L*Gt212*Gt213*gtu31 + 
+           gt12L*Gt211*Gt223*gtu31 + Gt211*Gt213*gt22L*gtu31 + gt12L*Gt233*Gt311*gtu31 + Gt213*gt23L*Gt311*gtu31 + 
+           gt13L*Gt213*Gt312*gtu31 + Gt113*gt11L*Gt313*gtu31 + Gt211*gt23L*Gt313*gtu31 + gt13L*Gt211*Gt323*gtu31 + 
+           gt13L*Gt311*Gt333*gtu31 + Gt311*Gt313*gt33L*gtu31 + gt11L*Gt123*Gt212*gtu32 + gt12L*Gt213*Gt222*gtu32 + 
+           gt12L*Gt212*Gt223*gtu32 + Gt212*Gt213*gt22L*gtu32 + gt11L*Gt133*Gt312*gtu32 + gt12L*Gt233*Gt312*gtu32 + 
+           Gt213*gt23L*Gt312*gtu32 + Gt212*gt23L*Gt313*gtu32 + gt13L*Gt213*Gt322*gtu32 + gt13L*Gt212*Gt323*gtu32 + 
+           gt13L*Gt313*Gt323*gtu32 + gt13L*Gt312*Gt333*gtu32 + Gt312*Gt313*gt33L*gtu32 + gt12L*Gt213*Gt223*gtu33 + 
+           gt12L*Gt233*Gt313*gtu33 + Gt213*gt23L*Gt313*gtu33 + gt13L*Gt213*Gt323*gtu33 + gt13L*Gt313*Gt333*gtu33 + 
+           gt12L*gtu21*SQR(Gt212)) + gt22L*gtu33*SQR(Gt213) + gt33L*gtu11*SQR(Gt311) + gt33L*gtu22*SQR(Gt312) + 
         2*gt13L*gtu31*SQR(Gt313) + gt33L*gtu33*SQR(Gt313);
     
-    Rt12  =  khalf*(-(gtu11*PDstandardNth11gt12) - 2*gtu21*PDstandardNth12gt12 - 
-          2*gtu31*PDstandardNth13gt12 + gt12L*PDstandardNth1Xt1 + 
-          gt22L*PDstandardNth1Xt2 + gt23L*PDstandardNth1Xt3 - 
-          gtu22*PDstandardNth22gt12 - 2*gtu32*PDstandardNth23gt12 + 
-          gt11L*PDstandardNth2Xt1 + gt12L*PDstandardNth2Xt2 + 
-          gt13L*PDstandardNth2Xt3 - gtu33*PDstandardNth33gt12 + 
-          (Gt111*gt12L + Gt211*gt22L + gt23L*Gt311)*Xtn1 + 
-          (Gt112*gt11L + gt12L*Gt212 + gt13L*Gt312)*Xtn1 + 
-          (Gt112*gt12L + Gt212*gt22L + gt23L*Gt312)*Xtn2 + 
-          (gt11L*Gt122 + gt12L*Gt222 + gt13L*Gt322)*Xtn2 + 
-          (Gt113*gt12L + Gt213*gt22L + gt23L*Gt313)*Xtn3 + 
+    Rt12  =  khalf*(-(gtu11*PDstandardNth11gt12) - 2*gtu21*PDstandardNth12gt12 - 2*gtu31*PDstandardNth13gt12 + 
+          gt12L*PDstandardNth1Xt1 + gt22L*PDstandardNth1Xt2 + gt23L*PDstandardNth1Xt3 - gtu22*PDstandardNth22gt12 - 
+          2*gtu32*PDstandardNth23gt12 + gt11L*PDstandardNth2Xt1 + gt12L*PDstandardNth2Xt2 + gt13L*PDstandardNth2Xt3 - 
+          gtu33*PDstandardNth33gt12 + (Gt111*gt12L + Gt211*gt22L + gt23L*Gt311)*Xtn1 + 
+          (Gt112*gt11L + gt12L*Gt212 + gt13L*Gt312)*Xtn1 + (Gt112*gt12L + Gt212*gt22L + gt23L*Gt312)*Xtn2 + 
+          (gt11L*Gt122 + gt12L*Gt222 + gt13L*Gt322)*Xtn2 + (Gt113*gt12L + Gt213*gt22L + gt23L*Gt313)*Xtn3 + 
           (gt11L*Gt123 + gt12L*Gt223 + gt13L*Gt323)*Xtn3 + 
-          2*gtu21*(Gt112*gt11L*Gt222 + Gt112*Gt211*gt22L + Gt211*Gt222*gt22L + 
-             2*Gt122*gt13L*Gt311 + Gt112*gt23L*Gt311 + Gt222*gt23L*Gt311 + 
-             gt13L*Gt222*Gt312 + Gt213*gt22L*Gt312 + Gt212*gt23L*Gt312 + 
-             gt23L*Gt312*Gt313 + Gt113*gt11L*Gt322 + Gt211*gt23L*Gt322 + 
-             gt13L*Gt313*Gt322 + Gt111*
-              (2*gt11L*Gt122 + Gt112*gt12L + gt12L*Gt222 + gt13L*Gt322) + 
-             gt12L*(2*Gt122*Gt211 + Gt112*Gt212 + Gt212*Gt222 + Gt113*Gt312 + 
-                Gt213*Gt322) + Gt311*Gt322*gt33L + gt22L*SQR(Gt212)) + 
-          2*((Gt123*gt12L*Gt211 + Gt113*gt12L*Gt212 + 2*Gt112*gt12L*Gt213 + 
-                gt12L*Gt212*Gt223 + Gt212*Gt213*gt22L + Gt211*Gt223*gt22L + 
-                gt12L*Gt133*Gt311 + gt22L*Gt233*Gt311 + Gt113*gt13L*Gt312 + 
-                gt12L*Gt233*Gt312 + Gt213*gt23L*Gt312 + 
-                gt11L*(2*Gt112*Gt113 + Gt123*Gt212 + Gt133*Gt312) + 
-                2*Gt112*gt13L*Gt313 + Gt212*gt23L*Gt313 + 
-                Gt111*(Gt113*gt12L + Gt213*gt22L + gt23L*Gt313) + 
-                gt13L*Gt212*Gt323 + Gt211*gt23L*Gt323 + gt23L*Gt311*Gt333 + 
-                gt13L*Gt312*Gt333 + Gt312*Gt313*gt33L)*gtu31 + 
-             (Gt123*gt12L*Gt212 + 2*Gt122*gt12L*Gt213 + Gt113*gt12L*Gt222 + 
-                gt12L*Gt222*Gt223 + Gt213*Gt222*gt22L + Gt212*Gt223*gt22L + 
-                gt12L*Gt133*Gt312 + gt22L*Gt233*Gt312 + 2*Gt122*gt13L*Gt313 + 
-                Gt222*gt23L*Gt313 + Gt112*
-                 (Gt113*gt12L + Gt213*gt22L + gt23L*Gt313) + Gt113*gt13L*Gt322 + 
-                gt12L*Gt233*Gt322 + Gt213*gt23L*Gt322 + 
-                gt11L*(2*Gt113*Gt122 + Gt123*Gt222 + Gt133*Gt322) + 
-                gt13L*Gt222*Gt323 + Gt212*gt23L*Gt323 + gt23L*Gt312*Gt333 + 
-                gt13L*Gt322*Gt333 + Gt313*Gt322*gt33L)*gtu32 + 
-             gtu11*(3*Gt112*gt12L*Gt211 + 2*Gt211*Gt212*gt22L + Gt113*gt12L*Gt311 + 
-                2*Gt112*gt13L*Gt311 + Gt213*gt22L*Gt311 + Gt212*gt23L*Gt311 + 
-                gt13L*Gt212*Gt312 + gt12L*Gt213*Gt312 + 2*Gt211*gt23L*Gt312 + 
+          2*gtu21*(Gt112*gt11L*Gt222 + Gt112*Gt211*gt22L + Gt211*Gt222*gt22L + 2*Gt122*gt13L*Gt311 + Gt112*gt23L*Gt311 + 
+             Gt222*gt23L*Gt311 + gt13L*Gt222*Gt312 + Gt213*gt22L*Gt312 + Gt212*gt23L*Gt312 + gt23L*Gt312*Gt313 + 
+             Gt113*gt11L*Gt322 + Gt211*gt23L*Gt322 + gt13L*Gt313*Gt322 + 
+             Gt111*(2*gt11L*Gt122 + Gt112*gt12L + gt12L*Gt222 + gt13L*Gt322) + 
+             gt12L*(2*Gt122*Gt211 + Gt112*Gt212 + Gt212*Gt222 + Gt113*Gt312 + Gt213*Gt322) + Gt311*Gt322*gt33L + 
+             gt22L*SQR(Gt212)) + 2*((Gt123*gt12L*Gt211 + Gt113*gt12L*Gt212 + 2*Gt112*gt12L*Gt213 + gt12L*Gt212*Gt223 + 
+                Gt212*Gt213*gt22L + Gt211*Gt223*gt22L + gt12L*Gt133*Gt311 + gt22L*Gt233*Gt311 + Gt113*gt13L*Gt312 + 
+                gt12L*Gt233*Gt312 + Gt213*gt23L*Gt312 + gt11L*(2*Gt112*Gt113 + Gt123*Gt212 + Gt133*Gt312) + 
+                2*Gt112*gt13L*Gt313 + Gt212*gt23L*Gt313 + Gt111*(Gt113*gt12L + Gt213*gt22L + gt23L*Gt313) + 
+                gt13L*Gt212*Gt323 + Gt211*gt23L*Gt323 + gt23L*Gt311*Gt333 + gt13L*Gt312*Gt333 + Gt312*Gt313*gt33L)*gtu31 + 
+             (Gt123*gt12L*Gt212 + 2*Gt122*gt12L*Gt213 + Gt113*gt12L*Gt222 + gt12L*Gt222*Gt223 + Gt213*Gt222*gt22L + 
+                Gt212*Gt223*gt22L + gt12L*Gt133*Gt312 + gt22L*Gt233*Gt312 + 2*Gt122*gt13L*Gt313 + Gt222*gt23L*Gt313 + 
+                Gt112*(Gt113*gt12L + Gt213*gt22L + gt23L*Gt313) + Gt113*gt13L*Gt322 + gt12L*Gt233*Gt322 + 
+                Gt213*gt23L*Gt322 + gt11L*(2*Gt113*Gt122 + Gt123*Gt222 + Gt133*Gt322) + gt13L*Gt222*Gt323 + 
+                Gt212*gt23L*Gt323 + gt23L*Gt312*Gt333 + gt13L*Gt322*Gt333 + Gt313*Gt322*gt33L)*gtu32 + 
+             gtu11*(3*Gt112*gt12L*Gt211 + 2*Gt211*Gt212*gt22L + Gt113*gt12L*Gt311 + 2*Gt112*gt13L*Gt311 + 
+                Gt213*gt22L*Gt311 + Gt212*gt23L*Gt311 + gt13L*Gt212*Gt312 + gt12L*Gt213*Gt312 + 2*Gt211*gt23L*Gt312 + 
                 gt11L*(2*Gt111*Gt112 + Gt112*Gt212 + Gt113*Gt312) + 
-                Gt111*(gt12L*Gt212 + Gt211*gt22L + gt23L*Gt311 + gt13L*Gt312) + 
-                gt23L*Gt311*Gt313 + gt13L*Gt312*Gt313 + Gt311*Gt312*gt33L + 
-                gt12L*SQR(Gt111) + gt12L*SQR(Gt212))) + 
-          2*gtu22*(gt11L*Gt122*Gt222 + 2*Gt212*Gt222*gt22L + 2*Gt122*gt13L*Gt312 + 
-             Gt223*gt22L*Gt312 + Gt222*gt23L*Gt312 + gt11L*Gt123*Gt322 + 
-             gt13L*Gt222*Gt322 + 2*Gt212*gt23L*Gt322 + 
-             Gt112*(2*gt11L*Gt122 + gt12L*Gt222 + Gt212*gt22L + gt23L*Gt312 + 
-                gt13L*Gt322) + gt23L*Gt312*Gt323 + gt13L*Gt322*Gt323 + 
-             Gt312*Gt322*gt33L + gt12L*SQR(Gt112) + 
+                Gt111*(gt12L*Gt212 + Gt211*gt22L + gt23L*Gt311 + gt13L*Gt312) + gt23L*Gt311*Gt313 + gt13L*Gt312*Gt313 + 
+                Gt311*Gt312*gt33L + gt12L*SQR(Gt111) + gt12L*SQR(Gt212))) + 
+          2*gtu22*(gt11L*Gt122*Gt222 + 2*Gt212*Gt222*gt22L + 2*Gt122*gt13L*Gt312 + Gt223*gt22L*Gt312 + Gt222*gt23L*Gt312 + 
+             gt11L*Gt123*Gt322 + gt13L*Gt222*Gt322 + 2*Gt212*gt23L*Gt322 + 
+             Gt112*(2*gt11L*Gt122 + gt12L*Gt222 + Gt212*gt22L + gt23L*Gt312 + gt13L*Gt322) + gt23L*Gt312*Gt323 + 
+             gt13L*Gt322*Gt323 + Gt312*Gt322*gt33L + gt12L*SQR(Gt112) + 
              gt12L*(3*Gt122*Gt212 + Gt123*Gt312 + Gt223*Gt322 + SQR(Gt222))) + 
-          2*gtu33*(gt11L*Gt123*Gt223 + 2*Gt213*Gt223*gt22L + 2*Gt123*gt13L*Gt313 + 
-             gt22L*Gt233*Gt313 + Gt223*gt23L*Gt313 + gt11L*Gt133*Gt323 + 
-             gt13L*Gt223*Gt323 + 2*Gt213*gt23L*Gt323 + 
-             Gt113*(2*gt11L*Gt123 + gt12L*Gt223 + Gt213*gt22L + gt23L*Gt313 + 
-                gt13L*Gt323) + gt23L*Gt313*Gt333 + gt13L*Gt323*Gt333 + 
-             Gt313*Gt323*gt33L + gt12L*SQR(Gt113) + 
+          2*gtu33*(gt11L*Gt123*Gt223 + 2*Gt213*Gt223*gt22L + 2*Gt123*gt13L*Gt313 + gt22L*Gt233*Gt313 + Gt223*gt23L*Gt313 + 
+             gt11L*Gt133*Gt323 + gt13L*Gt223*Gt323 + 2*Gt213*gt23L*Gt323 + 
+             Gt113*(2*gt11L*Gt123 + gt12L*Gt223 + Gt213*gt22L + gt23L*Gt313 + gt13L*Gt323) + gt23L*Gt313*Gt333 + 
+             gt13L*Gt323*Gt333 + Gt313*Gt323*gt33L + gt12L*SQR(Gt113) + 
              gt12L*(3*Gt123*Gt213 + Gt133*Gt313 + Gt233*Gt323 + SQR(Gt223))) + 
-          2*gtu21*(Gt122*gt12L*Gt211 + 3*Gt112*gt12L*Gt212 + gt12L*Gt212*Gt222 + 
-             Gt211*Gt222*gt22L + Gt123*gt12L*Gt311 + Gt223*gt22L*Gt311 + 
-             3*Gt112*gt13L*Gt312 + gt12L*Gt223*Gt312 + 2*Gt212*gt23L*Gt312 + 
-             Gt111*(Gt112*gt12L + Gt212*gt22L + gt23L*Gt312) + gt13L*Gt212*Gt322 + 
-             Gt211*gt23L*Gt322 + gt23L*Gt311*Gt323 + gt13L*Gt312*Gt323 + 
-             gt11L*(Gt122*Gt212 + Gt123*Gt312 + 2*SQR(Gt112)) + gt22L*SQR(Gt212) + 
-             gt33L*SQR(Gt312)) + 2*gtu31*
-           (Gt112*gt11L*Gt223 + Gt113*Gt211*gt22L + Gt212*Gt213*gt22L + 
-             Gt211*Gt223*gt22L + 2*Gt123*gt13L*Gt311 + Gt113*gt23L*Gt311 + 
-             Gt223*gt23L*Gt311 + gt13L*Gt223*Gt312 + Gt213*gt23L*Gt312 + 
-             Gt213*gt22L*Gt313 + Gt113*gt11L*Gt323 + Gt211*gt23L*Gt323 + 
-             gt13L*Gt313*Gt323 + Gt111*
-              (2*gt11L*Gt123 + Gt113*gt12L + gt12L*Gt223 + gt13L*Gt323) + 
-             gt12L*(2*Gt123*Gt211 + Gt112*Gt213 + Gt212*Gt223 + Gt113*Gt313 + 
-                Gt213*Gt323) + Gt311*Gt323*gt33L + gt23L*SQR(Gt313)) + 
-          2*gtu32*(gt11L*Gt122*Gt223 + Gt113*Gt212*gt22L + Gt213*Gt222*gt22L + 
-             Gt212*Gt223*gt22L + 2*Gt123*gt13L*Gt312 + Gt113*gt23L*Gt312 + 
-             Gt223*gt23L*Gt312 + Gt223*gt22L*Gt313 + gt13L*Gt223*Gt322 + 
-             Gt213*gt23L*Gt322 + gt11L*Gt123*Gt323 + Gt212*gt23L*Gt323 + 
-             gt23L*Gt313*Gt323 + Gt112*
-              (2*gt11L*Gt123 + Gt113*gt12L + gt12L*Gt223 + gt13L*Gt323) + 
-             gt12L*(Gt122*Gt213 + Gt123*(2*Gt212 + Gt313) + 
-                Gt223*(Gt222 + Gt323)) + Gt312*Gt323*gt33L + gt13L*SQR(Gt323)));
+          2*gtu21*(Gt122*gt12L*Gt211 + 3*Gt112*gt12L*Gt212 + gt12L*Gt212*Gt222 + Gt211*Gt222*gt22L + Gt123*gt12L*Gt311 + 
+             Gt223*gt22L*Gt311 + 3*Gt112*gt13L*Gt312 + gt12L*Gt223*Gt312 + 2*Gt212*gt23L*Gt312 + 
+             Gt111*(Gt112*gt12L + Gt212*gt22L + gt23L*Gt312) + gt13L*Gt212*Gt322 + Gt211*gt23L*Gt322 + gt23L*Gt311*Gt323 + 
+             gt13L*Gt312*Gt323 + gt11L*(Gt122*Gt212 + Gt123*Gt312 + 2*SQR(Gt112)) + gt22L*SQR(Gt212) + gt33L*SQR(Gt312)) + 
+          2*gtu31*(Gt112*gt11L*Gt223 + Gt113*Gt211*gt22L + Gt212*Gt213*gt22L + Gt211*Gt223*gt22L + 2*Gt123*gt13L*Gt311 + 
+             Gt113*gt23L*Gt311 + Gt223*gt23L*Gt311 + gt13L*Gt223*Gt312 + Gt213*gt23L*Gt312 + Gt213*gt22L*Gt313 + 
+             Gt113*gt11L*Gt323 + Gt211*gt23L*Gt323 + gt13L*Gt313*Gt323 + 
+             Gt111*(2*gt11L*Gt123 + Gt113*gt12L + gt12L*Gt223 + gt13L*Gt323) + 
+             gt12L*(2*Gt123*Gt211 + Gt112*Gt213 + Gt212*Gt223 + Gt113*Gt313 + Gt213*Gt323) + Gt311*Gt323*gt33L + 
+             gt23L*SQR(Gt313)) + 2*gtu32*(gt11L*Gt122*Gt223 + Gt113*Gt212*gt22L + Gt213*Gt222*gt22L + Gt212*Gt223*gt22L + 
+             2*Gt123*gt13L*Gt312 + Gt113*gt23L*Gt312 + Gt223*gt23L*Gt312 + Gt223*gt22L*Gt313 + gt13L*Gt223*Gt322 + 
+             Gt213*gt23L*Gt322 + gt11L*Gt123*Gt323 + Gt212*gt23L*Gt323 + gt23L*Gt313*Gt323 + 
+             Gt112*(2*gt11L*Gt123 + Gt113*gt12L + gt12L*Gt223 + gt13L*Gt323) + 
+             gt12L*(Gt122*Gt213 + Gt123*(2*Gt212 + Gt313) + Gt223*(Gt222 + Gt323)) + Gt312*Gt323*gt33L + gt13L*SQR(Gt323)));
     
-    Rt13  =  khalf*(-(gtu11*PDstandardNth11gt13) - 2*gtu21*PDstandardNth12gt13 - 
-          2*gtu31*PDstandardNth13gt13 + gt13L*PDstandardNth1Xt1 + 
-          gt23L*PDstandardNth1Xt2 + gt33L*PDstandardNth1Xt3 - 
-          gtu22*PDstandardNth22gt13 - 2*gtu32*PDstandardNth23gt13 - 
-          gtu33*PDstandardNth33gt13 + gt11L*PDstandardNth3Xt1 + 
-          gt12L*PDstandardNth3Xt2 + gt13L*PDstandardNth3Xt3 + 
-          (Gt113*gt11L + gt12L*Gt213 + gt13L*Gt313)*Xtn1 + 
-          (Gt111*gt13L + Gt211*gt23L + Gt311*gt33L)*Xtn1 + 
-          (gt11L*Gt123 + gt12L*Gt223 + gt13L*Gt323)*Xtn2 + 
-          (Gt112*gt13L + Gt212*gt23L + Gt312*gt33L)*Xtn2 + 
-          (gt11L*Gt133 + gt12L*Gt233 + gt13L*Gt333)*Xtn3 + 
+    Rt13  =  khalf*(-(gtu11*PDstandardNth11gt13) - 2*gtu21*PDstandardNth12gt13 - 2*gtu31*PDstandardNth13gt13 + 
+          gt13L*PDstandardNth1Xt1 + gt23L*PDstandardNth1Xt2 + gt33L*PDstandardNth1Xt3 - gtu22*PDstandardNth22gt13 - 
+          2*gtu32*PDstandardNth23gt13 - gtu33*PDstandardNth33gt13 + gt11L*PDstandardNth3Xt1 + gt12L*PDstandardNth3Xt2 + 
+          gt13L*PDstandardNth3Xt3 + (Gt113*gt11L + gt12L*Gt213 + gt13L*Gt313)*Xtn1 + 
+          (Gt111*gt13L + Gt211*gt23L + Gt311*gt33L)*Xtn1 + (gt11L*Gt123 + gt12L*Gt223 + gt13L*Gt323)*Xtn2 + 
+          (Gt112*gt13L + Gt212*gt23L + Gt312*gt33L)*Xtn2 + (gt11L*Gt133 + gt12L*Gt233 + gt13L*Gt333)*Xtn3 + 
           (Gt113*gt13L + Gt213*gt23L + Gt313*gt33L)*Xtn3 + 
-          2*((Gt122*gt13L*Gt211 + 2*Gt113*gt12L*Gt212 + Gt112*gt12L*Gt213 + 
-                gt12L*Gt213*Gt222 + Gt212*Gt213*gt22L + Gt211*Gt222*gt23L + 
-                Gt123*gt13L*Gt311 + Gt223*gt23L*Gt311 + 2*Gt113*gt13L*Gt312 + 
-                Gt213*gt23L*Gt312 + Gt112*gt13L*Gt313 + gt12L*Gt223*Gt313 + 
-                Gt212*gt23L*Gt313 + gt11L*
-                 (2*Gt112*Gt113 + Gt122*Gt213 + Gt123*Gt313) + gt13L*Gt213*Gt322 + 
-                gt13L*Gt313*Gt323 + Gt312*Gt313*gt33L + Gt211*Gt322*gt33L + 
-                Gt311*Gt323*gt33L + Gt111*(Gt112*gt13L + Gt212*gt23L + Gt312*gt33L))
-               *gtu21 + (Gt122*gt13L*Gt213 + gt11L*Gt122*Gt233 + 
-                Gt212*gt22L*Gt233 + Gt113*Gt212*gt23L + Gt213*Gt222*gt23L + 
-                2*Gt133*gt13L*Gt312 + Gt233*gt23L*Gt312 + Gt123*gt13L*Gt313 + 
-                Gt223*gt23L*Gt313 + gt13L*Gt233*Gt322 + gt11L*Gt123*Gt333 + 
-                Gt212*gt23L*Gt333 + gt13L*Gt323*Gt333 + 
+          2*((Gt122*gt13L*Gt211 + 2*Gt113*gt12L*Gt212 + Gt112*gt12L*Gt213 + gt12L*Gt213*Gt222 + Gt212*Gt213*gt22L + 
+                Gt211*Gt222*gt23L + Gt123*gt13L*Gt311 + Gt223*gt23L*Gt311 + 2*Gt113*gt13L*Gt312 + Gt213*gt23L*Gt312 + 
+                Gt112*gt13L*Gt313 + gt12L*Gt223*Gt313 + Gt212*gt23L*Gt313 + 
+                gt11L*(2*Gt112*Gt113 + Gt122*Gt213 + Gt123*Gt313) + gt13L*Gt213*Gt322 + gt13L*Gt313*Gt323 + 
+                Gt312*Gt313*gt33L + Gt211*Gt322*gt33L + Gt311*Gt323*gt33L + Gt111*(Gt112*gt13L + Gt212*gt23L + Gt312*gt33L))
+               *gtu21 + (Gt122*gt13L*Gt213 + gt11L*Gt122*Gt233 + Gt212*gt22L*Gt233 + Gt113*Gt212*gt23L + 
+                Gt213*Gt222*gt23L + 2*Gt133*gt13L*Gt312 + Gt233*gt23L*Gt312 + Gt123*gt13L*Gt313 + Gt223*gt23L*Gt313 + 
+                gt13L*Gt233*Gt322 + gt11L*Gt123*Gt333 + Gt212*gt23L*Gt333 + gt13L*Gt323*Gt333 + 
                 Gt112*(2*gt11L*Gt133 + Gt113*gt13L + gt12L*Gt233 + gt13L*Gt333) + 
-                gt12L*(2*Gt133*Gt212 + Gt222*Gt233 + Gt223*Gt333) + 
-                Gt113*Gt312*gt33L + Gt213*Gt322*gt33L + Gt313*Gt323*gt33L + 
-                Gt312*Gt333*gt33L)*gtu32 + 
-             gtu21*(2*Gt123*gt12L*Gt211 + Gt112*gt13L*Gt212 + gt12L*Gt212*Gt223 + 
-                Gt211*Gt223*gt22L + Gt112*Gt211*gt23L + 2*Gt123*gt13L*Gt311 + 
-                Gt223*gt23L*Gt311 + Gt113*gt13L*Gt312 + gt13L*Gt223*Gt312 + 
-                Gt213*gt23L*Gt312 + gt12L*Gt213*Gt323 + Gt211*gt23L*Gt323 + 
-                gt13L*Gt313*Gt323 + gt11L*
-                 (2*Gt111*Gt123 + Gt112*Gt223 + Gt113*Gt323) + 
-                Gt111*(Gt112*gt13L + gt12L*Gt223 + gt13L*Gt323) + 
-                Gt112*Gt311*gt33L + Gt212*Gt312*gt33L + Gt312*Gt313*gt33L + 
-                Gt311*Gt323*gt33L + gt23L*SQR(Gt212))) + 
-          2*gtu32*(Gt123*gt13L*Gt212 + 2*Gt123*gt12L*Gt213 + Gt113*gt12L*Gt223 + 
-             Gt213*Gt223*gt22L + Gt212*Gt223*gt23L + Gt133*gt13L*Gt312 + 
-             Gt233*gt23L*Gt312 + 2*Gt123*gt13L*Gt313 + Gt223*gt23L*Gt313 + 
-             Gt113*gt13L*Gt323 + gt13L*Gt223*Gt323 + gt12L*Gt233*Gt323 + 
-             Gt213*gt23L*Gt323 + gt11L*
-              (2*Gt113*Gt123 + Gt123*Gt223 + Gt133*Gt323) + gt13L*Gt323*Gt333 + 
-             Gt212*Gt323*gt33L + Gt313*Gt323*gt33L + Gt312*Gt333*gt33L + 
-             Gt112*(Gt113*gt13L + Gt213*gt23L + Gt313*gt33L) + gt12L*SQR(Gt223)) + 
-          2*gtu11*(2*Gt113*gt12L*Gt211 + Gt112*gt13L*Gt211 + gt12L*Gt212*Gt213 + 
-             Gt211*Gt213*gt22L + Gt211*Gt212*gt23L + 3*Gt113*gt13L*Gt311 + 
-             2*Gt213*gt23L*Gt311 + gt13L*Gt213*Gt312 + gt12L*Gt213*Gt313 + 
-             Gt211*gt23L*Gt313 + gt11L*
-              (2*Gt111*Gt113 + Gt112*Gt213 + Gt113*Gt313) + Gt211*Gt312*gt33L + 
-             2*Gt311*Gt313*gt33L + Gt111*
-              (gt12L*Gt213 + Gt211*gt23L + gt13L*Gt313 + Gt311*gt33L) + 
-             gt13L*SQR(Gt111) + gt13L*SQR(Gt313)) + 
-          2*gtu31*(Gt112*gt13L*Gt213 + Gt112*gt11L*Gt233 + Gt211*gt22L*Gt233 + 
-             Gt113*Gt211*gt23L + Gt212*Gt213*gt23L + 2*Gt133*gt13L*Gt311 + 
-             Gt233*gt23L*Gt311 + gt13L*Gt233*Gt312 + Gt113*gt13L*Gt313 + 
-             Gt213*gt23L*Gt313 + Gt113*gt11L*Gt333 + Gt211*gt23L*Gt333 + 
-             gt13L*Gt313*Gt333 + Gt111*
-              (2*gt11L*Gt133 + Gt113*gt13L + gt12L*Gt233 + gt13L*Gt333) + 
-             gt12L*(2*Gt133*Gt211 + Gt212*Gt233 + Gt213*Gt333) + 
-             Gt113*Gt311*gt33L + Gt213*Gt312*gt33L + Gt311*Gt333*gt33L + 
-             gt33L*SQR(Gt313)) + 2*gtu31*
-           (Gt123*gt13L*Gt211 + 3*Gt113*gt12L*Gt213 + gt12L*Gt213*Gt223 + 
-             Gt211*Gt223*gt23L + Gt133*gt13L*Gt311 + Gt233*gt23L*Gt311 + 
-             3*Gt113*gt13L*Gt313 + gt12L*Gt233*Gt313 + 2*Gt213*gt23L*Gt313 + 
-             gt13L*Gt213*Gt323 + gt13L*Gt313*Gt333 + Gt211*Gt323*gt33L + 
-             Gt311*Gt333*gt33L + Gt111*(Gt113*gt13L + Gt213*gt23L + Gt313*gt33L) + 
-             gt11L*(Gt123*Gt213 + Gt133*Gt313 + 2*SQR(Gt113)) + gt22L*SQR(Gt213) + 
-             gt33L*SQR(Gt313)) + 2*gtu22*
-           (2*Gt123*gt12L*Gt212 + Gt122*gt13L*Gt212 + gt12L*Gt222*Gt223 + 
-             Gt212*Gt223*gt22L + Gt212*Gt222*gt23L + 3*Gt123*gt13L*Gt312 + 
-             2*Gt223*gt23L*Gt312 + gt13L*Gt223*Gt322 + gt12L*Gt223*Gt323 + 
-             Gt212*gt23L*Gt323 + gt11L*
-              (2*Gt112*Gt123 + Gt122*Gt223 + Gt123*Gt323) + Gt212*Gt322*gt33L + 
-             2*Gt312*Gt323*gt33L + Gt112*
-              (gt12L*Gt223 + Gt212*gt23L + gt13L*Gt323 + Gt312*gt33L) + 
-             gt13L*SQR(Gt112) + gt13L*SQR(Gt323)) + 
-          2*gtu33*(2*gt12L*Gt133*Gt213 + Gt123*gt13L*Gt213 + gt11L*Gt123*Gt233 + 
-             gt12L*Gt223*Gt233 + Gt213*gt22L*Gt233 + Gt213*Gt223*gt23L + 
-             3*Gt133*gt13L*Gt313 + 2*Gt233*gt23L*Gt313 + gt13L*Gt233*Gt323 + 
-             gt11L*Gt133*Gt333 + gt12L*Gt233*Gt333 + Gt213*gt23L*Gt333 + 
-             Gt213*Gt323*gt33L + 2*Gt313*Gt333*gt33L + 
-             Gt113*(2*gt11L*Gt133 + gt12L*Gt233 + Gt213*gt23L + gt13L*Gt333 + 
-                Gt313*gt33L) + gt13L*SQR(Gt113) + gt13L*SQR(Gt333)));
+                gt12L*(2*Gt133*Gt212 + Gt222*Gt233 + Gt223*Gt333) + Gt113*Gt312*gt33L + Gt213*Gt322*gt33L + 
+                Gt313*Gt323*gt33L + Gt312*Gt333*gt33L)*gtu32 + 
+             gtu21*(2*Gt123*gt12L*Gt211 + Gt112*gt13L*Gt212 + gt12L*Gt212*Gt223 + Gt211*Gt223*gt22L + Gt112*Gt211*gt23L + 
+                2*Gt123*gt13L*Gt311 + Gt223*gt23L*Gt311 + Gt113*gt13L*Gt312 + gt13L*Gt223*Gt312 + Gt213*gt23L*Gt312 + 
+                gt12L*Gt213*Gt323 + Gt211*gt23L*Gt323 + gt13L*Gt313*Gt323 + 
+                gt11L*(2*Gt111*Gt123 + Gt112*Gt223 + Gt113*Gt323) + Gt111*(Gt112*gt13L + gt12L*Gt223 + gt13L*Gt323) + 
+                Gt112*Gt311*gt33L + Gt212*Gt312*gt33L + Gt312*Gt313*gt33L + Gt311*Gt323*gt33L + gt23L*SQR(Gt212))) + 
+          2*gtu32*(Gt123*gt13L*Gt212 + 2*Gt123*gt12L*Gt213 + Gt113*gt12L*Gt223 + Gt213*Gt223*gt22L + Gt212*Gt223*gt23L + 
+             Gt133*gt13L*Gt312 + Gt233*gt23L*Gt312 + 2*Gt123*gt13L*Gt313 + Gt223*gt23L*Gt313 + Gt113*gt13L*Gt323 + 
+             gt13L*Gt223*Gt323 + gt12L*Gt233*Gt323 + Gt213*gt23L*Gt323 + 
+             gt11L*(2*Gt113*Gt123 + Gt123*Gt223 + Gt133*Gt323) + gt13L*Gt323*Gt333 + Gt212*Gt323*gt33L + 
+             Gt313*Gt323*gt33L + Gt312*Gt333*gt33L + Gt112*(Gt113*gt13L + Gt213*gt23L + Gt313*gt33L) + gt12L*SQR(Gt223)) + 
+          2*gtu11*(2*Gt113*gt12L*Gt211 + Gt112*gt13L*Gt211 + gt12L*Gt212*Gt213 + Gt211*Gt213*gt22L + Gt211*Gt212*gt23L + 
+             3*Gt113*gt13L*Gt311 + 2*Gt213*gt23L*Gt311 + gt13L*Gt213*Gt312 + gt12L*Gt213*Gt313 + Gt211*gt23L*Gt313 + 
+             gt11L*(2*Gt111*Gt113 + Gt112*Gt213 + Gt113*Gt313) + Gt211*Gt312*gt33L + 2*Gt311*Gt313*gt33L + 
+             Gt111*(gt12L*Gt213 + Gt211*gt23L + gt13L*Gt313 + Gt311*gt33L) + gt13L*SQR(Gt111) + gt13L*SQR(Gt313)) + 
+          2*gtu31*(Gt112*gt13L*Gt213 + Gt112*gt11L*Gt233 + Gt211*gt22L*Gt233 + Gt113*Gt211*gt23L + Gt212*Gt213*gt23L + 
+             2*Gt133*gt13L*Gt311 + Gt233*gt23L*Gt311 + gt13L*Gt233*Gt312 + Gt113*gt13L*Gt313 + Gt213*gt23L*Gt313 + 
+             Gt113*gt11L*Gt333 + Gt211*gt23L*Gt333 + gt13L*Gt313*Gt333 + 
+             Gt111*(2*gt11L*Gt133 + Gt113*gt13L + gt12L*Gt233 + gt13L*Gt333) + 
+             gt12L*(2*Gt133*Gt211 + Gt212*Gt233 + Gt213*Gt333) + Gt113*Gt311*gt33L + Gt213*Gt312*gt33L + 
+             Gt311*Gt333*gt33L + gt33L*SQR(Gt313)) + 
+          2*gtu31*(Gt123*gt13L*Gt211 + 3*Gt113*gt12L*Gt213 + gt12L*Gt213*Gt223 + Gt211*Gt223*gt23L + Gt133*gt13L*Gt311 + 
+             Gt233*gt23L*Gt311 + 3*Gt113*gt13L*Gt313 + gt12L*Gt233*Gt313 + 2*Gt213*gt23L*Gt313 + gt13L*Gt213*Gt323 + 
+             gt13L*Gt313*Gt333 + Gt211*Gt323*gt33L + Gt311*Gt333*gt33L + Gt111*(Gt113*gt13L + Gt213*gt23L + Gt313*gt33L) + 
+             gt11L*(Gt123*Gt213 + Gt133*Gt313 + 2*SQR(Gt113)) + gt22L*SQR(Gt213) + gt33L*SQR(Gt313)) + 
+          2*gtu22*(2*Gt123*gt12L*Gt212 + Gt122*gt13L*Gt212 + gt12L*Gt222*Gt223 + Gt212*Gt223*gt22L + Gt212*Gt222*gt23L + 
+             3*Gt123*gt13L*Gt312 + 2*Gt223*gt23L*Gt312 + gt13L*Gt223*Gt322 + gt12L*Gt223*Gt323 + Gt212*gt23L*Gt323 + 
+             gt11L*(2*Gt112*Gt123 + Gt122*Gt223 + Gt123*Gt323) + Gt212*Gt322*gt33L + 2*Gt312*Gt323*gt33L + 
+             Gt112*(gt12L*Gt223 + Gt212*gt23L + gt13L*Gt323 + Gt312*gt33L) + gt13L*SQR(Gt112) + gt13L*SQR(Gt323)) + 
+          2*gtu33*(2*gt12L*Gt133*Gt213 + Gt123*gt13L*Gt213 + gt11L*Gt123*Gt233 + gt12L*Gt223*Gt233 + Gt213*gt22L*Gt233 + 
+             Gt213*Gt223*gt23L + 3*Gt133*gt13L*Gt313 + 2*Gt233*gt23L*Gt313 + gt13L*Gt233*Gt323 + gt11L*Gt133*Gt333 + 
+             gt12L*Gt233*Gt333 + Gt213*gt23L*Gt333 + Gt213*Gt323*gt33L + 2*Gt313*Gt333*gt33L + 
+             Gt113*(2*gt11L*Gt133 + gt12L*Gt233 + Gt213*gt23L + gt13L*Gt333 + Gt313*gt33L) + gt13L*SQR(Gt113) + 
+             gt13L*SQR(Gt333)));
     
-    Rt22  =  4*(Gt122*gt12L*Gt212*gtu21 + Gt112*gt12L*Gt222*gtu21 + 
-           Gt122*gt12L*Gt222*gtu22 + Gt123*gt12L*Gt212*gtu31 + 
-           Gt123*gt12L*Gt222*gtu32 + Gt123*gt12L*Gt223*gtu33) - 
-        gtu11*khalf*PDstandardNth11gt22 + 
-        gtu21*(6*Gt212*Gt222*gt22L + 2*Gt122*gt23L*Gt311 + 2*Gt122*gt13L*Gt312 + 
-           4*Gt222*gt23L*Gt312 + 2*Gt113*gt12L*Gt322 + 2*gt23L*Gt312*Gt323 + 
-           2*Gt312*Gt322*gt33L - PDstandardNth12gt22) + 
-        gtu31*(6*Gt212*Gt223*gt22L + 2*Gt123*gt13L*Gt312 + 2*Gt112*gt23L*Gt313 + 
-           2*Gt113*gt12L*Gt323 + 2*gt23L*Gt312*Gt333 + 2*Gt312*Gt323*gt33L - 
-           PDstandardNth13gt22) - gtu22*khalf*PDstandardNth22gt22 + 
-        gtu32*(4*Gt122*gt12L*Gt223 + 2*Gt123*Gt212*gt22L + 2*gt12L*Gt133*Gt322 + 
-           4*Gt223*gt23L*Gt322 + 2*Gt123*gt12L*Gt323 + 4*Gt222*gt23L*Gt323 + 
-           2*gt23L*Gt322*Gt333 + 2*Gt322*Gt323*gt33L - PDstandardNth23gt22) + 
-        gt12L*(2*Gt111*Gt123*gtu31 + 4*Gt112*Gt223*gtu31 + 2*Gt113*Gt122*gtu32 + 
-           2*Gt113*Gt123*gtu33 + PDstandardNth2Xt1) + 
-        gt22L*(2*Gt122*Gt213*gtu32 + 6*Gt222*Gt223*gtu32 + 2*Gt123*Gt213*gtu33 + 
-           PDstandardNth2Xt2) + gt23L*
-         (4*Gt212*Gt322*gtu21 + 2*Gt313*Gt322*gtu21 + 4*Gt222*Gt322*gtu22 + 
-           2*Gt123*Gt311*gtu31 + 4*Gt212*Gt323*gtu31 + 2*Gt313*Gt323*gtu31 + 
-           2*Gt122*Gt313*gtu32 + 2*Gt123*Gt313*gtu33 + 4*Gt223*Gt323*gtu33 + 
-           2*Gt323*Gt333*gtu33 + PDstandardNth2Xt3) - 
-        gtu33*khalf*PDstandardNth33gt22 + Gt212*gt22L*Xtn1 + 
-        Gt112*(2*Gt111*gt12L*gtu11 + 4*gt12L*Gt212*gtu11 + 2*gt11L*Gt122*gtu21 + 
-           2*Gt122*gt12L*gtu22 + 2*gt11L*Gt123*gtu31 + 2*Gt123*gt12L*gtu32 + 
-           gt12L*Xtn1) + Gt312*(2*Gt213*gt22L*gtu11 + 4*Gt212*gt23L*gtu11 + 
-           2*gt23L*Gt313*gtu11 + 2*Gt123*gt12L*gtu21 + 2*Gt122*gt23L*gtu22 + 
-           2*gt12L*Gt133*gtu31 + 2*gt22L*Gt233*gtu31 + 4*Gt223*gt23L*gtu31 + 
-           2*Gt123*gt23L*gtu32 + gt23L*Xtn1) + Gt122*gt12L*Xtn2 + 
-        Gt222*gt22L*Xtn2 + gt23L*Gt322*Xtn2 + Gt123*gt12L*Xtn3 + Gt223*gt22L*Xtn3 + 
-        gt23L*Gt323*Xtn3 + gt11L*gtu11*SQR(Gt112) + 
-        2*(Gt112*Gt211*gt22L*gtu11 + Gt112*gt23L*Gt311*gtu11 + 
-           Gt113*gt12L*Gt312*gtu11 + Gt112*gt13L*Gt312*gtu11 + 
-           Gt111*Gt122*gt12L*gtu21 + Gt122*Gt211*gt22L*gtu21 + 
-           Gt112*Gt212*gt22L*gtu21 + Gt223*gt22L*Gt312*gtu21 + 
-           Gt112*gt23L*Gt312*gtu21 + Gt112*gt13L*Gt322*gtu21 + 
-           Gt213*gt22L*Gt322*gtu21 + Gt122*Gt212*gt22L*gtu22 + 
-           Gt123*gt12L*Gt322*gtu22 + Gt122*gt13L*Gt322*gtu22 + 
-           Gt223*gt22L*Gt322*gtu22 + gt23L*Gt322*Gt323*gtu22 + 
-           Gt112*Gt113*gt12L*gtu31 + Gt123*Gt211*gt22L*gtu31 + 
-           Gt112*Gt213*gt22L*gtu31 + Gt112*gt13L*Gt323*gtu31 + 
-           Gt213*gt22L*Gt323*gtu31 + gt11L*Gt122*Gt123*gtu32 + 
-           Gt123*gt13L*Gt322*gtu32 + gt22L*Gt233*Gt322*gtu32 + 
-           Gt122*gt13L*Gt323*gtu32 + Gt223*gt22L*Gt323*gtu32 + 
-           gt12L*Gt133*Gt323*gtu33 + Gt123*gt13L*Gt323*gtu33 + 
-           gt22L*Gt233*Gt323*gtu33 + gt12L*gtu21*SQR(Gt112)) + 
-        gt11L*gtu22*SQR(Gt122) + gt11L*gtu33*SQR(Gt123) + 
-        3*gt22L*gtu11*SQR(Gt212) + 3*gt22L*gtu22*SQR(Gt222) + 
-        3*gt22L*gtu33*SQR(Gt223) + gt33L*gtu11*SQR(Gt312) + 
+    Rt22  =  4*(Gt122*gt12L*Gt212*gtu21 + Gt112*gt12L*Gt222*gtu21 + Gt122*gt12L*Gt222*gtu22 + Gt123*gt12L*Gt212*gtu31 + 
+           Gt123*gt12L*Gt222*gtu32 + Gt123*gt12L*Gt223*gtu33) - gtu11*khalf*PDstandardNth11gt22 + 
+        gtu21*(6*Gt212*Gt222*gt22L + 2*Gt122*gt23L*Gt311 + 2*Gt122*gt13L*Gt312 + 4*Gt222*gt23L*Gt312 + 
+           2*Gt113*gt12L*Gt322 + 2*gt23L*Gt312*Gt323 + 2*Gt312*Gt322*gt33L - PDstandardNth12gt22) + 
+        gtu31*(6*Gt212*Gt223*gt22L + 2*Gt123*gt13L*Gt312 + 2*Gt112*gt23L*Gt313 + 2*Gt113*gt12L*Gt323 + 
+           2*gt23L*Gt312*Gt333 + 2*Gt312*Gt323*gt33L - PDstandardNth13gt22) - gtu22*khalf*PDstandardNth22gt22 + 
+        gtu32*(4*Gt122*gt12L*Gt223 + 2*Gt123*Gt212*gt22L + 2*gt12L*Gt133*Gt322 + 4*Gt223*gt23L*Gt322 + 
+           2*Gt123*gt12L*Gt323 + 4*Gt222*gt23L*Gt323 + 2*gt23L*Gt322*Gt333 + 2*Gt322*Gt323*gt33L - PDstandardNth23gt22) + 
+        gt12L*(2*Gt111*Gt123*gtu31 + 4*Gt112*Gt223*gtu31 + 2*Gt113*Gt122*gtu32 + 2*Gt113*Gt123*gtu33 + PDstandardNth2Xt1) + 
+        gt22L*(2*Gt122*Gt213*gtu32 + 6*Gt222*Gt223*gtu32 + 2*Gt123*Gt213*gtu33 + PDstandardNth2Xt2) + 
+        gt23L*(4*Gt212*Gt322*gtu21 + 2*Gt313*Gt322*gtu21 + 4*Gt222*Gt322*gtu22 + 2*Gt123*Gt311*gtu31 + 
+           4*Gt212*Gt323*gtu31 + 2*Gt313*Gt323*gtu31 + 2*Gt122*Gt313*gtu32 + 2*Gt123*Gt313*gtu33 + 4*Gt223*Gt323*gtu33 + 
+           2*Gt323*Gt333*gtu33 + PDstandardNth2Xt3) - gtu33*khalf*PDstandardNth33gt22 + Gt212*gt22L*Xtn1 + 
+        Gt112*(2*Gt111*gt12L*gtu11 + 4*gt12L*Gt212*gtu11 + 2*gt11L*Gt122*gtu21 + 2*Gt122*gt12L*gtu22 + 
+           2*gt11L*Gt123*gtu31 + 2*Gt123*gt12L*gtu32 + gt12L*Xtn1) + 
+        Gt312*(2*Gt213*gt22L*gtu11 + 4*Gt212*gt23L*gtu11 + 2*gt23L*Gt313*gtu11 + 2*Gt123*gt12L*gtu21 + 
+           2*Gt122*gt23L*gtu22 + 2*gt12L*Gt133*gtu31 + 2*gt22L*Gt233*gtu31 + 4*Gt223*gt23L*gtu31 + 2*Gt123*gt23L*gtu32 + 
+           gt23L*Xtn1) + Gt122*gt12L*Xtn2 + Gt222*gt22L*Xtn2 + gt23L*Gt322*Xtn2 + Gt123*gt12L*Xtn3 + Gt223*gt22L*Xtn3 + 
+        gt23L*Gt323*Xtn3 + gt11L*gtu11*SQR(Gt112) + 2*
+         (Gt112*Gt211*gt22L*gtu11 + Gt112*gt23L*Gt311*gtu11 + Gt113*gt12L*Gt312*gtu11 + Gt112*gt13L*Gt312*gtu11 + 
+           Gt111*Gt122*gt12L*gtu21 + Gt122*Gt211*gt22L*gtu21 + Gt112*Gt212*gt22L*gtu21 + Gt223*gt22L*Gt312*gtu21 + 
+           Gt112*gt23L*Gt312*gtu21 + Gt112*gt13L*Gt322*gtu21 + Gt213*gt22L*Gt322*gtu21 + Gt122*Gt212*gt22L*gtu22 + 
+           Gt123*gt12L*Gt322*gtu22 + Gt122*gt13L*Gt322*gtu22 + Gt223*gt22L*Gt322*gtu22 + gt23L*Gt322*Gt323*gtu22 + 
+           Gt112*Gt113*gt12L*gtu31 + Gt123*Gt211*gt22L*gtu31 + Gt112*Gt213*gt22L*gtu31 + Gt112*gt13L*Gt323*gtu31 + 
+           Gt213*gt22L*Gt323*gtu31 + gt11L*Gt122*Gt123*gtu32 + Gt123*gt13L*Gt322*gtu32 + gt22L*Gt233*Gt322*gtu32 + 
+           Gt122*gt13L*Gt323*gtu32 + Gt223*gt22L*Gt323*gtu32 + gt12L*Gt133*Gt323*gtu33 + Gt123*gt13L*Gt323*gtu33 + 
+           gt22L*Gt233*Gt323*gtu33 + gt12L*gtu21*SQR(Gt112)) + gt11L*gtu22*SQR(Gt122) + gt11L*gtu33*SQR(Gt123) + 
+        3*gt22L*gtu11*SQR(Gt212) + 3*gt22L*gtu22*SQR(Gt222) + 3*gt22L*gtu33*SQR(Gt223) + gt33L*gtu11*SQR(Gt312) + 
         gt33L*gtu22*SQR(Gt322) + 2*gt23L*gtu32*SQR(Gt323) + gt33L*gtu33*SQR(Gt323);
     
-    Rt23  =  khalf*(-(gtu11*PDstandardNth11gt23) - 2*gtu21*PDstandardNth12gt23 - 
-          2*gtu31*PDstandardNth13gt23 - gtu22*PDstandardNth22gt23 - 
-          2*gtu32*PDstandardNth23gt23 + gt13L*PDstandardNth2Xt1 + 
-          gt23L*PDstandardNth2Xt2 + gt33L*PDstandardNth2Xt3 - 
-          gtu33*PDstandardNth33gt23 + gt12L*PDstandardNth3Xt1 + 
-          gt22L*PDstandardNth3Xt2 + gt23L*PDstandardNth3Xt3 + 
-          (Gt113*gt12L + Gt213*gt22L + gt23L*Gt313)*Xtn1 + 
-          (Gt112*gt13L + Gt212*gt23L + Gt312*gt33L)*Xtn1 + 
-          (Gt123*gt12L + Gt223*gt22L + gt23L*Gt323)*Xtn2 + 
-          (Gt122*gt13L + Gt222*gt23L + Gt322*gt33L)*Xtn2 + 
-          (gt12L*Gt133 + gt22L*Gt233 + gt23L*Gt333)*Xtn3 + 
+    Rt23  =  khalf*(-(gtu11*PDstandardNth11gt23) - 2*gtu21*PDstandardNth12gt23 - 2*gtu31*PDstandardNth13gt23 - 
+          gtu22*PDstandardNth22gt23 - 2*gtu32*PDstandardNth23gt23 + gt13L*PDstandardNth2Xt1 + gt23L*PDstandardNth2Xt2 + 
+          gt33L*PDstandardNth2Xt3 - gtu33*PDstandardNth33gt23 + gt12L*PDstandardNth3Xt1 + gt22L*PDstandardNth3Xt2 + 
+          gt23L*PDstandardNth3Xt3 + (Gt113*gt12L + Gt213*gt22L + gt23L*Gt313)*Xtn1 + 
+          (Gt112*gt13L + Gt212*gt23L + Gt312*gt33L)*Xtn1 + (Gt123*gt12L + Gt223*gt22L + gt23L*Gt323)*Xtn2 + 
+          (Gt122*gt13L + Gt222*gt23L + Gt322*gt33L)*Xtn2 + (gt12L*Gt133 + gt22L*Gt233 + gt23L*Gt333)*Xtn3 + 
           (Gt123*gt13L + Gt223*gt23L + Gt323*gt33L)*Xtn3 + 
-          2*((Gt112*gt11L*Gt123 + Gt111*Gt123*gt12L + Gt111*Gt122*gt13L + 
-                Gt123*gt12L*Gt212 + Gt112*gt13L*Gt222 + 2*Gt112*gt12L*Gt223 + 
-                Gt123*Gt211*gt22L + 2*Gt212*Gt223*gt22L + Gt122*Gt211*gt23L + 
-                Gt212*Gt222*gt23L + Gt123*gt23L*Gt311 + Gt123*gt13L*Gt312 + 
-                2*Gt223*gt23L*Gt312 + Gt113*gt13L*Gt322 + Gt213*gt23L*Gt322 + 
-                Gt113*gt12L*Gt323 + Gt112*gt13L*Gt323 + Gt213*gt22L*Gt323 + 
-                Gt212*gt23L*Gt323 + gt23L*Gt313*Gt323 + Gt122*Gt311*gt33L + 
-                Gt222*Gt312*gt33L + Gt313*Gt322*gt33L + Gt312*Gt323*gt33L)*gtu21 + 
-             (Gt112*gt11L*Gt133 + Gt111*gt12L*Gt133 + Gt111*Gt123*gt13L + 
-                gt12L*Gt133*Gt212 + Gt112*gt13L*Gt223 + Gt133*Gt211*gt22L + 
-                2*Gt112*gt12L*Gt233 + 2*Gt212*gt22L*Gt233 + Gt123*Gt211*gt23L + 
-                Gt212*Gt223*gt23L + Gt133*gt23L*Gt311 + Gt133*gt13L*Gt312 + 
-                2*Gt233*gt23L*Gt312 + Gt113*gt13L*Gt323 + Gt213*gt23L*Gt323 + 
-                Gt113*gt12L*Gt333 + Gt112*gt13L*Gt333 + Gt213*gt22L*Gt333 + 
-                Gt212*gt23L*Gt333 + gt23L*Gt313*Gt333 + Gt123*Gt311*gt33L + 
-                Gt223*Gt312*gt33L + Gt313*Gt323*gt33L + Gt312*Gt333*gt33L)*gtu31 + 
-             gtu21*(Gt113*gt11L*Gt122 + Gt122*gt13L*Gt212 + 2*Gt122*gt12L*Gt213 + 
-                Gt113*gt12L*Gt222 + Gt113*Gt212*gt22L + 2*Gt213*Gt222*gt22L + 
-                Gt212*Gt222*gt23L + Gt123*gt13L*Gt312 + Gt113*gt23L*Gt312 + 
-                Gt223*gt23L*Gt312 + Gt123*gt12L*Gt313 + Gt122*gt13L*Gt313 + 
-                Gt223*gt22L*Gt313 + Gt222*gt23L*Gt313 + Gt113*gt13L*Gt322 + 
-                2*Gt213*gt23L*Gt322 + gt23L*Gt313*Gt323 + Gt212*Gt322*gt33L + 
-                Gt313*Gt322*gt33L + Gt312*Gt323*gt33L + 
-                Gt112*(Gt113*gt12L + Gt212*gt23L + Gt312*gt33L) + gt13L*SQR(Gt112)))
-            + 2*gtu31*(2*Gt213*Gt223*gt22L + Gt112*Gt213*gt23L + 
-             Gt212*Gt223*gt23L + Gt133*gt13L*Gt312 + Gt233*gt23L*Gt312 + 
-             gt12L*Gt133*Gt313 + gt22L*Gt233*Gt313 + Gt223*gt23L*Gt313 + 
-             Gt123*(2*gt12L*Gt213 + gt13L*(Gt212 + Gt313)) + 2*Gt213*gt23L*Gt323 + 
-             Gt113*(gt11L*Gt123 + Gt112*gt13L + gt12L*Gt223 + Gt213*gt22L + 
-                gt23L*Gt313 + gt13L*Gt323) + gt23L*Gt313*Gt333 + 
-             Gt112*Gt313*gt33L + Gt212*Gt323*gt33L + Gt313*Gt323*gt33L + 
+          2*((Gt112*gt11L*Gt123 + Gt111*Gt123*gt12L + Gt111*Gt122*gt13L + Gt123*gt12L*Gt212 + Gt112*gt13L*Gt222 + 
+                2*Gt112*gt12L*Gt223 + Gt123*Gt211*gt22L + 2*Gt212*Gt223*gt22L + Gt122*Gt211*gt23L + Gt212*Gt222*gt23L + 
+                Gt123*gt23L*Gt311 + Gt123*gt13L*Gt312 + 2*Gt223*gt23L*Gt312 + Gt113*gt13L*Gt322 + Gt213*gt23L*Gt322 + 
+                Gt113*gt12L*Gt323 + Gt112*gt13L*Gt323 + Gt213*gt22L*Gt323 + Gt212*gt23L*Gt323 + gt23L*Gt313*Gt323 + 
+                Gt122*Gt311*gt33L + Gt222*Gt312*gt33L + Gt313*Gt322*gt33L + Gt312*Gt323*gt33L)*gtu21 + 
+             (Gt112*gt11L*Gt133 + Gt111*gt12L*Gt133 + Gt111*Gt123*gt13L + gt12L*Gt133*Gt212 + Gt112*gt13L*Gt223 + 
+                Gt133*Gt211*gt22L + 2*Gt112*gt12L*Gt233 + 2*Gt212*gt22L*Gt233 + Gt123*Gt211*gt23L + Gt212*Gt223*gt23L + 
+                Gt133*gt23L*Gt311 + Gt133*gt13L*Gt312 + 2*Gt233*gt23L*Gt312 + Gt113*gt13L*Gt323 + Gt213*gt23L*Gt323 + 
+                Gt113*gt12L*Gt333 + Gt112*gt13L*Gt333 + Gt213*gt22L*Gt333 + Gt212*gt23L*Gt333 + gt23L*Gt313*Gt333 + 
+                Gt123*Gt311*gt33L + Gt223*Gt312*gt33L + Gt313*Gt323*gt33L + Gt312*Gt333*gt33L)*gtu31 + 
+             gtu21*(Gt113*gt11L*Gt122 + Gt122*gt13L*Gt212 + 2*Gt122*gt12L*Gt213 + Gt113*gt12L*Gt222 + Gt113*Gt212*gt22L + 
+                2*Gt213*Gt222*gt22L + Gt212*Gt222*gt23L + Gt123*gt13L*Gt312 + Gt113*gt23L*Gt312 + Gt223*gt23L*Gt312 + 
+                Gt123*gt12L*Gt313 + Gt122*gt13L*Gt313 + Gt223*gt22L*Gt313 + Gt222*gt23L*Gt313 + Gt113*gt13L*Gt322 + 
+                2*Gt213*gt23L*Gt322 + gt23L*Gt313*Gt323 + Gt212*Gt322*gt33L + Gt313*Gt322*gt33L + Gt312*Gt323*gt33L + 
+                Gt112*(Gt113*gt12L + Gt212*gt23L + Gt312*gt33L) + gt13L*SQR(Gt112))) + 
+          2*gtu31*(2*Gt213*Gt223*gt22L + Gt112*Gt213*gt23L + Gt212*Gt223*gt23L + Gt133*gt13L*Gt312 + Gt233*gt23L*Gt312 + 
+             gt12L*Gt133*Gt313 + gt22L*Gt233*Gt313 + Gt223*gt23L*Gt313 + Gt123*(2*gt12L*Gt213 + gt13L*(Gt212 + Gt313)) + 
+             2*Gt213*gt23L*Gt323 + Gt113*(gt11L*Gt123 + Gt112*gt13L + gt12L*Gt223 + Gt213*gt22L + gt23L*Gt313 + 
+                gt13L*Gt323) + gt23L*Gt313*Gt333 + Gt112*Gt313*gt33L + Gt212*Gt323*gt33L + Gt313*Gt323*gt33L + 
              Gt312*Gt333*gt33L + gt12L*SQR(Gt113)) + 
-          2*gtu11*(Gt112*Gt113*gt11L + Gt111*Gt113*gt12L + Gt111*Gt112*gt13L + 
-             Gt113*gt12L*Gt212 + Gt112*gt13L*Gt212 + 2*Gt112*gt12L*Gt213 + 
-             Gt113*Gt211*gt22L + 2*Gt212*Gt213*gt22L + Gt112*Gt211*gt23L + 
-             Gt113*gt23L*Gt311 + 2*Gt113*gt13L*Gt312 + 3*Gt213*gt23L*Gt312 + 
-             Gt113*gt12L*Gt313 + Gt112*gt13L*Gt313 + Gt213*gt22L*Gt313 + 
-             Gt212*gt23L*Gt313 + Gt112*Gt311*gt33L + Gt212*Gt312*gt33L + 
-             2*Gt312*Gt313*gt33L + gt23L*SQR(Gt212) + gt23L*SQR(Gt313)) + 
-          2*gtu22*(gt11L*Gt122*Gt123 + Gt112*Gt123*gt12L + Gt112*Gt122*gt13L + 
-             Gt123*gt12L*Gt222 + Gt122*gt13L*Gt222 + 2*Gt122*gt12L*Gt223 + 
-             Gt123*Gt212*gt22L + 2*Gt222*Gt223*gt22L + Gt122*Gt212*gt23L + 
-             Gt123*gt23L*Gt312 + 2*Gt123*gt13L*Gt322 + 3*Gt223*gt23L*Gt322 + 
-             Gt123*gt12L*Gt323 + Gt122*gt13L*Gt323 + Gt223*gt22L*Gt323 + 
-             Gt222*gt23L*Gt323 + Gt122*Gt312*gt33L + Gt222*Gt322*gt33L + 
-             2*Gt322*Gt323*gt33L + gt23L*SQR(Gt222) + gt23L*SQR(Gt323)) + 
-          2*gtu32*(gt11L*Gt122*Gt133 + Gt112*gt12L*Gt133 + Gt112*Gt123*gt13L + 
-             gt12L*Gt133*Gt222 + Gt122*gt13L*Gt223 + Gt133*Gt212*gt22L + 
-             2*Gt122*gt12L*Gt233 + 2*Gt222*gt22L*Gt233 + Gt123*Gt212*gt23L + 
-             Gt222*Gt223*gt23L + Gt133*gt23L*Gt312 + Gt133*gt13L*Gt322 + 
-             2*Gt233*gt23L*Gt322 + Gt123*gt13L*Gt323 + Gt223*gt23L*Gt323 + 
-             Gt123*gt12L*Gt333 + Gt122*gt13L*Gt333 + Gt223*gt22L*Gt333 + 
-             Gt222*gt23L*Gt333 + gt23L*Gt323*Gt333 + Gt123*Gt312*gt33L + 
-             Gt223*Gt322*gt33L + Gt322*Gt333*gt33L + gt33L*SQR(Gt323)) + 
-          2*gtu32*(Gt113*Gt123*gt12L + Gt113*Gt122*gt13L + Gt123*gt13L*Gt222 + 
-             3*Gt123*gt12L*Gt223 + Gt123*Gt213*gt22L + Gt122*Gt213*gt23L + 
-             Gt222*Gt223*gt23L + Gt123*gt23L*Gt313 + Gt133*gt13L*Gt322 + 
-             Gt233*gt23L*Gt322 + gt12L*Gt133*Gt323 + 2*Gt123*gt13L*Gt323 + 
-             gt22L*Gt233*Gt323 + 3*Gt223*gt23L*Gt323 + gt23L*Gt323*Gt333 + 
-             Gt122*Gt313*gt33L + Gt222*Gt323*gt33L + Gt322*Gt333*gt33L + 
-             gt11L*SQR(Gt123) + 2*gt22L*SQR(Gt223) + gt33L*SQR(Gt323)) + 
-          2*gtu33*(gt11L*Gt123*Gt133 + Gt113*gt12L*Gt133 + Gt113*Gt123*gt13L + 
-             gt12L*Gt133*Gt223 + Gt123*gt13L*Gt223 + Gt133*Gt213*gt22L + 
-             2*Gt123*gt12L*Gt233 + 2*Gt223*gt22L*Gt233 + Gt123*Gt213*gt23L + 
-             Gt133*gt23L*Gt313 + 2*Gt133*gt13L*Gt323 + 3*Gt233*gt23L*Gt323 + 
-             gt12L*Gt133*Gt333 + Gt123*gt13L*Gt333 + gt22L*Gt233*Gt333 + 
-             Gt223*gt23L*Gt333 + Gt123*Gt313*gt33L + Gt223*Gt323*gt33L + 
-             2*Gt323*Gt333*gt33L + gt23L*SQR(Gt223) + gt23L*SQR(Gt333)));
+          2*gtu11*(Gt112*Gt113*gt11L + Gt111*Gt113*gt12L + Gt111*Gt112*gt13L + Gt113*gt12L*Gt212 + Gt112*gt13L*Gt212 + 
+             2*Gt112*gt12L*Gt213 + Gt113*Gt211*gt22L + 2*Gt212*Gt213*gt22L + Gt112*Gt211*gt23L + Gt113*gt23L*Gt311 + 
+             2*Gt113*gt13L*Gt312 + 3*Gt213*gt23L*Gt312 + Gt113*gt12L*Gt313 + Gt112*gt13L*Gt313 + Gt213*gt22L*Gt313 + 
+             Gt212*gt23L*Gt313 + Gt112*Gt311*gt33L + Gt212*Gt312*gt33L + 2*Gt312*Gt313*gt33L + gt23L*SQR(Gt212) + 
+             gt23L*SQR(Gt313)) + 2*gtu22*(gt11L*Gt122*Gt123 + Gt112*Gt123*gt12L + Gt112*Gt122*gt13L + Gt123*gt12L*Gt222 + 
+             Gt122*gt13L*Gt222 + 2*Gt122*gt12L*Gt223 + Gt123*Gt212*gt22L + 2*Gt222*Gt223*gt22L + Gt122*Gt212*gt23L + 
+             Gt123*gt23L*Gt312 + 2*Gt123*gt13L*Gt322 + 3*Gt223*gt23L*Gt322 + Gt123*gt12L*Gt323 + Gt122*gt13L*Gt323 + 
+             Gt223*gt22L*Gt323 + Gt222*gt23L*Gt323 + Gt122*Gt312*gt33L + Gt222*Gt322*gt33L + 2*Gt322*Gt323*gt33L + 
+             gt23L*SQR(Gt222) + gt23L*SQR(Gt323)) + 2*gtu32*
+           (gt11L*Gt122*Gt133 + Gt112*gt12L*Gt133 + Gt112*Gt123*gt13L + gt12L*Gt133*Gt222 + Gt122*gt13L*Gt223 + 
+             Gt133*Gt212*gt22L + 2*Gt122*gt12L*Gt233 + 2*Gt222*gt22L*Gt233 + Gt123*Gt212*gt23L + Gt222*Gt223*gt23L + 
+             Gt133*gt23L*Gt312 + Gt133*gt13L*Gt322 + 2*Gt233*gt23L*Gt322 + Gt123*gt13L*Gt323 + Gt223*gt23L*Gt323 + 
+             Gt123*gt12L*Gt333 + Gt122*gt13L*Gt333 + Gt223*gt22L*Gt333 + Gt222*gt23L*Gt333 + gt23L*Gt323*Gt333 + 
+             Gt123*Gt312*gt33L + Gt223*Gt322*gt33L + Gt322*Gt333*gt33L + gt33L*SQR(Gt323)) + 
+          2*gtu32*(Gt113*Gt123*gt12L + Gt113*Gt122*gt13L + Gt123*gt13L*Gt222 + 3*Gt123*gt12L*Gt223 + Gt123*Gt213*gt22L + 
+             Gt122*Gt213*gt23L + Gt222*Gt223*gt23L + Gt123*gt23L*Gt313 + Gt133*gt13L*Gt322 + Gt233*gt23L*Gt322 + 
+             gt12L*Gt133*Gt323 + 2*Gt123*gt13L*Gt323 + gt22L*Gt233*Gt323 + 3*Gt223*gt23L*Gt323 + gt23L*Gt323*Gt333 + 
+             Gt122*Gt313*gt33L + Gt222*Gt323*gt33L + Gt322*Gt333*gt33L + gt11L*SQR(Gt123) + 2*gt22L*SQR(Gt223) + 
+             gt33L*SQR(Gt323)) + 2*gtu33*(gt11L*Gt123*Gt133 + Gt113*gt12L*Gt133 + Gt113*Gt123*gt13L + gt12L*Gt133*Gt223 + 
+             Gt123*gt13L*Gt223 + Gt133*Gt213*gt22L + 2*Gt123*gt12L*Gt233 + 2*Gt223*gt22L*Gt233 + Gt123*Gt213*gt23L + 
+             Gt133*gt23L*Gt313 + 2*Gt133*gt13L*Gt323 + 3*Gt233*gt23L*Gt323 + gt12L*Gt133*Gt333 + Gt123*gt13L*Gt333 + 
+             gt22L*Gt233*Gt333 + Gt223*gt23L*Gt333 + Gt123*Gt313*gt33L + Gt223*Gt323*gt33L + 2*Gt323*Gt333*gt33L + 
+             gt23L*SQR(Gt223) + gt23L*SQR(Gt333)));
     
-    Rt33  =  4*(Gt123*gt13L*Gt323*gtu22 + Gt223*gt23L*Gt323*gtu22 + 
-           Gt133*gt13L*Gt313*gtu31 + Gt233*gt23L*Gt313*gtu31 + 
-           Gt113*gt13L*Gt333*gtu31 + Gt133*gt13L*Gt323*gtu32 + 
-           Gt233*gt23L*Gt323*gtu32 + Gt123*gt13L*Gt333*gtu32 + 
-           Gt133*gt13L*Gt333*gtu33) + 
-        gtu21*(2*Gt212*Gt223*gt23L + 4*Gt123*gt13L*Gt313 + 4*Gt223*gt23L*Gt313 + 
-           4*Gt113*gt13L*Gt323 + 4*Gt213*gt23L*Gt323 + 2*Gt123*Gt311*gt33L - 
-           PDstandardNth12gt33) + gtu31*
-         (4*Gt213*gt23L*Gt333 + 2*Gt233*Gt312*gt33L + 6*Gt313*Gt333*gt33L - 
-           PDstandardNth13gt33) - gtu22*khalf*PDstandardNth22gt33 + 
-        gtu32*(4*Gt223*gt23L*Gt333 + 2*Gt123*Gt313*gt33L + 6*Gt323*Gt333*gt33L - 
-           PDstandardNth23gt33) - gtu33*khalf*PDstandardNth33gt33 + 
-        gt13L*PDstandardNth3Xt1 + gt23L*PDstandardNth3Xt2 + 
-        gt33L*(2*Gt213*Gt322*gtu21 + 6*Gt313*Gt323*gtu21 + 2*Gt123*Gt312*gtu22 + 
-           2*Gt133*Gt311*gtu31 + 2*Gt133*Gt312*gtu32 + 2*Gt133*Gt313*gtu33 + 
-           PDstandardNth3Xt3) + Gt113*gt13L*Xtn1 + Gt213*gt23L*Xtn1 + 
-        Gt313*gt33L*Xtn1 + Gt123*gt13L*Xtn2 + Gt223*gt23L*Xtn2 + Gt323*gt33L*Xtn2 + 
-        Gt133*gt13L*Xtn3 + Gt333*gt33L*Xtn3 + 
+    Rt33  =  4*(Gt123*gt13L*Gt323*gtu22 + Gt223*gt23L*Gt323*gtu22 + Gt133*gt13L*Gt313*gtu31 + Gt233*gt23L*Gt313*gtu31 + 
+           Gt113*gt13L*Gt333*gtu31 + Gt133*gt13L*Gt323*gtu32 + Gt233*gt23L*Gt323*gtu32 + Gt123*gt13L*Gt333*gtu32 + 
+           Gt133*gt13L*Gt333*gtu33) + gtu21*(2*Gt212*Gt223*gt23L + 4*Gt123*gt13L*Gt313 + 4*Gt223*gt23L*Gt313 + 
+           4*Gt113*gt13L*Gt323 + 4*Gt213*gt23L*Gt323 + 2*Gt123*Gt311*gt33L - PDstandardNth12gt33) + 
+        gtu31*(4*Gt213*gt23L*Gt333 + 2*Gt233*Gt312*gt33L + 6*Gt313*Gt333*gt33L - PDstandardNth13gt33) - 
+        gtu22*khalf*PDstandardNth22gt33 + gtu32*(4*Gt223*gt23L*Gt333 + 2*Gt123*Gt313*gt33L + 6*Gt323*Gt333*gt33L - 
+           PDstandardNth23gt33) - gtu33*khalf*PDstandardNth33gt33 + gt13L*PDstandardNth3Xt1 + gt23L*PDstandardNth3Xt2 + 
+        gt33L*(2*Gt213*Gt322*gtu21 + 6*Gt313*Gt323*gtu21 + 2*Gt123*Gt312*gtu22 + 2*Gt133*Gt311*gtu31 + 
+           2*Gt133*Gt312*gtu32 + 2*Gt133*Gt313*gtu33 + PDstandardNth3Xt3) + Gt113*gt13L*Xtn1 + Gt213*gt23L*Xtn1 + 
+        Gt313*gt33L*Xtn1 + Gt123*gt13L*Xtn2 + Gt223*gt23L*Xtn2 + Gt323*gt33L*Xtn2 + Gt133*gt13L*Xtn3 + Gt333*gt33L*Xtn3 + 
         Gt233*(4*gt23L*Gt333*gtu33 + 2*Gt323*gt33L*gtu33 + gt23L*Xtn3) + 
-        gtu11*(2*Gt212*Gt213*gt23L + 4*Gt113*gt13L*Gt313 + 4*Gt213*gt23L*Gt313 + 
-           2*Gt113*Gt311*gt33L + 2*Gt213*Gt312*gt33L - khalf*PDstandardNth11gt33 + 
-           gt11L*SQR(Gt113)) + 2*(Gt111*Gt113*gt13L*gtu11 + 
-           Gt113*gt12L*Gt213*gtu11 + Gt112*gt13L*Gt213*gtu11 + 
-           Gt113*Gt211*gt23L*gtu11 + Gt113*gt11L*Gt123*gtu21 + 
-           Gt112*Gt113*gt13L*gtu21 + Gt111*Gt123*gt13L*gtu21 + 
-           Gt123*gt12L*Gt213*gtu21 + Gt122*gt13L*Gt213*gtu21 + 
-           Gt113*gt12L*Gt223*gtu21 + Gt112*gt13L*Gt223*gtu21 + 
-           Gt213*Gt223*gt22L*gtu21 + Gt123*Gt211*gt23L*gtu21 + 
-           Gt113*Gt212*gt23L*gtu21 + Gt213*Gt222*gt23L*gtu21 + 
-           Gt113*Gt312*gt33L*gtu21 + Gt223*Gt312*gt33L*gtu21 + 
-           Gt112*Gt123*gt13L*gtu22 + Gt123*gt12L*Gt223*gtu22 + 
-           Gt122*gt13L*Gt223*gtu22 + Gt123*Gt212*gt23L*gtu22 + 
-           Gt222*Gt223*gt23L*gtu22 + Gt223*Gt322*gt33L*gtu22 + 
-           Gt113*gt11L*Gt133*gtu31 + Gt111*Gt133*gt13L*gtu31 + 
-           gt12L*Gt133*Gt213*gtu31 + Gt123*gt13L*Gt213*gtu31 + 
-           Gt113*gt12L*Gt233*gtu31 + Gt112*gt13L*Gt233*gtu31 + 
-           Gt213*gt22L*Gt233*gtu31 + Gt133*Gt211*gt23L*gtu31 + 
-           Gt113*Gt213*gt23L*gtu31 + Gt213*Gt223*gt23L*gtu31 + 
-           Gt212*Gt233*gt23L*gtu31 + Gt113*Gt313*gt33L*gtu31 + 
-           Gt213*Gt323*gt33L*gtu31 + gt11L*Gt123*Gt133*gtu32 + 
-           Gt113*Gt123*gt13L*gtu32 + Gt112*Gt133*gt13L*gtu32 + 
-           gt12L*Gt133*Gt223*gtu32 + Gt123*gt13L*Gt223*gtu32 + 
-           Gt123*gt12L*Gt233*gtu32 + Gt122*gt13L*Gt233*gtu32 + 
-           Gt223*gt22L*Gt233*gtu32 + Gt133*Gt212*gt23L*gtu32 + 
-           Gt123*Gt213*gt23L*gtu32 + Gt222*Gt233*gt23L*gtu32 + 
-           Gt233*Gt322*gt33L*gtu32 + Gt223*Gt323*gt33L*gtu32 + 
-           Gt113*Gt133*gt13L*gtu33 + gt12L*Gt133*Gt233*gtu33 + 
-           Gt123*gt13L*Gt233*gtu33 + Gt133*Gt213*gt23L*gtu33 + 
-           Gt223*Gt233*gt23L*gtu33 + gt13L*gtu31*SQR(Gt113)) + 
-        gt11L*gtu22*SQR(Gt123) + gt11L*gtu33*SQR(Gt133) + gt22L*gtu11*SQR(Gt213) + 
-        gt22L*gtu22*SQR(Gt223) + 2*gt23L*gtu32*SQR(Gt223) + 
-        gt22L*gtu33*SQR(Gt233) + 3*gt33L*gtu11*SQR(Gt313) + 
-        3*gt33L*gtu22*SQR(Gt323) + 3*gt33L*gtu33*SQR(Gt333);
+        gtu11*(2*Gt212*Gt213*gt23L + 4*Gt113*gt13L*Gt313 + 4*Gt213*gt23L*Gt313 + 2*Gt113*Gt311*gt33L + 
+           2*Gt213*Gt312*gt33L - khalf*PDstandardNth11gt33 + gt11L*SQR(Gt113)) + 
+        2*(Gt111*Gt113*gt13L*gtu11 + Gt113*gt12L*Gt213*gtu11 + Gt112*gt13L*Gt213*gtu11 + Gt113*Gt211*gt23L*gtu11 + 
+           Gt113*gt11L*Gt123*gtu21 + Gt112*Gt113*gt13L*gtu21 + Gt111*Gt123*gt13L*gtu21 + Gt123*gt12L*Gt213*gtu21 + 
+           Gt122*gt13L*Gt213*gtu21 + Gt113*gt12L*Gt223*gtu21 + Gt112*gt13L*Gt223*gtu21 + Gt213*Gt223*gt22L*gtu21 + 
+           Gt123*Gt211*gt23L*gtu21 + Gt113*Gt212*gt23L*gtu21 + Gt213*Gt222*gt23L*gtu21 + Gt113*Gt312*gt33L*gtu21 + 
+           Gt223*Gt312*gt33L*gtu21 + Gt112*Gt123*gt13L*gtu22 + Gt123*gt12L*Gt223*gtu22 + Gt122*gt13L*Gt223*gtu22 + 
+           Gt123*Gt212*gt23L*gtu22 + Gt222*Gt223*gt23L*gtu22 + Gt223*Gt322*gt33L*gtu22 + Gt113*gt11L*Gt133*gtu31 + 
+           Gt111*Gt133*gt13L*gtu31 + gt12L*Gt133*Gt213*gtu31 + Gt123*gt13L*Gt213*gtu31 + Gt113*gt12L*Gt233*gtu31 + 
+           Gt112*gt13L*Gt233*gtu31 + Gt213*gt22L*Gt233*gtu31 + Gt133*Gt211*gt23L*gtu31 + Gt113*Gt213*gt23L*gtu31 + 
+           Gt213*Gt223*gt23L*gtu31 + Gt212*Gt233*gt23L*gtu31 + Gt113*Gt313*gt33L*gtu31 + Gt213*Gt323*gt33L*gtu31 + 
+           gt11L*Gt123*Gt133*gtu32 + Gt113*Gt123*gt13L*gtu32 + Gt112*Gt133*gt13L*gtu32 + gt12L*Gt133*Gt223*gtu32 + 
+           Gt123*gt13L*Gt223*gtu32 + Gt123*gt12L*Gt233*gtu32 + Gt122*gt13L*Gt233*gtu32 + Gt223*gt22L*Gt233*gtu32 + 
+           Gt133*Gt212*gt23L*gtu32 + Gt123*Gt213*gt23L*gtu32 + Gt222*Gt233*gt23L*gtu32 + Gt233*Gt322*gt33L*gtu32 + 
+           Gt223*Gt323*gt33L*gtu32 + Gt113*Gt133*gt13L*gtu33 + gt12L*Gt133*Gt233*gtu33 + Gt123*gt13L*Gt233*gtu33 + 
+           Gt133*Gt213*gt23L*gtu33 + Gt223*Gt233*gt23L*gtu33 + gt13L*gtu31*SQR(Gt113)) + gt11L*gtu22*SQR(Gt123) + 
+        gt11L*gtu33*SQR(Gt133) + gt22L*gtu11*SQR(Gt213) + gt22L*gtu22*SQR(Gt223) + 2*gt23L*gtu32*SQR(Gt223) + 
+        gt22L*gtu33*SQR(Gt233) + 3*gt33L*gtu11*SQR(Gt313) + 3*gt33L*gtu22*SQR(Gt323) + 3*gt33L*gtu33*SQR(Gt333);
     
-    Rphi11  =  2*(-PDstandardNth11phi - gt11L*gtu11*PDstandardNth11phi - 
-          2*gt11L*gtu21*PDstandardNth12phi - 2*gt11L*gtu31*PDstandardNth13phi - 
-          gt11L*gtu22*PDstandardNth22phi - 2*gt11L*gtu32*PDstandardNth23phi - 
-          gt11L*gtu33*PDstandardNth33phi + Gt311*PDstandardNth3phi + 
-          gt11L*Gt311*gtu11*PDstandardNth3phi + 
-          2*gt11L*Gt312*gtu21*PDstandardNth3phi + 
-          gt11L*Gt322*gtu22*PDstandardNth3phi + 
-          2*gt11L*Gt313*gtu31*PDstandardNth3phi + 
-          2*gt11L*Gt323*gtu32*PDstandardNth3phi + 
-          gt11L*Gt333*gtu33*PDstandardNth3phi + 
-          PDstandardNth1phi*(Gt111 + Gt111*gt11L*gtu11 + 2*Gt112*gt11L*gtu21 + 
-             gt11L*Gt122*gtu22 + 2*Gt113*gt11L*gtu31 + 2*gt11L*Gt123*gtu32 + 
-             gt11L*Gt133*gtu33 - 4*gt11L*gtu21*PDstandardNth2phi - 
-             4*gt11L*gtu31*PDstandardNth3phi) + 
+    Rphi11  =  2*(-PDstandardNth11phi - gt11L*gtu11*PDstandardNth11phi - 2*gt11L*gtu21*PDstandardNth12phi - 
+          2*gt11L*gtu31*PDstandardNth13phi - gt11L*gtu22*PDstandardNth22phi - 2*gt11L*gtu32*PDstandardNth23phi - 
+          gt11L*gtu33*PDstandardNth33phi + Gt311*PDstandardNth3phi + gt11L*Gt311*gtu11*PDstandardNth3phi + 
+          2*gt11L*Gt312*gtu21*PDstandardNth3phi + gt11L*Gt322*gtu22*PDstandardNth3phi + 
+          2*gt11L*Gt313*gtu31*PDstandardNth3phi + 2*gt11L*Gt323*gtu32*PDstandardNth3phi + 
+          gt11L*Gt333*gtu33*PDstandardNth3phi + PDstandardNth1phi*
+           (Gt111 + Gt111*gt11L*gtu11 + 2*Gt112*gt11L*gtu21 + gt11L*Gt122*gtu22 + 2*Gt113*gt11L*gtu31 + 
+             2*gt11L*Gt123*gtu32 + gt11L*Gt133*gtu33 - 4*gt11L*gtu21*PDstandardNth2phi - 4*gt11L*gtu31*PDstandardNth3phi) + 
           PDstandardNth2phi*(Gt211 + gt11L*Gt211*gtu11 + 
-             gt11L*(2*Gt212*gtu21 + Gt222*gtu22 + 2*Gt213*gtu31 + 2*Gt223*gtu32 + 
-                Gt233*gtu33) - 4*gt11L*gtu32*PDstandardNth3phi) + 
-          (2 - 2*gt11L*gtu11)*SQR(PDstandardNth1phi) - 
-          2*gt11L*gtu22*SQR(PDstandardNth2phi) - 
-          2*gt11L*gtu33*SQR(PDstandardNth3phi));
+             gt11L*(2*Gt212*gtu21 + Gt222*gtu22 + 2*Gt213*gtu31 + 2*Gt223*gtu32 + Gt233*gtu33) - 
+             4*gt11L*gtu32*PDstandardNth3phi) + (2 - 2*gt11L*gtu11)*SQR(PDstandardNth1phi) - 
+          2*gt11L*gtu22*SQR(PDstandardNth2phi) - 2*gt11L*gtu33*SQR(PDstandardNth3phi));
     
-    Rphi12  =  2*(-(gt12L*gtu11*PDstandardNth11phi) - PDstandardNth12phi - 
-          2*gt12L*gtu21*PDstandardNth12phi - 2*gt12L*gtu31*PDstandardNth13phi - 
-          gt12L*gtu22*PDstandardNth22phi - 2*gt12L*gtu32*PDstandardNth23phi - 
-          gt12L*gtu33*PDstandardNth33phi + Gt312*PDstandardNth3phi + 
-          gt12L*Gt311*gtu11*PDstandardNth3phi + 
-          2*gt12L*Gt312*gtu21*PDstandardNth3phi + 
-          gt12L*Gt322*gtu22*PDstandardNth3phi + 
-          2*gt12L*Gt313*gtu31*PDstandardNth3phi + 
-          2*gt12L*Gt323*gtu32*PDstandardNth3phi + 
-          gt12L*Gt333*gtu33*PDstandardNth3phi + 
-          PDstandardNth1phi*(Gt112 + Gt111*gt12L*gtu11 + 2*Gt112*gt12L*gtu21 + 
-             Gt122*gt12L*gtu22 + 2*Gt113*gt12L*gtu31 + 2*Gt123*gt12L*gtu32 + 
-             gt12L*Gt133*gtu33 + (2 - 4*gt12L*gtu21)*PDstandardNth2phi - 
-             4*gt12L*gtu31*PDstandardNth3phi) + 
-          PDstandardNth2phi*(Gt212 + 2*gt12L*Gt212*gtu21 + 
-             gt12L*(Gt211*gtu11 + Gt222*gtu22 + 2*Gt213*gtu31 + 2*Gt223*gtu32 + 
-                Gt233*gtu33) - 4*gt12L*gtu32*PDstandardNth3phi) - 
-          2*gt12L*gtu11*SQR(PDstandardNth1phi) - 
-          2*gt12L*gtu22*SQR(PDstandardNth2phi) - 
-          2*gt12L*gtu33*SQR(PDstandardNth3phi));
+    Rphi12  =  2*(-(gt12L*gtu11*PDstandardNth11phi) - PDstandardNth12phi - 2*gt12L*gtu21*PDstandardNth12phi - 
+          2*gt12L*gtu31*PDstandardNth13phi - gt12L*gtu22*PDstandardNth22phi - 2*gt12L*gtu32*PDstandardNth23phi - 
+          gt12L*gtu33*PDstandardNth33phi + Gt312*PDstandardNth3phi + gt12L*Gt311*gtu11*PDstandardNth3phi + 
+          2*gt12L*Gt312*gtu21*PDstandardNth3phi + gt12L*Gt322*gtu22*PDstandardNth3phi + 
+          2*gt12L*Gt313*gtu31*PDstandardNth3phi + 2*gt12L*Gt323*gtu32*PDstandardNth3phi + 
+          gt12L*Gt333*gtu33*PDstandardNth3phi + PDstandardNth1phi*
+           (Gt112 + Gt111*gt12L*gtu11 + 2*Gt112*gt12L*gtu21 + Gt122*gt12L*gtu22 + 2*Gt113*gt12L*gtu31 + 
+             2*Gt123*gt12L*gtu32 + gt12L*Gt133*gtu33 + (2 - 4*gt12L*gtu21)*PDstandardNth2phi - 
+             4*gt12L*gtu31*PDstandardNth3phi) + PDstandardNth2phi*
+           (Gt212 + 2*gt12L*Gt212*gtu21 + gt12L*(Gt211*gtu11 + Gt222*gtu22 + 2*Gt213*gtu31 + 2*Gt223*gtu32 + Gt233*gtu33) - 
+             4*gt12L*gtu32*PDstandardNth3phi) - 2*gt12L*gtu11*SQR(PDstandardNth1phi) - 
+          2*gt12L*gtu22*SQR(PDstandardNth2phi) - 2*gt12L*gtu33*SQR(PDstandardNth3phi));
     
-    Rphi13  =  2*(-PDstandardNth13phi + 
-          gt13L*(-(gtu11*PDstandardNth11phi) - 2*gtu21*PDstandardNth12phi - 
-             2*gtu31*PDstandardNth13phi) - gt13L*gtu22*PDstandardNth22phi - 
-          2*gt13L*gtu32*PDstandardNth23phi - gt13L*gtu33*PDstandardNth33phi + 
-          Gt313*PDstandardNth3phi + gt13L*Gt311*gtu11*PDstandardNth3phi + 
-          2*gt13L*Gt312*gtu21*PDstandardNth3phi + 
-          gt13L*Gt322*gtu22*PDstandardNth3phi + 
-          2*gt13L*Gt313*gtu31*PDstandardNth3phi + 
-          2*gt13L*Gt323*gtu32*PDstandardNth3phi + 
-          gt13L*Gt333*gtu33*PDstandardNth3phi + 
-          PDstandardNth1phi*(Gt113 + Gt111*gt13L*gtu11 + 2*Gt112*gt13L*gtu21 + 
-             Gt122*gt13L*gtu22 + 2*Gt113*gt13L*gtu31 + 2*Gt123*gt13L*gtu32 + 
-             Gt133*gt13L*gtu33 - 4*gt13L*gtu21*PDstandardNth2phi + 
+    Rphi13  =  2*(-PDstandardNth13phi + gt13L*(-(gtu11*PDstandardNth11phi) - 2*gtu21*PDstandardNth12phi - 
+             2*gtu31*PDstandardNth13phi) - gt13L*gtu22*PDstandardNth22phi - 2*gt13L*gtu32*PDstandardNth23phi - 
+          gt13L*gtu33*PDstandardNth33phi + Gt313*PDstandardNth3phi + gt13L*Gt311*gtu11*PDstandardNth3phi + 
+          2*gt13L*Gt312*gtu21*PDstandardNth3phi + gt13L*Gt322*gtu22*PDstandardNth3phi + 
+          2*gt13L*Gt313*gtu31*PDstandardNth3phi + 2*gt13L*Gt323*gtu32*PDstandardNth3phi + 
+          gt13L*Gt333*gtu33*PDstandardNth3phi + PDstandardNth1phi*
+           (Gt113 + Gt111*gt13L*gtu11 + 2*Gt112*gt13L*gtu21 + Gt122*gt13L*gtu22 + 2*Gt113*gt13L*gtu31 + 
+             2*Gt123*gt13L*gtu32 + Gt133*gt13L*gtu33 - 4*gt13L*gtu21*PDstandardNth2phi + 
              (2 - 4*gt13L*gtu31)*PDstandardNth3phi) + 
           PDstandardNth2phi*(Gt213 + 2*gt13L*Gt213*gtu31 + 
-             gt13L*(Gt211*gtu11 + 2*Gt212*gtu21 + Gt222*gtu22 + 2*Gt223*gtu32 + 
-                Gt233*gtu33) - 4*gt13L*gtu32*PDstandardNth3phi) - 
-          2*gt13L*gtu11*SQR(PDstandardNth1phi) - 
-          2*gt13L*gtu22*SQR(PDstandardNth2phi) - 
-          2*gt13L*gtu33*SQR(PDstandardNth3phi));
+             gt13L*(Gt211*gtu11 + 2*Gt212*gtu21 + Gt222*gtu22 + 2*Gt223*gtu32 + Gt233*gtu33) - 
+             4*gt13L*gtu32*PDstandardNth3phi) - 2*gt13L*gtu11*SQR(PDstandardNth1phi) - 
+          2*gt13L*gtu22*SQR(PDstandardNth2phi) - 2*gt13L*gtu33*SQR(PDstandardNth3phi));
     
-    Rphi22  =  2*(-PDstandardNth22phi + 
-          gt22L*(-(gtu11*PDstandardNth11phi) - 2*gtu21*PDstandardNth12phi - 
-             2*gtu31*PDstandardNth13phi - gtu22*PDstandardNth22phi) - 
-          2*gt22L*gtu32*PDstandardNth23phi - gt22L*gtu33*PDstandardNth33phi + 
-          Gt322*PDstandardNth3phi + gt22L*Gt311*gtu11*PDstandardNth3phi + 
-          2*gt22L*Gt312*gtu21*PDstandardNth3phi + 
-          gt22L*Gt322*gtu22*PDstandardNth3phi + 
-          2*gt22L*Gt313*gtu31*PDstandardNth3phi + 
-          2*gt22L*Gt323*gtu32*PDstandardNth3phi + 
-          gt22L*Gt333*gtu33*PDstandardNth3phi + 
-          PDstandardNth1phi*(Gt122 + Gt111*gt22L*gtu11 + 2*Gt112*gt22L*gtu21 + 
-             Gt122*gt22L*gtu22 + 2*Gt113*gt22L*gtu31 + 2*Gt123*gt22L*gtu32 + 
-             Gt133*gt22L*gtu33 - 4*gt22L*gtu21*PDstandardNth2phi - 
-             4*gt22L*gtu31*PDstandardNth3phi) + 
+    Rphi22  =  2*(-PDstandardNth22phi + gt22L*(-(gtu11*PDstandardNth11phi) - 2*gtu21*PDstandardNth12phi - 
+             2*gtu31*PDstandardNth13phi - gtu22*PDstandardNth22phi) - 2*gt22L*gtu32*PDstandardNth23phi - 
+          gt22L*gtu33*PDstandardNth33phi + Gt322*PDstandardNth3phi + gt22L*Gt311*gtu11*PDstandardNth3phi + 
+          2*gt22L*Gt312*gtu21*PDstandardNth3phi + gt22L*Gt322*gtu22*PDstandardNth3phi + 
+          2*gt22L*Gt313*gtu31*PDstandardNth3phi + 2*gt22L*Gt323*gtu32*PDstandardNth3phi + 
+          gt22L*Gt333*gtu33*PDstandardNth3phi + PDstandardNth1phi*
+           (Gt122 + Gt111*gt22L*gtu11 + 2*Gt112*gt22L*gtu21 + Gt122*gt22L*gtu22 + 2*Gt113*gt22L*gtu31 + 
+             2*Gt123*gt22L*gtu32 + Gt133*gt22L*gtu33 - 4*gt22L*gtu21*PDstandardNth2phi - 4*gt22L*gtu31*PDstandardNth3phi) + 
           PDstandardNth2phi*(Gt222 + Gt222*gt22L*gtu22 + 
-             gt22L*(Gt211*gtu11 + 2*Gt212*gtu21 + 2*Gt213*gtu31 + 2*Gt223*gtu32 + 
-                Gt233*gtu33) - 4*gt22L*gtu32*PDstandardNth3phi) - 
-          2*gt22L*gtu11*SQR(PDstandardNth1phi) + 
-          (2 - 2*gt22L*gtu22)*SQR(PDstandardNth2phi) - 
-          2*gt22L*gtu33*SQR(PDstandardNth3phi));
+             gt22L*(Gt211*gtu11 + 2*Gt212*gtu21 + 2*Gt213*gtu31 + 2*Gt223*gtu32 + Gt233*gtu33) - 
+             4*gt22L*gtu32*PDstandardNth3phi) - 2*gt22L*gtu11*SQR(PDstandardNth1phi) + 
+          (2 - 2*gt22L*gtu22)*SQR(PDstandardNth2phi) - 2*gt22L*gtu33*SQR(PDstandardNth3phi));
     
-    Rphi23  =  2*(-PDstandardNth23phi + 
-          gt23L*(-(gtu11*PDstandardNth11phi) - 2*gtu21*PDstandardNth12phi - 
-             2*gtu31*PDstandardNth13phi - gtu22*PDstandardNth22phi - 
-             2*gtu32*PDstandardNth23phi) - gt23L*gtu33*PDstandardNth33phi + 
-          Gt323*PDstandardNth3phi + gt23L*Gt311*gtu11*PDstandardNth3phi + 
-          2*gt23L*Gt312*gtu21*PDstandardNth3phi + 
-          gt23L*Gt322*gtu22*PDstandardNth3phi + 
-          2*gt23L*Gt313*gtu31*PDstandardNth3phi + 
-          2*gt23L*Gt323*gtu32*PDstandardNth3phi + 
-          gt23L*Gt333*gtu33*PDstandardNth3phi + 
-          PDstandardNth1phi*(Gt123 + Gt111*gt23L*gtu11 + 2*Gt112*gt23L*gtu21 + 
-             Gt122*gt23L*gtu22 + 2*Gt113*gt23L*gtu31 + 2*Gt123*gt23L*gtu32 + 
-             Gt133*gt23L*gtu33 - 4*gt23L*gtu21*PDstandardNth2phi - 
-             4*gt23L*gtu31*PDstandardNth3phi) + 
+    Rphi23  =  2*(-PDstandardNth23phi + gt23L*(-(gtu11*PDstandardNth11phi) - 2*gtu21*PDstandardNth12phi - 
+             2*gtu31*PDstandardNth13phi - gtu22*PDstandardNth22phi - 2*gtu32*PDstandardNth23phi) - 
+          gt23L*gtu33*PDstandardNth33phi + Gt323*PDstandardNth3phi + gt23L*Gt311*gtu11*PDstandardNth3phi + 
+          2*gt23L*Gt312*gtu21*PDstandardNth3phi + gt23L*Gt322*gtu22*PDstandardNth3phi + 
+          2*gt23L*Gt313*gtu31*PDstandardNth3phi + 2*gt23L*Gt323*gtu32*PDstandardNth3phi + 
+          gt23L*Gt333*gtu33*PDstandardNth3phi + PDstandardNth1phi*
+           (Gt123 + Gt111*gt23L*gtu11 + 2*Gt112*gt23L*gtu21 + Gt122*gt23L*gtu22 + 2*Gt113*gt23L*gtu31 + 
+             2*Gt123*gt23L*gtu32 + Gt133*gt23L*gtu33 - 4*gt23L*gtu21*PDstandardNth2phi - 4*gt23L*gtu31*PDstandardNth3phi) + 
           PDstandardNth2phi*(Gt223 + 2*Gt223*gt23L*gtu32 + 
-             gt23L*(Gt211*gtu11 + 2*Gt212*gtu21 + Gt222*gtu22 + 2*Gt213*gtu31 + 
-                Gt233*gtu33) + (2 - 4*gt23L*gtu32)*PDstandardNth3phi) - 
-          2*gt23L*gtu11*SQR(PDstandardNth1phi) - 
-          2*gt23L*gtu22*SQR(PDstandardNth2phi) - 
-          2*gt23L*gtu33*SQR(PDstandardNth3phi));
+             gt23L*(Gt211*gtu11 + 2*Gt212*gtu21 + Gt222*gtu22 + 2*Gt213*gtu31 + Gt233*gtu33) + 
+             (2 - 4*gt23L*gtu32)*PDstandardNth3phi) - 2*gt23L*gtu11*SQR(PDstandardNth1phi) - 
+          2*gt23L*gtu22*SQR(PDstandardNth2phi) - 2*gt23L*gtu33*SQR(PDstandardNth3phi));
     
-    Rphi33  =  2*(-PDstandardNth33phi + 
-          (Gt333 + gt33L*(Gt322*gtu22 + 
-                2*(Gt312*gtu21 + Gt313*gtu31 + Gt323*gtu32) + Gt333*gtu33))*
-           PDstandardNth3phi + PDstandardNth2phi*
-           (Gt233 + gt33L*(Gt211*gtu11 + Gt222*gtu22 + 
-                2*(Gt212*gtu21 + Gt213*gtu31 + Gt223*gtu32) + Gt233*gtu33 - 
-                4*gtu32*PDstandardNth3phi)) + 
-          PDstandardNth1phi*(Gt133 + 
-             gt33L*(Gt111*gtu11 + Gt122*gtu22 + 
-                2*(Gt112*gtu21 + Gt113*gtu31 + Gt123*gtu32) + Gt133*gtu33 - 
-                4*(gtu21*PDstandardNth2phi + gtu31*PDstandardNth3phi))) + 
-          2*SQR(PDstandardNth3phi) + 
-          gt33L*(-(gtu11*PDstandardNth11phi) - 2*gtu21*PDstandardNth12phi - 
-             2*gtu31*PDstandardNth13phi - gtu22*PDstandardNth22phi - 
-             2*gtu32*PDstandardNth23phi - gtu33*PDstandardNth33phi + 
-             Gt311*gtu11*PDstandardNth3phi - 2*gtu11*SQR(PDstandardNth1phi) - 
-             2*gtu22*SQR(PDstandardNth2phi) - 2*gtu33*SQR(PDstandardNth3phi)));
+    Rphi33  =  2*(-PDstandardNth33phi + (Gt333 + gt33L*
+              (Gt322*gtu22 + 2*(Gt312*gtu21 + Gt313*gtu31 + Gt323*gtu32) + Gt333*gtu33))*PDstandardNth3phi + 
+          PDstandardNth2phi*(Gt233 + gt33L*(Gt211*gtu11 + Gt222*gtu22 + 2*(Gt212*gtu21 + Gt213*gtu31 + Gt223*gtu32) + 
+                Gt233*gtu33 - 4*gtu32*PDstandardNth3phi)) + 
+          PDstandardNth1phi*(Gt133 + gt33L*(Gt111*gtu11 + Gt122*gtu22 + 2*(Gt112*gtu21 + Gt113*gtu31 + Gt123*gtu32) + 
+                Gt133*gtu33 - 4*(gtu21*PDstandardNth2phi + gtu31*PDstandardNth3phi))) + 2*SQR(PDstandardNth3phi) + 
+          gt33L*(-(gtu11*PDstandardNth11phi) - 2*gtu21*PDstandardNth12phi - 2*gtu31*PDstandardNth13phi - 
+             gtu22*PDstandardNth22phi - 2*gtu32*PDstandardNth23phi - gtu33*PDstandardNth33phi + 
+             Gt311*gtu11*PDstandardNth3phi - 2*gtu11*SQR(PDstandardNth1phi) - 2*gtu22*SQR(PDstandardNth2phi) - 
+             2*gtu33*SQR(PDstandardNth3phi)));
     
     Atm11  =  At11L*gtu11 + At12L*gtu21 + At13L*gtu31;
     
@@ -1221,61 +901,43 @@ void ML_BSSN_M_RHS_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT c
     
     gu33  =  em4phi*gtu33;
     
-    G111  =  Gt111 + (4 - 2*gt11L*gtu11)*PDstandardNth1phi - 
-        2*gt11L*(gtu21*PDstandardNth2phi + gtu31*PDstandardNth3phi);
+    G111  =  Gt111 + (4 - 2*gt11L*gtu11)*PDstandardNth1phi - 2*gt11L*(gtu21*PDstandardNth2phi + gtu31*PDstandardNth3phi);
     
-    G211  =  Gt211 - 2*gt11L*(gtu21*PDstandardNth1phi + gtu22*PDstandardNth2phi + 
-           gtu32*PDstandardNth3phi);
+    G211  =  Gt211 - 2*gt11L*(gtu21*PDstandardNth1phi + gtu22*PDstandardNth2phi + gtu32*PDstandardNth3phi);
     
-    G311  =  Gt311 - 2*gt11L*(gtu31*PDstandardNth1phi + gtu32*PDstandardNth2phi + 
-           gtu33*PDstandardNth3phi);
+    G311  =  Gt311 - 2*gt11L*(gtu31*PDstandardNth1phi + gtu32*PDstandardNth2phi + gtu33*PDstandardNth3phi);
     
-    G112  =  Gt112 + (2 - 2*gt12L*gtu21)*PDstandardNth2phi - 
-        2*gt12L*(gtu11*PDstandardNth1phi + gtu31*PDstandardNth3phi);
+    G112  =  Gt112 + (2 - 2*gt12L*gtu21)*PDstandardNth2phi - 2*gt12L*(gtu11*PDstandardNth1phi + gtu31*PDstandardNth3phi);
     
-    G212  =  Gt212 + (2 - 2*gt12L*gtu21)*PDstandardNth1phi - 
-        2*gt12L*(gtu22*PDstandardNth2phi + gtu32*PDstandardNth3phi);
+    G212  =  Gt212 + (2 - 2*gt12L*gtu21)*PDstandardNth1phi - 2*gt12L*(gtu22*PDstandardNth2phi + gtu32*PDstandardNth3phi);
     
-    G312  =  Gt312 - 2*gt12L*(gtu31*PDstandardNth1phi + gtu32*PDstandardNth2phi + 
-           gtu33*PDstandardNth3phi);
+    G312  =  Gt312 - 2*gt12L*(gtu31*PDstandardNth1phi + gtu32*PDstandardNth2phi + gtu33*PDstandardNth3phi);
     
-    G113  =  Gt113 + 2*PDstandardNth3phi - 
-        2*gt13L*(gtu11*PDstandardNth1phi + gtu21*PDstandardNth2phi + 
+    G113  =  Gt113 + 2*PDstandardNth3phi - 2*gt13L*(gtu11*PDstandardNth1phi + gtu21*PDstandardNth2phi + 
            gtu31*PDstandardNth3phi);
     
-    G213  =  Gt213 - 2*gt13L*(gtu21*PDstandardNth1phi + gtu22*PDstandardNth2phi + 
+    G213  =  Gt213 - 2*gt13L*(gtu21*PDstandardNth1phi + gtu22*PDstandardNth2phi + gtu32*PDstandardNth3phi);
+    
+    G313  =  Gt313 + (2 - 2*gt13L*gtu31)*PDstandardNth1phi - 2*gt13L*(gtu32*PDstandardNth2phi + gtu33*PDstandardNth3phi);
+    
+    G122  =  Gt122 - 2*gt22L*(gtu11*PDstandardNth1phi + gtu21*PDstandardNth2phi + gtu31*PDstandardNth3phi);
+    
+    G222  =  Gt222 + (4 - 2*gt22L*gtu22)*PDstandardNth2phi - 2*gt22L*(gtu21*PDstandardNth1phi + gtu32*PDstandardNth3phi);
+    
+    G322  =  Gt322 - 2*gt22L*(gtu31*PDstandardNth1phi + gtu32*PDstandardNth2phi + gtu33*PDstandardNth3phi);
+    
+    G123  =  Gt123 - 2*gt23L*(gtu11*PDstandardNth1phi + gtu21*PDstandardNth2phi + gtu31*PDstandardNth3phi);
+    
+    G223  =  Gt223 + 2*PDstandardNth3phi - 2*gt23L*(gtu21*PDstandardNth1phi + gtu22*PDstandardNth2phi + 
            gtu32*PDstandardNth3phi);
     
-    G313  =  Gt313 + (2 - 2*gt13L*gtu31)*PDstandardNth1phi - 
-        2*gt13L*(gtu32*PDstandardNth2phi + gtu33*PDstandardNth3phi);
+    G323  =  Gt323 + (2 - 2*gt23L*gtu32)*PDstandardNth2phi - 2*gt23L*(gtu31*PDstandardNth1phi + gtu33*PDstandardNth3phi);
     
-    G122  =  Gt122 - 2*gt22L*(gtu11*PDstandardNth1phi + gtu21*PDstandardNth2phi + 
-           gtu31*PDstandardNth3phi);
+    G133  =  Gt133 - 2*gt33L*(gtu11*PDstandardNth1phi + gtu21*PDstandardNth2phi + gtu31*PDstandardNth3phi);
     
-    G222  =  Gt222 + (4 - 2*gt22L*gtu22)*PDstandardNth2phi - 
-        2*gt22L*(gtu21*PDstandardNth1phi + gtu32*PDstandardNth3phi);
+    G233  =  Gt233 - 2*gt33L*(gtu21*PDstandardNth1phi + gtu22*PDstandardNth2phi + gtu32*PDstandardNth3phi);
     
-    G322  =  Gt322 - 2*gt22L*(gtu31*PDstandardNth1phi + gtu32*PDstandardNth2phi + 
-           gtu33*PDstandardNth3phi);
-    
-    G123  =  Gt123 - 2*gt23L*(gtu11*PDstandardNth1phi + gtu21*PDstandardNth2phi + 
-           gtu31*PDstandardNth3phi);
-    
-    G223  =  Gt223 + 2*PDstandardNth3phi - 
-        2*gt23L*(gtu21*PDstandardNth1phi + gtu22*PDstandardNth2phi + 
-           gtu32*PDstandardNth3phi);
-    
-    G323  =  Gt323 + (2 - 2*gt23L*gtu32)*PDstandardNth2phi - 
-        2*gt23L*(gtu31*PDstandardNth1phi + gtu33*PDstandardNth3phi);
-    
-    G133  =  Gt133 - 2*gt33L*(gtu11*PDstandardNth1phi + gtu21*PDstandardNth2phi + 
-           gtu31*PDstandardNth3phi);
-    
-    G233  =  Gt233 - 2*gt33L*(gtu21*PDstandardNth1phi + gtu22*PDstandardNth2phi + 
-           gtu32*PDstandardNth3phi);
-    
-    G333  =  Gt333 + 4*PDstandardNth3phi - 
-        2*gt33L*(gtu31*PDstandardNth1phi + gtu32*PDstandardNth2phi + 
+    G333  =  Gt333 + 4*PDstandardNth3phi - 2*gt33L*(gtu31*PDstandardNth1phi + gtu32*PDstandardNth2phi + 
            gtu33*PDstandardNth3phi);
     
     R11  =  Rphi11 + Rt11;
@@ -1311,8 +973,8 @@ void ML_BSSN_M_RHS_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT c
     T33  =  eTzzL;
     
     rho  =  pow(alphaL,-2)*(T00 - 2*(beta2L*T02 + beta3L*T03) + 
-          2*(beta1L*(-T01 + beta2L*T12 + beta3L*T13) + beta2L*beta3L*T23) + 
-          T11*SQR(beta1L) + T22*SQR(beta2L) + T33*SQR(beta3L));
+          2*(beta1L*(-T01 + beta2L*T12 + beta3L*T13) + beta2L*beta3L*T23) + T11*SQR(beta1L) + T22*SQR(beta2L) + 
+          T33*SQR(beta3L));
     
     S1  =  (-T01 + beta1L*T11 + beta2L*T12 + beta3L*T13)*INV(alphaL);
     
@@ -1322,279 +984,181 @@ void ML_BSSN_M_RHS_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT c
     
     trS  =  gu11*T11 + gu22*T22 + 2*(gu21*T12 + gu31*T13 + gu32*T23) + gu33*T33;
     
-    phirhsL  =  (PDstandardNth1beta1 + PDstandardNth2beta2 + PDstandardNth3beta3 + 
-          6*(beta1L*PDstandardNth1phi + beta2L*PDstandardNth2phi + 
-             beta3L*PDstandardNth3phi) - alphaL*trKL)/6.;
+    phirhsL  =  (6*(PDupwindNth1(phi, i, j, k)*beta1L + PDupwindNth2(phi, i, j, k)*beta2L + 
+             PDupwindNth3(phi, i, j, k)*beta3L) + PDstandardNth1beta1 + PDstandardNth2beta2 + PDstandardNth3beta3 - 
+          alphaL*trKL)/6.;
     
-    gt11rhsL  =  -2*alphaL*At11L + 2*(gt12L*PDstandardNth1beta2 + 
-           gt13L*PDstandardNth1beta3) + (betam1 + betap1)*PDstandardNth1gt11 + 
-        (betam2 + betap2)*PDstandardNth2gt11 + 
-        gt11L*(kfourthird*PDstandardNth1beta1 - ktwothird*PDstandardNth2beta2 - 
-           ktwothird*PDstandardNth3beta3) + (betam3 + betap3)*PDstandardNth3gt11;
+    gt11rhsL  =  -2*alphaL*At11L + PDupwindNth1(gt11, i, j, k)*beta1L + PDupwindNth2(gt11, i, j, k)*beta2L + 
+        PDupwindNth3(gt11, i, j, k)*beta3L + 2*(gt12L*PDstandardNth1beta2 + gt13L*PDstandardNth1beta3) + 
+        gt11L*(kfourthird*PDstandardNth1beta1 - ktwothird*PDstandardNth2beta2 - ktwothird*PDstandardNth3beta3);
     
-    gt12rhsL  =  -2*alphaL*At12L + gt22L*PDstandardNth1beta2 + 
-        gt23L*PDstandardNth1beta3 + (betam1 + betap1)*PDstandardNth1gt12 + 
+    gt12rhsL  =  -2*alphaL*At12L + PDupwindNth1(gt12, i, j, k)*beta1L + PDupwindNth2(gt12, i, j, k)*beta2L + 
+        PDupwindNth3(gt12, i, j, k)*beta3L + gt22L*PDstandardNth1beta2 + gt23L*PDstandardNth1beta3 + 
         gt11L*PDstandardNth2beta1 + gt13L*PDstandardNth2beta3 + 
-        (betam2 + betap2)*PDstandardNth2gt12 + 
-        gt12L*(kthird*(PDstandardNth1beta1 + PDstandardNth2beta2) - 
-           ktwothird*PDstandardNth3beta3) + (betam3 + betap3)*PDstandardNth3gt12;
+        gt12L*(kthird*(PDstandardNth1beta1 + PDstandardNth2beta2) - ktwothird*PDstandardNth3beta3);
     
-    gt13rhsL  =  -2*alphaL*At13L + gt23L*PDstandardNth1beta2 + 
-        gt33L*PDstandardNth1beta3 + (betam1 + betap1)*PDstandardNth1gt13 + 
-        (betam2 + betap2)*PDstandardNth2gt13 + gt11L*PDstandardNth3beta1 + 
-        gt12L*PDstandardNth3beta2 + gt13L*
-         (-(ktwothird*PDstandardNth2beta2) + 
-           kthird*(PDstandardNth1beta1 + PDstandardNth3beta3)) + 
-        (betam3 + betap3)*PDstandardNth3gt13;
+    gt13rhsL  =  -2*alphaL*At13L + PDupwindNth1(gt13, i, j, k)*beta1L + PDupwindNth2(gt13, i, j, k)*beta2L + 
+        PDupwindNth3(gt13, i, j, k)*beta3L + gt23L*PDstandardNth1beta2 + gt33L*PDstandardNth1beta3 + 
+        gt11L*PDstandardNth3beta1 + gt12L*PDstandardNth3beta2 + 
+        gt13L*(-(ktwothird*PDstandardNth2beta2) + kthird*(PDstandardNth1beta1 + PDstandardNth3beta3));
     
-    gt22rhsL  =  -2*alphaL*At22L + (betam1 + betap1)*PDstandardNth1gt22 + 
-        2*(gt12L*PDstandardNth2beta1 + gt23L*PDstandardNth2beta3) + 
-        (betam2 + betap2)*PDstandardNth2gt22 + 
-        gt22L*(-(ktwothird*PDstandardNth1beta1) + kfourthird*PDstandardNth2beta2 - 
-           ktwothird*PDstandardNth3beta3) + (betam3 + betap3)*PDstandardNth3gt22;
+    gt22rhsL  =  -2*alphaL*At22L + PDupwindNth1(gt22, i, j, k)*beta1L + PDupwindNth2(gt22, i, j, k)*beta2L + 
+        PDupwindNth3(gt22, i, j, k)*beta3L + 2*(gt12L*PDstandardNth2beta1 + gt23L*PDstandardNth2beta3) + 
+        gt22L*(-(ktwothird*PDstandardNth1beta1) + kfourthird*PDstandardNth2beta2 - ktwothird*PDstandardNth3beta3);
     
-    gt23rhsL  =  -2*alphaL*At23L + (betam1 + betap1)*PDstandardNth1gt23 + 
-        gt13L*PDstandardNth2beta1 + gt33L*PDstandardNth2beta3 + 
-        (betam2 + betap2)*PDstandardNth2gt23 + gt12L*PDstandardNth3beta1 + 
-        gt22L*PDstandardNth3beta2 + gt23L*
-         (-(ktwothird*PDstandardNth1beta1) + 
-           kthird*(PDstandardNth2beta2 + PDstandardNth3beta3)) + 
-        (betam3 + betap3)*PDstandardNth3gt23;
+    gt23rhsL  =  -2*alphaL*At23L + PDupwindNth1(gt23, i, j, k)*beta1L + PDupwindNth2(gt23, i, j, k)*beta2L + 
+        PDupwindNth3(gt23, i, j, k)*beta3L + gt13L*PDstandardNth2beta1 + gt33L*PDstandardNth2beta3 + 
+        gt12L*PDstandardNth3beta1 + gt22L*PDstandardNth3beta2 + 
+        gt23L*(-(ktwothird*PDstandardNth1beta1) + kthird*(PDstandardNth2beta2 + PDstandardNth3beta3));
     
-    gt33rhsL  =  -2*alphaL*At33L - gt33L*ktwothird*PDstandardNth1beta1 + 
-        betam1*PDstandardNth1gt33 + betap1*PDstandardNth1gt33 - 
-        gt33L*ktwothird*PDstandardNth2beta2 + betam2*PDstandardNth2gt33 + 
-        betap2*PDstandardNth2gt33 + 2*gt13L*PDstandardNth3beta1 + 
-        2*gt23L*PDstandardNth3beta2 + gt33L*kfourthird*PDstandardNth3beta3 + 
-        betam3*PDstandardNth3gt33 + betap3*PDstandardNth3gt33;
+    gt33rhsL  =  -2*alphaL*At33L + PDupwindNth1(gt33, i, j, k)*beta1L + PDupwindNth2(gt33, i, j, k)*beta2L + 
+        PDupwindNth3(gt33, i, j, k)*beta3L - gt33L*ktwothird*PDstandardNth1beta1 - gt33L*ktwothird*PDstandardNth2beta2 + 
+        2*gt13L*PDstandardNth3beta1 + 2*gt23L*PDstandardNth3beta2 + gt33L*kfourthird*PDstandardNth3beta3;
     
-    Xt1rhsL  =  kthird*(7*(gtu21*PDstandardNth12beta1 + 
-             gtu31*PDstandardNth13beta1) + 
-          gtu11*(4*PDstandardNth11beta1 + PDstandardNth12beta2 + 
-             PDstandardNth13beta3) + 
+    Xt1rhsL  =  kthird*(7*(gtu21*PDstandardNth12beta1 + gtu31*PDstandardNth13beta1) + 
+          gtu11*(4*PDstandardNth11beta1 + PDstandardNth12beta2 + PDstandardNth13beta3) + 
           gtu21*(PDstandardNth22beta2 + PDstandardNth23beta3) + 
+          3*(PDupwindNth1(Xt1, i, j, k)*beta1L + PDupwindNth2(Xt1, i, j, k)*beta2L + 
+             PDupwindNth3(Xt1, i, j, k)*beta3L + gtu22*PDstandardNth22beta1 + gtu33*PDstandardNth33beta1) + 
           gtu31*(PDstandardNth23beta2 + PDstandardNth33beta3) - 
-          6*(Atu11*PDstandardNth1alpha + Atu21*PDstandardNth2alpha + 
-             Atu31*PDstandardNth3alpha) + 
-          6*(gtu32*PDstandardNth23beta1 + 
-             alphaL*(Atu11*Gt111 + Atu22*Gt122 + 
-                2*(Atu21*Gt112 + Atu31*Gt113 + Atu32*Gt123) + Atu33*Gt133 + 
-                6*(Atu11*PDstandardNth1phi + Atu21*PDstandardNth2phi + 
-                   Atu31*PDstandardNth3phi) - 
-                ktwothird*(gtu11*PDstandardNth1trK + gtu21*PDstandardNth2trK + 
-                   gtu31*PDstandardNth3trK))) + 
-          3*((betam1 + betap1)*PDstandardNth1Xt1 + gtu22*PDstandardNth22beta1 + 
-             (betam2 + betap2)*PDstandardNth2Xt1 + gtu33*PDstandardNth33beta1 + 
-             (betam3 + betap3)*PDstandardNth3Xt1) - 
-          150.7964473723100754462068823974161384415*alphaL*
-           (gtu11*S1 + gtu21*S2 + gtu31*S3) + 
-          (-3*PDstandardNth1beta1 + 2*
-              (PDstandardNth1beta1 + PDstandardNth2beta2 + PDstandardNth3beta3))*
-           Xtn1 - 3*(PDstandardNth2beta1*Xtn2 + PDstandardNth3beta1*Xtn3));
+          6*(Atu11*PDstandardNth1alpha + Atu21*PDstandardNth2alpha + Atu31*PDstandardNth3alpha) + 
+          6*(gtu32*PDstandardNth23beta1 + alphaL*(Atu11*Gt111 + Atu22*Gt122 + 2*(Atu21*Gt112 + Atu31*Gt113 + Atu32*Gt123) + 
+                Atu33*Gt133 + 6*(Atu11*PDstandardNth1phi + Atu21*PDstandardNth2phi + Atu31*PDstandardNth3phi) - 
+                ktwothird*(gtu11*PDstandardNth1trK + gtu21*PDstandardNth2trK + gtu31*PDstandardNth3trK))) - 
+          150.7964473723100754462068823974161384415*alphaL*(gtu11*S1 + gtu21*S2 + gtu31*S3) + 
+          (-3*PDstandardNth1beta1 + 2*(PDstandardNth1beta1 + PDstandardNth2beta2 + PDstandardNth3beta3))*Xtn1 - 
+          3*(PDstandardNth2beta1*Xtn2 + PDstandardNth3beta1*Xtn3));
     
-    Xt2rhsL  =  kthird*(gtu21*(PDstandardNth11beta1 + 7*PDstandardNth12beta2 + 
-             PDstandardNth13beta3) + 
-          gtu22*(PDstandardNth12beta1 + 4*PDstandardNth22beta2 + 
-             PDstandardNth23beta3) + 
-          gtu32*(PDstandardNth13beta1 + 7*PDstandardNth23beta2 + 
-             PDstandardNth33beta3) - 
-          6*(Atu21*PDstandardNth1alpha + Atu22*PDstandardNth2alpha + 
-             Atu32*PDstandardNth3alpha) + 
-          6*(gtu31*PDstandardNth13beta2 + 
-             alphaL*(Atu11*Gt211 + Atu22*Gt222 + 
-                2*(Atu21*Gt212 + Atu31*Gt213 + Atu32*Gt223) + Atu33*Gt233 + 
-                6*(Atu21*PDstandardNth1phi + Atu22*PDstandardNth2phi + 
-                   Atu32*PDstandardNth3phi) - 
-                ktwothird*(gtu21*PDstandardNth1trK + gtu22*PDstandardNth2trK + 
-                   gtu32*PDstandardNth3trK))) + 
-          3*(gtu11*PDstandardNth11beta2 + (betam1 + betap1)*PDstandardNth1Xt2 + 
-             (betam2 + betap2)*PDstandardNth2Xt2 + gtu33*PDstandardNth33beta2 + 
-             (betam3 + betap3)*PDstandardNth3Xt2) - 
-          150.7964473723100754462068823974161384415*alphaL*
-           (gtu21*S1 + gtu22*S2 + gtu32*S3) + 
-          2*(PDstandardNth1beta1 + PDstandardNth2beta2 + PDstandardNth3beta3)*
-           Xtn2 - 3*(PDstandardNth1beta2*Xtn1 + PDstandardNth2beta2*Xtn2 + 
-             PDstandardNth3beta2*Xtn3));
+    Xt2rhsL  =  kthird*(gtu21*(PDstandardNth11beta1 + 7*PDstandardNth12beta2 + PDstandardNth13beta3) + 
+          gtu22*(PDstandardNth12beta1 + 4*PDstandardNth22beta2 + PDstandardNth23beta3) + 
+          3*(PDupwindNth1(Xt2, i, j, k)*beta1L + PDupwindNth2(Xt2, i, j, k)*beta2L + 
+             PDupwindNth3(Xt2, i, j, k)*beta3L + gtu11*PDstandardNth11beta2 + gtu33*PDstandardNth33beta2) + 
+          gtu32*(PDstandardNth13beta1 + 7*PDstandardNth23beta2 + PDstandardNth33beta3) - 
+          6*(Atu21*PDstandardNth1alpha + Atu22*PDstandardNth2alpha + Atu32*PDstandardNth3alpha) + 
+          6*(gtu31*PDstandardNth13beta2 + alphaL*(Atu11*Gt211 + Atu22*Gt222 + 2*(Atu21*Gt212 + Atu31*Gt213 + Atu32*Gt223) + 
+                Atu33*Gt233 + 6*(Atu21*PDstandardNth1phi + Atu22*PDstandardNth2phi + Atu32*PDstandardNth3phi) - 
+                ktwothird*(gtu21*PDstandardNth1trK + gtu22*PDstandardNth2trK + gtu32*PDstandardNth3trK))) - 
+          150.7964473723100754462068823974161384415*alphaL*(gtu21*S1 + gtu22*S2 + gtu32*S3) + 
+          2*(PDstandardNth1beta1 + PDstandardNth2beta2 + PDstandardNth3beta3)*Xtn2 - 
+          3*(PDstandardNth1beta2*Xtn1 + PDstandardNth2beta2*Xtn2 + PDstandardNth3beta2*Xtn3));
     
-    Xt3rhsL  =  kthird*(gtu31*(PDstandardNth11beta1 + PDstandardNth12beta2 + 
-             7*PDstandardNth13beta3) + 
-          gtu32*(PDstandardNth12beta1 + PDstandardNth22beta2 + 
-             7*PDstandardNth23beta3) + 
-          gtu33*(PDstandardNth13beta1 + PDstandardNth23beta2 + 
-             4*PDstandardNth33beta3) - 
-          6*(Atu31*PDstandardNth1alpha + Atu32*PDstandardNth2alpha + 
-             Atu33*PDstandardNth3alpha) + 
-          6*(gtu21*PDstandardNth12beta3 + 
-             alphaL*(Atu11*Gt311 + Atu22*Gt322 + 
-                2*(Atu21*Gt312 + Atu31*Gt313 + Atu32*Gt323) + Atu33*Gt333 + 
-                6*(Atu31*PDstandardNth1phi + Atu32*PDstandardNth2phi + 
-                   Atu33*PDstandardNth3phi) - 
-                ktwothird*(gtu31*PDstandardNth1trK + gtu32*PDstandardNth2trK + 
-                   gtu33*PDstandardNth3trK))) + 
-          3*(gtu11*PDstandardNth11beta3 + (betam1 + betap1)*PDstandardNth1Xt3 + 
-             gtu22*PDstandardNth22beta3 + (betam2 + betap2)*PDstandardNth2Xt3 + 
-             (betam3 + betap3)*PDstandardNth3Xt3) - 
-          150.7964473723100754462068823974161384415*alphaL*
-           (gtu31*S1 + gtu32*S2 + gtu33*S3) + 
-          2*(PDstandardNth1beta1 + PDstandardNth2beta2 + PDstandardNth3beta3)*
-           Xtn3 - 3*(PDstandardNth1beta3*Xtn1 + PDstandardNth2beta3*Xtn2 + 
-             PDstandardNth3beta3*Xtn3));
+    Xt3rhsL  =  kthird*(gtu31*(PDstandardNth11beta1 + PDstandardNth12beta2 + 7*PDstandardNth13beta3) + 
+          3*(PDupwindNth1(Xt3, i, j, k)*beta1L + PDupwindNth2(Xt3, i, j, k)*beta2L + 
+             PDupwindNth3(Xt3, i, j, k)*beta3L + gtu11*PDstandardNth11beta3 + gtu22*PDstandardNth22beta3) + 
+          gtu32*(PDstandardNth12beta1 + PDstandardNth22beta2 + 7*PDstandardNth23beta3) + 
+          gtu33*(PDstandardNth13beta1 + PDstandardNth23beta2 + 4*PDstandardNth33beta3) - 
+          6*(Atu31*PDstandardNth1alpha + Atu32*PDstandardNth2alpha + Atu33*PDstandardNth3alpha) + 
+          6*(gtu21*PDstandardNth12beta3 + alphaL*(Atu11*Gt311 + Atu22*Gt322 + 2*(Atu21*Gt312 + Atu31*Gt313 + Atu32*Gt323) + 
+                Atu33*Gt333 + 6*(Atu31*PDstandardNth1phi + Atu32*PDstandardNth2phi + Atu33*PDstandardNth3phi) - 
+                ktwothird*(gtu31*PDstandardNth1trK + gtu32*PDstandardNth2trK + gtu33*PDstandardNth3trK))) - 
+          150.7964473723100754462068823974161384415*alphaL*(gtu31*S1 + gtu32*S2 + gtu33*S3) + 
+          2*(PDstandardNth1beta1 + PDstandardNth2beta2 + PDstandardNth3beta3)*Xtn3 - 
+          3*(PDstandardNth1beta3*Xtn1 + PDstandardNth2beta3*Xtn2 + PDstandardNth3beta3*Xtn3));
     
-    trKrhsL  =  (G111*gu11 + G122*gu22 + 2.*(G112*gu21 + G113*gu31 + G123*gu32) + 
-           G133*gu33)*PDstandardNth1alpha + (betam1 + betap1)*PDstandardNth1trK - 
-        2.*(gu21*PDstandardNth12alpha + gu31*PDstandardNth13alpha + 
-           gu32*PDstandardNth23alpha) + 
-        (G211*gu11 + G222*gu22 + 2.*(G212*gu21 + G213*gu31 + G223*gu32) + 
-           G233*gu33)*PDstandardNth2alpha + (betam2 + betap2)*PDstandardNth2trK - 
-        1.*(gu11*PDstandardNth11alpha + gu22*PDstandardNth22alpha + 
-           gu33*PDstandardNth33alpha) + 
-        (G311*gu11 + G322*gu22 + 2.*(G313*gu31 + G323*gu32) + G333*gu33)*
-         PDstandardNth3alpha + 2.*(alphaL*
-            (Atm12*Atm21 + Atm13*Atm31 + Atm23*Atm32) + 
-           G312*gu21*PDstandardNth3alpha) + (betam3 + betap3)*PDstandardNth3trK + 
-        alphaL*(12.56637061435917295385057353311801153679*(rho + trS) + 
-           SQR(Atm11) + SQR(Atm22) + SQR(Atm33) + 
+    trKrhsL  =  PDupwindNth1(trK, i, j, k)*beta1L + PDupwindNth2(trK, i, j, k)*beta2L + 
+        PDupwindNth3(trK, i, j, k)*beta3L + (G111*gu11 + G122*gu22 + 2.*(G112*gu21 + G113*gu31 + G123*gu32) + G133*gu33)*
+         PDstandardNth1alpha - 2.*(gu21*PDstandardNth12alpha + gu31*PDstandardNth13alpha + gu32*PDstandardNth23alpha) + 
+        (G211*gu11 + G222*gu22 + 2.*(G212*gu21 + G213*gu31 + G223*gu32) + G233*gu33)*PDstandardNth2alpha - 
+        1.*(gu11*PDstandardNth11alpha + gu22*PDstandardNth22alpha + gu33*PDstandardNth33alpha) + 
+        (G311*gu11 + G322*gu22 + 2.*(G313*gu31 + G323*gu32) + G333*gu33)*PDstandardNth3alpha + 
+        2.*(alphaL*(Atm12*Atm21 + Atm13*Atm31 + Atm23*Atm32) + G312*gu21*PDstandardNth3alpha) + 
+        alphaL*(12.56637061435917295385057353311801153679*(rho + trS) + SQR(Atm11) + SQR(Atm22) + SQR(Atm33) + 
            0.3333333333333333333333333333333333333333*SQR(trKL));
     
-    Ats11  =  -PDstandardNth11alpha + G111*PDstandardNth1alpha + 
-        G211*PDstandardNth2alpha + G311*PDstandardNth3alpha + alphaL*R11;
+    Ats11  =  -PDstandardNth11alpha + G111*PDstandardNth1alpha + G211*PDstandardNth2alpha + G311*PDstandardNth3alpha + 
+        alphaL*R11;
     
-    Ats12  =  -PDstandardNth12alpha + G112*PDstandardNth1alpha + 
-        G212*PDstandardNth2alpha + G312*PDstandardNth3alpha + alphaL*R12;
+    Ats12  =  -PDstandardNth12alpha + G112*PDstandardNth1alpha + G212*PDstandardNth2alpha + G312*PDstandardNth3alpha + 
+        alphaL*R12;
     
-    Ats13  =  -PDstandardNth13alpha + G113*PDstandardNth1alpha + 
-        G213*PDstandardNth2alpha + G313*PDstandardNth3alpha + alphaL*R13;
+    Ats13  =  -PDstandardNth13alpha + G113*PDstandardNth1alpha + G213*PDstandardNth2alpha + G313*PDstandardNth3alpha + 
+        alphaL*R13;
     
-    Ats22  =  G122*PDstandardNth1alpha - PDstandardNth22alpha + 
-        G222*PDstandardNth2alpha + G322*PDstandardNth3alpha + alphaL*R22;
+    Ats22  =  G122*PDstandardNth1alpha - PDstandardNth22alpha + G222*PDstandardNth2alpha + G322*PDstandardNth3alpha + 
+        alphaL*R22;
     
-    Ats23  =  G123*PDstandardNth1alpha - PDstandardNth23alpha + 
-        G223*PDstandardNth2alpha + G323*PDstandardNth3alpha + alphaL*R23;
+    Ats23  =  G123*PDstandardNth1alpha - PDstandardNth23alpha + G223*PDstandardNth2alpha + G323*PDstandardNth3alpha + 
+        alphaL*R23;
     
-    Ats33  =  G133*PDstandardNth1alpha + G233*PDstandardNth2alpha - 
-        PDstandardNth33alpha + G333*PDstandardNth3alpha + alphaL*R33;
+    Ats33  =  G133*PDstandardNth1alpha + G233*PDstandardNth2alpha - PDstandardNth33alpha + G333*PDstandardNth3alpha + 
+        alphaL*R33;
     
-    trAts  =  Ats11*gu11 + Ats22*gu22 + 2*(Ats12*gu21 + Ats13*gu31 + Ats23*gu32) + 
-        Ats33*gu33;
+    trAts  =  Ats11*gu11 + Ats22*gu22 + 2*(Ats12*gu21 + Ats13*gu31 + Ats23*gu32) + Ats33*gu33;
     
-    At11rhsL  =  -2.*alphaL*(At11L*Atm11 + At12L*Atm21 + At13L*Atm31) + 
-        (betam1 + betap1)*PDstandardNth1At11 + 
+    At11rhsL  =  -2.*alphaL*(At11L*Atm11 + At12L*Atm21 + At13L*Atm31) + PDupwindNth1(At11, i, j, k)*beta1L + 
+        PDupwindNth2(At11, i, j, k)*beta2L + PDupwindNth3(At11, i, j, k)*beta3L + 
         2.*(At12L*PDstandardNth1beta2 + At13L*PDstandardNth1beta3) + 
-        (betam2 + betap2)*PDstandardNth2At11 + 
-        (betam3 + betap3)*PDstandardNth3At11 + 
         At11L*(1.333333333333333333333333333333333333333*PDstandardNth1beta1 - 
-           0.6666666666666666666666666666666666666667*
-            (PDstandardNth2beta2 + PDstandardNth3beta3) + alphaL*trKL) + 
+           0.6666666666666666666666666666666666666667*(PDstandardNth2beta2 + PDstandardNth3beta3) + alphaL*trKL) + 
         em4phi*(Ats11 - 0.3333333333333333333333333333333333333333*g11*trAts + 
-           alphaL*(-25.13274122871834590770114706623602307358*T11 + 
-              8.377580409572781969233715688745341024526*g11*trS));
+           alphaL*(-25.13274122871834590770114706623602307358*T11 + 8.377580409572781969233715688745341024526*g11*trS));
     
-    At12rhsL  =  -2.*alphaL*(At11L*Atm12 + At12L*Atm22 + At13L*Atm32) + 
-        (betam1 + betap1)*PDstandardNth1At12 + At22L*PDstandardNth1beta2 + 
-        At23L*PDstandardNth1beta3 + (betam2 + betap2)*PDstandardNth2At12 + 
-        At11L*PDstandardNth2beta1 + At13L*PDstandardNth2beta3 + 
-        (betam3 + betap3)*PDstandardNth3At12 + 
-        At12L*(0.3333333333333333333333333333333333333333*
-            (PDstandardNth1beta1 + PDstandardNth2beta2) - 
-           0.6666666666666666666666666666666666666667*PDstandardNth3beta3 + 
-           alphaL*trKL) + em4phi*(Ats12 - 
-           0.3333333333333333333333333333333333333333*g12*trAts + 
-           alphaL*(-25.13274122871834590770114706623602307358*T12 + 
-              8.377580409572781969233715688745341024526*g12*trS));
+    At12rhsL  =  -2.*alphaL*(At11L*Atm12 + At12L*Atm22 + At13L*Atm32) + PDupwindNth1(At12, i, j, k)*beta1L + 
+        PDupwindNth2(At12, i, j, k)*beta2L + PDupwindNth3(At12, i, j, k)*beta3L + At22L*PDstandardNth1beta2 + 
+        At23L*PDstandardNth1beta3 + At11L*PDstandardNth2beta1 + At13L*PDstandardNth2beta3 + 
+        At12L*(0.3333333333333333333333333333333333333333*(PDstandardNth1beta1 + PDstandardNth2beta2) - 
+           0.6666666666666666666666666666666666666667*PDstandardNth3beta3 + alphaL*trKL) + 
+        em4phi*(Ats12 - 0.3333333333333333333333333333333333333333*g12*trAts + 
+           alphaL*(-25.13274122871834590770114706623602307358*T12 + 8.377580409572781969233715688745341024526*g12*trS));
     
-    At13rhsL  =  -2.*alphaL*(At11L*Atm13 + At12L*Atm23 + At13L*Atm33) + 
-        (betam1 + betap1)*PDstandardNth1At13 + At23L*PDstandardNth1beta2 + 
-        At33L*PDstandardNth1beta3 + (betam2 + betap2)*PDstandardNth2At13 + 
-        (betam3 + betap3)*PDstandardNth3At13 + At11L*PDstandardNth3beta1 + 
-        At12L*PDstandardNth3beta2 + At13L*
-         (-0.6666666666666666666666666666666666666667*PDstandardNth2beta2 + 
-           0.3333333333333333333333333333333333333333*
-            (PDstandardNth1beta1 + PDstandardNth3beta3) + alphaL*trKL) + 
+    At13rhsL  =  -2.*alphaL*(At11L*Atm13 + At12L*Atm23 + At13L*Atm33) + PDupwindNth1(At13, i, j, k)*beta1L + 
+        PDupwindNth2(At13, i, j, k)*beta2L + PDupwindNth3(At13, i, j, k)*beta3L + At23L*PDstandardNth1beta2 + 
+        At33L*PDstandardNth1beta3 + At11L*PDstandardNth3beta1 + At12L*PDstandardNth3beta2 + 
+        At13L*(-0.6666666666666666666666666666666666666667*PDstandardNth2beta2 + 
+           0.3333333333333333333333333333333333333333*(PDstandardNth1beta1 + PDstandardNth3beta3) + alphaL*trKL) + 
         em4phi*(Ats13 - 0.3333333333333333333333333333333333333333*g13*trAts + 
-           alphaL*(-25.13274122871834590770114706623602307358*T13 + 
-              8.377580409572781969233715688745341024526*g13*trS));
+           alphaL*(-25.13274122871834590770114706623602307358*T13 + 8.377580409572781969233715688745341024526*g13*trS));
     
-    At22rhsL  =  -2.*alphaL*(At12L*Atm12 + At22L*Atm22 + At23L*Atm32) + 
-        (betam1 + betap1)*PDstandardNth1At22 + 
-        (betam2 + betap2)*PDstandardNth2At22 + 
+    At22rhsL  =  -2.*alphaL*(At12L*Atm12 + At22L*Atm22 + At23L*Atm32) + PDupwindNth1(At22, i, j, k)*beta1L + 
+        PDupwindNth2(At22, i, j, k)*beta2L + PDupwindNth3(At22, i, j, k)*beta3L + 
         2.*(At12L*PDstandardNth2beta1 + At23L*PDstandardNth2beta3) + 
-        (betam3 + betap3)*PDstandardNth3At22 + 
         At22L*(1.333333333333333333333333333333333333333*PDstandardNth2beta2 - 
-           0.6666666666666666666666666666666666666667*
-            (PDstandardNth1beta1 + PDstandardNth3beta3) + alphaL*trKL) + 
+           0.6666666666666666666666666666666666666667*(PDstandardNth1beta1 + PDstandardNth3beta3) + alphaL*trKL) + 
         em4phi*(Ats22 - 0.3333333333333333333333333333333333333333*g22*trAts + 
-           alphaL*(-25.13274122871834590770114706623602307358*T22 + 
-              8.377580409572781969233715688745341024526*g22*trS));
+           alphaL*(-25.13274122871834590770114706623602307358*T22 + 8.377580409572781969233715688745341024526*g22*trS));
     
-    At23rhsL  =  -2.*alphaL*(At12L*Atm13 + At22L*Atm23 + At23L*Atm33) + 
-        (betam1 + betap1)*PDstandardNth1At23 + 
-        (betam2 + betap2)*PDstandardNth2At23 + At13L*PDstandardNth2beta1 + 
-        At33L*PDstandardNth2beta3 + (betam3 + betap3)*PDstandardNth3At23 + 
-        At12L*PDstandardNth3beta1 + At22L*PDstandardNth3beta2 + 
+    At23rhsL  =  -2.*alphaL*(At12L*Atm13 + At22L*Atm23 + At23L*Atm33) + PDupwindNth1(At23, i, j, k)*beta1L + 
+        PDupwindNth2(At23, i, j, k)*beta2L + PDupwindNth3(At23, i, j, k)*beta3L + At13L*PDstandardNth2beta1 + 
+        At33L*PDstandardNth2beta3 + At12L*PDstandardNth3beta1 + At22L*PDstandardNth3beta2 + 
         At23L*(-0.6666666666666666666666666666666666666667*PDstandardNth1beta1 + 
-           0.3333333333333333333333333333333333333333*
-            (PDstandardNth2beta2 + PDstandardNth3beta3) + alphaL*trKL) + 
+           0.3333333333333333333333333333333333333333*(PDstandardNth2beta2 + PDstandardNth3beta3) + alphaL*trKL) + 
         em4phi*(Ats23 - 0.3333333333333333333333333333333333333333*g23*trAts + 
-           alphaL*(-25.13274122871834590770114706623602307358*T23 + 
-              8.377580409572781969233715688745341024526*g23*trS));
+           alphaL*(-25.13274122871834590770114706623602307358*T23 + 8.377580409572781969233715688745341024526*g23*trS));
     
-    At33rhsL  =  -2.*alphaL*(At13L*Atm13 + At23L*Atm23 + At33L*Atm33) + 
-        (betam1 + betap1)*PDstandardNth1At33 + 
-        (betam2 + betap2)*PDstandardNth2At33 + 
-        (betam3 + betap3)*PDstandardNth3At33 + 
+    At33rhsL  =  -2.*alphaL*(At13L*Atm13 + At23L*Atm23 + At33L*Atm33) + PDupwindNth1(At33, i, j, k)*beta1L + 
+        PDupwindNth2(At33, i, j, k)*beta2L + PDupwindNth3(At33, i, j, k)*beta3L + 
         2.*(At13L*PDstandardNth3beta1 + At23L*PDstandardNth3beta2) + 
-        At33L*(-0.6666666666666666666666666666666666666667*
-            (PDstandardNth1beta1 + PDstandardNth2beta2) + 
-           1.333333333333333333333333333333333333333*PDstandardNth3beta3 + 
-           alphaL*trKL) + em4phi*(Ats33 - 
-           0.3333333333333333333333333333333333333333*g33*trAts + 
-           alphaL*(-25.13274122871834590770114706623602307358*T33 + 
-              8.377580409572781969233715688745341024526*g33*trS));
+        At33L*(-0.6666666666666666666666666666666666666667*(PDstandardNth1beta1 + PDstandardNth2beta2) + 
+           1.333333333333333333333333333333333333333*PDstandardNth3beta3 + alphaL*trKL) + 
+        em4phi*(Ats33 - 0.3333333333333333333333333333333333333333*g33*trAts + 
+           alphaL*(-25.13274122871834590770114706623602307358*T33 + 8.377580409572781969233715688745341024526*g33*trS));
     
-    alpharhsL  =  LapseAdvectionCoeff*
-         ((betam1 + betap1)*PDstandardNth1alpha + 
-           (betam2 + betap2)*PDstandardNth2alpha + 
-           (betam3 + betap3)*PDstandardNth3alpha) + 
-        harmonicF*(AL*(-1 + LapseAdvectionCoeff) - LapseAdvectionCoeff*trKL)*
-         pow(alphaL,harmonicN);
+    alpharhsL  =  (PDupwindNth1(alpha, i, j, k)*beta1L + PDupwindNth2(alpha, i, j, k)*beta2L + 
+           PDupwindNth3(alpha, i, j, k)*beta3L)*LapseAdvectionCoeff + 
+        harmonicF*(AL*(-1 + LapseAdvectionCoeff) - LapseAdvectionCoeff*trKL)*pow(alphaL,harmonicN);
     
     ArhsL  =  (-1 + LapseAdvectionCoeff)*(AL*AlphaDriver - trKrhsL);
     
-    beta1rhsL  =  ((betam1 + betap1)*PDstandardNth1beta1 + 
-           (betam2 + betap2)*PDstandardNth2beta1 + 
-           (betam3 + betap3)*PDstandardNth3beta1)*ShiftAdvectionCoeff + 
-        B1L*ShiftGammaCoeff;
+    beta1rhsL  =  (PDupwindNth1(beta1, i, j, k)*beta1L + PDupwindNth2(beta1, i, j, k)*beta2L + 
+           PDupwindNth3(beta1, i, j, k)*beta3L)*ShiftAdvectionCoeff + B1L*ShiftGammaCoeff;
     
-    beta2rhsL  =  ((betam1 + betap1)*PDstandardNth1beta2 + 
-           (betam2 + betap2)*PDstandardNth2beta2 + 
-           (betam3 + betap3)*PDstandardNth3beta2)*ShiftAdvectionCoeff + 
-        B2L*ShiftGammaCoeff;
+    beta2rhsL  =  (PDupwindNth1(beta2, i, j, k)*beta1L + PDupwindNth2(beta2, i, j, k)*beta2L + 
+           PDupwindNth3(beta2, i, j, k)*beta3L)*ShiftAdvectionCoeff + B2L*ShiftGammaCoeff;
     
-    beta3rhsL  =  ((betam1 + betap1)*PDstandardNth1beta3 + 
-           (betam2 + betap2)*PDstandardNth2beta3 + 
-           (betam3 + betap3)*PDstandardNth3beta3)*ShiftAdvectionCoeff + 
-        B3L*ShiftGammaCoeff;
+    beta3rhsL  =  (PDupwindNth1(beta3, i, j, k)*beta1L + PDupwindNth2(beta3, i, j, k)*beta2L + 
+           PDupwindNth3(beta3, i, j, k)*beta3L)*ShiftAdvectionCoeff + B3L*ShiftGammaCoeff;
     
-    B1rhsL  =  -(B1L*BetaDriver) + ((betam1 + betap1)*PDstandardNth1B1 - 
-           betam1*PDstandardNth1Xt1 - betap1*PDstandardNth1Xt1 + 
-           (betam2 + betap2)*PDstandardNth2B1 - betam2*PDstandardNth2Xt1 - 
-           betap2*PDstandardNth2Xt1 + betam3*PDstandardNth3B1 + 
-           betap3*PDstandardNth3B1 - betam3*PDstandardNth3Xt1 - 
-           betap3*PDstandardNth3Xt1)*ShiftAdvectionCoeff + Xt1rhsL;
+    B1rhsL  =  -(B1L*BetaDriver) + ((PDupwindNth1(B1, i, j, k) - PDupwindNth1(Xt1, i, j, k))*beta1L + 
+           (PDupwindNth2(B1, i, j, k) - PDupwindNth2(Xt1, i, j, k))*beta2L + 
+           (PDupwindNth3(B1, i, j, k) - PDupwindNth3(Xt1, i, j, k))*beta3L)*ShiftAdvectionCoeff + Xt1rhsL;
     
-    B2rhsL  =  -(B2L*BetaDriver) + ((betam1 + betap1)*PDstandardNth1B2 - 
-           betam1*PDstandardNth1Xt2 - betap1*PDstandardNth1Xt2 + 
-           (betam2 + betap2)*PDstandardNth2B2 - betam2*PDstandardNth2Xt2 - 
-           betap2*PDstandardNth2Xt2 + betam3*PDstandardNth3B2 + 
-           betap3*PDstandardNth3B2 - betam3*PDstandardNth3Xt2 - 
-           betap3*PDstandardNth3Xt2)*ShiftAdvectionCoeff + Xt2rhsL;
+    B2rhsL  =  -(B2L*BetaDriver) + ((PDupwindNth1(B2, i, j, k) - PDupwindNth1(Xt2, i, j, k))*beta1L + 
+           (PDupwindNth2(B2, i, j, k) - PDupwindNth2(Xt2, i, j, k))*beta2L + 
+           (PDupwindNth3(B2, i, j, k) - PDupwindNth3(Xt2, i, j, k))*beta3L)*ShiftAdvectionCoeff + Xt2rhsL;
     
-    B3rhsL  =  -(B3L*BetaDriver) + ((betam1 + betap1)*PDstandardNth1B3 - 
-           betam1*PDstandardNth1Xt3 - betap1*PDstandardNth1Xt3 + 
-           (betam2 + betap2)*PDstandardNth2B3 - betam2*PDstandardNth2Xt3 - 
-           betap2*PDstandardNth2Xt3 + betam3*PDstandardNth3B3 + 
-           betap3*PDstandardNth3B3 - betam3*PDstandardNth3Xt3 - 
-           betap3*PDstandardNth3Xt3)*ShiftAdvectionCoeff + Xt3rhsL;
+    B3rhsL  =  -(B3L*BetaDriver) + ((PDupwindNth1(B3, i, j, k) - PDupwindNth1(Xt3, i, j, k))*beta1L + 
+           (PDupwindNth2(B3, i, j, k) - PDupwindNth2(Xt3, i, j, k))*beta2L + 
+           (PDupwindNth3(B3, i, j, k) - PDupwindNth3(Xt3, i, j, k))*beta3L)*ShiftAdvectionCoeff + Xt3rhsL;
     
     
     /* Copy local copies back to grid functions */
@@ -1631,8 +1195,8 @@ void ML_BSSN_M_RHS_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT c
 
 void ML_BSSN_M_RHS(CCTK_ARGUMENTS)
 {
-  DECLARE_CCTK_ARGUMENTS
-  DECLARE_CCTK_PARAMETERS
+  DECLARE_CCTK_ARGUMENTS;
+  DECLARE_CCTK_PARAMETERS;
   
   GenericFD_LoopOverInterior(cctkGH, &ML_BSSN_M_RHS_Body);
 }

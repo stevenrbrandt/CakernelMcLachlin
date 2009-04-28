@@ -120,23 +120,15 @@ void hydro_soundWave_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT
     /* Precompute derivatives (old style) */
     
     /* Calculate temporaries and grid functions */
-    CCTK_REAL const T1000001  =  INV(L);
-    
     rhoL  =  1.;
     
+    vel1L  =  A*Sin(2*Pi*xL*INV(L));
+    
+    vel2L  =  A*Sin(2*Pi*xL*INV(L));
+    
+    vel3L  =  A*Sin(2*Pi*xL*INV(L));
+    
     epsL  =  1.;
-    
-    CCTK_REAL const T1000002  =  2*Pi*T1000001*xL;
-    
-    CCTK_REAL const T1000003  =  Sin(T1000002);
-    
-    CCTK_REAL const T1000004  =  A*T1000003;
-    
-    vel1L  =  T1000004;
-    
-    vel2L  =  T1000004;
-    
-    vel3L  =  T1000004;
     
     
     /* Copy local copies back to grid functions */

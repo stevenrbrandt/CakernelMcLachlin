@@ -1,3 +1,5 @@
+#include <assert.h>
+
 #include <cctk.h>
 #include <cctk_Arguments.h>
 #include <cctk_Parameters.h>
@@ -23,6 +25,7 @@ select_bcs (cGH const * restrict const cctkGH, char const * restrict const gn)
 {
   DECLARE_CCTK_PARAMETERS;
   
-  Boundary_SelectGroupForBC
+  int const ierr = Boundary_SelectGroupForBC
     (cctkGH, CCTK_ALL_FACES, boundary_width, -1, gn, "none");
+  assert (! ierr);
 }

@@ -43,15 +43,12 @@ void ML_BSSN_RHSBoundary_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK
   CCTK_REAL p1o144dxdy = INITVALUE;
   CCTK_REAL p1o144dxdz = INITVALUE;
   CCTK_REAL p1o144dydz = INITVALUE;
-  CCTK_REAL p1o2dx = INITVALUE;
-  CCTK_REAL p1o2dy = INITVALUE;
-  CCTK_REAL p1o2dz = INITVALUE;
+  CCTK_REAL p1odx = INITVALUE;
+  CCTK_REAL p1ody = INITVALUE;
+  CCTK_REAL p1odz = INITVALUE;
   CCTK_REAL pm1o12dx2 = INITVALUE;
   CCTK_REAL pm1o12dy2 = INITVALUE;
   CCTK_REAL pm1o12dz2 = INITVALUE;
-  CCTK_REAL pm1o2dx = INITVALUE;
-  CCTK_REAL pm1o2dy = INITVALUE;
-  CCTK_REAL pm1o2dz = INITVALUE;
   
   if (verbose > 1)
   {
@@ -88,15 +85,12 @@ void ML_BSSN_RHSBoundary_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK
   p1o144dxdy = (INV(dx)*INV(dy))/144.;
   p1o144dxdz = (INV(dx)*INV(dz))/144.;
   p1o144dydz = (INV(dy)*INV(dz))/144.;
-  p1o2dx = khalf*INV(dx);
-  p1o2dy = khalf*INV(dy);
-  p1o2dz = khalf*INV(dz);
+  p1odx = INV(dx);
+  p1ody = INV(dy);
+  p1odz = INV(dz);
   pm1o12dx2 = -pow(dx,-2)/12.;
   pm1o12dy2 = -pow(dy,-2)/12.;
   pm1o12dz2 = -pow(dz,-2)/12.;
-  pm1o2dx = -(khalf*INV(dx));
-  pm1o2dy = -(khalf*INV(dy));
-  pm1o2dz = -(khalf*INV(dz));
   
   /* Loop over the grid points */
   #pragma omp parallel
@@ -111,6 +105,7 @@ void ML_BSSN_RHSBoundary_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK
     
     /* Declare shorthands */
     CCTK_REAL detgt = INITVALUE;
+    CCTK_REAL dir1 = INITVALUE, dir2 = INITVALUE, dir3 = INITVALUE;
     CCTK_REAL em4phi = INITVALUE;
     CCTK_REAL gtu11 = INITVALUE, gtu21 = INITVALUE, gtu22 = INITVALUE, gtu31 = INITVALUE, gtu32 = INITVALUE, gtu33 = INITVALUE;
     CCTK_REAL gu11 = INITVALUE, gu21 = INITVALUE, gu22 = INITVALUE, gu31 = INITVALUE, gu32 = INITVALUE, gu33 = INITVALUE;
@@ -136,81 +131,6 @@ void ML_BSSN_RHSBoundary_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK
     /* Declare precomputed derivatives*/
     
     /* Declare derivatives */
-    CCTK_REAL PDMinus1A = INITVALUE;
-    CCTK_REAL PDMinus2A = INITVALUE;
-    CCTK_REAL PDMinus3A = INITVALUE;
-    CCTK_REAL PDMinus1alpha = INITVALUE;
-    CCTK_REAL PDMinus2alpha = INITVALUE;
-    CCTK_REAL PDMinus3alpha = INITVALUE;
-    CCTK_REAL PDMinus1At11 = INITVALUE;
-    CCTK_REAL PDMinus2At11 = INITVALUE;
-    CCTK_REAL PDMinus3At11 = INITVALUE;
-    CCTK_REAL PDMinus1At12 = INITVALUE;
-    CCTK_REAL PDMinus2At12 = INITVALUE;
-    CCTK_REAL PDMinus3At12 = INITVALUE;
-    CCTK_REAL PDMinus1At13 = INITVALUE;
-    CCTK_REAL PDMinus2At13 = INITVALUE;
-    CCTK_REAL PDMinus3At13 = INITVALUE;
-    CCTK_REAL PDMinus1At22 = INITVALUE;
-    CCTK_REAL PDMinus2At22 = INITVALUE;
-    CCTK_REAL PDMinus3At22 = INITVALUE;
-    CCTK_REAL PDMinus1At23 = INITVALUE;
-    CCTK_REAL PDMinus2At23 = INITVALUE;
-    CCTK_REAL PDMinus3At23 = INITVALUE;
-    CCTK_REAL PDMinus1At33 = INITVALUE;
-    CCTK_REAL PDMinus2At33 = INITVALUE;
-    CCTK_REAL PDMinus3At33 = INITVALUE;
-    CCTK_REAL PDMinus1B1 = INITVALUE;
-    CCTK_REAL PDMinus2B1 = INITVALUE;
-    CCTK_REAL PDMinus3B1 = INITVALUE;
-    CCTK_REAL PDMinus1B2 = INITVALUE;
-    CCTK_REAL PDMinus2B2 = INITVALUE;
-    CCTK_REAL PDMinus3B2 = INITVALUE;
-    CCTK_REAL PDMinus1B3 = INITVALUE;
-    CCTK_REAL PDMinus2B3 = INITVALUE;
-    CCTK_REAL PDMinus3B3 = INITVALUE;
-    CCTK_REAL PDMinus1beta1 = INITVALUE;
-    CCTK_REAL PDMinus2beta1 = INITVALUE;
-    CCTK_REAL PDMinus3beta1 = INITVALUE;
-    CCTK_REAL PDMinus1beta2 = INITVALUE;
-    CCTK_REAL PDMinus2beta2 = INITVALUE;
-    CCTK_REAL PDMinus3beta2 = INITVALUE;
-    CCTK_REAL PDMinus1beta3 = INITVALUE;
-    CCTK_REAL PDMinus2beta3 = INITVALUE;
-    CCTK_REAL PDMinus3beta3 = INITVALUE;
-    CCTK_REAL PDMinus1gt11 = INITVALUE;
-    CCTK_REAL PDMinus2gt11 = INITVALUE;
-    CCTK_REAL PDMinus3gt11 = INITVALUE;
-    CCTK_REAL PDMinus1gt12 = INITVALUE;
-    CCTK_REAL PDMinus2gt12 = INITVALUE;
-    CCTK_REAL PDMinus3gt12 = INITVALUE;
-    CCTK_REAL PDMinus1gt13 = INITVALUE;
-    CCTK_REAL PDMinus2gt13 = INITVALUE;
-    CCTK_REAL PDMinus3gt13 = INITVALUE;
-    CCTK_REAL PDMinus1gt22 = INITVALUE;
-    CCTK_REAL PDMinus2gt22 = INITVALUE;
-    CCTK_REAL PDMinus3gt22 = INITVALUE;
-    CCTK_REAL PDMinus1gt23 = INITVALUE;
-    CCTK_REAL PDMinus2gt23 = INITVALUE;
-    CCTK_REAL PDMinus3gt23 = INITVALUE;
-    CCTK_REAL PDMinus1gt33 = INITVALUE;
-    CCTK_REAL PDMinus2gt33 = INITVALUE;
-    CCTK_REAL PDMinus3gt33 = INITVALUE;
-    CCTK_REAL PDMinus1phi = INITVALUE;
-    CCTK_REAL PDMinus2phi = INITVALUE;
-    CCTK_REAL PDMinus3phi = INITVALUE;
-    CCTK_REAL PDMinus1trK = INITVALUE;
-    CCTK_REAL PDMinus2trK = INITVALUE;
-    CCTK_REAL PDMinus3trK = INITVALUE;
-    CCTK_REAL PDMinus1Xt1 = INITVALUE;
-    CCTK_REAL PDMinus2Xt1 = INITVALUE;
-    CCTK_REAL PDMinus3Xt1 = INITVALUE;
-    CCTK_REAL PDMinus1Xt2 = INITVALUE;
-    CCTK_REAL PDMinus2Xt2 = INITVALUE;
-    CCTK_REAL PDMinus3Xt2 = INITVALUE;
-    CCTK_REAL PDMinus1Xt3 = INITVALUE;
-    CCTK_REAL PDMinus2Xt3 = INITVALUE;
-    CCTK_REAL PDMinus3Xt3 = INITVALUE;
     
     /* Assign local copies of grid functions */
     AL = A[index];
@@ -244,110 +164,31 @@ void ML_BSSN_RHSBoundary_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK
     /* Include user supplied include files */
     
     /* Precompute derivatives (new style) */
-    PDMinus1A = PDMinus1(A, i, j, k);
-    PDMinus2A = PDMinus2(A, i, j, k);
-    PDMinus3A = PDMinus3(A, i, j, k);
-    PDMinus1alpha = PDMinus1(alpha, i, j, k);
-    PDMinus2alpha = PDMinus2(alpha, i, j, k);
-    PDMinus3alpha = PDMinus3(alpha, i, j, k);
-    PDMinus1At11 = PDMinus1(At11, i, j, k);
-    PDMinus2At11 = PDMinus2(At11, i, j, k);
-    PDMinus3At11 = PDMinus3(At11, i, j, k);
-    PDMinus1At12 = PDMinus1(At12, i, j, k);
-    PDMinus2At12 = PDMinus2(At12, i, j, k);
-    PDMinus3At12 = PDMinus3(At12, i, j, k);
-    PDMinus1At13 = PDMinus1(At13, i, j, k);
-    PDMinus2At13 = PDMinus2(At13, i, j, k);
-    PDMinus3At13 = PDMinus3(At13, i, j, k);
-    PDMinus1At22 = PDMinus1(At22, i, j, k);
-    PDMinus2At22 = PDMinus2(At22, i, j, k);
-    PDMinus3At22 = PDMinus3(At22, i, j, k);
-    PDMinus1At23 = PDMinus1(At23, i, j, k);
-    PDMinus2At23 = PDMinus2(At23, i, j, k);
-    PDMinus3At23 = PDMinus3(At23, i, j, k);
-    PDMinus1At33 = PDMinus1(At33, i, j, k);
-    PDMinus2At33 = PDMinus2(At33, i, j, k);
-    PDMinus3At33 = PDMinus3(At33, i, j, k);
-    PDMinus1B1 = PDMinus1(B1, i, j, k);
-    PDMinus2B1 = PDMinus2(B1, i, j, k);
-    PDMinus3B1 = PDMinus3(B1, i, j, k);
-    PDMinus1B2 = PDMinus1(B2, i, j, k);
-    PDMinus2B2 = PDMinus2(B2, i, j, k);
-    PDMinus3B2 = PDMinus3(B2, i, j, k);
-    PDMinus1B3 = PDMinus1(B3, i, j, k);
-    PDMinus2B3 = PDMinus2(B3, i, j, k);
-    PDMinus3B3 = PDMinus3(B3, i, j, k);
-    PDMinus1beta1 = PDMinus1(beta1, i, j, k);
-    PDMinus2beta1 = PDMinus2(beta1, i, j, k);
-    PDMinus3beta1 = PDMinus3(beta1, i, j, k);
-    PDMinus1beta2 = PDMinus1(beta2, i, j, k);
-    PDMinus2beta2 = PDMinus2(beta2, i, j, k);
-    PDMinus3beta2 = PDMinus3(beta2, i, j, k);
-    PDMinus1beta3 = PDMinus1(beta3, i, j, k);
-    PDMinus2beta3 = PDMinus2(beta3, i, j, k);
-    PDMinus3beta3 = PDMinus3(beta3, i, j, k);
-    PDMinus1gt11 = PDMinus1(gt11, i, j, k);
-    PDMinus2gt11 = PDMinus2(gt11, i, j, k);
-    PDMinus3gt11 = PDMinus3(gt11, i, j, k);
-    PDMinus1gt12 = PDMinus1(gt12, i, j, k);
-    PDMinus2gt12 = PDMinus2(gt12, i, j, k);
-    PDMinus3gt12 = PDMinus3(gt12, i, j, k);
-    PDMinus1gt13 = PDMinus1(gt13, i, j, k);
-    PDMinus2gt13 = PDMinus2(gt13, i, j, k);
-    PDMinus3gt13 = PDMinus3(gt13, i, j, k);
-    PDMinus1gt22 = PDMinus1(gt22, i, j, k);
-    PDMinus2gt22 = PDMinus2(gt22, i, j, k);
-    PDMinus3gt22 = PDMinus3(gt22, i, j, k);
-    PDMinus1gt23 = PDMinus1(gt23, i, j, k);
-    PDMinus2gt23 = PDMinus2(gt23, i, j, k);
-    PDMinus3gt23 = PDMinus3(gt23, i, j, k);
-    PDMinus1gt33 = PDMinus1(gt33, i, j, k);
-    PDMinus2gt33 = PDMinus2(gt33, i, j, k);
-    PDMinus3gt33 = PDMinus3(gt33, i, j, k);
-    PDMinus1phi = PDMinus1(phi, i, j, k);
-    PDMinus2phi = PDMinus2(phi, i, j, k);
-    PDMinus3phi = PDMinus3(phi, i, j, k);
-    PDMinus1trK = PDMinus1(trK, i, j, k);
-    PDMinus2trK = PDMinus2(trK, i, j, k);
-    PDMinus3trK = PDMinus3(trK, i, j, k);
-    PDMinus1Xt1 = PDMinus1(Xt1, i, j, k);
-    PDMinus2Xt1 = PDMinus2(Xt1, i, j, k);
-    PDMinus3Xt1 = PDMinus3(Xt1, i, j, k);
-    PDMinus1Xt2 = PDMinus1(Xt2, i, j, k);
-    PDMinus2Xt2 = PDMinus2(Xt2, i, j, k);
-    PDMinus3Xt2 = PDMinus3(Xt2, i, j, k);
-    PDMinus1Xt3 = PDMinus1(Xt3, i, j, k);
-    PDMinus2Xt3 = PDMinus2(Xt3, i, j, k);
-    PDMinus3Xt3 = PDMinus3(Xt3, i, j, k);
     
     /* Precompute derivatives (old style) */
     
     /* Calculate temporaries and grid functions */
+    dir1  =  Sign(normal[0]);
+    
+    dir2  =  Sign(normal[1]);
+    
+    dir3  =  Sign(normal[2]);
+    
     detgt  =  1;
     
+    gtu11  =  INV(detgt)*(gt22L*gt33L - SQR(gt23L));
+    
+    gtu21  =  (gt13L*gt23L - gt12L*gt33L)*INV(detgt);
+    
+    gtu31  =  (-(gt13L*gt22L) + gt12L*gt23L)*INV(detgt);
+    
+    gtu22  =  INV(detgt)*(gt11L*gt33L - SQR(gt13L));
+    
+    gtu32  =  (gt12L*gt13L - gt11L*gt23L)*INV(detgt);
+    
+    gtu33  =  INV(detgt)*(gt11L*gt22L - SQR(gt12L));
+    
     em4phi  =  exp(-4*phiL);
-    
-    nn1  =  normal[0];
-    
-    nn2  =  normal[1];
-    
-    nn3  =  normal[2];
-    
-    vg  =  pow(harmonicF,0.5);
-    
-    CCTK_REAL const T1000001  =  INV(detgt);
-    
-    gtu11  =  T1000001*(gt22L*gt33L - SQR(gt23L));
-    
-    gtu21  =  (gt13L*gt23L - gt12L*gt33L)*T1000001;
-    
-    gtu31  =  (-(gt13L*gt22L) + gt12L*gt23L)*T1000001;
-    
-    gtu22  =  T1000001*(gt11L*gt33L - SQR(gt13L));
-    
-    gtu32  =  (gt12L*gt13L - gt11L*gt23L)*T1000001;
-    
-    gtu33  =  T1000001*(gt11L*gt22L - SQR(gt12L));
     
     gu11  =  em4phi*gtu11;
     
@@ -361,6 +202,12 @@ void ML_BSSN_RHSBoundary_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK
     
     gu33  =  em4phi*gtu33;
     
+    nn1  =  normal[0];
+    
+    nn2  =  normal[1];
+    
+    nn3  =  normal[2];
+    
     nu1  =  gu11*nn1 + gu21*nn2 + gu31*nn3;
     
     nu2  =  gu21*nn1 + gu22*nn2 + gu32*nn3;
@@ -371,63 +218,67 @@ void ML_BSSN_RHSBoundary_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK
     
     nlen  =  pow(nlen2,0.5);
     
-    CCTK_REAL const T1000002  =  INV(nlen);
+    su1  =  nu1*INV(nlen);
     
-    su1  =  nu1*T1000002;
+    su2  =  nu2*INV(nlen);
     
-    su2  =  nu2*T1000002;
+    su3  =  nu3*INV(nlen);
     
-    su3  =  nu3*T1000002;
+    vg  =  pow(harmonicF,0.5);
     
-    phirhsL  =  -((PDMinus1phi*su1 + PDMinus2phi*su2 + PDMinus3phi*su3)*vg);
+    phirhsL  =  -((PDonesided1(phi, i, j, k)*su1 + PDonesided2(phi, i, j, k)*su2 + PDonesided3(phi, i, j, k)*su3)*vg);
     
-    gt11rhsL  =  -(PDMinus1gt11*su1) - PDMinus2gt11*su2 - PDMinus3gt11*su3;
+    gt11rhsL  =  -(PDonesided1(gt11, i, j, k)*su1) - PDonesided2(gt11, i, j, k)*su2 - PDonesided3(gt11, i, j, k)*su3;
     
-    gt12rhsL  =  -(PDMinus1gt12*su1) - PDMinus2gt12*su2 - PDMinus3gt12*su3;
+    gt12rhsL  =  -(PDonesided1(gt12, i, j, k)*su1) - PDonesided2(gt12, i, j, k)*su2 - PDonesided3(gt12, i, j, k)*su3;
     
-    gt13rhsL  =  -(PDMinus1gt13*su1) - PDMinus2gt13*su2 - PDMinus3gt13*su3;
+    gt13rhsL  =  -(PDonesided1(gt13, i, j, k)*su1) - PDonesided2(gt13, i, j, k)*su2 - PDonesided3(gt13, i, j, k)*su3;
     
-    gt22rhsL  =  -(PDMinus1gt22*su1) - PDMinus2gt22*su2 - PDMinus3gt22*su3;
+    gt22rhsL  =  -(PDonesided1(gt22, i, j, k)*su1) - PDonesided2(gt22, i, j, k)*su2 - PDonesided3(gt22, i, j, k)*su3;
     
-    gt23rhsL  =  -(PDMinus1gt23*su1) - PDMinus2gt23*su2 - PDMinus3gt23*su3;
+    gt23rhsL  =  -(PDonesided1(gt23, i, j, k)*su1) - PDonesided2(gt23, i, j, k)*su2 - PDonesided3(gt23, i, j, k)*su3;
     
-    gt33rhsL  =  -(PDMinus1gt33*su1) - PDMinus2gt33*su2 - PDMinus3gt33*su3;
+    gt33rhsL  =  -(PDonesided1(gt33, i, j, k)*su1) - PDonesided2(gt33, i, j, k)*su2 - PDonesided3(gt33, i, j, k)*su3;
     
-    trKrhsL  =  -((PDMinus1trK*su1 + PDMinus2trK*su2 + PDMinus3trK*su3)*vg);
+    trKrhsL  =  -((PDonesided1(trK, i, j, k)*su1 + PDonesided2(trK, i, j, k)*su2 + PDonesided3(trK, i, j, k)*su3)*vg);
     
-    At11rhsL  =  -(PDMinus1At11*su1) - PDMinus2At11*su2 - PDMinus3At11*su3;
+    At11rhsL  =  -(PDonesided1(At11, i, j, k)*su1) - PDonesided2(At11, i, j, k)*su2 - PDonesided3(At11, i, j, k)*su3;
     
-    At12rhsL  =  -(PDMinus1At12*su1) - PDMinus2At12*su2 - PDMinus3At12*su3;
+    At12rhsL  =  -(PDonesided1(At12, i, j, k)*su1) - PDonesided2(At12, i, j, k)*su2 - PDonesided3(At12, i, j, k)*su3;
     
-    At13rhsL  =  -(PDMinus1At13*su1) - PDMinus2At13*su2 - PDMinus3At13*su3;
+    At13rhsL  =  -(PDonesided1(At13, i, j, k)*su1) - PDonesided2(At13, i, j, k)*su2 - PDonesided3(At13, i, j, k)*su3;
     
-    At22rhsL  =  -(PDMinus1At22*su1) - PDMinus2At22*su2 - PDMinus3At22*su3;
+    At22rhsL  =  -(PDonesided1(At22, i, j, k)*su1) - PDonesided2(At22, i, j, k)*su2 - PDonesided3(At22, i, j, k)*su3;
     
-    At23rhsL  =  -(PDMinus1At23*su1) - PDMinus2At23*su2 - PDMinus3At23*su3;
+    At23rhsL  =  -(PDonesided1(At23, i, j, k)*su1) - PDonesided2(At23, i, j, k)*su2 - PDonesided3(At23, i, j, k)*su3;
     
-    At33rhsL  =  -(PDMinus1At33*su1) - PDMinus2At33*su2 - PDMinus3At33*su3;
+    At33rhsL  =  -(PDonesided1(At33, i, j, k)*su1) - PDonesided2(At33, i, j, k)*su2 - PDonesided3(At33, i, j, k)*su3;
     
-    Xt1rhsL  =  -(PDMinus1Xt1*su1) - PDMinus2Xt1*su2 - PDMinus3Xt1*su3;
+    Xt1rhsL  =  -(PDonesided1(Xt1, i, j, k)*su1) - PDonesided2(Xt1, i, j, k)*su2 - PDonesided3(Xt1, i, j, k)*su3;
     
-    Xt2rhsL  =  -(PDMinus1Xt2*su1) - PDMinus2Xt2*su2 - PDMinus3Xt2*su3;
+    Xt2rhsL  =  -(PDonesided1(Xt2, i, j, k)*su1) - PDonesided2(Xt2, i, j, k)*su2 - PDonesided3(Xt2, i, j, k)*su3;
     
-    Xt3rhsL  =  -(PDMinus1Xt3*su1) - PDMinus2Xt3*su2 - PDMinus3Xt3*su3;
+    Xt3rhsL  =  -(PDonesided1(Xt3, i, j, k)*su1) - PDonesided2(Xt3, i, j, k)*su2 - PDonesided3(Xt3, i, j, k)*su3;
     
-    alpharhsL  =  -((PDMinus1alpha*su1 + PDMinus2alpha*su2 + PDMinus3alpha*su3)*vg);
+    alpharhsL  =  -((PDonesided1(alpha, i, j, k)*su1 + PDonesided2(alpha, i, j, k)*su2 + 
+            PDonesided3(alpha, i, j, k)*su3)*vg);
     
-    ArhsL  =  -((PDMinus1A*su1 + PDMinus2A*su2 + PDMinus3A*su3)*vg);
+    ArhsL  =  -((PDonesided1(A, i, j, k)*su1 + PDonesided2(A, i, j, k)*su2 + PDonesided3(A, i, j, k)*su3)*vg);
     
-    beta1rhsL  =  -(PDMinus1beta1*su1) - PDMinus2beta1*su2 - PDMinus3beta1*su3;
+    beta1rhsL  =  -(PDonesided1(beta1, i, j, k)*su1) - PDonesided2(beta1, i, j, k)*su2 - 
+        PDonesided3(beta1, i, j, k)*su3;
     
-    beta2rhsL  =  -(PDMinus1beta2*su1) - PDMinus2beta2*su2 - PDMinus3beta2*su3;
+    beta2rhsL  =  -(PDonesided1(beta2, i, j, k)*su1) - PDonesided2(beta2, i, j, k)*su2 - 
+        PDonesided3(beta2, i, j, k)*su3;
     
-    beta3rhsL  =  -(PDMinus1beta3*su1) - PDMinus2beta3*su2 - PDMinus3beta3*su3;
+    beta3rhsL  =  -(PDonesided1(beta3, i, j, k)*su1) - PDonesided2(beta3, i, j, k)*su2 - 
+        PDonesided3(beta3, i, j, k)*su3;
     
-    B1rhsL  =  -(PDMinus1B1*su1) - PDMinus2B1*su2 - PDMinus3B1*su3;
+    B1rhsL  =  -(PDonesided1(B1, i, j, k)*su1) - PDonesided2(B1, i, j, k)*su2 - PDonesided3(B1, i, j, k)*su3;
     
-    B2rhsL  =  -(PDMinus1B2*su1) - PDMinus2B2*su2 - PDMinus3B2*su3;
+    B2rhsL  =  -(PDonesided1(B2, i, j, k)*su1) - PDonesided2(B2, i, j, k)*su2 - PDonesided3(B2, i, j, k)*su3;
     
-    B3rhsL  =  -(PDMinus1B3*su1) - PDMinus2B3*su2 - PDMinus3B3*su3;
+    B3rhsL  =  -(PDonesided1(B3, i, j, k)*su1) - PDonesided2(B3, i, j, k)*su2 - PDonesided3(B3, i, j, k)*su3;
     
     
     /* Copy local copies back to grid functions */

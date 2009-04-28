@@ -43,15 +43,12 @@ void ML_BSSN_convertToADMBase_Body(cGH const * const cctkGH, CCTK_INT const dir,
   CCTK_REAL p1o144dxdy = INITVALUE;
   CCTK_REAL p1o144dxdz = INITVALUE;
   CCTK_REAL p1o144dydz = INITVALUE;
-  CCTK_REAL p1o2dx = INITVALUE;
-  CCTK_REAL p1o2dy = INITVALUE;
-  CCTK_REAL p1o2dz = INITVALUE;
+  CCTK_REAL p1odx = INITVALUE;
+  CCTK_REAL p1ody = INITVALUE;
+  CCTK_REAL p1odz = INITVALUE;
   CCTK_REAL pm1o12dx2 = INITVALUE;
   CCTK_REAL pm1o12dy2 = INITVALUE;
   CCTK_REAL pm1o12dz2 = INITVALUE;
-  CCTK_REAL pm1o2dx = INITVALUE;
-  CCTK_REAL pm1o2dy = INITVALUE;
-  CCTK_REAL pm1o2dz = INITVALUE;
   
   if (verbose > 1)
   {
@@ -88,15 +85,12 @@ void ML_BSSN_convertToADMBase_Body(cGH const * const cctkGH, CCTK_INT const dir,
   p1o144dxdy = (INV(dx)*INV(dy))/144.;
   p1o144dxdz = (INV(dx)*INV(dz))/144.;
   p1o144dydz = (INV(dy)*INV(dz))/144.;
-  p1o2dx = khalf*INV(dx);
-  p1o2dy = khalf*INV(dy);
-  p1o2dz = khalf*INV(dz);
+  p1odx = INV(dx);
+  p1ody = INV(dy);
+  p1odz = INV(dz);
   pm1o12dx2 = -pow(dx,-2)/12.;
   pm1o12dy2 = -pow(dy,-2)/12.;
   pm1o12dz2 = -pow(dz,-2)/12.;
-  pm1o2dx = -(khalf*INV(dx));
-  pm1o2dy = -(khalf*INV(dy));
-  pm1o2dz = -(khalf*INV(dz));
   
   /* Loop over the grid points */
   #pragma omp parallel
@@ -187,7 +181,7 @@ void ML_BSSN_convertToADMBase_Body(cGH const * const cctkGH, CCTK_INT const dir,
     
     dir3  =  Sign(beta3L);
     
-    e4phi  =  xp(4*phiL);
+    e4phi  =  exp(4*phiL);
     
     g11  =  e4phi*gt11L;
     
@@ -245,26 +239,18 @@ void ML_BSSN_convertToADMBase_Body(cGH const * const cctkGH, CCTK_INT const dir,
     
     betazL  =  beta3L;
     
-    dtalpL  =  (PDupwindNth1(alpha, i, j, k)*beta1L + 
-           PDupwindNth2(alpha, i, j, k)*beta2L + 
+    dtalpL  =  (PDupwindNth1(alpha, i, j, k)*beta1L + PDupwindNth2(alpha, i, j, k)*beta2L + 
            PDupwindNth3(alpha, i, j, k)*beta3L)*LapseAdvectionCoeff + 
-        harmonicF*(AL*(-1 + LapseAdvectionCoeff) - LapseAdvectionCoeff*trKL)*
-         pow(alphaL,harmonicN);
+        harmonicF*(AL*(-1 + LapseAdvectionCoeff) - LapseAdvectionCoeff*trKL)*pow(alphaL,harmonicN);
     
-    dtbetaxL  =  (PDupwindNth1(beta1, i, j, k)*beta1L + 
-           PDupwindNth2(beta1, i, j, k)*beta2L + 
-           PDupwindNth3(beta1, i, j, k)*beta3L)*ShiftAdvectionCoeff + 
-        B1L*ShiftGammaCoeff;
+    dtbetaxL  =  (PDupwindNth1(beta1, i, j, k)*beta1L + PDupwindNth2(beta1, i, j, k)*beta2L + 
+           PDupwindNth3(beta1, i, j, k)*beta3L)*ShiftAdvectionCoeff + B1L*ShiftGammaCoeff;
     
-    dtbetayL  =  (PDupwindNth1(beta2, i, j, k)*beta1L + 
-           PDupwindNth2(beta2, i, j, k)*beta2L + 
-           PDupwindNth3(beta2, i, j, k)*beta3L)*ShiftAdvectionCoeff + 
-        B2L*ShiftGammaCoeff;
+    dtbetayL  =  (PDupwindNth1(beta2, i, j, k)*beta1L + PDupwindNth2(beta2, i, j, k)*beta2L + 
+           PDupwindNth3(beta2, i, j, k)*beta3L)*ShiftAdvectionCoeff + B2L*ShiftGammaCoeff;
     
-    dtbetazL  =  (PDupwindNth1(beta3, i, j, k)*beta1L + 
-           PDupwindNth2(beta3, i, j, k)*beta2L + 
-           PDupwindNth3(beta3, i, j, k)*beta3L)*ShiftAdvectionCoeff + 
-        B3L*ShiftGammaCoeff;
+    dtbetazL  =  (PDupwindNth1(beta3, i, j, k)*beta1L + PDupwindNth2(beta3, i, j, k)*beta2L + 
+           PDupwindNth3(beta3, i, j, k)*beta3L)*ShiftAdvectionCoeff + B3L*ShiftGammaCoeff;
     
     
     /* Copy local copies back to grid functions */

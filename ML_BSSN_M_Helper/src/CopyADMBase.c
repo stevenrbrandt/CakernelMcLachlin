@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include <string.h>
 
 #include <cctk.h>
@@ -40,10 +41,10 @@ ML_BSSN_M_CopyADMBase (CCTK_ARGUMENTS)
 }
 
 static void
-copy (cGH const * restrict cctkGH,
-      CCTK_REAL * restrict dst, CCTK_REAL const * restrict src)
+copy (cGH const * restrict const cctkGH,
+      CCTK_REAL * restrict const dst, CCTK_REAL const * restrict const src)
 {
-  int const npoints =
-    cctkGH->cctk_lsh[0] * cctkGH->cctk_lsh[1] * cctkGH->cctk_lsh[2];
+  size_t const npoints =
+    (size_t) cctkGH->cctk_lsh[0] * cctkGH->cctk_lsh[1] * cctkGH->cctk_lsh[2];
   memcpy (dst, src, npoints * sizeof *dst);
 }

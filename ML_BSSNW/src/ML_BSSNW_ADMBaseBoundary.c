@@ -43,12 +43,15 @@ void ML_BSSNW_ADMBaseBoundary_Body(cGH const * const cctkGH, CCTK_INT const dir,
   CCTK_REAL p1o144dxdy = INITVALUE;
   CCTK_REAL p1o144dxdz = INITVALUE;
   CCTK_REAL p1o144dydz = INITVALUE;
-  CCTK_REAL pm1o12dx = INITVALUE;
   CCTK_REAL pm1o12dx2 = INITVALUE;
-  CCTK_REAL pm1o12dy = INITVALUE;
   CCTK_REAL pm1o12dy2 = INITVALUE;
-  CCTK_REAL pm1o12dz = INITVALUE;
   CCTK_REAL pm1o12dz2 = INITVALUE;
+  CCTK_REAL Differencing`Private`liName$30259 = INITVALUE;
+  CCTK_REAL Differencing`Private`liName$30283 = INITVALUE;
+  CCTK_REAL Differencing`Private`liName$30307 = INITVALUE;
+  CCTK_REAL Differencing`Private`liName$30331 = INITVALUE;
+  CCTK_REAL Differencing`Private`liName$30355 = INITVALUE;
+  CCTK_REAL Differencing`Private`liName$30379 = INITVALUE;
   
   if (verbose > 1)
   {
@@ -85,12 +88,15 @@ void ML_BSSNW_ADMBaseBoundary_Body(cGH const * const cctkGH, CCTK_INT const dir,
   p1o144dxdy = (INV(dx)*INV(dy))/144.;
   p1o144dxdz = (INV(dx)*INV(dz))/144.;
   p1o144dydz = (INV(dy)*INV(dz))/144.;
-  pm1o12dx = -INV(dx)/12.;
   pm1o12dx2 = -pow(dx,-2)/12.;
-  pm1o12dy = -INV(dy)/12.;
   pm1o12dy2 = -pow(dy,-2)/12.;
-  pm1o12dz = -INV(dz)/12.;
   pm1o12dz2 = -pow(dz,-2)/12.;
+  Differencing`Private`liName$30259 = Differencing_Private_num$30259*Differencing_Private_ss$30259*INV(Differencing_Private_den$30259);
+  Differencing`Private`liName$30283 = Differencing_Private_num$30283*Differencing_Private_ss$30283*INV(Differencing_Private_den$30283);
+  Differencing`Private`liName$30307 = Differencing_Private_num$30307*Differencing_Private_ss$30307*INV(Differencing_Private_den$30307);
+  Differencing`Private`liName$30331 = Differencing_Private_num$30331*Differencing_Private_ss$30331*INV(Differencing_Private_den$30331);
+  Differencing`Private`liName$30355 = Differencing_Private_num$30355*Differencing_Private_ss$30355*INV(Differencing_Private_den$30355);
+  Differencing`Private`liName$30379 = Differencing_Private_num$30379*Differencing_Private_ss$30379*INV(Differencing_Private_den$30379);
   
   /* Loop over the grid points */
   #pragma omp parallel

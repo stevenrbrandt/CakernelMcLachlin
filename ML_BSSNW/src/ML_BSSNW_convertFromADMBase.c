@@ -43,12 +43,15 @@ void ML_BSSNW_convertFromADMBase_Body(cGH const * const cctkGH, CCTK_INT const d
   CCTK_REAL p1o144dxdy = INITVALUE;
   CCTK_REAL p1o144dxdz = INITVALUE;
   CCTK_REAL p1o144dydz = INITVALUE;
-  CCTK_REAL pm1o12dx = INITVALUE;
   CCTK_REAL pm1o12dx2 = INITVALUE;
-  CCTK_REAL pm1o12dy = INITVALUE;
   CCTK_REAL pm1o12dy2 = INITVALUE;
-  CCTK_REAL pm1o12dz = INITVALUE;
   CCTK_REAL pm1o12dz2 = INITVALUE;
+  CCTK_REAL Differencing`Private`liName$30259 = INITVALUE;
+  CCTK_REAL Differencing`Private`liName$30283 = INITVALUE;
+  CCTK_REAL Differencing`Private`liName$30307 = INITVALUE;
+  CCTK_REAL Differencing`Private`liName$30331 = INITVALUE;
+  CCTK_REAL Differencing`Private`liName$30355 = INITVALUE;
+  CCTK_REAL Differencing`Private`liName$30379 = INITVALUE;
   
   if (verbose > 1)
   {
@@ -85,12 +88,15 @@ void ML_BSSNW_convertFromADMBase_Body(cGH const * const cctkGH, CCTK_INT const d
   p1o144dxdy = (INV(dx)*INV(dy))/144.;
   p1o144dxdz = (INV(dx)*INV(dz))/144.;
   p1o144dydz = (INV(dy)*INV(dz))/144.;
-  pm1o12dx = -INV(dx)/12.;
   pm1o12dx2 = -pow(dx,-2)/12.;
-  pm1o12dy = -INV(dy)/12.;
   pm1o12dy2 = -pow(dy,-2)/12.;
-  pm1o12dz = -INV(dz)/12.;
   pm1o12dz2 = -pow(dz,-2)/12.;
+  Differencing`Private`liName$30259 = Differencing_Private_num$30259*Differencing_Private_ss$30259*INV(Differencing_Private_den$30259);
+  Differencing`Private`liName$30283 = Differencing_Private_num$30283*Differencing_Private_ss$30283*INV(Differencing_Private_den$30283);
+  Differencing`Private`liName$30307 = Differencing_Private_num$30307*Differencing_Private_ss$30307*INV(Differencing_Private_den$30307);
+  Differencing`Private`liName$30331 = Differencing_Private_num$30331*Differencing_Private_ss$30331*INV(Differencing_Private_den$30331);
+  Differencing`Private`liName$30355 = Differencing_Private_num$30355*Differencing_Private_ss$30355*INV(Differencing_Private_den$30355);
+  Differencing`Private`liName$30379 = Differencing_Private_num$30379*Differencing_Private_ss$30379*INV(Differencing_Private_den$30379);
   
   /* Loop over the grid points */
   #pragma omp parallel
@@ -178,49 +184,21 @@ void ML_BSSNW_convertFromADMBase_Body(cGH const * const cctkGH, CCTK_INT const d
     
     g33  =  gzzL;
     
-    K11  =  kxxL;
+    detg  =  2*g12*g13*g23 + g33*(g11*g22 - SQR(g12)) - g22*SQR(g13) - g11*SQR(g23);
     
-    K12  =  kxyL;
+    gu11  =  INV(detg)*(g22*g33 - SQR(g23));
     
-    K13  =  kxzL;
+    gu21  =  (g13*g23 - g12*g33)*INV(detg);
     
-    K22  =  kyyL;
+    gu31  =  (-(g13*g22) + g12*g23)*INV(detg);
     
-    K23  =  kyzL;
+    gu22  =  INV(detg)*(g11*g33 - SQR(g13));
     
-    K33  =  kzzL;
+    gu32  =  (g12*g13 - g11*g23)*INV(detg);
     
-    alphaL  =  alpL;
-    
-    beta1L  =  betaxL;
-    
-    beta2L  =  betayL;
-    
-    beta3L  =  betazL;
-    
-    CCTK_REAL const T1000001  =  SQR(g23);
-    
-    CCTK_REAL const T1000003  =  SQR(g13);
-    
-    CCTK_REAL const T1000004  =  SQR(g12);
-    
-    detg  =  2*g12*g13*g23 + g11*(g22*g33 - T1000001) - g22*T1000003 - g33*T1000004;
-    
-    CCTK_REAL const T1000002  =  INV(detg);
+    gu33  =  INV(detg)*(g11*g22 - SQR(g12));
     
     WL  =  pow(detg,-0.16666666666666666);
-    
-    gu11  =  (g22*g33 - T1000001)*T1000002;
-    
-    gu21  =  (g13*g23 - g12*g33)*T1000002;
-    
-    gu31  =  (-(g13*g22) + g12*g23)*T1000002;
-    
-    gu22  =  T1000002*(g11*g33 - T1000003);
-    
-    gu32  =  (g12*g13 - g11*g23)*T1000002;
-    
-    gu33  =  T1000002*(g11*g22 - T1000004);
     
     W2  =  SQR(WL);
     
@@ -236,6 +214,18 @@ void ML_BSSNW_convertFromADMBase_Body(cGH const * const cctkGH, CCTK_INT const d
     
     gt33L  =  g33*W2;
     
+    K11  =  kxxL;
+    
+    K12  =  kxyL;
+    
+    K13  =  kxzL;
+    
+    K22  =  kyyL;
+    
+    K23  =  kyzL;
+    
+    K33  =  kzzL;
+    
     trKL  =  gu11*K11 + gu22*K22 + 2*(gu21*K12 + gu31*K13 + gu32*K23) + gu33*K33;
     
     At11L  =  (K11 - g11*kthird*trKL)*W2;
@@ -249,6 +239,14 @@ void ML_BSSNW_convertFromADMBase_Body(cGH const * const cctkGH, CCTK_INT const d
     At23L  =  (K23 - g23*kthird*trKL)*W2;
     
     At33L  =  (K33 - g33*kthird*trKL)*W2;
+    
+    alphaL  =  alpL;
+    
+    beta1L  =  betaxL;
+    
+    beta2L  =  betayL;
+    
+    beta3L  =  betazL;
     
     
     /* Copy local copies back to grid functions */

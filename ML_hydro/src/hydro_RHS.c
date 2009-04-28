@@ -167,20 +167,15 @@ void hydro_RHS_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT const
     /* Precompute derivatives (old style) */
     
     /* Calculate temporaries and grid functions */
-    massrhsL  =  -PDstandardNth1massflux1 - PDstandardNth2massflux2 - 
-        PDstandardNth3massflux3;
+    massrhsL  =  -PDstandardNth1massflux1 - PDstandardNth2massflux2 - PDstandardNth3massflux3;
     
-    mom1rhsL  =  -PDstandardNth1momflux11 - PDstandardNth2momflux12 - 
-        PDstandardNth3momflux13;
+    mom1rhsL  =  -PDstandardNth1momflux11 - PDstandardNth2momflux12 - PDstandardNth3momflux13;
     
-    mom2rhsL  =  -PDstandardNth1momflux21 - PDstandardNth2momflux22 - 
-        PDstandardNth3momflux23;
+    mom2rhsL  =  -PDstandardNth1momflux21 - PDstandardNth2momflux22 - PDstandardNth3momflux23;
     
-    mom3rhsL  =  -PDstandardNth1momflux31 - PDstandardNth2momflux32 - 
-        PDstandardNth3momflux33;
+    mom3rhsL  =  -PDstandardNth1momflux31 - PDstandardNth2momflux32 - PDstandardNth3momflux33;
     
-    enerhsL  =  -PDstandardNth1eneflux1 - PDstandardNth2eneflux2 - 
-        PDstandardNth3eneflux3;
+    enerhsL  =  -PDstandardNth1eneflux1 - PDstandardNth2eneflux2 - PDstandardNth3eneflux3;
     
     
     /* Copy local copies back to grid functions */

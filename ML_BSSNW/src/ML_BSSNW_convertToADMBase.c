@@ -43,12 +43,15 @@ void ML_BSSNW_convertToADMBase_Body(cGH const * const cctkGH, CCTK_INT const dir
   CCTK_REAL p1o144dxdy = INITVALUE;
   CCTK_REAL p1o144dxdz = INITVALUE;
   CCTK_REAL p1o144dydz = INITVALUE;
-  CCTK_REAL pm1o12dx = INITVALUE;
   CCTK_REAL pm1o12dx2 = INITVALUE;
-  CCTK_REAL pm1o12dy = INITVALUE;
   CCTK_REAL pm1o12dy2 = INITVALUE;
-  CCTK_REAL pm1o12dz = INITVALUE;
   CCTK_REAL pm1o12dz2 = INITVALUE;
+  CCTK_REAL Differencing`Private`liName$30259 = INITVALUE;
+  CCTK_REAL Differencing`Private`liName$30283 = INITVALUE;
+  CCTK_REAL Differencing`Private`liName$30307 = INITVALUE;
+  CCTK_REAL Differencing`Private`liName$30331 = INITVALUE;
+  CCTK_REAL Differencing`Private`liName$30355 = INITVALUE;
+  CCTK_REAL Differencing`Private`liName$30379 = INITVALUE;
   
   if (verbose > 1)
   {
@@ -85,12 +88,15 @@ void ML_BSSNW_convertToADMBase_Body(cGH const * const cctkGH, CCTK_INT const dir
   p1o144dxdy = (INV(dx)*INV(dy))/144.;
   p1o144dxdz = (INV(dx)*INV(dz))/144.;
   p1o144dydz = (INV(dy)*INV(dz))/144.;
-  pm1o12dx = -INV(dx)/12.;
   pm1o12dx2 = -pow(dx,-2)/12.;
-  pm1o12dy = -INV(dy)/12.;
   pm1o12dy2 = -pow(dy,-2)/12.;
-  pm1o12dz = -INV(dz)/12.;
   pm1o12dz2 = -pow(dz,-2)/12.;
+  Differencing`Private`liName$30259 = Differencing_Private_num$30259*Differencing_Private_ss$30259*INV(Differencing_Private_den$30259);
+  Differencing`Private`liName$30283 = Differencing_Private_num$30283*Differencing_Private_ss$30283*INV(Differencing_Private_den$30283);
+  Differencing`Private`liName$30307 = Differencing_Private_num$30307*Differencing_Private_ss$30307*INV(Differencing_Private_den$30307);
+  Differencing`Private`liName$30331 = Differencing_Private_num$30331*Differencing_Private_ss$30331*INV(Differencing_Private_den$30331);
+  Differencing`Private`liName$30355 = Differencing_Private_num$30355*Differencing_Private_ss$30355*INV(Differencing_Private_den$30355);
+  Differencing`Private`liName$30379 = Differencing_Private_num$30379*Differencing_Private_ss$30379*INV(Differencing_Private_den$30379);
   
   /* Loop over the grid points */
   #pragma omp parallel
@@ -200,33 +206,19 @@ void ML_BSSNW_convertToADMBase_Body(cGH const * const cctkGH, CCTK_INT const dir
     /* Precompute derivatives (old style) */
     
     /* Calculate temporaries and grid functions */
-    CCTK_REAL const T1000001  =  Abs(beta1L);
+    betam1  =  khalf*(beta1L - Abs(beta1L));
     
-    CCTK_REAL const T1000002  =  Abs(beta2L);
+    betam2  =  khalf*(beta2L - Abs(beta2L));
     
-    CCTK_REAL const T1000003  =  Abs(beta3L);
+    betam3  =  khalf*(beta3L - Abs(beta3L));
+    
+    betap1  =  khalf*(beta1L + Abs(beta1L));
+    
+    betap2  =  khalf*(beta2L + Abs(beta2L));
+    
+    betap3  =  khalf*(beta3L + Abs(beta3L));
     
     invW2  =  pow(WL,-2);
-    
-    alpL  =  alphaL;
-    
-    betaxL  =  beta1L;
-    
-    betayL  =  beta2L;
-    
-    betazL  =  beta3L;
-    
-    betam1  =  khalf*(beta1L - T1000001);
-    
-    betam2  =  khalf*(beta2L - T1000002);
-    
-    betam3  =  khalf*(beta3L - T1000003);
-    
-    betap1  =  khalf*(beta1L + T1000001);
-    
-    betap2  =  khalf*(beta2L + T1000002);
-    
-    betap3  =  khalf*(beta3L + T1000003);
     
     g11  =  gt11L*invW2;
     
@@ -239,18 +231,6 @@ void ML_BSSNW_convertToADMBase_Body(cGH const * const cctkGH, CCTK_INT const dir
     g23  =  gt23L*invW2;
     
     g33  =  gt33L*invW2;
-    
-    CCTK_REAL const T1000004  =  betam1*PDupwindmNth1beta1;
-    
-    CCTK_REAL const T1000005  =  betam2*PDupwindmNth2beta1;
-    
-    CCTK_REAL const T1000006  =  betam3*PDupwindmNth3beta1;
-    
-    CCTK_REAL const T1000007  =  betap1*PDupwindpNth1beta1;
-    
-    CCTK_REAL const T1000008  =  betap2*PDupwindpNth2beta1;
-    
-    CCTK_REAL const T1000009  =  betap3*PDupwindpNth3beta1;
     
     gxxL  =  g11;
     
@@ -276,16 +256,6 @@ void ML_BSSNW_convertToADMBase_Body(cGH const * const cctkGH, CCTK_INT const dir
     
     K33  =  At33L*invW2 + g33*kthird*trKL;
     
-    dtalpL  =  LapseAdvectionCoeff*(betam1*PDupwindmNth1alpha + 
-           betam2*PDupwindmNth2alpha + betam3*PDupwindmNth3alpha + 
-           betap1*PDupwindpNth1alpha + betap2*PDupwindpNth2alpha + 
-           betap3*PDupwindpNth3alpha) + 
-        harmonicF*(AL*(-1 + LapseAdvectionCoeff) - LapseAdvectionCoeff*trKL)*
-         pow(alphaL,harmonicN);
-    
-    CCTK_REAL const T1000010  =  
-       T1000004 + T1000005 + T1000006 + T1000007 + T1000008 + T1000009;
-    
     kxxL  =  K11;
     
     kxyL  =  K12;
@@ -298,13 +268,29 @@ void ML_BSSNW_convertToADMBase_Body(cGH const * const cctkGH, CCTK_INT const dir
     
     kzzL  =  K33;
     
-    CCTK_REAL const T1000011  =  ShiftAdvectionCoeff*T1000010;
+    alpL  =  alphaL;
     
-    dtbetaxL  =  B1L*ShiftGammaCoeff + T1000011;
+    betaxL  =  beta1L;
     
-    dtbetayL  =  B2L*ShiftGammaCoeff + T1000011;
+    betayL  =  beta2L;
     
-    dtbetazL  =  B3L*ShiftGammaCoeff + T1000011;
+    betazL  =  beta3L;
+    
+    dtalpL  =  LapseAdvectionCoeff*(betam1*PDupwindmNth1alpha + betam2*PDupwindmNth2alpha + betam3*PDupwindmNth3alpha + 
+           betap1*PDupwindpNth1alpha + betap2*PDupwindpNth2alpha + betap3*PDupwindpNth3alpha) + 
+        harmonicF*(AL*(-1 + LapseAdvectionCoeff) - LapseAdvectionCoeff*trKL)*pow(alphaL,harmonicN);
+    
+    dtbetaxL  =  (betam1*PDupwindmNth1beta1 + betam2*PDupwindmNth2beta1 + betam3*PDupwindmNth3beta1 + 
+           betap1*PDupwindpNth1beta1 + betap2*PDupwindpNth2beta1 + betap3*PDupwindpNth3beta1)*ShiftAdvectionCoeff + 
+        B1L*ShiftGammaCoeff;
+    
+    dtbetayL  =  (betam1*PDupwindmNth1beta1 + betam2*PDupwindmNth2beta1 + betam3*PDupwindmNth3beta1 + 
+           betap1*PDupwindpNth1beta1 + betap2*PDupwindpNth2beta1 + betap3*PDupwindpNth3beta1)*ShiftAdvectionCoeff + 
+        B2L*ShiftGammaCoeff;
+    
+    dtbetazL  =  (betam1*PDupwindmNth1beta1 + betam2*PDupwindmNth2beta1 + betam3*PDupwindmNth3beta1 + 
+           betap1*PDupwindpNth1beta1 + betap2*PDupwindpNth2beta1 + betap3*PDupwindpNth3beta1)*ShiftAdvectionCoeff + 
+        B3L*ShiftGammaCoeff;
     
     
     /* Copy local copies back to grid functions */
