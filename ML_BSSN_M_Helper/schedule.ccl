@@ -35,6 +35,12 @@ if (CCTK_EQUALS (evolution_method, "ML_BSSN_M")) {
     OPTIONS: meta
   } "Don't checkpoint ADMBase variables"
   
+  SCHEDULE ML_BSSN_M_RegisterConstrained IN MoL_Register
+  {
+    LANG: C
+    OPTIONS: meta
+  } "Register ADMBase variables as constrained"
+  
   
   
   SCHEDULE GROUP ML_BSSN_M_evolCalcGroup IN MoL_CalcRHS
@@ -62,13 +68,13 @@ if (CCTK_EQUALS (evolution_method, "ML_BSSN_M")) {
   
   if (CCTK_EQUALS (calculate_ADMBase_variables_at, "MoL_PostStep"))
   {
-    if (timelevels > 1)
-    {
-      SCHEDULE ML_BSSN_M_CopyADMBase AT CCTK_PRESTEP
-      {
-        LANG: C
-      } "Copy ADMBase variables to current time level"
-    }
+    # if (timelevels > 1)
+    # {
+    #   SCHEDULE ML_BSSN_M_CopyADMBase AT CCTK_PRESTEP
+    #   {
+    #     LANG: C
+    #   } "Copy ADMBase variables to current time level"
+    # }
     SCHEDULE GROUP ML_BSSN_M_convertToADMBaseGroupWrapper IN MoL_PostStep AFTER (ML_BSSN_M_ApplyBCs ML_BSSN_M_enforce) BEFORE (ADMBase_SetADMVars Whisky_PostStep)
     {
     } "Calculate ADM variables"

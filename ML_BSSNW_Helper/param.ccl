@@ -1,3 +1,7 @@
+SHARES: MethodofLines
+
+USES CCTK_INT MoL_Num_Constrained_Vars
+
 SHARES: ADMBase
 
 USES KEYWORD evolution_method
@@ -10,3 +14,10 @@ SHARES: ML_BSSNW
 
 USES CCTK_INT timelevels
 USES KEYWORD calculate_ADMBase_variables_at
+
+PRIVATE:
+
+CCTK_INT ML_BSSNW_MaxNumConstrainedVars "Number of constrained variables used by this thorn" ACCUMULATOR-BASE=MethodofLines::MoL_Num_Constrained_Vars
+{
+  20:20 :: "Number of constrained variables used by this thorn"
+} 20
