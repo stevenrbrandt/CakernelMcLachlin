@@ -23,9 +23,9 @@ ActiveThorns = "LocalInterp"
 
 ActiveThorns = "LoopControl"
 
-ActiveThorns = "GenericFD"
-
 ActiveThorns = "GSL"
+
+ActiveThorns = "GenericFD"
 
 ActiveThorns = "HDF5"
 
@@ -147,7 +147,7 @@ ActiveThorns = "CarpetRegrid2 CarpetTracker"
 
 CarpetTracker::surface[0] = 0
 
-CarpetRegrid2::regrid_every            = 128
+CarpetRegrid2::regrid_every            = 0
 CarpetRegrid2::freeze_unaligned_levels = yes
 CarpetRegrid2::symmetry_rotating180    = yes
 CarpetRegrid2::verbose                 = yes
@@ -189,8 +189,11 @@ ADMBase::initial_dtlapse = "zero"
 ADMBase::initial_dtshift = "zero"
 
 Exact::exact_model = "Kerr/Kerr-Schild"
-Exact::Kerr_KerrSchild__mass = 1.0
-Exact::Kerr_KerrSchild__spin = 0.8
+Exact::Kerr_KerrSchild__mass      = 1.0
+Exact::Kerr_KerrSchild__spin      = 0.8
+Exact::Kerr_KerrSchild__parabolic = yes
+Exact::Kerr_KerrSchild__power     = 8
+Exact::Kerr_KerrSchild__epsilon   = 1.0
 
 
 
@@ -349,6 +352,7 @@ IOHDF5::compression_level      = 1
 IOHDF5::use_checksums          = yes
 IOHDF5::out_vars               = "
         CarpetReduce::weight
+        ADMBase::lapse
         ADMConstraints::hamiltonian
 "
 
