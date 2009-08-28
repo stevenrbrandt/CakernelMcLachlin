@@ -1,0 +1,135 @@
+!REPOSITORY_TYPE pserver
+!REPOSITORY_LOCATION cvs.cactuscode.org
+!REPOSITORY_NAME /cactusdevcvs
+!REPOSITORY_USER cvs_anon
+
+CactusBase/Boundary
+CactusBase/CartGrid3D
+CactusBase/CoordBase
+CactusBase/IOUtil
+CactusBase/InitBase
+CactusBase/LocalInterp
+CactusBase/MoL
+CactusBase/SymBase
+CactusBase/Time
+
+CactusConnect/Socket
+
+CactusEinstein/ADMBase
+CactusEinstein/ADMConstraints
+CactusEinstein/ADMCoupling
+CactusEinstein/ADMMacros
+CactusEinstein/CoordGauge
+CactusEinstein/SpaceMask
+CactusEinstein/StaticConformal
+
+CactusExternal/BLAS
+CactusExternal/GSL
+CactusExternal/HDF5
+CactusExternal/LAPACK
+
+CactusUtils/NaNChecker
+CactusUtils/TimerReport
+
+
+
+!REPOSITORY_TYPE pserver
+!REPOSITORY_LOCATION cvs.cactuscode.org
+!REPOSITORY_NAME /cactusdevcvs
+!REPOSITORY_USER cvs_anon
+
+BetaThorns/Cartoon2D
+
+
+
+Carpet/Carpet
+Carpet/CarpetIOASCII
+Carpet/CarpetIOBasic
+Carpet/CarpetIOHDF5
+Carpet/CarpetIOScalar
+Carpet/CarpetInterp
+Carpet/CarpetLib
+Carpet/CarpetMask
+Carpet/CarpetReduce
+Carpet/CarpetRegrid2
+Carpet/CarpetSlab
+Carpet/CarpetTracker
+Carpet/LoopControl
+
+KrancNumericalTools/GenericFD
+
+McLachlan/ML_BSSN
+McLachlan/ML_BSSN_Helper
+
+
+
+!REPOSITORY_TYPE pserver
+!REPOSITORY_LOCATION cvs.cactuscode.org
+!REPOSITORY_NAME /arrangements
+!REPOSITORY_USER cvs_anon
+
+CactusEOS/EOS_1D_Base
+CactusEOS/EOS_1D_Ideal_Polytrope
+CactusEOS/EOS_Base
+CactusEOS/EOS_Ideal_Fluid
+
+TAT/NaNCatcher
+TAT/Periodic
+TAT/Slab
+TAT/SlabTest
+TAT/TGRtensor
+
+
+
+!REPOSITORY_TYPE svn:https://
+!REPOSITORY_LOCATION svn.aei.mpg.de
+!REPOSITORY_NAME /numrel/@ARRANGEMENT@/@THORN@/trunk
+
+AEIThorns/AEILocalInterp
+AEIThorns/AHFinderDirect
+AEIThorns/Dissipation
+AEIThorns/Exact
+AEIThorns/Formaline
+AEIThorns/Fortran
+AEIThorns/GSLFortran
+AEIThorns/IDFileADM
+AEIThorns/ManualTermination
+AEIThorns/NoExcision
+AEIThorns/ReflectionSymmetry
+AEIThorns/RotatingSymmetry180
+AEIThorns/RotatingSymmetry90
+AEIThorns/SphericalSurface
+AEIThorns/TmunuBase
+
+
+
+!REPOSITORY_TYPE svn:https://
+!REPOSITORY_LOCATION svn.aei.mpg.de
+!REPOSITORY_NAME /eScience/@ARRANGEMENT@/Cactus/Thorns/@THORN@/trunk
+
+AstroGrid/HTTPS
+AstroGrid/Publish
+AstroGrid/Visualisation
+
+
+
+!REPOSITORY_TYPE pserver
+!REPOSITORY_LOCATION cvs.cct.lsu.edu
+!REPOSITORY_NAME /numrel
+!REPOSITORY_USER cvs_anon
+
+LSUThorns/SpECReader
+LSUThorns/SummationByParts
+LSUThorns/SummationByPartsTests
+
+
+
+!REPOSITORY_TYPE svn:https://
+!REPOSITORY_LOCATION svn.cct.lsu.edu
+!REPOSITORY_NAME /repos/users/knarf/@ARRANGEMENT@/@THORN@
+
+Whisky/EOS_Polytrope
+Whisky/Whisky
+Whisky/Whisky_Init_Data
+Whisky/Whisky_IVP
+Whisky/Whisky_TOVSolverC
