@@ -1,5 +1,5 @@
 /*  File produced by user eschnett */
-/*  Produced with Mathematica Version 7.0 for Mac OS X x86 (64-bit) (February 19, 2009) */
+/*  Produced with Mathematica Version 7.0 for Mac OS X x86 (64-bit) (November 11, 2008) */
 
 /*  Mathematica script written by Ian Hinder and Sascha Husa */
 
@@ -40,19 +40,9 @@ void WTFO_RHS_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT const 
   CCTK_REAL p1o12dx = INITVALUE;
   CCTK_REAL p1o12dy = INITVALUE;
   CCTK_REAL p1o12dz = INITVALUE;
-  CCTK_REAL p1o144dx2dy = INITVALUE;
-  CCTK_REAL p1o144dx2dz = INITVALUE;
   CCTK_REAL p1o144dxdy = INITVALUE;
-  CCTK_REAL p1o144dxdy2 = INITVALUE;
   CCTK_REAL p1o144dxdz = INITVALUE;
-  CCTK_REAL p1o144dxdz2 = INITVALUE;
-  CCTK_REAL p1o144dy2dz = INITVALUE;
   CCTK_REAL p1o144dydz = INITVALUE;
-  CCTK_REAL p1o144dydz2 = INITVALUE;
-  CCTK_REAL p1o1728dxdydz = INITVALUE;
-  CCTK_REAL p1o2dx3 = INITVALUE;
-  CCTK_REAL p1o2dy3 = INITVALUE;
-  CCTK_REAL p1o2dz3 = INITVALUE;
   CCTK_REAL pm1o12dx2 = INITVALUE;
   CCTK_REAL pm1o12dy2 = INITVALUE;
   CCTK_REAL pm1o12dz2 = INITVALUE;
@@ -89,19 +79,9 @@ void WTFO_RHS_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT const 
   p1o12dx = INV(dx)/12.;
   p1o12dy = INV(dy)/12.;
   p1o12dz = INV(dz)/12.;
-  p1o144dx2dy = (INV(dy)*pow(dx,-2))/144.;
-  p1o144dx2dz = (INV(dz)*pow(dx,-2))/144.;
   p1o144dxdy = (INV(dx)*INV(dy))/144.;
-  p1o144dxdy2 = (INV(dx)*pow(dy,-2))/144.;
   p1o144dxdz = (INV(dx)*INV(dz))/144.;
-  p1o144dxdz2 = (INV(dx)*pow(dz,-2))/144.;
-  p1o144dy2dz = (INV(dz)*pow(dy,-2))/144.;
   p1o144dydz = (INV(dy)*INV(dz))/144.;
-  p1o144dydz2 = (INV(dy)*pow(dz,-2))/144.;
-  p1o1728dxdydz = (INV(dx)*INV(dy)*INV(dz))/1728.;
-  p1o2dx3 = khalf*pow(dx,-3);
-  p1o2dy3 = khalf*pow(dy,-3);
-  p1o2dz3 = khalf*pow(dz,-3);
   pm1o12dx2 = -pow(dx,-2)/12.;
   pm1o12dy2 = -pow(dy,-2)/12.;
   pm1o12dz2 = -pow(dz,-2)/12.;

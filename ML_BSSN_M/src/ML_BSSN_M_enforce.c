@@ -1,5 +1,5 @@
 /*  File produced by user eschnett */
-/*  Produced with Mathematica Version 7.0 for Mac OS X x86 (64-bit) (February 19, 2009) */
+/*  Produced with Mathematica Version 7.0 for Mac OS X x86 (64-bit) (November 11, 2008) */
 
 /*  Mathematica script written by Ian Hinder and Sascha Husa */
 
@@ -109,6 +109,7 @@ void ML_BSSN_M_enforce_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_I
     CCTK_REAL trAt = INITVALUE;
     
     /* Declare local copies of grid functions */
+    CCTK_REAL alphaL = INITVALUE;
     CCTK_REAL At11L = INITVALUE, At12L = INITVALUE, At13L = INITVALUE, At22L = INITVALUE, At23L = INITVALUE, At33L = INITVALUE;
     CCTK_REAL gt11L = INITVALUE, gt12L = INITVALUE, gt13L = INITVALUE, gt22L = INITVALUE, gt23L = INITVALUE, gt33L = INITVALUE;
     /* Declare precomputed derivatives*/
@@ -116,6 +117,7 @@ void ML_BSSN_M_enforce_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_I
     /* Declare derivatives */
     
     /* Assign local copies of grid functions */
+    alphaL = alpha[index];
     At11L = At11[index];
     At12L = At12[index];
     At13L = At13[index];
@@ -166,8 +168,11 @@ void ML_BSSN_M_enforce_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_I
     
     At33L  =  At33L - gt33L*kthird*trAt;
     
+    alphaL  =  fmax(alphaL,MinimumLapse);
+    
     
     /* Copy local copies back to grid functions */
+    alpha[index] = alphaL;
     At11[index] = At11L;
     At12[index] = At12L;
     At13[index] = At13L;
