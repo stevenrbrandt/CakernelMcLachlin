@@ -1,7 +1,4 @@
-# File produced by user eschnett
-# Produced with Mathematica Version 7.0 for Mac OS X x86 (64-bit) (February 19, 2009)
-
-# Mathematica script written by Ian Hinder and Sascha Husa
+# File produced by Kranc
 
 
 STORAGE: eneflux_group[1]
@@ -19,12 +16,6 @@ STORAGE: rho_group[1]
 STORAGE: vel_group[1]
 
 STORAGE: vol_group[1]
-
-STORAGE: ene_grouprhs[1]
-
-STORAGE: mass_grouprhs[1]
-
-STORAGE: mom_grouprhs[1]
 
 if (timelevels == 1)
 {
@@ -63,6 +54,45 @@ if (timelevels == 2)
 if (timelevels == 3)
 {
   STORAGE: mom_group[3]
+}
+
+if (rhs_timelevels == 1)
+{
+  STORAGE: ene_grouprhs[1]
+}
+if (rhs_timelevels == 2)
+{
+  STORAGE: ene_grouprhs[2]
+}
+if (rhs_timelevels == 3)
+{
+  STORAGE: ene_grouprhs[3]
+}
+
+if (rhs_timelevels == 1)
+{
+  STORAGE: mass_grouprhs[1]
+}
+if (rhs_timelevels == 2)
+{
+  STORAGE: mass_grouprhs[2]
+}
+if (rhs_timelevels == 3)
+{
+  STORAGE: mass_grouprhs[3]
+}
+
+if (rhs_timelevels == 1)
+{
+  STORAGE: mom_grouprhs[1]
+}
+if (rhs_timelevels == 2)
+{
+  STORAGE: mom_grouprhs[2]
+}
+if (rhs_timelevels == 3)
+{
+  STORAGE: mom_grouprhs[3]
 }
 
 schedule ML_hydro_Startup at STARTUP

@@ -1,7 +1,4 @@
-# File produced by user eschnett
-# Produced with Mathematica Version 7.0 for Mac OS X x86 (64-bit) (November 11, 2008)
-
-# Mathematica script written by Ian Hinder and Sascha Husa
+# File produced by Kranc
 
 implements: ML_BSSN_M
 
@@ -62,77 +59,7 @@ CCTK_REAL ML_mom type=GF timelevels=1 tags='tensortypealias="D" tensorweight=1.0
 } "ML_mom"
 
 public:
-CCTK_REAL ML_curvrhs type=GF timelevels=1 tags='tensortypealias="DD_sym" tensorweight=-0.66666666666666666667'
-{
-  At11rhs,
-  At12rhs,
-  At13rhs,
-  At22rhs,
-  At23rhs,
-  At33rhs
-} "ML_curvrhs"
-
-public:
-CCTK_REAL ML_dtlapserhs type=GF timelevels=1 tags='tensortypealias="Scalar" tensorweight=1.0000000000000000000'
-{
-  Arhs
-} "ML_dtlapserhs"
-
-public:
-CCTK_REAL ML_dtshiftrhs type=GF timelevels=1 tags='tensortypealias="U" tensorweight=1.0000000000000000000'
-{
-  B1rhs,
-  B2rhs,
-  B3rhs
-} "ML_dtshiftrhs"
-
-public:
-CCTK_REAL ML_Gammarhs type=GF timelevels=1 tags='tensortypealias="U" tensorweight=0.66666666666666666667'
-{
-  Xt1rhs,
-  Xt2rhs,
-  Xt3rhs
-} "ML_Gammarhs"
-
-public:
-CCTK_REAL ML_lapserhs type=GF timelevels=1 tags='tensortypealias="Scalar" tensorweight=1.0000000000000000000'
-{
-  alpharhs
-} "ML_lapserhs"
-
-public:
-CCTK_REAL ML_log_confacrhs type=GF timelevels=1 tags='tensortypealias="Scalar" tensorweight=0.16666666666666666667'
-{
-  phirhs
-} "ML_log_confacrhs"
-
-public:
-CCTK_REAL ML_metricrhs type=GF timelevels=1 tags='tensortypealias="DD_sym" tensorweight=-0.66666666666666666667'
-{
-  gt11rhs,
-  gt12rhs,
-  gt13rhs,
-  gt22rhs,
-  gt23rhs,
-  gt33rhs
-} "ML_metricrhs"
-
-public:
-CCTK_REAL ML_shiftrhs type=GF timelevels=1 tags='tensortypealias="U" tensorweight=1.0000000000000000000'
-{
-  beta1rhs,
-  beta2rhs,
-  beta3rhs
-} "ML_shiftrhs"
-
-public:
-CCTK_REAL ML_trace_curvrhs type=GF timelevels=1 tags='tensortypealias="Scalar" tensorweight=1.0000000000000000000'
-{
-  trKrhs
-} "ML_trace_curvrhs"
-
-public:
-CCTK_REAL ML_curv type=GF timelevels=3 tags='tensortypealias="DD_sym" tensorweight=-0.66666666666666666667'
+CCTK_REAL ML_curv type=GF timelevels=4 tags='tensortypealias="DD_sym" tensorweight=-0.66666666666666666667'
 {
   At11,
   At12,
@@ -143,13 +70,13 @@ CCTK_REAL ML_curv type=GF timelevels=3 tags='tensortypealias="DD_sym" tensorweig
 } "ML_curv"
 
 public:
-CCTK_REAL ML_dtlapse type=GF timelevels=3 tags='tensortypealias="Scalar" tensorweight=1.0000000000000000000'
+CCTK_REAL ML_dtlapse type=GF timelevels=4 tags='tensortypealias="Scalar" tensorweight=1.0000000000000000000'
 {
   A
 } "ML_dtlapse"
 
 public:
-CCTK_REAL ML_dtshift type=GF timelevels=3 tags='tensortypealias="U" tensorweight=1.0000000000000000000'
+CCTK_REAL ML_dtshift type=GF timelevels=4 tags='tensortypealias="U" tensorweight=1.0000000000000000000'
 {
   B1,
   B2,
@@ -157,7 +84,7 @@ CCTK_REAL ML_dtshift type=GF timelevels=3 tags='tensortypealias="U" tensorweight
 } "ML_dtshift"
 
 public:
-CCTK_REAL ML_Gamma type=GF timelevels=3 tags='tensortypealias="U" tensorweight=0.66666666666666666667'
+CCTK_REAL ML_Gamma type=GF timelevels=4 tags='tensortypealias="U" tensorweight=0.66666666666666666667'
 {
   Xt1,
   Xt2,
@@ -165,19 +92,19 @@ CCTK_REAL ML_Gamma type=GF timelevels=3 tags='tensortypealias="U" tensorweight=0
 } "ML_Gamma"
 
 public:
-CCTK_REAL ML_lapse type=GF timelevels=3 tags='tensortypealias="Scalar" tensorweight=1.0000000000000000000'
+CCTK_REAL ML_lapse type=GF timelevels=4 tags='tensortypealias="Scalar" tensorweight=1.0000000000000000000'
 {
   alpha
 } "ML_lapse"
 
 public:
-CCTK_REAL ML_log_confac type=GF timelevels=3 tags='tensortypealias="Scalar" tensorweight=0.16666666666666666667'
+CCTK_REAL ML_log_confac type=GF timelevels=4 tags='tensortypealias="Scalar" tensorweight=0.16666666666666666667'
 {
   phi
 } "ML_log_confac"
 
 public:
-CCTK_REAL ML_metric type=GF timelevels=3 tags='tensortypealias="DD_sym" tensorweight=-0.66666666666666666667'
+CCTK_REAL ML_metric type=GF timelevels=4 tags='tensortypealias="DD_sym" tensorweight=-0.66666666666666666667'
 {
   gt11,
   gt12,
@@ -188,7 +115,7 @@ CCTK_REAL ML_metric type=GF timelevels=3 tags='tensortypealias="DD_sym" tensorwe
 } "ML_metric"
 
 public:
-CCTK_REAL ML_shift type=GF timelevels=3 tags='tensortypealias="U" tensorweight=1.0000000000000000000'
+CCTK_REAL ML_shift type=GF timelevels=4 tags='tensortypealias="U" tensorweight=1.0000000000000000000'
 {
   beta1,
   beta2,
@@ -196,7 +123,77 @@ CCTK_REAL ML_shift type=GF timelevels=3 tags='tensortypealias="U" tensorweight=1
 } "ML_shift"
 
 public:
-CCTK_REAL ML_trace_curv type=GF timelevels=3 tags='tensortypealias="Scalar" tensorweight=1.0000000000000000000'
+CCTK_REAL ML_trace_curv type=GF timelevels=4 tags='tensortypealias="Scalar" tensorweight=1.0000000000000000000'
 {
   trK
 } "ML_trace_curv"
+
+public:
+CCTK_REAL ML_curvrhs type=GF timelevels=4 tags='tensortypealias="DD_sym" tensorweight=-0.66666666666666666667'
+{
+  At11rhs,
+  At12rhs,
+  At13rhs,
+  At22rhs,
+  At23rhs,
+  At33rhs
+} "ML_curvrhs"
+
+public:
+CCTK_REAL ML_dtlapserhs type=GF timelevels=4 tags='tensortypealias="Scalar" tensorweight=1.0000000000000000000'
+{
+  Arhs
+} "ML_dtlapserhs"
+
+public:
+CCTK_REAL ML_dtshiftrhs type=GF timelevels=4 tags='tensortypealias="U" tensorweight=1.0000000000000000000'
+{
+  B1rhs,
+  B2rhs,
+  B3rhs
+} "ML_dtshiftrhs"
+
+public:
+CCTK_REAL ML_Gammarhs type=GF timelevels=4 tags='tensortypealias="U" tensorweight=0.66666666666666666667'
+{
+  Xt1rhs,
+  Xt2rhs,
+  Xt3rhs
+} "ML_Gammarhs"
+
+public:
+CCTK_REAL ML_lapserhs type=GF timelevels=4 tags='tensortypealias="Scalar" tensorweight=1.0000000000000000000'
+{
+  alpharhs
+} "ML_lapserhs"
+
+public:
+CCTK_REAL ML_log_confacrhs type=GF timelevels=4 tags='tensortypealias="Scalar" tensorweight=0.16666666666666666667'
+{
+  phirhs
+} "ML_log_confacrhs"
+
+public:
+CCTK_REAL ML_metricrhs type=GF timelevels=4 tags='tensortypealias="DD_sym" tensorweight=-0.66666666666666666667'
+{
+  gt11rhs,
+  gt12rhs,
+  gt13rhs,
+  gt22rhs,
+  gt23rhs,
+  gt33rhs
+} "ML_metricrhs"
+
+public:
+CCTK_REAL ML_shiftrhs type=GF timelevels=4 tags='tensortypealias="U" tensorweight=1.0000000000000000000'
+{
+  beta1rhs,
+  beta2rhs,
+  beta3rhs
+} "ML_shiftrhs"
+
+public:
+CCTK_REAL ML_trace_curvrhs type=GF timelevels=4 tags='tensortypealias="Scalar" tensorweight=1.0000000000000000000'
+{
+  trKrhs
+} "ML_trace_curvrhs"

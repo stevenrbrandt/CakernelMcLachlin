@@ -1,7 +1,4 @@
-# File produced by user eschnett
-# Produced with Mathematica Version 7.0 for Mac OS X x86 (64-bit) (February 19, 2009)
-
-# Mathematica script written by Ian Hinder and Sascha Husa
+# File produced by Kranc
 
 
 shares: GenericFD
@@ -71,6 +68,12 @@ CCTK_INT timelevels "Number of active timelevels"
 {
   0:3 :: ""
 } 3
+
+restricted:
+CCTK_INT rhs_timelevels "Number of active RHS timelevels"
+{
+  0:3 :: ""
+} 1
 
 restricted:
 CCTK_INT hydro_vacuum_calc_every "hydro_vacuum_calc_every"

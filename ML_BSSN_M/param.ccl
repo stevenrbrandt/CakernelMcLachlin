@@ -1,7 +1,4 @@
-# File produced by user eschnett
-# Produced with Mathematica Version 7.0 for Mac OS X x86 (64-bit) (November 11, 2008)
-
-# Mathematica script written by Ian Hinder and Sascha Husa
+# File produced by Kranc
 
 
 shares: ADMBase
@@ -106,7 +103,7 @@ KEYWORD my_initial_data "my_initial_data"
   "Minkowski" :: "Minkowski"
 } "ADMBase"
 
-private:
+restricted:
 KEYWORD my_rhs_boundary_condition "my_rhs_boundary_condition"
 {
   "none" :: "none"
@@ -137,8 +134,14 @@ CCTK_INT ML_BSSN_M_MaxNumEvolvedVars "Number of evolved variables used by this t
 restricted:
 CCTK_INT timelevels "Number of active timelevels"
 {
-  0:3 :: ""
-} 3
+  0:4 :: ""
+} 4
+
+restricted:
+CCTK_INT rhs_timelevels "Number of active RHS timelevels"
+{
+  0:4 :: ""
+} 1
 
 restricted:
 CCTK_INT ML_BSSN_M_Minkowski_calc_every "ML_BSSN_M_Minkowski_calc_every"

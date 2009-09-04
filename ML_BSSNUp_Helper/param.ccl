@@ -1,3 +1,7 @@
+SHARES: Boundary
+
+USES CCTK_INT radpower
+
 SHARES: MethodofLines
 
 USES CCTK_INT MoL_Num_Constrained_Vars
@@ -14,6 +18,13 @@ SHARES: ML_BSSNUp
 
 USES CCTK_INT timelevels
 USES KEYWORD calculate_ADMBase_variables_at
+
+USES CCTK_REAL harmonicF
+
+EXTENDS KEYWORD my_rhs_boundary_condition
+{
+  "NewRad" :: "NewRad"
+}
 
 PRIVATE:
 

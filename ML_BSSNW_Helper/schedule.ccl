@@ -62,6 +62,33 @@ if (CCTK_EQUALS (evolution_method, "ML_BSSNW")) {
   
   
   
+  if (CCTK_EQUALS (my_rhs_boundary_condition, "NewRad"))
+  {
+    SCHEDULE ML_BSSNW_ExtrapolateGammas AT initial AFTER ML_BSSNW_convertFromADMBaseGamma
+    {
+      LANG: C
+      SYNC: ML_Gamma
+      SYNC: ML_dtlapse
+      SYNC: ML_dtshift
+    } "Extrapolate Gammas and time derivatives of lapse and shift"
+    
+    SCHEDULE ML_BSSNW_NewRad IN ML_BSSNW_evolCalcGroup AFTER ML_BSSNW_RHS
+    {
+      LANG: C
+      SYNC: ML_curvrhs
+      SYNC: ML_dtlapserhs
+      SYNC: ML_dtshiftrhs
+      SYNC: ML_Gammarhs
+      SYNC: ML_lapserhs
+      SYNC: ML_log_confacrhs
+      SYNC: ML_metricrhs
+      SYNC: ML_shiftrhs
+      SYNC: ML_trace_curvrhs
+    } "Apply NewRad boundary conditions to RHS"
+  }
+  
+  
+  
   SCHEDULE GROUP ML_BSSNW_convertToADMBaseGroup IN ML_BSSNW_convertToADMBaseGroupWrapper
   {
   } "Calculate ADM variables"

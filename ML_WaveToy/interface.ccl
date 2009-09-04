@@ -1,7 +1,4 @@
-# File produced by user eschnett
-# Produced with Mathematica Version 7.0 for Mac OS X x86 (64-bit) (November 11, 2008)
-
-# Mathematica script written by Ian Hinder and Sascha Husa
+# File produced by Kranc
 
 implements: ML_WaveToy
 
@@ -28,18 +25,6 @@ CCTK_INT FUNCTION Boundary_SelectVarForBC(CCTK_POINTER_TO_CONST IN GH, CCTK_INT 
 USES FUNCTION Boundary_SelectVarForBC
 
 public:
-CCTK_REAL WT_rhorhs type=GF timelevels=1 tags='tensortypealias="Scalar" tensorweight=1.0000000000000000000'
-{
-  rhorhs
-} "WT_rhorhs"
-
-public:
-CCTK_REAL WT_urhs type=GF timelevels=1 tags='tensortypealias="Scalar" tensorweight=1.0000000000000000000'
-{
-  urhs
-} "WT_urhs"
-
-public:
 CCTK_REAL WT_rho type=GF timelevels=2 tags='tensortypealias="Scalar" tensorweight=1.0000000000000000000'
 {
   rho
@@ -50,3 +35,15 @@ CCTK_REAL WT_u type=GF timelevels=2 tags='tensortypealias="Scalar" tensorweight=
 {
   u
 } "WT_u"
+
+public:
+CCTK_REAL WT_rhorhs type=GF timelevels=2 tags='tensortypealias="Scalar" tensorweight=1.0000000000000000000'
+{
+  rhorhs
+} "WT_rhorhs"
+
+public:
+CCTK_REAL WT_urhs type=GF timelevels=2 tags='tensortypealias="Scalar" tensorweight=1.0000000000000000000'
+{
+  urhs
+} "WT_urhs"

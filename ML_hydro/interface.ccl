@@ -1,7 +1,4 @@
-# File produced by user eschnett
-# Produced with Mathematica Version 7.0 for Mac OS X x86 (64-bit) (February 19, 2009)
-
-# Mathematica script written by Ian Hinder and Sascha Husa
+# File produced by Kranc
 
 implements: ML_hydro
 
@@ -90,26 +87,6 @@ CCTK_REAL vol_group type=GF timelevels=1 tags='tensortypealias="Scalar" tensorwe
 } "vol_group"
 
 public:
-CCTK_REAL ene_grouprhs type=GF timelevels=1 tags='tensortypealias="Scalar" tensorweight=1.0000000000000000000'
-{
-  enerhs
-} "ene_grouprhs"
-
-public:
-CCTK_REAL mass_grouprhs type=GF timelevels=1 tags='tensortypealias="Scalar" tensorweight=1.0000000000000000000'
-{
-  massrhs
-} "mass_grouprhs"
-
-public:
-CCTK_REAL mom_grouprhs type=GF timelevels=1 tags='tensortypealias="D" tensorweight=1.0000000000000000000'
-{
-  mom1rhs,
-  mom2rhs,
-  mom3rhs
-} "mom_grouprhs"
-
-public:
 CCTK_REAL ene_group type=GF timelevels=3 tags='tensortypealias="Scalar" tensorweight=1.0000000000000000000'
 {
   ene
@@ -128,3 +105,23 @@ CCTK_REAL mom_group type=GF timelevels=3 tags='tensortypealias="D" tensorweight=
   mom2,
   mom3
 } "mom_group"
+
+public:
+CCTK_REAL ene_grouprhs type=GF timelevels=3 tags='tensortypealias="Scalar" tensorweight=1.0000000000000000000'
+{
+  enerhs
+} "ene_grouprhs"
+
+public:
+CCTK_REAL mass_grouprhs type=GF timelevels=3 tags='tensortypealias="Scalar" tensorweight=1.0000000000000000000'
+{
+  massrhs
+} "mass_grouprhs"
+
+public:
+CCTK_REAL mom_grouprhs type=GF timelevels=3 tags='tensortypealias="D" tensorweight=1.0000000000000000000'
+{
+  mom1rhs,
+  mom2rhs,
+  mom3rhs
+} "mom_grouprhs"

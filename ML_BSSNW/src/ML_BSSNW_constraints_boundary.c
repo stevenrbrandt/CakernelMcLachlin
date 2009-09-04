@@ -1,7 +1,4 @@
-/*  File produced by user eschnett */
-/*  Produced with Mathematica Version 7.0 for Mac OS X x86 (64-bit) (February 19, 2009) */
-
-/*  Mathematica script written by Ian Hinder and Sascha Husa */
+/*  File produced by Kranc */
 
 #define KRANC_C
 
@@ -46,12 +43,12 @@ void ML_BSSNW_constraints_boundary_Body(cGH const * const cctkGH, CCTK_INT const
   CCTK_REAL pm1o12dx2 = INITVALUE;
   CCTK_REAL pm1o12dy2 = INITVALUE;
   CCTK_REAL pm1o12dz2 = INITVALUE;
-  CCTK_REAL Differencing`Private`liName$23695 = INITVALUE;
-  CCTK_REAL Differencing`Private`liName$23711 = INITVALUE;
-  CCTK_REAL Differencing`Private`liName$23727 = INITVALUE;
-  CCTK_REAL Differencing`Private`liName$23743 = INITVALUE;
-  CCTK_REAL Differencing`Private`liName$23759 = INITVALUE;
-  CCTK_REAL Differencing`Private`liName$23775 = INITVALUE;
+  CCTK_REAL Differencing`Private`liName$23747 = INITVALUE;
+  CCTK_REAL Differencing`Private`liName$23763 = INITVALUE;
+  CCTK_REAL Differencing`Private`liName$23779 = INITVALUE;
+  CCTK_REAL Differencing`Private`liName$23795 = INITVALUE;
+  CCTK_REAL Differencing`Private`liName$23811 = INITVALUE;
+  CCTK_REAL Differencing`Private`liName$23827 = INITVALUE;
   
   if (verbose > 1)
   {
@@ -91,12 +88,12 @@ void ML_BSSNW_constraints_boundary_Body(cGH const * const cctkGH, CCTK_INT const
   pm1o12dx2 = -pow(dx,-2)/12.;
   pm1o12dy2 = -pow(dy,-2)/12.;
   pm1o12dz2 = -pow(dz,-2)/12.;
-  Differencing`Private`liName$23695 = Differencing_Private_num$23695*Differencing_Private_ss$23695*INV(Differencing_Private_den$23695);
-  Differencing`Private`liName$23711 = Differencing_Private_num$23711*Differencing_Private_ss$23711*INV(Differencing_Private_den$23711);
-  Differencing`Private`liName$23727 = Differencing_Private_num$23727*Differencing_Private_ss$23727*INV(Differencing_Private_den$23727);
-  Differencing`Private`liName$23743 = Differencing_Private_num$23743*Differencing_Private_ss$23743*INV(Differencing_Private_den$23743);
-  Differencing`Private`liName$23759 = Differencing_Private_num$23759*Differencing_Private_ss$23759*INV(Differencing_Private_den$23759);
-  Differencing`Private`liName$23775 = Differencing_Private_num$23775*Differencing_Private_ss$23775*INV(Differencing_Private_den$23775);
+  Differencing`Private`liName$23747 = Differencing_Private_num$23747*Differencing_Private_ss$23747*INV(Differencing_Private_den$23747);
+  Differencing`Private`liName$23763 = Differencing_Private_num$23763*Differencing_Private_ss$23763*INV(Differencing_Private_den$23763);
+  Differencing`Private`liName$23779 = Differencing_Private_num$23779*Differencing_Private_ss$23779*INV(Differencing_Private_den$23779);
+  Differencing`Private`liName$23795 = Differencing_Private_num$23795*Differencing_Private_ss$23795*INV(Differencing_Private_den$23795);
+  Differencing`Private`liName$23811 = Differencing_Private_num$23811*Differencing_Private_ss$23811*INV(Differencing_Private_den$23811);
+  Differencing`Private`liName$23827 = Differencing_Private_num$23827*Differencing_Private_ss$23827*INV(Differencing_Private_den$23827);
   
   /* Loop over the grid points */
   #pragma omp parallel

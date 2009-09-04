@@ -1,12 +1,5 @@
-# File produced by user eschnett
-# Produced with Mathematica Version 7.0 for Mac OS X x86 (64-bit) (November 11, 2008)
+# File produced by Kranc
 
-# Mathematica script written by Ian Hinder and Sascha Husa
-
-
-STORAGE: WT_rhorhs[1]
-
-STORAGE: WT_urhs[1]
 
 if (timelevels == 1)
 {
@@ -24,6 +17,24 @@ if (timelevels == 1)
 if (timelevels == 2)
 {
   STORAGE: WT_u[2]
+}
+
+if (rhs_timelevels == 1)
+{
+  STORAGE: WT_rhorhs[1]
+}
+if (rhs_timelevels == 2)
+{
+  STORAGE: WT_rhorhs[2]
+}
+
+if (rhs_timelevels == 1)
+{
+  STORAGE: WT_urhs[1]
+}
+if (rhs_timelevels == 2)
+{
+  STORAGE: WT_urhs[2]
 }
 
 schedule ML_WaveToy_Startup at STARTUP
