@@ -124,8 +124,9 @@ For reference, here is a brief overview over the commands to do this:
 \item\verb+./GetCactus+
   
   This checks out Cactus itself (the \emph{flesh}) into a new
-  subdirectory \code{Cactus}.  Use the default answer for all
-  questions.
+  subdirectory \code{Cactus}.  When asked, choose the
+  \emph{development version} of Cactus; use the default answer for all
+  other questions.
 \item\verb+cd Cactus+
 \item\verb+make checkout+
   
@@ -204,14 +205,14 @@ via the GetCactus script that was downloaded above (see section
 \begin{enumerate}
 \item\verb+cd Cactus+
 \item\verb+cd ..+
-\item\verb+./GetCactus qc0-mclachlan-public.th+
+\item\verb+./GetCactus Cactus/arrangements/McLachlan/doc/mclachlan-public.th+
   
   Use the default answer for all questions.
 \end{enumerate}
 
 \subsection{Consistency Check}
 
-The \emph{thorn list} \code{qc0-mclachlan-public.th} lists the thorns
+The \emph{thorn list} \code{mclachlan-public.th} lists the thorns
 that are necessary for a simple spacetime evolution.  The thorns are
 grouped into arrangements.  All thorns listed in this file must now be
 present in the \code{arrangements} subdirectory of the main Cactus
@@ -232,7 +233,7 @@ It is best to begin building Cactus with building documentation:
 \item\verb+cd Cactus+
 \item\verb+make UsersGuide+
 \end{enumerate}
-This creates the users' guide as \code{doc/UsersGuid.pdf}.
+This creates the users' guide as \code{doc/UsersGuide.pdf}.
 
 All Cactus commands are listed with
 \begin{enumerate}
@@ -263,8 +264,8 @@ called \code{einstein-redshift-gcc.cfg}.
 To configure an application
 \begin{enumerate}
 \item\verb+cd Cactus+
-\item\verb+make sim-config options=einstein-redshift-gcc.cfg \+\\
-  \verb+THORNLIST=qc0-mclachlan-public.th+
+\item\verb+make sim-config options=redshift-gcc.cfg \+\\
+  \verb+THORNLIST=arrangements/McLachlan/doc/mclachlan-public.th+
 \item\verb+make sim+
 \end{enumerate}
 This is necessary only once, or when the configuration options change.
@@ -299,7 +300,7 @@ To run the McLachlan code, one needs a \emph{parameter file}.
 Parameter files select which thorns are activated at run time, and
 what values the thorns' run-time parameters have.  They typically have
 a \code{.par} suffix.  Below, we use the parameter file
-\code{qc0-mclachlan-public.par}.
+\code{ks-mclachlan-public.par}.
 
 Cactus applications are started like a regular MPI application.  The
 exact mechanism depends on the particular MPI implementation.  On
@@ -308,7 +309,8 @@ Redshift, the command is
 \item\verb+cd Cactus+
 \item\verb+mkdir simulations+
 \item\verb+cd simulations+
-\item\verb+env OMP_NUM_THREADS=1 mpirun ../exe/cactus_sim qc0-mclachlan-public.par+
+\item\verb+env OMP_NUM_THREADS=1 mpirun -np 1 ../exe/cactus_sim \+
+\verb+   ../arrangements/McLachlan/doc/ks-mclachlan-public.par+
 \end{enumerate}
 This parameter file simulates a single, stationary, spinning black
 hole in Kerr-Schild coordinates.  It requires about 4~GByte of RAM to
