@@ -99,7 +99,7 @@ void ML_BSSNUp_enforce_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_I
   #pragma omp parallel
   LC_LOOP3 (ML_BSSNUp_enforce,
             i,j,k, min[0],min[1],min[2], max[0],max[1],max[2],
-            cctk_lssh[CCTK_LSSH_IDX(0,0)],cctk_lssh[CCTK_LSSH_IDX(0,1)],cctk_lssh[CCTK_LSSH_IDX(0,2)])
+            cctk_lsh[0],cctk_lsh[1],cctk_lsh[2])
   {
     int index = INITVALUE;
     int subblock_index = INITVALUE;
