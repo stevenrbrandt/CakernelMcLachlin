@@ -1,9 +1,6 @@
-# File produced by user eschnett
-# Produced with Mathematica Version 7.0 for Mac OS X x86 (64-bit) (November 11, 2008)
+# File produced by Kranc
 
-# Mathematica script written by Ian Hinder and Sascha Husa
-
-implements: ML_FOWaveToy
+implements: ML_WaveToyFO
 
 inherits:   Grid GenericFD Boundary
 
@@ -36,26 +33,6 @@ CCTK_REAL WT_w type=GF timelevels=1 tags='tensortypealias="U" tensorweight=1.000
 } "WT_w"
 
 public:
-CCTK_REAL WT_rhorhs type=GF timelevels=1 tags='tensortypealias="Scalar" tensorweight=1.0000000000000000000'
-{
-  rhorhs
-} "WT_rhorhs"
-
-public:
-CCTK_REAL WT_urhs type=GF timelevels=1 tags='tensortypealias="Scalar" tensorweight=1.0000000000000000000'
-{
-  urhs
-} "WT_urhs"
-
-public:
-CCTK_REAL WT_vrhs type=GF timelevels=1 tags='tensortypealias="D" tensorweight=1.0000000000000000000'
-{
-  v1rhs,
-  v2rhs,
-  v3rhs
-} "WT_vrhs"
-
-public:
 CCTK_REAL WT_rho type=GF timelevels=2 tags='tensortypealias="Scalar" tensorweight=1.0000000000000000000'
 {
   rho
@@ -74,3 +51,23 @@ CCTK_REAL WT_v type=GF timelevels=2 tags='tensortypealias="D" tensorweight=1.000
   v2,
   v3
 } "WT_v"
+
+public:
+CCTK_REAL WT_rhorhs type=GF timelevels=2 tags='tensortypealias="Scalar" tensorweight=1.0000000000000000000'
+{
+  rhorhs
+} "WT_rhorhs"
+
+public:
+CCTK_REAL WT_urhs type=GF timelevels=2 tags='tensortypealias="Scalar" tensorweight=1.0000000000000000000'
+{
+  urhs
+} "WT_urhs"
+
+public:
+CCTK_REAL WT_vrhs type=GF timelevels=2 tags='tensortypealias="D" tensorweight=1.0000000000000000000'
+{
+  v1rhs,
+  v2rhs,
+  v3rhs
+} "WT_vrhs"

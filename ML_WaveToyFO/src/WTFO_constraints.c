@@ -1,7 +1,4 @@
-/*  File produced by user eschnett */
-/*  Produced with Mathematica Version 7.0 for Mac OS X x86 (64-bit) (November 11, 2008) */
-
-/*  Mathematica script written by Ian Hinder and Sascha Husa */
+/*  File produced by Kranc */
 
 #define KRANC_C
 
@@ -23,7 +20,7 @@
 #define CUB(x) ((x) * (x) * (x))
 #define QAD(x) ((x) * (x) * (x) * (x))
 
-void WTFO_Gaussian_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT const face, CCTK_REAL const normal[3], CCTK_REAL const tangentA[3], CCTK_REAL const tangentB[3], CCTK_INT const min[3], CCTK_INT const max[3], CCTK_INT const n_subblock_gfs, CCTK_REAL * const subblock_gfs[])
+void WTFO_constraints_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT const face, CCTK_REAL const normal[3], CCTK_REAL const tangentA[3], CCTK_REAL const tangentB[3], CCTK_INT const min[3], CCTK_INT const max[3], CCTK_INT const n_subblock_gfs, CCTK_REAL * const subblock_gfs[])
 {
   DECLARE_CCTK_ARGUMENTS;
   DECLARE_CCTK_PARAMETERS;
@@ -49,10 +46,10 @@ void WTFO_Gaussian_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT c
   
   if (verbose > 1)
   {
-    CCTK_VInfo(CCTK_THORNSTRING,"Entering WTFO_Gaussian_Body");
+    CCTK_VInfo(CCTK_THORNSTRING,"Entering WTFO_constraints_Body");
   }
   
-  if (cctk_iteration % WTFO_Gaussian_calc_every != WTFO_Gaussian_calc_offset)
+  if (cctk_iteration % WTFO_constraints_calc_every != WTFO_constraints_calc_offset)
   {
     return;
   }
@@ -88,9 +85,9 @@ void WTFO_Gaussian_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT c
   
   /* Loop over the grid points */
   #pragma omp parallel
-  LC_LOOP3 (WTFO_Gaussian,
+  LC_LOOP3 (WTFO_constraints,
             i,j,k, min[0],min[1],min[2], max[0],max[1],max[2],
-            cctk_lssh[CCTK_LSSH_IDX(0,0)],cctk_lssh[CCTK_LSSH_IDX(0,1)],cctk_lssh[CCTK_LSSH_IDX(0,2)])
+            cctk_lsh[0],cctk_lsh[1],cctk_lsh[2])
   {
     int index = INITVALUE;
     int subblock_index = INITVALUE;
@@ -100,51 +97,59 @@ void WTFO_Gaussian_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT c
     /* Declare shorthands */
     
     /* Declare local copies of grid functions */
-    CCTK_REAL rhoL = INITVALUE;
-    CCTK_REAL uL = INITVALUE;
     CCTK_REAL v1L = INITVALUE, v2L = INITVALUE, v3L = INITVALUE;
+    CCTK_REAL w1L = INITVALUE, w2L = INITVALUE, w3L = INITVALUE;
     /* Declare precomputed derivatives*/
     
     /* Declare derivatives */
+    CCTK_REAL PDstandardNth2v1 = INITVALUE;
+    CCTK_REAL PDstandardNth3v1 = INITVALUE;
+    CCTK_REAL PDstandardNth1v2 = INITVALUE;
+    CCTK_REAL PDstandardNth3v2 = INITVALUE;
+    CCTK_REAL PDstandardNth1v3 = INITVALUE;
+    CCTK_REAL PDstandardNth2v3 = INITVALUE;
     
     /* Assign local copies of grid functions */
+    v1L = v1[index];
+    v2L = v2[index];
+    v3L = v3[index];
     
     /* Assign local copies of subblock grid functions */
     
     /* Include user supplied include files */
     
     /* Precompute derivatives (new style) */
+    PDstandardNth2v1 = PDstandardNth2(v1, i, j, k);
+    PDstandardNth3v1 = PDstandardNth3(v1, i, j, k);
+    PDstandardNth1v2 = PDstandardNth1(v2, i, j, k);
+    PDstandardNth3v2 = PDstandardNth3(v2, i, j, k);
+    PDstandardNth1v3 = PDstandardNth1(v3, i, j, k);
+    PDstandardNth2v3 = PDstandardNth2(v3, i, j, k);
     
     /* Precompute derivatives (old style) */
     
     /* Calculate temporaries and grid functions */
-    uL  =  0;
+    w1L  =  -PDstandardNth2v3 + PDstandardNth3v2;
     
-    v1L  =  0;
+    w2L  =  PDstandardNth1v3 - PDstandardNth3v1;
     
-    v2L  =  0;
-    
-    v3L  =  0;
-    
-    rhoL  =  0;
+    w3L  =  -PDstandardNth1v2 + PDstandardNth2v1;
     
     
     /* Copy local copies back to grid functions */
-    rho[index] = rhoL;
-    u[index] = uL;
-    v1[index] = v1L;
-    v2[index] = v2L;
-    v3[index] = v3L;
+    w1[index] = w1L;
+    w2[index] = w2L;
+    w3[index] = w3L;
     
     /* Copy local copies back to subblock grid functions */
   }
-  LC_ENDLOOP3 (WTFO_Gaussian);
+  LC_ENDLOOP3 (WTFO_constraints);
 }
 
-void WTFO_Gaussian(CCTK_ARGUMENTS)
+void WTFO_constraints(CCTK_ARGUMENTS)
 {
   DECLARE_CCTK_ARGUMENTS;
   DECLARE_CCTK_PARAMETERS;
   
-  GenericFD_LoopOverEverything(cctkGH, &WTFO_Gaussian_Body);
+  GenericFD_LoopOverInterior(cctkGH, &WTFO_constraints_Body);
 }
