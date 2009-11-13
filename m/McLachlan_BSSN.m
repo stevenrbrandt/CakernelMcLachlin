@@ -17,7 +17,7 @@ prefix = "ML_";
 suffix =
   If [useGlobalDerivs, "_MP", ""] <>
   If [derivOrder!=4, "_O" <> ToString[derivOrder], ""] <>
-  (* If [evolutionTimelevels!=3, "_TL" <> ToString[evolutionTimelevels], ""] <> *)
+  If [evolutionTimelevels!=3, "_TL" <> ToString[evolutionTimelevels], ""] <>
   If [addMatter==1, "_M", ""];
 
 BSSN = prefix <> "BSSN" <> suffix;
@@ -128,7 +128,7 @@ Map [DefineTensor,
       nn, nu, nlen, nlen2, su, vg,
       xx, rr, th, ph,
       J, dJ,
-      g, K, alpha, beta, H, M, detg, gu, G, R, trR, Km, trK,
+      g, K, alpha, beta, H, M, detg, gu, G, R, trR, Km, trK, cdphi, cdphi2,
       phi, gt, At, Xt, Xtn, A, B, Atm, Atu, trA, Ats, trAts, cXt, cS, cA,
       e4phi, em4phi, ddetg, detgt, gtu, ddetgt, dgtu, ddgtu, Gt, Rt, Rphi, gK,
       T00, T0, T, rho, S,
@@ -148,7 +148,7 @@ SetTensorAttribute[cXt, TensorWeight, +2/3];
 SetTensorAttribute[cS,  TensorWeight, +2  ];
 
 Map [AssertSymmetricIncreasing,
-     {g[la,lb], K[la,lb], R[la,lb],
+     {g[la,lb], K[la,lb], R[la,lb], cdphi2[la,lb],
       gt[la,lb], At[la,lb], Ats[la,lb], Rt[la,lb], Rphi[la,lb], T[la,lb]}];
 AssertSymmetricIncreasing [dJ[ua,lb,lc], lb, lc];
 AssertSymmetricIncreasing [G[ua,lb,lc], lb, lc];
@@ -248,7 +248,7 @@ initialCalc =
   ConditionalOnKeyword -> {"my_initial_data", "Minkowski"},
   Equations -> 
   {
-    phi       -> 0,
+    phi       -> IfThen[conformalmethod,1,0],
     gt[la,lb] -> KD[la,lb],
     trK       -> 0,
     At[la,lb] -> 0,
@@ -296,8 +296,8 @@ convertFromADMBaseCalc =
     detg      -> detgExpr,
     gu[ua,ub] -> 1/detg detgExpr MatrixInverse [g[ua,ub]],
     
-    phi       -> Log[detg] / 12,
-    em4phi    -> Exp[-4 phi],
+    phi       -> IfThen[conformalmethod,detg^(-1/6),Log[detg]/12],
+    em4phi    -> IfThen[conformalmethod,phi^2,Exp[-4 phi]],
     gt[la,lb] -> em4phi g[la,lb],
     
     K11 -> kxx,
@@ -364,7 +364,7 @@ convertToADMBaseCalc =
   {
     dir[ua] -> Sign[beta[ua]],
     
-    e4phi    -> Exp[4 phi],
+    e4phi    -> IfThen[conformalmethod,1/phi^2,Exp[4 phi]],
     g[la,lb] -> e4phi gt[la,lb],
     gxx      -> g11,
     gxy      -> g12,
@@ -440,7 +440,7 @@ boundaryCalcADMBase =
   Shorthands -> {e4phi, g[la,lb], K[la,lb]},
   Equations -> 
   {
-    e4phi    -> Exp[4 phi],
+    e4phi    -> IfThen[conformalmethod,1/phi^2,Exp[4 phi]],
     g[la,lb] -> e4phi gt[la,lb],
     gxx      -> g11,
     gxy      -> g12,
@@ -482,9 +482,9 @@ evolCalc =
                  dgtu[ua,ub,lc], ddgtu[ua,ub,lc,ld], Gt[ua,lb,lc],
                  Xtn[ua], Rt[la,lb], Rphi[la,lb], R[la,lb],
                  Atm[ua,lb], Atu[ua,ub],
-                 e4phi, em4phi, g[la,lb], detg,
+                 e4phi, em4phi, cdphi[la], cdphi2[la,lb], g[la,lb], detg,
                  ddetg[la], gu[ua,ub], G[ua,lb,lc], Ats[la,lb], trAts,
-                 T00, T0[la], T[la,lb], rho, S[la], trS},
+                 T00, T0[la], T[la,lb], rho, S[la], trS, fac1, fac2 },
   Equations -> 
   {
     dir[ua] -> Sign[beta[ua]],
@@ -514,24 +514,30 @@ evolCalc =
                  + gtu[ul,um] (+ Gt[uk,ll,li] gt[lj,ln] Gt[un,lk,lm]
                                + Gt[uk,ll,lj] gt[li,ln] Gt[un,lk,lm]
                                + Gt[uk,li,lm] gt[lk,ln] Gt[un,ll,lj]),
+
+    fac1 -> IfThen[conformalmethod,-1/(2 phi),1],
+    cdphi[la] -> fac1 CDt[phi,la],
+    fac2 -> IfThen[conformalmethod,1/(2 phi^2),0],
+    cdphi2[la,lb] -> fac1 CDt[phi,la,lb] + fac2 CDt[phi,la] CDt[phi,lb],
+
     (* PRD 62, 044034 (2000), eqn. (15) *)
-    Rphi[li,lj] -> - 2 CDt[phi,lj,li]
-                   - 2 gt[li,lj] gtu[ul,un] CDt[phi,ll,ln]
-                   + 4 CDt[phi,li] CDt[phi,lj]
-                   - 4 gt[li,lj] gtu[ul,un] CDt[phi,ln] CDt[phi,ll],
+    Rphi[li,lj] -> - 2 cdphi2[lj,li]
+                   - 2 gt[li,lj] gtu[ul,un] cdphi2[ll,ln]
+                   + 4 cdphi[li] cdphi[lj]
+                   - 4 gt[li,lj] gtu[ul,un] cdphi[ln] cdphi[ll],
     
     Atm[ua,lb] -> gtu[ua,uc] At[lc,lb],
     Atu[ua,ub] -> Atm[ua,lc] gtu[ub,uc],
     
-    e4phi       -> Exp[4 phi],
+    e4phi       -> IfThen[conformalmethod,1/phi^2,Exp[4 phi]],
     em4phi      -> 1 / e4phi,
     g[la,lb]    -> e4phi gt[la,lb],
     detg        -> detgExpr,
     (* gu[ua,ub] -> 1/detg detgExpr MatrixInverse [g[ua,ub]], *)
     gu[ua,ub]   -> em4phi gtu[ua,ub],
     G[ua,lb,lc] -> Gt[ua,lb,lc]
-                   + 2 (KD[ua,lb] PD[phi,lc] + KD[ua,lc] PD[phi,lb] 
-                        - gtu[ua,ud] gt[lb,lc] PD[phi,ld]),
+                   + 2 (KD[ua,lb] cdphi[lc] + KD[ua,lc] cdphi[lb] 
+                        - gtu[ua,ud] gt[lb,lc] cdphi[ld]),
     
     R[la,lb] -> Rt[la,lb] + Rphi[la,lb],
     
@@ -562,9 +568,9 @@ evolCalc =
     
     (* PRD 62, 044034 (2000), eqn. (10) *)
     (* PRD 67 084023 (2003), eqn. (16) and (23) *)  
-    dot[phi]       -> - (1/6) alpha trK 
+    dot[phi]       -> IfThen[conformalmethod,(1/3) phi,-(1/6) ] alpha trK
                       + beta[ua] PDu[phi,la]
-                      + (1/6) PD[beta[ua],la],
+                      + IfThen[conformalmethod,-(1/3) phi ,(1/6)] PD[beta[ua],la],
     
     (* PRD 62, 044034 (2000), eqn. (9) *)
     dot[gt[la,lb]] -> - 2 alpha At[la,lb]
@@ -576,7 +582,7 @@ evolCalc =
     dot[Xt[ui]]    -> - 2 Atu[ui,uj] PD[alpha,lj]
                       + 2 alpha (+ Gt[ui,lj,lk] Atu[uk,uj]
                                  - (2/3) gtu[ui,uj] PD[trK,lj]
-                                 + 6 Atu[ui,uj] PD[phi,lj])
+                                 + 6 Atu[ui,uj] cdphi[lj])
                       + gtu[uj,ul] PD[beta[ui],lj,ll]
                       + (1/3) gtu[ui,uj] PD[beta[ul],lj,ll]
                       + beta[uj] PDu[Xt[ui],lj]
@@ -640,7 +646,7 @@ RHSBoundaryCalc =
     
     detgt      -> 1 (* detgtExpr *),
     gtu[ua,ub] -> 1/detgt detgtExpr MatrixInverse [gt[ua,ub]],
-    em4phi     -> Exp[-4 phi],
+    em4phi     -> IfThen[conformalmethod,phi^2,Exp[-4 phi]],
     gu[ua,ub]  -> em4phi gtu[ua,ub],
     
     nn[la] -> normal[la],
@@ -675,9 +681,9 @@ enforceCalc =
     
     trAt -> gtu[ua,ub] At[la,lb],
     
-    At[la,lb] -> At[la,lb] - (1/3) gt[la,lb] trAt,
+    At[la,lb] -> At[la,lb] - (1/3) gt[la,lb] trAt
     
-    alpha -> Max[alpha, MinimumLapse]
+    (* alpha -> Max[alpha, 10^(-10)] *)
   }
 };
 
@@ -693,7 +699,7 @@ boundaryCalc =
   Where -> BoundaryWithGhosts,
   Equations -> 
   {
-    phi       -> 0,
+    phi       -> IfThen[conformalmethod,1,0],
     gt[la,lb] -> KD[la,lb],
     trK       -> 0,
     At[la,lb] -> 0,
@@ -717,8 +723,8 @@ constraintsCalc =
   Shorthands -> {detgt, ddetgt[la], gtu[ua,ub], Gt[ua,lb,lc], e4phi, em4phi,
                  g[la,lb], detg, gu[ua,ub], ddetg[la], G[ua,lb,lc],
                  Rt[la,lb], Rphi[la,lb], R[la,lb], trR, Atm[la,lb],
-                 gK[la,lb,lc],
-                 T00, T0[la], T[la,lb], rho, S[la]},
+                 gK[la,lb,lc], cdphi[la], cdphi2[la,lb],
+                 T00, T0[la], T[la,lb], rho, S[la], fac1, fac2},
   Equations -> 
   {
     detgt        -> 1 (* detgtExpr *),
@@ -762,13 +768,19 @@ constraintsCalc =
                  + 1/2 gtu[u1,u2] (- PD[gt[l1,l2],la,lb] + PD[gt[l1,la],l2,lb]
                                    - PD[gt[la,lb],l1,l2] + PD[gt[l2,lb],l1,la]),
 *)
+
+    fac1 -> IfThen[conformalmethod,-1/(2 phi),1],
+    cdphi[la] -> fac1 CDt[phi,la],
+    fac2 -> IfThen[conformalmethod,1/(2 phi^2),0],
+    cdphi2[la,lb] -> fac1 CDt[phi,la,lb] + fac2 CDt[phi,la] CDt[phi,lb],
+
     (* PRD 62, 044034 (2000), eqn. (15) *)
-    Rphi[li,lj] -> - 2 CDt[phi,lj,li]
-                   - 2 gt[li,lj] gtu[ul,un] CDt[phi,ll,ln]
-                   + 4 CDt[phi,li] CDt[phi,lj]
-                   - 4 gt[li,lj] gtu[ul,un] CDt[phi,ln] CDt[phi,ll],
+    Rphi[li,lj] -> - 2 cdphi2[lj,li]
+                   - 2 gt[li,lj] gtu[ul,un] cdphi2[ll,ln]
+                   + 4 cdphi[li] cdphi[lj]
+                   - 4 gt[li,lj] gtu[ul,un] cdphi[ln] cdphi[ll],
     
-    e4phi       -> Exp[4 phi],
+    e4phi       -> IfThen[conformalmethod,1/phi^2,Exp[4 phi]],
     em4phi      -> 1 / e4phi,
     g[la,lb]    -> e4phi gt[la,lb],
     (* detg      -> detgExpr, *)
@@ -820,7 +832,7 @@ constraintsCalc =
 
     M[la] -> gu[ub,uc] (gK[lc,la,lb] - gK[lc,lb,la]), *)
 
-    M[li] -> + gtu[uj,uk] (CDt[At[li,lj],lk] + 6 At[li,lj] PD[phi,lk])
+    M[li] -> + gtu[uj,uk] (CDt[At[li,lj],lk] + 6 At[li,lj] cdphi[lk])
              - (2/3) PD[trK,li]
              - addMatter 8 pi S[li],
     (* TODO: use PRD 67, 084023 (2003), eqn. (20) *)
@@ -876,6 +888,10 @@ extendedKeywordParameters =
   {
     Name -> "ADMBase::shift_evolution_method",
     AllowedValues -> {BSSN}
+  },
+  {
+    Name -> "ADMBase::dtshift_evolution_method",
+    AllowedValues -> {BSSN}
   }
 };
 
@@ -921,6 +937,12 @@ intParameters =
   {
     Name -> ShiftAlphaPower,
     Default -> 0
+  },
+  {
+    Name -> conformalmethod,
+    Description -> "0 for phi method, 1 for W method",
+    AllowedValues -> {{Value -> "0:1", Description -> "0 or 1"}},
+    Default -> 0
   }
 };
 
@@ -952,11 +974,6 @@ realParameters =
     Name -> ShiftAdvectionCoeff,
     Description -> "Factor in front of the shift advection terms in gamma driver",
     Default -> 1
-  },
-  {
-    Name -> MinimumLapse,
-    Description -> "Minimum value of the lapse function",
-    Default -> -1
   }
 };
 
@@ -1008,6 +1025,6 @@ CreateKrancThornTT [groups, ".", BSSN,
 (* matter: 0 or 1
    (matter seems cheap; it should be always enabled) *)
 
-createCode[4, False, 4, 0];
-createCode[4, False, 4, 1];
-createCode[4, True,  4, 0];
+createCode[4, False, 3, 0];
+createCode[4, False, 3, 1];
+createCode[4, True,  3, 0];

@@ -1,4 +1,7 @@
-/*  File produced by Kranc */
+/*  File produced by user diener */
+/*  Produced with Mathematica Version 7.0 for Linux x86 (64-bit) (February 18, 2009) */
+
+/*  Mathematica script written by Ian Hinder and Sascha Husa */
 
 #define KRANC_C
 
@@ -178,7 +181,7 @@ void ML_BSSN_M_convertToADMBase_Body(cGH const * const cctkGH, CCTK_INT const di
     
     dir3  =  Sign(beta3L);
     
-    e4phi  =  exp(4*phiL);
+    e4phi  =  IfThen(conformalmethod,pow(phiL,-2),exp(4*phiL));
     
     g11  =  e4phi*gt11L;
     

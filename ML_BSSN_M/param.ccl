@@ -1,4 +1,7 @@
-# File produced by Kranc
+# File produced by user diener
+# Produced with Mathematica Version 7.0 for Linux x86 (64-bit) (February 18, 2009)
+
+# Mathematica script written by Ian Hinder and Sascha Husa
 
 
 shares: ADMBase
@@ -17,6 +20,12 @@ EXTENDS CCTK_KEYWORD lapse_evolution_method "lapse_evolution_method"
 
 
 EXTENDS CCTK_KEYWORD shift_evolution_method "shift_evolution_method"
+{
+  ML_BSSN_M :: ""
+} 
+
+
+EXTENDS CCTK_KEYWORD dtshift_evolution_method "dtshift_evolution_method"
 {
   ML_BSSN_M :: ""
 } 
@@ -79,12 +88,6 @@ CCTK_REAL ShiftAdvectionCoeff "Factor in front of the shift advection terms in g
 } 1
 
 restricted:
-CCTK_REAL MinimumLapse "Minimum value of the lapse function"
-{
-  "*:*" :: ""
-} -1
-
-restricted:
 CCTK_INT harmonicN "d/dt alpha = - f alpha^n K  (harmonic=2, 1+log=1)"
 {
   *:* :: ""
@@ -92,6 +95,12 @@ CCTK_INT harmonicN "d/dt alpha = - f alpha^n K  (harmonic=2, 1+log=1)"
 
 restricted:
 CCTK_INT ShiftAlphaPower "ShiftAlphaPower"
+{
+  *:* :: ""
+} 0
+
+restricted:
+CCTK_INT conformalmethod "0 for phi method, 1 for W method"
 {
   *:* :: ""
 } 0
@@ -134,14 +143,8 @@ CCTK_INT ML_BSSN_M_MaxNumEvolvedVars "Number of evolved variables used by this t
 restricted:
 CCTK_INT timelevels "Number of active timelevels"
 {
-  0:4 :: ""
-} 4
-
-restricted:
-CCTK_INT rhs_timelevels "Number of active RHS timelevels"
-{
-  0:4 :: ""
-} 1
+  0:3 :: ""
+} 3
 
 restricted:
 CCTK_INT ML_BSSN_M_Minkowski_calc_every "ML_BSSN_M_Minkowski_calc_every"

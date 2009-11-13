@@ -1,4 +1,7 @@
-# File produced by Kranc
+# File produced by user diener
+# Produced with Mathematica Version 7.0 for Linux x86 (64-bit) (February 18, 2009)
+
+# Mathematica script written by Ian Hinder and Sascha Husa
 
 implements: ML_BSSN_MP
 
@@ -59,77 +62,7 @@ CCTK_REAL ML_mom type=GF timelevels=1 tags='tensortypealias="D" tensorweight=1.0
 } "ML_mom"
 
 public:
-CCTK_REAL ML_curv type=GF timelevels=4 tags='tensortypealias="DD_sym" tensorweight=-0.66666666666666666667'
-{
-  At11,
-  At12,
-  At13,
-  At22,
-  At23,
-  At33
-} "ML_curv"
-
-public:
-CCTK_REAL ML_dtlapse type=GF timelevels=4 tags='tensortypealias="Scalar" tensorweight=1.0000000000000000000'
-{
-  A
-} "ML_dtlapse"
-
-public:
-CCTK_REAL ML_dtshift type=GF timelevels=4 tags='tensortypealias="U" tensorweight=1.0000000000000000000'
-{
-  B1,
-  B2,
-  B3
-} "ML_dtshift"
-
-public:
-CCTK_REAL ML_Gamma type=GF timelevels=4 tags='tensortypealias="U" tensorweight=0.66666666666666666667'
-{
-  Xt1,
-  Xt2,
-  Xt3
-} "ML_Gamma"
-
-public:
-CCTK_REAL ML_lapse type=GF timelevels=4 tags='tensortypealias="Scalar" tensorweight=1.0000000000000000000'
-{
-  alpha
-} "ML_lapse"
-
-public:
-CCTK_REAL ML_log_confac type=GF timelevels=4 tags='tensortypealias="Scalar" tensorweight=0.16666666666666666667'
-{
-  phi
-} "ML_log_confac"
-
-public:
-CCTK_REAL ML_metric type=GF timelevels=4 tags='tensortypealias="DD_sym" tensorweight=-0.66666666666666666667'
-{
-  gt11,
-  gt12,
-  gt13,
-  gt22,
-  gt23,
-  gt33
-} "ML_metric"
-
-public:
-CCTK_REAL ML_shift type=GF timelevels=4 tags='tensortypealias="U" tensorweight=1.0000000000000000000'
-{
-  beta1,
-  beta2,
-  beta3
-} "ML_shift"
-
-public:
-CCTK_REAL ML_trace_curv type=GF timelevels=4 tags='tensortypealias="Scalar" tensorweight=1.0000000000000000000'
-{
-  trK
-} "ML_trace_curv"
-
-public:
-CCTK_REAL ML_curvrhs type=GF timelevels=4 tags='tensortypealias="DD_sym" tensorweight=-0.66666666666666666667'
+CCTK_REAL ML_curvrhs type=GF timelevels=1 tags='tensortypealias="DD_sym" tensorweight=-0.66666666666666666667'
 {
   At11rhs,
   At12rhs,
@@ -140,13 +73,13 @@ CCTK_REAL ML_curvrhs type=GF timelevels=4 tags='tensortypealias="DD_sym" tensorw
 } "ML_curvrhs"
 
 public:
-CCTK_REAL ML_dtlapserhs type=GF timelevels=4 tags='tensortypealias="Scalar" tensorweight=1.0000000000000000000'
+CCTK_REAL ML_dtlapserhs type=GF timelevels=1 tags='tensortypealias="Scalar" tensorweight=1.0000000000000000000'
 {
   Arhs
 } "ML_dtlapserhs"
 
 public:
-CCTK_REAL ML_dtshiftrhs type=GF timelevels=4 tags='tensortypealias="U" tensorweight=1.0000000000000000000'
+CCTK_REAL ML_dtshiftrhs type=GF timelevels=1 tags='tensortypealias="U" tensorweight=1.0000000000000000000'
 {
   B1rhs,
   B2rhs,
@@ -154,7 +87,7 @@ CCTK_REAL ML_dtshiftrhs type=GF timelevels=4 tags='tensortypealias="U" tensorwei
 } "ML_dtshiftrhs"
 
 public:
-CCTK_REAL ML_Gammarhs type=GF timelevels=4 tags='tensortypealias="U" tensorweight=0.66666666666666666667'
+CCTK_REAL ML_Gammarhs type=GF timelevels=1 tags='tensortypealias="U" tensorweight=0.66666666666666666667'
 {
   Xt1rhs,
   Xt2rhs,
@@ -162,19 +95,19 @@ CCTK_REAL ML_Gammarhs type=GF timelevels=4 tags='tensortypealias="U" tensorweigh
 } "ML_Gammarhs"
 
 public:
-CCTK_REAL ML_lapserhs type=GF timelevels=4 tags='tensortypealias="Scalar" tensorweight=1.0000000000000000000'
+CCTK_REAL ML_lapserhs type=GF timelevels=1 tags='tensortypealias="Scalar" tensorweight=1.0000000000000000000'
 {
   alpharhs
 } "ML_lapserhs"
 
 public:
-CCTK_REAL ML_log_confacrhs type=GF timelevels=4 tags='tensortypealias="Scalar" tensorweight=0.16666666666666666667'
+CCTK_REAL ML_log_confacrhs type=GF timelevels=1 tags='tensortypealias="Scalar" tensorweight=0.16666666666666666667'
 {
   phirhs
 } "ML_log_confacrhs"
 
 public:
-CCTK_REAL ML_metricrhs type=GF timelevels=4 tags='tensortypealias="DD_sym" tensorweight=-0.66666666666666666667'
+CCTK_REAL ML_metricrhs type=GF timelevels=1 tags='tensortypealias="DD_sym" tensorweight=-0.66666666666666666667'
 {
   gt11rhs,
   gt12rhs,
@@ -185,7 +118,7 @@ CCTK_REAL ML_metricrhs type=GF timelevels=4 tags='tensortypealias="DD_sym" tenso
 } "ML_metricrhs"
 
 public:
-CCTK_REAL ML_shiftrhs type=GF timelevels=4 tags='tensortypealias="U" tensorweight=1.0000000000000000000'
+CCTK_REAL ML_shiftrhs type=GF timelevels=1 tags='tensortypealias="U" tensorweight=1.0000000000000000000'
 {
   beta1rhs,
   beta2rhs,
@@ -193,7 +126,77 @@ CCTK_REAL ML_shiftrhs type=GF timelevels=4 tags='tensortypealias="U" tensorweigh
 } "ML_shiftrhs"
 
 public:
-CCTK_REAL ML_trace_curvrhs type=GF timelevels=4 tags='tensortypealias="Scalar" tensorweight=1.0000000000000000000'
+CCTK_REAL ML_trace_curvrhs type=GF timelevels=1 tags='tensortypealias="Scalar" tensorweight=1.0000000000000000000'
 {
   trKrhs
 } "ML_trace_curvrhs"
+
+public:
+CCTK_REAL ML_curv type=GF timelevels=3 tags='tensortypealias="DD_sym" tensorweight=-0.66666666666666666667'
+{
+  At11,
+  At12,
+  At13,
+  At22,
+  At23,
+  At33
+} "ML_curv"
+
+public:
+CCTK_REAL ML_dtlapse type=GF timelevels=3 tags='tensortypealias="Scalar" tensorweight=1.0000000000000000000'
+{
+  A
+} "ML_dtlapse"
+
+public:
+CCTK_REAL ML_dtshift type=GF timelevels=3 tags='tensortypealias="U" tensorweight=1.0000000000000000000'
+{
+  B1,
+  B2,
+  B3
+} "ML_dtshift"
+
+public:
+CCTK_REAL ML_Gamma type=GF timelevels=3 tags='tensortypealias="U" tensorweight=0.66666666666666666667'
+{
+  Xt1,
+  Xt2,
+  Xt3
+} "ML_Gamma"
+
+public:
+CCTK_REAL ML_lapse type=GF timelevels=3 tags='tensortypealias="Scalar" tensorweight=1.0000000000000000000'
+{
+  alpha
+} "ML_lapse"
+
+public:
+CCTK_REAL ML_log_confac type=GF timelevels=3 tags='tensortypealias="Scalar" tensorweight=0.16666666666666666667'
+{
+  phi
+} "ML_log_confac"
+
+public:
+CCTK_REAL ML_metric type=GF timelevels=3 tags='tensortypealias="DD_sym" tensorweight=-0.66666666666666666667'
+{
+  gt11,
+  gt12,
+  gt13,
+  gt22,
+  gt23,
+  gt33
+} "ML_metric"
+
+public:
+CCTK_REAL ML_shift type=GF timelevels=3 tags='tensortypealias="U" tensorweight=1.0000000000000000000'
+{
+  beta1,
+  beta2,
+  beta3
+} "ML_shift"
+
+public:
+CCTK_REAL ML_trace_curv type=GF timelevels=3 tags='tensortypealias="Scalar" tensorweight=1.0000000000000000000'
+{
+  trK
+} "ML_trace_curv"

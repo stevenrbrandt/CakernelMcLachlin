@@ -1,4 +1,7 @@
-/*  File produced by Kranc */
+/*  File produced by user diener */
+/*  Produced with Mathematica Version 7.0 for Linux x86 (64-bit) (February 18, 2009) */
+
+/*  Mathematica script written by Ian Hinder and Sascha Husa */
 
 #define KRANC_C
 
@@ -185,7 +188,7 @@ void ML_BSSN_RHSBoundary_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK
     
     gtu33  =  INV(detgt)*(gt11L*gt22L - SQR(gt12L));
     
-    em4phi  =  exp(-4*phiL);
+    em4phi  =  IfThen(conformalmethod,SQR(phiL),exp(-4*phiL));
     
     gu11  =  em4phi*gtu11;
     

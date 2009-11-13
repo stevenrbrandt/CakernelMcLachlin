@@ -1,4 +1,7 @@
-/*  File produced by Kranc */
+/*  File produced by user diener */
+/*  Produced with Mathematica Version 7.0 for Linux x86 (64-bit) (February 18, 2009) */
+
+/*  Mathematica script written by Ian Hinder and Sascha Husa */
 
 #define KRANC_C
 
@@ -127,7 +130,7 @@ void ML_BSSN_M_boundary_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_
     /* Precompute derivatives (old style) */
     
     /* Calculate temporaries and grid functions */
-    phiL  =  0;
+    phiL  =  IfThen(conformalmethod,1,0);
     
     gt11L  =  1;
     

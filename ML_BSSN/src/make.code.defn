@@ -1,3 +1,6 @@
-# File produced by Kranc
+# File produced by user diener
+# Produced with Mathematica Version 7.0 for Linux x86 (64-bit) (February 18, 2009)
+
+# Mathematica script written by Ian Hinder and Sascha Husa
 
 SRCS = Startup.c RegisterMoL.c RegisterSymmetries.c ML_BSSN_Minkowski.c ML_BSSN_convertFromADMBase.c ML_BSSN_convertFromADMBaseGamma.c ML_BSSN_RHS.c ML_BSSN_RHSBoundary.c ML_BSSN_enforce.c ML_BSSN_boundary.c ML_BSSN_convertToADMBase.c ML_BSSN_ADMBaseBoundary.c ML_BSSN_constraints.c ML_BSSN_constraints_boundary.c Boundaries.c 
