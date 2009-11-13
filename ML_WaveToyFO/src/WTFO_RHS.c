@@ -1,7 +1,4 @@
-/*  File produced by user eschnett */
-/*  Produced with Mathematica Version 7.0 for Mac OS X x86 (64-bit) (November 11, 2008) */
-
-/*  Mathematica script written by Ian Hinder and Sascha Husa */
+/*  File produced by Kranc */
 
 #define KRANC_C
 
@@ -23,7 +20,7 @@
 #define CUB(x) ((x) * (x) * (x))
 #define QAD(x) ((x) * (x) * (x) * (x))
 
-void WTFO_Gaussian_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT const face, CCTK_REAL const normal[3], CCTK_REAL const tangentA[3], CCTK_REAL const tangentB[3], CCTK_INT const min[3], CCTK_INT const max[3], CCTK_INT const n_subblock_gfs, CCTK_REAL * const subblock_gfs[])
+void WTFO_RHS_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT const face, CCTK_REAL const normal[3], CCTK_REAL const tangentA[3], CCTK_REAL const tangentB[3], CCTK_INT const min[3], CCTK_INT const max[3], CCTK_INT const n_subblock_gfs, CCTK_REAL * const subblock_gfs[])
 {
   DECLARE_CCTK_ARGUMENTS;
   DECLARE_CCTK_PARAMETERS;
@@ -49,10 +46,10 @@ void WTFO_Gaussian_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT c
   
   if (verbose > 1)
   {
-    CCTK_VInfo(CCTK_THORNSTRING,"Entering WTFO_Gaussian_Body");
+    CCTK_VInfo(CCTK_THORNSTRING,"Entering WTFO_RHS_Body");
   }
   
-  if (cctk_iteration % WTFO_Gaussian_calc_every != WTFO_Gaussian_calc_offset)
+  if (cctk_iteration % WTFO_RHS_calc_every != WTFO_RHS_calc_offset)
   {
     return;
   }
@@ -88,9 +85,9 @@ void WTFO_Gaussian_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT c
   
   /* Loop over the grid points */
   #pragma omp parallel
-  LC_LOOP3 (WTFO_Gaussian,
+  LC_LOOP3 (WTFO_RHS,
             i,j,k, min[0],min[1],min[2], max[0],max[1],max[2],
-            cctk_lssh[CCTK_LSSH_IDX(0,0)],cctk_lssh[CCTK_LSSH_IDX(0,1)],cctk_lssh[CCTK_LSSH_IDX(0,2)])
+            cctk_lsh[0],cctk_lsh[1],cctk_lsh[2])
   {
     int index = INITVALUE;
     int subblock_index = INITVALUE;
@@ -100,51 +97,67 @@ void WTFO_Gaussian_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT c
     /* Declare shorthands */
     
     /* Declare local copies of grid functions */
-    CCTK_REAL rhoL = INITVALUE;
-    CCTK_REAL uL = INITVALUE;
-    CCTK_REAL v1L = INITVALUE, v2L = INITVALUE, v3L = INITVALUE;
+    CCTK_REAL rhoL = INITVALUE, rhorhsL = INITVALUE;
+    CCTK_REAL urhsL = INITVALUE;
+    CCTK_REAL v1L = INITVALUE, v1rhsL = INITVALUE, v2L = INITVALUE, v2rhsL = INITVALUE, v3L = INITVALUE, v3rhsL = INITVALUE;
     /* Declare precomputed derivatives*/
     
     /* Declare derivatives */
+    CCTK_REAL PDstandardNth1rho = INITVALUE;
+    CCTK_REAL PDstandardNth2rho = INITVALUE;
+    CCTK_REAL PDstandardNth3rho = INITVALUE;
+    CCTK_REAL PDstandardNth1v1 = INITVALUE;
+    CCTK_REAL PDstandardNth2v2 = INITVALUE;
+    CCTK_REAL PDstandardNth3v3 = INITVALUE;
     
     /* Assign local copies of grid functions */
+    rhoL = rho[index];
+    v1L = v1[index];
+    v2L = v2[index];
+    v3L = v3[index];
     
     /* Assign local copies of subblock grid functions */
     
     /* Include user supplied include files */
     
     /* Precompute derivatives (new style) */
+    PDstandardNth1rho = PDstandardNth1(rho, i, j, k);
+    PDstandardNth2rho = PDstandardNth2(rho, i, j, k);
+    PDstandardNth3rho = PDstandardNth3(rho, i, j, k);
+    PDstandardNth1v1 = PDstandardNth1(v1, i, j, k);
+    PDstandardNth2v2 = PDstandardNth2(v2, i, j, k);
+    PDstandardNth3v3 = PDstandardNth3(v3, i, j, k);
     
     /* Precompute derivatives (old style) */
     
     /* Calculate temporaries and grid functions */
-    uL  =  0;
+    urhsL  =  rhoL;
     
-    v1L  =  0;
+    rhorhsL  =  PDstandardNth1v1 + PDstandardNth2v2 + PDstandardNth3v3;
     
-    v2L  =  0;
+    v1rhsL  =  PDstandardNth1rho;
     
-    v3L  =  0;
+    v2rhsL  =  PDstandardNth2rho;
     
-    rhoL  =  0;
+    v3rhsL  =  PDstandardNth3rho;
     
     
     /* Copy local copies back to grid functions */
-    rho[index] = rhoL;
-    u[index] = uL;
-    v1[index] = v1L;
-    v2[index] = v2L;
-    v3[index] = v3L;
+    rhorhs[index] = rhorhsL;
+    urhs[index] = urhsL;
+    v1rhs[index] = v1rhsL;
+    v2rhs[index] = v2rhsL;
+    v3rhs[index] = v3rhsL;
     
     /* Copy local copies back to subblock grid functions */
   }
-  LC_ENDLOOP3 (WTFO_Gaussian);
+  LC_ENDLOOP3 (WTFO_RHS);
 }
 
-void WTFO_Gaussian(CCTK_ARGUMENTS)
+void WTFO_RHS(CCTK_ARGUMENTS)
 {
   DECLARE_CCTK_ARGUMENTS;
   DECLARE_CCTK_PARAMETERS;
   
-  GenericFD_LoopOverEverything(cctkGH, &WTFO_Gaussian_Body);
+  GenericFD_LoopOverInterior(cctkGH, &WTFO_RHS_Body);
 }

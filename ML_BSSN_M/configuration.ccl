@@ -3,4 +3,5 @@
 
 # Mathematica script written by Ian Hinder and Sascha Husa
 
+REQUIRES GenericFD
 REQUIRES LoopControl

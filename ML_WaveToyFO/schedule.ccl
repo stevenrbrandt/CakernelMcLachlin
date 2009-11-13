@@ -1,16 +1,7 @@
-# File produced by user eschnett
-# Produced with Mathematica Version 7.0 for Mac OS X x86 (64-bit) (November 11, 2008)
-
-# Mathematica script written by Ian Hinder and Sascha Husa
+# File produced by Kranc
 
 
 STORAGE: WT_w[1]
-
-STORAGE: WT_rhorhs[1]
-
-STORAGE: WT_urhs[1]
-
-STORAGE: WT_vrhs[1]
 
 if (timelevels == 1)
 {
@@ -39,19 +30,46 @@ if (timelevels == 2)
   STORAGE: WT_v[2]
 }
 
-schedule ML_FOWaveToy_Startup at STARTUP
+if (rhs_timelevels == 1)
+{
+  STORAGE: WT_rhorhs[1]
+}
+if (rhs_timelevels == 2)
+{
+  STORAGE: WT_rhorhs[2]
+}
+
+if (rhs_timelevels == 1)
+{
+  STORAGE: WT_urhs[1]
+}
+if (rhs_timelevels == 2)
+{
+  STORAGE: WT_urhs[2]
+}
+
+if (rhs_timelevels == 1)
+{
+  STORAGE: WT_vrhs[1]
+}
+if (rhs_timelevels == 2)
+{
+  STORAGE: WT_vrhs[2]
+}
+
+schedule ML_WaveToyFO_Startup at STARTUP
 {
   LANG: C
   OPTIONS: meta
 } "create banner"
 
-schedule ML_FOWaveToy_RegisterVars in MoL_Register
+schedule ML_WaveToyFO_RegisterVars in MoL_Register
 {
   LANG: C
   OPTIONS: meta
 } "Register Variables for MoL"
 
-schedule ML_FOWaveToy_RegisterSymmetries in SymmetryRegister
+schedule ML_WaveToyFO_RegisterSymmetries in SymmetryRegister
 {
   LANG: C
   OPTIONS: meta
@@ -81,7 +99,7 @@ schedule WTFO_constraints AT analysis
   SYNC: WT_w
 } "WTFO_constraints"
 
-schedule ML_FOWaveToy_ApplyBoundConds in MoL_PostStep
+schedule ML_WaveToyFO_ApplyBoundConds in MoL_PostStep
 {
   LANG: C
   OPTIONS: level
@@ -90,13 +108,13 @@ schedule ML_FOWaveToy_ApplyBoundConds in MoL_PostStep
   SYNC: WT_v
 } "apply boundary conditions"
 
-schedule ML_FOWaveToy_CheckBoundaries at BASEGRID
+schedule ML_WaveToyFO_CheckBoundaries at BASEGRID
 {
   LANG: C
   OPTIONS: meta
 } "check boundaries treatment"
 
-schedule group ApplyBCs as ML_FOWaveToy_ApplyBCs in MoL_PostStep  after ML_FOWaveToy_ApplyBoundConds
+schedule group ApplyBCs as ML_WaveToyFO_ApplyBCs in MoL_PostStep  after ML_WaveToyFO_ApplyBoundConds
 {
   # no language specified
 } "Apply boundary conditions controlled by thorn Boundary"

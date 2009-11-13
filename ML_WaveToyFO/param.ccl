@@ -1,7 +1,4 @@
-# File produced by user eschnett
-# Produced with Mathematica Version 7.0 for Mac OS X x86 (64-bit) (November 11, 2008)
-
-# Mathematica script written by Ian Hinder and Sascha Husa
+# File produced by Kranc
 
 
 shares: GenericFD
@@ -24,7 +21,7 @@ CCTK_INT verbose "verbose"
 } 0
 
 restricted:
-CCTK_INT ML_FOWaveToy_MaxNumEvolvedVars "Number of evolved variables used by this thorn" ACCUMULATOR-BASE=MethodofLines::MoL_Num_Evolved_Vars
+CCTK_INT ML_WaveToyFO_MaxNumEvolvedVars "Number of evolved variables used by this thorn" ACCUMULATOR-BASE=MethodofLines::MoL_Num_Evolved_Vars
 {
   5:5 :: "Number of evolved variables used by this thorn"
 } 5
@@ -34,6 +31,12 @@ CCTK_INT timelevels "Number of active timelevels"
 {
   0:2 :: ""
 } 2
+
+restricted:
+CCTK_INT rhs_timelevels "Number of active RHS timelevels"
+{
+  0:2 :: ""
+} 1
 
 restricted:
 CCTK_INT WTFO_Gaussian_calc_every "WTFO_Gaussian_calc_every"

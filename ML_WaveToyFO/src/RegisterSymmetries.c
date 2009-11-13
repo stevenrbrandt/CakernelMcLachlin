@@ -1,14 +1,11 @@
-/*  File produced by user eschnett */
-/*  Produced with Mathematica Version 7.0 for Mac OS X x86 (64-bit) (November 11, 2008) */
-
-/*  Mathematica script written by Ian Hinder and Sascha Husa */
+/*  File produced by Kranc */
 
 #include "cctk.h"
 #include "cctk_Arguments.h"
 #include "cctk_Parameters.h"
 #include "Symmetry.h"
 
-void ML_FOWaveToy_RegisterSymmetries(CCTK_ARGUMENTS)
+void ML_WaveToyFO_RegisterSymmetries(CCTK_ARGUMENTS)
 {
   DECLARE_CCTK_ARGUMENTS;
   DECLARE_CCTK_PARAMETERS;
@@ -22,41 +19,41 @@ void ML_FOWaveToy_RegisterSymmetries(CCTK_ARGUMENTS)
   sym[0] = 1;
   sym[1] = 1;
   sym[2] = 1;
-  SetCartSymVN(cctkGH, sym, "ML_FOWaveToy::rho");
+  SetCartSymVN(cctkGH, sym, "ML_WaveToyFO::rho");
   
   sym[0] = 1;
   sym[1] = 1;
   sym[2] = 1;
-  SetCartSymVN(cctkGH, sym, "ML_FOWaveToy::u");
+  SetCartSymVN(cctkGH, sym, "ML_WaveToyFO::u");
   
   sym[0] = -1;
   sym[1] = 1;
   sym[2] = 1;
-  SetCartSymVN(cctkGH, sym, "ML_FOWaveToy::v1");
+  SetCartSymVN(cctkGH, sym, "ML_WaveToyFO::v1");
   
   sym[0] = 1;
   sym[1] = -1;
   sym[2] = 1;
-  SetCartSymVN(cctkGH, sym, "ML_FOWaveToy::v2");
+  SetCartSymVN(cctkGH, sym, "ML_WaveToyFO::v2");
   
   sym[0] = 1;
   sym[1] = 1;
   sym[2] = -1;
-  SetCartSymVN(cctkGH, sym, "ML_FOWaveToy::v3");
+  SetCartSymVN(cctkGH, sym, "ML_WaveToyFO::v3");
   
   sym[0] = -1;
   sym[1] = 1;
   sym[2] = 1;
-  SetCartSymVN(cctkGH, sym, "ML_FOWaveToy::w1");
+  SetCartSymVN(cctkGH, sym, "ML_WaveToyFO::w1");
   
   sym[0] = 1;
   sym[1] = -1;
   sym[2] = 1;
-  SetCartSymVN(cctkGH, sym, "ML_FOWaveToy::w2");
+  SetCartSymVN(cctkGH, sym, "ML_WaveToyFO::w2");
   
   sym[0] = 1;
   sym[1] = 1;
   sym[2] = -1;
-  SetCartSymVN(cctkGH, sym, "ML_FOWaveToy::w3");
+  SetCartSymVN(cctkGH, sym, "ML_WaveToyFO::w3");
   
 }
