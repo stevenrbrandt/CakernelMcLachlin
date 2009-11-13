@@ -21,6 +21,19 @@ if (CCTK_EQUALS (evolution_method, "ML_BSSN")) {
     STORAGE: ADMBase::shift[3]
     STORAGE: ADMBase::dtlapse[3]
     STORAGE: ADMBase::dtshift[3]
+  } else if (timelevels == 4) {
+    #STORAGE: ADMBase::metric[4]
+    #STORAGE: ADMBase::curv[4]
+    #STORAGE: ADMBase::lapse[4]
+    #STORAGE: ADMBase::shift[4]
+    #STORAGE: ADMBase::dtlapse[4]
+    #STORAGE: ADMBase::dtshift[4]
+    STORAGE: ADMBase::metric[3]
+    STORAGE: ADMBase::curv[3]
+    STORAGE: ADMBase::lapse[3]
+    STORAGE: ADMBase::shift[3]
+    STORAGE: ADMBase::dtlapse[3]
+    STORAGE: ADMBase::dtshift[3]
   }
   
   SCHEDULE ML_BSSN_RegisterSlicing AT startup
@@ -29,11 +42,11 @@ if (CCTK_EQUALS (evolution_method, "ML_BSSN")) {
     OPTIONS: meta
   } "Register slicing"
   
-  SCHEDULE ML_BSSN_UnsetCheckpointTags AT startup
+  SCHEDULE ML_BSSN_SetGroupTags AT startup BEFORE Driver_Startup
   {
     LANG: C
     OPTIONS: meta
-  } "Don't checkpoint ADMBase variables"
+  } "Set checkpointing and prolongation group tags"
   
   SCHEDULE ML_BSSN_RegisterConstrained IN MoL_Register
   {
@@ -42,6 +55,13 @@ if (CCTK_EQUALS (evolution_method, "ML_BSSN")) {
   } "Register ADMBase variables as constrained"
   
   
+  
+  #SCHEDULE GROUP ML_BSSN_evolCalcGroup AT postinitial AFTER MoL_PostStep
+  #{
+  #} "Calculate BSSN RHS"
+  SCHEDULE GROUP MoL_CalcRHS AT postinitial AFTER MoL_PostStep
+  {
+  } "Evaluate RHS"
   
   SCHEDULE GROUP ML_BSSN_evolCalcGroup IN MoL_CalcRHS
   {
@@ -62,7 +82,7 @@ if (CCTK_EQUALS (evolution_method, "ML_BSSN")) {
   
   
   
-  if (CCTK_EQUALS (my_rhs_boundary_condition, "NewRad"))
+  if (CCTK_EQUALS (my_initial_boundary_condition, "extrapolate-gammas"))
   {
     SCHEDULE ML_BSSN_ExtrapolateGammas AT initial AFTER ML_BSSN_convertFromADMBaseGamma
     {
@@ -71,7 +91,10 @@ if (CCTK_EQUALS (evolution_method, "ML_BSSN")) {
       SYNC: ML_dtlapse
       SYNC: ML_dtshift
     } "Extrapolate Gammas and time derivatives of lapse and shift"
-    
+  }
+  
+  if (CCTK_EQUALS (my_rhs_boundary_condition, "NewRad"))
+  {
     SCHEDULE ML_BSSN_NewRad IN ML_BSSN_evolCalcGroup AFTER ML_BSSN_RHS
     {
       LANG: C
@@ -97,7 +120,7 @@ if (CCTK_EQUALS (evolution_method, "ML_BSSN")) {
   {
     # if (timelevels > 1)
     # {
-    #   SCHEDULE ML_BSSN_CopyADMBase AT CCTK_PRESTEP
+    #   SCHEDULE ML_BSSN_CopyADMBase AT prestep
     #   {
     #     LANG: C
     #   } "Copy ADMBase variables to current time level"

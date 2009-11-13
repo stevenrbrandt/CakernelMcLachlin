@@ -56,9 +56,9 @@ WaveToy.out: WaveToy.m
 	done
 
 WaveToyFO.out: WaveToyFO.m
-	rm -rf ML_FOWaveToy
+	rm -rf ML_WaveToyFO
 	./runmath.sh $^
-	for thorn in ML_FOWaveToy; do \
+	for thorn in ML_WaveToyFO; do \
 		./copy-if-changed.sh $$thorn ../$$thorn; \
 	done
 
@@ -71,14 +71,14 @@ hydro.out: hydro.m
 
 clean:
 	rm -rf ML_ADM* ML_BSSN*
-	rm -rf ML_WaveToy ML_FOWaveToy
+	rm -rf ML_WaveToy ML_WaveToyFO
 	rm -rf ML_hydro
-	rm -rf McLachlan_ADM.out McLachlan_ADM.err
-	rm -rf McLachlan_BSSN.out McLachlan_BSSN.err
-	rm -rf McLachlanW.out McLachlanW.err
-	rm -rf McLachlanUp.out McLachlanUp.err
-	rm -rf McLachlan6.out McLachlan6.err
-	rm -rf WaveToy.out WaveToy.err
-	rm -rf hydro.out hydro.err
+	rm -f McLachlan_ADM.out McLachlan_ADM.err
+	rm -f McLachlan_BSSN.out McLachlan_BSSN.err
+	rm -f McLachlanW.out McLachlanW.err
+	rm -f McLachlanUp.out McLachlanUp.err
+	rm -f McLachlan6.out McLachlan6.err
+	rm -f WaveToy.out WaveToy.err
+	rm -f hydro.out hydro.err
 
 .PHONY: all clean
