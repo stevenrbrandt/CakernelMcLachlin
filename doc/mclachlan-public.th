@@ -87,6 +87,7 @@ TAT/TGRtensor
 
 AEIThorns/AEILocalInterp
 AEIThorns/AHFinderDirect
+AEIThorns/Constants
 AEIThorns/Dissipation
 AEIThorns/Exact
 AEIThorns/Formaline
@@ -103,13 +104,13 @@ AEIThorns/TmunuBase
 
 
 
-!REPOSITORY_TYPE svn:https://
-!REPOSITORY_LOCATION svn.aei.mpg.de
-!REPOSITORY_NAME /eScience/@ARRANGEMENT@/Cactus/Thorns/@THORN@/trunk
-
-AstroGrid/HTTPS
-AstroGrid/Publish
-AstroGrid/Visualisation
+#!REPOSITORY_TYPE svn:https://
+#!REPOSITORY_LOCATION svn.aei.mpg.de
+#!REPOSITORY_NAME /eScience/@ARRANGEMENT@/Cactus/Thorns/@THORN@/trunk
+#
+#AstroGrid/HTTPS
+#AstroGrid/Publish
+#AstroGrid/Visualisation
 
 
 
@@ -118,9 +119,9 @@ AstroGrid/Visualisation
 !REPOSITORY_NAME /numrel
 !REPOSITORY_USER cvs_anon
 
-LSUThorns/SpECReader
+#LSUThorns/SpECReader
 LSUThorns/SummationByParts
-LSUThorns/SummationByPartsTests
+#LSUThorns/SummationByPartsTests
 
 
 
@@ -131,5 +132,5 @@ LSUThorns/SummationByPartsTests
 Whisky/EOS_Polytrope
 Whisky/Whisky
 Whisky/Whisky_Init_Data
-Whisky/Whisky_IVP
+#Whisky/Whisky_IVP
 Whisky/Whisky_TOVSolverC

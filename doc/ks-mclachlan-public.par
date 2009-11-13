@@ -204,6 +204,8 @@ ADMBase::evolution_method       = "ML_BSSN"
 ADMBase::lapse_evolution_method = "ML_BSSN"
 ADMBase::shift_evolution_method = "ML_BSSN"
 
+ML_BSSN::timelevels = 3
+
 ML_BSSN::harmonicN           = 1      # 1+log
 ML_BSSN::harmonicF           = 2.0    # 1+log
 ML_BSSN::ShiftGammaCoeff     = 0.75

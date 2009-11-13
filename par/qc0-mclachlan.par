@@ -2,7 +2,6 @@ Cactus::cctk_run_title = "QC-0"
 
 Cactus::cctk_full_warnings         = yes
 Cactus::highlight_warning_messages = no
-Cactus::cctk_timer_output          = "full"
 
 Cactus::terminate       = "time"
 #Cactus::cctk_final_time = 1.0
@@ -40,7 +39,7 @@ ActiveThorns = "GenericFD"
 
 ActiveThorns = "HDF5"
 
-#ActiveThorns = "MPIClock"
+ActiveThorns = "LoopControl"
 
 #ActiveThorns = "NaNCatcher"
 
