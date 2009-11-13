@@ -17,7 +17,7 @@ prefix = "ML_";
 suffix =
   If [useGlobalDerivs, "_MP", ""] <>
   If [derivOrder!=4, "_O" <> ToString[derivOrder], ""] <>
-  If [evolutionTimelevels!=3, "_TL" <> ToString[evolutionTimelevels], ""] <>
+  (* If [evolutionTimelevels!=3, "_TL" <> ToString[evolutionTimelevels], ""] <> *)
   If [addMatter==1, "_M", ""];
 
 BSSN = prefix <> "BSSN" <> suffix;
@@ -704,9 +704,9 @@ enforceCalc =
     
     trAt -> gtu[ua,ub] At[la,lb],
     
-    At[la,lb] -> At[la,lb] - (1/3) gt[la,lb] trAt
+    At[la,lb] -> At[la,lb] - (1/3) gt[la,lb] trAt,
     
-    (* alpha -> Max[alpha, 10^(-10)] *)
+    alpha -> Max[alpha, MinimumLapse]
   }
 };
 
@@ -1004,6 +1004,11 @@ realParameters =
     Name -> ShiftAdvectionCoeff,
     Description -> "Factor in front of the shift advection terms in gamma driver",
     Default -> 1
+  },
+  {
+    Name -> MinimumLapse,
+    Description -> "Minimum value of the lapse function",
+    Default -> -1
   }
 };
 

@@ -1,7 +1,4 @@
-/*  File produced by user diener */
-/*  Produced with Mathematica Version 7.0 for Linux x86 (64-bit) (February 18, 2009) */
-
-/*  Mathematica script written by Ian Hinder and Sascha Husa */
+/*  File produced by Kranc */
 
 #define KRANC_C
 
@@ -23,7 +20,7 @@
 #define CUB(x) ((x) * (x) * (x))
 #define QAD(x) ((x) * (x) * (x) * (x))
 
-void ML_BSSN_RHSBoundary_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT const face, CCTK_REAL const normal[3], CCTK_REAL const tangentA[3], CCTK_REAL const tangentB[3], CCTK_INT const min[3], CCTK_INT const max[3], CCTK_INT const n_subblock_gfs, CCTK_REAL * const subblock_gfs[])
+void ML_BSSN_MP_RHSRadiativeBoundary_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT const face, CCTK_REAL const normal[3], CCTK_REAL const tangentA[3], CCTK_REAL const tangentB[3], CCTK_INT const min[3], CCTK_INT const max[3], CCTK_INT const n_subblock_gfs, CCTK_REAL * const subblock_gfs[])
 {
   DECLARE_CCTK_ARGUMENTS;
   DECLARE_CCTK_PARAMETERS;
@@ -52,10 +49,10 @@ void ML_BSSN_RHSBoundary_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK
   
   if (verbose > 1)
   {
-    CCTK_VInfo(CCTK_THORNSTRING,"Entering ML_BSSN_RHSBoundary_Body");
+    CCTK_VInfo(CCTK_THORNSTRING,"Entering ML_BSSN_MP_RHSRadiativeBoundary_Body");
   }
   
-  if (cctk_iteration % ML_BSSN_RHSBoundary_calc_every != ML_BSSN_RHSBoundary_calc_offset)
+  if (cctk_iteration % ML_BSSN_MP_RHSRadiativeBoundary_calc_every != ML_BSSN_MP_RHSRadiativeBoundary_calc_offset)
   {
     return;
   }
@@ -94,7 +91,7 @@ void ML_BSSN_RHSBoundary_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK
   
   /* Loop over the grid points */
   #pragma omp parallel
-  LC_LOOP3 (ML_BSSN_RHSBoundary,
+  LC_LOOP3 (ML_BSSN_MP_RHSRadiativeBoundary,
             i,j,k, min[0],min[1],min[2], max[0],max[1],max[2],
             cctk_lsh[0],cctk_lsh[1],cctk_lsh[2])
   {
@@ -125,6 +122,8 @@ void ML_BSSN_RHSBoundary_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK
     CCTK_REAL beta1L = INITVALUE, beta1rhsL = INITVALUE, beta2L = INITVALUE, beta2rhsL = INITVALUE, beta3L = INITVALUE, beta3rhsL = INITVALUE;
     CCTK_REAL gt11L = INITVALUE, gt11rhsL = INITVALUE, gt12L = INITVALUE, gt12rhsL = INITVALUE, gt13L = INITVALUE, gt13rhsL = INITVALUE;
     CCTK_REAL gt22L = INITVALUE, gt22rhsL = INITVALUE, gt23L = INITVALUE, gt23rhsL = INITVALUE, gt33L = INITVALUE, gt33rhsL = INITVALUE;
+    CCTK_REAL J11L = INITVALUE, J12L = INITVALUE, J13L = INITVALUE, J21L = INITVALUE, J22L = INITVALUE, J23L = INITVALUE;
+    CCTK_REAL J31L = INITVALUE, J32L = INITVALUE, J33L = INITVALUE;
     CCTK_REAL phiL = INITVALUE, phirhsL = INITVALUE;
     CCTK_REAL trKL = INITVALUE, trKrhsL = INITVALUE;
     CCTK_REAL Xt1L = INITVALUE, Xt1rhsL = INITVALUE, Xt2L = INITVALUE, Xt2rhsL = INITVALUE, Xt3L = INITVALUE, Xt3rhsL = INITVALUE;
@@ -153,6 +152,15 @@ void ML_BSSN_RHSBoundary_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK
     gt22L = gt22[index];
     gt23L = gt23[index];
     gt33L = gt33[index];
+    J11L = J11[index];
+    J12L = J12[index];
+    J13L = J13[index];
+    J21L = J21[index];
+    J22L = J22[index];
+    J23L = J23[index];
+    J31L = J31[index];
+    J32L = J32[index];
+    J33L = J33[index];
     phiL = phi[index];
     trKL = trK[index];
     Xt1L = Xt1[index];
@@ -226,59 +234,105 @@ void ML_BSSN_RHSBoundary_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK
     
     vg  =  pow(harmonicF,0.5);
     
-    phirhsL  =  -((PDonesided1(phi, i, j, k)*su1 + PDonesided2(phi, i, j, k)*su2 + PDonesided3(phi, i, j, k)*su3)*vg);
+    phirhsL  =  -((PDonesided1(phi, i, j, k)*(J11L*su1 + J12L*su2 + J13L*su3) + 
+            PDonesided2(phi, i, j, k)*(J21L*su1 + J22L*su2 + J23L*su3) + 
+            PDonesided3(phi, i, j, k)*(J31L*su1 + J32L*su2 + J33L*su3))*vg);
     
-    gt11rhsL  =  -(PDonesided1(gt11, i, j, k)*su1) - PDonesided2(gt11, i, j, k)*su2 - PDonesided3(gt11, i, j, k)*su3;
+    gt11rhsL  =  -(PDonesided1(gt11, i, j, k)*(J11L*su1 + J12L*su2 + J13L*su3)) - 
+        PDonesided2(gt11, i, j, k)*(J21L*su1 + J22L*su2 + J23L*su3) - 
+        PDonesided3(gt11, i, j, k)*(J31L*su1 + J32L*su2 + J33L*su3);
     
-    gt12rhsL  =  -(PDonesided1(gt12, i, j, k)*su1) - PDonesided2(gt12, i, j, k)*su2 - PDonesided3(gt12, i, j, k)*su3;
+    gt12rhsL  =  -(PDonesided1(gt12, i, j, k)*(J11L*su1 + J12L*su2 + J13L*su3)) - 
+        PDonesided2(gt12, i, j, k)*(J21L*su1 + J22L*su2 + J23L*su3) - 
+        PDonesided3(gt12, i, j, k)*(J31L*su1 + J32L*su2 + J33L*su3);
     
-    gt13rhsL  =  -(PDonesided1(gt13, i, j, k)*su1) - PDonesided2(gt13, i, j, k)*su2 - PDonesided3(gt13, i, j, k)*su3;
+    gt13rhsL  =  -(PDonesided1(gt13, i, j, k)*(J11L*su1 + J12L*su2 + J13L*su3)) - 
+        PDonesided2(gt13, i, j, k)*(J21L*su1 + J22L*su2 + J23L*su3) - 
+        PDonesided3(gt13, i, j, k)*(J31L*su1 + J32L*su2 + J33L*su3);
     
-    gt22rhsL  =  -(PDonesided1(gt22, i, j, k)*su1) - PDonesided2(gt22, i, j, k)*su2 - PDonesided3(gt22, i, j, k)*su3;
+    gt22rhsL  =  -(PDonesided1(gt22, i, j, k)*(J11L*su1 + J12L*su2 + J13L*su3)) - 
+        PDonesided2(gt22, i, j, k)*(J21L*su1 + J22L*su2 + J23L*su3) - 
+        PDonesided3(gt22, i, j, k)*(J31L*su1 + J32L*su2 + J33L*su3);
     
-    gt23rhsL  =  -(PDonesided1(gt23, i, j, k)*su1) - PDonesided2(gt23, i, j, k)*su2 - PDonesided3(gt23, i, j, k)*su3;
+    gt23rhsL  =  -(PDonesided1(gt23, i, j, k)*(J11L*su1 + J12L*su2 + J13L*su3)) - 
+        PDonesided2(gt23, i, j, k)*(J21L*su1 + J22L*su2 + J23L*su3) - 
+        PDonesided3(gt23, i, j, k)*(J31L*su1 + J32L*su2 + J33L*su3);
     
-    gt33rhsL  =  -(PDonesided1(gt33, i, j, k)*su1) - PDonesided2(gt33, i, j, k)*su2 - PDonesided3(gt33, i, j, k)*su3;
+    gt33rhsL  =  -(PDonesided1(gt33, i, j, k)*(J11L*su1 + J12L*su2 + J13L*su3)) - 
+        PDonesided2(gt33, i, j, k)*(J21L*su1 + J22L*su2 + J23L*su3) - 
+        PDonesided3(gt33, i, j, k)*(J31L*su1 + J32L*su2 + J33L*su3);
     
-    trKrhsL  =  -((PDonesided1(trK, i, j, k)*su1 + PDonesided2(trK, i, j, k)*su2 + PDonesided3(trK, i, j, k)*su3)*vg);
+    trKrhsL  =  -((PDonesided1(trK, i, j, k)*(J11L*su1 + J12L*su2 + J13L*su3) + 
+            PDonesided2(trK, i, j, k)*(J21L*su1 + J22L*su2 + J23L*su3) + 
+            PDonesided3(trK, i, j, k)*(J31L*su1 + J32L*su2 + J33L*su3))*vg);
     
-    At11rhsL  =  -(PDonesided1(At11, i, j, k)*su1) - PDonesided2(At11, i, j, k)*su2 - PDonesided3(At11, i, j, k)*su3;
+    At11rhsL  =  -(PDonesided1(At11, i, j, k)*(J11L*su1 + J12L*su2 + J13L*su3)) - 
+        PDonesided2(At11, i, j, k)*(J21L*su1 + J22L*su2 + J23L*su3) - 
+        PDonesided3(At11, i, j, k)*(J31L*su1 + J32L*su2 + J33L*su3);
     
-    At12rhsL  =  -(PDonesided1(At12, i, j, k)*su1) - PDonesided2(At12, i, j, k)*su2 - PDonesided3(At12, i, j, k)*su3;
+    At12rhsL  =  -(PDonesided1(At12, i, j, k)*(J11L*su1 + J12L*su2 + J13L*su3)) - 
+        PDonesided2(At12, i, j, k)*(J21L*su1 + J22L*su2 + J23L*su3) - 
+        PDonesided3(At12, i, j, k)*(J31L*su1 + J32L*su2 + J33L*su3);
     
-    At13rhsL  =  -(PDonesided1(At13, i, j, k)*su1) - PDonesided2(At13, i, j, k)*su2 - PDonesided3(At13, i, j, k)*su3;
+    At13rhsL  =  -(PDonesided1(At13, i, j, k)*(J11L*su1 + J12L*su2 + J13L*su3)) - 
+        PDonesided2(At13, i, j, k)*(J21L*su1 + J22L*su2 + J23L*su3) - 
+        PDonesided3(At13, i, j, k)*(J31L*su1 + J32L*su2 + J33L*su3);
     
-    At22rhsL  =  -(PDonesided1(At22, i, j, k)*su1) - PDonesided2(At22, i, j, k)*su2 - PDonesided3(At22, i, j, k)*su3;
+    At22rhsL  =  -(PDonesided1(At22, i, j, k)*(J11L*su1 + J12L*su2 + J13L*su3)) - 
+        PDonesided2(At22, i, j, k)*(J21L*su1 + J22L*su2 + J23L*su3) - 
+        PDonesided3(At22, i, j, k)*(J31L*su1 + J32L*su2 + J33L*su3);
     
-    At23rhsL  =  -(PDonesided1(At23, i, j, k)*su1) - PDonesided2(At23, i, j, k)*su2 - PDonesided3(At23, i, j, k)*su3;
+    At23rhsL  =  -(PDonesided1(At23, i, j, k)*(J11L*su1 + J12L*su2 + J13L*su3)) - 
+        PDonesided2(At23, i, j, k)*(J21L*su1 + J22L*su2 + J23L*su3) - 
+        PDonesided3(At23, i, j, k)*(J31L*su1 + J32L*su2 + J33L*su3);
     
-    At33rhsL  =  -(PDonesided1(At33, i, j, k)*su1) - PDonesided2(At33, i, j, k)*su2 - PDonesided3(At33, i, j, k)*su3;
+    At33rhsL  =  -(PDonesided1(At33, i, j, k)*(J11L*su1 + J12L*su2 + J13L*su3)) - 
+        PDonesided2(At33, i, j, k)*(J21L*su1 + J22L*su2 + J23L*su3) - 
+        PDonesided3(At33, i, j, k)*(J31L*su1 + J32L*su2 + J33L*su3);
     
-    Xt1rhsL  =  -(PDonesided1(Xt1, i, j, k)*su1) - PDonesided2(Xt1, i, j, k)*su2 - PDonesided3(Xt1, i, j, k)*su3;
+    Xt1rhsL  =  -(PDonesided1(Xt1, i, j, k)*(J11L*su1 + J12L*su2 + J13L*su3)) - 
+        PDonesided2(Xt1, i, j, k)*(J21L*su1 + J22L*su2 + J23L*su3) - 
+        PDonesided3(Xt1, i, j, k)*(J31L*su1 + J32L*su2 + J33L*su3);
     
-    Xt2rhsL  =  -(PDonesided1(Xt2, i, j, k)*su1) - PDonesided2(Xt2, i, j, k)*su2 - PDonesided3(Xt2, i, j, k)*su3;
+    Xt2rhsL  =  -(PDonesided1(Xt2, i, j, k)*(J11L*su1 + J12L*su2 + J13L*su3)) - 
+        PDonesided2(Xt2, i, j, k)*(J21L*su1 + J22L*su2 + J23L*su3) - 
+        PDonesided3(Xt2, i, j, k)*(J31L*su1 + J32L*su2 + J33L*su3);
     
-    Xt3rhsL  =  -(PDonesided1(Xt3, i, j, k)*su1) - PDonesided2(Xt3, i, j, k)*su2 - PDonesided3(Xt3, i, j, k)*su3;
+    Xt3rhsL  =  -(PDonesided1(Xt3, i, j, k)*(J11L*su1 + J12L*su2 + J13L*su3)) - 
+        PDonesided2(Xt3, i, j, k)*(J21L*su1 + J22L*su2 + J23L*su3) - 
+        PDonesided3(Xt3, i, j, k)*(J31L*su1 + J32L*su2 + J33L*su3);
     
-    alpharhsL  =  -((PDonesided1(alpha, i, j, k)*su1 + PDonesided2(alpha, i, j, k)*su2 + 
-            PDonesided3(alpha, i, j, k)*su3)*vg);
+    alpharhsL  =  -((PDonesided1(alpha, i, j, k)*(J11L*su1 + J12L*su2 + J13L*su3) + 
+            PDonesided2(alpha, i, j, k)*(J21L*su1 + J22L*su2 + J23L*su3) + 
+            PDonesided3(alpha, i, j, k)*(J31L*su1 + J32L*su2 + J33L*su3))*vg);
     
-    ArhsL  =  -((PDonesided1(A, i, j, k)*su1 + PDonesided2(A, i, j, k)*su2 + PDonesided3(A, i, j, k)*su3)*vg);
+    ArhsL  =  -((PDonesided1(A, i, j, k)*(J11L*su1 + J12L*su2 + J13L*su3) + 
+            PDonesided2(A, i, j, k)*(J21L*su1 + J22L*su2 + J23L*su3) + 
+            PDonesided3(A, i, j, k)*(J31L*su1 + J32L*su2 + J33L*su3))*vg);
     
-    beta1rhsL  =  -(PDonesided1(beta1, i, j, k)*su1) - PDonesided2(beta1, i, j, k)*su2 - 
-        PDonesided3(beta1, i, j, k)*su3;
+    beta1rhsL  =  -(PDonesided1(beta1, i, j, k)*(J11L*su1 + J12L*su2 + J13L*su3)) - 
+        PDonesided2(beta1, i, j, k)*(J21L*su1 + J22L*su2 + J23L*su3) - 
+        PDonesided3(beta1, i, j, k)*(J31L*su1 + J32L*su2 + J33L*su3);
     
-    beta2rhsL  =  -(PDonesided1(beta2, i, j, k)*su1) - PDonesided2(beta2, i, j, k)*su2 - 
-        PDonesided3(beta2, i, j, k)*su3;
+    beta2rhsL  =  -(PDonesided1(beta2, i, j, k)*(J11L*su1 + J12L*su2 + J13L*su3)) - 
+        PDonesided2(beta2, i, j, k)*(J21L*su1 + J22L*su2 + J23L*su3) - 
+        PDonesided3(beta2, i, j, k)*(J31L*su1 + J32L*su2 + J33L*su3);
     
-    beta3rhsL  =  -(PDonesided1(beta3, i, j, k)*su1) - PDonesided2(beta3, i, j, k)*su2 - 
-        PDonesided3(beta3, i, j, k)*su3;
+    beta3rhsL  =  -(PDonesided1(beta3, i, j, k)*(J11L*su1 + J12L*su2 + J13L*su3)) - 
+        PDonesided2(beta3, i, j, k)*(J21L*su1 + J22L*su2 + J23L*su3) - 
+        PDonesided3(beta3, i, j, k)*(J31L*su1 + J32L*su2 + J33L*su3);
     
-    B1rhsL  =  -(PDonesided1(B1, i, j, k)*su1) - PDonesided2(B1, i, j, k)*su2 - PDonesided3(B1, i, j, k)*su3;
+    B1rhsL  =  -(PDonesided1(B1, i, j, k)*(J11L*su1 + J12L*su2 + J13L*su3)) - 
+        PDonesided2(B1, i, j, k)*(J21L*su1 + J22L*su2 + J23L*su3) - 
+        PDonesided3(B1, i, j, k)*(J31L*su1 + J32L*su2 + J33L*su3);
     
-    B2rhsL  =  -(PDonesided1(B2, i, j, k)*su1) - PDonesided2(B2, i, j, k)*su2 - PDonesided3(B2, i, j, k)*su3;
+    B2rhsL  =  -(PDonesided1(B2, i, j, k)*(J11L*su1 + J12L*su2 + J13L*su3)) - 
+        PDonesided2(B2, i, j, k)*(J21L*su1 + J22L*su2 + J23L*su3) - 
+        PDonesided3(B2, i, j, k)*(J31L*su1 + J32L*su2 + J33L*su3);
     
-    B3rhsL  =  -(PDonesided1(B3, i, j, k)*su1) - PDonesided2(B3, i, j, k)*su2 - PDonesided3(B3, i, j, k)*su3;
+    B3rhsL  =  -(PDonesided1(B3, i, j, k)*(J11L*su1 + J12L*su2 + J13L*su3)) - 
+        PDonesided2(B3, i, j, k)*(J21L*su1 + J22L*su2 + J23L*su3) - 
+        PDonesided3(B3, i, j, k)*(J31L*su1 + J32L*su2 + J33L*su3);
     
     
     /* Copy local copies back to grid functions */
@@ -310,13 +364,13 @@ void ML_BSSN_RHSBoundary_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK
     
     /* Copy local copies back to subblock grid functions */
   }
-  LC_ENDLOOP3 (ML_BSSN_RHSBoundary);
+  LC_ENDLOOP3 (ML_BSSN_MP_RHSRadiativeBoundary);
 }
 
-void ML_BSSN_RHSBoundary(CCTK_ARGUMENTS)
+void ML_BSSN_MP_RHSRadiativeBoundary(CCTK_ARGUMENTS)
 {
   DECLARE_CCTK_ARGUMENTS;
   DECLARE_CCTK_PARAMETERS;
   
-  GenericFD_LoopOverBoundary(cctkGH, &ML_BSSN_RHSBoundary_Body);
+  GenericFD_LoopOverBoundary(cctkGH, &ML_BSSN_MP_RHSRadiativeBoundary_Body);
 }

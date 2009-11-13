@@ -185,7 +185,7 @@ void ML_BSSN_RHSRadiativeBoundary_Body(cGH const * const cctkGH, CCTK_INT const 
     
     gtu33  =  INV(detgt)*(gt11L*gt22L - SQR(gt12L));
     
-    em4phi  =  exp(-4*phiL);
+    em4phi  =  IfThen(conformalmethod,SQR(phiL),exp(-4*phiL));
     
     gu11  =  em4phi*gtu11;
     

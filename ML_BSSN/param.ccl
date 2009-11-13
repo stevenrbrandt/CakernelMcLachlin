@@ -1,7 +1,4 @@
-# File produced by user diener
-# Produced with Mathematica Version 7.0 for Linux x86 (64-bit) (February 18, 2009)
-
-# Mathematica script written by Ian Hinder and Sascha Husa
+# File produced by Kranc
 
 
 shares: ADMBase
@@ -88,6 +85,12 @@ CCTK_REAL ShiftAdvectionCoeff "Factor in front of the shift advection terms in g
 } 1
 
 restricted:
+CCTK_REAL MinimumLapse "Minimum value of the lapse function"
+{
+  "*:*" :: ""
+} -1
+
+restricted:
 CCTK_INT harmonicN "d/dt alpha = - f alpha^n K  (harmonic=2, 1+log=1)"
 {
   *:* :: ""
@@ -113,9 +116,16 @@ KEYWORD my_initial_data "my_initial_data"
 } "ADMBase"
 
 restricted:
+KEYWORD my_initial_boundary_condition "my_initial_boundary_condition"
+{
+  "none" :: "none"
+} "none"
+
+restricted:
 KEYWORD my_rhs_boundary_condition "my_rhs_boundary_condition"
 {
   "none" :: "none"
+  "static" :: "static"
   "radiative" :: "radiative"
 } "none"
 
@@ -147,6 +157,12 @@ CCTK_INT timelevels "Number of active timelevels"
 } 3
 
 restricted:
+CCTK_INT rhs_timelevels "Number of active RHS timelevels"
+{
+  0:3 :: ""
+} 1
+
+restricted:
 CCTK_INT ML_BSSN_Minkowski_calc_every "ML_BSSN_Minkowski_calc_every"
 {
   *:* :: ""
@@ -171,7 +187,13 @@ CCTK_INT ML_BSSN_RHS_calc_every "ML_BSSN_RHS_calc_every"
 } 1
 
 restricted:
-CCTK_INT ML_BSSN_RHSBoundary_calc_every "ML_BSSN_RHSBoundary_calc_every"
+CCTK_INT ML_BSSN_RHSStaticBoundary_calc_every "ML_BSSN_RHSStaticBoundary_calc_every"
+{
+  *:* :: ""
+} 1
+
+restricted:
+CCTK_INT ML_BSSN_RHSRadiativeBoundary_calc_every "ML_BSSN_RHSRadiativeBoundary_calc_every"
 {
   *:* :: ""
 } 1
@@ -237,7 +259,13 @@ CCTK_INT ML_BSSN_RHS_calc_offset "ML_BSSN_RHS_calc_offset"
 } 0
 
 restricted:
-CCTK_INT ML_BSSN_RHSBoundary_calc_offset "ML_BSSN_RHSBoundary_calc_offset"
+CCTK_INT ML_BSSN_RHSStaticBoundary_calc_offset "ML_BSSN_RHSStaticBoundary_calc_offset"
+{
+  *:* :: ""
+} 0
+
+restricted:
+CCTK_INT ML_BSSN_RHSRadiativeBoundary_calc_offset "ML_BSSN_RHSRadiativeBoundary_calc_offset"
 {
   *:* :: ""
 } 0

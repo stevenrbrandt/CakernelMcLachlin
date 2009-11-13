@@ -1,7 +1,4 @@
-/*  File produced by user diener */
-/*  Produced with Mathematica Version 7.0 for Linux x86 (64-bit) (February 18, 2009) */
-
-/*  Mathematica script written by Ian Hinder and Sascha Husa */
+/*  File produced by Kranc */
 
 #define KRANC_C
 
@@ -23,7 +20,7 @@
 #define CUB(x) ((x) * (x) * (x))
 #define QAD(x) ((x) * (x) * (x) * (x))
 
-void ML_BSSN_M_RHSBoundary_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT const face, CCTK_REAL const normal[3], CCTK_REAL const tangentA[3], CCTK_REAL const tangentB[3], CCTK_INT const min[3], CCTK_INT const max[3], CCTK_INT const n_subblock_gfs, CCTK_REAL * const subblock_gfs[])
+void ML_BSSN_M_RHSRadiativeBoundary_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT const face, CCTK_REAL const normal[3], CCTK_REAL const tangentA[3], CCTK_REAL const tangentB[3], CCTK_INT const min[3], CCTK_INT const max[3], CCTK_INT const n_subblock_gfs, CCTK_REAL * const subblock_gfs[])
 {
   DECLARE_CCTK_ARGUMENTS;
   DECLARE_CCTK_PARAMETERS;
@@ -52,10 +49,10 @@ void ML_BSSN_M_RHSBoundary_Body(cGH const * const cctkGH, CCTK_INT const dir, CC
   
   if (verbose > 1)
   {
-    CCTK_VInfo(CCTK_THORNSTRING,"Entering ML_BSSN_M_RHSBoundary_Body");
+    CCTK_VInfo(CCTK_THORNSTRING,"Entering ML_BSSN_M_RHSRadiativeBoundary_Body");
   }
   
-  if (cctk_iteration % ML_BSSN_M_RHSBoundary_calc_every != ML_BSSN_M_RHSBoundary_calc_offset)
+  if (cctk_iteration % ML_BSSN_M_RHSRadiativeBoundary_calc_every != ML_BSSN_M_RHSRadiativeBoundary_calc_offset)
   {
     return;
   }
@@ -94,7 +91,7 @@ void ML_BSSN_M_RHSBoundary_Body(cGH const * const cctkGH, CCTK_INT const dir, CC
   
   /* Loop over the grid points */
   #pragma omp parallel
-  LC_LOOP3 (ML_BSSN_M_RHSBoundary,
+  LC_LOOP3 (ML_BSSN_M_RHSRadiativeBoundary,
             i,j,k, min[0],min[1],min[2], max[0],max[1],max[2],
             cctk_lsh[0],cctk_lsh[1],cctk_lsh[2])
   {
@@ -310,13 +307,13 @@ void ML_BSSN_M_RHSBoundary_Body(cGH const * const cctkGH, CCTK_INT const dir, CC
     
     /* Copy local copies back to subblock grid functions */
   }
-  LC_ENDLOOP3 (ML_BSSN_M_RHSBoundary);
+  LC_ENDLOOP3 (ML_BSSN_M_RHSRadiativeBoundary);
 }
 
-void ML_BSSN_M_RHSBoundary(CCTK_ARGUMENTS)
+void ML_BSSN_M_RHSRadiativeBoundary(CCTK_ARGUMENTS)
 {
   DECLARE_CCTK_ARGUMENTS;
   DECLARE_CCTK_PARAMETERS;
   
-  GenericFD_LoopOverBoundary(cctkGH, &ML_BSSN_M_RHSBoundary_Body);
+  GenericFD_LoopOverBoundary(cctkGH, &ML_BSSN_M_RHSRadiativeBoundary_Body);
 }

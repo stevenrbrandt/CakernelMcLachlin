@@ -20,7 +20,7 @@
 #define CUB(x) ((x) * (x) * (x))
 #define QAD(x) ((x) * (x) * (x) * (x))
 
-void ML_BSSN_boundary_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT const face, CCTK_REAL const normal[3], CCTK_REAL const tangentA[3], CCTK_REAL const tangentB[3], CCTK_INT const min[3], CCTK_INT const max[3], CCTK_INT const n_subblock_gfs, CCTK_REAL * const subblock_gfs[])
+void ML_BSSN_RHSStaticBoundary_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT const face, CCTK_REAL const normal[3], CCTK_REAL const tangentA[3], CCTK_REAL const tangentB[3], CCTK_INT const min[3], CCTK_INT const max[3], CCTK_INT const n_subblock_gfs, CCTK_REAL * const subblock_gfs[])
 {
   DECLARE_CCTK_ARGUMENTS;
   DECLARE_CCTK_PARAMETERS;
@@ -49,10 +49,10 @@ void ML_BSSN_boundary_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_IN
   
   if (verbose > 1)
   {
-    CCTK_VInfo(CCTK_THORNSTRING,"Entering ML_BSSN_boundary_Body");
+    CCTK_VInfo(CCTK_THORNSTRING,"Entering ML_BSSN_RHSStaticBoundary_Body");
   }
   
-  if (cctk_iteration % ML_BSSN_boundary_calc_every != ML_BSSN_boundary_calc_offset)
+  if (cctk_iteration % ML_BSSN_RHSStaticBoundary_calc_every != ML_BSSN_RHSStaticBoundary_calc_offset)
   {
     return;
   }
@@ -91,7 +91,7 @@ void ML_BSSN_boundary_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_IN
   
   /* Loop over the grid points */
   #pragma omp parallel
-  LC_LOOP3 (ML_BSSN_boundary,
+  LC_LOOP3 (ML_BSSN_RHSStaticBoundary,
             i,j,k, min[0],min[1],min[2], max[0],max[1],max[2],
             cctk_lsh[0],cctk_lsh[1],cctk_lsh[2])
   {
@@ -103,15 +103,15 @@ void ML_BSSN_boundary_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_IN
     /* Declare shorthands */
     
     /* Declare local copies of grid functions */
-    CCTK_REAL AL = INITVALUE;
-    CCTK_REAL alphaL = INITVALUE;
-    CCTK_REAL At11L = INITVALUE, At12L = INITVALUE, At13L = INITVALUE, At22L = INITVALUE, At23L = INITVALUE, At33L = INITVALUE;
-    CCTK_REAL B1L = INITVALUE, B2L = INITVALUE, B3L = INITVALUE;
-    CCTK_REAL beta1L = INITVALUE, beta2L = INITVALUE, beta3L = INITVALUE;
-    CCTK_REAL gt11L = INITVALUE, gt12L = INITVALUE, gt13L = INITVALUE, gt22L = INITVALUE, gt23L = INITVALUE, gt33L = INITVALUE;
-    CCTK_REAL phiL = INITVALUE;
-    CCTK_REAL trKL = INITVALUE;
-    CCTK_REAL Xt1L = INITVALUE, Xt2L = INITVALUE, Xt3L = INITVALUE;
+    CCTK_REAL alpharhsL = INITVALUE;
+    CCTK_REAL ArhsL = INITVALUE;
+    CCTK_REAL At11rhsL = INITVALUE, At12rhsL = INITVALUE, At13rhsL = INITVALUE, At22rhsL = INITVALUE, At23rhsL = INITVALUE, At33rhsL = INITVALUE;
+    CCTK_REAL B1rhsL = INITVALUE, B2rhsL = INITVALUE, B3rhsL = INITVALUE;
+    CCTK_REAL beta1rhsL = INITVALUE, beta2rhsL = INITVALUE, beta3rhsL = INITVALUE;
+    CCTK_REAL gt11rhsL = INITVALUE, gt12rhsL = INITVALUE, gt13rhsL = INITVALUE, gt22rhsL = INITVALUE, gt23rhsL = INITVALUE, gt33rhsL = INITVALUE;
+    CCTK_REAL phirhsL = INITVALUE;
+    CCTK_REAL trKrhsL = INITVALUE;
+    CCTK_REAL Xt1rhsL = INITVALUE, Xt2rhsL = INITVALUE, Xt3rhsL = INITVALUE;
     /* Declare precomputed derivatives*/
     
     /* Declare derivatives */
@@ -127,93 +127,93 @@ void ML_BSSN_boundary_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_IN
     /* Precompute derivatives (old style) */
     
     /* Calculate temporaries and grid functions */
-    phiL  =  IfThen(conformalmethod,1,0);
+    phirhsL  =  0;
     
-    gt11L  =  1;
+    gt11rhsL  =  0;
     
-    gt12L  =  0;
+    gt12rhsL  =  0;
     
-    gt13L  =  0;
+    gt13rhsL  =  0;
     
-    gt22L  =  1;
+    gt22rhsL  =  0;
     
-    gt23L  =  0;
+    gt23rhsL  =  0;
     
-    gt33L  =  1;
+    gt33rhsL  =  0;
     
-    trKL  =  0;
+    trKrhsL  =  0;
     
-    At11L  =  0;
+    At11rhsL  =  0;
     
-    At12L  =  0;
+    At12rhsL  =  0;
     
-    At13L  =  0;
+    At13rhsL  =  0;
     
-    At22L  =  0;
+    At22rhsL  =  0;
     
-    At23L  =  0;
+    At23rhsL  =  0;
     
-    At33L  =  0;
+    At33rhsL  =  0;
     
-    Xt1L  =  0;
+    Xt1rhsL  =  0;
     
-    Xt2L  =  0;
+    Xt2rhsL  =  0;
     
-    Xt3L  =  0;
+    Xt3rhsL  =  0;
     
-    alphaL  =  1;
+    alpharhsL  =  0;
     
-    AL  =  0;
+    ArhsL  =  0;
     
-    beta1L  =  0;
+    beta1rhsL  =  0;
     
-    beta2L  =  0;
+    beta2rhsL  =  0;
     
-    beta3L  =  0;
+    beta3rhsL  =  0;
     
-    B1L  =  0;
+    B1rhsL  =  0;
     
-    B2L  =  0;
+    B2rhsL  =  0;
     
-    B3L  =  0;
+    B3rhsL  =  0;
     
     
     /* Copy local copies back to grid functions */
-    A[index] = AL;
-    alpha[index] = alphaL;
-    At11[index] = At11L;
-    At12[index] = At12L;
-    At13[index] = At13L;
-    At22[index] = At22L;
-    At23[index] = At23L;
-    At33[index] = At33L;
-    B1[index] = B1L;
-    B2[index] = B2L;
-    B3[index] = B3L;
-    beta1[index] = beta1L;
-    beta2[index] = beta2L;
-    beta3[index] = beta3L;
-    gt11[index] = gt11L;
-    gt12[index] = gt12L;
-    gt13[index] = gt13L;
-    gt22[index] = gt22L;
-    gt23[index] = gt23L;
-    gt33[index] = gt33L;
-    phi[index] = phiL;
-    trK[index] = trKL;
-    Xt1[index] = Xt1L;
-    Xt2[index] = Xt2L;
-    Xt3[index] = Xt3L;
+    alpharhs[index] = alpharhsL;
+    Arhs[index] = ArhsL;
+    At11rhs[index] = At11rhsL;
+    At12rhs[index] = At12rhsL;
+    At13rhs[index] = At13rhsL;
+    At22rhs[index] = At22rhsL;
+    At23rhs[index] = At23rhsL;
+    At33rhs[index] = At33rhsL;
+    B1rhs[index] = B1rhsL;
+    B2rhs[index] = B2rhsL;
+    B3rhs[index] = B3rhsL;
+    beta1rhs[index] = beta1rhsL;
+    beta2rhs[index] = beta2rhsL;
+    beta3rhs[index] = beta3rhsL;
+    gt11rhs[index] = gt11rhsL;
+    gt12rhs[index] = gt12rhsL;
+    gt13rhs[index] = gt13rhsL;
+    gt22rhs[index] = gt22rhsL;
+    gt23rhs[index] = gt23rhsL;
+    gt33rhs[index] = gt33rhsL;
+    phirhs[index] = phirhsL;
+    trKrhs[index] = trKrhsL;
+    Xt1rhs[index] = Xt1rhsL;
+    Xt2rhs[index] = Xt2rhsL;
+    Xt3rhs[index] = Xt3rhsL;
     
     /* Copy local copies back to subblock grid functions */
   }
-  LC_ENDLOOP3 (ML_BSSN_boundary);
+  LC_ENDLOOP3 (ML_BSSN_RHSStaticBoundary);
 }
 
-void ML_BSSN_boundary(CCTK_ARGUMENTS)
+void ML_BSSN_RHSStaticBoundary(CCTK_ARGUMENTS)
 {
   DECLARE_CCTK_ARGUMENTS;
   DECLARE_CCTK_PARAMETERS;
   
-  GenericFD_LoopOverBoundaryWithGhosts(cctkGH, &ML_BSSN_boundary_Body);
+  GenericFD_LoopOverBoundary(cctkGH, &ML_BSSN_RHSStaticBoundary_Body);
 }
