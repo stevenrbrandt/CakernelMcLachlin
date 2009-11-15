@@ -25,7 +25,7 @@ void ML_BSSN6_CheckBoundaries(CCTK_ARGUMENTS)
   return;
 }
 
-void ML_BSSN6_ApplyBoundConds(CCTK_ARGUMENTS)
+void ML_BSSN6_SelectBoundConds(CCTK_ARGUMENTS)
 {
   DECLARE_CCTK_ARGUMENTS;
   DECLARE_CCTK_PARAMETERS;
@@ -408,7 +408,7 @@ void ML_BSSN6_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(ML_curv_bound, "radiative"))
   {
-   /* apply radiation boundary condition */
+   /* select radiation boundary condition */
     static CCTK_INT handle_ML_curv_bound = -1;
     if (handle_ML_curv_bound < 0) handle_ML_curv_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_ML_curv_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -427,7 +427,7 @@ void ML_BSSN6_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(ML_dtlapse_bound, "radiative"))
   {
-   /* apply radiation boundary condition */
+   /* select radiation boundary condition */
     static CCTK_INT handle_ML_dtlapse_bound = -1;
     if (handle_ML_dtlapse_bound < 0) handle_ML_dtlapse_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_ML_dtlapse_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -446,7 +446,7 @@ void ML_BSSN6_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(ML_dtshift_bound, "radiative"))
   {
-   /* apply radiation boundary condition */
+   /* select radiation boundary condition */
     static CCTK_INT handle_ML_dtshift_bound = -1;
     if (handle_ML_dtshift_bound < 0) handle_ML_dtshift_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_ML_dtshift_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -465,7 +465,7 @@ void ML_BSSN6_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(ML_Gamma_bound, "radiative"))
   {
-   /* apply radiation boundary condition */
+   /* select radiation boundary condition */
     static CCTK_INT handle_ML_Gamma_bound = -1;
     if (handle_ML_Gamma_bound < 0) handle_ML_Gamma_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_ML_Gamma_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -484,7 +484,7 @@ void ML_BSSN6_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(ML_lapse_bound, "radiative"))
   {
-   /* apply radiation boundary condition */
+   /* select radiation boundary condition */
     static CCTK_INT handle_ML_lapse_bound = -1;
     if (handle_ML_lapse_bound < 0) handle_ML_lapse_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_ML_lapse_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -503,7 +503,7 @@ void ML_BSSN6_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(ML_log_confac_bound, "radiative"))
   {
-   /* apply radiation boundary condition */
+   /* select radiation boundary condition */
     static CCTK_INT handle_ML_log_confac_bound = -1;
     if (handle_ML_log_confac_bound < 0) handle_ML_log_confac_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_ML_log_confac_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -522,7 +522,7 @@ void ML_BSSN6_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(ML_metric_bound, "radiative"))
   {
-   /* apply radiation boundary condition */
+   /* select radiation boundary condition */
     static CCTK_INT handle_ML_metric_bound = -1;
     if (handle_ML_metric_bound < 0) handle_ML_metric_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_ML_metric_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -541,7 +541,7 @@ void ML_BSSN6_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(ML_shift_bound, "radiative"))
   {
-   /* apply radiation boundary condition */
+   /* select radiation boundary condition */
     static CCTK_INT handle_ML_shift_bound = -1;
     if (handle_ML_shift_bound < 0) handle_ML_shift_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_ML_shift_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -560,7 +560,7 @@ void ML_BSSN6_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(ML_trace_curv_bound, "radiative"))
   {
-   /* apply radiation boundary condition */
+   /* select radiation boundary condition */
     static CCTK_INT handle_ML_trace_curv_bound = -1;
     if (handle_ML_trace_curv_bound < 0) handle_ML_trace_curv_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_ML_trace_curv_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -579,7 +579,7 @@ void ML_BSSN6_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(At11_bound, "radiative"))
   {
-   /* apply radiation boundary condition */
+   /* select radiation boundary condition */
     static CCTK_INT handle_At11_bound = -1;
     if (handle_At11_bound < 0) handle_At11_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_At11_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -598,7 +598,7 @@ void ML_BSSN6_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(At12_bound, "radiative"))
   {
-   /* apply radiation boundary condition */
+   /* select radiation boundary condition */
     static CCTK_INT handle_At12_bound = -1;
     if (handle_At12_bound < 0) handle_At12_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_At12_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -617,7 +617,7 @@ void ML_BSSN6_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(At13_bound, "radiative"))
   {
-   /* apply radiation boundary condition */
+   /* select radiation boundary condition */
     static CCTK_INT handle_At13_bound = -1;
     if (handle_At13_bound < 0) handle_At13_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_At13_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -636,7 +636,7 @@ void ML_BSSN6_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(At22_bound, "radiative"))
   {
-   /* apply radiation boundary condition */
+   /* select radiation boundary condition */
     static CCTK_INT handle_At22_bound = -1;
     if (handle_At22_bound < 0) handle_At22_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_At22_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -655,7 +655,7 @@ void ML_BSSN6_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(At23_bound, "radiative"))
   {
-   /* apply radiation boundary condition */
+   /* select radiation boundary condition */
     static CCTK_INT handle_At23_bound = -1;
     if (handle_At23_bound < 0) handle_At23_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_At23_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -674,7 +674,7 @@ void ML_BSSN6_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(At33_bound, "radiative"))
   {
-   /* apply radiation boundary condition */
+   /* select radiation boundary condition */
     static CCTK_INT handle_At33_bound = -1;
     if (handle_At33_bound < 0) handle_At33_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_At33_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -693,7 +693,7 @@ void ML_BSSN6_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(A_bound, "radiative"))
   {
-   /* apply radiation boundary condition */
+   /* select radiation boundary condition */
     static CCTK_INT handle_A_bound = -1;
     if (handle_A_bound < 0) handle_A_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_A_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -712,7 +712,7 @@ void ML_BSSN6_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(B1_bound, "radiative"))
   {
-   /* apply radiation boundary condition */
+   /* select radiation boundary condition */
     static CCTK_INT handle_B1_bound = -1;
     if (handle_B1_bound < 0) handle_B1_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_B1_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -731,7 +731,7 @@ void ML_BSSN6_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(B2_bound, "radiative"))
   {
-   /* apply radiation boundary condition */
+   /* select radiation boundary condition */
     static CCTK_INT handle_B2_bound = -1;
     if (handle_B2_bound < 0) handle_B2_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_B2_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -750,7 +750,7 @@ void ML_BSSN6_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(B3_bound, "radiative"))
   {
-   /* apply radiation boundary condition */
+   /* select radiation boundary condition */
     static CCTK_INT handle_B3_bound = -1;
     if (handle_B3_bound < 0) handle_B3_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_B3_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -769,7 +769,7 @@ void ML_BSSN6_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(Xt1_bound, "radiative"))
   {
-   /* apply radiation boundary condition */
+   /* select radiation boundary condition */
     static CCTK_INT handle_Xt1_bound = -1;
     if (handle_Xt1_bound < 0) handle_Xt1_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_Xt1_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -788,7 +788,7 @@ void ML_BSSN6_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(Xt2_bound, "radiative"))
   {
-   /* apply radiation boundary condition */
+   /* select radiation boundary condition */
     static CCTK_INT handle_Xt2_bound = -1;
     if (handle_Xt2_bound < 0) handle_Xt2_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_Xt2_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -807,7 +807,7 @@ void ML_BSSN6_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(Xt3_bound, "radiative"))
   {
-   /* apply radiation boundary condition */
+   /* select radiation boundary condition */
     static CCTK_INT handle_Xt3_bound = -1;
     if (handle_Xt3_bound < 0) handle_Xt3_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_Xt3_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -826,7 +826,7 @@ void ML_BSSN6_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(alpha_bound, "radiative"))
   {
-   /* apply radiation boundary condition */
+   /* select radiation boundary condition */
     static CCTK_INT handle_alpha_bound = -1;
     if (handle_alpha_bound < 0) handle_alpha_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_alpha_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -845,7 +845,7 @@ void ML_BSSN6_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(phi_bound, "radiative"))
   {
-   /* apply radiation boundary condition */
+   /* select radiation boundary condition */
     static CCTK_INT handle_phi_bound = -1;
     if (handle_phi_bound < 0) handle_phi_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_phi_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -864,7 +864,7 @@ void ML_BSSN6_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(gt11_bound, "radiative"))
   {
-   /* apply radiation boundary condition */
+   /* select radiation boundary condition */
     static CCTK_INT handle_gt11_bound = -1;
     if (handle_gt11_bound < 0) handle_gt11_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_gt11_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -883,7 +883,7 @@ void ML_BSSN6_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(gt12_bound, "radiative"))
   {
-   /* apply radiation boundary condition */
+   /* select radiation boundary condition */
     static CCTK_INT handle_gt12_bound = -1;
     if (handle_gt12_bound < 0) handle_gt12_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_gt12_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -902,7 +902,7 @@ void ML_BSSN6_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(gt13_bound, "radiative"))
   {
-   /* apply radiation boundary condition */
+   /* select radiation boundary condition */
     static CCTK_INT handle_gt13_bound = -1;
     if (handle_gt13_bound < 0) handle_gt13_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_gt13_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -921,7 +921,7 @@ void ML_BSSN6_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(gt22_bound, "radiative"))
   {
-   /* apply radiation boundary condition */
+   /* select radiation boundary condition */
     static CCTK_INT handle_gt22_bound = -1;
     if (handle_gt22_bound < 0) handle_gt22_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_gt22_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -940,7 +940,7 @@ void ML_BSSN6_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(gt23_bound, "radiative"))
   {
-   /* apply radiation boundary condition */
+   /* select radiation boundary condition */
     static CCTK_INT handle_gt23_bound = -1;
     if (handle_gt23_bound < 0) handle_gt23_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_gt23_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -959,7 +959,7 @@ void ML_BSSN6_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(gt33_bound, "radiative"))
   {
-   /* apply radiation boundary condition */
+   /* select radiation boundary condition */
     static CCTK_INT handle_gt33_bound = -1;
     if (handle_gt33_bound < 0) handle_gt33_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_gt33_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -978,7 +978,7 @@ void ML_BSSN6_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(beta1_bound, "radiative"))
   {
-   /* apply radiation boundary condition */
+   /* select radiation boundary condition */
     static CCTK_INT handle_beta1_bound = -1;
     if (handle_beta1_bound < 0) handle_beta1_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_beta1_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -997,7 +997,7 @@ void ML_BSSN6_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(beta2_bound, "radiative"))
   {
-   /* apply radiation boundary condition */
+   /* select radiation boundary condition */
     static CCTK_INT handle_beta2_bound = -1;
     if (handle_beta2_bound < 0) handle_beta2_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_beta2_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -1016,7 +1016,7 @@ void ML_BSSN6_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(beta3_bound, "radiative"))
   {
-   /* apply radiation boundary condition */
+   /* select radiation boundary condition */
     static CCTK_INT handle_beta3_bound = -1;
     if (handle_beta3_bound < 0) handle_beta3_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_beta3_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -1035,7 +1035,7 @@ void ML_BSSN6_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(trK_bound, "radiative"))
   {
-   /* apply radiation boundary condition */
+   /* select radiation boundary condition */
     static CCTK_INT handle_trK_bound = -1;
     if (handle_trK_bound < 0) handle_trK_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_trK_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -1054,7 +1054,7 @@ void ML_BSSN6_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(ML_curv_bound, "scalar"))
   {
-   /* apply scalar boundary condition */
+   /* select scalar boundary condition */
     static CCTK_INT handle_ML_curv_bound = -1;
     if (handle_ML_curv_bound < 0) handle_ML_curv_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_ML_curv_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -1071,7 +1071,7 @@ void ML_BSSN6_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(ML_dtlapse_bound, "scalar"))
   {
-   /* apply scalar boundary condition */
+   /* select scalar boundary condition */
     static CCTK_INT handle_ML_dtlapse_bound = -1;
     if (handle_ML_dtlapse_bound < 0) handle_ML_dtlapse_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_ML_dtlapse_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -1088,7 +1088,7 @@ void ML_BSSN6_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(ML_dtshift_bound, "scalar"))
   {
-   /* apply scalar boundary condition */
+   /* select scalar boundary condition */
     static CCTK_INT handle_ML_dtshift_bound = -1;
     if (handle_ML_dtshift_bound < 0) handle_ML_dtshift_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_ML_dtshift_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -1105,7 +1105,7 @@ void ML_BSSN6_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(ML_Gamma_bound, "scalar"))
   {
-   /* apply scalar boundary condition */
+   /* select scalar boundary condition */
     static CCTK_INT handle_ML_Gamma_bound = -1;
     if (handle_ML_Gamma_bound < 0) handle_ML_Gamma_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_ML_Gamma_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -1122,7 +1122,7 @@ void ML_BSSN6_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(ML_lapse_bound, "scalar"))
   {
-   /* apply scalar boundary condition */
+   /* select scalar boundary condition */
     static CCTK_INT handle_ML_lapse_bound = -1;
     if (handle_ML_lapse_bound < 0) handle_ML_lapse_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_ML_lapse_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -1139,7 +1139,7 @@ void ML_BSSN6_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(ML_log_confac_bound, "scalar"))
   {
-   /* apply scalar boundary condition */
+   /* select scalar boundary condition */
     static CCTK_INT handle_ML_log_confac_bound = -1;
     if (handle_ML_log_confac_bound < 0) handle_ML_log_confac_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_ML_log_confac_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -1156,7 +1156,7 @@ void ML_BSSN6_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(ML_metric_bound, "scalar"))
   {
-   /* apply scalar boundary condition */
+   /* select scalar boundary condition */
     static CCTK_INT handle_ML_metric_bound = -1;
     if (handle_ML_metric_bound < 0) handle_ML_metric_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_ML_metric_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -1173,7 +1173,7 @@ void ML_BSSN6_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(ML_shift_bound, "scalar"))
   {
-   /* apply scalar boundary condition */
+   /* select scalar boundary condition */
     static CCTK_INT handle_ML_shift_bound = -1;
     if (handle_ML_shift_bound < 0) handle_ML_shift_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_ML_shift_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -1190,7 +1190,7 @@ void ML_BSSN6_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(ML_trace_curv_bound, "scalar"))
   {
-   /* apply scalar boundary condition */
+   /* select scalar boundary condition */
     static CCTK_INT handle_ML_trace_curv_bound = -1;
     if (handle_ML_trace_curv_bound < 0) handle_ML_trace_curv_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_ML_trace_curv_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -1207,7 +1207,7 @@ void ML_BSSN6_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(At11_bound, "scalar"))
   {
-   /* apply scalar boundary condition */
+   /* select scalar boundary condition */
     static CCTK_INT handle_At11_bound = -1;
     if (handle_At11_bound < 0) handle_At11_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_At11_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -1224,7 +1224,7 @@ void ML_BSSN6_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(At12_bound, "scalar"))
   {
-   /* apply scalar boundary condition */
+   /* select scalar boundary condition */
     static CCTK_INT handle_At12_bound = -1;
     if (handle_At12_bound < 0) handle_At12_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_At12_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -1241,7 +1241,7 @@ void ML_BSSN6_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(At13_bound, "scalar"))
   {
-   /* apply scalar boundary condition */
+   /* select scalar boundary condition */
     static CCTK_INT handle_At13_bound = -1;
     if (handle_At13_bound < 0) handle_At13_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_At13_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -1258,7 +1258,7 @@ void ML_BSSN6_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(At22_bound, "scalar"))
   {
-   /* apply scalar boundary condition */
+   /* select scalar boundary condition */
     static CCTK_INT handle_At22_bound = -1;
     if (handle_At22_bound < 0) handle_At22_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_At22_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -1275,7 +1275,7 @@ void ML_BSSN6_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(At23_bound, "scalar"))
   {
-   /* apply scalar boundary condition */
+   /* select scalar boundary condition */
     static CCTK_INT handle_At23_bound = -1;
     if (handle_At23_bound < 0) handle_At23_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_At23_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -1292,7 +1292,7 @@ void ML_BSSN6_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(At33_bound, "scalar"))
   {
-   /* apply scalar boundary condition */
+   /* select scalar boundary condition */
     static CCTK_INT handle_At33_bound = -1;
     if (handle_At33_bound < 0) handle_At33_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_At33_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -1309,7 +1309,7 @@ void ML_BSSN6_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(A_bound, "scalar"))
   {
-   /* apply scalar boundary condition */
+   /* select scalar boundary condition */
     static CCTK_INT handle_A_bound = -1;
     if (handle_A_bound < 0) handle_A_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_A_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -1326,7 +1326,7 @@ void ML_BSSN6_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(B1_bound, "scalar"))
   {
-   /* apply scalar boundary condition */
+   /* select scalar boundary condition */
     static CCTK_INT handle_B1_bound = -1;
     if (handle_B1_bound < 0) handle_B1_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_B1_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -1343,7 +1343,7 @@ void ML_BSSN6_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(B2_bound, "scalar"))
   {
-   /* apply scalar boundary condition */
+   /* select scalar boundary condition */
     static CCTK_INT handle_B2_bound = -1;
     if (handle_B2_bound < 0) handle_B2_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_B2_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -1360,7 +1360,7 @@ void ML_BSSN6_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(B3_bound, "scalar"))
   {
-   /* apply scalar boundary condition */
+   /* select scalar boundary condition */
     static CCTK_INT handle_B3_bound = -1;
     if (handle_B3_bound < 0) handle_B3_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_B3_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -1377,7 +1377,7 @@ void ML_BSSN6_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(Xt1_bound, "scalar"))
   {
-   /* apply scalar boundary condition */
+   /* select scalar boundary condition */
     static CCTK_INT handle_Xt1_bound = -1;
     if (handle_Xt1_bound < 0) handle_Xt1_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_Xt1_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -1394,7 +1394,7 @@ void ML_BSSN6_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(Xt2_bound, "scalar"))
   {
-   /* apply scalar boundary condition */
+   /* select scalar boundary condition */
     static CCTK_INT handle_Xt2_bound = -1;
     if (handle_Xt2_bound < 0) handle_Xt2_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_Xt2_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -1411,7 +1411,7 @@ void ML_BSSN6_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(Xt3_bound, "scalar"))
   {
-   /* apply scalar boundary condition */
+   /* select scalar boundary condition */
     static CCTK_INT handle_Xt3_bound = -1;
     if (handle_Xt3_bound < 0) handle_Xt3_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_Xt3_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -1428,7 +1428,7 @@ void ML_BSSN6_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(alpha_bound, "scalar"))
   {
-   /* apply scalar boundary condition */
+   /* select scalar boundary condition */
     static CCTK_INT handle_alpha_bound = -1;
     if (handle_alpha_bound < 0) handle_alpha_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_alpha_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -1445,7 +1445,7 @@ void ML_BSSN6_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(phi_bound, "scalar"))
   {
-   /* apply scalar boundary condition */
+   /* select scalar boundary condition */
     static CCTK_INT handle_phi_bound = -1;
     if (handle_phi_bound < 0) handle_phi_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_phi_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -1462,7 +1462,7 @@ void ML_BSSN6_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(gt11_bound, "scalar"))
   {
-   /* apply scalar boundary condition */
+   /* select scalar boundary condition */
     static CCTK_INT handle_gt11_bound = -1;
     if (handle_gt11_bound < 0) handle_gt11_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_gt11_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -1479,7 +1479,7 @@ void ML_BSSN6_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(gt12_bound, "scalar"))
   {
-   /* apply scalar boundary condition */
+   /* select scalar boundary condition */
     static CCTK_INT handle_gt12_bound = -1;
     if (handle_gt12_bound < 0) handle_gt12_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_gt12_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -1496,7 +1496,7 @@ void ML_BSSN6_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(gt13_bound, "scalar"))
   {
-   /* apply scalar boundary condition */
+   /* select scalar boundary condition */
     static CCTK_INT handle_gt13_bound = -1;
     if (handle_gt13_bound < 0) handle_gt13_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_gt13_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -1513,7 +1513,7 @@ void ML_BSSN6_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(gt22_bound, "scalar"))
   {
-   /* apply scalar boundary condition */
+   /* select scalar boundary condition */
     static CCTK_INT handle_gt22_bound = -1;
     if (handle_gt22_bound < 0) handle_gt22_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_gt22_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -1530,7 +1530,7 @@ void ML_BSSN6_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(gt23_bound, "scalar"))
   {
-   /* apply scalar boundary condition */
+   /* select scalar boundary condition */
     static CCTK_INT handle_gt23_bound = -1;
     if (handle_gt23_bound < 0) handle_gt23_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_gt23_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -1547,7 +1547,7 @@ void ML_BSSN6_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(gt33_bound, "scalar"))
   {
-   /* apply scalar boundary condition */
+   /* select scalar boundary condition */
     static CCTK_INT handle_gt33_bound = -1;
     if (handle_gt33_bound < 0) handle_gt33_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_gt33_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -1564,7 +1564,7 @@ void ML_BSSN6_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(beta1_bound, "scalar"))
   {
-   /* apply scalar boundary condition */
+   /* select scalar boundary condition */
     static CCTK_INT handle_beta1_bound = -1;
     if (handle_beta1_bound < 0) handle_beta1_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_beta1_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -1581,7 +1581,7 @@ void ML_BSSN6_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(beta2_bound, "scalar"))
   {
-   /* apply scalar boundary condition */
+   /* select scalar boundary condition */
     static CCTK_INT handle_beta2_bound = -1;
     if (handle_beta2_bound < 0) handle_beta2_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_beta2_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -1598,7 +1598,7 @@ void ML_BSSN6_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(beta3_bound, "scalar"))
   {
-   /* apply scalar boundary condition */
+   /* select scalar boundary condition */
     static CCTK_INT handle_beta3_bound = -1;
     if (handle_beta3_bound < 0) handle_beta3_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_beta3_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -1615,7 +1615,7 @@ void ML_BSSN6_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(trK_bound, "scalar"))
   {
-   /* apply scalar boundary condition */
+   /* select scalar boundary condition */
     static CCTK_INT handle_trK_bound = -1;
     if (handle_trK_bound < 0) handle_trK_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_trK_bound < 0) CCTK_WARN(0, "could not create table!");

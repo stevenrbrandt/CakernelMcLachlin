@@ -913,6 +913,10 @@ extendedKeywordParameters =
     AllowedValues -> {BSSN}
   },
   {
+    Name -> "ADMBase::dtlapse_evolution_method",
+    AllowedValues -> {BSSN}
+  },
+  {
     Name -> "ADMBase::dtshift_evolution_method",
     AllowedValues -> {BSSN}
   }
@@ -1061,6 +1065,6 @@ CreateKrancThornTT [groups, ".", BSSN,
 (* matter: 0 or 1
    (matter seems cheap; it should be always enabled) *)
 
-createCode[4, False, 3, 0];
-createCode[4, False, 3, 1];
-createCode[4, True,  3, 0];
+createCode[4, False, 4, 0];
+createCode[4, False, 4, 1];
+createCode[4, True,  4, 0];

@@ -22,6 +22,12 @@ EXTENDS CCTK_KEYWORD shift_evolution_method "shift_evolution_method"
 } 
 
 
+EXTENDS CCTK_KEYWORD dtlapse_evolution_method "dtlapse_evolution_method"
+{
+  ML_BSSN_MP :: ""
+} 
+
+
 EXTENDS CCTK_KEYWORD dtshift_evolution_method "dtshift_evolution_method"
 {
   ML_BSSN_MP :: ""
@@ -153,13 +159,13 @@ CCTK_INT ML_BSSN_MP_MaxNumEvolvedVars "Number of evolved variables used by this 
 restricted:
 CCTK_INT timelevels "Number of active timelevels"
 {
-  0:3 :: ""
-} 3
+  0:4 :: ""
+} 4
 
 restricted:
 CCTK_INT rhs_timelevels "Number of active RHS timelevels"
 {
-  0:3 :: ""
+  0:4 :: ""
 } 1
 
 restricted:

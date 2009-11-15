@@ -187,7 +187,7 @@ schedule ML_ADM_constraints_boundary AT analysis AFTER ML_ADM_constraints
   LANG: C
 } "ML_ADM_constraints_boundary"
 
-schedule ML_ADM_ApplyBoundConds in MoL_PostStep
+schedule ML_ADM_SelectBoundConds in MoL_PostStep
 {
   LANG: C
   OPTIONS: level
@@ -195,7 +195,7 @@ schedule ML_ADM_ApplyBoundConds in MoL_PostStep
   SYNC: ML_lapse
   SYNC: ML_metric
   SYNC: ML_shift
-} "apply boundary conditions"
+} "select boundary conditions"
 
 schedule ML_ADM_CheckBoundaries at BASEGRID
 {
@@ -203,7 +203,7 @@ schedule ML_ADM_CheckBoundaries at BASEGRID
   OPTIONS: meta
 } "check boundaries treatment"
 
-schedule group ApplyBCs as ML_ADM_ApplyBCs in MoL_PostStep  after ML_ADM_ApplyBoundConds
+schedule group ApplyBCs as ML_ADM_ApplyBCs in MoL_PostStep  after ML_ADM_SelectBoundConds
 {
   # no language specified
 } "Apply boundary conditions controlled by thorn Boundary"

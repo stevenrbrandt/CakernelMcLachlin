@@ -17,10 +17,15 @@ USES CCTK_INT boundary_width
 SHARES: ML_BSSNW
 
 USES CCTK_INT timelevels
+USES CCTK_INT rhs_timelevels
 USES KEYWORD calculate_ADMBase_variables_at
 
 USES CCTK_REAL harmonicF
 
+EXTENDS KEYWORD my_initial_boundary_condition
+{
+  "extrapolate-gammas" :: "extrapolate-gammas"
+}
 EXTENDS KEYWORD my_rhs_boundary_condition
 {
   "NewRad" :: "NewRad"

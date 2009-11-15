@@ -149,14 +149,14 @@ schedule hydro_RHS IN hydro_evolCalcGroup AFTER hydro_fluxes
   SYNC: mom_grouprhs
 } "hydro_RHS"
 
-schedule ML_hydro_ApplyBoundConds in MoL_PostStep
+schedule ML_hydro_SelectBoundConds in MoL_PostStep
 {
   LANG: C
   OPTIONS: level
   SYNC: ene_group
   SYNC: mass_group
   SYNC: mom_group
-} "apply boundary conditions"
+} "select boundary conditions"
 
 schedule ML_hydro_CheckBoundaries at BASEGRID
 {
@@ -164,7 +164,7 @@ schedule ML_hydro_CheckBoundaries at BASEGRID
   OPTIONS: meta
 } "check boundaries treatment"
 
-schedule group ApplyBCs as ML_hydro_ApplyBCs in MoL_PostStep  after ML_hydro_ApplyBoundConds
+schedule group ApplyBCs as ML_hydro_ApplyBCs in MoL_PostStep  after ML_hydro_SelectBoundConds
 {
   # no language specified
 } "Apply boundary conditions controlled by thorn Boundary"

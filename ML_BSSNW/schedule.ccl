@@ -364,7 +364,7 @@ schedule ML_BSSNW_constraints_boundary IN ML_BSSNW_constraintsCalcGroup AFTER ML
   LANG: C
 } "ML_BSSNW_constraints_boundary"
 
-schedule ML_BSSNW_ApplyBoundConds in MoL_PostStep
+schedule ML_BSSNW_SelectBoundConds in MoL_PostStep
 {
   LANG: C
   OPTIONS: level
@@ -377,7 +377,7 @@ schedule ML_BSSNW_ApplyBoundConds in MoL_PostStep
   SYNC: ML_shift
   SYNC: ML_trace_curv
   SYNC: ML_W
-} "apply boundary conditions"
+} "select boundary conditions"
 
 schedule ML_BSSNW_CheckBoundaries at BASEGRID
 {
@@ -385,7 +385,7 @@ schedule ML_BSSNW_CheckBoundaries at BASEGRID
   OPTIONS: meta
 } "check boundaries treatment"
 
-schedule group ApplyBCs as ML_BSSNW_ApplyBCs in MoL_PostStep  after ML_BSSNW_ApplyBoundConds
+schedule group ApplyBCs as ML_BSSNW_ApplyBCs in MoL_PostStep  after ML_BSSNW_SelectBoundConds
 {
   # no language specified
 } "Apply boundary conditions controlled by thorn Boundary"

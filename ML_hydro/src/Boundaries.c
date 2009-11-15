@@ -25,7 +25,7 @@ void ML_hydro_CheckBoundaries(CCTK_ARGUMENTS)
   return;
 }
 
-void ML_hydro_ApplyBoundConds(CCTK_ARGUMENTS)
+void ML_hydro_SelectBoundConds(CCTK_ARGUMENTS)
 {
   DECLARE_CCTK_ARGUMENTS;
   DECLARE_CCTK_PARAMETERS;
@@ -122,7 +122,7 @@ void ML_hydro_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(ene_group_bound, "radiative"))
   {
-   /* apply radiation boundary condition */
+   /* select radiation boundary condition */
     static CCTK_INT handle_ene_group_bound = -1;
     if (handle_ene_group_bound < 0) handle_ene_group_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_ene_group_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -141,7 +141,7 @@ void ML_hydro_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(mass_group_bound, "radiative"))
   {
-   /* apply radiation boundary condition */
+   /* select radiation boundary condition */
     static CCTK_INT handle_mass_group_bound = -1;
     if (handle_mass_group_bound < 0) handle_mass_group_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_mass_group_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -160,7 +160,7 @@ void ML_hydro_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(mom_group_bound, "radiative"))
   {
-   /* apply radiation boundary condition */
+   /* select radiation boundary condition */
     static CCTK_INT handle_mom_group_bound = -1;
     if (handle_mom_group_bound < 0) handle_mom_group_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_mom_group_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -179,7 +179,7 @@ void ML_hydro_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(ene_bound, "radiative"))
   {
-   /* apply radiation boundary condition */
+   /* select radiation boundary condition */
     static CCTK_INT handle_ene_bound = -1;
     if (handle_ene_bound < 0) handle_ene_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_ene_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -198,7 +198,7 @@ void ML_hydro_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(mass_bound, "radiative"))
   {
-   /* apply radiation boundary condition */
+   /* select radiation boundary condition */
     static CCTK_INT handle_mass_bound = -1;
     if (handle_mass_bound < 0) handle_mass_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_mass_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -217,7 +217,7 @@ void ML_hydro_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(mom1_bound, "radiative"))
   {
-   /* apply radiation boundary condition */
+   /* select radiation boundary condition */
     static CCTK_INT handle_mom1_bound = -1;
     if (handle_mom1_bound < 0) handle_mom1_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_mom1_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -236,7 +236,7 @@ void ML_hydro_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(mom2_bound, "radiative"))
   {
-   /* apply radiation boundary condition */
+   /* select radiation boundary condition */
     static CCTK_INT handle_mom2_bound = -1;
     if (handle_mom2_bound < 0) handle_mom2_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_mom2_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -255,7 +255,7 @@ void ML_hydro_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(mom3_bound, "radiative"))
   {
-   /* apply radiation boundary condition */
+   /* select radiation boundary condition */
     static CCTK_INT handle_mom3_bound = -1;
     if (handle_mom3_bound < 0) handle_mom3_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_mom3_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -274,7 +274,7 @@ void ML_hydro_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(ene_group_bound, "scalar"))
   {
-   /* apply scalar boundary condition */
+   /* select scalar boundary condition */
     static CCTK_INT handle_ene_group_bound = -1;
     if (handle_ene_group_bound < 0) handle_ene_group_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_ene_group_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -291,7 +291,7 @@ void ML_hydro_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(mass_group_bound, "scalar"))
   {
-   /* apply scalar boundary condition */
+   /* select scalar boundary condition */
     static CCTK_INT handle_mass_group_bound = -1;
     if (handle_mass_group_bound < 0) handle_mass_group_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_mass_group_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -308,7 +308,7 @@ void ML_hydro_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(mom_group_bound, "scalar"))
   {
-   /* apply scalar boundary condition */
+   /* select scalar boundary condition */
     static CCTK_INT handle_mom_group_bound = -1;
     if (handle_mom_group_bound < 0) handle_mom_group_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_mom_group_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -325,7 +325,7 @@ void ML_hydro_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(ene_bound, "scalar"))
   {
-   /* apply scalar boundary condition */
+   /* select scalar boundary condition */
     static CCTK_INT handle_ene_bound = -1;
     if (handle_ene_bound < 0) handle_ene_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_ene_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -342,7 +342,7 @@ void ML_hydro_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(mass_bound, "scalar"))
   {
-   /* apply scalar boundary condition */
+   /* select scalar boundary condition */
     static CCTK_INT handle_mass_bound = -1;
     if (handle_mass_bound < 0) handle_mass_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_mass_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -359,7 +359,7 @@ void ML_hydro_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(mom1_bound, "scalar"))
   {
-   /* apply scalar boundary condition */
+   /* select scalar boundary condition */
     static CCTK_INT handle_mom1_bound = -1;
     if (handle_mom1_bound < 0) handle_mom1_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_mom1_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -376,7 +376,7 @@ void ML_hydro_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(mom2_bound, "scalar"))
   {
-   /* apply scalar boundary condition */
+   /* select scalar boundary condition */
     static CCTK_INT handle_mom2_bound = -1;
     if (handle_mom2_bound < 0) handle_mom2_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_mom2_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -393,7 +393,7 @@ void ML_hydro_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(mom3_bound, "scalar"))
   {
-   /* apply scalar boundary condition */
+   /* select scalar boundary condition */
     static CCTK_INT handle_mom3_bound = -1;
     if (handle_mom3_bound < 0) handle_mom3_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_mom3_bound < 0) CCTK_WARN(0, "could not create table!");

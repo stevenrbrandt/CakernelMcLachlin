@@ -99,14 +99,14 @@ schedule WTFO_constraints AT analysis
   SYNC: WT_w
 } "WTFO_constraints"
 
-schedule ML_WaveToyFO_ApplyBoundConds in MoL_PostStep
+schedule ML_WaveToyFO_SelectBoundConds in MoL_PostStep
 {
   LANG: C
   OPTIONS: level
   SYNC: WT_rho
   SYNC: WT_u
   SYNC: WT_v
-} "apply boundary conditions"
+} "select boundary conditions"
 
 schedule ML_WaveToyFO_CheckBoundaries at BASEGRID
 {
@@ -114,7 +114,7 @@ schedule ML_WaveToyFO_CheckBoundaries at BASEGRID
   OPTIONS: meta
 } "check boundaries treatment"
 
-schedule group ApplyBCs as ML_WaveToyFO_ApplyBCs in MoL_PostStep  after ML_WaveToyFO_ApplyBoundConds
+schedule group ApplyBCs as ML_WaveToyFO_ApplyBCs in MoL_PostStep  after ML_WaveToyFO_SelectBoundConds
 {
   # no language specified
 } "Apply boundary conditions controlled by thorn Boundary"

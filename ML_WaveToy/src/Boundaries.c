@@ -25,7 +25,7 @@ void ML_WaveToy_CheckBoundaries(CCTK_ARGUMENTS)
   return;
 }
 
-void ML_WaveToy_ApplyBoundConds(CCTK_ARGUMENTS)
+void ML_WaveToy_SelectBoundConds(CCTK_ARGUMENTS)
 {
   DECLARE_CCTK_ARGUMENTS;
   DECLARE_CCTK_PARAMETERS;
@@ -78,7 +78,7 @@ void ML_WaveToy_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(WT_rho_bound, "radiative"))
   {
-   /* apply radiation boundary condition */
+   /* select radiation boundary condition */
     static CCTK_INT handle_WT_rho_bound = -1;
     if (handle_WT_rho_bound < 0) handle_WT_rho_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_WT_rho_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -97,7 +97,7 @@ void ML_WaveToy_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(WT_u_bound, "radiative"))
   {
-   /* apply radiation boundary condition */
+   /* select radiation boundary condition */
     static CCTK_INT handle_WT_u_bound = -1;
     if (handle_WT_u_bound < 0) handle_WT_u_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_WT_u_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -116,7 +116,7 @@ void ML_WaveToy_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(rho_bound, "radiative"))
   {
-   /* apply radiation boundary condition */
+   /* select radiation boundary condition */
     static CCTK_INT handle_rho_bound = -1;
     if (handle_rho_bound < 0) handle_rho_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_rho_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -135,7 +135,7 @@ void ML_WaveToy_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(u_bound, "radiative"))
   {
-   /* apply radiation boundary condition */
+   /* select radiation boundary condition */
     static CCTK_INT handle_u_bound = -1;
     if (handle_u_bound < 0) handle_u_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_u_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -154,7 +154,7 @@ void ML_WaveToy_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(WT_rho_bound, "scalar"))
   {
-   /* apply scalar boundary condition */
+   /* select scalar boundary condition */
     static CCTK_INT handle_WT_rho_bound = -1;
     if (handle_WT_rho_bound < 0) handle_WT_rho_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_WT_rho_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -171,7 +171,7 @@ void ML_WaveToy_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(WT_u_bound, "scalar"))
   {
-   /* apply scalar boundary condition */
+   /* select scalar boundary condition */
     static CCTK_INT handle_WT_u_bound = -1;
     if (handle_WT_u_bound < 0) handle_WT_u_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_WT_u_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -188,7 +188,7 @@ void ML_WaveToy_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(rho_bound, "scalar"))
   {
-   /* apply scalar boundary condition */
+   /* select scalar boundary condition */
     static CCTK_INT handle_rho_bound = -1;
     if (handle_rho_bound < 0) handle_rho_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_rho_bound < 0) CCTK_WARN(0, "could not create table!");
@@ -205,7 +205,7 @@ void ML_WaveToy_ApplyBoundConds(CCTK_ARGUMENTS)
   
   if (CCTK_EQUALS(u_bound, "scalar"))
   {
-   /* apply scalar boundary condition */
+   /* select scalar boundary condition */
     static CCTK_INT handle_u_bound = -1;
     if (handle_u_bound < 0) handle_u_bound = Util_TableCreate(UTIL_TABLE_FLAGS_CASE_INSENSITIVE);
     if (handle_u_bound < 0) CCTK_WARN(0, "could not create table!");

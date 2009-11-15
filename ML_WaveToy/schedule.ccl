@@ -72,13 +72,13 @@ schedule WT_RHS AT analysis
   SYNC: WT_urhs
 } "WT_RHS"
 
-schedule ML_WaveToy_ApplyBoundConds in MoL_PostStep
+schedule ML_WaveToy_SelectBoundConds in MoL_PostStep
 {
   LANG: C
   OPTIONS: level
   SYNC: WT_rho
   SYNC: WT_u
-} "apply boundary conditions"
+} "select boundary conditions"
 
 schedule ML_WaveToy_CheckBoundaries at BASEGRID
 {
@@ -86,7 +86,7 @@ schedule ML_WaveToy_CheckBoundaries at BASEGRID
   OPTIONS: meta
 } "check boundaries treatment"
 
-schedule group ApplyBCs as ML_WaveToy_ApplyBCs in MoL_PostStep  after ML_WaveToy_ApplyBoundConds
+schedule group ApplyBCs as ML_WaveToy_ApplyBCs in MoL_PostStep  after ML_WaveToy_SelectBoundConds
 {
   # no language specified
 } "Apply boundary conditions controlled by thorn Boundary"
