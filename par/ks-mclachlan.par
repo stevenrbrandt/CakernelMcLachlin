@@ -1,4 +1,4 @@
-Cactus::cctk_run_title = "QC-0"
+Cactus::cctk_run_title = "Kerr-Schild"
 
 Cactus::cctk_full_warnings         = yes
 Cactus::highlight_warning_messages = no
@@ -16,9 +16,9 @@ IO::out_dir = $parfile
 
 ActiveThorns = "AEILocalInterp"
 
-ActiveThorns = "BLAS LAPACK"
-
 ActiveThorns = "Fortran"
+
+ActiveThorns = "GSL"
 
 ActiveThorns = "GenericFD"
 
@@ -29,16 +29,6 @@ ActiveThorns = "LocalInterp"
 ActiveThorns = "LoopControl"
 
 ActiveThorns = "Slab"
-
-ActiveThorns = "SpinHarmonics"
-
-ActiveThorns = "TGRtensor"
-
-
-
-ActiveThorns = "SummationByParts"
-
-SummationByParts::order = 4
 
 
 
@@ -79,10 +69,8 @@ CarpetLib::print_memstats_every  = 5120
 
 ActiveThorns = "NaNChecker"
 
-NaNChecker::check_every     = 1 # 512
-#NaNChecker::verbose         = "all"
-#NaNChecker::action_if_found = "just warn"
-NaNChecker::action_if_found = "terminate"
+NaNChecker::check_every     = 512
+NaNChecker::action_if_found = "just warn"
 NaNChecker::check_vars      = "
         ML_BSSN::ML_log_confac
         ML_BSSN::ML_metric
@@ -103,12 +91,12 @@ NaNChecker::check_vars      = "
 
 
 
-ActiveThorns = "Boundary CartGrid3D CoordBase ReflectionSymmetry RotatingSymmetry180 SymBase"
+ActiveThorns = "Boundary CartGrid3D CoordBase ReflectionSymmetry RotatingSymmetry90 SymBase"
 
 CoordBase::domainsize = "minmax"
 
 CoordBase::xmin =    0.00
-CoordBase::ymin = -120.00
+CoordBase::ymin =    0.00
 CoordBase::zmin =    0.00
 CoordBase::xmax = +120.00
 CoordBase::ymax = +120.00
@@ -125,6 +113,7 @@ CoordBase::boundary_size_y_upper     = 3
 CoordBase::boundary_size_z_upper     = 3
 
 CoordBase::boundary_shiftout_x_lower = 1
+CoordBase::boundary_shiftout_y_lower = 1
 CoordBase::boundary_shiftout_z_lower = 1
 
 CartGrid3D::type = "coordbase"
@@ -136,7 +125,7 @@ ReflectionSymmetry::avoid_origin_z = no
 
 ActiveThorns = "SphericalSurface"
 
-SphericalSurface::nsurfaces = 6
+SphericalSurface::nsurfaces = 1
 SphericalSurface::maxntheta = 39
 SphericalSurface::maxnphi   = 76
 
@@ -145,90 +134,32 @@ SphericalSurface::nphi        [0] = 76
 SphericalSurface::nghoststheta[0] = 2
 SphericalSurface::nghostsphi  [0] = 2
 
-SphericalSurface::ntheta      [1] = 39
-SphericalSurface::nphi        [1] = 76
-SphericalSurface::nghoststheta[1] = 2
-SphericalSurface::nghostsphi  [1] = 2
-
-SphericalSurface::ntheta      [2] = 39
-SphericalSurface::nphi        [2] = 76
-SphericalSurface::nghoststheta[2] = 2
-SphericalSurface::nghostsphi  [2] = 2
-
-SphericalSurface::ntheta      [3] = 39
-SphericalSurface::nphi        [3] = 76
-SphericalSurface::nghoststheta[3] = 2
-SphericalSurface::nghostsphi  [3] = 2
-
-SphericalSurface::ntheta      [4] = 39
-SphericalSurface::nphi        [4] = 76
-SphericalSurface::nghoststheta[4] = 2
-SphericalSurface::nghostsphi  [4] = 2
-
-SphericalSurface::ntheta      [5] = 39
-SphericalSurface::nphi        [5] = 76
-SphericalSurface::nghoststheta[5] = 2
-SphericalSurface::nghostsphi  [5] = 2
-
 
 
 ActiveThorns = "CarpetMask"
 
-CarpetMask::verbose = no
-
 CarpetMask::excluded_surface       [0] = 0
 CarpetMask::excluded_surface_factor[0] = 1.0
-
-CarpetMask::excluded_surface       [1] = 1
-CarpetMask::excluded_surface_factor[1] = 1.0
-
-CarpetMask::excluded_surface       [2] = 2
-CarpetMask::excluded_surface_factor[2] = 1.0
 
 
 
 ActiveThorns = "CarpetRegrid2 CarpetTracker"
 
 CarpetTracker::surface[0] = 0
-CarpetTracker::surface[1] = 1
-CarpetTracker::surface[2] = 2
 
-CarpetRegrid2::regrid_every            = 128
+CarpetRegrid2::regrid_every            = 0
 CarpetRegrid2::freeze_unaligned_levels = yes
-CarpetRegrid2::symmetry_rotating180    = yes
+CarpetRegrid2::symmetry_rotating90     = yes
 CarpetRegrid2::verbose                 = yes
 
-CarpetRegrid2::num_centres = 3
+CarpetRegrid2::num_centres = 1
 
-CarpetRegrid2::num_levels_1         =  7
-CarpetRegrid2::position_x_1         = +1.168642873
-CarpetRegrid2::radius_1[ 1]         =  64.0
-CarpetRegrid2::radius_1[ 2]         =  16.0
-CarpetRegrid2::radius_1[ 3]         =   8.0
-CarpetRegrid2::radius_1[ 4]         =   4.0
-CarpetRegrid2::radius_1[ 5]         =   2.0
-CarpetRegrid2::radius_1[ 6]         =   1.0
-CarpetRegrid2::movement_threshold_1 =   0.16
-
-CarpetRegrid2::num_levels_2         =  7
-CarpetRegrid2::position_x_2         = -1.168642873
-CarpetRegrid2::radius_2[ 1]         =  64.0
-CarpetRegrid2::radius_2[ 2]         =  16.0
-CarpetRegrid2::radius_2[ 3]         =   8.0
-CarpetRegrid2::radius_2[ 4]         =   4.0
-CarpetRegrid2::radius_2[ 5]         =   2.0
-CarpetRegrid2::radius_2[ 6]         =   1.0
-CarpetRegrid2::movement_threshold_2 =   0.16
-
-CarpetRegrid2::num_levels_3         =  7
-CarpetRegrid2::active_3             = no
-CarpetRegrid2::radius_3[ 1]         =  64.0
-CarpetRegrid2::radius_3[ 2]         =  16.0
-CarpetRegrid2::radius_3[ 3]         =   8.0
-CarpetRegrid2::radius_3[ 4]         =   4.0
-CarpetRegrid2::radius_3[ 5]         =   2.0
-CarpetRegrid2::radius_3[ 6]         =   1.0
-CarpetRegrid2::movement_threshold_3 =   0.16
+CarpetRegrid2::num_levels_1 = 6
+CarpetRegrid2::radius_1[1]  = 60.0
+CarpetRegrid2::radius_1[2]  = 30.0
+CarpetRegrid2::radius_1[3]  = 15.0
+CarpetRegrid2::radius_1[4]  =  7.5
+CarpetRegrid2::radius_1[5]  =  3.75
 
 
 
@@ -238,9 +169,7 @@ MoL::ODE_Method             = "RK4"
 MoL::MoL_Intermediate_Steps = 4
 MoL::MoL_Num_Scratch_Levels = 1
 
-Carpet::time_refinement_factors = "[1, 1, 2, 4, 8, 16, 32, 64, 128, 256]"
-
-Time::dtfac = 0.25
+Time::dtfac = 0.40
 
 
 
@@ -250,28 +179,20 @@ ADMMacros::spatial_order = 4
 
 
 
-ActiveThorns = "TwoPunctures"
+ActiveThorns = "Exact"
 
-ADMBase::metric_type = "physical"
+ADMBase::initial_data    = "exact"
+ADMBase::initial_lapse   = "exact"
+ADMBase::initial_shift   = "exact"
+ADMBase::initial_dtlapse = "exact"
+ADMBase::initial_dtshift = "exact"
 
-ADMBase::initial_data    = "twopunctures"
-ADMBase::initial_lapse   = "twopunctures-averaged"
-ADMBase::initial_shift   = "zero"
-ADMBase::initial_dtlapse = "zero"
-ADMBase::initial_dtshift = "zero"
-
-TwoPunctures::par_b          =  1.168642873
-TwoPunctures::par_m_plus     =  0.453
-TwoPunctures::par_m_minus    =  0.453
-TwoPunctures::par_P_plus [1] = +0.3331917498
-TwoPunctures::par_P_minus[1] = -0.3331917498
-
-#TODO# TwoPunctures::grid_setup_method = "evaluation"
-
-TwoPunctures::TP_epsilon = 1.0e-2
-TwoPunctures::TP_Tiny    = 1.0e-2
-
-TwoPunctures::verbose = yes
+Exact::exact_model = "Kerr/Kerr-Schild"
+Exact::Kerr_KerrSchild__mass      = 1.0
+Exact::Kerr_KerrSchild__spin      = 0.8
+Exact::Kerr_KerrSchild__parabolic = yes
+Exact::Kerr_KerrSchild__power     = 8
+Exact::Kerr_KerrSchild__epsilon   = 1.0
 
 
 
@@ -283,12 +204,15 @@ ADMBase::shift_evolution_method   = "ML_BSSN"
 ADMBase::dtlapse_evolution_method = "ML_BSSN"
 ADMBase::dtshift_evolution_method = "ML_BSSN"
 
+ML_BSSN::timelevels = 3
+
 ML_BSSN::harmonicN           = 1      # 1+log
 ML_BSSN::harmonicF           = 2.0    # 1+log
 ML_BSSN::ShiftGammaCoeff     = 0.75
+ML_BSSN::AlphaDriver         = 1.0
 ML_BSSN::BetaDriver          = 1.0
-ML_BSSN::LapseAdvectionCoeff = 1.0
-ML_BSSN::ShiftAdvectionCoeff = 1.0
+ML_BSSN::LapseAdvectionCoeff = 0.0
+ML_BSSN::ShiftAdvectionCoeff = 0.0
 
 ML_BSSN::MinimumLapse        = 1.0e-8
 
@@ -334,13 +258,9 @@ ADMConstraints::constraints_timelevels = 3
 
 ActiveThorns = "AHFinderDirect"
 
-AHFinderDirect::find_every = 128
+AHFinderDirect::find_every = 1280
 
 AHFinderDirect::run_at_CCTK_POST_RECOVER_VARIABLES = no
-
-AHFinderDirect::move_origins            = yes
-AHFinderDirect::reshape_while_moving    = yes
-AHFinderDirect::predict_origin_movement = yes
 
 AHFinderDirect::geometry_interpolator_name = "Lagrange polynomial interpolation"
 AHFinderDirect::geometry_interpolator_pars = "order=4"
@@ -349,51 +269,17 @@ AHFinderDirect::surface_interpolator_pars  = "order=4"
 
 AHFinderDirect::output_h_every = 0
 
-AHFinderDirect::N_horizons = 6
+AHFinderDirect::N_horizons = 1
 
-AHFinderDirect::origin_x                             [1] = +1.168642873
-AHFinderDirect::initial_guess__coord_sphere__x_center[1] = +1.168642873
-AHFinderDirect::initial_guess__coord_sphere__radius  [1] =  0.25
-AHFinderDirect::which_surface_to_store_info          [1] = 0
-AHFinderDirect::reset_horizon_after_not_finding      [1] = no
-AHFinderDirect::dont_find_after_individual_time      [1] = 30.0
-
-AHFinderDirect::origin_x                             [2] = -1.168642873
-AHFinderDirect::initial_guess__coord_sphere__x_center[2] = -1.168642873
-AHFinderDirect::initial_guess__coord_sphere__radius  [2] =  0.25
-AHFinderDirect::which_surface_to_store_info          [2] = 1
-AHFinderDirect::reset_horizon_after_not_finding      [2] = no
-AHFinderDirect::dont_find_after_individual_time      [2] = 30.0
-
-AHFinderDirect::initial_guess__coord_sphere__radius  [3] = 1.0
-AHFinderDirect::which_surface_to_store_info          [3] = 2
-AHFinderDirect::reset_horizon_after_not_finding      [3] = no
-AHFinderDirect::find_after_individual_time           [3] = 15.0
-
-AHFinderDirect::surface_definition                   [4] = "expansion product"
-AHFinderDirect::surface_selection                    [4] = "areal radius"
-AHFinderDirect::desired_value                        [4] = 50.0
-AHFinderDirect::initial_guess__coord_sphere__radius  [4] = 50.0
-AHFinderDirect::which_surface_to_store_info          [4] = 3
-AHFinderDirect::reset_horizon_after_not_finding      [4] = no
-
-AHFinderDirect::depends_on                           [5] = 1
-AHFinderDirect::desired_value_offset                 [5] = 0.001
-AHFinderDirect::which_surface_to_store_info          [5] = 4
-AHFinderDirect::reset_horizon_after_not_finding      [5] = no
-AHFinderDirect::dont_find_after_individual_time      [5] = 30.0
-
-AHFinderDirect::depends_on                           [6] = 3
-AHFinderDirect::desired_value_offset                 [6] = 0.001
-AHFinderDirect::which_surface_to_store_info          [6] = 5
-AHFinderDirect::reset_horizon_after_not_finding      [6] = no
-AHFinderDirect::find_after_individual_time           [6] = 15.0
+AHFinderDirect::initial_guess__coord_sphere__radius[1] = 2.0
+AHFinderDirect::which_surface_to_store_info        [1] = 0
+AHFinderDirect::reset_horizon_after_not_finding    [1] = no
 
 
 
 ActiveThorns = "CarpetIOBasic"
 
-IOBasic::outInfo_every      = 128
+IOBasic::outInfo_every      = 1280
 IOBasic::outInfo_reductions = "norm2"
 IOBasic::outInfo_vars       = "
         Carpet::physical_time_per_hour
@@ -406,7 +292,7 @@ ActiveThorns = "CarpetIOScalar"
 
 IOScalar::one_file_per_group = yes
 
-IOScalar::outScalar_every = 128
+IOScalar::outScalar_every = 1280
 IOScalar::outScalar_vars  = "
         CarpetReduce::weight
         ADMBase::metric
@@ -429,7 +315,7 @@ IOASCII::one_file_per_group = yes
 IOASCII::output_symmetry_points = no
 IOASCII::out3D_ghosts           = no
 
-IOASCII::out0D_every = 128
+IOASCII::out0D_every = 1280
 IOASCII::out0D_vars  = "
         Carpet::timing
         CarpetReduce::weight
@@ -449,7 +335,7 @@ IOASCII::out0D_vars  = "
         SphericalSurface::sf_coordinate_descriptors
 "
 
-IOASCII::out1D_every = 128
+IOASCII::out1D_every = 1280
 IOASCII::out1D_vars  = "
         CarpetReduce::weight
         ADMBase::metric
@@ -463,7 +349,7 @@ IOASCII::out1D_vars  = "
         SphericalSurface::sf_radius
 "
 
-IOASCII::out2D_every = 128
+IOASCII::out2D_every = 1280
 IOASCII::out2D_vars  = "
         SphericalSurface::sf_radius
 "
@@ -472,7 +358,7 @@ IOASCII::out2D_vars  = "
 
 Activethorns = "CarpetIOHDF5"
 
-IOHDF5::out_every              = 512
+IOHDF5::out_every              = 5120
 IOHDF5::one_file_per_group     = yes
 IOHDF5::output_symmetry_points = no
 IOHDF5::out3D_ghosts           = no
@@ -490,14 +376,14 @@ IOHDF5::out_vars               = "
         ADMConstraints::momentum
 "
 
-IOHDF5::checkpoint                  = yes
-IO::checkpoint_dir                  = $parfile
-IO::checkpoint_ID                   = yes
-IO::checkpoint_every_walltime_hours = 6.0
-IO::checkpoint_on_terminate         = yes
-
-IO::recover     = "autoprobe"
-IO::recover_dir = $parfile
+#IOHDF5::checkpoint                  = yes
+#IO::checkpoint_dir                  = $parfile
+#IO::checkpoint_ID                   = yes
+#IO::checkpoint_every_walltime_hours = 6.0
+#IO::checkpoint_on_terminate         = yes
+#
+#IO::recover     = "autoprobe"
+#IO::recover_dir = $parfile
 
 
 
