@@ -15,10 +15,12 @@ Module[{},
 
 prefix = "ML_";
 suffix =
-  If [useGlobalDerivs, "_MP", ""] <>
-  If [derivOrder!=4, "_O" <> ToString[derivOrder], ""] <>
-  (* If [evolutionTimelevels!=3, "_TL" <> ToString[evolutionTimelevels], ""] <> *)
-  If [addMatter==1, "_M", ""];
+  ""
+  <> If [useGlobalDerivs, "_MP", ""]
+  <> If [derivOrder!=4, "_O" <> ToString[derivOrder], ""]
+  (* <> If [evolutionTimelevels!=3, "_TL" <> ToString[evolutionTimelevels], ""] *)
+  <> If [addMatter==1, "_M", ""]
+  ;
 
 BSSN = prefix <> "BSSN" <> suffix;
 
@@ -251,7 +253,7 @@ initialCalc =
   ConditionalOnKeyword -> {"my_initial_data", "Minkowski"},
   Equations -> 
   {
-    phi       -> IfThen[conformalmethod,1,0],
+    phi       -> IfThen[conformalMethod,1,0],
     gt[la,lb] -> KD[la,lb],
     trK       -> 0,
     At[la,lb] -> 0,
@@ -299,8 +301,8 @@ convertFromADMBaseCalc =
     detg      -> detgExpr,
     gu[ua,ub] -> 1/detg detgExpr MatrixInverse [g[ua,ub]],
     
-    phi       -> IfThen[conformalmethod,detg^(-1/6),Log[detg]/12],
-    em4phi    -> IfThen[conformalmethod,phi^2,Exp[-4 phi]],
+    phi       -> IfThen[conformalMethod,detg^(-1/6),Log[detg]/12],
+    em4phi    -> IfThen[conformalMethod,phi^2,Exp[-4 phi]],
     gt[la,lb] -> em4phi g[la,lb],
     
     K11 -> kxx,
@@ -367,7 +369,7 @@ convertToADMBaseCalc =
   {
     dir[ua] -> Sign[beta[ua]],
     
-    e4phi    -> IfThen[conformalmethod,1/phi^2,Exp[4 phi]],
+    e4phi    -> IfThen[conformalMethod,1/phi^2,Exp[4 phi]],
     g[la,lb] -> e4phi gt[la,lb],
     gxx      -> g11,
     gxy      -> g12,
@@ -443,7 +445,7 @@ boundaryCalcADMBase =
   Shorthands -> {e4phi, g[la,lb], K[la,lb]},
   Equations -> 
   {
-    e4phi    -> IfThen[conformalmethod,1/phi^2,Exp[4 phi]],
+    e4phi    -> IfThen[conformalMethod,1/phi^2,Exp[4 phi]],
     g[la,lb] -> e4phi gt[la,lb],
     gxx      -> g11,
     gxy      -> g12,
@@ -518,9 +520,9 @@ evolCalc =
                                + Gt[uk,ll,lj] gt[li,ln] Gt[un,lk,lm]
                                + Gt[uk,li,lm] gt[lk,ln] Gt[un,ll,lj]),
 
-    fac1 -> IfThen[conformalmethod,-1/(2 phi),1],
+    fac1 -> IfThen[conformalMethod,-1/(2 phi),1],
     cdphi[la] -> fac1 CDt[phi,la],
-    fac2 -> IfThen[conformalmethod,1/(2 phi^2),0],
+    fac2 -> IfThen[conformalMethod,1/(2 phi^2),0],
     cdphi2[la,lb] -> fac1 CDt[phi,la,lb] + fac2 CDt[phi,la] CDt[phi,lb],
 
     (* PRD 62, 044034 (2000), eqn. (15) *)
@@ -532,7 +534,7 @@ evolCalc =
     Atm[ua,lb] -> gtu[ua,uc] At[lc,lb],
     Atu[ua,ub] -> Atm[ua,lc] gtu[ub,uc],
     
-    e4phi       -> IfThen[conformalmethod,1/phi^2,Exp[4 phi]],
+    e4phi       -> IfThen[conformalMethod,1/phi^2,Exp[4 phi]],
     em4phi      -> 1 / e4phi,
     g[la,lb]    -> e4phi gt[la,lb],
     detg        -> detgExpr,
@@ -571,9 +573,9 @@ evolCalc =
     
     (* PRD 62, 044034 (2000), eqn. (10) *)
     (* PRD 67 084023 (2003), eqn. (16) and (23) *)  
-    dot[phi]       -> IfThen[conformalmethod,(1/3) phi,-(1/6) ] alpha trK
+    dot[phi]       -> IfThen[conformalMethod,(1/3) phi,-(1/6) ] alpha trK
                       + beta[ua] PDu[phi,la]
-                      + IfThen[conformalmethod,-(1/3) phi ,(1/6)] PD[beta[ua],la],
+                      + IfThen[conformalMethod,-(1/3) phi ,(1/6)] PD[beta[ua],la],
     
     (* PRD 62, 044034 (2000), eqn. (9) *)
     dot[gt[la,lb]] -> - 2 alpha At[la,lb]
@@ -669,7 +671,7 @@ RHSRadiativeBoundaryCalc =
     
     detgt      -> 1 (* detgtExpr *),
     gtu[ua,ub] -> 1/detgt detgtExpr MatrixInverse [gt[ua,ub]],
-    em4phi     -> IfThen[conformalmethod,phi^2,Exp[-4 phi]],
+    em4phi     -> IfThen[conformalMethod,phi^2,Exp[-4 phi]],
     gu[ua,ub]  -> em4phi gtu[ua,ub],
     
     nn[la] -> normal[la],
@@ -722,7 +724,7 @@ boundaryCalc =
   Where -> BoundaryWithGhosts,
   Equations -> 
   {
-    phi       -> IfThen[conformalmethod,1,0],
+    phi       -> IfThen[conformalMethod,1,0],
     gt[la,lb] -> KD[la,lb],
     trK       -> 0,
     At[la,lb] -> 0,
@@ -792,9 +794,9 @@ constraintsCalc =
                                    - PD[gt[la,lb],l1,l2] + PD[gt[l2,lb],l1,la]),
 *)
 
-    fac1 -> IfThen[conformalmethod,-1/(2 phi),1],
+    fac1 -> IfThen[conformalMethod,-1/(2 phi),1],
     cdphi[la] -> fac1 CDt[phi,la],
-    fac2 -> IfThen[conformalmethod,1/(2 phi^2),0],
+    fac2 -> IfThen[conformalMethod,1/(2 phi^2),0],
     cdphi2[la,lb] -> fac1 CDt[phi,la,lb] + fac2 CDt[phi,la] CDt[phi,lb],
 
     (* PRD 62, 044034 (2000), eqn. (15) *)
@@ -803,7 +805,7 @@ constraintsCalc =
                    + 4 cdphi[li] cdphi[lj]
                    - 4 gt[li,lj] gtu[ul,un] cdphi[ln] cdphi[ll],
     
-    e4phi       -> IfThen[conformalmethod,1/phi^2,Exp[4 phi]],
+    e4phi       -> IfThen[conformalMethod,1/phi^2,Exp[4 phi]],
     em4phi      -> 1 / e4phi,
     g[la,lb]    -> e4phi gt[la,lb],
     (* detg      -> detgExpr, *)
@@ -973,10 +975,18 @@ intParameters =
     Default -> 0
   },
   {
-    Name -> conformalmethod,
-    Description -> "0 for phi method, 1 for W method",
-    AllowedValues -> {{Value -> "0:1", Description -> "0 or 1"}},
+    Name -> conformalMethod,
+    Description -> "Treatment of conformal factor",
+    AllowedValues -> {{Value -> "0", Description -> "phi method"},
+                      {Value -> "1", Description -> "W method"}},
     Default -> 0
+  },
+  {
+    Name -> useMatter,
+    Description -> "Add matter terms",
+    AllowedValues -> {{Value -> "0", Description -> "no matter"},
+                      {Value -> "1", Description -> "matter"}},
+    Default -> addMatter
   }
 };
 
