@@ -1,6 +1,6 @@
 # -*-Makefile-*-
 
-all: McLachlan_ADM.out McLachlan_BSSN.out McLachlanW.out McLachlanUp.out McLachlan6.out WaveToy.out WaveToyFO.out hydro.out
+all: McLachlan_ADM.out McLachlan_BSSN.out McLachlanUp.out McLachlan6.out WaveToy.out WaveToyFO.out hydro.out
 	@echo
 	@echo "The Cactus thorns are up to date."
 	@echo
@@ -21,14 +21,14 @@ McLachlan_BSSN.out: McLachlan_BSSN.m
 		./copy-if-changed.sh $${thorn}_Helper ../$${thorn}_Helper; \
 	done
 
-McLachlanW.out: McLachlanW.m
-	rm -rf ML_BSSNW
-	./runmath.sh $^
-	for thorn in ML_BSSNW; do \
-		./copy-if-changed.sh $$thorn ../$$thorn; \
-		./create-helper-thorn.sh $$thorn; \
-		./copy-if-changed.sh $${thorn}_Helper ../$${thorn}_Helper; \
-	done
+#McLachlanW.out: McLachlanW.m
+#	rm -rf ML_BSSNW
+#	./runmath.sh $^
+#	for thorn in ML_BSSNW; do \
+#		./copy-if-changed.sh $$thorn ../$$thorn; \
+#		./create-helper-thorn.sh $$thorn; \
+#		./copy-if-changed.sh $${thorn}_Helper ../$${thorn}_Helper; \
+#	done
 
 McLachlanUp.out: McLachlanUp.m
 	rm -rf ML_BSSNUp
