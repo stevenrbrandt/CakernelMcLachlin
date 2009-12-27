@@ -950,7 +950,7 @@ void ML_BSSN_MP_RHS_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT 
               2*J23L*J33L*PDstandardNth23gt33 + dJ233L*PDstandardNth2gt33 + dJ333L*PDstandardNth3gt33 + 
               PDstandardNth11gt33*SQR(J13L) + PDstandardNth22gt33*SQR(J23L) + PDstandardNth33gt33*SQR(J33L)));
     
-    fac1  =  IfThen(conformalmethod,-(khalf*INV(phiL)),1);
+    fac1  =  IfThen(conformalMethod,-(khalf*INV(phiL)),1);
     
     cdphi1  =  fac1*(J11L*PDstandardNth1phi + J21L*PDstandardNth2phi + J31L*PDstandardNth3phi);
     
@@ -958,7 +958,7 @@ void ML_BSSN_MP_RHS_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT 
     
     cdphi3  =  fac1*(J13L*PDstandardNth1phi + J23L*PDstandardNth2phi + J33L*PDstandardNth3phi);
     
-    fac2  =  IfThen(conformalmethod,khalf*pow(phiL,-2),0);
+    fac2  =  IfThen(conformalMethod,khalf*pow(phiL,-2),0);
     
     cdphi211  =  fac1*((dJ111L - Gt111*J11L - Gt211*J12L - Gt311*J13L)*PDstandardNth1phi + 
            2*(J11L*(J21L*PDstandardNth12phi + J31L*PDstandardNth13phi) + J21L*J31L*PDstandardNth23phi) + 
@@ -1067,7 +1067,7 @@ void ML_BSSN_MP_RHS_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT 
     
     Atu33  =  Atm31*gtu31 + Atm32*gtu32 + Atm33*gtu33;
     
-    e4phi  =  IfThen(conformalmethod,pow(phiL,-2),exp(4*phiL));
+    e4phi  =  IfThen(conformalMethod,pow(phiL,-2),exp(4*phiL));
     
     em4phi  =  INV(e4phi);
     
@@ -1148,8 +1148,8 @@ void ML_BSSN_MP_RHS_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT 
         PDupwindNth3(phi, i, j, k)*(beta1L*J31L + beta2L*J32L + beta3L*J33L) + 
         (J11L*PDstandardNth1beta1 + J12L*PDstandardNth1beta2 + J13L*PDstandardNth1beta3 + J21L*PDstandardNth2beta1 + 
            J22L*PDstandardNth2beta2 + J23L*PDstandardNth2beta3 + J31L*PDstandardNth3beta1 + J32L*PDstandardNth3beta2 + 
-           J33L*PDstandardNth3beta3)*IfThen(conformalmethod,-(kthird*phiL),0.16666666666666666) + 
-        alphaL*trKL*IfThen(conformalmethod,kthird*phiL,-0.16666666666666666);
+           J33L*PDstandardNth3beta3)*IfThen(conformalMethod,-(kthird*phiL),0.16666666666666666) + 
+        alphaL*trKL*IfThen(conformalMethod,kthird*phiL,-0.16666666666666666);
     
     gt11rhsL  =  -2*alphaL*At11L + PDupwindNth1(gt11, i, j, k)*(beta1L*J11L + beta2L*J12L + beta3L*J13L) + 
         PDupwindNth2(gt11, i, j, k)*(beta1L*J21L + beta2L*J22L + beta3L*J23L) + 

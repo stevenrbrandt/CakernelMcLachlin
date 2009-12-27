@@ -254,16 +254,16 @@ void ML_BSSN_M_constraints_Body(cGH const * const cctkGH, CCTK_INT const dir, CC
     beta1L = beta1[index];
     beta2L = beta2[index];
     beta3L = beta3[index];
-    eTttL = eTtt[index];
-    eTtxL = eTtx[index];
-    eTtyL = eTty[index];
-    eTtzL = eTtz[index];
-    eTxxL = eTxx[index];
-    eTxyL = eTxy[index];
-    eTxzL = eTxz[index];
-    eTyyL = eTyy[index];
-    eTyzL = eTyz[index];
-    eTzzL = eTzz[index];
+    eTttL = useMatter ? eTtt[index] : 0.0;
+    eTtxL = useMatter ? eTtx[index] : 0.0;
+    eTtyL = useMatter ? eTty[index] : 0.0;
+    eTtzL = useMatter ? eTtz[index] : 0.0;
+    eTxxL = useMatter ? eTxx[index] : 0.0;
+    eTxyL = useMatter ? eTxy[index] : 0.0;
+    eTxzL = useMatter ? eTxz[index] : 0.0;
+    eTyyL = useMatter ? eTyy[index] : 0.0;
+    eTyzL = useMatter ? eTyz[index] : 0.0;
+    eTzzL = useMatter ? eTzz[index] : 0.0;
     gt11L = gt11[index];
     gt12L = gt12[index];
     gt13L = gt13[index];
@@ -693,7 +693,7 @@ void ML_BSSN_M_constraints_Body(cGH const * const cctkGH, CCTK_INT const dir, CC
         gt11L*gtu33*SQR(Gt133) + gt22L*gtu11*SQR(Gt213) + gt22L*gtu22*SQR(Gt223) + 2*gt23L*gtu32*SQR(Gt223) + 
         gt22L*gtu33*SQR(Gt233) + 3*gt33L*gtu11*SQR(Gt313) + 3*gt33L*gtu22*SQR(Gt323) + 3*gt33L*gtu33*SQR(Gt333);
     
-    fac1  =  IfThen(conformalmethod,-(khalf*INV(phiL)),1);
+    fac1  =  IfThen(conformalMethod,-(khalf*INV(phiL)),1);
     
     cdphi1  =  fac1*PDstandardNth1phi;
     
@@ -701,7 +701,7 @@ void ML_BSSN_M_constraints_Body(cGH const * const cctkGH, CCTK_INT const dir, CC
     
     cdphi3  =  fac1*PDstandardNth3phi;
     
-    fac2  =  IfThen(conformalmethod,khalf*pow(phiL,-2),0);
+    fac2  =  IfThen(conformalMethod,khalf*pow(phiL,-2),0);
     
     cdphi211  =  -(fac1*(-PDstandardNth11phi + Gt111*PDstandardNth1phi + Gt211*PDstandardNth2phi + 
              Gt311*PDstandardNth3phi)) + fac2*SQR(PDstandardNth1phi);
@@ -747,7 +747,7 @@ void ML_BSSN_M_constraints_Body(cGH const * const cctkGH, CCTK_INT const dir, CC
              2*(cdphi213*gtu31 + cdphi223*gtu32) + cdphi233*gtu33 + gtu11*(cdphi211 + 2*SQR(cdphi1)) + 
              gtu22*(cdphi222 + 2*SQR(cdphi2))) + 2*(-1 + gt33L*gtu33)*SQR(cdphi3));
     
-    e4phi  =  IfThen(conformalmethod,pow(phiL,-2),exp(4*phiL));
+    e4phi  =  IfThen(conformalMethod,pow(phiL,-2),exp(4*phiL));
     
     em4phi  =  INV(e4phi);
     

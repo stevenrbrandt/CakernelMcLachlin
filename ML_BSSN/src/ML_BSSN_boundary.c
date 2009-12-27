@@ -127,7 +127,7 @@ void ML_BSSN_boundary_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_IN
     /* Precompute derivatives (old style) */
     
     /* Calculate temporaries and grid functions */
-    phiL  =  IfThen(conformalmethod,1,0);
+    phiL  =  IfThen(conformalMethod,1,0);
     
     gt11L  =  1;
     

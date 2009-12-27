@@ -872,7 +872,7 @@ void ML_BSSN_MP_constraints_Body(cGH const * const cctkGH, CCTK_INT const dir, C
               2*J23L*J33L*PDstandardNth23gt33 + dJ233L*PDstandardNth2gt33 + dJ333L*PDstandardNth3gt33 + 
               PDstandardNth11gt33*SQR(J13L) + PDstandardNth22gt33*SQR(J23L) + PDstandardNth33gt33*SQR(J33L)));
     
-    fac1  =  IfThen(conformalmethod,-(khalf*INV(phiL)),1);
+    fac1  =  IfThen(conformalMethod,-(khalf*INV(phiL)),1);
     
     cdphi1  =  fac1*(J11L*PDstandardNth1phi + J21L*PDstandardNth2phi + J31L*PDstandardNth3phi);
     
@@ -880,7 +880,7 @@ void ML_BSSN_MP_constraints_Body(cGH const * const cctkGH, CCTK_INT const dir, C
     
     cdphi3  =  fac1*(J13L*PDstandardNth1phi + J23L*PDstandardNth2phi + J33L*PDstandardNth3phi);
     
-    fac2  =  IfThen(conformalmethod,khalf*pow(phiL,-2),0);
+    fac2  =  IfThen(conformalMethod,khalf*pow(phiL,-2),0);
     
     cdphi211  =  fac1*((dJ111L - Gt111*J11L - Gt211*J12L - Gt311*J13L)*PDstandardNth1phi + 
            2*(J11L*(J21L*PDstandardNth12phi + J31L*PDstandardNth13phi) + J21L*J31L*PDstandardNth23phi) + 
@@ -959,7 +959,7 @@ void ML_BSSN_MP_constraints_Body(cGH const * const cctkGH, CCTK_INT const dir, C
              2*(cdphi213*gtu31 + cdphi223*gtu32) + cdphi233*gtu33 + gtu11*(cdphi211 + 2*SQR(cdphi1)) + 
              gtu22*(cdphi222 + 2*SQR(cdphi2))) + 2*(-1 + gt33L*gtu33)*SQR(cdphi3));
     
-    e4phi  =  IfThen(conformalmethod,pow(phiL,-2),exp(4*phiL));
+    e4phi  =  IfThen(conformalMethod,pow(phiL,-2),exp(4*phiL));
     
     em4phi  =  INV(e4phi);
     

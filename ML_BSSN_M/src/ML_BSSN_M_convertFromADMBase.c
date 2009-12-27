@@ -189,9 +189,9 @@ void ML_BSSN_M_convertFromADMBase_Body(cGH const * const cctkGH, CCTK_INT const 
     
     gu33  =  INV(detg)*(g11*g22 - SQR(g12));
     
-    phiL  =  IfThen(conformalmethod,pow(detg,-0.16666666666666666),Log(detg)/12.);
+    phiL  =  IfThen(conformalMethod,pow(detg,-0.16666666666666666),Log(detg)/12.);
     
-    em4phi  =  IfThen(conformalmethod,SQR(phiL),exp(-4*phiL));
+    em4phi  =  IfThen(conformalMethod,SQR(phiL),exp(-4*phiL));
     
     gt11L  =  em4phi*g11;
     

@@ -171,7 +171,7 @@ void ML_BSSN_MP_ADMBaseBoundary_Body(cGH const * const cctkGH, CCTK_INT const di
     /* Precompute derivatives (old style) */
     
     /* Calculate temporaries and grid functions */
-    e4phi  =  IfThen(conformalmethod,pow(phiL,-2),exp(4*phiL));
+    e4phi  =  IfThen(conformalMethod,pow(phiL,-2),exp(4*phiL));
     
     g11  =  e4phi*gt11L;
     

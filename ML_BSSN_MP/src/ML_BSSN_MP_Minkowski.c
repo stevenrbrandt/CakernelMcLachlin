@@ -127,7 +127,7 @@ void ML_BSSN_MP_Minkowski_Body(cGH const * const cctkGH, CCTK_INT const dir, CCT
     /* Precompute derivatives (old style) */
     
     /* Calculate temporaries and grid functions */
-    phiL  =  IfThen(conformalmethod,1,0);
+    phiL  =  IfThen(conformalMethod,1,0);
     
     gt11L  =  1;
     

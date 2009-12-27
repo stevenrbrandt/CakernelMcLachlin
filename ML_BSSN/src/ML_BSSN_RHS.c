@@ -741,7 +741,7 @@ void ML_BSSN_RHS_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT con
         gt11L*gtu33*SQR(Gt133) + gt22L*gtu11*SQR(Gt213) + gt22L*gtu22*SQR(Gt223) + 2*gt23L*gtu32*SQR(Gt223) + 
         gt22L*gtu33*SQR(Gt233) + 3*gt33L*gtu11*SQR(Gt313) + 3*gt33L*gtu22*SQR(Gt323) + 3*gt33L*gtu33*SQR(Gt333);
     
-    fac1  =  IfThen(conformalmethod,-(khalf*INV(phiL)),1);
+    fac1  =  IfThen(conformalMethod,-(khalf*INV(phiL)),1);
     
     cdphi1  =  fac1*PDstandardNth1phi;
     
@@ -749,7 +749,7 @@ void ML_BSSN_RHS_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT con
     
     cdphi3  =  fac1*PDstandardNth3phi;
     
-    fac2  =  IfThen(conformalmethod,khalf*pow(phiL,-2),0);
+    fac2  =  IfThen(conformalMethod,khalf*pow(phiL,-2),0);
     
     cdphi211  =  -(fac1*(-PDstandardNth11phi + Gt111*PDstandardNth1phi + Gt211*PDstandardNth2phi + 
              Gt311*PDstandardNth3phi)) + fac2*SQR(PDstandardNth1phi);
@@ -825,7 +825,7 @@ void ML_BSSN_RHS_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT con
     
     Atu33  =  Atm31*gtu31 + Atm32*gtu32 + Atm33*gtu33;
     
-    e4phi  =  IfThen(conformalmethod,pow(phiL,-2),exp(4*phiL));
+    e4phi  =  IfThen(conformalMethod,pow(phiL,-2),exp(4*phiL));
     
     em4phi  =  INV(e4phi);
     
@@ -903,8 +903,8 @@ void ML_BSSN_RHS_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT con
     
     phirhsL  =  PDupwindNth1(phi, i, j, k)*beta1L + PDupwindNth2(phi, i, j, k)*beta2L + 
         PDupwindNth3(phi, i, j, k)*beta3L + (PDstandardNth1beta1 + PDstandardNth2beta2 + PDstandardNth3beta3)*
-         IfThen(conformalmethod,-(kthird*phiL),0.16666666666666666) + 
-        alphaL*trKL*IfThen(conformalmethod,kthird*phiL,-0.16666666666666666);
+         IfThen(conformalMethod,-(kthird*phiL),0.16666666666666666) + 
+        alphaL*trKL*IfThen(conformalMethod,kthird*phiL,-0.16666666666666666);
     
     gt11rhsL  =  -2*alphaL*At11L + PDupwindNth1(gt11, i, j, k)*beta1L + PDupwindNth2(gt11, i, j, k)*beta2L + 
         PDupwindNth3(gt11, i, j, k)*beta3L + 2*(gt12L*PDstandardNth1beta2 + gt13L*PDstandardNth1beta3) + 

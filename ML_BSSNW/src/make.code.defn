@@ -1,3 +1,0 @@
-# File produced by Kranc
-
-SRCS = Startup.c RegisterMoL.c RegisterSymmetries.c ML_BSSNW_Minkowski.c ML_BSSNW_convertFromADMBase.c ML_BSSNW_convertFromADMBaseGamma.c ML_BSSNW_RHS.c ML_BSSNW_enforce.c ML_BSSNW_boundary.c ML_BSSNW_convertToADMBase.c ML_BSSNW_ADMBaseBoundary.c ML_BSSNW_constraints.c ML_BSSNW_constraints_boundary.c Boundaries.c 
