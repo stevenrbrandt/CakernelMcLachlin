@@ -253,7 +253,7 @@ initialCalc =
   ConditionalOnKeyword -> {"my_initial_data", "Minkowski"},
   Equations -> 
   {
-    phi       -> IfThen[conformalMethod,1,0],
+    phi       -> IfThen [conformalMethod, 1, 0],
     gt[la,lb] -> KD[la,lb],
     trK       -> 0,
     At[la,lb] -> 0,
@@ -301,8 +301,8 @@ convertFromADMBaseCalc =
     detg      -> detgExpr,
     gu[ua,ub] -> 1/detg detgExpr MatrixInverse [g[ua,ub]],
     
-    phi       -> IfThen[conformalMethod,detg^(-1/6),Log[detg]/12],
-    em4phi    -> IfThen[conformalMethod,phi^2,Exp[-4 phi]],
+    phi       -> IfThen [conformalMethod, detg^(-1/6), Log[detg]/12],
+    em4phi    -> IfThen [conformalMethod, phi^2, Exp[-4 phi]],
     gt[la,lb] -> em4phi g[la,lb],
     
     K11 -> kxx,
@@ -362,14 +362,11 @@ convertToADMBaseCalc =
 {
   Name -> BSSN <> "_convertToADMBase",
   Schedule -> {"IN " <> BSSN <> "_convertToADMBaseGroup"},
-  Where -> Interior,
-  Shorthands -> {dir[ua],
-                 e4phi, g[la,lb], K[la,lb]},
+  Where -> Everywhere,
+  Shorthands -> {e4phi, g[la,lb], K[la,lb]},
   Equations -> 
   {
-    dir[ua] -> Sign[beta[ua]],
-    
-    e4phi    -> IfThen[conformalMethod,1/phi^2,Exp[4 phi]],
+    e4phi    -> IfThen [conformalMethod, 1/phi^2, Exp[4 phi]],
     g[la,lb] -> e4phi gt[la,lb],
     gxx      -> g11,
     gxy      -> g12,
@@ -387,7 +384,21 @@ convertToADMBaseCalc =
     alp      -> alpha,
     betax    -> beta1,
     betay    -> beta2,
-    betaz    -> beta3,
+    betaz    -> beta3
+  }
+};
+
+convertToADMBaseDtLapseShiftCalc =
+{
+  Name -> BSSN <> "_convertToADMBaseDtLapseShift",
+  Schedule -> {"IN " <> BSSN <> "_convertToADMBaseGroup"},
+  ConditionalOnKeyword -> {"dt_lapse_shift_method", "correct"},
+  Where -> Interior,
+  Shorthands -> {dir[ua]},
+  Equations -> 
+  {
+    dir[ua] -> Sign[beta[ua]],
+    
     (* see RHS *)
     dtalp    -> - harmonicF alpha^harmonicN
                   ((1 - LapseAdvectionCoeff) A + LapseAdvectionCoeff trK)
@@ -398,73 +409,37 @@ convertToADMBaseCalc =
                 + ShiftAdvectionCoeff beta[ub] PDu[beta2,lb],
     dtbetaz  -> + ShiftGammaCoeff B3
                 + ShiftAdvectionCoeff beta[ub] PDu[beta3,lb]
-
   }
 };
 
-(* TODO: Need to apply a boundary condition to the ADM variables in
-   all cases!  *)
-(*
-boundaryCalcADMBase =
+convertToADMBaseDtLapseShiftBoundaryCalc =
 {
-  Name -> BSSN <> "_ADMBaseBoundary",
-  Schedule -> {"IN " <> BSSN <> "_convertToADMBaseGroup AFTER " <> BSSN <> "_convertToADMBase"},
-  ConditionalOnKeyword -> {"my_boundary_condition", "Minkowski"},
+  Name -> BSSN <> "_convertToADMBaseDtLapseShiftBoundary",
+  Schedule -> {"IN " <> BSSN <> "_convertToADMBaseGroup"},
+  ConditionalOnKeyword -> {"dt_lapse_shift_method", "correct"},
   Where -> BoundaryWithGhosts,
-  Equations -> 
+  Equations ->
   {
-    gxx     -> 1,
-    gxy     -> 0,
-    gxz     -> 0,
-    gyy     -> 1,
-    gyz     -> 0,
-    gzz     -> 1,
-    kxx     -> 0,
-    kxy     -> 0,
-    kxz     -> 0,
-    kyy     -> 0,
-    kyz     -> 0,
-    kzz     -> 0,
-    alp     -> 1,
-    dtalp   -> 0,
-    betax   -> 0,
-    betay   -> 0,
-    betaz   -> 0,
-    dtbetax -> 0,
-    dtbetay -> 0,
-    dtbetaz -> 0
-  }
-};
-*)
-
-boundaryCalcADMBase =
-{
-  Name -> BSSN <> "_ADMBaseBoundary",
-  Schedule -> {"IN " <> BSSN <> "_convertToADMBaseGroup AFTER " <> BSSN <> "_convertToADMBase"},
-  Where -> BoundaryWithGhosts,
-  Shorthands -> {e4phi, g[la,lb], K[la,lb]},
-  Equations -> 
-  {
-    e4phi    -> IfThen[conformalMethod,1/phi^2,Exp[4 phi]],
-    g[la,lb] -> e4phi gt[la,lb],
-    gxx      -> g11,
-    gxy      -> g12,
-    gxz      -> g13,
-    gyy      -> g22,
-    gyz      -> g23,
-    gzz      -> g33,
-    K[la,lb] -> e4phi At[la,lb] + (1/3) g[la,lb] trK,
-    kxx      -> K11,
-    kxy      -> K12,
-    kxz      -> K13,
-    kyy      -> K22,
-    kyz      -> K23,
-    kzz      -> K33,
-    alp      -> alpha,
-    betax    -> beta1,
-    betay    -> beta2,
-    betaz    -> beta3,
     (* see RHS, but omit derivatives near the boundary *)
+    dtalp    -> - harmonicF alpha^harmonicN
+                  ((1 - LapseAdvectionCoeff) A + LapseAdvectionCoeff trK),
+    dtbetax  -> + ShiftGammaCoeff B1,
+    dtbetay  -> + ShiftGammaCoeff B2,
+    dtbetaz  -> + ShiftGammaCoeff B3
+  }
+};
+
+convertToADMBaseFakeDtLapseShiftCalc =
+{
+  Name -> BSSN <> "_convertToADMBaseFakeDtLapseShift",
+  Schedule -> {"IN " <> BSSN <> "_convertToADMBaseGroup"},
+  ConditionalOnKeyword -> {"dt_lapse_shift_method", "noLapseShiftAdvection"},
+  Where -> Everywhere,
+  Equations ->
+  {
+    (* see RHS, but omit derivatives everywhere (which is wrong, but
+       faster, since it does not require synchronisation or boundary
+       conditions) *)
     dtalp    -> - harmonicF alpha^harmonicN
                   ((1 - LapseAdvectionCoeff) A + LapseAdvectionCoeff trK),
     dtbetax  -> + ShiftGammaCoeff B1,
@@ -481,7 +456,7 @@ evolCalc =
 {
   Name -> BSSN <> "_RHS",
   Schedule -> {"IN " <> BSSN <> "_evolCalcGroup"},
-  Where -> Interior,
+  Where -> InteriorNoSync,
   Shorthands -> {dir[ua],
                  detgt, ddetgt[la], gtu[ua,ub],
                  dgtu[ua,ub,lc], ddgtu[ua,ub,lc,ld], Gt[ua,lb,lc],
@@ -520,9 +495,9 @@ evolCalc =
                                + Gt[uk,ll,lj] gt[li,ln] Gt[un,lk,lm]
                                + Gt[uk,li,lm] gt[lk,ln] Gt[un,ll,lj]),
 
-    fac1 -> IfThen[conformalMethod,-1/(2 phi),1],
+    fac1 -> IfThen [conformalMethod, -1/(2 phi), 1],
     cdphi[la] -> fac1 CDt[phi,la],
-    fac2 -> IfThen[conformalMethod,1/(2 phi^2),0],
+    fac2 -> IfThen [conformalMethod, 1/(2 phi^2), 0],
     cdphi2[la,lb] -> fac1 CDt[phi,la,lb] + fac2 CDt[phi,la] CDt[phi,lb],
 
     (* PRD 62, 044034 (2000), eqn. (15) *)
@@ -534,7 +509,7 @@ evolCalc =
     Atm[ua,lb] -> gtu[ua,uc] At[lc,lb],
     Atu[ua,ub] -> Atm[ua,lc] gtu[ub,uc],
     
-    e4phi       -> IfThen[conformalMethod,1/phi^2,Exp[4 phi]],
+    e4phi       -> IfThen [conformalMethod, 1/phi^2, Exp[4 phi]],
     em4phi      -> 1 / e4phi,
     g[la,lb]    -> e4phi gt[la,lb],
     detg        -> detgExpr,
@@ -573,9 +548,9 @@ evolCalc =
     
     (* PRD 62, 044034 (2000), eqn. (10) *)
     (* PRD 67 084023 (2003), eqn. (16) and (23) *)  
-    dot[phi]       -> IfThen[conformalMethod,(1/3) phi,-(1/6) ] alpha trK
+    dot[phi]       -> IfThen [conformalMethod, 1/3 phi, -1/6] alpha trK
                       + beta[ua] PDu[phi,la]
-                      + IfThen[conformalMethod,-(1/3) phi ,(1/6)] PD[beta[ua],la],
+                      + IfThen [conformalMethod, -1/3 phi, 1/6] PD[beta[ua],la],
     
     (* PRD 62, 044034 (2000), eqn. (9) *)
     dot[gt[la,lb]] -> - 2 alpha At[la,lb]
@@ -671,7 +646,7 @@ RHSRadiativeBoundaryCalc =
     
     detgt      -> 1 (* detgtExpr *),
     gtu[ua,ub] -> 1/detgt detgtExpr MatrixInverse [gt[ua,ub]],
-    em4phi     -> IfThen[conformalMethod,phi^2,Exp[-4 phi]],
+    em4phi     -> IfThen [conformalMethod, phi^2, Exp[-4 phi]],
     gu[ua,ub]  -> em4phi gtu[ua,ub],
     
     nn[la] -> normal[la],
@@ -724,7 +699,7 @@ boundaryCalc =
   Where -> BoundaryWithGhosts,
   Equations -> 
   {
-    phi       -> IfThen[conformalMethod,1,0],
+    phi       -> IfThen [conformalMethod, 1, 0],
     gt[la,lb] -> KD[la,lb],
     trK       -> 0,
     At[la,lb] -> 0,
@@ -794,9 +769,9 @@ constraintsCalc =
                                    - PD[gt[la,lb],l1,l2] + PD[gt[l2,lb],l1,la]),
 *)
 
-    fac1 -> IfThen[conformalMethod,-1/(2 phi),1],
+    fac1 -> IfThen [conformalMethod, -1/(2 phi), 1],
     cdphi[la] -> fac1 CDt[phi,la],
-    fac2 -> IfThen[conformalMethod,1/(2 phi^2),0],
+    fac2 -> IfThen [conformalMethod, 1/(2 phi^2), 0],
     cdphi2[la,lb] -> fac1 CDt[phi,la,lb] + fac2 CDt[phi,la] CDt[phi,lb],
 
     (* PRD 62, 044034 (2000), eqn. (15) *)
@@ -805,7 +780,7 @@ constraintsCalc =
                    + 4 cdphi[li] cdphi[lj]
                    - 4 gt[li,lj] gtu[ul,un] cdphi[ln] cdphi[ll],
     
-    e4phi       -> IfThen[conformalMethod,1/phi^2,Exp[4 phi]],
+    e4phi       -> IfThen [conformalMethod, 1/phi^2, Exp[4 phi]],
     em4phi      -> 1 / e4phi,
     g[la,lb]    -> e4phi gt[la,lb],
     (* detg      -> detgExpr, *)
@@ -960,6 +935,14 @@ keywordParameters =
     (* Description -> "ddd", *)
     AllowedValues -> {"MoL_PostStep", "CCTK_EVOL", "CCTK_ANALYSIS"},
     Default -> "MoL_PostStep"
+  },
+  {
+    Name -> "dt_lapse_shift_method",
+    Description -> "Treatment of ADMBase dtlapse and dtshift",
+    AllowedValues -> {"correct",
+                      "noLapseShiftAdvection" (* omit lapse and shift advection terms (faster) *)
+                     },
+    Default -> "correct"
   }
 };
 
@@ -1041,7 +1024,9 @@ calculations =
   enforceCalc,
   boundaryCalc,
   convertToADMBaseCalc,
-  boundaryCalcADMBase,
+  convertToADMBaseDtLapseShiftCalc,
+  convertToADMBaseDtLapseShiftBoundaryCalc,
+  convertToADMBaseFakeDtLapseShiftCalc,
   constraintsCalc,
   constraintsBoundaryCalc
 };
