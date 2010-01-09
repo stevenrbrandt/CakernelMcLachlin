@@ -216,6 +216,8 @@ ML_BSSN::ShiftAdvectionCoeff = 0.0
 
 ML_BSSN::MinimumLapse        = 1.0e-8
 
+ML_BSSN::dt_lapse_shift_method = "noLapseShiftAdvection"
+
 ML_BSSN::my_initial_boundary_condition = "extrapolate-gammas"
 ML_BSSN::my_rhs_boundary_condition     = "NewRad"
 Boundary::radpower                     = 2
