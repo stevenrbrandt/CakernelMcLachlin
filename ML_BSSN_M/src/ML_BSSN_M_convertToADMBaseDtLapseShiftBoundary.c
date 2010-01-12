@@ -20,7 +20,7 @@
 #define CUB(x) ((x) * (x) * (x))
 #define QAD(x) ((x) * (x) * (x) * (x))
 
-void ML_BSSN_MP_ADMBaseBoundary_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT const face, CCTK_REAL const normal[3], CCTK_REAL const tangentA[3], CCTK_REAL const tangentB[3], CCTK_INT const min[3], CCTK_INT const max[3], CCTK_INT const n_subblock_gfs, CCTK_REAL * const subblock_gfs[])
+void ML_BSSN_M_convertToADMBaseDtLapseShiftBoundary_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT const face, CCTK_REAL const normal[3], CCTK_REAL const tangentA[3], CCTK_REAL const tangentB[3], CCTK_INT const min[3], CCTK_INT const max[3], CCTK_INT const n_subblock_gfs, CCTK_REAL * const subblock_gfs[])
 {
   DECLARE_CCTK_ARGUMENTS;
   DECLARE_CCTK_PARAMETERS;
@@ -49,10 +49,10 @@ void ML_BSSN_MP_ADMBaseBoundary_Body(cGH const * const cctkGH, CCTK_INT const di
   
   if (verbose > 1)
   {
-    CCTK_VInfo(CCTK_THORNSTRING,"Entering ML_BSSN_MP_ADMBaseBoundary_Body");
+    CCTK_VInfo(CCTK_THORNSTRING,"Entering ML_BSSN_M_convertToADMBaseDtLapseShiftBoundary_Body");
   }
   
-  if (cctk_iteration % ML_BSSN_MP_ADMBaseBoundary_calc_every != ML_BSSN_MP_ADMBaseBoundary_calc_offset)
+  if (cctk_iteration % ML_BSSN_M_convertToADMBaseDtLapseShiftBoundary_calc_every != ML_BSSN_M_convertToADMBaseDtLapseShiftBoundary_calc_offset)
   {
     return;
   }
@@ -91,7 +91,7 @@ void ML_BSSN_MP_ADMBaseBoundary_Body(cGH const * const cctkGH, CCTK_INT const di
   
   /* Loop over the grid points */
   #pragma omp parallel
-  LC_LOOP3 (ML_BSSN_MP_ADMBaseBoundary,
+  LC_LOOP3 (ML_BSSN_M_convertToADMBaseDtLapseShiftBoundary,
             i,j,k, min[0],min[1],min[2], max[0],max[1],max[2],
             cctk_lsh[0],cctk_lsh[1],cctk_lsh[2])
   {
@@ -101,38 +101,15 @@ void ML_BSSN_MP_ADMBaseBoundary_Body(cGH const * const cctkGH, CCTK_INT const di
     subblock_index = i - min[0] + (max[0] - min[0]) * (j - min[1] + (max[1]-min[1]) * (k - min[2]));
     
     /* Declare shorthands */
-    CCTK_REAL e4phi = INITVALUE;
-    CCTK_REAL g11 = INITVALUE, g12 = INITVALUE, g13 = INITVALUE, g22 = INITVALUE, g23 = INITVALUE, g33 = INITVALUE;
-    CCTK_REAL K11 = INITVALUE, K12 = INITVALUE, K13 = INITVALUE, K22 = INITVALUE, K23 = INITVALUE, K33 = INITVALUE;
     
     /* Declare local copies of grid functions */
     CCTK_REAL AL = INITVALUE;
-    CCTK_REAL alpL = INITVALUE;
     CCTK_REAL alphaL = INITVALUE;
-    CCTK_REAL At11L = INITVALUE, At12L = INITVALUE, At13L = INITVALUE, At22L = INITVALUE, At23L = INITVALUE, At33L = INITVALUE;
     CCTK_REAL B1L = INITVALUE, B2L = INITVALUE, B3L = INITVALUE;
-    CCTK_REAL beta1L = INITVALUE, beta2L = INITVALUE, beta3L = INITVALUE;
-    CCTK_REAL betaxL = INITVALUE;
-    CCTK_REAL betayL = INITVALUE;
-    CCTK_REAL betazL = INITVALUE;
     CCTK_REAL dtalpL = INITVALUE;
     CCTK_REAL dtbetaxL = INITVALUE;
     CCTK_REAL dtbetayL = INITVALUE;
     CCTK_REAL dtbetazL = INITVALUE;
-    CCTK_REAL gt11L = INITVALUE, gt12L = INITVALUE, gt13L = INITVALUE, gt22L = INITVALUE, gt23L = INITVALUE, gt33L = INITVALUE;
-    CCTK_REAL gxxL = INITVALUE;
-    CCTK_REAL gxyL = INITVALUE;
-    CCTK_REAL gxzL = INITVALUE;
-    CCTK_REAL gyyL = INITVALUE;
-    CCTK_REAL gyzL = INITVALUE;
-    CCTK_REAL gzzL = INITVALUE;
-    CCTK_REAL kxxL = INITVALUE;
-    CCTK_REAL kxyL = INITVALUE;
-    CCTK_REAL kxzL = INITVALUE;
-    CCTK_REAL kyyL = INITVALUE;
-    CCTK_REAL kyzL = INITVALUE;
-    CCTK_REAL kzzL = INITVALUE;
-    CCTK_REAL phiL = INITVALUE;
     CCTK_REAL trKL = INITVALUE;
     /* Declare precomputed derivatives*/
     
@@ -141,25 +118,9 @@ void ML_BSSN_MP_ADMBaseBoundary_Body(cGH const * const cctkGH, CCTK_INT const di
     /* Assign local copies of grid functions */
     AL = A[index];
     alphaL = alpha[index];
-    At11L = At11[index];
-    At12L = At12[index];
-    At13L = At13[index];
-    At22L = At22[index];
-    At23L = At23[index];
-    At33L = At33[index];
     B1L = B1[index];
     B2L = B2[index];
     B3L = B3[index];
-    beta1L = beta1[index];
-    beta2L = beta2[index];
-    beta3L = beta3[index];
-    gt11L = gt11[index];
-    gt12L = gt12[index];
-    gt13L = gt13[index];
-    gt22L = gt22[index];
-    gt23L = gt23[index];
-    gt33L = gt33[index];
-    phiL = phi[index];
     trKL = trK[index];
     
     /* Assign local copies of subblock grid functions */
@@ -171,64 +132,6 @@ void ML_BSSN_MP_ADMBaseBoundary_Body(cGH const * const cctkGH, CCTK_INT const di
     /* Precompute derivatives (old style) */
     
     /* Calculate temporaries and grid functions */
-    e4phi  =  IfThen(conformalMethod,pow(phiL,-2),exp(4*phiL));
-    
-    g11  =  e4phi*gt11L;
-    
-    g12  =  e4phi*gt12L;
-    
-    g13  =  e4phi*gt13L;
-    
-    g22  =  e4phi*gt22L;
-    
-    g23  =  e4phi*gt23L;
-    
-    g33  =  e4phi*gt33L;
-    
-    gxxL  =  g11;
-    
-    gxyL  =  g12;
-    
-    gxzL  =  g13;
-    
-    gyyL  =  g22;
-    
-    gyzL  =  g23;
-    
-    gzzL  =  g33;
-    
-    K11  =  At11L*e4phi + g11*kthird*trKL;
-    
-    K12  =  At12L*e4phi + g12*kthird*trKL;
-    
-    K13  =  At13L*e4phi + g13*kthird*trKL;
-    
-    K22  =  At22L*e4phi + g22*kthird*trKL;
-    
-    K23  =  At23L*e4phi + g23*kthird*trKL;
-    
-    K33  =  At33L*e4phi + g33*kthird*trKL;
-    
-    kxxL  =  K11;
-    
-    kxyL  =  K12;
-    
-    kxzL  =  K13;
-    
-    kyyL  =  K22;
-    
-    kyzL  =  K23;
-    
-    kzzL  =  K33;
-    
-    alpL  =  alphaL;
-    
-    betaxL  =  beta1L;
-    
-    betayL  =  beta2L;
-    
-    betazL  =  beta3L;
-    
     dtalpL  =  harmonicF*(AL*(-1 + LapseAdvectionCoeff) - LapseAdvectionCoeff*trKL)*pow(alphaL,harmonicN);
     
     dtbetaxL  =  B1L*ShiftGammaCoeff;
@@ -239,36 +142,20 @@ void ML_BSSN_MP_ADMBaseBoundary_Body(cGH const * const cctkGH, CCTK_INT const di
     
     
     /* Copy local copies back to grid functions */
-    alp[index] = alpL;
-    betax[index] = betaxL;
-    betay[index] = betayL;
-    betaz[index] = betazL;
     dtalp[index] = dtalpL;
     dtbetax[index] = dtbetaxL;
     dtbetay[index] = dtbetayL;
     dtbetaz[index] = dtbetazL;
-    gxx[index] = gxxL;
-    gxy[index] = gxyL;
-    gxz[index] = gxzL;
-    gyy[index] = gyyL;
-    gyz[index] = gyzL;
-    gzz[index] = gzzL;
-    kxx[index] = kxxL;
-    kxy[index] = kxyL;
-    kxz[index] = kxzL;
-    kyy[index] = kyyL;
-    kyz[index] = kyzL;
-    kzz[index] = kzzL;
     
     /* Copy local copies back to subblock grid functions */
   }
-  LC_ENDLOOP3 (ML_BSSN_MP_ADMBaseBoundary);
+  LC_ENDLOOP3 (ML_BSSN_M_convertToADMBaseDtLapseShiftBoundary);
 }
 
-void ML_BSSN_MP_ADMBaseBoundary(CCTK_ARGUMENTS)
+void ML_BSSN_M_convertToADMBaseDtLapseShiftBoundary(CCTK_ARGUMENTS)
 {
   DECLARE_CCTK_ARGUMENTS;
   DECLARE_CCTK_PARAMETERS;
   
-  GenericFD_LoopOverBoundaryWithGhosts(cctkGH, &ML_BSSN_MP_ADMBaseBoundary_Body);
+  GenericFD_LoopOverBoundaryWithGhosts(cctkGH, &ML_BSSN_M_convertToADMBaseDtLapseShiftBoundary_Body);
 }

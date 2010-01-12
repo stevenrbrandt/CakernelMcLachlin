@@ -368,15 +368,6 @@ if (CCTK_EQUALS(my_initial_data, "ADMBase"))
 schedule ML_BSSN_M_RHS IN ML_BSSN_M_evolCalcGroup
 {
   LANG: C
-  SYNC: ML_curvrhs
-  SYNC: ML_dtlapserhs
-  SYNC: ML_dtshiftrhs
-  SYNC: ML_Gammarhs
-  SYNC: ML_lapserhs
-  SYNC: ML_log_confacrhs
-  SYNC: ML_metricrhs
-  SYNC: ML_shiftrhs
-  SYNC: ML_trace_curvrhs
 } "ML_BSSN_M_RHS"
 
 
@@ -414,18 +405,36 @@ if (CCTK_EQUALS(my_boundary_condition, "Minkowski"))
 schedule ML_BSSN_M_convertToADMBase IN ML_BSSN_M_convertToADMBaseGroup
 {
   LANG: C
-  SYNC: ADMBase::curv
-  SYNC: ADMBase::dtlapse
-  SYNC: ADMBase::dtshift
-  SYNC: ADMBase::lapse
-  SYNC: ADMBase::metric
-  SYNC: ADMBase::shift
 } "ML_BSSN_M_convertToADMBase"
 
-schedule ML_BSSN_M_ADMBaseBoundary IN ML_BSSN_M_convertToADMBaseGroup AFTER ML_BSSN_M_convertToADMBase
+
+if (CCTK_EQUALS(dt_lapse_shift_method, "correct"))
 {
-  LANG: C
-} "ML_BSSN_M_ADMBaseBoundary"
+  schedule ML_BSSN_M_convertToADMBaseDtLapseShift IN ML_BSSN_M_convertToADMBaseGroup
+  {
+    LANG: C
+    SYNC: ADMBase::dtlapse
+    SYNC: ADMBase::dtshift
+  } "ML_BSSN_M_convertToADMBaseDtLapseShift"
+}
+
+
+if (CCTK_EQUALS(dt_lapse_shift_method, "correct"))
+{
+  schedule ML_BSSN_M_convertToADMBaseDtLapseShiftBoundary IN ML_BSSN_M_convertToADMBaseGroup
+  {
+    LANG: C
+  } "ML_BSSN_M_convertToADMBaseDtLapseShiftBoundary"
+}
+
+
+if (CCTK_EQUALS(dt_lapse_shift_method, "noLapseShiftAdvection"))
+{
+  schedule ML_BSSN_M_convertToADMBaseFakeDtLapseShift IN ML_BSSN_M_convertToADMBaseGroup
+  {
+    LANG: C
+  } "ML_BSSN_M_convertToADMBaseFakeDtLapseShift"
+}
 
 schedule ML_BSSN_M_constraints IN ML_BSSN_M_constraintsCalcGroup
 {

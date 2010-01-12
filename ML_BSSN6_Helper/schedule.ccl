@@ -98,15 +98,15 @@ if (CCTK_EQUALS (evolution_method, "ML_BSSN6")) {
     SCHEDULE ML_BSSN6_NewRad IN ML_BSSN6_evolCalcGroup AFTER ML_BSSN6_RHS
     {
       LANG: C
-      SYNC: ML_curvrhs
-      SYNC: ML_dtlapserhs
-      SYNC: ML_dtshiftrhs
-      SYNC: ML_Gammarhs
-      SYNC: ML_lapserhs
-      SYNC: ML_log_confacrhs
-      SYNC: ML_metricrhs
-      SYNC: ML_shiftrhs
-      SYNC: ML_trace_curvrhs
+      #SYNC: ML_curvrhs
+      #SYNC: ML_dtlapserhs
+      #SYNC: ML_dtshiftrhs
+      #SYNC: ML_Gammarhs
+      #SYNC: ML_lapserhs
+      #SYNC: ML_log_confacrhs
+      #SYNC: ML_metricrhs
+      #SYNC: ML_shiftrhs
+      #SYNC: ML_trace_curvrhs
     } "Apply NewRad boundary conditions to RHS"
   }
   

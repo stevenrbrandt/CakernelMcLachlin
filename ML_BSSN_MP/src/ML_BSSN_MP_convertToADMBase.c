@@ -101,25 +101,18 @@ void ML_BSSN_MP_convertToADMBase_Body(cGH const * const cctkGH, CCTK_INT const d
     subblock_index = i - min[0] + (max[0] - min[0]) * (j - min[1] + (max[1]-min[1]) * (k - min[2]));
     
     /* Declare shorthands */
-    CCTK_REAL dir1 = INITVALUE, dir2 = INITVALUE, dir3 = INITVALUE;
     CCTK_REAL e4phi = INITVALUE;
     CCTK_REAL g11 = INITVALUE, g12 = INITVALUE, g13 = INITVALUE, g22 = INITVALUE, g23 = INITVALUE, g33 = INITVALUE;
     CCTK_REAL K11 = INITVALUE, K12 = INITVALUE, K13 = INITVALUE, K22 = INITVALUE, K23 = INITVALUE, K33 = INITVALUE;
     
     /* Declare local copies of grid functions */
-    CCTK_REAL AL = INITVALUE;
     CCTK_REAL alpL = INITVALUE;
     CCTK_REAL alphaL = INITVALUE;
     CCTK_REAL At11L = INITVALUE, At12L = INITVALUE, At13L = INITVALUE, At22L = INITVALUE, At23L = INITVALUE, At33L = INITVALUE;
-    CCTK_REAL B1L = INITVALUE, B2L = INITVALUE, B3L = INITVALUE;
     CCTK_REAL beta1L = INITVALUE, beta2L = INITVALUE, beta3L = INITVALUE;
     CCTK_REAL betaxL = INITVALUE;
     CCTK_REAL betayL = INITVALUE;
     CCTK_REAL betazL = INITVALUE;
-    CCTK_REAL dtalpL = INITVALUE;
-    CCTK_REAL dtbetaxL = INITVALUE;
-    CCTK_REAL dtbetayL = INITVALUE;
-    CCTK_REAL dtbetazL = INITVALUE;
     CCTK_REAL gt11L = INITVALUE, gt12L = INITVALUE, gt13L = INITVALUE, gt22L = INITVALUE, gt23L = INITVALUE, gt33L = INITVALUE;
     CCTK_REAL gxxL = INITVALUE;
     CCTK_REAL gxyL = INITVALUE;
@@ -127,8 +120,6 @@ void ML_BSSN_MP_convertToADMBase_Body(cGH const * const cctkGH, CCTK_INT const d
     CCTK_REAL gyyL = INITVALUE;
     CCTK_REAL gyzL = INITVALUE;
     CCTK_REAL gzzL = INITVALUE;
-    CCTK_REAL J11L = INITVALUE, J12L = INITVALUE, J13L = INITVALUE, J21L = INITVALUE, J22L = INITVALUE, J23L = INITVALUE;
-    CCTK_REAL J31L = INITVALUE, J32L = INITVALUE, J33L = INITVALUE;
     CCTK_REAL kxxL = INITVALUE;
     CCTK_REAL kxyL = INITVALUE;
     CCTK_REAL kxzL = INITVALUE;
@@ -142,7 +133,6 @@ void ML_BSSN_MP_convertToADMBase_Body(cGH const * const cctkGH, CCTK_INT const d
     /* Declare derivatives */
     
     /* Assign local copies of grid functions */
-    AL = A[index];
     alphaL = alpha[index];
     At11L = At11[index];
     At12L = At12[index];
@@ -150,9 +140,6 @@ void ML_BSSN_MP_convertToADMBase_Body(cGH const * const cctkGH, CCTK_INT const d
     At22L = At22[index];
     At23L = At23[index];
     At33L = At33[index];
-    B1L = B1[index];
-    B2L = B2[index];
-    B3L = B3[index];
     beta1L = beta1[index];
     beta2L = beta2[index];
     beta3L = beta3[index];
@@ -162,15 +149,6 @@ void ML_BSSN_MP_convertToADMBase_Body(cGH const * const cctkGH, CCTK_INT const d
     gt22L = gt22[index];
     gt23L = gt23[index];
     gt33L = gt33[index];
-    J11L = J11[index];
-    J12L = J12[index];
-    J13L = J13[index];
-    J21L = J21[index];
-    J22L = J22[index];
-    J23L = J23[index];
-    J31L = J31[index];
-    J32L = J32[index];
-    J33L = J33[index];
     phiL = phi[index];
     trKL = trK[index];
     
@@ -183,12 +161,6 @@ void ML_BSSN_MP_convertToADMBase_Body(cGH const * const cctkGH, CCTK_INT const d
     /* Precompute derivatives (old style) */
     
     /* Calculate temporaries and grid functions */
-    dir1  =  Sign(beta1L);
-    
-    dir2  =  Sign(beta2L);
-    
-    dir3  =  Sign(beta3L);
-    
     e4phi  =  IfThen(conformalMethod,pow(phiL,-2),exp(4*phiL));
     
     g11  =  e4phi*gt11L;
@@ -247,36 +219,12 @@ void ML_BSSN_MP_convertToADMBase_Body(cGH const * const cctkGH, CCTK_INT const d
     
     betazL  =  beta3L;
     
-    dtalpL  =  (PDupwindNth1(alpha, i, j, k)*(beta1L*J11L + beta2L*J12L + beta3L*J13L) + 
-           PDupwindNth2(alpha, i, j, k)*(beta1L*J21L + beta2L*J22L + beta3L*J23L) + 
-           PDupwindNth3(alpha, i, j, k)*(beta1L*J31L + beta2L*J32L + beta3L*J33L))*LapseAdvectionCoeff + 
-        harmonicF*(AL*(-1 + LapseAdvectionCoeff) - LapseAdvectionCoeff*trKL)*pow(alphaL,harmonicN);
-    
-    dtbetaxL  =  (PDupwindNth1(beta1, i, j, k)*(beta1L*J11L + beta2L*J12L + beta3L*J13L) + 
-           PDupwindNth2(beta1, i, j, k)*(beta1L*J21L + beta2L*J22L + beta3L*J23L) + 
-           PDupwindNth3(beta1, i, j, k)*(beta1L*J31L + beta2L*J32L + beta3L*J33L))*ShiftAdvectionCoeff + 
-        B1L*ShiftGammaCoeff;
-    
-    dtbetayL  =  (PDupwindNth1(beta2, i, j, k)*(beta1L*J11L + beta2L*J12L + beta3L*J13L) + 
-           PDupwindNth2(beta2, i, j, k)*(beta1L*J21L + beta2L*J22L + beta3L*J23L) + 
-           PDupwindNth3(beta2, i, j, k)*(beta1L*J31L + beta2L*J32L + beta3L*J33L))*ShiftAdvectionCoeff + 
-        B2L*ShiftGammaCoeff;
-    
-    dtbetazL  =  (PDupwindNth1(beta3, i, j, k)*(beta1L*J11L + beta2L*J12L + beta3L*J13L) + 
-           PDupwindNth2(beta3, i, j, k)*(beta1L*J21L + beta2L*J22L + beta3L*J23L) + 
-           PDupwindNth3(beta3, i, j, k)*(beta1L*J31L + beta2L*J32L + beta3L*J33L))*ShiftAdvectionCoeff + 
-        B3L*ShiftGammaCoeff;
-    
     
     /* Copy local copies back to grid functions */
     alp[index] = alpL;
     betax[index] = betaxL;
     betay[index] = betayL;
     betaz[index] = betazL;
-    dtalp[index] = dtalpL;
-    dtbetax[index] = dtbetaxL;
-    dtbetay[index] = dtbetayL;
-    dtbetaz[index] = dtbetazL;
     gxx[index] = gxxL;
     gxy[index] = gxyL;
     gxz[index] = gxzL;
@@ -300,5 +248,5 @@ void ML_BSSN_MP_convertToADMBase(CCTK_ARGUMENTS)
   DECLARE_CCTK_ARGUMENTS;
   DECLARE_CCTK_PARAMETERS;
   
-  GenericFD_LoopOverInterior(cctkGH, &ML_BSSN_MP_convertToADMBase_Body);
+  GenericFD_LoopOverEverything(cctkGH, &ML_BSSN_MP_convertToADMBase_Body);
 }

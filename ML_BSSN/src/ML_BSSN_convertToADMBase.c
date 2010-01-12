@@ -101,25 +101,18 @@ void ML_BSSN_convertToADMBase_Body(cGH const * const cctkGH, CCTK_INT const dir,
     subblock_index = i - min[0] + (max[0] - min[0]) * (j - min[1] + (max[1]-min[1]) * (k - min[2]));
     
     /* Declare shorthands */
-    CCTK_REAL dir1 = INITVALUE, dir2 = INITVALUE, dir3 = INITVALUE;
     CCTK_REAL e4phi = INITVALUE;
     CCTK_REAL g11 = INITVALUE, g12 = INITVALUE, g13 = INITVALUE, g22 = INITVALUE, g23 = INITVALUE, g33 = INITVALUE;
     CCTK_REAL K11 = INITVALUE, K12 = INITVALUE, K13 = INITVALUE, K22 = INITVALUE, K23 = INITVALUE, K33 = INITVALUE;
     
     /* Declare local copies of grid functions */
-    CCTK_REAL AL = INITVALUE;
     CCTK_REAL alpL = INITVALUE;
     CCTK_REAL alphaL = INITVALUE;
     CCTK_REAL At11L = INITVALUE, At12L = INITVALUE, At13L = INITVALUE, At22L = INITVALUE, At23L = INITVALUE, At33L = INITVALUE;
-    CCTK_REAL B1L = INITVALUE, B2L = INITVALUE, B3L = INITVALUE;
     CCTK_REAL beta1L = INITVALUE, beta2L = INITVALUE, beta3L = INITVALUE;
     CCTK_REAL betaxL = INITVALUE;
     CCTK_REAL betayL = INITVALUE;
     CCTK_REAL betazL = INITVALUE;
-    CCTK_REAL dtalpL = INITVALUE;
-    CCTK_REAL dtbetaxL = INITVALUE;
-    CCTK_REAL dtbetayL = INITVALUE;
-    CCTK_REAL dtbetazL = INITVALUE;
     CCTK_REAL gt11L = INITVALUE, gt12L = INITVALUE, gt13L = INITVALUE, gt22L = INITVALUE, gt23L = INITVALUE, gt33L = INITVALUE;
     CCTK_REAL gxxL = INITVALUE;
     CCTK_REAL gxyL = INITVALUE;
@@ -140,7 +133,6 @@ void ML_BSSN_convertToADMBase_Body(cGH const * const cctkGH, CCTK_INT const dir,
     /* Declare derivatives */
     
     /* Assign local copies of grid functions */
-    AL = A[index];
     alphaL = alpha[index];
     At11L = At11[index];
     At12L = At12[index];
@@ -148,9 +140,6 @@ void ML_BSSN_convertToADMBase_Body(cGH const * const cctkGH, CCTK_INT const dir,
     At22L = At22[index];
     At23L = At23[index];
     At33L = At33[index];
-    B1L = B1[index];
-    B2L = B2[index];
-    B3L = B3[index];
     beta1L = beta1[index];
     beta2L = beta2[index];
     beta3L = beta3[index];
@@ -172,12 +161,6 @@ void ML_BSSN_convertToADMBase_Body(cGH const * const cctkGH, CCTK_INT const dir,
     /* Precompute derivatives (old style) */
     
     /* Calculate temporaries and grid functions */
-    dir1  =  Sign(beta1L);
-    
-    dir2  =  Sign(beta2L);
-    
-    dir3  =  Sign(beta3L);
-    
     e4phi  =  IfThen(conformalMethod,pow(phiL,-2),exp(4*phiL));
     
     g11  =  e4phi*gt11L;
@@ -236,29 +219,12 @@ void ML_BSSN_convertToADMBase_Body(cGH const * const cctkGH, CCTK_INT const dir,
     
     betazL  =  beta3L;
     
-    dtalpL  =  (PDupwindNth1(alpha, i, j, k)*beta1L + PDupwindNth2(alpha, i, j, k)*beta2L + 
-           PDupwindNth3(alpha, i, j, k)*beta3L)*LapseAdvectionCoeff + 
-        harmonicF*(AL*(-1 + LapseAdvectionCoeff) - LapseAdvectionCoeff*trKL)*pow(alphaL,harmonicN);
-    
-    dtbetaxL  =  (PDupwindNth1(beta1, i, j, k)*beta1L + PDupwindNth2(beta1, i, j, k)*beta2L + 
-           PDupwindNth3(beta1, i, j, k)*beta3L)*ShiftAdvectionCoeff + B1L*ShiftGammaCoeff;
-    
-    dtbetayL  =  (PDupwindNth1(beta2, i, j, k)*beta1L + PDupwindNth2(beta2, i, j, k)*beta2L + 
-           PDupwindNth3(beta2, i, j, k)*beta3L)*ShiftAdvectionCoeff + B2L*ShiftGammaCoeff;
-    
-    dtbetazL  =  (PDupwindNth1(beta3, i, j, k)*beta1L + PDupwindNth2(beta3, i, j, k)*beta2L + 
-           PDupwindNth3(beta3, i, j, k)*beta3L)*ShiftAdvectionCoeff + B3L*ShiftGammaCoeff;
-    
     
     /* Copy local copies back to grid functions */
     alp[index] = alpL;
     betax[index] = betaxL;
     betay[index] = betayL;
     betaz[index] = betazL;
-    dtalp[index] = dtalpL;
-    dtbetax[index] = dtbetaxL;
-    dtbetay[index] = dtbetayL;
-    dtbetaz[index] = dtbetazL;
     gxx[index] = gxxL;
     gxy[index] = gxyL;
     gxz[index] = gxzL;
@@ -282,5 +248,5 @@ void ML_BSSN_convertToADMBase(CCTK_ARGUMENTS)
   DECLARE_CCTK_ARGUMENTS;
   DECLARE_CCTK_PARAMETERS;
   
-  GenericFD_LoopOverInterior(cctkGH, &ML_BSSN_convertToADMBase_Body);
+  GenericFD_LoopOverEverything(cctkGH, &ML_BSSN_convertToADMBase_Body);
 }

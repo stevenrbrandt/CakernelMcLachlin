@@ -156,6 +156,13 @@ KEYWORD calculate_ADMBase_variables_at "calculate_ADMBase_variables_at"
   "CCTK_ANALYSIS" :: "CCTK_ANALYSIS"
 } "MoL_PostStep"
 
+private:
+KEYWORD dt_lapse_shift_method "Treatment of ADMBase dtlapse and dtshift"
+{
+  "correct" :: "correct"
+  "noLapseShiftAdvection" :: "noLapseShiftAdvection"
+} "correct"
+
 restricted:
 CCTK_INT ML_BSSN_MP_MaxNumEvolvedVars "Number of evolved variables used by this thorn" ACCUMULATOR-BASE=MethodofLines::MoL_Num_Evolved_Vars
 {
@@ -229,7 +236,19 @@ CCTK_INT ML_BSSN_MP_convertToADMBase_calc_every "ML_BSSN_MP_convertToADMBase_cal
 } 1
 
 restricted:
-CCTK_INT ML_BSSN_MP_ADMBaseBoundary_calc_every "ML_BSSN_MP_ADMBaseBoundary_calc_every"
+CCTK_INT ML_BSSN_MP_convertToADMBaseDtLapseShift_calc_every "ML_BSSN_MP_convertToADMBaseDtLapseShift_calc_every"
+{
+  *:* :: ""
+} 1
+
+restricted:
+CCTK_INT ML_BSSN_MP_convertToADMBaseDtLapseShiftBoundary_calc_every "ML_BSSN_MP_convertToADMBaseDtLapseShiftBoundary_calc_every"
+{
+  *:* :: ""
+} 1
+
+restricted:
+CCTK_INT ML_BSSN_MP_convertToADMBaseFakeDtLapseShift_calc_every "ML_BSSN_MP_convertToADMBaseFakeDtLapseShift_calc_every"
 {
   *:* :: ""
 } 1
@@ -301,7 +320,19 @@ CCTK_INT ML_BSSN_MP_convertToADMBase_calc_offset "ML_BSSN_MP_convertToADMBase_ca
 } 0
 
 restricted:
-CCTK_INT ML_BSSN_MP_ADMBaseBoundary_calc_offset "ML_BSSN_MP_ADMBaseBoundary_calc_offset"
+CCTK_INT ML_BSSN_MP_convertToADMBaseDtLapseShift_calc_offset "ML_BSSN_MP_convertToADMBaseDtLapseShift_calc_offset"
+{
+  *:* :: ""
+} 0
+
+restricted:
+CCTK_INT ML_BSSN_MP_convertToADMBaseDtLapseShiftBoundary_calc_offset "ML_BSSN_MP_convertToADMBaseDtLapseShiftBoundary_calc_offset"
+{
+  *:* :: ""
+} 0
+
+restricted:
+CCTK_INT ML_BSSN_MP_convertToADMBaseFakeDtLapseShift_calc_offset "ML_BSSN_MP_convertToADMBaseFakeDtLapseShift_calc_offset"
 {
   *:* :: ""
 } 0
