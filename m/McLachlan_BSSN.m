@@ -137,6 +137,7 @@ Map [DefineTensor,
       phi, gt, At, Xt, Xtn, A, B, Atm, Atu, trA, Ats, trAts, cXt, cS, cA,
       e4phi, em4phi, ddetg, detgt, gtu, ddetgt, dgtu, ddgtu, Gt, Rt, Rphi, gK,
       T00, T0, T, rho, S,
+      eta, x, y, z, r,
       Psi0re, Psi0im, Psi1re, Psi1im, Psi2re, Psi2im, Psi3re, Psi3im,
       Psi4re, Psi4im,
       er, eth, eph, mm1A, mm1L, mm1, mm2A, mm2B, mm2L, mm2,
@@ -209,7 +210,8 @@ evolvedGroups =
    SetGroupName [CreateGroupFromTensor [alpha    ], prefix <> "lapse"     ],
    SetGroupName [CreateGroupFromTensor [A        ], prefix <> "dtlapse"   ],
    SetGroupName [CreateGroupFromTensor [beta[ua] ], prefix <> "shift"     ],
-   SetGroupName [CreateGroupFromTensor [B[ua]    ], prefix <> "dtshift"   ]};
+   SetGroupName [CreateGroupFromTensor [B[ua]    ], prefix <> "dtshift"   ],
+   SetGroupName [CreateGroupFromTensor [eta      ], prefix <> "BetaDriver"]};
 evaluatedGroups =
   {SetGroupName [CreateGroupFromTensor [H      ], prefix <> "Ham"],
    SetGroupName [CreateGroupFromTensor [M[la]  ], prefix <> "mom"],
@@ -229,6 +231,7 @@ extraGroups =
    {"ADMBase::dtlapse",  {dtalp}},
    {"ADMBase::shift",    {betax, betay, betaz}},
    {"ADMBase::dtshift",  {dtbetax, dtbetay, dtbetaz}},
+   {"Grid::coordinates", {x, y, z, r}},
    {"TmunuBase::stress_energy_scalar", {eTtt}},
    {"TmunuBase::stress_energy_vector", {eTtx, eTty, eTtz}},
    {"TmunuBase::stress_energy_tensor", {eTxx, eTxy, eTxz, eTyy, eTyz, eTzz}},
@@ -261,7 +264,8 @@ initialCalc =
     alpha     -> 1,
     A         -> 0,
     beta[ua]  -> 0,
-    B[ua]     -> 0
+    B[ua]     -> 0,
+    eta       -> BetaDriver
   }
 };
 
@@ -319,7 +323,9 @@ convertFromADMBaseCalc =
     
     beta1 -> betax,
     beta2 -> betay,
-    beta3 -> betaz
+    beta3 -> betaz,
+
+    eta   -> BetaDriver
   }
 };
 
@@ -351,6 +357,17 @@ convertFromADMBaseGammaCalc =
           (dtbetay - ShiftAdvectionCoeff beta[ua] PDu[beta2,la]),
     B3 -> 1/ShiftGammaCoeff
           (dtbetaz - ShiftAdvectionCoeff beta[ua] PDu[beta3,la])
+  }
+};
+
+setBetaDriverCalc =
+{
+  Name -> BSSN <> "_setBetaDriver",
+  Schedule -> {"AT initial AFTER ADMBase_PostInitial AFTER " <> BSSN <> "_convertFromADMBase"},
+  ConditionalOnKeyword -> {"UseSpatialBetaDriver", "yes"},
+  Equations ->
+  {
+    eta -> eta IfThen[r>SpatialBetaDriverRadius,SpatialBetaDriverRadius/r,1]
   }
 };
 
@@ -604,7 +621,7 @@ evolCalc =
     dot[beta[ua]] -> + ShiftGammaCoeff B[ua]
                      + ShiftAdvectionCoeff beta[ub] PDu[beta[ua],lb],
 
-    dot[B[ua]]    -> + dot[Xt[ua]] - BetaDriver B[ua]
+    dot[B[ua]]    -> + dot[Xt[ua]] - eta B[ua]
                      + ShiftAdvectionCoeff beta[ub] ( PDu[B[ua],lb]
                                                     - PDu[Xt[ua],lb] )
   }
@@ -937,6 +954,13 @@ keywordParameters =
     Default -> "MoL_PostStep"
   },
   {
+    Name -> "UseSpatialBetaDriver",
+    Visibility -> "restricted",
+    (* Description -> "ddd", *)
+    AllowedValues -> {"no", "yes"},
+    Default -> "no"
+  },
+  {
     Name -> "dt_lapse_shift_method",
     Description -> "Treatment of ADMBase dtlapse and dtshift",
     AllowedValues -> {"correct",
@@ -1006,6 +1030,12 @@ realParameters =
     Name -> MinimumLapse,
     Description -> "Minimum value of the lapse function",
     Default -> -1
+  },
+  {
+    Name -> SpatialBetaDriverRadius,
+    Description -> "Radius at which the BetaDriver starts to be reduced",
+    AllowedValues -> {{Value -> "(0:*", Description -> "Positive"}},
+    Default -> 10^12
   }
 };
 
@@ -1018,6 +1048,7 @@ calculations =
   initialCalc,
   convertFromADMBaseCalc,
   convertFromADMBaseGammaCalc,
+  setBetaDriverCalc,
   evolCalc,
   RHSStaticBoundaryCalc,
   RHSRadiativeBoundaryCalc,

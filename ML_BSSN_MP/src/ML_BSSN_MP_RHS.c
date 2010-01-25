@@ -146,6 +146,7 @@ void ML_BSSN_MP_RHS_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT 
     CCTK_REAL dJ111L = INITVALUE, dJ112L = INITVALUE, dJ113L = INITVALUE, dJ122L = INITVALUE, dJ123L = INITVALUE, dJ133L = INITVALUE;
     CCTK_REAL dJ211L = INITVALUE, dJ212L = INITVALUE, dJ213L = INITVALUE, dJ222L = INITVALUE, dJ223L = INITVALUE, dJ233L = INITVALUE;
     CCTK_REAL dJ311L = INITVALUE, dJ312L = INITVALUE, dJ313L = INITVALUE, dJ322L = INITVALUE, dJ323L = INITVALUE, dJ333L = INITVALUE;
+    CCTK_REAL etaL = INITVALUE;
     CCTK_REAL gt11L = INITVALUE, gt11rhsL = INITVALUE, gt12L = INITVALUE, gt12rhsL = INITVALUE, gt13L = INITVALUE, gt13rhsL = INITVALUE;
     CCTK_REAL gt22L = INITVALUE, gt22rhsL = INITVALUE, gt23L = INITVALUE, gt23rhsL = INITVALUE, gt33L = INITVALUE, gt33rhsL = INITVALUE;
     CCTK_REAL J11L = INITVALUE, J12L = INITVALUE, J13L = INITVALUE, J21L = INITVALUE, J22L = INITVALUE, J23L = INITVALUE;
@@ -301,6 +302,7 @@ void ML_BSSN_MP_RHS_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT 
     dJ322L = dJ322[index];
     dJ323L = dJ323[index];
     dJ333L = dJ333[index];
+    etaL = eta[index];
     gt11L = gt11[index];
     gt12L = gt12[index];
     gt13L = gt13[index];
@@ -1584,7 +1586,7 @@ void ML_BSSN_MP_RHS_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT 
            PDupwindNth3(beta3, i, j, k)*(beta1L*J31L + beta2L*J32L + beta3L*J33L))*ShiftAdvectionCoeff + 
         B3L*ShiftGammaCoeff;
     
-    B1rhsL  =  -(B1L*BetaDriver) + (beta1L*((PDupwindNth1(B1, i, j, k) - PDupwindNth1(Xt1, i, j, k))*J11L + 
+    B1rhsL  =  -(B1L*etaL) + (beta1L*((PDupwindNth1(B1, i, j, k) - PDupwindNth1(Xt1, i, j, k))*J11L + 
               (PDupwindNth2(B1, i, j, k) - PDupwindNth2(Xt1, i, j, k))*J21L + 
               (PDupwindNth3(B1, i, j, k) - PDupwindNth3(Xt1, i, j, k))*J31L) + 
            beta2L*((PDupwindNth1(B1, i, j, k) - PDupwindNth1(Xt1, i, j, k))*J12L + 
@@ -1594,7 +1596,7 @@ void ML_BSSN_MP_RHS_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT 
               (PDupwindNth2(B1, i, j, k) - PDupwindNth2(Xt1, i, j, k))*J23L + 
               (PDupwindNth3(B1, i, j, k) - PDupwindNth3(Xt1, i, j, k))*J33L))*ShiftAdvectionCoeff + Xt1rhsL;
     
-    B2rhsL  =  -(B2L*BetaDriver) + (beta1L*((PDupwindNth1(B2, i, j, k) - PDupwindNth1(Xt2, i, j, k))*J11L + 
+    B2rhsL  =  -(B2L*etaL) + (beta1L*((PDupwindNth1(B2, i, j, k) - PDupwindNth1(Xt2, i, j, k))*J11L + 
               (PDupwindNth2(B2, i, j, k) - PDupwindNth2(Xt2, i, j, k))*J21L + 
               (PDupwindNth3(B2, i, j, k) - PDupwindNth3(Xt2, i, j, k))*J31L) + 
            beta2L*((PDupwindNth1(B2, i, j, k) - PDupwindNth1(Xt2, i, j, k))*J12L + 
@@ -1604,7 +1606,7 @@ void ML_BSSN_MP_RHS_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT 
               (PDupwindNth2(B2, i, j, k) - PDupwindNth2(Xt2, i, j, k))*J23L + 
               (PDupwindNth3(B2, i, j, k) - PDupwindNth3(Xt2, i, j, k))*J33L))*ShiftAdvectionCoeff + Xt2rhsL;
     
-    B3rhsL  =  -(B3L*BetaDriver) + (beta1L*((PDupwindNth1(B3, i, j, k) - PDupwindNth1(Xt3, i, j, k))*J11L + 
+    B3rhsL  =  -(B3L*etaL) + (beta1L*((PDupwindNth1(B3, i, j, k) - PDupwindNth1(Xt3, i, j, k))*J11L + 
               (PDupwindNth2(B3, i, j, k) - PDupwindNth2(Xt3, i, j, k))*J21L + 
               (PDupwindNth3(B3, i, j, k) - PDupwindNth3(Xt3, i, j, k))*J31L) + 
            beta2L*((PDupwindNth1(B3, i, j, k) - PDupwindNth1(Xt3, i, j, k))*J12L + 
