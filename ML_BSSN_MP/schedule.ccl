@@ -1,6 +1,8 @@
 # File produced by Kranc
 
 
+STORAGE: ML_BetaDriver[1]
+
 STORAGE: ML_cons_detg[1]
 
 STORAGE: ML_cons_Gamma[1]
@@ -363,6 +365,15 @@ if (CCTK_EQUALS(my_initial_data, "ADMBase"))
     SYNC: ML_dtshift
     SYNC: ML_Gamma
   } "ML_BSSN_MP_convertFromADMBaseGamma"
+}
+
+
+if (CCTK_EQUALS(UseSpatialBetaDriver, "yes"))
+{
+  schedule ML_BSSN_MP_setBetaDriver AT initial AFTER ADMBase_PostInitial AFTER ML_BSSN_MP_convertFromADMBase
+  {
+    LANG: C
+  } "ML_BSSN_MP_setBetaDriver"
 }
 
 schedule ML_BSSN_MP_RHS IN ML_BSSN_MP_evolCalcGroup

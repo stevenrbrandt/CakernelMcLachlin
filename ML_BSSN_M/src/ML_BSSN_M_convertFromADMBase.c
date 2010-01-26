@@ -115,6 +115,7 @@ void ML_BSSN_M_convertFromADMBase_Body(cGH const * const cctkGH, CCTK_INT const 
     CCTK_REAL betaxL = INITVALUE;
     CCTK_REAL betayL = INITVALUE;
     CCTK_REAL betazL = INITVALUE;
+    CCTK_REAL etaL = INITVALUE;
     CCTK_REAL gt11L = INITVALUE, gt12L = INITVALUE, gt13L = INITVALUE, gt22L = INITVALUE, gt23L = INITVALUE, gt33L = INITVALUE;
     CCTK_REAL gxxL = INITVALUE;
     CCTK_REAL gxyL = INITVALUE;
@@ -239,6 +240,8 @@ void ML_BSSN_M_convertFromADMBase_Body(cGH const * const cctkGH, CCTK_INT const 
     
     beta3L  =  betazL;
     
+    etaL  =  BetaDriver;
+    
     
     /* Copy local copies back to grid functions */
     alpha[index] = alphaL;
@@ -251,6 +254,7 @@ void ML_BSSN_M_convertFromADMBase_Body(cGH const * const cctkGH, CCTK_INT const 
     beta1[index] = beta1L;
     beta2[index] = beta2L;
     beta3[index] = beta3L;
+    eta[index] = etaL;
     gt11[index] = gt11L;
     gt12[index] = gt12L;
     gt13[index] = gt13L;

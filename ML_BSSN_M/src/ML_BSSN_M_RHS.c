@@ -148,6 +148,7 @@ void ML_BSSN_M_RHS_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT c
     CCTK_REAL At22L = INITVALUE, At22rhsL = INITVALUE, At23L = INITVALUE, At23rhsL = INITVALUE, At33L = INITVALUE, At33rhsL = INITVALUE;
     CCTK_REAL B1L = INITVALUE, B1rhsL = INITVALUE, B2L = INITVALUE, B2rhsL = INITVALUE, B3L = INITVALUE, B3rhsL = INITVALUE;
     CCTK_REAL beta1L = INITVALUE, beta1rhsL = INITVALUE, beta2L = INITVALUE, beta2rhsL = INITVALUE, beta3L = INITVALUE, beta3rhsL = INITVALUE;
+    CCTK_REAL etaL = INITVALUE;
     CCTK_REAL eTttL = INITVALUE;
     CCTK_REAL eTtxL = INITVALUE;
     CCTK_REAL eTtyL = INITVALUE;
@@ -293,6 +294,7 @@ void ML_BSSN_M_RHS_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT c
     beta1L = beta1[index];
     beta2L = beta2[index];
     beta3L = beta3[index];
+    etaL = eta[index];
     eTttL = useMatter ? eTtt[index] : 0.0;
     eTtxL = useMatter ? eTtx[index] : 0.0;
     eTtyL = useMatter ? eTty[index] : 0.0;
@@ -1123,15 +1125,15 @@ void ML_BSSN_M_RHS_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT c
     beta3rhsL  =  (PDupwindNth1(beta3, i, j, k)*beta1L + PDupwindNth2(beta3, i, j, k)*beta2L + 
            PDupwindNth3(beta3, i, j, k)*beta3L)*ShiftAdvectionCoeff + B3L*ShiftGammaCoeff;
     
-    B1rhsL  =  -(B1L*BetaDriver) + ((PDupwindNth1(B1, i, j, k) - PDupwindNth1(Xt1, i, j, k))*beta1L + 
+    B1rhsL  =  -(B1L*etaL) + ((PDupwindNth1(B1, i, j, k) - PDupwindNth1(Xt1, i, j, k))*beta1L + 
            (PDupwindNth2(B1, i, j, k) - PDupwindNth2(Xt1, i, j, k))*beta2L + 
            (PDupwindNth3(B1, i, j, k) - PDupwindNth3(Xt1, i, j, k))*beta3L)*ShiftAdvectionCoeff + Xt1rhsL;
     
-    B2rhsL  =  -(B2L*BetaDriver) + ((PDupwindNth1(B2, i, j, k) - PDupwindNth1(Xt2, i, j, k))*beta1L + 
+    B2rhsL  =  -(B2L*etaL) + ((PDupwindNth1(B2, i, j, k) - PDupwindNth1(Xt2, i, j, k))*beta1L + 
            (PDupwindNth2(B2, i, j, k) - PDupwindNth2(Xt2, i, j, k))*beta2L + 
            (PDupwindNth3(B2, i, j, k) - PDupwindNth3(Xt2, i, j, k))*beta3L)*ShiftAdvectionCoeff + Xt2rhsL;
     
-    B3rhsL  =  -(B3L*BetaDriver) + ((PDupwindNth1(B3, i, j, k) - PDupwindNth1(Xt3, i, j, k))*beta1L + 
+    B3rhsL  =  -(B3L*etaL) + ((PDupwindNth1(B3, i, j, k) - PDupwindNth1(Xt3, i, j, k))*beta1L + 
            (PDupwindNth2(B3, i, j, k) - PDupwindNth2(Xt3, i, j, k))*beta2L + 
            (PDupwindNth3(B3, i, j, k) - PDupwindNth3(Xt3, i, j, k))*beta3L)*ShiftAdvectionCoeff + Xt3rhsL;
     
