@@ -118,13 +118,6 @@ if (CCTK_EQUALS (evolution_method, "ML_BSSN_MP")) {
   
   if (CCTK_EQUALS (calculate_ADMBase_variables_at, "MoL_PostStep"))
   {
-    # if (timelevels > 1)
-    # {
-    #   SCHEDULE ML_BSSN_MP_CopyADMBase AT prestep
-    #   {
-    #     LANG: C
-    #   } "Copy ADMBase variables to current time level"
-    # }
     SCHEDULE GROUP ML_BSSN_MP_convertToADMBaseGroupWrapper IN MoL_PostStep AFTER (ML_BSSN_MP_ApplyBCs ML_BSSN_MP_enforce) BEFORE (ADMBase_SetADMVars Whisky_PostStep)
     {
     } "Calculate ADM variables"
