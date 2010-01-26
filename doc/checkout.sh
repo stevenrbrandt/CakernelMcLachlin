@@ -5,12 +5,13 @@ set +x
 
 # Cactus
 #wget http://preview.cactuscode.org/download/GetCactus
+echo ':pserver:cvs_anon@cvs.cactuscode.org:/cactus Ay=0=' > cvspass
 env CVS_PASSFILE=cvspass cvs -d :pserver:cvs_anon@cvs.cactuscode.org:/cactus checkout -d qqq Utilities/Scripts/GetCactus
 mv qqq/GetCactus .
 rmdir -rf qqq
 #cp /Users/eschnett/Utilities/Scripts/GetCactus .
 chmod a+x GetCactus
-{ echo; echo; echo; echo; } | ./GetCactus
+{ echo; echo; echo 2; echo; } | ./GetCactus
 
 # Basic thorns
 pushd Cactus
