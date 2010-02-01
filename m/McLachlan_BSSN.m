@@ -264,8 +264,7 @@ initialCalc =
     alpha     -> 1,
     A         -> 0,
     beta[ua]  -> 0,
-    B[ua]     -> 0,
-    eta       -> BetaDriver
+    B[ua]     -> 0
   }
 };
 
@@ -323,9 +322,7 @@ convertFromADMBaseCalc =
     
     beta1 -> betax,
     beta2 -> betay,
-    beta3 -> betaz,
-
-    eta   -> BetaDriver
+    beta3 -> betaz
   }
 };
 
@@ -360,14 +357,25 @@ convertFromADMBaseGammaCalc =
   }
 };
 
-setBetaDriverCalc =
+setBetaDriverSpatialCalc =
 {
-  Name -> BSSN <> "_setBetaDriver",
-  Schedule -> {"AT initial AFTER ADMBase_PostInitial AFTER " <> BSSN <> "_convertFromADMBase"},
+  Name -> BSSN <> "_setBetaDriverSpatial",
+  Schedule -> {"IN "<> BSSN <> "_init_eta"},
   ConditionalOnKeyword -> {"UseSpatialBetaDriver", "yes"},
   Equations ->
   {
-    eta -> eta IfThen[r>SpatialBetaDriverRadius,SpatialBetaDriverRadius/r,1]
+    eta -> BetaDriver IfThen[r>SpatialBetaDriverRadius,SpatialBetaDriverRadius/r,1]
+  }
+};
+
+setBetaDriverConstantCalc =
+{
+  Name -> BSSN <> "_setBetaDriverConstant",
+  Schedule -> {"IN "<> BSSN <> "_init_eta"},
+  ConditionalOnKeyword -> {"UseSpatialBetaDriver", "no"},
+  Equations ->
+  {
+    eta -> BetaDriver 
   }
 };
 
@@ -1048,7 +1056,8 @@ calculations =
   initialCalc,
   convertFromADMBaseCalc,
   convertFromADMBaseGammaCalc,
-  setBetaDriverCalc,
+  setBetaDriverSpatialCalc,
+  setBetaDriverConstantCalc,
   evolCalc,
   RHSStaticBoundaryCalc,
   RHSRadiativeBoundaryCalc,

@@ -213,7 +213,13 @@ CCTK_INT ML_BSSN_M_convertFromADMBaseGamma_calc_every "ML_BSSN_M_convertFromADMB
 } 1
 
 restricted:
-CCTK_INT ML_BSSN_M_setBetaDriver_calc_every "ML_BSSN_M_setBetaDriver_calc_every"
+CCTK_INT ML_BSSN_M_setBetaDriverSpatial_calc_every "ML_BSSN_M_setBetaDriverSpatial_calc_every"
+{
+  *:* :: ""
+} 1
+
+restricted:
+CCTK_INT ML_BSSN_M_setBetaDriverConstant_calc_every "ML_BSSN_M_setBetaDriverConstant_calc_every"
 {
   *:* :: ""
 } 1
@@ -303,7 +309,13 @@ CCTK_INT ML_BSSN_M_convertFromADMBaseGamma_calc_offset "ML_BSSN_M_convertFromADM
 } 0
 
 restricted:
-CCTK_INT ML_BSSN_M_setBetaDriver_calc_offset "ML_BSSN_M_setBetaDriver_calc_offset"
+CCTK_INT ML_BSSN_M_setBetaDriverSpatial_calc_offset "ML_BSSN_M_setBetaDriverSpatial_calc_offset"
+{
+  *:* :: ""
+} 0
+
+restricted:
+CCTK_INT ML_BSSN_M_setBetaDriverConstant_calc_offset "ML_BSSN_M_setBetaDriverConstant_calc_offset"
 {
   *:* :: ""
 } 0

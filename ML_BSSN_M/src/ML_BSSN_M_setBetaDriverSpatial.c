@@ -20,7 +20,7 @@
 #define CUB(x) ((x) * (x) * (x))
 #define QAD(x) ((x) * (x) * (x) * (x))
 
-void ML_BSSN_MP_Minkowski_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT const face, CCTK_REAL const normal[3], CCTK_REAL const tangentA[3], CCTK_REAL const tangentB[3], CCTK_INT const min[3], CCTK_INT const max[3], CCTK_INT const n_subblock_gfs, CCTK_REAL * const subblock_gfs[])
+void ML_BSSN_M_setBetaDriverSpatial_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT const face, CCTK_REAL const normal[3], CCTK_REAL const tangentA[3], CCTK_REAL const tangentB[3], CCTK_INT const min[3], CCTK_INT const max[3], CCTK_INT const n_subblock_gfs, CCTK_REAL * const subblock_gfs[])
 {
   DECLARE_CCTK_ARGUMENTS;
   DECLARE_CCTK_PARAMETERS;
@@ -49,10 +49,10 @@ void ML_BSSN_MP_Minkowski_Body(cGH const * const cctkGH, CCTK_INT const dir, CCT
   
   if (verbose > 1)
   {
-    CCTK_VInfo(CCTK_THORNSTRING,"Entering ML_BSSN_MP_Minkowski_Body");
+    CCTK_VInfo(CCTK_THORNSTRING,"Entering ML_BSSN_M_setBetaDriverSpatial_Body");
   }
   
-  if (cctk_iteration % ML_BSSN_MP_Minkowski_calc_every != ML_BSSN_MP_Minkowski_calc_offset)
+  if (cctk_iteration % ML_BSSN_M_setBetaDriverSpatial_calc_every != ML_BSSN_M_setBetaDriverSpatial_calc_offset)
   {
     return;
   }
@@ -91,7 +91,7 @@ void ML_BSSN_MP_Minkowski_Body(cGH const * const cctkGH, CCTK_INT const dir, CCT
   
   /* Loop over the grid points */
   #pragma omp parallel
-  LC_LOOP3 (ML_BSSN_MP_Minkowski,
+  LC_LOOP3 (ML_BSSN_M_setBetaDriverSpatial,
             i,j,k, min[0],min[1],min[2], max[0],max[1],max[2],
             cctk_lsh[0],cctk_lsh[1],cctk_lsh[2])
   {
@@ -103,20 +103,14 @@ void ML_BSSN_MP_Minkowski_Body(cGH const * const cctkGH, CCTK_INT const dir, CCT
     /* Declare shorthands */
     
     /* Declare local copies of grid functions */
-    CCTK_REAL AL = INITVALUE;
-    CCTK_REAL alphaL = INITVALUE;
-    CCTK_REAL At11L = INITVALUE, At12L = INITVALUE, At13L = INITVALUE, At22L = INITVALUE, At23L = INITVALUE, At33L = INITVALUE;
-    CCTK_REAL B1L = INITVALUE, B2L = INITVALUE, B3L = INITVALUE;
-    CCTK_REAL beta1L = INITVALUE, beta2L = INITVALUE, beta3L = INITVALUE;
-    CCTK_REAL gt11L = INITVALUE, gt12L = INITVALUE, gt13L = INITVALUE, gt22L = INITVALUE, gt23L = INITVALUE, gt33L = INITVALUE;
-    CCTK_REAL phiL = INITVALUE;
-    CCTK_REAL trKL = INITVALUE;
-    CCTK_REAL Xt1L = INITVALUE, Xt2L = INITVALUE, Xt3L = INITVALUE;
+    CCTK_REAL etaL = INITVALUE;
+    CCTK_REAL rL = INITVALUE;
     /* Declare precomputed derivatives*/
     
     /* Declare derivatives */
     
     /* Assign local copies of grid functions */
+    rL = r[index];
     
     /* Assign local copies of subblock grid functions */
     
@@ -127,93 +121,21 @@ void ML_BSSN_MP_Minkowski_Body(cGH const * const cctkGH, CCTK_INT const dir, CCT
     /* Precompute derivatives (old style) */
     
     /* Calculate temporaries and grid functions */
-    phiL  =  IfThen(conformalMethod,1,0);
-    
-    gt11L  =  1;
-    
-    gt12L  =  0;
-    
-    gt13L  =  0;
-    
-    gt22L  =  1;
-    
-    gt23L  =  0;
-    
-    gt33L  =  1;
-    
-    trKL  =  0;
-    
-    At11L  =  0;
-    
-    At12L  =  0;
-    
-    At13L  =  0;
-    
-    At22L  =  0;
-    
-    At23L  =  0;
-    
-    At33L  =  0;
-    
-    Xt1L  =  0;
-    
-    Xt2L  =  0;
-    
-    Xt3L  =  0;
-    
-    alphaL  =  1;
-    
-    AL  =  0;
-    
-    beta1L  =  0;
-    
-    beta2L  =  0;
-    
-    beta3L  =  0;
-    
-    B1L  =  0;
-    
-    B2L  =  0;
-    
-    B3L  =  0;
+    etaL  =  BetaDriver*IfThen(rL > SpatialBetaDriverRadius,SpatialBetaDriverRadius*INV(rL),1);
     
     
     /* Copy local copies back to grid functions */
-    A[index] = AL;
-    alpha[index] = alphaL;
-    At11[index] = At11L;
-    At12[index] = At12L;
-    At13[index] = At13L;
-    At22[index] = At22L;
-    At23[index] = At23L;
-    At33[index] = At33L;
-    B1[index] = B1L;
-    B2[index] = B2L;
-    B3[index] = B3L;
-    beta1[index] = beta1L;
-    beta2[index] = beta2L;
-    beta3[index] = beta3L;
-    gt11[index] = gt11L;
-    gt12[index] = gt12L;
-    gt13[index] = gt13L;
-    gt22[index] = gt22L;
-    gt23[index] = gt23L;
-    gt33[index] = gt33L;
-    phi[index] = phiL;
-    trK[index] = trKL;
-    Xt1[index] = Xt1L;
-    Xt2[index] = Xt2L;
-    Xt3[index] = Xt3L;
+    eta[index] = etaL;
     
     /* Copy local copies back to subblock grid functions */
   }
-  LC_ENDLOOP3 (ML_BSSN_MP_Minkowski);
+  LC_ENDLOOP3 (ML_BSSN_M_setBetaDriverSpatial);
 }
 
-void ML_BSSN_MP_Minkowski(CCTK_ARGUMENTS)
+void ML_BSSN_M_setBetaDriverSpatial(CCTK_ARGUMENTS)
 {
   DECLARE_CCTK_ARGUMENTS;
   DECLARE_CCTK_PARAMETERS;
   
-  GenericFD_LoopOverEverything(cctkGH, &ML_BSSN_MP_Minkowski_Body);
+  GenericFD_LoopOverEverything(cctkGH, &ML_BSSN_M_setBetaDriverSpatial_Body);
 }
