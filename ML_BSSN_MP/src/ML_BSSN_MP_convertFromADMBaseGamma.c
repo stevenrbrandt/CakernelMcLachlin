@@ -328,20 +328,50 @@ void ML_BSSN_MP_convertFromADMBaseGamma_Body(cGH const * const cctkGH, CCTK_INT 
     
     AL  =  -(dtalpL*(-1 + LapseAdvectionCoeff)*INV(harmonicF)*pow(alphaL,-harmonicN));
     
-    B1L  =  (dtbetaxL - (PDupwindNth1(beta1, i, j, k)*(beta1L*J11L + beta2L*J12L + beta3L*J13L) + 
-             PDupwindNth2(beta1, i, j, k)*(beta1L*J21L + beta2L*J22L + beta3L*J23L) + 
-             PDupwindNth3(beta1, i, j, k)*(beta1L*J31L + beta2L*J32L + beta3L*J33L))*ShiftAdvectionCoeff)*
-        INV(ShiftGammaCoeff);
+    B1L  =  IfThen(ShiftGammaCoeff,(dtbetaxL - PDupwindNth1(beta1, i, j, k)*beta1L*J11L*ShiftAdvectionCoeff)*
+          INV(ShiftGammaCoeff),0) + IfThen(ShiftGammaCoeff,
+         (dtbetaxL - PDupwindNth1(beta1, i, j, k)*beta2L*J12L*ShiftAdvectionCoeff)*INV(ShiftGammaCoeff),0) + 
+        IfThen(ShiftGammaCoeff,(dtbetaxL - PDupwindNth1(beta1, i, j, k)*beta3L*J13L*ShiftAdvectionCoeff)*
+          INV(ShiftGammaCoeff),0) + IfThen(ShiftGammaCoeff,
+         (dtbetaxL - PDupwindNth2(beta1, i, j, k)*beta1L*J21L*ShiftAdvectionCoeff)*INV(ShiftGammaCoeff),0) + 
+        IfThen(ShiftGammaCoeff,(dtbetaxL - PDupwindNth2(beta1, i, j, k)*beta2L*J22L*ShiftAdvectionCoeff)*
+          INV(ShiftGammaCoeff),0) + IfThen(ShiftGammaCoeff,
+         (dtbetaxL - PDupwindNth2(beta1, i, j, k)*beta3L*J23L*ShiftAdvectionCoeff)*INV(ShiftGammaCoeff),0) + 
+        IfThen(ShiftGammaCoeff,(dtbetaxL - PDupwindNth3(beta1, i, j, k)*beta1L*J31L*ShiftAdvectionCoeff)*
+          INV(ShiftGammaCoeff),0) + IfThen(ShiftGammaCoeff,
+         (dtbetaxL - PDupwindNth3(beta1, i, j, k)*beta2L*J32L*ShiftAdvectionCoeff)*INV(ShiftGammaCoeff),0) + 
+        IfThen(ShiftGammaCoeff,(dtbetaxL - PDupwindNth3(beta1, i, j, k)*beta3L*J33L*ShiftAdvectionCoeff)*
+          INV(ShiftGammaCoeff),0);
     
-    B2L  =  (dtbetayL - (PDupwindNth1(beta2, i, j, k)*(beta1L*J11L + beta2L*J12L + beta3L*J13L) + 
-             PDupwindNth2(beta2, i, j, k)*(beta1L*J21L + beta2L*J22L + beta3L*J23L) + 
-             PDupwindNth3(beta2, i, j, k)*(beta1L*J31L + beta2L*J32L + beta3L*J33L))*ShiftAdvectionCoeff)*
-        INV(ShiftGammaCoeff);
+    B2L  =  IfThen(ShiftGammaCoeff,(dtbetayL - PDupwindNth1(beta2, i, j, k)*beta1L*J11L*ShiftAdvectionCoeff)*
+          INV(ShiftGammaCoeff),0) + IfThen(ShiftGammaCoeff,
+         (dtbetayL - PDupwindNth1(beta2, i, j, k)*beta2L*J12L*ShiftAdvectionCoeff)*INV(ShiftGammaCoeff),0) + 
+        IfThen(ShiftGammaCoeff,(dtbetayL - PDupwindNth1(beta2, i, j, k)*beta3L*J13L*ShiftAdvectionCoeff)*
+          INV(ShiftGammaCoeff),0) + IfThen(ShiftGammaCoeff,
+         (dtbetayL - PDupwindNth2(beta2, i, j, k)*beta1L*J21L*ShiftAdvectionCoeff)*INV(ShiftGammaCoeff),0) + 
+        IfThen(ShiftGammaCoeff,(dtbetayL - PDupwindNth2(beta2, i, j, k)*beta2L*J22L*ShiftAdvectionCoeff)*
+          INV(ShiftGammaCoeff),0) + IfThen(ShiftGammaCoeff,
+         (dtbetayL - PDupwindNth2(beta2, i, j, k)*beta3L*J23L*ShiftAdvectionCoeff)*INV(ShiftGammaCoeff),0) + 
+        IfThen(ShiftGammaCoeff,(dtbetayL - PDupwindNth3(beta2, i, j, k)*beta1L*J31L*ShiftAdvectionCoeff)*
+          INV(ShiftGammaCoeff),0) + IfThen(ShiftGammaCoeff,
+         (dtbetayL - PDupwindNth3(beta2, i, j, k)*beta2L*J32L*ShiftAdvectionCoeff)*INV(ShiftGammaCoeff),0) + 
+        IfThen(ShiftGammaCoeff,(dtbetayL - PDupwindNth3(beta2, i, j, k)*beta3L*J33L*ShiftAdvectionCoeff)*
+          INV(ShiftGammaCoeff),0);
     
-    B3L  =  (dtbetazL - (PDupwindNth1(beta3, i, j, k)*(beta1L*J11L + beta2L*J12L + beta3L*J13L) + 
-             PDupwindNth2(beta3, i, j, k)*(beta1L*J21L + beta2L*J22L + beta3L*J23L) + 
-             PDupwindNth3(beta3, i, j, k)*(beta1L*J31L + beta2L*J32L + beta3L*J33L))*ShiftAdvectionCoeff)*
-        INV(ShiftGammaCoeff);
+    B3L  =  IfThen(ShiftGammaCoeff,(dtbetazL - PDupwindNth1(beta3, i, j, k)*beta1L*J11L*ShiftAdvectionCoeff)*
+          INV(ShiftGammaCoeff),0) + IfThen(ShiftGammaCoeff,
+         (dtbetazL - PDupwindNth1(beta3, i, j, k)*beta2L*J12L*ShiftAdvectionCoeff)*INV(ShiftGammaCoeff),0) + 
+        IfThen(ShiftGammaCoeff,(dtbetazL - PDupwindNth1(beta3, i, j, k)*beta3L*J13L*ShiftAdvectionCoeff)*
+          INV(ShiftGammaCoeff),0) + IfThen(ShiftGammaCoeff,
+         (dtbetazL - PDupwindNth2(beta3, i, j, k)*beta1L*J21L*ShiftAdvectionCoeff)*INV(ShiftGammaCoeff),0) + 
+        IfThen(ShiftGammaCoeff,(dtbetazL - PDupwindNth2(beta3, i, j, k)*beta2L*J22L*ShiftAdvectionCoeff)*
+          INV(ShiftGammaCoeff),0) + IfThen(ShiftGammaCoeff,
+         (dtbetazL - PDupwindNth2(beta3, i, j, k)*beta3L*J23L*ShiftAdvectionCoeff)*INV(ShiftGammaCoeff),0) + 
+        IfThen(ShiftGammaCoeff,(dtbetazL - PDupwindNth3(beta3, i, j, k)*beta1L*J31L*ShiftAdvectionCoeff)*
+          INV(ShiftGammaCoeff),0) + IfThen(ShiftGammaCoeff,
+         (dtbetazL - PDupwindNth3(beta3, i, j, k)*beta2L*J32L*ShiftAdvectionCoeff)*INV(ShiftGammaCoeff),0) + 
+        IfThen(ShiftGammaCoeff,(dtbetazL - PDupwindNth3(beta3, i, j, k)*beta3L*J33L*ShiftAdvectionCoeff)*
+          INV(ShiftGammaCoeff),0);
     
     
     /* Copy local copies back to grid functions */
