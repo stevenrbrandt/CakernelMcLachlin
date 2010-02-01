@@ -1,5 +1,5 @@
-$Path = Join[$Path, {"~/Calpha/kranc/Tools/CodeGen",
-                     "~/Calpha/kranc/Tools/MathematicaMisc"}];
+$Path = Join[$Path, {"../../../kranc/Tools/CodeGen",
+                     "../../../kranc/Tools/MathematicaMisc"}];
 
 Get["KrancThorn`"];
 
@@ -348,12 +348,21 @@ convertFromADMBaseGammaCalc =
     
     A -> - dtalp / (harmonicF alpha^harmonicN) (LapseAdvectionCoeff - 1),
     
-    B1 -> 1/ShiftGammaCoeff
-          (dtbetax - ShiftAdvectionCoeff beta[ua] PDu[beta1,la]),
-    B2 -> 1/ShiftGammaCoeff
-          (dtbetay - ShiftAdvectionCoeff beta[ua] PDu[beta2,la]),
-    B3 -> 1/ShiftGammaCoeff
-          (dtbetaz - ShiftAdvectionCoeff beta[ua] PDu[beta3,la])
+    (* If ShiftGammaCoeff=0, then B^i is not evolved, in the sense
+       that it does not influence the time evolution of other
+       variables.  *)
+    B1 -> IfThen [ShiftGammaCoeff,
+                  1/ShiftGammaCoeff
+                  (dtbetax - ShiftAdvectionCoeff beta[ua] PDu[beta1,la]),
+                  0],
+    B2 -> IfThen [ShiftGammaCoeff,
+                  1/ShiftGammaCoeff
+                  (dtbetay - ShiftAdvectionCoeff beta[ua] PDu[beta2,la]),
+                  0],
+    B3 -> IfThen [ShiftGammaCoeff,
+                  1/ShiftGammaCoeff
+                  (dtbetaz - ShiftAdvectionCoeff beta[ua] PDu[beta3,la]),
+                  0]
   }
 };
 
