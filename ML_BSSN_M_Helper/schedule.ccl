@@ -162,4 +162,15 @@ if (CCTK_EQUALS (evolution_method, "ML_BSSN_M")) {
     TRIGGERS: ML_BSSN_M::ML_mom
   } "Calculate BSSN constraints"
   
+  SCHEDULE GROUP ML_BSSN_M_init_eta AT initial
+  {
+  } "Initialize BetaDriver"
+  
+  SCHEDULE GROUP ML_BSSN_M_init_eta AT postregrid
+  {
+  } "Initialize BetaDriver"
+  
+  SCHEDULE GROUP ML_BSSN_M_init_eta AT post_recover_variables
+  {
+  } "Initialize BetaDriver"
 }
