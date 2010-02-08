@@ -143,7 +143,11 @@ if (CCTK_EQUALS (evolution_method, "ML_BSSN")) {
       TRIGGERS: ML_BSSN::ML_mom
     } "Calculate ADM variables"
   }
-  
+
+  SCHEDULE GROUP ML_BSSN_convertToADMBaseGroupWrapper AT CCTK_POST_RECOVER_VARIABLES 
+  {
+  } "Calculate ADM variables"
+
   SCHEDULE ML_BSSN_SelectBCsADMBase IN ML_BSSN_convertToADMBaseGroupWrapper AFTER ML_BSSN_convertToADMBaseGroup
   {
     LANG: C
