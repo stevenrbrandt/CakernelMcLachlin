@@ -19,7 +19,7 @@ suffix =
   <> If [useGlobalDerivs, "_MP", ""]
   <> If [derivOrder!=4, "_O" <> ToString[derivOrder], ""]
   (* <> If [evolutionTimelevels!=3, "_TL" <> ToString[evolutionTimelevels], ""] *)
-  <> If [addMatter==1, "_M", ""]
+  (* <> If [addMatter==1, "_M", ""] *)
   ;
 
 BSSN = prefix <> "BSSN" <> suffix;
@@ -1305,6 +1305,5 @@ CreateKrancThornTT [groups, ".", BSSN,
 (* matter: 0 or 1
    (matter seems cheap; it should be always enabled) *)
 
-createCode[4, False, 4, 0];
 createCode[4, False, 4, 1];
-createCode[4, True,  4, 0];
+createCode[4, True,  4, 1];
