@@ -532,19 +532,6 @@ evolCalc =
     
     (* Matter terms *)
     
-    (*
-    T00 -> addMatter eTtt,
-    T01 -> addMatter eTtx,
-    T02 -> addMatter eTty,
-    T03 -> addMatter eTtz,
-    T11 -> addMatter eTxx,
-    T12 -> addMatter eTxy,
-    T13 -> addMatter eTxz,
-    T22 -> addMatter eTyy,
-    T23 -> addMatter eTyz,
-    T33 -> addMatter eTzz,
-    *)
-    
     (* rho = n^a n^b T_ab *)
     rho -> addMatter
            (1/alpha^2 (T00 - 2 beta[ui] T0[li] + beta[ui] beta[uj] T[li,lj])),
@@ -661,18 +648,6 @@ evol1Calc =
     
     (* Matter terms *)
     
-    (*
-    T01 -> addMatter eTtx,
-    T02 -> addMatter eTty,
-    T03 -> addMatter eTtz,
-    T11 -> addMatter eTxx,
-    T12 -> addMatter eTxy,
-    T13 -> addMatter eTxz,
-    T22 -> addMatter eTyy,
-    T23 -> addMatter eTyz,
-    T33 -> addMatter eTzz,
-    *)
-    
     (* S_i = -p^a_i n^b T_ab, where p^a_i = delta^a_i + n^a n_i *)
     S[li] -> addMatter (-1/alpha (T0[li] - beta[uj] T[li,lj])),
     
@@ -785,19 +760,6 @@ evol2Calc =
     R[la,lb] -> Rt[la,lb] + Rphi[la,lb],
     
     (* Matter terms *)
-    
-    (*
-    T00 -> addMatter eTtt,
-    T01 -> addMatter eTtx,
-    T02 -> addMatter eTty,
-    T03 -> addMatter eTtz,
-    T11 -> addMatter eTxx,
-    T12 -> addMatter eTxy,
-    T13 -> addMatter eTxz,
-    T22 -> addMatter eTyy,
-    T23 -> addMatter eTyz,
-    T33 -> addMatter eTzz,
-    *)
     
     (* rho = n^a n^b T_ab *)
     rho -> addMatter
@@ -1044,19 +1006,6 @@ constraintsCalc =
     Atm[ua,lb] -> gtu[ua,uc] At[lc,lb],
     
     (* Matter terms *)
-    
-    (*
-    T00 -> eTtt,
-    T01 -> eTtx,
-    T02 -> eTty,
-    T03 -> eTtz,
-    T11 -> eTxx,
-    T12 -> eTxy,
-    T13 -> eTxz,
-    T22 -> eTyy,
-    T23 -> eTyz,
-    T33 -> eTzz,
-    *)
     
     (* rho = n^a n^b T_ab *)
     rho -> 1/alpha^2 (T00 - 2 beta[ui] T0[li] + beta[ui] beta[uj] T[li,lj]),

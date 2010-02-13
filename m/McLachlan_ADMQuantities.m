@@ -132,15 +132,6 @@ Map [DefineTensor,
      {normal, tangentA, tangentB, dir,
       nn, nu, nlen, nlen2, su, vg,
       J, dJ,
-      (*
-      phi,
-      gt11, gt12, gt13, gt22, gt23, gt33,
-      Xt1, Xt2, Xt3,
-      trK,
-      At11, At12, At13, At22, At23, At33,
-      alpha,
-      beta1, beta2, beta3,
-      *)
       g, K, alpha, beta, detg, gu, G, R, trR, Km, trK,
       phi, gt, At, Xt, Xtn, alpha, A, beta, B, Atm, Atu, trA, Ats, trAts,
       ephi, detgt, gtu, ddetgt, dgtu, ddgtu, Gtl, Gtlu, Gt,
@@ -164,10 +155,10 @@ AssertSymmetricIncreasing [ddgtu[ua,ub,lc,ld], lc, ld];
 (* Use the CartGrid3D variable names *)
 x1=x; x2=y; x3=z;
 
-Map [DefineTensor,
-     {eTtt,
-      eTtx, eTty, eTtz,
-      eTxx, eTxy, eTxz, eTyy, eTyz, eTzz}];
+(* Use the TmunuBase variable names *)
+T00=eTtt;
+T01=eTtx; T02=eTty; T03=eTtz;
+T11=eTxx; T12=eTxy; T22=eTyy; T13=eTxz; T23=eTyz; T33=eTzz;
 
 (******************************************************************************)
 (* Expressions *)
@@ -202,7 +193,8 @@ declaredGroupNames = Map [First, declaredGroups];
 
 
 extraGroups =
-  {{"ADMBase::metric",   {gxx, gxy, gxz, gyy, gyz, gzz}},
+  {{"Grid::coordinates", {x, y, z, r}},
+   {"ADMBase::metric",   {gxx, gxy, gxz, gyy, gyz, gzz}},
    {"ADMBase::curv",     {kxx, kxy, kxz, kyy, kyz, kzz}},
    {"ADMBase::lapse",    {alp}},
    {"ADMBase::dtlapse",  {dtalp}},
@@ -218,7 +210,6 @@ extraGroups =
    {"TmunuBase::stress_energy_scalar", {eTtt}},
    {"TmunuBase::stress_energy_vector", {eTtx, eTty, eTtz}},
    {"TmunuBase::stress_energy_tensor", {eTxx, eTxy, eTxz, eTyy, eTyz, eTzz}},
-   {"Grid::coordinates", {x, y, z, r}},
    {"Coordinates::jacobian",  {J11, J12, J13, J21, J22, J23, J31, J32, J33}},
    {"Coordinates::jacobian2", {dJ111, dJ112, dJ113, dJ122, dJ123, dJ133,
                                dJ211, dJ212, dJ213, dJ222, dJ223, dJ233,
@@ -246,7 +237,7 @@ ADMQuantitiesCalc =
                  Xtn[ua], Rt[la,lb], trRt,
                  Atm[ua,lb],
                  ephi,
-                 T00, T0[la], T[la,lb], rho, S[la]},
+                 rho, S[la]},
   Equations -> 
   {
     detgt          -> 1 (* detgtExpr *),
@@ -278,17 +269,6 @@ ADMQuantitiesCalc =
     Atm[ua,lb] -> gtu[ua,uc] At[lc,lb],
 
     (* Matter terms *)
-
-    T00 -> eTtt,
-    T01 -> eTtx,
-    T02 -> eTty,
-    T03 -> eTtz,
-    T11 -> eTxx,
-    T12 -> eTxy,
-    T13 -> eTxz,
-    T22 -> eTyy,
-    T23 -> eTyz,
-    T33 -> eTzz,
 
     (* rho = n^a n^b T_ab *)
     rho -> addMatter

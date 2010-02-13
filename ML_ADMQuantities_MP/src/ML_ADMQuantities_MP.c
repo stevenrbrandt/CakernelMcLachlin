@@ -121,8 +121,6 @@ void ML_ADMQuantities_MP_Body(cGH const * restrict const cctkGH, int const dir, 
     // CCTK_REAL rho = INITVALUE;
     // CCTK_REAL Rt11 = INITVALUE, Rt12 = INITVALUE, Rt13 = INITVALUE, Rt22 = INITVALUE, Rt23 = INITVALUE, Rt33 = INITVALUE;
     // CCTK_REAL S1 = INITVALUE, S2 = INITVALUE, S3 = INITVALUE;
-    // CCTK_REAL T00 = INITVALUE, T01 = INITVALUE, T02 = INITVALUE, T03 = INITVALUE, T11 = INITVALUE, T12 = INITVALUE;
-    // CCTK_REAL T13 = INITVALUE, T22 = INITVALUE, T23 = INITVALUE, T33 = INITVALUE;
     // CCTK_REAL trRt = INITVALUE;
     // CCTK_REAL Xtn1 = INITVALUE, Xtn2 = INITVALUE, Xtn3 = INITVALUE;
     
@@ -896,35 +894,15 @@ void ML_ADMQuantities_MP_Body(cGH const * restrict const cctkGH, int const dir, 
     
     CCTK_REAL const Atm33  =  At13L*gtu31 + At23L*gtu32 + At33L*gtu33;
     
-    CCTK_REAL const T00  =  eTttL;
+    CCTK_REAL const rho  =  pow(alphaL,-2)*(eTttL - 2*(beta2L*eTtyL + beta3L*eTtzL) + 
+          2*(beta1L*(-eTtxL + beta2L*eTxyL + beta3L*eTxzL) + beta2L*beta3L*eTyzL) + eTxxL*SQR(beta1L) + eTyyL*SQR(beta2L) + 
+          eTzzL*SQR(beta3L));
     
-    CCTK_REAL const T01  =  eTtxL;
+    CCTK_REAL const S1  =  (-eTtxL + beta1L*eTxxL + beta2L*eTxyL + beta3L*eTxzL)*INV(alphaL);
     
-    CCTK_REAL const T02  =  eTtyL;
+    CCTK_REAL const S2  =  (-eTtyL + beta1L*eTxyL + beta2L*eTyyL + beta3L*eTyzL)*INV(alphaL);
     
-    CCTK_REAL const T03  =  eTtzL;
-    
-    CCTK_REAL const T11  =  eTxxL;
-    
-    CCTK_REAL const T12  =  eTxyL;
-    
-    CCTK_REAL const T13  =  eTxzL;
-    
-    CCTK_REAL const T22  =  eTyyL;
-    
-    CCTK_REAL const T23  =  eTyzL;
-    
-    CCTK_REAL const T33  =  eTzzL;
-    
-    CCTK_REAL const rho  =  pow(alphaL,-2)*(T00 - 2*(beta2L*T02 + beta3L*T03) + 
-          2*(beta1L*(-T01 + beta2L*T12 + beta3L*T13) + beta2L*beta3L*T23) + T11*SQR(beta1L) + T22*SQR(beta2L) + 
-          T33*SQR(beta3L));
-    
-    CCTK_REAL const S1  =  (-T01 + beta1L*T11 + beta2L*T12 + beta3L*T13)*INV(alphaL);
-    
-    CCTK_REAL const S2  =  (-T02 + beta1L*T12 + beta2L*T22 + beta3L*T23)*INV(alphaL);
-    
-    CCTK_REAL const S3  =  (-T03 + beta1L*T13 + beta2L*T23 + beta3L*T33)*INV(alphaL);
+    CCTK_REAL const S3  =  (-eTtzL + beta1L*eTxzL + beta2L*eTyzL + beta3L*eTzzL)*INV(alphaL);
     
     CCTK_REAL const MadmL  =  0.01989436788648691697111047042156429525431*
         (-((Gt111*Gtlu111 + Gt112*Gtlu112 + Gt113*Gtlu113 + Gt211*Gtlu121 + Gt212*Gtlu122 + Gt213*Gtlu123 + Gt311*Gtlu131 + 

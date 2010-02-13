@@ -109,8 +109,6 @@ void ML_ADMConstraints_Body(cGH const * restrict const cctkGH, int const dir, in
     // CCTK_REAL R11 = INITVALUE, R12 = INITVALUE, R13 = INITVALUE, R22 = INITVALUE, R23 = INITVALUE, R33 = INITVALUE;
     // CCTK_REAL rho = INITVALUE;
     // CCTK_REAL S1 = INITVALUE, S2 = INITVALUE, S3 = INITVALUE;
-    // CCTK_REAL T00 = INITVALUE, T01 = INITVALUE, T02 = INITVALUE, T03 = INITVALUE, T11 = INITVALUE, T12 = INITVALUE;
-    // CCTK_REAL T13 = INITVALUE, T22 = INITVALUE, T23 = INITVALUE, T33 = INITVALUE;
     // CCTK_REAL trK = INITVALUE;
     // CCTK_REAL trR = INITVALUE;
     
@@ -419,35 +417,15 @@ void ML_ADMConstraints_Body(cGH const * restrict const cctkGH, int const dir, in
     
     CCTK_REAL const trK  =  Km11 + Km22 + Km33;
     
-    CCTK_REAL const T00  =  eTttL;
+    CCTK_REAL const rho  =  pow(alpL,-2)*(eTttL - 2*(betayL*eTtyL + betazL*eTtzL) + 
+          2*(betaxL*(-eTtxL + betayL*eTxyL + betazL*eTxzL) + betayL*betazL*eTyzL) + eTxxL*SQR(betaxL) + eTyyL*SQR(betayL) + 
+          eTzzL*SQR(betazL));
     
-    CCTK_REAL const T01  =  eTtxL;
+    CCTK_REAL const S1  =  (-eTtxL + betaxL*eTxxL + betayL*eTxyL + betazL*eTxzL)*INV(alpL);
     
-    CCTK_REAL const T02  =  eTtyL;
+    CCTK_REAL const S2  =  (-eTtyL + betaxL*eTxyL + betayL*eTyyL + betazL*eTyzL)*INV(alpL);
     
-    CCTK_REAL const T03  =  eTtzL;
-    
-    CCTK_REAL const T11  =  eTxxL;
-    
-    CCTK_REAL const T12  =  eTxyL;
-    
-    CCTK_REAL const T13  =  eTxzL;
-    
-    CCTK_REAL const T22  =  eTyyL;
-    
-    CCTK_REAL const T23  =  eTyzL;
-    
-    CCTK_REAL const T33  =  eTzzL;
-    
-    CCTK_REAL const rho  =  pow(alpL,-2)*(T00 - 2*(betayL*T02 + betazL*T03) + 
-          2*(betaxL*(-T01 + betayL*T12 + betazL*T13) + betayL*betazL*T23) + T11*SQR(betaxL) + T22*SQR(betayL) + 
-          T33*SQR(betazL));
-    
-    CCTK_REAL const S1  =  (-T01 + betaxL*T11 + betayL*T12 + betazL*T13)*INV(alpL);
-    
-    CCTK_REAL const S2  =  (-T02 + betaxL*T12 + betayL*T22 + betazL*T23)*INV(alpL);
-    
-    CCTK_REAL const S3  =  (-T03 + betaxL*T13 + betayL*T23 + betazL*T33)*INV(alpL);
+    CCTK_REAL const S3  =  (-eTtzL + betaxL*eTxzL + betayL*eTyzL + betazL*eTzzL)*INV(alpL);
     
     CCTK_REAL const HL  =  -2*(Km12*Km21 + Km13*Km31 + Km23*Km32) - 50.26548245743669181540229413247204614715*rho + trR - SQR(Km11) - 
         SQR(Km22) - SQR(Km33) + SQR(trK);

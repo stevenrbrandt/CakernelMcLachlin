@@ -155,10 +155,10 @@ K11=kxx; K12=kxy; K22=kyy; K13=kxz; K23=kyz; K33=kzz;
 alpha=alp;
 beta1=betax; beta2=betay; beta3=betaz;
 
-Map [DefineTensor,
-     {eTtt,
-      eTtx, eTty, eTtz,
-      eTxx, eTxy, eTxz, eTyy, eTyz, eTzz}];
+(* Use the TmunuBase variable names *)
+T00=eTtt;
+T01=eTtx; T02=eTty; T03=eTtz;
+T11=eTxx; T12=eTxy; T22=eTyy; T13=eTxz; T23=eTyz; T33=eTzz;
 
 (******************************************************************************)
 (* Expressions *)
@@ -196,13 +196,13 @@ declaredGroupNames = Map [First, declaredGroups];
 
 
 extraGroups =
-  {{"ADMBase::metric",  {gxx, gxy, gxz, gyy, gyz, gzz}},
+  {{"Grid::coordinates", {x, y, z, r}},
+   {"ADMBase::metric",  {gxx, gxy, gxz, gyy, gyz, gzz}},
    {"ADMBase::curv",    {kxx, kxy, kxz, kyy, kyz, kzz}},
    {"ADMBase::lapse",   {alp}},
    {"ADMBase::dtlapse", {dtalp}},
    {"ADMBase::shift",   {betax, betay, betaz}},
    {"ADMBase::dtshift", {dtbetax, dtbetay, dtbetaz}},
-   {"Grid::coordinates", {x, y, z, r}},
    {"TmunuBase::stress_energy_scalar", {eTtt}},
    {"TmunuBase::stress_energy_vector", {eTtx, eTty, eTtz}},
    {"TmunuBase::stress_energy_tensor", {eTxx, eTxy, eTxz, eTyy, eTyz, eTzz}},
@@ -230,7 +230,7 @@ ADMConstraintsCalc =
   Where -> Interior,
   Shorthands -> {detg, gu[ua,ub], G[ua,lb,lc],
                  R[la,lb], trR, Km[la,lb], trK,
-                 T00, T0[la], T[la,lb], rho, S[la]},
+                 rho, S[la]},
   Equations -> 
   {
     detg -> detgExpr,
@@ -246,17 +246,6 @@ ADMConstraintsCalc =
     trK -> Km[ua,la],
 
     (* Matter terms *)
-
-    T00 -> eTtt,
-    T01 -> eTtx,
-    T02 -> eTty,
-    T03 -> eTtz,
-    T11 -> eTxx,
-    T12 -> eTxy,
-    T13 -> eTxz,
-    T22 -> eTyy,
-    T23 -> eTyz,
-    T33 -> eTzz,
 
     (* rho = n^a n^b T_ab *)
     rho -> 1/alpha^2 (T00 - 2 beta[ui] T0[li] + beta[ui] beta[uj] T[li,lj]),
