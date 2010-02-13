@@ -1,6 +1,6 @@
 # -*-Makefile-*-
 
-all: McLachlan_ADM.out McLachlan_BSSN.out WaveToy.out WaveToyFO.out hydro.out
+all: McLachlan_ADM.out McLachlan_BSSN.out McLachlan_ADMConstraints.out McLachlan_ADMQuantities.out WaveToy.out WaveToyFO.out hydro.out
 	@echo
 	@echo "The Cactus thorns are up to date."
 	@echo
@@ -19,6 +19,20 @@ McLachlan_BSSN.out: McLachlan_BSSN.m
 		./copy-if-changed.sh $$thorn ../$$thorn; \
 		./create-helper-thorn.sh $$thorn; \
 		./copy-if-changed.sh $${thorn}_Helper ../$${thorn}_Helper; \
+	done
+
+McLachlan_ADMConstraints.out: McLachlan_ADMConstraints.m
+	rm -rf ML_ADMConstraints*
+	./runmath.sh $^
+	for thorn in ML_ADMConstraints*; do \
+		./copy-if-changed.sh $$thorn ../$$thorn; \
+	done
+
+McLachlan_ADMQuantities.out: McLachlan_ADMQuantities.m
+	rm -rf ML_ADMQuantities*
+	./runmath.sh $^
+	for thorn in ML_ADMQuantities*; do \
+		./copy-if-changed.sh $$thorn ../$$thorn; \
 	done
 
 WaveToy.out: WaveToy.m
@@ -43,11 +57,12 @@ hydro.out: hydro.m
 	done
 
 clean:
-	rm -rf ML_ADM* ML_BSSN*
+	rm -rf ML_ADM* ML_BSSN* ML_ADMConstraints*
 	rm -rf ML_WaveToy ML_WaveToyFO
 	rm -rf ML_hydro
 	rm -f McLachlan_ADM.out McLachlan_ADM.err
 	rm -f McLachlan_BSSN.out McLachlan_BSSN.err
+	rm -f McLachlan_ADMConstraints.out McLachlan_ADMConstraints.err
 	rm -f WaveToy.out WaveToy.err
 	rm -f hydro.out hydro.err
 
