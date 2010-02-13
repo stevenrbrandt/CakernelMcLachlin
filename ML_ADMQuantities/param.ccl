@@ -1,0 +1,76 @@
+# File produced by Kranc
+
+
+shares: GenericFD
+
+USES CCTK_INT stencil_width
+USES CCTK_INT stencil_width_x
+USES CCTK_INT stencil_width_y
+USES CCTK_INT stencil_width_z
+USES CCTK_INT boundary_width
+
+
+shares: MethodOfLines
+
+USES CCTK_INT MoL_Num_Evolved_Vars
+
+restricted:
+CCTK_INT verbose "verbose"
+{
+  *:* :: ""
+} 0
+
+restricted:
+CCTK_INT conformalMethod "Treatment of conformal factor"
+{
+  *:* :: ""
+} 0
+
+restricted:
+CCTK_INT useMatter "Add matter terms"
+{
+  *:* :: ""
+} 1
+
+restricted:
+CCTK_INT ML_ADMQuantities_MaxNumEvolvedVars "Number of evolved variables used by this thorn" ACCUMULATOR-BASE=MethodofLines::MoL_Num_Evolved_Vars
+{
+  0:0 :: "Number of evolved variables used by this thorn"
+} 0
+
+restricted:
+CCTK_INT timelevels "Number of active timelevels"
+{
+  0:3 :: ""
+} 3
+
+restricted:
+CCTK_INT rhs_timelevels "Number of active RHS timelevels"
+{
+  0:3 :: ""
+} 1
+
+restricted:
+CCTK_INT ML_ADMQuantities_calc_every "ML_ADMQuantities_calc_every"
+{
+  *:* :: ""
+} 1
+
+restricted:
+CCTK_INT ML_ADMQuantities_boundary_calc_every "ML_ADMQuantities_boundary_calc_every"
+{
+  *:* :: ""
+} 1
+
+restricted:
+CCTK_INT ML_ADMQuantities_calc_offset "ML_ADMQuantities_calc_offset"
+{
+  *:* :: ""
+} 0
+
+restricted:
+CCTK_INT ML_ADMQuantities_boundary_calc_offset "ML_ADMQuantities_boundary_calc_offset"
+{
+  *:* :: ""
+} 0
+

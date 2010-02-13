@@ -5,7 +5,9 @@
 #include <assert.h>
 
 static void
-set_group_tags (int const checkpoint, int const prolongate,
+set_group_tags (int const checkpoint,
+                int const persistent,
+                int const prolongate,
                 char const * restrict const gn);
 
 int
@@ -13,35 +15,39 @@ ML_BSSN_SetGroupTags (void)
 {
   DECLARE_CCTK_PARAMETERS;
   
-  set_group_tags (0, 1, "ADMBase::metric");
-  set_group_tags (0, 1, "ADMBase::curv");
-  set_group_tags (0, 1, "ADMBase::lapse");
-  set_group_tags (0, 1, "ADMBase::shift");
-  set_group_tags (0, 1, "ADMBase::dtlapse");
-  set_group_tags (0, 1, "ADMBase::dtshift");
+  set_group_tags (0, 0, 1, "ADMBase::metric");
+  set_group_tags (0, 0, 1, "ADMBase::curv");
+  set_group_tags (0, 0, 1, "ADMBase::lapse");
+  set_group_tags (0, 0, 1, "ADMBase::shift");
+  set_group_tags (0, 0, 1, "ADMBase::dtlapse");
+  set_group_tags (0, 0, 1, "ADMBase::dtshift");
   
-  set_group_tags (0, 0, "ML_BSSN::ML_cons_detg");
-  set_group_tags (0, 0, "ML_BSSN::ML_cons_Gamma");
-  set_group_tags (0, 0, "ML_BSSN::ML_cons_traceA");
-  set_group_tags (0, 0, "ML_BSSN::ML_Ham");
-  set_group_tags (0, 0, "ML_BSSN::ML_mom");
-  set_group_tags (0, 0, "ML_BSSN::ML_curvrhs");
+  set_group_tags (0, 0, 0, "ML_BSSN::ML_cons_detg");
+  set_group_tags (0, 0, 0, "ML_BSSN::ML_cons_Gamma");
+  set_group_tags (0, 0, 0, "ML_BSSN::ML_cons_traceA");
+  set_group_tags (0, 0, 0, "ML_BSSN::ML_Ham");
+  set_group_tags (0, 0, 0, "ML_BSSN::ML_mom");
+  
+  set_group_tags (0, 1, 0, "ML_BSSN::ML_BetaDriver");
   
   int const checkpoint = rhs_timelevels > 1;
-  set_group_tags (checkpoint, 0, "ML_BSSN::ML_dtlapserhs");
-  set_group_tags (checkpoint, 0, "ML_BSSN::ML_dtshiftrhs");
-  set_group_tags (checkpoint, 0, "ML_BSSN::ML_Gammarhs");
-  set_group_tags (checkpoint, 0, "ML_BSSN::ML_lapserhs");
-  set_group_tags (checkpoint, 0, "ML_BSSN::ML_log_confacrhs");
-  set_group_tags (checkpoint, 0, "ML_BSSN::ML_metricrhs");
-  set_group_tags (checkpoint, 0, "ML_BSSN::ML_shiftrhs");
-  set_group_tags (checkpoint, 0, "ML_BSSN::ML_trace_curvrhs");
+  set_group_tags (checkpoint, checkpoint, 0, "ML_BSSN::ML_dtlapserhs");
+  set_group_tags (checkpoint, checkpoint, 0, "ML_BSSN::ML_dtshiftrhs");
+  set_group_tags (checkpoint, checkpoint, 0, "ML_BSSN::ML_Gammarhs");
+  set_group_tags (checkpoint, checkpoint, 0, "ML_BSSN::ML_lapserhs");
+  set_group_tags (checkpoint, checkpoint, 0, "ML_BSSN::ML_log_confacrhs");
+  set_group_tags (checkpoint, checkpoint, 0, "ML_BSSN::ML_metricrhs");
+  set_group_tags (checkpoint, checkpoint, 0, "ML_BSSN::ML_shiftrhs");
+  set_group_tags (checkpoint, checkpoint, 0, "ML_BSSN::ML_trace_curvrhs");
+  set_group_tags (checkpoint, checkpoint, 0, "ML_BSSN::ML_curvrhs");
   
   return 0;
 }
 
 static void
-set_group_tags (int const checkpoint, int const prolongate,
+set_group_tags (int const checkpoint,
+                int const persistent,
+                int const prolongate,
                 char const * restrict const gn)
 {
   assert (gn);
@@ -53,17 +59,17 @@ set_group_tags (int const checkpoint, int const prolongate,
   assert (table >= 0);
   
   if (! checkpoint) {
-    int ierr;
-    ierr = Util_TableSetString (table, "no", "Checkpoint");
+    int const ierr = Util_TableSetString (table, "no", "Checkpoint");
     assert (! ierr);
-    
-    ierr = Util_TableSetString (table, "no", "Persistent");
+  }
+  
+  if (! persistent) {
+    int const ierr = Util_TableSetString (table, "no", "Persistent");
     assert (! ierr);
   }
   
   if (! prolongate) {
-    int ierr;
-    ierr = Util_TableSetString (table, "none", "Prolongation");
+    int const ierr = Util_TableSetString (table, "none", "Prolongation");
     assert (! ierr);
   }
 }

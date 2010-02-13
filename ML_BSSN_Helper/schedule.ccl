@@ -87,9 +87,11 @@ if (CCTK_EQUALS (evolution_method, "ML_BSSN")) {
     SCHEDULE ML_BSSN_ExtrapolateGammas AT initial AFTER ML_BSSN_convertFromADMBaseGamma
     {
       LANG: C
-      SYNC: ML_Gamma
-      SYNC: ML_dtlapse
-      SYNC: ML_dtshift
+      # We don't need to synchronise here because extrapolation is now filling
+      # ghost zones
+      #SYNC: ML_Gamma
+      #SYNC: ML_dtlapse
+      #SYNC: ML_dtshift
     } "Extrapolate Gammas and time derivatives of lapse and shift"
   }
   
@@ -114,6 +116,12 @@ if (CCTK_EQUALS (evolution_method, "ML_BSSN")) {
   
   SCHEDULE GROUP ML_BSSN_convertToADMBaseGroup IN ML_BSSN_convertToADMBaseGroupWrapper
   {
+    #SYNC: ADMBase::metric
+    #SYNC: ADMBase::curv
+    #SYNC: ADMBase::lapse
+    #SYNC: ADMBase::shift
+    #SYNC: ADMBase::dtlapse
+    #SYNC: ADMBase::dtshift
   } "Calculate ADM variables"
   
   if (CCTK_EQUALS (calculate_ADMBase_variables_at, "MoL_PostStep"))

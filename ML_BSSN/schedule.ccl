@@ -376,10 +376,20 @@ if (CCTK_EQUALS(UseSpatialBetaDriver, "yes"))
   } "ML_BSSN_setBetaDriver"
 }
 
-schedule ML_BSSN_RHS IN ML_BSSN_evolCalcGroup
+schedule ML_BSSN_RHS IN NoSuchGroup
 {
   LANG: C
 } "ML_BSSN_RHS"
+
+schedule ML_BSSN_RHS1 IN ML_BSSN_evolCalcGroup
+{
+  LANG: C
+} "ML_BSSN_RHS1"
+
+schedule ML_BSSN_RHS2 IN ML_BSSN_evolCalcGroup
+{
+  LANG: C
+} "ML_BSSN_RHS2"
 
 
 if (CCTK_EQUALS(my_rhs_boundary_condition, "static"))
@@ -399,10 +409,15 @@ if (CCTK_EQUALS(my_rhs_boundary_condition, "radiative"))
   } "ML_BSSN_RHSRadiativeBoundary"
 }
 
-schedule ML_BSSN_enforce IN MoL_PostStep BEFORE ML_BSSN_BoundConds
+schedule ML_BSSN_enforce IN MoL_PostStep BEFORE ML_BSSN_SelectBoundConds
 {
   LANG: C
 } "ML_BSSN_enforce"
+
+schedule ML_BSSN_enforce2 IN MoL_PostStep AFTER ML_BSSN_enforce BEFORE ML_BSSN_SelectBoundConds
+{
+  LANG: C
+} "ML_BSSN_enforce2"
 
 
 if (CCTK_EQUALS(my_boundary_condition, "Minkowski"))

@@ -20,32 +20,27 @@
 #define CUB(x) ((x) * (x) * (x))
 #define QAD(x) ((x) * (x) * (x) * (x))
 
-void ML_BSSN_MP_convertFromADMBase_Body(cGH const * const cctkGH, CCTK_INT const dir, CCTK_INT const face, CCTK_REAL const normal[3], CCTK_REAL const tangentA[3], CCTK_REAL const tangentB[3], CCTK_INT const min[3], CCTK_INT const max[3], CCTK_INT const n_subblock_gfs, CCTK_REAL * const subblock_gfs[])
+void ML_BSSN_MP_convertFromADMBase_Body(cGH const * restrict const cctkGH, int const dir, int const face, CCTK_REAL const normal[3], CCTK_REAL const tangentA[3], CCTK_REAL const tangentB[3], int const min[3], int const max[3], int const n_subblock_gfs, CCTK_REAL * restrict const subblock_gfs[])
 {
   DECLARE_CCTK_ARGUMENTS;
   DECLARE_CCTK_PARAMETERS;
   
   
   /* Declare finite differencing variables */
-  CCTK_REAL dx = INITVALUE, dy = INITVALUE, dz = INITVALUE;
-  CCTK_REAL dxi = INITVALUE, dyi = INITVALUE, dzi = INITVALUE;
-  CCTK_REAL khalf = INITVALUE, kthird = INITVALUE, ktwothird = INITVALUE, kfourthird = INITVALUE, keightthird = INITVALUE;
-  CCTK_REAL hdxi = INITVALUE, hdyi = INITVALUE, hdzi = INITVALUE;
-  
   
   /* Declare predefined quantities */
-  CCTK_REAL p1o12dx = INITVALUE;
-  CCTK_REAL p1o12dy = INITVALUE;
-  CCTK_REAL p1o12dz = INITVALUE;
-  CCTK_REAL p1o144dxdy = INITVALUE;
-  CCTK_REAL p1o144dxdz = INITVALUE;
-  CCTK_REAL p1o144dydz = INITVALUE;
-  CCTK_REAL p1odx = INITVALUE;
-  CCTK_REAL p1ody = INITVALUE;
-  CCTK_REAL p1odz = INITVALUE;
-  CCTK_REAL pm1o12dx2 = INITVALUE;
-  CCTK_REAL pm1o12dy2 = INITVALUE;
-  CCTK_REAL pm1o12dz2 = INITVALUE;
+  // CCTK_REAL p1o12dx = INITVALUE;
+  // CCTK_REAL p1o12dy = INITVALUE;
+  // CCTK_REAL p1o12dz = INITVALUE;
+  // CCTK_REAL p1o144dxdy = INITVALUE;
+  // CCTK_REAL p1o144dxdz = INITVALUE;
+  // CCTK_REAL p1o144dydz = INITVALUE;
+  // CCTK_REAL p1odx = INITVALUE;
+  // CCTK_REAL p1ody = INITVALUE;
+  // CCTK_REAL p1odz = INITVALUE;
+  // CCTK_REAL pm1o12dx2 = INITVALUE;
+  // CCTK_REAL pm1o12dy2 = INITVALUE;
+  // CCTK_REAL pm1o12dz2 = INITVALUE;
   
   if (verbose > 1)
   {
@@ -60,34 +55,37 @@ void ML_BSSN_MP_convertFromADMBase_Body(cGH const * const cctkGH, CCTK_INT const
   /* Include user-supplied include files */
   
   /* Initialise finite differencing variables */
-  dx = CCTK_DELTA_SPACE(0);
-  dy = CCTK_DELTA_SPACE(1);
-  dz = CCTK_DELTA_SPACE(2);
-  dxi = 1.0 / dx;
-  dyi = 1.0 / dy;
-  dzi = 1.0 / dz;
-  khalf = 0.5;
-  kthird = 1/3.0;
-  ktwothird = 2.0/3.0;
-  kfourthird = 4.0/3.0;
-  keightthird = 8.0/3.0;
-  hdxi = 0.5 * dxi;
-  hdyi = 0.5 * dyi;
-  hdzi = 0.5 * dzi;
+  CCTK_REAL const dx = CCTK_DELTA_SPACE(0);
+  CCTK_REAL const dy = CCTK_DELTA_SPACE(1);
+  CCTK_REAL const dz = CCTK_DELTA_SPACE(2);
+  int const di = 1;
+  int const dj = CCTK_GFINDEX3D(cctkGH,0,1,0) - CCTK_GFINDEX3D(cctkGH,0,0,0);
+  int const dk = CCTK_GFINDEX3D(cctkGH,0,0,1) - CCTK_GFINDEX3D(cctkGH,0,0,0);
+  CCTK_REAL const dxi = 1.0 / dx;
+  CCTK_REAL const dyi = 1.0 / dy;
+  CCTK_REAL const dzi = 1.0 / dz;
+  CCTK_REAL const khalf = 0.5;
+  CCTK_REAL const kthird = 1/3.0;
+  CCTK_REAL const ktwothird = 2.0/3.0;
+  CCTK_REAL const kfourthird = 4.0/3.0;
+  CCTK_REAL const keightthird = 8.0/3.0;
+  CCTK_REAL const hdxi = 0.5 * dxi;
+  CCTK_REAL const hdyi = 0.5 * dyi;
+  CCTK_REAL const hdzi = 0.5 * dzi;
   
   /* Initialize predefined quantities */
-  p1o12dx = INV(dx)/12.;
-  p1o12dy = INV(dy)/12.;
-  p1o12dz = INV(dz)/12.;
-  p1o144dxdy = (INV(dx)*INV(dy))/144.;
-  p1o144dxdz = (INV(dx)*INV(dz))/144.;
-  p1o144dydz = (INV(dy)*INV(dz))/144.;
-  p1odx = INV(dx);
-  p1ody = INV(dy);
-  p1odz = INV(dz);
-  pm1o12dx2 = -pow(dx,-2)/12.;
-  pm1o12dy2 = -pow(dy,-2)/12.;
-  pm1o12dz2 = -pow(dz,-2)/12.;
+  CCTK_REAL const p1o12dx = INV(dx)/12.;
+  CCTK_REAL const p1o12dy = INV(dy)/12.;
+  CCTK_REAL const p1o12dz = INV(dz)/12.;
+  CCTK_REAL const p1o144dxdy = (INV(dx)*INV(dy))/144.;
+  CCTK_REAL const p1o144dxdz = (INV(dx)*INV(dz))/144.;
+  CCTK_REAL const p1o144dydz = (INV(dy)*INV(dz))/144.;
+  CCTK_REAL const p1odx = INV(dx);
+  CCTK_REAL const p1ody = INV(dy);
+  CCTK_REAL const p1odz = INV(dz);
+  CCTK_REAL const pm1o12dx2 = -pow(dx,-2)/12.;
+  CCTK_REAL const pm1o12dy2 = -pow(dy,-2)/12.;
+  CCTK_REAL const pm1o12dz2 = -pow(dz,-2)/12.;
   
   /* Loop over the grid points */
   #pragma omp parallel
@@ -95,65 +93,62 @@ void ML_BSSN_MP_convertFromADMBase_Body(cGH const * const cctkGH, CCTK_INT const
             i,j,k, min[0],min[1],min[2], max[0],max[1],max[2],
             cctk_lsh[0],cctk_lsh[1],cctk_lsh[2])
   {
-    int index = INITVALUE;
-    int subblock_index = INITVALUE;
-    index = CCTK_GFINDEX3D(cctkGH,i,j,k);
-    subblock_index = i - min[0] + (max[0] - min[0]) * (j - min[1] + (max[1]-min[1]) * (k - min[2]));
+    // int index = INITVALUE;
+    // int subblock_index = INITVALUE;
+    int const index = CCTK_GFINDEX3D(cctkGH,i,j,k);
+    int const subblock_index = i - min[0] + (max[0] - min[0]) * (j - min[1] + (max[1]-min[1]) * (k - min[2]));
     
     /* Declare shorthands */
-    CCTK_REAL detg = INITVALUE;
-    CCTK_REAL em4phi = INITVALUE;
-    CCTK_REAL g11 = INITVALUE, g12 = INITVALUE, g13 = INITVALUE, g22 = INITVALUE, g23 = INITVALUE, g33 = INITVALUE;
-    CCTK_REAL gu11 = INITVALUE, gu21 = INITVALUE, gu22 = INITVALUE, gu31 = INITVALUE, gu32 = INITVALUE, gu33 = INITVALUE;
-    CCTK_REAL K11 = INITVALUE, K12 = INITVALUE, K13 = INITVALUE, K22 = INITVALUE, K23 = INITVALUE, K33 = INITVALUE;
+    // CCTK_REAL detg = INITVALUE;
+    // CCTK_REAL em4phi = INITVALUE;
+    // CCTK_REAL g11 = INITVALUE, g12 = INITVALUE, g13 = INITVALUE, g22 = INITVALUE, g23 = INITVALUE, g33 = INITVALUE;
+    // CCTK_REAL gu11 = INITVALUE, gu21 = INITVALUE, gu22 = INITVALUE, gu31 = INITVALUE, gu32 = INITVALUE, gu33 = INITVALUE;
     
     /* Declare local copies of grid functions */
-    CCTK_REAL alpL = INITVALUE;
-    CCTK_REAL alphaL = INITVALUE;
-    CCTK_REAL At11L = INITVALUE, At12L = INITVALUE, At13L = INITVALUE, At22L = INITVALUE, At23L = INITVALUE, At33L = INITVALUE;
-    CCTK_REAL beta1L = INITVALUE, beta2L = INITVALUE, beta3L = INITVALUE;
-    CCTK_REAL betaxL = INITVALUE;
-    CCTK_REAL betayL = INITVALUE;
-    CCTK_REAL betazL = INITVALUE;
-    CCTK_REAL etaL = INITVALUE;
-    CCTK_REAL gt11L = INITVALUE, gt12L = INITVALUE, gt13L = INITVALUE, gt22L = INITVALUE, gt23L = INITVALUE, gt33L = INITVALUE;
-    CCTK_REAL gxxL = INITVALUE;
-    CCTK_REAL gxyL = INITVALUE;
-    CCTK_REAL gxzL = INITVALUE;
-    CCTK_REAL gyyL = INITVALUE;
-    CCTK_REAL gyzL = INITVALUE;
-    CCTK_REAL gzzL = INITVALUE;
-    CCTK_REAL kxxL = INITVALUE;
-    CCTK_REAL kxyL = INITVALUE;
-    CCTK_REAL kxzL = INITVALUE;
-    CCTK_REAL kyyL = INITVALUE;
-    CCTK_REAL kyzL = INITVALUE;
-    CCTK_REAL kzzL = INITVALUE;
-    CCTK_REAL phiL = INITVALUE;
-    CCTK_REAL trKL = INITVALUE;
+    // CCTK_REAL alpL = INITVALUE;
+    // CCTK_REAL alphaL = INITVALUE;
+    // CCTK_REAL At11L = INITVALUE, At12L = INITVALUE, At13L = INITVALUE, At22L = INITVALUE, At23L = INITVALUE, At33L = INITVALUE;
+    // CCTK_REAL beta1L = INITVALUE, beta2L = INITVALUE, beta3L = INITVALUE;
+    // CCTK_REAL betaxL = INITVALUE;
+    // CCTK_REAL betayL = INITVALUE;
+    // CCTK_REAL betazL = INITVALUE;
+    // CCTK_REAL etaL = INITVALUE;
+    // CCTK_REAL gt11L = INITVALUE, gt12L = INITVALUE, gt13L = INITVALUE, gt22L = INITVALUE, gt23L = INITVALUE, gt33L = INITVALUE;
+    // CCTK_REAL gxxL = INITVALUE;
+    // CCTK_REAL gxyL = INITVALUE;
+    // CCTK_REAL gxzL = INITVALUE;
+    // CCTK_REAL gyyL = INITVALUE;
+    // CCTK_REAL gyzL = INITVALUE;
+    // CCTK_REAL gzzL = INITVALUE;
+    // CCTK_REAL kxxL = INITVALUE;
+    // CCTK_REAL kxyL = INITVALUE;
+    // CCTK_REAL kxzL = INITVALUE;
+    // CCTK_REAL kyyL = INITVALUE;
+    // CCTK_REAL kyzL = INITVALUE;
+    // CCTK_REAL kzzL = INITVALUE;
+    // CCTK_REAL phiL = INITVALUE;
+    // CCTK_REAL trKL = INITVALUE;
     /* Declare precomputed derivatives*/
     
     /* Declare derivatives */
     
     /* Assign local copies of grid functions */
-    alpL = alp[index];
-    betaxL = betax[index];
-    betayL = betay[index];
-    betazL = betaz[index];
-    gxxL = gxx[index];
-    gxyL = gxy[index];
-    gxzL = gxz[index];
-    gyyL = gyy[index];
-    gyzL = gyz[index];
-    gzzL = gzz[index];
-    kxxL = kxx[index];
-    kxyL = kxy[index];
-    kxzL = kxz[index];
-    kyyL = kyy[index];
-    kyzL = kyz[index];
-    kzzL = kzz[index];
-    phiL = phi[index];
-    trKL = trK[index];
+    CCTK_REAL const alpL = alp[index];
+    CCTK_REAL const betaxL = betax[index];
+    CCTK_REAL const betayL = betay[index];
+    CCTK_REAL const betazL = betaz[index];
+    CCTK_REAL const gxxL = gxx[index];
+    CCTK_REAL const gxyL = gxy[index];
+    CCTK_REAL const gxzL = gxz[index];
+    CCTK_REAL const gyyL = gyy[index];
+    CCTK_REAL const gyzL = gyz[index];
+    CCTK_REAL const gzzL = gzz[index];
+    CCTK_REAL const kxxL = kxx[index];
+    CCTK_REAL const kxyL = kxy[index];
+    CCTK_REAL const kxzL = kxz[index];
+    CCTK_REAL const kyyL = kyy[index];
+    CCTK_REAL const kyzL = kyz[index];
+    CCTK_REAL const kzzL = kzz[index];
     
     /* Assign local copies of subblock grid functions */
     
@@ -164,83 +159,71 @@ void ML_BSSN_MP_convertFromADMBase_Body(cGH const * const cctkGH, CCTK_INT const
     /* Precompute derivatives (old style) */
     
     /* Calculate temporaries and grid functions */
-    g11  =  gxxL;
+    CCTK_REAL const g11  =  gxxL;
     
-    g12  =  gxyL;
+    CCTK_REAL const g12  =  gxyL;
     
-    g13  =  gxzL;
+    CCTK_REAL const g13  =  gxzL;
     
-    g22  =  gyyL;
+    CCTK_REAL const g22  =  gyyL;
     
-    g23  =  gyzL;
+    CCTK_REAL const g23  =  gyzL;
     
-    g33  =  gzzL;
+    CCTK_REAL const g33  =  gzzL;
     
-    detg  =  2*g12*g13*g23 + g33*(g11*g22 - SQR(g12)) - g22*SQR(g13) - g11*SQR(g23);
+    CCTK_REAL const detg  =  2*g12*g13*g23 + g33*(g11*g22 - SQR(g12)) - g22*SQR(g13) - g11*SQR(g23);
     
-    gu11  =  INV(detg)*(g22*g33 - SQR(g23));
+    CCTK_REAL const gu11  =  INV(detg)*(g22*g33 - SQR(g23));
     
-    gu21  =  (g13*g23 - g12*g33)*INV(detg);
+    CCTK_REAL const gu21  =  (g13*g23 - g12*g33)*INV(detg);
     
-    gu31  =  (-(g13*g22) + g12*g23)*INV(detg);
+    CCTK_REAL const gu31  =  (-(g13*g22) + g12*g23)*INV(detg);
     
-    gu22  =  INV(detg)*(g11*g33 - SQR(g13));
+    CCTK_REAL const gu22  =  INV(detg)*(g11*g33 - SQR(g13));
     
-    gu32  =  (g12*g13 - g11*g23)*INV(detg);
+    CCTK_REAL const gu32  =  (g12*g13 - g11*g23)*INV(detg);
     
-    gu33  =  INV(detg)*(g11*g22 - SQR(g12));
+    CCTK_REAL const gu33  =  INV(detg)*(g11*g22 - SQR(g12));
     
-    phiL  =  IfThen(conformalMethod,pow(detg,-0.16666666666666666),Log(detg)/12.);
+    CCTK_REAL const phiL  =  IfThen(conformalMethod,pow(detg,-0.16666666666666666),Log(detg)/12.);
     
-    em4phi  =  IfThen(conformalMethod,SQR(phiL),exp(-4*phiL));
+    CCTK_REAL const em4phi  =  IfThen(conformalMethod,SQR(phiL),exp(-4*phiL));
     
-    gt11L  =  em4phi*g11;
+    CCTK_REAL const gt11L  =  em4phi*g11;
     
-    gt12L  =  em4phi*g12;
+    CCTK_REAL const gt12L  =  em4phi*g12;
     
-    gt13L  =  em4phi*g13;
+    CCTK_REAL const gt13L  =  em4phi*g13;
     
-    gt22L  =  em4phi*g22;
+    CCTK_REAL const gt22L  =  em4phi*g22;
     
-    gt23L  =  em4phi*g23;
+    CCTK_REAL const gt23L  =  em4phi*g23;
     
-    gt33L  =  em4phi*g33;
+    CCTK_REAL const gt33L  =  em4phi*g33;
     
-    K11  =  kxxL;
+    CCTK_REAL const trKL  =  gu11*kxxL + gu22*kyyL + 2*(gu21*kxyL + gu31*kxzL + gu32*kyzL) + gu33*kzzL;
     
-    K12  =  kxyL;
+    CCTK_REAL const At11L  =  em4phi*(kxxL - g11*kthird*trKL);
     
-    K13  =  kxzL;
+    CCTK_REAL const At12L  =  em4phi*(kxyL - g12*kthird*trKL);
     
-    K22  =  kyyL;
+    CCTK_REAL const At13L  =  em4phi*(kxzL - g13*kthird*trKL);
     
-    K23  =  kyzL;
+    CCTK_REAL const At22L  =  em4phi*(kyyL - g22*kthird*trKL);
     
-    K33  =  kzzL;
+    CCTK_REAL const At23L  =  em4phi*(kyzL - g23*kthird*trKL);
     
-    trKL  =  gu11*K11 + gu22*K22 + 2*(gu21*K12 + gu31*K13 + gu32*K23) + gu33*K33;
+    CCTK_REAL const At33L  =  em4phi*(kzzL - g33*kthird*trKL);
     
-    At11L  =  em4phi*(K11 - g11*kthird*trKL);
+    CCTK_REAL const alphaL  =  alpL;
     
-    At12L  =  em4phi*(K12 - g12*kthird*trKL);
+    CCTK_REAL const beta1L  =  betaxL;
     
-    At13L  =  em4phi*(K13 - g13*kthird*trKL);
+    CCTK_REAL const beta2L  =  betayL;
     
-    At22L  =  em4phi*(K22 - g22*kthird*trKL);
+    CCTK_REAL const beta3L  =  betazL;
     
-    At23L  =  em4phi*(K23 - g23*kthird*trKL);
-    
-    At33L  =  em4phi*(K33 - g33*kthird*trKL);
-    
-    alphaL  =  alpL;
-    
-    beta1L  =  betaxL;
-    
-    beta2L  =  betayL;
-    
-    beta3L  =  betazL;
-    
-    etaL  =  BetaDriver;
+    CCTK_REAL const etaL  =  BetaDriver;
     
     
     /* Copy local copies back to grid functions */

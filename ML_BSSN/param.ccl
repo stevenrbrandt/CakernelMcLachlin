@@ -124,7 +124,7 @@ restricted:
 CCTK_INT useMatter "Add matter terms"
 {
   *:* :: ""
-} 0
+} 1
 
 private:
 KEYWORD my_initial_data "my_initial_data"
@@ -186,7 +186,7 @@ restricted:
 CCTK_INT timelevels "Number of active timelevels"
 {
   0:4 :: ""
-} 4
+} 3
 
 restricted:
 CCTK_INT rhs_timelevels "Number of active RHS timelevels"
@@ -225,6 +225,18 @@ CCTK_INT ML_BSSN_RHS_calc_every "ML_BSSN_RHS_calc_every"
 } 1
 
 restricted:
+CCTK_INT ML_BSSN_RHS1_calc_every "ML_BSSN_RHS1_calc_every"
+{
+  *:* :: ""
+} 1
+
+restricted:
+CCTK_INT ML_BSSN_RHS2_calc_every "ML_BSSN_RHS2_calc_every"
+{
+  *:* :: ""
+} 1
+
+restricted:
 CCTK_INT ML_BSSN_RHSStaticBoundary_calc_every "ML_BSSN_RHSStaticBoundary_calc_every"
 {
   *:* :: ""
@@ -238,6 +250,12 @@ CCTK_INT ML_BSSN_RHSRadiativeBoundary_calc_every "ML_BSSN_RHSRadiativeBoundary_c
 
 restricted:
 CCTK_INT ML_BSSN_enforce_calc_every "ML_BSSN_enforce_calc_every"
+{
+  *:* :: ""
+} 1
+
+restricted:
+CCTK_INT ML_BSSN_enforce2_calc_every "ML_BSSN_enforce2_calc_every"
 {
   *:* :: ""
 } 1
@@ -315,6 +333,18 @@ CCTK_INT ML_BSSN_RHS_calc_offset "ML_BSSN_RHS_calc_offset"
 } 0
 
 restricted:
+CCTK_INT ML_BSSN_RHS1_calc_offset "ML_BSSN_RHS1_calc_offset"
+{
+  *:* :: ""
+} 0
+
+restricted:
+CCTK_INT ML_BSSN_RHS2_calc_offset "ML_BSSN_RHS2_calc_offset"
+{
+  *:* :: ""
+} 0
+
+restricted:
 CCTK_INT ML_BSSN_RHSStaticBoundary_calc_offset "ML_BSSN_RHSStaticBoundary_calc_offset"
 {
   *:* :: ""
@@ -328,6 +358,12 @@ CCTK_INT ML_BSSN_RHSRadiativeBoundary_calc_offset "ML_BSSN_RHSRadiativeBoundary_
 
 restricted:
 CCTK_INT ML_BSSN_enforce_calc_offset "ML_BSSN_enforce_calc_offset"
+{
+  *:* :: ""
+} 0
+
+restricted:
+CCTK_INT ML_BSSN_enforce2_calc_offset "ML_BSSN_enforce2_calc_offset"
 {
   *:* :: ""
 } 0

@@ -1,0 +1,4 @@
+# File produced by Kranc
+
+REQUIRES GenericFD
+REQUIRES LoopControl
