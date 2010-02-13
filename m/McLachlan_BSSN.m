@@ -329,9 +329,16 @@ convertFromADMBaseGammaCalc =
   Name -> BSSN <> "_convertFromADMBaseGamma",
   Schedule -> {"AT initial AFTER " <> BSSN <> "_convertFromADMBase"},
   ConditionalOnKeyword -> {"my_initial_data", "ADMBase"},
+  (*
+  Where -> InteriorNoSync,
+  *)
+  (* Do not synchronise right after this routine; instead, synchronise
+     after extrapolating *)
   Where -> Interior,
-  (* should not sync Gamma, since boundary conditions and
-     synchronisation are applied later anyway *)
+  (* Synchronise after this routine, so that the refinement boundaries
+     are set correctly before extrapolating.  (We will need to
+     synchronise again after extrapolating because extrapolation does
+     not fill ghost zones, but this is irrelevant here.)  *)
   Shorthands -> {dir[ua],
                  detgt, gtu[ua,ub], Gt[ua,lb,lc]},
   Equations -> 
@@ -448,7 +455,14 @@ convertToADMBaseFakeDtLapseShiftCalc =
 evolCalc =
 {
   Name -> BSSN <> "_RHS",
-  Schedule -> {"IN " <> BSSN <> "_evolCalcGroup"},
+  (* Schedule -> {"IN " <> BSSN <> "_evolCalcGroup"}, *)
+  Schedule -> {"IN NoSuchGroup"},
+  (*
+  Where -> Interior,
+  *)
+  (* Synchronise the RHS grid functions after this routine, so that
+     the refinement boundaries are set correctly before applying the
+     radiative boundary conditions.  *)
   Where -> InteriorNoSync,
   Shorthands -> {dir[ua],
                  detgt, gtu[ua,ub],
@@ -869,10 +883,12 @@ RHSRadiativeBoundaryCalc =
   }
 };
 
+(* Note: We abuse the RHS variables, so that the state vector is not
+   overwritten *)
 enforceCalc =
 {
   Name -> BSSN <> "_enforce",
-  Schedule -> {"IN MoL_PostStep BEFORE " <> BSSN <> "_BoundConds"},
+  Schedule -> {"IN MoL_PostStep BEFORE " <> BSSN <> "_SelectBoundConds"},
   Shorthands -> {detgt, gtu[ua,ub], trAt},
   Equations -> 
   {
