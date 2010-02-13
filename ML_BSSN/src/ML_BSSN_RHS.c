@@ -132,8 +132,6 @@ void ML_BSSN_RHS_Body(cGH const * restrict const cctkGH, int const dir, int cons
     // CCTK_REAL Rphi11 = INITVALUE, Rphi12 = INITVALUE, Rphi13 = INITVALUE, Rphi22 = INITVALUE, Rphi23 = INITVALUE, Rphi33 = INITVALUE;
     // CCTK_REAL Rt11 = INITVALUE, Rt12 = INITVALUE, Rt13 = INITVALUE, Rt22 = INITVALUE, Rt23 = INITVALUE, Rt33 = INITVALUE;
     // CCTK_REAL S1 = INITVALUE, S2 = INITVALUE, S3 = INITVALUE;
-    // CCTK_REAL T00 = INITVALUE, T01 = INITVALUE, T02 = INITVALUE, T03 = INITVALUE, T11 = INITVALUE, T12 = INITVALUE;
-    // CCTK_REAL T13 = INITVALUE, T22 = INITVALUE, T23 = INITVALUE, T33 = INITVALUE;
     // CCTK_REAL trAts = INITVALUE;
     // CCTK_REAL trS = INITVALUE;
     // CCTK_REAL Xtn1 = INITVALUE, Xtn2 = INITVALUE, Xtn3 = INITVALUE;
@@ -922,37 +920,17 @@ void ML_BSSN_RHS_Body(cGH const * restrict const cctkGH, int const dir, int cons
     
     CCTK_REAL const R33  =  Rphi33 + Rt33;
     
-    CCTK_REAL const T00  =  eTttL;
+    CCTK_REAL const rho  =  pow(alphaL,-2)*(eTttL - 2*(beta2L*eTtyL + beta3L*eTtzL) + 
+          2*(beta1L*(-eTtxL + beta2L*eTxyL + beta3L*eTxzL) + beta2L*beta3L*eTyzL) + eTxxL*SQR(beta1L) + eTyyL*SQR(beta2L) + 
+          eTzzL*SQR(beta3L));
     
-    CCTK_REAL const T01  =  eTtxL;
+    CCTK_REAL const S1  =  (-eTtxL + beta1L*eTxxL + beta2L*eTxyL + beta3L*eTxzL)*INV(alphaL);
     
-    CCTK_REAL const T02  =  eTtyL;
+    CCTK_REAL const S2  =  (-eTtyL + beta1L*eTxyL + beta2L*eTyyL + beta3L*eTyzL)*INV(alphaL);
     
-    CCTK_REAL const T03  =  eTtzL;
+    CCTK_REAL const S3  =  (-eTtzL + beta1L*eTxzL + beta2L*eTyzL + beta3L*eTzzL)*INV(alphaL);
     
-    CCTK_REAL const T11  =  eTxxL;
-    
-    CCTK_REAL const T12  =  eTxyL;
-    
-    CCTK_REAL const T13  =  eTxzL;
-    
-    CCTK_REAL const T22  =  eTyyL;
-    
-    CCTK_REAL const T23  =  eTyzL;
-    
-    CCTK_REAL const T33  =  eTzzL;
-    
-    CCTK_REAL const rho  =  pow(alphaL,-2)*(T00 - 2*(beta2L*T02 + beta3L*T03) + 
-          2*(beta1L*(-T01 + beta2L*T12 + beta3L*T13) + beta2L*beta3L*T23) + T11*SQR(beta1L) + T22*SQR(beta2L) + 
-          T33*SQR(beta3L));
-    
-    CCTK_REAL const S1  =  (-T01 + beta1L*T11 + beta2L*T12 + beta3L*T13)*INV(alphaL);
-    
-    CCTK_REAL const S2  =  (-T02 + beta1L*T12 + beta2L*T22 + beta3L*T23)*INV(alphaL);
-    
-    CCTK_REAL const S3  =  (-T03 + beta1L*T13 + beta2L*T23 + beta3L*T33)*INV(alphaL);
-    
-    CCTK_REAL const trS  =  gu11*T11 + gu22*T22 + 2*(gu21*T12 + gu31*T13 + gu32*T23) + gu33*T33;
+    CCTK_REAL const trS  =  eTxxL*gu11 + eTyyL*gu22 + 2*(eTxyL*gu21 + eTxzL*gu31 + eTyzL*gu32) + eTzzL*gu33;
     
     CCTK_REAL const phirhsL  =  PDupwindNth1(phi, i, j, k)*beta1L + PDupwindNth2(phi, i, j, k)*beta2L + 
         PDupwindNth3(phi, i, j, k)*beta3L + (PDstandardNth1beta1 + PDstandardNth2beta2 + PDstandardNth3beta3)*
@@ -1062,7 +1040,7 @@ void ML_BSSN_RHS_Body(cGH const * restrict const cctkGH, int const dir, int cons
         At11L*(1.333333333333333333333333333333333333333*PDstandardNth1beta1 - 
            0.6666666666666666666666666666666666666667*(PDstandardNth2beta2 + PDstandardNth3beta3) + alphaL*trKL) + 
         em4phi*(Ats11 - 0.3333333333333333333333333333333333333333*g11*trAts + 
-           alphaL*(-25.13274122871834590770114706623602307358*T11 + 8.377580409572781969233715688745341024526*g11*trS));
+           alphaL*(-25.13274122871834590770114706623602307358*eTxxL + 8.377580409572781969233715688745341024526*g11*trS));
     
     CCTK_REAL const At12rhsL  =  -2.*alphaL*(At11L*Atm12 + At12L*Atm22 + At13L*Atm32) + PDupwindNth1(At12, i, j, k)*beta1L + 
         PDupwindNth2(At12, i, j, k)*beta2L + PDupwindNth3(At12, i, j, k)*beta3L + At22L*PDstandardNth1beta2 + 
@@ -1070,7 +1048,7 @@ void ML_BSSN_RHS_Body(cGH const * restrict const cctkGH, int const dir, int cons
         At12L*(0.3333333333333333333333333333333333333333*(PDstandardNth1beta1 + PDstandardNth2beta2) - 
            0.6666666666666666666666666666666666666667*PDstandardNth3beta3 + alphaL*trKL) + 
         em4phi*(Ats12 - 0.3333333333333333333333333333333333333333*g12*trAts + 
-           alphaL*(-25.13274122871834590770114706623602307358*T12 + 8.377580409572781969233715688745341024526*g12*trS));
+           alphaL*(-25.13274122871834590770114706623602307358*eTxyL + 8.377580409572781969233715688745341024526*g12*trS));
     
     CCTK_REAL const At13rhsL  =  -2.*alphaL*(At11L*Atm13 + At12L*Atm23 + At13L*Atm33) + PDupwindNth1(At13, i, j, k)*beta1L + 
         PDupwindNth2(At13, i, j, k)*beta2L + PDupwindNth3(At13, i, j, k)*beta3L + At23L*PDstandardNth1beta2 + 
@@ -1078,7 +1056,7 @@ void ML_BSSN_RHS_Body(cGH const * restrict const cctkGH, int const dir, int cons
         At13L*(-0.6666666666666666666666666666666666666667*PDstandardNth2beta2 + 
            0.3333333333333333333333333333333333333333*(PDstandardNth1beta1 + PDstandardNth3beta3) + alphaL*trKL) + 
         em4phi*(Ats13 - 0.3333333333333333333333333333333333333333*g13*trAts + 
-           alphaL*(-25.13274122871834590770114706623602307358*T13 + 8.377580409572781969233715688745341024526*g13*trS));
+           alphaL*(-25.13274122871834590770114706623602307358*eTxzL + 8.377580409572781969233715688745341024526*g13*trS));
     
     CCTK_REAL const At22rhsL  =  -2.*alphaL*(At12L*Atm12 + At22L*Atm22 + At23L*Atm32) + PDupwindNth1(At22, i, j, k)*beta1L + 
         PDupwindNth2(At22, i, j, k)*beta2L + PDupwindNth3(At22, i, j, k)*beta3L + 
@@ -1086,7 +1064,7 @@ void ML_BSSN_RHS_Body(cGH const * restrict const cctkGH, int const dir, int cons
         At22L*(1.333333333333333333333333333333333333333*PDstandardNth2beta2 - 
            0.6666666666666666666666666666666666666667*(PDstandardNth1beta1 + PDstandardNth3beta3) + alphaL*trKL) + 
         em4phi*(Ats22 - 0.3333333333333333333333333333333333333333*g22*trAts + 
-           alphaL*(-25.13274122871834590770114706623602307358*T22 + 8.377580409572781969233715688745341024526*g22*trS));
+           alphaL*(-25.13274122871834590770114706623602307358*eTyyL + 8.377580409572781969233715688745341024526*g22*trS));
     
     CCTK_REAL const At23rhsL  =  -2.*alphaL*(At12L*Atm13 + At22L*Atm23 + At23L*Atm33) + PDupwindNth1(At23, i, j, k)*beta1L + 
         PDupwindNth2(At23, i, j, k)*beta2L + PDupwindNth3(At23, i, j, k)*beta3L + At13L*PDstandardNth2beta1 + 
@@ -1094,7 +1072,7 @@ void ML_BSSN_RHS_Body(cGH const * restrict const cctkGH, int const dir, int cons
         At23L*(-0.6666666666666666666666666666666666666667*PDstandardNth1beta1 + 
            0.3333333333333333333333333333333333333333*(PDstandardNth2beta2 + PDstandardNth3beta3) + alphaL*trKL) + 
         em4phi*(Ats23 - 0.3333333333333333333333333333333333333333*g23*trAts + 
-           alphaL*(-25.13274122871834590770114706623602307358*T23 + 8.377580409572781969233715688745341024526*g23*trS));
+           alphaL*(-25.13274122871834590770114706623602307358*eTyzL + 8.377580409572781969233715688745341024526*g23*trS));
     
     CCTK_REAL const At33rhsL  =  -2.*alphaL*(At13L*Atm13 + At23L*Atm23 + At33L*Atm33) + PDupwindNth1(At33, i, j, k)*beta1L + 
         PDupwindNth2(At33, i, j, k)*beta2L + PDupwindNth3(At33, i, j, k)*beta3L + 
@@ -1102,7 +1080,7 @@ void ML_BSSN_RHS_Body(cGH const * restrict const cctkGH, int const dir, int cons
         At33L*(-0.6666666666666666666666666666666666666667*(PDstandardNth1beta1 + PDstandardNth2beta2) + 
            1.333333333333333333333333333333333333333*PDstandardNth3beta3 + alphaL*trKL) + 
         em4phi*(Ats33 - 0.3333333333333333333333333333333333333333*g33*trAts + 
-           alphaL*(-25.13274122871834590770114706623602307358*T33 + 8.377580409572781969233715688745341024526*g33*trS));
+           alphaL*(-25.13274122871834590770114706623602307358*eTzzL + 8.377580409572781969233715688745341024526*g33*trS));
     
     CCTK_REAL const alpharhsL  =  (PDupwindNth1(alpha, i, j, k)*beta1L + PDupwindNth2(alpha, i, j, k)*beta2L + 
            PDupwindNth3(alpha, i, j, k)*beta3L)*LapseAdvectionCoeff + 

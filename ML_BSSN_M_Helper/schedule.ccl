@@ -1,4 +1,4 @@
-if (CCTK_EQUALS (evolution_method, "ML_BSSN")) {
+if (CCTK_EQUALS (evolution_method, "ML_BSSN_M")) {
   
   if (timelevels == 1) {
     STORAGE: ADMBase::metric[1]
@@ -36,19 +36,19 @@ if (CCTK_EQUALS (evolution_method, "ML_BSSN")) {
     STORAGE: ADMBase::dtshift[3]
   }
   
-  SCHEDULE ML_BSSN_RegisterSlicing AT startup
+  SCHEDULE ML_BSSN_M_RegisterSlicing AT startup
   {
     LANG: C
     OPTIONS: meta
   } "Register slicing"
   
-  SCHEDULE ML_BSSN_SetGroupTags AT startup BEFORE Driver_Startup
+  SCHEDULE ML_BSSN_M_SetGroupTags AT startup BEFORE Driver_Startup
   {
     LANG: C
     OPTIONS: meta
   } "Set checkpointing and prolongation group tags"
   
-  SCHEDULE ML_BSSN_RegisterConstrained IN MoL_Register
+  SCHEDULE ML_BSSN_M_RegisterConstrained IN MoL_Register
   {
     LANG: C
     OPTIONS: meta
@@ -56,62 +56,46 @@ if (CCTK_EQUALS (evolution_method, "ML_BSSN")) {
   
   
   
-  SCHEDULE GROUP ML_BSSN_InitEta AT initial
-  {
-  } "Initialize BetaDriver"
-  
-  SCHEDULE GROUP ML_BSSN_InitEta AT postregrid
-  {
-  } "Initialize BetaDriver"
-  
-  SCHEDULE GROUP ML_BSSN_InitEta AT post_recover_variables
-  {
-  } "Initialize BetaDriver"
-  
-  
-  
-  #SCHEDULE GROUP ML_BSSN_evolCalcGroup AT postinitial AFTER MoL_PostStep
+  #SCHEDULE GROUP ML_BSSN_M_evolCalcGroup AT postinitial AFTER MoL_PostStep
   #{
   #} "Calculate BSSN RHS"
   SCHEDULE GROUP MoL_CalcRHS AT postinitial AFTER MoL_PostStep
   {
   } "Evaluate RHS"
   
-  SCHEDULE GROUP ML_BSSN_evolCalcGroup IN MoL_CalcRHS
+  SCHEDULE GROUP ML_BSSN_M_evolCalcGroup IN MoL_CalcRHS
   {
   } "Calculate BSSN RHS"
   
-  SCHEDULE GROUP ML_BSSN_evolCalcGroup AT analysis
+  SCHEDULE GROUP ML_BSSN_M_evolCalcGroup AT analysis
   {
-    TRIGGERS: ML_BSSN::ML_log_confacrhs
-    TRIGGERS: ML_BSSN::ML_metricrhs
-    TRIGGERS: ML_BSSN::ML_Gammarhs
-    TRIGGERS: ML_BSSN::ML_trace_curvrhs
-    TRIGGERS: ML_BSSN::ML_curvrhs
-    TRIGGERS: ML_BSSN::ML_lapserhs
-    TRIGGERS: ML_BSSN::ML_dtlapserhs
-    TRIGGERS: ML_BSSN::ML_shiftrhs
-    TRIGGERS: ML_BSSN::ML_dtshiftrhs
+    TRIGGERS: ML_BSSN_M::ML_log_confacrhs
+    TRIGGERS: ML_BSSN_M::ML_metricrhs
+    TRIGGERS: ML_BSSN_M::ML_Gammarhs
+    TRIGGERS: ML_BSSN_M::ML_trace_curvrhs
+    TRIGGERS: ML_BSSN_M::ML_curvrhs
+    TRIGGERS: ML_BSSN_M::ML_lapserhs
+    TRIGGERS: ML_BSSN_M::ML_dtlapserhs
+    TRIGGERS: ML_BSSN_M::ML_shiftrhs
+    TRIGGERS: ML_BSSN_M::ML_dtshiftrhs
   } "Calculate BSSN RHS"
   
   
   
   if (CCTK_EQUALS (my_initial_boundary_condition, "extrapolate-gammas"))
   {
-    SCHEDULE ML_BSSN_ExtrapolateGammas AT initial AFTER ML_BSSN_convertFromADMBaseGamma
+    SCHEDULE ML_BSSN_M_ExtrapolateGammas AT initial AFTER ML_BSSN_M_convertFromADMBaseGamma
     {
       LANG: C
-      # We don't need to synchronise here because extrapolation is now filling
-      # ghost zones
-      #SYNC: ML_Gamma
-      #SYNC: ML_dtlapse
-      #SYNC: ML_dtshift
+      SYNC: ML_Gamma
+      SYNC: ML_dtlapse
+      SYNC: ML_dtshift
     } "Extrapolate Gammas and time derivatives of lapse and shift"
   }
   
   if (CCTK_EQUALS (my_rhs_boundary_condition, "NewRad"))
   {
-    SCHEDULE ML_BSSN_NewRad IN ML_BSSN_evolCalcGroup AFTER ML_BSSN_RHS
+    SCHEDULE ML_BSSN_M_NewRad IN ML_BSSN_M_evolCalcGroup AFTER ML_BSSN_M_RHS
     {
       LANG: C
       #SYNC: ML_curvrhs
@@ -128,56 +112,69 @@ if (CCTK_EQUALS (evolution_method, "ML_BSSN")) {
   
   
   
-  SCHEDULE GROUP ML_BSSN_convertToADMBaseGroup IN ML_BSSN_convertToADMBaseGroupWrapper
+  SCHEDULE GROUP ML_BSSN_M_convertToADMBaseGroup IN ML_BSSN_M_convertToADMBaseGroupWrapper
   {
-    #SYNC: ADMBase::metric
-    #SYNC: ADMBase::curv
-    #SYNC: ADMBase::lapse
-    #SYNC: ADMBase::shift
-    #SYNC: ADMBase::dtlapse
-    #SYNC: ADMBase::dtshift
   } "Calculate ADM variables"
   
   if (CCTK_EQUALS (calculate_ADMBase_variables_at, "MoL_PostStep"))
   {
-    SCHEDULE GROUP ML_BSSN_convertToADMBaseGroupWrapper IN MoL_PostStep AFTER (ML_BSSN_ApplyBCs ML_BSSN_enforce) BEFORE (ADMBase_SetADMVars Whisky_PostStep)
+    # if (timelevels > 1)
+    # {
+    #   SCHEDULE ML_BSSN_M_CopyADMBase AT prestep
+    #   {
+    #     LANG: C
+    #   } "Copy ADMBase variables to current time level"
+    # }
+    SCHEDULE GROUP ML_BSSN_M_convertToADMBaseGroupWrapper IN MoL_PostStep AFTER (ML_BSSN_M_ApplyBCs ML_BSSN_M_enforce) BEFORE (ADMBase_SetADMVars Whisky_PostStep)
     {
     } "Calculate ADM variables"
   }
   else if  (CCTK_EQUALS (calculate_ADMBase_variables_at, "CCTK_EVOL"))
   {
-    SCHEDULE GROUP ML_BSSN_convertToADMBaseGroupWrapper AT evol AFTER MoL_Evolution BEFORE (ADMBase_SetADMVars Whisky_PostStep)
+    SCHEDULE GROUP ML_BSSN_M_convertToADMBaseGroupWrapper AT evol AFTER MoL_Evolution BEFORE (ADMBase_SetADMVars Whisky_PostStep)
     {
     } "Calculate ADM variables"
   }
   else if  (CCTK_EQUALS (calculate_ADMBase_variables_at, "CCTK_ANALYSIS"))
   {
-    SCHEDULE GROUP ML_BSSN_convertToADMBaseGroupWrapper AT analysis BEFORE (ADMBase_SetADMVars Whisky_PostStep)
+    SCHEDULE GROUP ML_BSSN_M_convertToADMBaseGroupWrapper AT analysis BEFORE (ADMBase_SetADMVars Whisky_PostStep)
     {
-      TRIGGERS: ML_BSSN::ML_Ham
-      TRIGGERS: ML_BSSN::ML_mom
+      TRIGGERS: ML_BSSN_M::ML_Ham
+      TRIGGERS: ML_BSSN_M::ML_mom
     } "Calculate ADM variables"
   }
 
-  SCHEDULE GROUP ML_BSSN_convertToADMBaseGroupWrapper AT CCTK_POST_RECOVER_VARIABLES 
+  SCHEDULE GROUP ML_BSSN_M_convertToADMBaseGroupWrapper AT CCTK_POST_RECOVER_VARIABLES 
   {
   } "Calculate ADM variables"
 
-  SCHEDULE ML_BSSN_SelectBCsADMBase IN ML_BSSN_convertToADMBaseGroupWrapper AFTER ML_BSSN_convertToADMBaseGroup
+  SCHEDULE ML_BSSN_M_SelectBCsADMBase IN ML_BSSN_M_convertToADMBaseGroupWrapper AFTER ML_BSSN_M_convertToADMBaseGroup
   {
     LANG: C
     OPTIONS: level
   } "Apply boundary conditions to ADMBase variables"
   
-  SCHEDULE GROUP ApplyBCs AS ML_BSSN_ApplyBCsADMBase IN ML_BSSN_convertToADMBaseGroupWrapper AFTER ML_BSSN_SelectBCsADMBase
+  SCHEDULE GROUP ApplyBCs AS ML_BSSN_M_ApplyBCsADMBase IN ML_BSSN_M_convertToADMBaseGroupWrapper AFTER ML_BSSN_M_SelectBCsADMBase
   {
   } "Apply boundary conditions to ADMBase variables"
   
   
   
-  SCHEDULE GROUP ML_BSSN_constraintsCalcGroup AT analysis
+  SCHEDULE GROUP ML_BSSN_M_constraintsCalcGroup AT analysis
   {
-    TRIGGERS: ML_BSSN::ML_Ham
-    TRIGGERS: ML_BSSN::ML_mom
+    TRIGGERS: ML_BSSN_M::ML_Ham
+    TRIGGERS: ML_BSSN_M::ML_mom
   } "Calculate BSSN constraints"
+  
+  SCHEDULE GROUP ML_BSSN_M_init_eta AT initial
+  {
+  } "Initialize BetaDriver"
+  
+  SCHEDULE GROUP ML_BSSN_M_init_eta AT postregrid
+  {
+  } "Initialize BetaDriver"
+  
+  SCHEDULE GROUP ML_BSSN_M_init_eta AT post_recover_variables
+  {
+  } "Initialize BetaDriver"
 }

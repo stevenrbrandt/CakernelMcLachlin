@@ -368,12 +368,21 @@ if (CCTK_EQUALS(my_initial_data, "ADMBase"))
 }
 
 
-if (CCTK_EQUALS(UseSpatialBetaDriver, "yes"))
+if (CCTK_EQUALS(UseSpatialBetaDriver, "no"))
 {
-  schedule ML_BSSN_MP_setBetaDriver AT initial AFTER ADMBase_PostInitial AFTER ML_BSSN_MP_convertFromADMBase
+  schedule ML_BSSN_MP_setBetaDriverConstant IN ML_BSSN_MP_InitEta
   {
     LANG: C
-  } "ML_BSSN_MP_setBetaDriver"
+  } "ML_BSSN_MP_setBetaDriverConstant"
+}
+
+
+if (CCTK_EQUALS(UseSpatialBetaDriver, "yes"))
+{
+  schedule ML_BSSN_MP_setBetaDriverSpatial IN ML_BSSN_MP_InitEta
+  {
+    LANG: C
+  } "ML_BSSN_MP_setBetaDriverSpatial"
 }
 
 schedule ML_BSSN_MP_RHS IN NoSuchGroup

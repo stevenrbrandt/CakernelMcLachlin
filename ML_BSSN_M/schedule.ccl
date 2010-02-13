@@ -319,19 +319,19 @@ if (rhs_timelevels == 4)
   STORAGE: ML_trace_curvrhs[4]
 }
 
-schedule ML_BSSN_Startup at STARTUP
+schedule ML_BSSN_M_Startup at STARTUP
 {
   LANG: C
   OPTIONS: meta
 } "create banner"
 
-schedule ML_BSSN_RegisterVars in MoL_Register
+schedule ML_BSSN_M_RegisterVars in MoL_Register
 {
   LANG: C
   OPTIONS: meta
 } "Register Variables for MoL"
 
-schedule ML_BSSN_RegisterSymmetries in SymmetryRegister
+schedule ML_BSSN_M_RegisterSymmetries in SymmetryRegister
 {
   LANG: C
   OPTIONS: meta
@@ -340,138 +340,123 @@ schedule ML_BSSN_RegisterSymmetries in SymmetryRegister
 
 if (CCTK_EQUALS(my_initial_data, "Minkowski"))
 {
-  schedule ML_BSSN_Minkowski IN ADMBase_InitialData
+  schedule ML_BSSN_M_Minkowski IN ADMBase_InitialData
   {
     LANG: C
-  } "ML_BSSN_Minkowski"
+  } "ML_BSSN_M_Minkowski"
 }
 
 
 if (CCTK_EQUALS(my_initial_data, "ADMBase"))
 {
-  schedule ML_BSSN_convertFromADMBase AT initial AFTER ADMBase_PostInitial
+  schedule ML_BSSN_M_convertFromADMBase AT initial AFTER ADMBase_PostInitial
   {
     LANG: C
-  } "ML_BSSN_convertFromADMBase"
+  } "ML_BSSN_M_convertFromADMBase"
 }
 
 
 if (CCTK_EQUALS(my_initial_data, "ADMBase"))
 {
-  schedule ML_BSSN_convertFromADMBaseGamma AT initial AFTER ML_BSSN_convertFromADMBase
+  schedule ML_BSSN_M_convertFromADMBaseGamma AT initial AFTER ML_BSSN_M_convertFromADMBase
   {
     LANG: C
     SYNC: ML_dtlapse
     SYNC: ML_dtshift
     SYNC: ML_Gamma
-  } "ML_BSSN_convertFromADMBaseGamma"
-}
-
-
-if (CCTK_EQUALS(UseSpatialBetaDriver, "no"))
-{
-  schedule ML_BSSN_setBetaDriverConstant IN ML_BSSN_InitEta
-  {
-    LANG: C
-  } "ML_BSSN_setBetaDriverConstant"
+  } "ML_BSSN_M_convertFromADMBaseGamma"
 }
 
 
 if (CCTK_EQUALS(UseSpatialBetaDriver, "yes"))
 {
-  schedule ML_BSSN_setBetaDriverSpatial IN ML_BSSN_InitEta
+  schedule ML_BSSN_M_setBetaDriverSpatial IN ML_BSSN_M_init_eta
   {
     LANG: C
-  } "ML_BSSN_setBetaDriverSpatial"
+  } "ML_BSSN_M_setBetaDriverSpatial"
 }
 
-schedule ML_BSSN_RHS IN NoSuchGroup
-{
-  LANG: C
-} "ML_BSSN_RHS"
 
-schedule ML_BSSN_RHS1 IN ML_BSSN_evolCalcGroup
+if (CCTK_EQUALS(UseSpatialBetaDriver, "no"))
 {
-  LANG: C
-} "ML_BSSN_RHS1"
+  schedule ML_BSSN_M_setBetaDriverConstant IN ML_BSSN_M_init_eta
+  {
+    LANG: C
+  } "ML_BSSN_M_setBetaDriverConstant"
+}
 
-schedule ML_BSSN_RHS2 IN ML_BSSN_evolCalcGroup
+schedule ML_BSSN_M_RHS IN ML_BSSN_M_evolCalcGroup
 {
   LANG: C
-} "ML_BSSN_RHS2"
+} "ML_BSSN_M_RHS"
 
 
 if (CCTK_EQUALS(my_rhs_boundary_condition, "static"))
 {
-  schedule ML_BSSN_RHSStaticBoundary IN MoL_CalcRHS
+  schedule ML_BSSN_M_RHSStaticBoundary IN MoL_CalcRHS
   {
     LANG: C
-  } "ML_BSSN_RHSStaticBoundary"
+  } "ML_BSSN_M_RHSStaticBoundary"
 }
 
 
 if (CCTK_EQUALS(my_rhs_boundary_condition, "radiative"))
 {
-  schedule ML_BSSN_RHSRadiativeBoundary IN MoL_CalcRHS
+  schedule ML_BSSN_M_RHSRadiativeBoundary IN MoL_CalcRHS
   {
     LANG: C
-  } "ML_BSSN_RHSRadiativeBoundary"
+  } "ML_BSSN_M_RHSRadiativeBoundary"
 }
 
-schedule ML_BSSN_enforce IN MoL_PostStep BEFORE ML_BSSN_SelectBoundConds
+schedule ML_BSSN_M_enforce IN MoL_PostStep BEFORE ML_BSSN_M_BoundConds
 {
   LANG: C
-} "ML_BSSN_enforce"
-
-schedule ML_BSSN_enforce2 IN MoL_PostStep AFTER ML_BSSN_enforce BEFORE ML_BSSN_SelectBoundConds
-{
-  LANG: C
-} "ML_BSSN_enforce2"
+} "ML_BSSN_M_enforce"
 
 
 if (CCTK_EQUALS(my_boundary_condition, "Minkowski"))
 {
-  schedule ML_BSSN_boundary IN MoL_PostStep
+  schedule ML_BSSN_M_boundary IN MoL_PostStep
   {
     LANG: C
-  } "ML_BSSN_boundary"
+  } "ML_BSSN_M_boundary"
 }
 
-schedule ML_BSSN_convertToADMBase IN ML_BSSN_convertToADMBaseGroup
+schedule ML_BSSN_M_convertToADMBase IN ML_BSSN_M_convertToADMBaseGroup
 {
   LANG: C
-} "ML_BSSN_convertToADMBase"
+} "ML_BSSN_M_convertToADMBase"
 
 
 if (CCTK_EQUALS(dt_lapse_shift_method, "correct"))
 {
-  schedule ML_BSSN_convertToADMBaseDtLapseShift IN ML_BSSN_convertToADMBaseGroup
+  schedule ML_BSSN_M_convertToADMBaseDtLapseShift IN ML_BSSN_M_convertToADMBaseGroup
   {
     LANG: C
     SYNC: ADMBase::dtlapse
     SYNC: ADMBase::dtshift
-  } "ML_BSSN_convertToADMBaseDtLapseShift"
+  } "ML_BSSN_M_convertToADMBaseDtLapseShift"
 }
 
 
 if (CCTK_EQUALS(dt_lapse_shift_method, "correct"))
 {
-  schedule ML_BSSN_convertToADMBaseDtLapseShiftBoundary IN ML_BSSN_convertToADMBaseGroup
+  schedule ML_BSSN_M_convertToADMBaseDtLapseShiftBoundary IN ML_BSSN_M_convertToADMBaseGroup
   {
     LANG: C
-  } "ML_BSSN_convertToADMBaseDtLapseShiftBoundary"
+  } "ML_BSSN_M_convertToADMBaseDtLapseShiftBoundary"
 }
 
 
 if (CCTK_EQUALS(dt_lapse_shift_method, "noLapseShiftAdvection"))
 {
-  schedule ML_BSSN_convertToADMBaseFakeDtLapseShift IN ML_BSSN_convertToADMBaseGroup
+  schedule ML_BSSN_M_convertToADMBaseFakeDtLapseShift IN ML_BSSN_M_convertToADMBaseGroup
   {
     LANG: C
-  } "ML_BSSN_convertToADMBaseFakeDtLapseShift"
+  } "ML_BSSN_M_convertToADMBaseFakeDtLapseShift"
 }
 
-schedule ML_BSSN_constraints IN ML_BSSN_constraintsCalcGroup
+schedule ML_BSSN_M_constraints IN ML_BSSN_M_constraintsCalcGroup
 {
   LANG: C
   SYNC: ML_cons_detg
@@ -479,14 +464,14 @@ schedule ML_BSSN_constraints IN ML_BSSN_constraintsCalcGroup
   SYNC: ML_cons_traceA
   SYNC: ML_Ham
   SYNC: ML_mom
-} "ML_BSSN_constraints"
+} "ML_BSSN_M_constraints"
 
-schedule ML_BSSN_constraints_boundary IN ML_BSSN_constraintsCalcGroup AFTER ML_BSSN_constraints
+schedule ML_BSSN_M_constraints_boundary IN ML_BSSN_M_constraintsCalcGroup AFTER ML_BSSN_M_constraints
 {
   LANG: C
-} "ML_BSSN_constraints_boundary"
+} "ML_BSSN_M_constraints_boundary"
 
-schedule ML_BSSN_SelectBoundConds in MoL_PostStep
+schedule ML_BSSN_M_SelectBoundConds in MoL_PostStep
 {
   LANG: C
   OPTIONS: level
@@ -501,13 +486,13 @@ schedule ML_BSSN_SelectBoundConds in MoL_PostStep
   SYNC: ML_trace_curv
 } "select boundary conditions"
 
-schedule ML_BSSN_CheckBoundaries at BASEGRID
+schedule ML_BSSN_M_CheckBoundaries at BASEGRID
 {
   LANG: C
   OPTIONS: meta
 } "check boundaries treatment"
 
-schedule group ApplyBCs as ML_BSSN_ApplyBCs in MoL_PostStep  after ML_BSSN_SelectBoundConds
+schedule group ApplyBCs as ML_BSSN_M_ApplyBCs in MoL_PostStep  after ML_BSSN_M_SelectBoundConds
 {
   # no language specified
 } "Apply boundary conditions controlled by thorn Boundary"

@@ -184,10 +184,10 @@ admdtalpha=dtalp;
 admbeta1=betax; admbeta2=betay; admbeta3=betaz;
 admdtbeta1=dtbetax; admdtbeta2=dtbetay; admdtbeta3=dtbetaz;
 
-Map [DefineTensor,
-     {eTtt,
-      eTtx, eTty, eTtz,
-      eTxx, eTxy, eTxz, eTyy, eTyz, eTzz}];
+(* Use the TmunuBase variable names *)
+T00=eTtt;
+T01=eTtx; T02=eTty; T03=eTtz;
+T11=eTxx; T12=eTxy; T22=eTyy; T13=eTxz; T23=eTyz; T33=eTzz;
 
 (******************************************************************************)
 (* Expressions *)
@@ -235,7 +235,8 @@ declaredGroupNames = Map [First, declaredGroups];
 
 
 extraGroups =
-  {{"ADMBase::metric",  {gxx, gxy, gxz, gyy, gyz, gzz}},
+  {{"Grid::coordinates", {x, y, z, r}},
+   {"ADMBase::metric",  {gxx, gxy, gxz, gyy, gyz, gzz}},
    {"ADMBase::curv",    {kxx, kxy, kxz, kyy, kyz, kzz}},
    {"ADMBase::lapse",   {alp}},
    {"ADMBase::dtlapse", {dtalp}},
@@ -244,7 +245,6 @@ extraGroups =
    {"TmunuBase::stress_energy_scalar", {eTtt}},
    {"TmunuBase::stress_energy_vector", {eTtx, eTty, eTtz}},
    {"TmunuBase::stress_energy_tensor", {eTxx, eTxy, eTxz, eTyy, eTyz, eTzz}},
-   {"Grid::coordinates", {x, y, z, r}},
    {"Coordinates::jacobian",  {J11, J12, J13, J21, J22, J23, J31, J32, J33}},
    {"Coordinates::jacobian2", {dJ111, dJ112, dJ113, dJ122, dJ123, dJ133,
                                dJ211, dJ212, dJ213, dJ222, dJ223, dJ233,
@@ -274,8 +274,7 @@ initialCalc =
     alpha     -> 1,
     A         -> 0,
     beta[ua]  -> 0,
-    B[ua]     -> 0,
-    eta       -> BetaDriver
+    B[ua]     -> 0
   }
 };
 
@@ -318,9 +317,7 @@ convertFromADMBaseCalc =
     
     alpha     -> admalpha,
     
-    beta[ua]  -> admbeta[ua],
-    
-    eta       -> BetaDriver
+    beta[ua]  -> admbeta[ua]
   }
 };
 
@@ -364,10 +361,21 @@ convertFromADMBaseGammaCalc =
   }
 };
 
-setBetaDriverCalc =
+setBetaDriverConstantCalc =
 {
-  Name -> BSSN <> "_setBetaDriver",
-  Schedule -> {"AT initial AFTER ADMBase_PostInitial AFTER " <> BSSN <> "_convertFromADMBase"},
+  Name -> BSSN <> "_setBetaDriverConstant",
+  Schedule -> {"IN "<> BSSN <> "_InitEta"},
+  ConditionalOnKeyword -> {"UseSpatialBetaDriver", "no"},
+  Equations ->
+  {
+    eta -> BetaDriver 
+  }
+};
+
+setBetaDriverSpatialCalc =
+{
+  Name -> BSSN <> "_setBetaDriverSpatial",
+  Schedule -> {"IN "<> BSSN <> "_InitEta"},
   ConditionalOnKeyword -> {"UseSpatialBetaDriver", "yes"},
   Equations ->
   {
@@ -470,7 +478,7 @@ evolCalc =
                  Atm[ua,lb], Atu[ua,ub],
                  e4phi, em4phi, cdphi[la], cdphi2[la,lb], g[la,lb], detg,
                  gu[ua,ub], G[ua,lb,lc], Ats[la,lb], trAts,
-                 T00, T0[la], T[la,lb], rho, S[la], trS, fac1, fac2},
+                 rho, S[la], trS, fac1, fac2},
   Equations -> 
   {
     dir[ua] -> Sign[beta[ua]],
@@ -524,6 +532,7 @@ evolCalc =
     
     (* Matter terms *)
     
+    (*
     T00 -> addMatter eTtt,
     T01 -> addMatter eTtx,
     T02 -> addMatter eTty,
@@ -534,6 +543,7 @@ evolCalc =
     T22 -> addMatter eTyy,
     T23 -> addMatter eTyz,
     T33 -> addMatter eTzz,
+    *)
     
     (* rho = n^a n^b T_ab *)
     rho -> addMatter
@@ -627,7 +637,7 @@ evol1Calc =
                  Gt[ua,lb,lc], Xtn[ua], Rt[la,lb], Rphi[la,lb], R[la,lb],
                  Atm[ua,lb], Atu[ua,ub],
                  e4phi, em4phi, cdphi[la], cdphi2[la,lb], g[la,lb], detg,
-                 T00, T0[la], T[la,lb], rho, S[la], trS, fac1, fac2},
+                 rho, S[la], trS, fac1, fac2},
   Equations -> 
   {
     dir[ua] -> Sign[beta[ua]],
@@ -651,6 +661,7 @@ evol1Calc =
     
     (* Matter terms *)
     
+    (*
     T01 -> addMatter eTtx,
     T02 -> addMatter eTty,
     T03 -> addMatter eTtz,
@@ -660,6 +671,7 @@ evol1Calc =
     T22 -> addMatter eTyy,
     T23 -> addMatter eTyz,
     T33 -> addMatter eTzz,
+    *)
     
     (* S_i = -p^a_i n^b T_ab, where p^a_i = delta^a_i + n^a n_i *)
     S[li] -> addMatter (-1/alpha (T0[li] - beta[uj] T[li,lj])),
@@ -720,7 +732,7 @@ evol2Calc =
                  Atm[ua,lb],
                  e4phi, em4phi, cdphi[la], cdphi2[la,lb], g[la,lb], detg,
                  gu[ua,ub], G[ua,lb,lc], Ats[la,lb], trAts,
-                 T00, T0[la], T[la,lb], rho, S[la], trS, fac1, fac2},
+                 rho, S[la], trS, fac1, fac2},
   Equations -> 
   {
     dir[ua] -> Sign[beta[ua]],
@@ -774,6 +786,7 @@ evol2Calc =
     
     (* Matter terms *)
     
+    (*
     T00 -> addMatter eTtt,
     T01 -> addMatter eTtx,
     T02 -> addMatter eTty,
@@ -784,6 +797,7 @@ evol2Calc =
     T22 -> addMatter eTyy,
     T23 -> addMatter eTyz,
     T33 -> addMatter eTzz,
+    *)
     
     (* rho = n^a n^b T_ab *)
     rho -> addMatter
@@ -952,7 +966,7 @@ constraintsCalc =
                  g[la,lb], detg, gu[ua,ub], ddetg[la], G[ua,lb,lc],
                  Rt[la,lb], Rphi[la,lb], R[la,lb], trR, Atm[la,lb],
                  gK[la,lb,lc], cdphi[la], cdphi2[la,lb],
-                 T00, T0[la], T[la,lb], rho, S[la], fac1, fac2},
+                 rho, S[la], fac1, fac2},
   Equations -> 
   {
     detgt        -> 1 (* detgtExpr *),
@@ -1031,6 +1045,7 @@ constraintsCalc =
     
     (* Matter terms *)
     
+    (*
     T00 -> eTtt,
     T01 -> eTtx,
     T02 -> eTty,
@@ -1041,6 +1056,7 @@ constraintsCalc =
     T22 -> eTyy,
     T23 -> eTyz,
     T33 -> eTzz,
+    *)
     
     (* rho = n^a n^b T_ab *)
     rho -> 1/alpha^2 (T00 - 2 beta[ui] T0[li] + beta[ui] beta[uj] T[li,lj]),
@@ -1259,7 +1275,8 @@ calculations =
   initialCalc,
   convertFromADMBaseCalc,
   convertFromADMBaseGammaCalc,
-  setBetaDriverCalc,
+  setBetaDriverConstantCalc,
+  setBetaDriverSpatialCalc,
   evolCalc,
   evol1Calc, evol2Calc,
   RHSStaticBoundaryCalc,

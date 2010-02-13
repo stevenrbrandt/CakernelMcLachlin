@@ -111,8 +111,6 @@ void ML_BSSN_MP_RHS1_Body(cGH const * restrict const cctkGH, int const dir, int 
     // CCTK_REAL Gt311 = INITVALUE, Gt312 = INITVALUE, Gt313 = INITVALUE, Gt322 = INITVALUE, Gt323 = INITVALUE, Gt333 = INITVALUE;
     // CCTK_REAL gtu11 = INITVALUE, gtu21 = INITVALUE, gtu22 = INITVALUE, gtu31 = INITVALUE, gtu32 = INITVALUE, gtu33 = INITVALUE;
     // CCTK_REAL S1 = INITVALUE, S2 = INITVALUE, S3 = INITVALUE;
-    // CCTK_REAL T01 = INITVALUE, T02 = INITVALUE, T03 = INITVALUE, T11 = INITVALUE, T12 = INITVALUE, T13 = INITVALUE;
-    // CCTK_REAL T22 = INITVALUE, T23 = INITVALUE, T33 = INITVALUE;
     // CCTK_REAL Xtn1 = INITVALUE, Xtn2 = INITVALUE, Xtn3 = INITVALUE;
     
     /* Declare local copies of grid functions */
@@ -493,29 +491,11 @@ void ML_BSSN_MP_RHS1_Body(cGH const * restrict const cctkGH, int const dir, int 
     
     CCTK_REAL const Atu33  =  Atm31*gtu31 + Atm32*gtu32 + Atm33*gtu33;
     
-    CCTK_REAL const T01  =  eTtxL;
+    CCTK_REAL const S1  =  (-eTtxL + beta1L*eTxxL + beta2L*eTxyL + beta3L*eTxzL)*INV(alphaL);
     
-    CCTK_REAL const T02  =  eTtyL;
+    CCTK_REAL const S2  =  (-eTtyL + beta1L*eTxyL + beta2L*eTyyL + beta3L*eTyzL)*INV(alphaL);
     
-    CCTK_REAL const T03  =  eTtzL;
-    
-    CCTK_REAL const T11  =  eTxxL;
-    
-    CCTK_REAL const T12  =  eTxyL;
-    
-    CCTK_REAL const T13  =  eTxzL;
-    
-    CCTK_REAL const T22  =  eTyyL;
-    
-    CCTK_REAL const T23  =  eTyzL;
-    
-    CCTK_REAL const T33  =  eTzzL;
-    
-    CCTK_REAL const S1  =  (-T01 + beta1L*T11 + beta2L*T12 + beta3L*T13)*INV(alphaL);
-    
-    CCTK_REAL const S2  =  (-T02 + beta1L*T12 + beta2L*T22 + beta3L*T23)*INV(alphaL);
-    
-    CCTK_REAL const S3  =  (-T03 + beta1L*T13 + beta2L*T23 + beta3L*T33)*INV(alphaL);
+    CCTK_REAL const S3  =  (-eTtzL + beta1L*eTxzL + beta2L*eTyzL + beta3L*eTzzL)*INV(alphaL);
     
     CCTK_REAL const phirhsL  =  PDupwindNth1(phi, i, j, k)*(beta1L*J11L + beta2L*J12L + beta3L*J13L) + 
         PDupwindNth2(phi, i, j, k)*(beta1L*J21L + beta2L*J22L + beta3L*J23L) + 

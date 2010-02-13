@@ -106,7 +106,6 @@ void ML_BSSN_Minkowski_Body(cGH const * restrict const cctkGH, int const dir, in
     // CCTK_REAL At11L = INITVALUE, At12L = INITVALUE, At13L = INITVALUE, At22L = INITVALUE, At23L = INITVALUE, At33L = INITVALUE;
     // CCTK_REAL B1L = INITVALUE, B2L = INITVALUE, B3L = INITVALUE;
     // CCTK_REAL beta1L = INITVALUE, beta2L = INITVALUE, beta3L = INITVALUE;
-    // CCTK_REAL etaL = INITVALUE;
     // CCTK_REAL gt11L = INITVALUE, gt12L = INITVALUE, gt13L = INITVALUE, gt22L = INITVALUE, gt23L = INITVALUE, gt33L = INITVALUE;
     // CCTK_REAL phiL = INITVALUE;
     // CCTK_REAL trKL = INITVALUE;
@@ -176,8 +175,6 @@ void ML_BSSN_Minkowski_Body(cGH const * restrict const cctkGH, int const dir, in
     
     CCTK_REAL const B3L  =  0;
     
-    CCTK_REAL const etaL  =  BetaDriver;
-    
     
     /* Copy local copies back to grid functions */
     A[index] = AL;
@@ -194,7 +191,6 @@ void ML_BSSN_Minkowski_Body(cGH const * restrict const cctkGH, int const dir, in
     beta1[index] = beta1L;
     beta2[index] = beta2L;
     beta3[index] = beta3L;
-    eta[index] = etaL;
     gt11[index] = gt11L;
     gt12[index] = gt12L;
     gt13[index] = gt13L;
