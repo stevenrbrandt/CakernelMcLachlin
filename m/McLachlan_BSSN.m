@@ -1163,13 +1163,6 @@ intParameters =
     AllowedValues -> {{Value -> "0", Description -> "phi method"},
                       {Value -> "1", Description -> "W method"}},
     Default -> 0
-  },
-  {
-    Name -> useMatter,
-    Description -> "Add matter terms",
-    AllowedValues -> {{Value -> "0", Description -> "no matter"},
-                      {Value -> "1", Description -> "matter"}},
-    Default -> addMatter
   }
 };
 

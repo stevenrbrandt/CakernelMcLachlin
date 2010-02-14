@@ -290,17 +290,6 @@ inheritedImplementations =
 (* Parameters *)
 (******************************************************************************)
 
-intParameters =
-{
-  {
-    Name -> useMatter,
-    Description -> "Add matter terms",
-    AllowedValues -> {{Value -> "0", Description -> "no matter"},
-                      {Value -> "1", Description -> "matter"}},
-    Default -> addMatter
-  }
-};
-
 (******************************************************************************)
 (* Construct the thorns *)
 (******************************************************************************)
@@ -317,8 +306,7 @@ CreateKrancThornTT [groups, ".", ADMConstraints,
   PartialDerivatives -> derivatives,
   EvolutionTimelevels -> evolutionTimelevels,
   UseLoopControl -> True,
-  InheritedImplementations -> inheritedImplementations,
-  IntParameters -> intParameters
+  InheritedImplementations -> inheritedImplementations
 ];
 
 ];

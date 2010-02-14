@@ -324,14 +324,6 @@ inheritedImplementations =
 (* Parameters *)
 (******************************************************************************)
 
-inheritedIntParameters =
-{
-  (*
-  "ML_BSSN::conformalMethod"
-  "ML_BSSN::useMatter"
-  *)
-};
-
 intParameters =
 {
   {
@@ -340,13 +332,6 @@ intParameters =
     AllowedValues -> {{Value -> "0", Description -> "phi method"},
                       {Value -> "1", Description -> "W method"}},
     Default -> 0
-  },
-  {
-    Name -> useMatter,
-    Description -> "Add matter terms",
-    AllowedValues -> {{Value -> "0", Description -> "no matter"},
-                      {Value -> "1", Description -> "matter"}},
-    Default -> addMatter
   }
 };
 
@@ -367,7 +352,6 @@ CreateKrancThornTT [groups, ".", ADMQuantities,
   EvolutionTimelevels -> evolutionTimelevels,
   UseLoopControl -> True,
   InheritedImplementations -> inheritedImplementations,
-  InheritedIntParameters -> inheritedIntParameters,
   IntParameters -> intParameters
 ];
 
