@@ -1,3 +1,0 @@
-# File produced by Kranc
-
-SRCS = Startup.c RegisterMoL.c RegisterSymmetries.c ML_BSSN_M_Minkowski.c ML_BSSN_M_convertFromADMBase.c ML_BSSN_M_convertFromADMBaseGamma.c ML_BSSN_M_setBetaDriverSpatial.c ML_BSSN_M_setBetaDriverConstant.c ML_BSSN_M_RHS.c ML_BSSN_M_RHSStaticBoundary.c ML_BSSN_M_RHSRadiativeBoundary.c ML_BSSN_M_enforce.c ML_BSSN_M_boundary.c ML_BSSN_M_convertToADMBase.c ML_BSSN_M_convertToADMBaseDtLapseShift.c ML_BSSN_M_convertToADMBaseDtLapseShiftBoundary.c ML_BSSN_M_convertToADMBaseFakeDtLapseShift.c ML_BSSN_M_constraints.c ML_BSSN_M_constraints_boundary.c Boundaries.c 

@@ -21,12 +21,6 @@ CCTK_INT verbose "verbose"
 } 0
 
 restricted:
-CCTK_INT useMatter "Add matter terms"
-{
-  *:* :: ""
-} 1
-
-restricted:
 CCTK_INT ML_ADMConstraints_MaxNumEvolvedVars "Number of evolved variables used by this thorn" ACCUMULATOR-BASE=MethodofLines::MoL_Num_Evolved_Vars
 {
   0:0 :: "Number of evolved variables used by this thorn"

@@ -1,3 +1,0 @@
-# File produced by Kranc
-
-SRCS = Startup.c RegisterMoL.c RegisterSymmetries.c ML_ADMConstraints_M.c ML_ADMConstraints_M_boundary.c Boundaries.c 

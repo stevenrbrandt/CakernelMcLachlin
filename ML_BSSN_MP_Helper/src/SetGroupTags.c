@@ -69,6 +69,8 @@ set_group_tags (int const checkpoint,
   }
   
   if (! prolongate) {
+    int const iret = Util_TableDeleteKey (table, "ProlongationParameter");
+    assert (iret == 0 || iret == UTIL_ERROR_TABLE_NO_SUCH_KEY);
     int const ierr = Util_TableSetString (table, "none", "Prolongation");
     assert (! ierr);
   }
