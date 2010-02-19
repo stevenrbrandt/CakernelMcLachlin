@@ -1,0 +1,53 @@
+# File produced by Kranc
+
+
+STORAGE: ML_Jadm[3]
+
+STORAGE: ML_Madm[3]
+
+schedule ML_ADMQuantities_O2_Startup at STARTUP
+{
+  LANG: C
+  OPTIONS: meta
+} "create banner"
+
+schedule ML_ADMQuantities_O2_RegisterVars in MoL_Register
+{
+  LANG: C
+  OPTIONS: meta
+} "Register Variables for MoL"
+
+schedule ML_ADMQuantities_O2_RegisterSymmetries in SymmetryRegister
+{
+  LANG: C
+  OPTIONS: meta
+} "register symmetries"
+
+schedule ML_ADMQuantities_O2 IN MoL_PseudoEvolution
+{
+  LANG: C
+  SYNC: ML_Jadm
+  SYNC: ML_Madm
+} "ML_ADMQuantities_O2"
+
+schedule ML_ADMQuantities_O2_boundary IN MoL_PseudoEvolution AFTER ML_ADMQuantities_O2
+{
+  LANG: C
+} "ML_ADMQuantities_O2_boundary"
+
+schedule ML_ADMQuantities_O2_SelectBoundConds in MoL_PostStep
+{
+  LANG: C
+  OPTIONS: level
+} "select boundary conditions"
+
+schedule ML_ADMQuantities_O2_CheckBoundaries at BASEGRID
+{
+  LANG: C
+  OPTIONS: meta
+} "check boundaries treatment"
+
+schedule group ApplyBCs as ML_ADMQuantities_O2_ApplyBCs in MoL_PostStep  after ML_ADMQuantities_O2_SelectBoundConds
+{
+  # no language specified
+} "Apply boundary conditions controlled by thorn Boundary"

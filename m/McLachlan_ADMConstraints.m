@@ -318,5 +318,6 @@ CreateKrancThornTT [groups, ".", ADMConstraints,
 (* matter: 0 or 1
    (matter seems cheap; it should be always enabled) *)
 
+createCode[2, False, 3, 1];
 createCode[4, False, 3, 1];
 createCode[4, True,  3, 1];
