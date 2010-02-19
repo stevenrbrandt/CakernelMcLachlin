@@ -23,14 +23,14 @@ schedule ML_ADMConstraints_RegisterSymmetries in SymmetryRegister
   OPTIONS: meta
 } "register symmetries"
 
-schedule ML_ADMConstraints AT evol AFTER MoL_Evolution
+schedule ML_ADMConstraints IN MoL_PseudoEvolution
 {
   LANG: C
   SYNC: ML_Ham
   SYNC: ML_mom
 } "ML_ADMConstraints"
 
-schedule ML_ADMConstraints_boundary AT evol AFTER MoL_Evolution AFTER ML_ADMConstraints
+schedule ML_ADMConstraints_boundary IN MoL_PseudoEvolution AFTER ML_ADMConstraints
 {
   LANG: C
 } "ML_ADMConstraints_boundary"

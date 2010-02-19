@@ -223,10 +223,7 @@ groups = Join [declaredGroups, extraGroups];
 ADMConstraintsCalc =
 {
   Name -> ADMConstraints,
-  (*
-  Schedule -> {"AT analysis"},
-  *)
-  Schedule -> {"AT evol AFTER MoL_Evolution"},
+  Schedule -> {"IN MoL_PseudoEvolution"},
   Where -> Interior,
   Shorthands -> {detg, gu[ua,ub], G[ua,lb,lc],
                  R[la,lb], trR, Km[la,lb], trK,
@@ -265,10 +262,7 @@ ADMConstraintsCalc =
 ADMConstraintsBoundaryCalc =
 {
   Name -> ADMConstraints <> "_boundary",
-  (*
-  Schedule -> {"AT analysis AFTER " <> ADMConstraints},
-  *)
-  Schedule -> {"AT evol AFTER MoL_Evolution AFTER " <> ADMConstraints},
+  Schedule -> {"IN MoL_PseudoEvolution AFTER " <> ADMConstraints},
   Where -> BoundaryWithGhosts,
   Equations -> 
   {
