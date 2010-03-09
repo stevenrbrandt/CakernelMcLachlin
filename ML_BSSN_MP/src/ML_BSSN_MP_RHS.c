@@ -109,6 +109,7 @@ void ML_BSSN_MP_RHS_Body(cGH const * restrict const cctkGH, int const dir, int c
     // CCTK_REAL dir1 = INITVALUE, dir2 = INITVALUE, dir3 = INITVALUE;
     // CCTK_REAL e4phi = INITVALUE;
     // CCTK_REAL em4phi = INITVALUE;
+    // CCTK_REAL eta = INITVALUE;
     // CCTK_REAL fac1 = INITVALUE, fac2 = INITVALUE;
     // CCTK_REAL g11 = INITVALUE;
     // CCTK_REAL G111 = INITVALUE, G112 = INITVALUE, G113 = INITVALUE;
@@ -147,7 +148,6 @@ void ML_BSSN_MP_RHS_Body(cGH const * restrict const cctkGH, int const dir, int c
     // CCTK_REAL dJ111L = INITVALUE, dJ112L = INITVALUE, dJ113L = INITVALUE, dJ122L = INITVALUE, dJ123L = INITVALUE, dJ133L = INITVALUE;
     // CCTK_REAL dJ211L = INITVALUE, dJ212L = INITVALUE, dJ213L = INITVALUE, dJ222L = INITVALUE, dJ223L = INITVALUE, dJ233L = INITVALUE;
     // CCTK_REAL dJ311L = INITVALUE, dJ312L = INITVALUE, dJ313L = INITVALUE, dJ322L = INITVALUE, dJ323L = INITVALUE, dJ333L = INITVALUE;
-    // CCTK_REAL etaL = INITVALUE;
     // CCTK_REAL eTttL = INITVALUE;
     // CCTK_REAL eTtxL = INITVALUE;
     // CCTK_REAL eTtyL = INITVALUE;
@@ -163,6 +163,7 @@ void ML_BSSN_MP_RHS_Body(cGH const * restrict const cctkGH, int const dir, int c
     // CCTK_REAL J11L = INITVALUE, J12L = INITVALUE, J13L = INITVALUE, J21L = INITVALUE, J22L = INITVALUE, J23L = INITVALUE;
     // CCTK_REAL J31L = INITVALUE, J32L = INITVALUE, J33L = INITVALUE;
     // CCTK_REAL phiL = INITVALUE, phirhsL = INITVALUE;
+    // CCTK_REAL rL = INITVALUE;
     // CCTK_REAL trKL = INITVALUE, trKrhsL = INITVALUE;
     // CCTK_REAL Xt1L = INITVALUE, Xt1rhsL = INITVALUE, Xt2L = INITVALUE, Xt2rhsL = INITVALUE, Xt3L = INITVALUE, Xt3rhsL = INITVALUE;
     /* Declare precomputed derivatives*/
@@ -313,7 +314,6 @@ void ML_BSSN_MP_RHS_Body(cGH const * restrict const cctkGH, int const dir, int c
     CCTK_REAL const dJ322L = dJ322[index];
     CCTK_REAL const dJ323L = dJ323[index];
     CCTK_REAL const dJ333L = dJ333[index];
-    CCTK_REAL const etaL = eta[index];
     CCTK_REAL const eTttL = (*stress_energy_state) ? (eTtt[index]) : 0.0;
     CCTK_REAL const eTtxL = (*stress_energy_state) ? (eTtx[index]) : 0.0;
     CCTK_REAL const eTtyL = (*stress_energy_state) ? (eTty[index]) : 0.0;
@@ -340,6 +340,7 @@ void ML_BSSN_MP_RHS_Body(cGH const * restrict const cctkGH, int const dir, int c
     CCTK_REAL const J32L = J32[index];
     CCTK_REAL const J33L = J33[index];
     CCTK_REAL const phiL = phi[index];
+    CCTK_REAL const rL = r[index];
     CCTK_REAL const trKL = trK[index];
     CCTK_REAL const Xt1L = Xt1[index];
     CCTK_REAL const Xt2L = Xt2[index];
@@ -1640,6 +1641,8 @@ void ML_BSSN_MP_RHS_Body(cGH const * restrict const cctkGH, int const dir, int c
     
     CCTK_REAL const ArhsL  =  (-1 + LapseAdvectionCoeff)*(AL*AlphaDriver - trKrhsL);
     
+    CCTK_REAL const eta  =  BetaDriver*IfThen(rL > SpatialBetaDriverRadius,SpatialBetaDriverRadius*INV(rL),1);
+    
     CCTK_REAL const beta1rhsL  =  (PDupwindNth1(beta1, i, j, k)*(beta1L*J11L + beta2L*J12L + beta3L*J13L) + 
            PDupwindNth2(beta1, i, j, k)*(beta1L*J21L + beta2L*J22L + beta3L*J23L) + 
            PDupwindNth3(beta1, i, j, k)*(beta1L*J31L + beta2L*J32L + beta3L*J33L))*ShiftAdvectionCoeff + 
@@ -1655,7 +1658,7 @@ void ML_BSSN_MP_RHS_Body(cGH const * restrict const cctkGH, int const dir, int c
            PDupwindNth3(beta3, i, j, k)*(beta1L*J31L + beta2L*J32L + beta3L*J33L))*ShiftAdvectionCoeff + 
         B3L*ShiftGammaCoeff;
     
-    CCTK_REAL const B1rhsL  =  -(B1L*etaL) + (beta1L*((PDupwindNth1(B1, i, j, k) - PDupwindNth1(Xt1, i, j, k))*J11L + 
+    CCTK_REAL const B1rhsL  =  -(B1L*eta) + (beta1L*((PDupwindNth1(B1, i, j, k) - PDupwindNth1(Xt1, i, j, k))*J11L + 
               (PDupwindNth2(B1, i, j, k) - PDupwindNth2(Xt1, i, j, k))*J21L + 
               (PDupwindNth3(B1, i, j, k) - PDupwindNth3(Xt1, i, j, k))*J31L) + 
            beta2L*((PDupwindNth1(B1, i, j, k) - PDupwindNth1(Xt1, i, j, k))*J12L + 
@@ -1665,7 +1668,7 @@ void ML_BSSN_MP_RHS_Body(cGH const * restrict const cctkGH, int const dir, int c
               (PDupwindNth2(B1, i, j, k) - PDupwindNth2(Xt1, i, j, k))*J23L + 
               (PDupwindNth3(B1, i, j, k) - PDupwindNth3(Xt1, i, j, k))*J33L))*ShiftAdvectionCoeff + Xt1rhsL;
     
-    CCTK_REAL const B2rhsL  =  -(B2L*etaL) + (beta1L*((PDupwindNth1(B2, i, j, k) - PDupwindNth1(Xt2, i, j, k))*J11L + 
+    CCTK_REAL const B2rhsL  =  -(B2L*eta) + (beta1L*((PDupwindNth1(B2, i, j, k) - PDupwindNth1(Xt2, i, j, k))*J11L + 
               (PDupwindNth2(B2, i, j, k) - PDupwindNth2(Xt2, i, j, k))*J21L + 
               (PDupwindNth3(B2, i, j, k) - PDupwindNth3(Xt2, i, j, k))*J31L) + 
            beta2L*((PDupwindNth1(B2, i, j, k) - PDupwindNth1(Xt2, i, j, k))*J12L + 
@@ -1675,7 +1678,7 @@ void ML_BSSN_MP_RHS_Body(cGH const * restrict const cctkGH, int const dir, int c
               (PDupwindNth2(B2, i, j, k) - PDupwindNth2(Xt2, i, j, k))*J23L + 
               (PDupwindNth3(B2, i, j, k) - PDupwindNth3(Xt2, i, j, k))*J33L))*ShiftAdvectionCoeff + Xt2rhsL;
     
-    CCTK_REAL const B3rhsL  =  -(B3L*etaL) + (beta1L*((PDupwindNth1(B3, i, j, k) - PDupwindNth1(Xt3, i, j, k))*J11L + 
+    CCTK_REAL const B3rhsL  =  -(B3L*eta) + (beta1L*((PDupwindNth1(B3, i, j, k) - PDupwindNth1(Xt3, i, j, k))*J11L + 
               (PDupwindNth2(B3, i, j, k) - PDupwindNth2(Xt3, i, j, k))*J21L + 
               (PDupwindNth3(B3, i, j, k) - PDupwindNth3(Xt3, i, j, k))*J31L) + 
            beta2L*((PDupwindNth1(B3, i, j, k) - PDupwindNth1(Xt3, i, j, k))*J12L + 

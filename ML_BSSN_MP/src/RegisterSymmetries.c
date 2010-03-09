@@ -144,11 +144,6 @@ void ML_BSSN_MP_RegisterSymmetries(CCTK_ARGUMENTS)
   sym[0] = 1;
   sym[1] = 1;
   sym[2] = 1;
-  SetCartSymVN(cctkGH, sym, "ML_BSSN_MP::eta");
-  
-  sym[0] = 1;
-  sym[1] = 1;
-  sym[2] = 1;
   SetCartSymVN(cctkGH, sym, "ML_BSSN_MP::cS");
   
   sym[0] = -1;

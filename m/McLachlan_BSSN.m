@@ -140,7 +140,7 @@ Map [DefineTensor,
       e4phi, em4phi, ddetg, detgt, gtu, ddetgt, dgtu, ddgtu, Gtl, Gtlu, Gt,
       Rt, Rphi, gK,
       T00, T0, T, rho, S,
-      eta, x, y, z, r,
+      x, y, z, r,
       Psi0re, Psi0im, Psi1re, Psi1im, Psi2re, Psi2im, Psi3re, Psi3im,
       Psi4re, Psi4im,
       er, eth, eph, mm1A, mm1L, mm1, mm2A, mm2B, mm2L, mm2,
@@ -220,8 +220,7 @@ evolvedGroups =
    SetGroupName [CreateGroupFromTensor [alpha    ], prefix <> "lapse"     ],
    SetGroupName [CreateGroupFromTensor [A        ], prefix <> "dtlapse"   ],
    SetGroupName [CreateGroupFromTensor [beta[ua] ], prefix <> "shift"     ],
-   SetGroupName [CreateGroupFromTensor [B[ua]    ], prefix <> "dtshift"   ],
-   SetGroupName [CreateGroupFromTensor [eta      ], prefix <> "BetaDriver"]};
+   SetGroupName [CreateGroupFromTensor [B[ua]    ], prefix <> "dtshift"   ]};
 evaluatedGroups =
   {SetGroupName [CreateGroupFromTensor [H      ], prefix <> "Ham"],
    SetGroupName [CreateGroupFromTensor [M[la]  ], prefix <> "mom"],
@@ -361,29 +360,6 @@ convertFromADMBaseGammaCalc =
   }
 };
 
-setBetaDriverConstantCalc =
-{
-  Name -> BSSN <> "_setBetaDriverConstant",
-  Schedule -> {"IN "<> BSSN <> "_InitEta"},
-  ConditionalOnKeyword -> {"UseSpatialBetaDriver", "no"},
-  Equations ->
-  {
-    eta -> BetaDriver 
-  }
-};
-
-setBetaDriverSpatialCalc =
-{
-  Name -> BSSN <> "_setBetaDriverSpatial",
-  Schedule -> {"IN "<> BSSN <> "_InitEta"},
-  ConditionalOnKeyword -> {"UseSpatialBetaDriver", "yes"},
-  Equations ->
-  {
-    eta -> BetaDriver
-           IfThen [r > SpatialBetaDriverRadius, SpatialBetaDriverRadius / r, 1]
-  }
-};
-
 (******************************************************************************)
 (* Convert to ADMBase *)
 (******************************************************************************)
@@ -477,7 +453,7 @@ evolCalc =
                  Gt[ua,lb,lc], Xtn[ua], Rt[la,lb], Rphi[la,lb], R[la,lb],
                  Atm[ua,lb], Atu[ua,ub],
                  e4phi, em4phi, cdphi[la], cdphi2[la,lb], g[la,lb], detg,
-                 gu[ua,ub], G[ua,lb,lc], Ats[la,lb], trAts,
+                 gu[ua,ub], G[ua,lb,lc], Ats[la,lb], trAts, eta,
                  rho, S[la], trS, fac1, fac2},
   Equations -> 
   {
@@ -596,7 +572,10 @@ evolCalc =
                   + LapseAdvectionCoeff beta[ua] PDu[alpha,la],
 
     dot[A]     -> (1 - LapseAdvectionCoeff) (dot[trK] - AlphaDriver A),
-
+    
+    eta -> BetaDriver
+           IfThen [r > SpatialBetaDriverRadius, SpatialBetaDriverRadius / r, 1],
+    
     (* dot[beta[ua]] -> eta Xt[ua], *)
     (* dot[beta[ua]] -> ShiftGammaCoeff alpha^ShiftAlphaPower B[ua], *)
     dot[beta[ua]] -> + ShiftGammaCoeff B[ua]
@@ -623,7 +602,7 @@ evol1Calc =
                  detgt, gtu[ua,ub],
                  Gt[ua,lb,lc], Xtn[ua], Rt[la,lb], Rphi[la,lb], R[la,lb],
                  Atm[ua,lb], Atu[ua,ub],
-                 e4phi, em4phi, cdphi[la], cdphi2[la,lb], g[la,lb], detg,
+                 e4phi, em4phi, cdphi[la], cdphi2[la,lb], g[la,lb], detg, eta,
                  rho, S[la], trS, fac1, fac2},
   Equations -> 
   {
@@ -677,6 +656,9 @@ evol1Calc =
                       + (2/3) Xtn[ui] PD[beta[uj],lj]
     (* Equation (4.28) in Baumgarte & Shapiro (Phys. Rept. 376 (2003) 41-131) *)
                       + addMatter (- 16 pi alpha gtu[ui,uj] S[lj]),
+    
+    eta -> BetaDriver
+           IfThen [r > SpatialBetaDriverRadius, SpatialBetaDriverRadius / r, 1],
     
     (* dot[beta[ua]] -> eta Xt[ua], *)
     (* dot[beta[ua]] -> ShiftGammaCoeff alpha^ShiftAlphaPower B[ua], *)
@@ -1217,8 +1199,6 @@ calculations =
   initialCalc,
   convertFromADMBaseCalc,
   convertFromADMBaseGammaCalc,
-  setBetaDriverConstantCalc,
-  setBetaDriverSpatialCalc,
   evolCalc,
   evol1Calc, evol2Calc,
   RHSStaticBoundaryCalc,

@@ -111,6 +111,7 @@ void ML_BSSN_O2_RHS1_Body(cGH const * restrict const cctkGH, int const dir, int 
     // CCTK_REAL cdphi1 = INITVALUE, cdphi2 = INITVALUE, cdphi3 = INITVALUE;
     // CCTK_REAL detgt = INITVALUE;
     // CCTK_REAL dir1 = INITVALUE, dir2 = INITVALUE, dir3 = INITVALUE;
+    // CCTK_REAL eta = INITVALUE;
     // CCTK_REAL fac1 = INITVALUE;
     // CCTK_REAL Gt111 = INITVALUE, Gt112 = INITVALUE, Gt113 = INITVALUE, Gt122 = INITVALUE, Gt123 = INITVALUE, Gt133 = INITVALUE;
     // CCTK_REAL Gt211 = INITVALUE, Gt212 = INITVALUE, Gt213 = INITVALUE, Gt222 = INITVALUE, Gt223 = INITVALUE, Gt233 = INITVALUE;
@@ -124,7 +125,6 @@ void ML_BSSN_O2_RHS1_Body(cGH const * restrict const cctkGH, int const dir, int 
     // CCTK_REAL At11L = INITVALUE, At12L = INITVALUE, At13L = INITVALUE, At22L = INITVALUE, At23L = INITVALUE, At33L = INITVALUE;
     // CCTK_REAL B1L = INITVALUE, B1rhsL = INITVALUE, B2L = INITVALUE, B2rhsL = INITVALUE, B3L = INITVALUE, B3rhsL = INITVALUE;
     // CCTK_REAL beta1L = INITVALUE, beta1rhsL = INITVALUE, beta2L = INITVALUE, beta2rhsL = INITVALUE, beta3L = INITVALUE, beta3rhsL = INITVALUE;
-    // CCTK_REAL etaL = INITVALUE;
     // CCTK_REAL eTtxL = INITVALUE;
     // CCTK_REAL eTtyL = INITVALUE;
     // CCTK_REAL eTtzL = INITVALUE;
@@ -137,6 +137,7 @@ void ML_BSSN_O2_RHS1_Body(cGH const * restrict const cctkGH, int const dir, int 
     // CCTK_REAL gt11L = INITVALUE, gt11rhsL = INITVALUE, gt12L = INITVALUE, gt12rhsL = INITVALUE, gt13L = INITVALUE, gt13rhsL = INITVALUE;
     // CCTK_REAL gt22L = INITVALUE, gt22rhsL = INITVALUE, gt23L = INITVALUE, gt23rhsL = INITVALUE, gt33L = INITVALUE, gt33rhsL = INITVALUE;
     // CCTK_REAL phiL = INITVALUE, phirhsL = INITVALUE;
+    // CCTK_REAL rL = INITVALUE;
     // CCTK_REAL trKL = INITVALUE;
     // CCTK_REAL Xt1L = INITVALUE, Xt1rhsL = INITVALUE, Xt2L = INITVALUE, Xt2rhsL = INITVALUE, Xt3L = INITVALUE, Xt3rhsL = INITVALUE;
     /* Declare precomputed derivatives*/
@@ -211,7 +212,6 @@ void ML_BSSN_O2_RHS1_Body(cGH const * restrict const cctkGH, int const dir, int 
     CCTK_REAL const beta1L = beta1[index];
     CCTK_REAL const beta2L = beta2[index];
     CCTK_REAL const beta3L = beta3[index];
-    CCTK_REAL const etaL = eta[index];
     CCTK_REAL const eTtxL = (*stress_energy_state) ? (eTtx[index]) : 0.0;
     CCTK_REAL const eTtyL = (*stress_energy_state) ? (eTty[index]) : 0.0;
     CCTK_REAL const eTtzL = (*stress_energy_state) ? (eTtz[index]) : 0.0;
@@ -228,6 +228,7 @@ void ML_BSSN_O2_RHS1_Body(cGH const * restrict const cctkGH, int const dir, int 
     CCTK_REAL const gt23L = gt23[index];
     CCTK_REAL const gt33L = gt33[index];
     CCTK_REAL const phiL = phi[index];
+    CCTK_REAL const rL = r[index];
     CCTK_REAL const trKL = trK[index];
     CCTK_REAL const Xt1L = Xt1[index];
     CCTK_REAL const Xt2L = Xt2[index];
@@ -492,6 +493,8 @@ void ML_BSSN_O2_RHS1_Body(cGH const * restrict const cctkGH, int const dir, int 
           2*(PDstandardNth1beta1 + PDstandardNth2beta2 + PDstandardNth3beta3)*Xtn3 - 
           3*(PDstandardNth1beta3*Xtn1 + PDstandardNth2beta3*Xtn2 + PDstandardNth3beta3*Xtn3));
     
+    CCTK_REAL const eta  =  BetaDriver*IfThen(rL > SpatialBetaDriverRadius,SpatialBetaDriverRadius*INV(rL),1);
+    
     CCTK_REAL const beta1rhsL  =  (PDupwindNth1(beta1, i, j, k)*beta1L + PDupwindNth2(beta1, i, j, k)*beta2L + 
            PDupwindNth3(beta1, i, j, k)*beta3L)*ShiftAdvectionCoeff + B1L*ShiftGammaCoeff;
     
@@ -501,15 +504,15 @@ void ML_BSSN_O2_RHS1_Body(cGH const * restrict const cctkGH, int const dir, int 
     CCTK_REAL const beta3rhsL  =  (PDupwindNth1(beta3, i, j, k)*beta1L + PDupwindNth2(beta3, i, j, k)*beta2L + 
            PDupwindNth3(beta3, i, j, k)*beta3L)*ShiftAdvectionCoeff + B3L*ShiftGammaCoeff;
     
-    CCTK_REAL const B1rhsL  =  -(B1L*etaL) + ((PDupwindNth1(B1, i, j, k) - PDupwindNth1(Xt1, i, j, k))*beta1L + 
+    CCTK_REAL const B1rhsL  =  -(B1L*eta) + ((PDupwindNth1(B1, i, j, k) - PDupwindNth1(Xt1, i, j, k))*beta1L + 
            (PDupwindNth2(B1, i, j, k) - PDupwindNth2(Xt1, i, j, k))*beta2L + 
            (PDupwindNth3(B1, i, j, k) - PDupwindNth3(Xt1, i, j, k))*beta3L)*ShiftAdvectionCoeff + Xt1rhsL;
     
-    CCTK_REAL const B2rhsL  =  -(B2L*etaL) + ((PDupwindNth1(B2, i, j, k) - PDupwindNth1(Xt2, i, j, k))*beta1L + 
+    CCTK_REAL const B2rhsL  =  -(B2L*eta) + ((PDupwindNth1(B2, i, j, k) - PDupwindNth1(Xt2, i, j, k))*beta1L + 
            (PDupwindNth2(B2, i, j, k) - PDupwindNth2(Xt2, i, j, k))*beta2L + 
            (PDupwindNth3(B2, i, j, k) - PDupwindNth3(Xt2, i, j, k))*beta3L)*ShiftAdvectionCoeff + Xt2rhsL;
     
-    CCTK_REAL const B3rhsL  =  -(B3L*etaL) + ((PDupwindNth1(B3, i, j, k) - PDupwindNth1(Xt3, i, j, k))*beta1L + 
+    CCTK_REAL const B3rhsL  =  -(B3L*eta) + ((PDupwindNth1(B3, i, j, k) - PDupwindNth1(Xt3, i, j, k))*beta1L + 
            (PDupwindNth2(B3, i, j, k) - PDupwindNth2(Xt3, i, j, k))*beta2L + 
            (PDupwindNth3(B3, i, j, k) - PDupwindNth3(Xt3, i, j, k))*beta3L)*ShiftAdvectionCoeff + Xt3rhsL;
     

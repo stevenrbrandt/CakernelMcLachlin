@@ -28,8 +28,6 @@ ML_BSSN_SetGroupTags (void)
   set_group_tags (0, 0, 0, "ML_BSSN::ML_Ham");
   set_group_tags (0, 0, 0, "ML_BSSN::ML_mom");
   
-  set_group_tags (0, 1, 0, "ML_BSSN::ML_BetaDriver");
-  
   int const checkpoint = rhs_timelevels > 1;
   set_group_tags (checkpoint, checkpoint, 0, "ML_BSSN::ML_dtlapserhs");
   set_group_tags (checkpoint, checkpoint, 0, "ML_BSSN::ML_dtshiftrhs");
