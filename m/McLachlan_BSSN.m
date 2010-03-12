@@ -1247,3 +1247,4 @@ CreateKrancThornTT [groups, ".", BSSN,
 createCode[2, False, 4, 1];
 createCode[4, False, 4, 1];
 createCode[4, True,  4, 1];
+createCode[8, False, 4, 1];
