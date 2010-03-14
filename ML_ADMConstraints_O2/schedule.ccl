@@ -30,11 +30,6 @@ schedule ML_ADMConstraints_O2 IN MoL_PseudoEvolution BEFORE ML_ADMConstraints_O2
   SYNC: ML_mom
 } "ML_ADMConstraints_O2"
 
-schedule ML_ADMConstraints_O2_boundary IN MoL_PseudoEvolution BEFORE ML_ADMConstraints_O2_SelectBoundConds
-{
-  LANG: C
-} "ML_ADMConstraints_O2_boundary"
-
 schedule ML_ADMConstraints_O2_SelectBoundConds in MoL_PseudoEvolution
 {
   LANG: C

@@ -30,11 +30,6 @@ schedule ML_ADMQuantities_O2 IN MoL_PseudoEvolution BEFORE ML_ADMQuantities_O2_S
   SYNC: ML_Madm
 } "ML_ADMQuantities_O2"
 
-schedule ML_ADMQuantities_O2_boundary IN MoL_PseudoEvolution BEFORE ML_ADMQuantities_O2_SelectBoundConds
-{
-  LANG: C
-} "ML_ADMQuantities_O2_boundary"
-
 schedule ML_ADMQuantities_O2_SelectBoundConds in MoL_PseudoEvolution
 {
   LANG: C

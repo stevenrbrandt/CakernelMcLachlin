@@ -30,11 +30,6 @@ schedule ML_ADMQuantities_MP IN MoL_PseudoEvolution BEFORE ML_ADMQuantities_MP_S
   SYNC: ML_Madm
 } "ML_ADMQuantities_MP"
 
-schedule ML_ADMQuantities_MP_boundary IN MoL_PseudoEvolution BEFORE ML_ADMQuantities_MP_SelectBoundConds
-{
-  LANG: C
-} "ML_ADMQuantities_MP_boundary"
-
 schedule ML_ADMQuantities_MP_SelectBoundConds in MoL_PseudoEvolution
 {
   LANG: C

@@ -292,6 +292,7 @@ ADMQuantitiesCalc =
   }
 };
 
+(*
 ADMQuantitiesBoundaryCalc =
 {
   Name -> ADMQuantities <> "_boundary",
@@ -303,6 +304,7 @@ ADMQuantitiesBoundaryCalc =
     Jadm[la] -> 0
   }
 };
+*)
 
 (******************************************************************************)
 (* Implementations *)
@@ -335,8 +337,10 @@ intParameters =
 
 calculations =
 {
-  ADMQuantitiesCalc,
+  ADMQuantitiesCalc
+(*
   ADMQuantitiesBoundaryCalc
+*)
 };
 
 CreateKrancThornTT [groups, ".", ADMQuantities,

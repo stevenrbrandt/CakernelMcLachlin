@@ -51,19 +51,7 @@ CCTK_INT ML_ADMQuantities_calc_every "ML_ADMQuantities_calc_every"
 } 1
 
 restricted:
-CCTK_INT ML_ADMQuantities_boundary_calc_every "ML_ADMQuantities_boundary_calc_every"
-{
-  *:* :: ""
-} 1
-
-restricted:
 CCTK_INT ML_ADMQuantities_calc_offset "ML_ADMQuantities_calc_offset"
-{
-  *:* :: ""
-} 0
-
-restricted:
-CCTK_INT ML_ADMQuantities_boundary_calc_offset "ML_ADMQuantities_boundary_calc_offset"
 {
   *:* :: ""
 } 0

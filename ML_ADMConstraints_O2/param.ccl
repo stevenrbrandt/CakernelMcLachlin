@@ -45,19 +45,7 @@ CCTK_INT ML_ADMConstraints_O2_calc_every "ML_ADMConstraints_O2_calc_every"
 } 1
 
 restricted:
-CCTK_INT ML_ADMConstraints_O2_boundary_calc_every "ML_ADMConstraints_O2_boundary_calc_every"
-{
-  *:* :: ""
-} 1
-
-restricted:
 CCTK_INT ML_ADMConstraints_O2_calc_offset "ML_ADMConstraints_O2_calc_offset"
-{
-  *:* :: ""
-} 0
-
-restricted:
-CCTK_INT ML_ADMConstraints_O2_boundary_calc_offset "ML_ADMConstraints_O2_boundary_calc_offset"
 {
   *:* :: ""
 } 0

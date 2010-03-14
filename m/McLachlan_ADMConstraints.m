@@ -259,6 +259,7 @@ ADMConstraintsCalc =
   }
 };
 
+(*
 ADMConstraintsBoundaryCalc =
 {
   Name -> ADMConstraints <> "_boundary",
@@ -270,6 +271,7 @@ ADMConstraintsBoundaryCalc =
     M[la] -> 0
   }
 };
+*)
 
 (******************************************************************************)
 (* Implementations *)
@@ -290,8 +292,10 @@ inheritedImplementations =
 
 calculations =
 {
-  ADMConstraintsCalc,
+  ADMConstraintsCalc
+(*
   ADMConstraintsBoundaryCalc
+*)
 };
 
 CreateKrancThornTT [groups, ".", ADMConstraints,
