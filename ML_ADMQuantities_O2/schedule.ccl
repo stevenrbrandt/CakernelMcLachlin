@@ -23,19 +23,19 @@ schedule ML_ADMQuantities_O2_RegisterSymmetries in SymmetryRegister
   OPTIONS: meta
 } "register symmetries"
 
-schedule ML_ADMQuantities_O2 IN MoL_PseudoEvolution
+schedule ML_ADMQuantities_O2 IN MoL_PseudoEvolution BEFORE ML_ADMQuantities_O2_SelectBoundConds
 {
   LANG: C
   SYNC: ML_Jadm
   SYNC: ML_Madm
 } "ML_ADMQuantities_O2"
 
-schedule ML_ADMQuantities_O2_boundary IN MoL_PseudoEvolution AFTER ML_ADMQuantities_O2
+schedule ML_ADMQuantities_O2_boundary IN MoL_PseudoEvolution BEFORE ML_ADMQuantities_O2_SelectBoundConds
 {
   LANG: C
 } "ML_ADMQuantities_O2_boundary"
 
-schedule ML_ADMQuantities_O2_SelectBoundConds in MoL_PostStep
+schedule ML_ADMQuantities_O2_SelectBoundConds in MoL_PseudoEvolution
 {
   LANG: C
   OPTIONS: level
@@ -47,7 +47,7 @@ schedule ML_ADMQuantities_O2_CheckBoundaries at BASEGRID
   OPTIONS: meta
 } "check boundaries treatment"
 
-schedule group ApplyBCs as ML_ADMQuantities_O2_ApplyBCs in MoL_PostStep  after ML_ADMQuantities_O2_SelectBoundConds
+schedule group ApplyBCs as ML_ADMQuantities_O2_ApplyBCs in MoL_PseudoEvolution  after ML_ADMQuantities_O2_SelectBoundConds
 {
   # no language specified
 } "Apply boundary conditions controlled by thorn Boundary"

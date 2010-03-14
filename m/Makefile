@@ -24,6 +24,7 @@ McLachlan_BSSN.out: McLachlan_BSSN.m
 McLachlan_ADMConstraints.out: McLachlan_ADMConstraints.m
 	rm -rf ML_ADMConstraints*
 	./runmath.sh $^
+	perl -pi -e 's/MoL_PostStep/MoL_PseudoEvolution/g' ML_ADMConstraints*/schedule.ccl
 	for thorn in ML_ADMConstraints*; do \
 		./copy-if-changed.sh $$thorn ../$$thorn; \
 	done
@@ -31,6 +32,7 @@ McLachlan_ADMConstraints.out: McLachlan_ADMConstraints.m
 McLachlan_ADMQuantities.out: McLachlan_ADMQuantities.m
 	rm -rf ML_ADMQuantities*
 	./runmath.sh $^
+	perl -pi -e 's/MoL_PostStep/MoL_PseudoEvolution/g' ML_ADMQuantities*/schedule.ccl
 	for thorn in ML_ADMQuantities*; do \
 		./copy-if-changed.sh $$thorn ../$$thorn; \
 	done

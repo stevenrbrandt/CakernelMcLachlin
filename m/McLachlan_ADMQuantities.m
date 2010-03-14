@@ -227,7 +227,7 @@ groups = Join [declaredGroups, extraGroups];
 ADMQuantitiesCalc =
 {
   Name -> ADMQuantities,
-  Schedule -> {"IN MoL_PseudoEvolution"},
+  Schedule -> {"IN MoL_PseudoEvolution BEFORE " <> ADMQuantities <> "_SelectBoundConds"},
   Where -> Interior,
   Shorthands -> {detgt, gtu[ua,ub], dgtu[ua,ub,lc],
                  Gtl[la,lb,lc], Gtlu[la,lb,uc], Gt[ua,lb,lc],
@@ -295,7 +295,7 @@ ADMQuantitiesCalc =
 ADMQuantitiesBoundaryCalc =
 {
   Name -> ADMQuantities <> "_boundary",
-  Schedule -> {"IN MoL_PseudoEvolution AFTER " <> ADMQuantities},
+  Schedule -> {"IN MoL_PseudoEvolution BEFORE " <> ADMQuantities <> "_SelectBoundConds"},
   Where -> BoundaryWithGhosts,
   Equations -> 
   {
