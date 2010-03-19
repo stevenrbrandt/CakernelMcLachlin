@@ -28,20 +28,6 @@ void ML_BSSN_convertToADMBaseDtLapseShift_Body(cGH const * restrict const cctkGH
   
   /* Declare finite differencing variables */
   
-  /* Declare predefined quantities */
-  // CCTK_REAL p1o12dx = INITVALUE;
-  // CCTK_REAL p1o12dy = INITVALUE;
-  // CCTK_REAL p1o12dz = INITVALUE;
-  // CCTK_REAL p1o144dxdy = INITVALUE;
-  // CCTK_REAL p1o144dxdz = INITVALUE;
-  // CCTK_REAL p1o144dydz = INITVALUE;
-  // CCTK_REAL p1odx = INITVALUE;
-  // CCTK_REAL p1ody = INITVALUE;
-  // CCTK_REAL p1odz = INITVALUE;
-  // CCTK_REAL pm1o12dx2 = INITVALUE;
-  // CCTK_REAL pm1o12dy2 = INITVALUE;
-  // CCTK_REAL pm1o12dz2 = INITVALUE;
-  
   if (verbose > 1)
   {
     CCTK_VInfo(CCTK_THORNSTRING,"Entering ML_BSSN_convertToADMBaseDtLapseShift_Body");
@@ -94,65 +80,47 @@ void ML_BSSN_convertToADMBaseDtLapseShift_Body(cGH const * restrict const cctkGH
             cctk_lsh[0],cctk_lsh[1],cctk_lsh[2])
   {
     // int index = INITVALUE;
-    // int subblock_index = INITVALUE;
     int const index = CCTK_GFINDEX3D(cctkGH,i,j,k);
-    int const subblock_index = i - min[0] + (max[0] - min[0]) * (j - min[1] + (max[1]-min[1]) * (k - min[2]));
-    
-    /* Declare shorthands */
-    // CCTK_REAL dir1 = INITVALUE, dir2 = INITVALUE, dir3 = INITVALUE;
-    
-    /* Declare local copies of grid functions */
-    // CCTK_REAL AL = INITVALUE;
-    // CCTK_REAL alphaL = INITVALUE;
-    // CCTK_REAL B1L = INITVALUE, B2L = INITVALUE, B3L = INITVALUE;
-    // CCTK_REAL beta1L = INITVALUE, beta2L = INITVALUE, beta3L = INITVALUE;
-    // CCTK_REAL dtalpL = INITVALUE;
-    // CCTK_REAL dtbetaxL = INITVALUE;
-    // CCTK_REAL dtbetayL = INITVALUE;
-    // CCTK_REAL dtbetazL = INITVALUE;
-    // CCTK_REAL trKL = INITVALUE;
-    /* Declare precomputed derivatives*/
-    
     /* Declare derivatives */
     
     /* Assign local copies of grid functions */
-    CCTK_REAL const AL = A[index];
-    CCTK_REAL const alphaL = alpha[index];
-    CCTK_REAL const B1L = B1[index];
-    CCTK_REAL const B2L = B2[index];
-    CCTK_REAL const B3L = B3[index];
-    CCTK_REAL const beta1L = beta1[index];
-    CCTK_REAL const beta2L = beta2[index];
-    CCTK_REAL const beta3L = beta3[index];
-    CCTK_REAL const trKL = trK[index];
-    
-    /* Assign local copies of subblock grid functions */
+    CCTK_REAL  AL = A[index];
+    CCTK_REAL  alphaL = alpha[index];
+    CCTK_REAL  B1L = B1[index];
+    CCTK_REAL  B2L = B2[index];
+    CCTK_REAL  B3L = B3[index];
+    CCTK_REAL  beta1L = beta1[index];
+    CCTK_REAL  beta2L = beta2[index];
+    CCTK_REAL  beta3L = beta3[index];
+    CCTK_REAL  trKL = trK[index];
     
     /* Include user supplied include files */
     
-    /* Precompute derivatives (new style) */
-    
-    /* Precompute derivatives (old style) */
+    /* Precompute derivatives */
     
     /* Calculate temporaries and grid functions */
-    int const dir1  =  Sign(beta1L);
+    int dir1 = Sign(beta1L);
     
-    int const dir2  =  Sign(beta2L);
+    int dir2 = Sign(beta2L);
     
-    int const dir3  =  Sign(beta3L);
+    int dir3 = Sign(beta3L);
     
-    CCTK_REAL const dtalpL  =  (PDupwindNth1(alpha, i, j, k)*beta1L + PDupwindNth2(alpha, i, j, k)*beta2L + 
-           PDupwindNth3(alpha, i, j, k)*beta3L)*LapseAdvectionCoeff + 
-        harmonicF*(AL*(-1 + LapseAdvectionCoeff) - LapseAdvectionCoeff*trKL)*pow(alphaL,harmonicN);
+    CCTK_REAL dtalpL = (PDupwindNth1(alpha, i, j, k)*beta1L + 
+      PDupwindNth2(alpha, i, j, k)*beta2L + PDupwindNth3(alpha, i, j, 
+      k)*beta3L)*LapseAdvectionCoeff + harmonicF*(AL*(-1 + 
+      LapseAdvectionCoeff) - LapseAdvectionCoeff*trKL)*pow(alphaL,harmonicN);
     
-    CCTK_REAL const dtbetaxL  =  (PDupwindNth1(beta1, i, j, k)*beta1L + PDupwindNth2(beta1, i, j, k)*beta2L + 
-           PDupwindNth3(beta1, i, j, k)*beta3L)*ShiftAdvectionCoeff + B1L*ShiftGammaCoeff;
+    CCTK_REAL dtbetaxL = (PDupwindNth1(beta1, i, j, k)*beta1L + 
+      PDupwindNth2(beta1, i, j, k)*beta2L + PDupwindNth3(beta1, i, j, 
+      k)*beta3L)*ShiftAdvectionCoeff + B1L*ShiftGammaCoeff;
     
-    CCTK_REAL const dtbetayL  =  (PDupwindNth1(beta2, i, j, k)*beta1L + PDupwindNth2(beta2, i, j, k)*beta2L + 
-           PDupwindNth3(beta2, i, j, k)*beta3L)*ShiftAdvectionCoeff + B2L*ShiftGammaCoeff;
+    CCTK_REAL dtbetayL = (PDupwindNth1(beta2, i, j, k)*beta1L + 
+      PDupwindNth2(beta2, i, j, k)*beta2L + PDupwindNth3(beta2, i, j, 
+      k)*beta3L)*ShiftAdvectionCoeff + B2L*ShiftGammaCoeff;
     
-    CCTK_REAL const dtbetazL  =  (PDupwindNth1(beta3, i, j, k)*beta1L + PDupwindNth2(beta3, i, j, k)*beta2L + 
-           PDupwindNth3(beta3, i, j, k)*beta3L)*ShiftAdvectionCoeff + B3L*ShiftGammaCoeff;
+    CCTK_REAL dtbetazL = (PDupwindNth1(beta3, i, j, k)*beta1L + 
+      PDupwindNth2(beta3, i, j, k)*beta2L + PDupwindNth3(beta3, i, j, 
+      k)*beta3L)*ShiftAdvectionCoeff + B3L*ShiftGammaCoeff;
     
     
     /* Copy local copies back to grid functions */
@@ -160,8 +128,6 @@ void ML_BSSN_convertToADMBaseDtLapseShift_Body(cGH const * restrict const cctkGH
     dtbetax[index] = dtbetaxL;
     dtbetay[index] = dtbetayL;
     dtbetaz[index] = dtbetazL;
-    
-    /* Copy local copies back to subblock grid functions */
   }
   LC_ENDLOOP3 (ML_BSSN_convertToADMBaseDtLapseShift);
 }

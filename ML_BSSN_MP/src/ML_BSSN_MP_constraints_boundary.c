@@ -28,20 +28,6 @@ void ML_BSSN_MP_constraints_boundary_Body(cGH const * restrict const cctkGH, int
   
   /* Declare finite differencing variables */
   
-  /* Declare predefined quantities */
-  // CCTK_REAL p1o12dx = INITVALUE;
-  // CCTK_REAL p1o12dy = INITVALUE;
-  // CCTK_REAL p1o12dz = INITVALUE;
-  // CCTK_REAL p1o144dxdy = INITVALUE;
-  // CCTK_REAL p1o144dxdz = INITVALUE;
-  // CCTK_REAL p1o144dydz = INITVALUE;
-  // CCTK_REAL p1odx = INITVALUE;
-  // CCTK_REAL p1ody = INITVALUE;
-  // CCTK_REAL p1odz = INITVALUE;
-  // CCTK_REAL pm1o12dx2 = INITVALUE;
-  // CCTK_REAL pm1o12dy2 = INITVALUE;
-  // CCTK_REAL pm1o12dz2 = INITVALUE;
-  
   if (verbose > 1)
   {
     CCTK_VInfo(CCTK_THORNSTRING,"Entering ML_BSSN_MP_constraints_boundary_Body");
@@ -94,46 +80,45 @@ void ML_BSSN_MP_constraints_boundary_Body(cGH const * restrict const cctkGH, int
             cctk_lsh[0],cctk_lsh[1],cctk_lsh[2])
   {
     // int index = INITVALUE;
-    // int subblock_index = INITVALUE;
     int const index = CCTK_GFINDEX3D(cctkGH,i,j,k);
-    int const subblock_index = i - min[0] + (max[0] - min[0]) * (j - min[1] + (max[1]-min[1]) * (k - min[2]));
-    
-    /* Declare shorthands */
-    
-    /* Declare local copies of grid functions */
-    // CCTK_REAL HL = INITVALUE;
-    // CCTK_REAL M1L = INITVALUE, M2L = INITVALUE, M3L = INITVALUE;
-    /* Declare precomputed derivatives*/
-    
     /* Declare derivatives */
     
     /* Assign local copies of grid functions */
     
-    /* Assign local copies of subblock grid functions */
-    
     /* Include user supplied include files */
     
-    /* Precompute derivatives (new style) */
-    
-    /* Precompute derivatives (old style) */
+    /* Precompute derivatives */
     
     /* Calculate temporaries and grid functions */
-    CCTK_REAL const HL  =  0;
+    CCTK_REAL HL = 0;
     
-    CCTK_REAL const M1L  =  0;
+    CCTK_REAL M1L = 0;
     
-    CCTK_REAL const M2L  =  0;
+    CCTK_REAL M2L = 0;
     
-    CCTK_REAL const M3L  =  0;
+    CCTK_REAL M3L = 0;
+    
+    CCTK_REAL cSL = 0;
+    
+    CCTK_REAL cXt1L = 0;
+    
+    CCTK_REAL cXt2L = 0;
+    
+    CCTK_REAL cXt3L = 0;
+    
+    CCTK_REAL cAL = 0;
     
     
     /* Copy local copies back to grid functions */
+    cA[index] = cAL;
+    cS[index] = cSL;
+    cXt1[index] = cXt1L;
+    cXt2[index] = cXt2L;
+    cXt3[index] = cXt3L;
     H[index] = HL;
     M1[index] = M1L;
     M2[index] = M2L;
     M3[index] = M3L;
-    
-    /* Copy local copies back to subblock grid functions */
   }
   LC_ENDLOOP3 (ML_BSSN_MP_constraints_boundary);
 }

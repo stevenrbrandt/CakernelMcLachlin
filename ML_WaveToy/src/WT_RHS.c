@@ -28,17 +28,6 @@ void WT_RHS_Body(cGH const * restrict const cctkGH, int const dir, int const fac
   
   /* Declare finite differencing variables */
   
-  /* Declare predefined quantities */
-  // CCTK_REAL p1o12dx = INITVALUE;
-  // CCTK_REAL p1o12dy = INITVALUE;
-  // CCTK_REAL p1o12dz = INITVALUE;
-  // CCTK_REAL p1o144dxdy = INITVALUE;
-  // CCTK_REAL p1o144dxdz = INITVALUE;
-  // CCTK_REAL p1o144dydz = INITVALUE;
-  // CCTK_REAL pm1o12dx2 = INITVALUE;
-  // CCTK_REAL pm1o12dy2 = INITVALUE;
-  // CCTK_REAL pm1o12dz2 = INITVALUE;
-  
   if (verbose > 1)
   {
     CCTK_VInfo(CCTK_THORNSTRING,"Entering WT_RHS_Body");
@@ -88,48 +77,33 @@ void WT_RHS_Body(cGH const * restrict const cctkGH, int const dir, int const fac
             cctk_lsh[0],cctk_lsh[1],cctk_lsh[2])
   {
     // int index = INITVALUE;
-    // int subblock_index = INITVALUE;
     int const index = CCTK_GFINDEX3D(cctkGH,i,j,k);
-    int const subblock_index = i - min[0] + (max[0] - min[0]) * (j - min[1] + (max[1]-min[1]) * (k - min[2]));
-    
-    /* Declare shorthands */
-    
-    /* Declare local copies of grid functions */
-    // CCTK_REAL rhoL = INITVALUE, rhorhsL = INITVALUE;
-    // CCTK_REAL uL = INITVALUE, urhsL = INITVALUE;
-    /* Declare precomputed derivatives*/
-    
     /* Declare derivatives */
     // CCTK_REAL PDstandardNth11u = INITVALUE;
     // CCTK_REAL PDstandardNth22u = INITVALUE;
     // CCTK_REAL PDstandardNth33u = INITVALUE;
     
     /* Assign local copies of grid functions */
-    CCTK_REAL const rhoL = rho[index];
-    CCTK_REAL const uL = u[index];
-    
-    /* Assign local copies of subblock grid functions */
+    CCTK_REAL  rhoL = rho[index];
+    CCTK_REAL  uL = u[index];
     
     /* Include user supplied include files */
     
-    /* Precompute derivatives (new style) */
+    /* Precompute derivatives */
     CCTK_REAL const PDstandardNth11u = PDstandardNth11(u, i, j, k);
     CCTK_REAL const PDstandardNth22u = PDstandardNth22(u, i, j, k);
     CCTK_REAL const PDstandardNth33u = PDstandardNth33(u, i, j, k);
     
-    /* Precompute derivatives (old style) */
-    
     /* Calculate temporaries and grid functions */
-    CCTK_REAL const urhsL  =  rhoL;
+    CCTK_REAL urhsL = rhoL;
     
-    CCTK_REAL const rhorhsL  =  PDstandardNth11u + PDstandardNth22u + PDstandardNth33u;
+    CCTK_REAL rhorhsL = PDstandardNth11u + PDstandardNth22u + 
+      PDstandardNth33u;
     
     
     /* Copy local copies back to grid functions */
     rhorhs[index] = rhorhsL;
     urhs[index] = urhsL;
-    
-    /* Copy local copies back to subblock grid functions */
   }
   LC_ENDLOOP3 (WT_RHS);
 }

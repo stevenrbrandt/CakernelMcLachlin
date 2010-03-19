@@ -28,17 +28,6 @@ void hydro_con2prim_Body(cGH const * restrict const cctkGH, int const dir, int c
   
   /* Declare finite differencing variables */
   
-  /* Declare predefined quantities */
-  // CCTK_REAL p1o2dx = INITVALUE;
-  // CCTK_REAL p1o2dy = INITVALUE;
-  // CCTK_REAL p1o2dz = INITVALUE;
-  // CCTK_REAL p1o4dxdy = INITVALUE;
-  // CCTK_REAL p1o4dxdz = INITVALUE;
-  // CCTK_REAL p1o4dydz = INITVALUE;
-  // CCTK_REAL p1odx2 = INITVALUE;
-  // CCTK_REAL p1ody2 = INITVALUE;
-  // CCTK_REAL p1odz2 = INITVALUE;
-  
   if (verbose > 1)
   {
     CCTK_VInfo(CCTK_THORNSTRING,"Entering hydro_con2prim_Body");
@@ -88,59 +77,39 @@ void hydro_con2prim_Body(cGH const * restrict const cctkGH, int const dir, int c
             cctk_lsh[0],cctk_lsh[1],cctk_lsh[2])
   {
     // int index = INITVALUE;
-    // int subblock_index = INITVALUE;
     int const index = CCTK_GFINDEX3D(cctkGH,i,j,k);
-    int const subblock_index = i - min[0] + (max[0] - min[0]) * (j - min[1] + (max[1]-min[1]) * (k - min[2]));
-    
-    /* Declare shorthands */
-    
-    /* Declare local copies of grid functions */
-    // CCTK_REAL eneL = INITVALUE;
-    // CCTK_REAL epsL = INITVALUE;
-    // CCTK_REAL massL = INITVALUE;
-    // CCTK_REAL mom1L = INITVALUE, mom2L = INITVALUE, mom3L = INITVALUE;
-    // CCTK_REAL pressL = INITVALUE;
-    // CCTK_REAL rhoL = INITVALUE;
-    // CCTK_REAL vel1L = INITVALUE, vel2L = INITVALUE, vel3L = INITVALUE;
-    // CCTK_REAL volL = INITVALUE;
-    /* Declare precomputed derivatives*/
-    
     /* Declare derivatives */
-    // CCTK_REAL PDstandardNth1vel1 = INITVALUE;
-    // CCTK_REAL PDstandardNth2vel2 = INITVALUE;
-    // CCTK_REAL PDstandardNth3vel3 = INITVALUE;
     
     /* Assign local copies of grid functions */
-    CCTK_REAL const eneL = ene[index];
-    CCTK_REAL const massL = mass[index];
-    CCTK_REAL const mom1L = mom1[index];
-    CCTK_REAL const mom2L = mom2[index];
-    CCTK_REAL const mom3L = mom3[index];
-    CCTK_REAL const volL = vol[index];
-    
-    /* Assign local copies of subblock grid functions */
+    CCTK_REAL  eneL = ene[index];
+    CCTK_REAL  epsL = eps[index];
+    CCTK_REAL  massL = mass[index];
+    CCTK_REAL  mom1L = mom1[index];
+    CCTK_REAL  mom2L = mom2[index];
+    CCTK_REAL  mom3L = mom3[index];
+    CCTK_REAL  rhoL = rho[index];
+    CCTK_REAL  vel1L = vel1[index];
+    CCTK_REAL  vel2L = vel2[index];
+    CCTK_REAL  vel3L = vel3[index];
+    CCTK_REAL  volL = vol[index];
     
     /* Include user supplied include files */
     
-    /* Precompute derivatives (new style) */
-    CCTK_REAL const PDstandardNth1vel1 = PDstandardNth1(vel1, i, j, k);
-    CCTK_REAL const PDstandardNth2vel2 = PDstandardNth2(vel2, i, j, k);
-    CCTK_REAL const PDstandardNth3vel3 = PDstandardNth3(vel3, i, j, k);
-    
-    /* Precompute derivatives (old style) */
+    /* Precompute derivatives */
     
     /* Calculate temporaries and grid functions */
-    CCTK_REAL const rhoL  =  massL*INV(volL);
+    rhoL = massL*INV(volL);
     
-    CCTK_REAL const vel1L  =  mom1L*INV(massL);
+    vel1L = mom1L*INV(massL);
     
-    CCTK_REAL const vel2L  =  mom2L*INV(massL);
+    vel2L = mom2L*INV(massL);
     
-    CCTK_REAL const vel3L  =  mom3L*INV(massL);
+    vel3L = mom3L*INV(massL);
     
-    CCTK_REAL const epsL  =  khalf*INV(massL)*(2*eneL - massL*(SQR(vel1L) + SQR(vel2L) + SQR(vel3L)));
+    epsL = khalf*INV(massL)*(2*eneL - massL*(SQR(vel1L) + SQR(vel2L) + 
+      SQR(vel3L)));
     
-    CCTK_REAL const pressL  =  alpha*(PDstandardNth1vel1 + PDstandardNth2vel2 + PDstandardNth3vel3) + epsL*Gamma*rhoL;
+    CCTK_REAL pressL = epsL*Gamma*rhoL;
     
     
     /* Copy local copies back to grid functions */
@@ -150,8 +119,6 @@ void hydro_con2prim_Body(cGH const * restrict const cctkGH, int const dir, int c
     vel1[index] = vel1L;
     vel2[index] = vel2L;
     vel3[index] = vel3L;
-    
-    /* Copy local copies back to subblock grid functions */
   }
   LC_ENDLOOP3 (hydro_con2prim);
 }

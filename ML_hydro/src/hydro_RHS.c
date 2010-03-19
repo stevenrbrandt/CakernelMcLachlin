@@ -28,17 +28,6 @@ void hydro_RHS_Body(cGH const * restrict const cctkGH, int const dir, int const 
   
   /* Declare finite differencing variables */
   
-  /* Declare predefined quantities */
-  // CCTK_REAL p1o2dx = INITVALUE;
-  // CCTK_REAL p1o2dy = INITVALUE;
-  // CCTK_REAL p1o2dz = INITVALUE;
-  // CCTK_REAL p1o4dxdy = INITVALUE;
-  // CCTK_REAL p1o4dxdz = INITVALUE;
-  // CCTK_REAL p1o4dydz = INITVALUE;
-  // CCTK_REAL p1odx2 = INITVALUE;
-  // CCTK_REAL p1ody2 = INITVALUE;
-  // CCTK_REAL p1odz2 = INITVALUE;
-  
   if (verbose > 1)
   {
     CCTK_VInfo(CCTK_THORNSTRING,"Entering hydro_RHS_Body");
@@ -88,22 +77,7 @@ void hydro_RHS_Body(cGH const * restrict const cctkGH, int const dir, int const 
             cctk_lsh[0],cctk_lsh[1],cctk_lsh[2])
   {
     // int index = INITVALUE;
-    // int subblock_index = INITVALUE;
     int const index = CCTK_GFINDEX3D(cctkGH,i,j,k);
-    int const subblock_index = i - min[0] + (max[0] - min[0]) * (j - min[1] + (max[1]-min[1]) * (k - min[2]));
-    
-    /* Declare shorthands */
-    
-    /* Declare local copies of grid functions */
-    // CCTK_REAL eneflux1L = INITVALUE, eneflux2L = INITVALUE, eneflux3L = INITVALUE;
-    // CCTK_REAL enerhsL = INITVALUE;
-    // CCTK_REAL massflux1L = INITVALUE, massflux2L = INITVALUE, massflux3L = INITVALUE;
-    // CCTK_REAL massrhsL = INITVALUE;
-    // CCTK_REAL mom1rhsL = INITVALUE, mom2rhsL = INITVALUE, mom3rhsL = INITVALUE;
-    // CCTK_REAL momflux11L = INITVALUE, momflux12L = INITVALUE, momflux13L = INITVALUE, momflux21L = INITVALUE, momflux22L = INITVALUE, momflux23L = INITVALUE;
-    // CCTK_REAL momflux31L = INITVALUE, momflux32L = INITVALUE, momflux33L = INITVALUE;
-    /* Declare precomputed derivatives*/
-    
     /* Declare derivatives */
     // CCTK_REAL PDstandardNth1eneflux1 = INITVALUE;
     // CCTK_REAL PDstandardNth2eneflux2 = INITVALUE;
@@ -122,27 +96,25 @@ void hydro_RHS_Body(cGH const * restrict const cctkGH, int const dir, int const 
     // CCTK_REAL PDstandardNth3momflux33 = INITVALUE;
     
     /* Assign local copies of grid functions */
-    CCTK_REAL const eneflux1L = eneflux1[index];
-    CCTK_REAL const eneflux2L = eneflux2[index];
-    CCTK_REAL const eneflux3L = eneflux3[index];
-    CCTK_REAL const massflux1L = massflux1[index];
-    CCTK_REAL const massflux2L = massflux2[index];
-    CCTK_REAL const massflux3L = massflux3[index];
-    CCTK_REAL const momflux11L = momflux11[index];
-    CCTK_REAL const momflux12L = momflux12[index];
-    CCTK_REAL const momflux13L = momflux13[index];
-    CCTK_REAL const momflux21L = momflux21[index];
-    CCTK_REAL const momflux22L = momflux22[index];
-    CCTK_REAL const momflux23L = momflux23[index];
-    CCTK_REAL const momflux31L = momflux31[index];
-    CCTK_REAL const momflux32L = momflux32[index];
-    CCTK_REAL const momflux33L = momflux33[index];
-    
-    /* Assign local copies of subblock grid functions */
+    CCTK_REAL  eneflux1L = eneflux1[index];
+    CCTK_REAL  eneflux2L = eneflux2[index];
+    CCTK_REAL  eneflux3L = eneflux3[index];
+    CCTK_REAL  massflux1L = massflux1[index];
+    CCTK_REAL  massflux2L = massflux2[index];
+    CCTK_REAL  massflux3L = massflux3[index];
+    CCTK_REAL  momflux11L = momflux11[index];
+    CCTK_REAL  momflux12L = momflux12[index];
+    CCTK_REAL  momflux13L = momflux13[index];
+    CCTK_REAL  momflux21L = momflux21[index];
+    CCTK_REAL  momflux22L = momflux22[index];
+    CCTK_REAL  momflux23L = momflux23[index];
+    CCTK_REAL  momflux31L = momflux31[index];
+    CCTK_REAL  momflux32L = momflux32[index];
+    CCTK_REAL  momflux33L = momflux33[index];
     
     /* Include user supplied include files */
     
-    /* Precompute derivatives (new style) */
+    /* Precompute derivatives */
     CCTK_REAL const PDstandardNth1eneflux1 = PDstandardNth1(eneflux1, i, j, k);
     CCTK_REAL const PDstandardNth2eneflux2 = PDstandardNth2(eneflux2, i, j, k);
     CCTK_REAL const PDstandardNth3eneflux3 = PDstandardNth3(eneflux3, i, j, k);
@@ -159,18 +131,21 @@ void hydro_RHS_Body(cGH const * restrict const cctkGH, int const dir, int const 
     CCTK_REAL const PDstandardNth2momflux32 = PDstandardNth2(momflux32, i, j, k);
     CCTK_REAL const PDstandardNth3momflux33 = PDstandardNth3(momflux33, i, j, k);
     
-    /* Precompute derivatives (old style) */
-    
     /* Calculate temporaries and grid functions */
-    CCTK_REAL const massrhsL  =  -PDstandardNth1massflux1 - PDstandardNth2massflux2 - PDstandardNth3massflux3;
+    CCTK_REAL massrhsL = -PDstandardNth1massflux1 - 
+      PDstandardNth2massflux2 - PDstandardNth3massflux3;
     
-    CCTK_REAL const mom1rhsL  =  -PDstandardNth1momflux11 - PDstandardNth2momflux12 - PDstandardNth3momflux13;
+    CCTK_REAL mom1rhsL = -PDstandardNth1momflux11 - 
+      PDstandardNth2momflux12 - PDstandardNth3momflux13;
     
-    CCTK_REAL const mom2rhsL  =  -PDstandardNth1momflux21 - PDstandardNth2momflux22 - PDstandardNth3momflux23;
+    CCTK_REAL mom2rhsL = -PDstandardNth1momflux21 - 
+      PDstandardNth2momflux22 - PDstandardNth3momflux23;
     
-    CCTK_REAL const mom3rhsL  =  -PDstandardNth1momflux31 - PDstandardNth2momflux32 - PDstandardNth3momflux33;
+    CCTK_REAL mom3rhsL = -PDstandardNth1momflux31 - 
+      PDstandardNth2momflux32 - PDstandardNth3momflux33;
     
-    CCTK_REAL const enerhsL  =  -PDstandardNth1eneflux1 - PDstandardNth2eneflux2 - PDstandardNth3eneflux3;
+    CCTK_REAL enerhsL = -PDstandardNth1eneflux1 - PDstandardNth2eneflux2 - 
+      PDstandardNth3eneflux3;
     
     
     /* Copy local copies back to grid functions */
@@ -179,8 +154,6 @@ void hydro_RHS_Body(cGH const * restrict const cctkGH, int const dir, int const 
     mom1rhs[index] = mom1rhsL;
     mom2rhs[index] = mom2rhsL;
     mom3rhs[index] = mom3rhsL;
-    
-    /* Copy local copies back to subblock grid functions */
   }
   LC_ENDLOOP3 (hydro_RHS);
 }

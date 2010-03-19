@@ -132,8 +132,7 @@ con2primCalc =
     vel[ua] -> mom[ua] / mass,
     eps     -> ene / mass - (1/2) vel[ua] vel[la],
     
-    press   -> Gamma rho eps +
-               alpha PD[vel[ua],la]
+    press   -> Gamma rho eps
   }
 };
 

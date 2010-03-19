@@ -56,20 +56,6 @@ if (CCTK_EQUALS (evolution_method, "ML_BSSN_O8")) {
   
   
   
-  SCHEDULE GROUP ML_BSSN_O8_InitEta AT initial
-  {
-  } "Initialize BetaDriver"
-  
-  SCHEDULE GROUP ML_BSSN_O8_InitEta AT postregrid
-  {
-  } "Initialize BetaDriver"
-  
-  SCHEDULE GROUP ML_BSSN_O8_InitEta AT post_recover_variables
-  {
-  } "Initialize BetaDriver"
-  
-  
-  
   #SCHEDULE GROUP ML_BSSN_O8_evolCalcGroup AT postinitial AFTER MoL_PostStep
   #{
   #} "Calculate BSSN RHS"
@@ -154,8 +140,6 @@ if (CCTK_EQUALS (evolution_method, "ML_BSSN_O8")) {
   {
     SCHEDULE GROUP ML_BSSN_O8_convertToADMBaseGroupWrapper AT analysis BEFORE (ADMBase_SetADMVars Whisky_PostStep)
     {
-      TRIGGERS: ML_BSSN_O8::ML_Ham
-      TRIGGERS: ML_BSSN_O8::ML_mom
     } "Calculate ADM variables"
   }
 
@@ -179,5 +163,8 @@ if (CCTK_EQUALS (evolution_method, "ML_BSSN_O8")) {
   {
     TRIGGERS: ML_BSSN_O8::ML_Ham
     TRIGGERS: ML_BSSN_O8::ML_mom
+    TRIGGERS: ML_BSSN_O8::ML_cons_detg
+    TRIGGERS: ML_BSSN_O8::ML_cons_Gamma
+    TRIGGERS: ML_BSSN_O8::ML_cons_traceA
   } "Calculate BSSN constraints"
 }

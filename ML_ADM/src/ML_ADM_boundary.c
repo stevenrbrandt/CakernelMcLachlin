@@ -28,17 +28,6 @@ void ML_ADM_boundary_Body(cGH const * restrict const cctkGH, int const dir, int 
   
   /* Declare finite differencing variables */
   
-  /* Declare predefined quantities */
-  // CCTK_REAL p1o12dx = INITVALUE;
-  // CCTK_REAL p1o12dy = INITVALUE;
-  // CCTK_REAL p1o12dz = INITVALUE;
-  // CCTK_REAL p1o144dxdy = INITVALUE;
-  // CCTK_REAL p1o144dxdz = INITVALUE;
-  // CCTK_REAL p1o144dydz = INITVALUE;
-  // CCTK_REAL pm1o12dx2 = INITVALUE;
-  // CCTK_REAL pm1o12dy2 = INITVALUE;
-  // CCTK_REAL pm1o12dz2 = INITVALUE;
-  
   if (verbose > 1)
   {
     CCTK_VInfo(CCTK_THORNSTRING,"Entering ML_ADM_boundary_Body");
@@ -88,63 +77,47 @@ void ML_ADM_boundary_Body(cGH const * restrict const cctkGH, int const dir, int 
             cctk_lsh[0],cctk_lsh[1],cctk_lsh[2])
   {
     // int index = INITVALUE;
-    // int subblock_index = INITVALUE;
     int const index = CCTK_GFINDEX3D(cctkGH,i,j,k);
-    int const subblock_index = i - min[0] + (max[0] - min[0]) * (j - min[1] + (max[1]-min[1]) * (k - min[2]));
-    
-    /* Declare shorthands */
-    
-    /* Declare local copies of grid functions */
-    // CCTK_REAL alphaL = INITVALUE;
-    // CCTK_REAL beta1L = INITVALUE, beta2L = INITVALUE, beta3L = INITVALUE;
-    // CCTK_REAL g11L = INITVALUE, g12L = INITVALUE, g13L = INITVALUE, g22L = INITVALUE, g23L = INITVALUE, g33L = INITVALUE;
-    // CCTK_REAL K11L = INITVALUE, K12L = INITVALUE, K13L = INITVALUE, K22L = INITVALUE, K23L = INITVALUE, K33L = INITVALUE;
-    /* Declare precomputed derivatives*/
-    
     /* Declare derivatives */
     
     /* Assign local copies of grid functions */
     
-    /* Assign local copies of subblock grid functions */
-    
     /* Include user supplied include files */
     
-    /* Precompute derivatives (new style) */
-    
-    /* Precompute derivatives (old style) */
+    /* Precompute derivatives */
     
     /* Calculate temporaries and grid functions */
-    CCTK_REAL const g11L  =  1;
+    CCTK_REAL g11L = 1;
     
-    CCTK_REAL const g12L  =  0;
+    CCTK_REAL g12L = 0;
     
-    CCTK_REAL const g13L  =  0;
+    CCTK_REAL g13L = 0;
     
-    CCTK_REAL const g22L  =  1;
+    CCTK_REAL g22L = 1;
     
-    CCTK_REAL const g23L  =  0;
+    CCTK_REAL g23L = 0;
     
-    CCTK_REAL const g33L  =  1;
+    CCTK_REAL g33L = 1;
     
-    CCTK_REAL const K11L  =  0;
+    CCTK_REAL K11L = 0;
     
-    CCTK_REAL const K12L  =  0;
+    CCTK_REAL K12L = 0;
     
-    CCTK_REAL const K13L  =  0;
+    CCTK_REAL K13L = 0;
     
-    CCTK_REAL const K22L  =  0;
+    CCTK_REAL K22L = 0;
     
-    CCTK_REAL const K23L  =  0;
+    CCTK_REAL K23L = 0;
     
-    CCTK_REAL const K33L  =  0;
+    CCTK_REAL K33L = 0;
     
-    CCTK_REAL const alphaL  =  1;
+    CCTK_REAL alphaL = 1;
     
-    CCTK_REAL const beta1L  =  0;
+    CCTK_REAL beta1L = 0;
     
-    CCTK_REAL const beta2L  =  0;
+    CCTK_REAL beta2L = 0;
     
-    CCTK_REAL const beta3L  =  0;
+    CCTK_REAL beta3L = 0;
     
     
     /* Copy local copies back to grid functions */
@@ -164,8 +137,6 @@ void ML_ADM_boundary_Body(cGH const * restrict const cctkGH, int const dir, int 
     K22[index] = K22L;
     K23[index] = K23L;
     K33[index] = K33L;
-    
-    /* Copy local copies back to subblock grid functions */
   }
   LC_ENDLOOP3 (ML_ADM_boundary);
 }

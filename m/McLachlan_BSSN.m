@@ -140,12 +140,7 @@ Map [DefineTensor,
       e4phi, em4phi, ddetg, detgt, gtu, ddetgt, dgtu, ddgtu, Gtl, Gtlu, Gt,
       Rt, Rphi, gK,
       T00, T0, T, rho, S,
-      x, y, z, r,
-      Psi0re, Psi0im, Psi1re, Psi1im, Psi2re, Psi2im, Psi3re, Psi3im,
-      Psi4re, Psi4im,
-      er, eth, eph, mm1A, mm1L, mm1, mm2A, mm2B, mm2L, mm2,
-      ssA, ssB, ssC, ssL, ss, ss0, tt, ss0, kk, nn, kk0, nn0, mmre, mmim,
-      EE, BB}];
+      x, y, z, r}];
 
 (* NOTE: It seems as if Lie[.,.] did not take these tensor weights
    into account.  Presumably, CD[.,.] and CDt[.,.] don't do this either.  *)
@@ -841,8 +836,6 @@ RHSRadiativeBoundaryCalc =
   }
 };
 
-(* Note: We abuse the RHS variables, so that the state vector is not
-   overwritten *)
 enforceCalc =
 {
   Name -> BSSN <> "_enforce",
@@ -855,21 +848,9 @@ enforceCalc =
     
     trAt -> gtu[ua,ub] At[la,lb],
     
-    dot[At[la,lb]] -> At[la,lb] - (1/3) gt[la,lb] trAt,
+    At[la,lb] -> At[la,lb] - (1/3) gt[la,lb] trAt,
     
-    dot[alpha] -> Max[alpha, MinimumLapse]
-  }
-};
-
-(* Copy back the RHS variables *)
-enforce2Calc =
-{
-  Name -> BSSN <> "_enforce2",
-  Schedule -> {"IN MoL_PostStep AFTER " <> BSSN <> "_enforce BEFORE " <> BSSN <> "_SelectBoundConds"},
-  Equations -> 
-  {
-    At[la,lb] -> dot[At[la,lb]],
-    alpha -> dot[alpha]
+    alpha -> Max[alpha, MinimumLapse]
   }
 };
 
@@ -1030,8 +1011,11 @@ constraintsBoundaryCalc =
   Where -> BoundaryWithGhosts,
   Equations -> 
   {
-    H     -> 0,
-    M[la] -> 0
+    H       -> 0,
+    M[la]   -> 0,
+    cS      -> 0,
+    cXt[ua] -> 0,
+    cA      -> 0
   }
 };
 
@@ -1204,7 +1188,6 @@ calculations =
   RHSStaticBoundaryCalc,
   RHSRadiativeBoundaryCalc,
   enforceCalc,
-  enforce2Calc,
   boundaryCalc,
   convertToADMBaseCalc,
   convertToADMBaseDtLapseShiftCalc,

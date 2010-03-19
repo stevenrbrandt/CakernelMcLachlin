@@ -403,11 +403,6 @@ schedule ML_BSSN_MP_enforce IN MoL_PostStep BEFORE ML_BSSN_MP_SelectBoundConds
   LANG: C
 } "ML_BSSN_MP_enforce"
 
-schedule ML_BSSN_MP_enforce2 IN MoL_PostStep AFTER ML_BSSN_MP_enforce BEFORE ML_BSSN_MP_SelectBoundConds
-{
-  LANG: C
-} "ML_BSSN_MP_enforce2"
-
 
 if (CCTK_EQUALS(my_boundary_condition, "Minkowski"))
 {

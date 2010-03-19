@@ -28,20 +28,6 @@ void ML_BSSN_RHSStaticBoundary_Body(cGH const * restrict const cctkGH, int const
   
   /* Declare finite differencing variables */
   
-  /* Declare predefined quantities */
-  // CCTK_REAL p1o12dx = INITVALUE;
-  // CCTK_REAL p1o12dy = INITVALUE;
-  // CCTK_REAL p1o12dz = INITVALUE;
-  // CCTK_REAL p1o144dxdy = INITVALUE;
-  // CCTK_REAL p1o144dxdz = INITVALUE;
-  // CCTK_REAL p1o144dydz = INITVALUE;
-  // CCTK_REAL p1odx = INITVALUE;
-  // CCTK_REAL p1ody = INITVALUE;
-  // CCTK_REAL p1odz = INITVALUE;
-  // CCTK_REAL pm1o12dx2 = INITVALUE;
-  // CCTK_REAL pm1o12dy2 = INITVALUE;
-  // CCTK_REAL pm1o12dz2 = INITVALUE;
-  
   if (verbose > 1)
   {
     CCTK_VInfo(CCTK_THORNSTRING,"Entering ML_BSSN_RHSStaticBoundary_Body");
@@ -94,86 +80,65 @@ void ML_BSSN_RHSStaticBoundary_Body(cGH const * restrict const cctkGH, int const
             cctk_lsh[0],cctk_lsh[1],cctk_lsh[2])
   {
     // int index = INITVALUE;
-    // int subblock_index = INITVALUE;
     int const index = CCTK_GFINDEX3D(cctkGH,i,j,k);
-    int const subblock_index = i - min[0] + (max[0] - min[0]) * (j - min[1] + (max[1]-min[1]) * (k - min[2]));
-    
-    /* Declare shorthands */
-    
-    /* Declare local copies of grid functions */
-    // CCTK_REAL alpharhsL = INITVALUE;
-    // CCTK_REAL ArhsL = INITVALUE;
-    // CCTK_REAL At11rhsL = INITVALUE, At12rhsL = INITVALUE, At13rhsL = INITVALUE, At22rhsL = INITVALUE, At23rhsL = INITVALUE, At33rhsL = INITVALUE;
-    // CCTK_REAL B1rhsL = INITVALUE, B2rhsL = INITVALUE, B3rhsL = INITVALUE;
-    // CCTK_REAL beta1rhsL = INITVALUE, beta2rhsL = INITVALUE, beta3rhsL = INITVALUE;
-    // CCTK_REAL gt11rhsL = INITVALUE, gt12rhsL = INITVALUE, gt13rhsL = INITVALUE, gt22rhsL = INITVALUE, gt23rhsL = INITVALUE, gt33rhsL = INITVALUE;
-    // CCTK_REAL phirhsL = INITVALUE;
-    // CCTK_REAL trKrhsL = INITVALUE;
-    // CCTK_REAL Xt1rhsL = INITVALUE, Xt2rhsL = INITVALUE, Xt3rhsL = INITVALUE;
-    /* Declare precomputed derivatives*/
-    
     /* Declare derivatives */
     
     /* Assign local copies of grid functions */
     
-    /* Assign local copies of subblock grid functions */
-    
     /* Include user supplied include files */
     
-    /* Precompute derivatives (new style) */
-    
-    /* Precompute derivatives (old style) */
+    /* Precompute derivatives */
     
     /* Calculate temporaries and grid functions */
-    CCTK_REAL const phirhsL  =  0;
+    CCTK_REAL phirhsL = 0;
     
-    CCTK_REAL const gt11rhsL  =  0;
+    CCTK_REAL gt11rhsL = 0;
     
-    CCTK_REAL const gt12rhsL  =  0;
+    CCTK_REAL gt12rhsL = 0;
     
-    CCTK_REAL const gt13rhsL  =  0;
+    CCTK_REAL gt13rhsL = 0;
     
-    CCTK_REAL const gt22rhsL  =  0;
+    CCTK_REAL gt22rhsL = 0;
     
-    CCTK_REAL const gt23rhsL  =  0;
+    CCTK_REAL gt23rhsL = 0;
     
-    CCTK_REAL const gt33rhsL  =  0;
+    CCTK_REAL gt33rhsL = 0;
     
-    CCTK_REAL const trKrhsL  =  0;
+    CCTK_REAL trKrhsL = 0;
     
-    CCTK_REAL const At11rhsL  =  0;
+    CCTK_REAL At11rhsL = 0;
     
-    CCTK_REAL const At12rhsL  =  0;
+    CCTK_REAL At12rhsL = 0;
     
-    CCTK_REAL const At13rhsL  =  0;
+    CCTK_REAL At13rhsL = 0;
     
-    CCTK_REAL const At22rhsL  =  0;
+    CCTK_REAL At22rhsL = 0;
     
-    CCTK_REAL const At23rhsL  =  0;
+    CCTK_REAL At23rhsL = 0;
     
-    CCTK_REAL const At33rhsL  =  0;
+    CCTK_REAL At33rhsL = 0;
     
-    CCTK_REAL const Xt1rhsL  =  0;
+    CCTK_REAL Xt1rhsL = 0;
     
-    CCTK_REAL const Xt2rhsL  =  0;
+    CCTK_REAL Xt2rhsL = 0;
     
-    CCTK_REAL const Xt3rhsL  =  0;
+    CCTK_REAL Xt3rhsL = 0;
     
-    CCTK_REAL const alpharhsL  =  0;
+    CCTK_REAL alpharhsL = 0;
     
-    CCTK_REAL const ArhsL  =  0;
+    CCTK_REAL ArhsL = 0;
     
-    CCTK_REAL const beta1rhsL  =  0;
+    CCTK_REAL beta1rhsL = 0;
     
-    CCTK_REAL const beta2rhsL  =  0;
+    CCTK_REAL beta2rhsL = 0;
     
-    CCTK_REAL const beta3rhsL  =  0;
+    CCTK_REAL beta3rhsL = 0;
     
-    CCTK_REAL const B1rhsL  =  0;
+    CCTK_REAL B1rhsL = 0;
     
-    CCTK_REAL const B2rhsL  =  0;
+    CCTK_REAL B2rhsL = 0;
     
-    CCTK_REAL const B3rhsL  =  0;
+    CCTK_REAL B3rhsL = 0;
     
     
     /* Copy local copies back to grid functions */
@@ -202,8 +167,6 @@ void ML_BSSN_RHSStaticBoundary_Body(cGH const * restrict const cctkGH, int const
     Xt1rhs[index] = Xt1rhsL;
     Xt2rhs[index] = Xt2rhsL;
     Xt3rhs[index] = Xt3rhsL;
-    
-    /* Copy local copies back to subblock grid functions */
   }
   LC_ENDLOOP3 (ML_BSSN_RHSStaticBoundary);
 }

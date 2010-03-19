@@ -28,23 +28,6 @@ void ML_BSSN_O2_boundary_Body(cGH const * restrict const cctkGH, int const dir, 
   
   /* Declare finite differencing variables */
   
-  /* Declare predefined quantities */
-  // CCTK_REAL p1o2dx = INITVALUE;
-  // CCTK_REAL p1o2dy = INITVALUE;
-  // CCTK_REAL p1o2dz = INITVALUE;
-  // CCTK_REAL p1o4dxdy = INITVALUE;
-  // CCTK_REAL p1o4dxdz = INITVALUE;
-  // CCTK_REAL p1o4dydz = INITVALUE;
-  // CCTK_REAL p1odx = INITVALUE;
-  // CCTK_REAL p1odx2 = INITVALUE;
-  // CCTK_REAL p1ody = INITVALUE;
-  // CCTK_REAL p1ody2 = INITVALUE;
-  // CCTK_REAL p1odz = INITVALUE;
-  // CCTK_REAL p1odz2 = INITVALUE;
-  // CCTK_REAL pm1o2dx = INITVALUE;
-  // CCTK_REAL pm1o2dy = INITVALUE;
-  // CCTK_REAL pm1o2dz = INITVALUE;
-  
   if (verbose > 1)
   {
     CCTK_VInfo(CCTK_THORNSTRING,"Entering ML_BSSN_O2_boundary_Body");
@@ -100,86 +83,65 @@ void ML_BSSN_O2_boundary_Body(cGH const * restrict const cctkGH, int const dir, 
             cctk_lsh[0],cctk_lsh[1],cctk_lsh[2])
   {
     // int index = INITVALUE;
-    // int subblock_index = INITVALUE;
     int const index = CCTK_GFINDEX3D(cctkGH,i,j,k);
-    int const subblock_index = i - min[0] + (max[0] - min[0]) * (j - min[1] + (max[1]-min[1]) * (k - min[2]));
-    
-    /* Declare shorthands */
-    
-    /* Declare local copies of grid functions */
-    // CCTK_REAL AL = INITVALUE;
-    // CCTK_REAL alphaL = INITVALUE;
-    // CCTK_REAL At11L = INITVALUE, At12L = INITVALUE, At13L = INITVALUE, At22L = INITVALUE, At23L = INITVALUE, At33L = INITVALUE;
-    // CCTK_REAL B1L = INITVALUE, B2L = INITVALUE, B3L = INITVALUE;
-    // CCTK_REAL beta1L = INITVALUE, beta2L = INITVALUE, beta3L = INITVALUE;
-    // CCTK_REAL gt11L = INITVALUE, gt12L = INITVALUE, gt13L = INITVALUE, gt22L = INITVALUE, gt23L = INITVALUE, gt33L = INITVALUE;
-    // CCTK_REAL phiL = INITVALUE;
-    // CCTK_REAL trKL = INITVALUE;
-    // CCTK_REAL Xt1L = INITVALUE, Xt2L = INITVALUE, Xt3L = INITVALUE;
-    /* Declare precomputed derivatives*/
-    
     /* Declare derivatives */
     
     /* Assign local copies of grid functions */
     
-    /* Assign local copies of subblock grid functions */
-    
     /* Include user supplied include files */
     
-    /* Precompute derivatives (new style) */
-    
-    /* Precompute derivatives (old style) */
+    /* Precompute derivatives */
     
     /* Calculate temporaries and grid functions */
-    CCTK_REAL const phiL  =  IfThen(conformalMethod,1,0);
+    CCTK_REAL phiL = IfThen(conformalMethod,1,0);
     
-    CCTK_REAL const gt11L  =  1;
+    CCTK_REAL gt11L = 1;
     
-    CCTK_REAL const gt12L  =  0;
+    CCTK_REAL gt12L = 0;
     
-    CCTK_REAL const gt13L  =  0;
+    CCTK_REAL gt13L = 0;
     
-    CCTK_REAL const gt22L  =  1;
+    CCTK_REAL gt22L = 1;
     
-    CCTK_REAL const gt23L  =  0;
+    CCTK_REAL gt23L = 0;
     
-    CCTK_REAL const gt33L  =  1;
+    CCTK_REAL gt33L = 1;
     
-    CCTK_REAL const trKL  =  0;
+    CCTK_REAL trKL = 0;
     
-    CCTK_REAL const At11L  =  0;
+    CCTK_REAL At11L = 0;
     
-    CCTK_REAL const At12L  =  0;
+    CCTK_REAL At12L = 0;
     
-    CCTK_REAL const At13L  =  0;
+    CCTK_REAL At13L = 0;
     
-    CCTK_REAL const At22L  =  0;
+    CCTK_REAL At22L = 0;
     
-    CCTK_REAL const At23L  =  0;
+    CCTK_REAL At23L = 0;
     
-    CCTK_REAL const At33L  =  0;
+    CCTK_REAL At33L = 0;
     
-    CCTK_REAL const Xt1L  =  0;
+    CCTK_REAL Xt1L = 0;
     
-    CCTK_REAL const Xt2L  =  0;
+    CCTK_REAL Xt2L = 0;
     
-    CCTK_REAL const Xt3L  =  0;
+    CCTK_REAL Xt3L = 0;
     
-    CCTK_REAL const alphaL  =  1;
+    CCTK_REAL alphaL = 1;
     
-    CCTK_REAL const AL  =  0;
+    CCTK_REAL AL = 0;
     
-    CCTK_REAL const beta1L  =  0;
+    CCTK_REAL beta1L = 0;
     
-    CCTK_REAL const beta2L  =  0;
+    CCTK_REAL beta2L = 0;
     
-    CCTK_REAL const beta3L  =  0;
+    CCTK_REAL beta3L = 0;
     
-    CCTK_REAL const B1L  =  0;
+    CCTK_REAL B1L = 0;
     
-    CCTK_REAL const B2L  =  0;
+    CCTK_REAL B2L = 0;
     
-    CCTK_REAL const B3L  =  0;
+    CCTK_REAL B3L = 0;
     
     
     /* Copy local copies back to grid functions */
@@ -208,8 +170,6 @@ void ML_BSSN_O2_boundary_Body(cGH const * restrict const cctkGH, int const dir, 
     Xt1[index] = Xt1L;
     Xt2[index] = Xt2L;
     Xt3[index] = Xt3L;
-    
-    /* Copy local copies back to subblock grid functions */
   }
   LC_ENDLOOP3 (ML_BSSN_O2_boundary);
 }

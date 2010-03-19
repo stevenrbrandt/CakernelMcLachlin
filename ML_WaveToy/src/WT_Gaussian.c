@@ -28,17 +28,6 @@ void WT_Gaussian_Body(cGH const * restrict const cctkGH, int const dir, int cons
   
   /* Declare finite differencing variables */
   
-  /* Declare predefined quantities */
-  // CCTK_REAL p1o12dx = INITVALUE;
-  // CCTK_REAL p1o12dy = INITVALUE;
-  // CCTK_REAL p1o12dz = INITVALUE;
-  // CCTK_REAL p1o144dxdy = INITVALUE;
-  // CCTK_REAL p1o144dxdz = INITVALUE;
-  // CCTK_REAL p1o144dydz = INITVALUE;
-  // CCTK_REAL pm1o12dx2 = INITVALUE;
-  // CCTK_REAL pm1o12dy2 = INITVALUE;
-  // CCTK_REAL pm1o12dz2 = INITVALUE;
-  
   if (verbose > 1)
   {
     CCTK_VInfo(CCTK_THORNSTRING,"Entering WT_Gaussian_Body");
@@ -88,40 +77,24 @@ void WT_Gaussian_Body(cGH const * restrict const cctkGH, int const dir, int cons
             cctk_lsh[0],cctk_lsh[1],cctk_lsh[2])
   {
     // int index = INITVALUE;
-    // int subblock_index = INITVALUE;
     int const index = CCTK_GFINDEX3D(cctkGH,i,j,k);
-    int const subblock_index = i - min[0] + (max[0] - min[0]) * (j - min[1] + (max[1]-min[1]) * (k - min[2]));
-    
-    /* Declare shorthands */
-    
-    /* Declare local copies of grid functions */
-    // CCTK_REAL rhoL = INITVALUE;
-    // CCTK_REAL uL = INITVALUE;
-    /* Declare precomputed derivatives*/
-    
     /* Declare derivatives */
     
     /* Assign local copies of grid functions */
     
-    /* Assign local copies of subblock grid functions */
-    
     /* Include user supplied include files */
     
-    /* Precompute derivatives (new style) */
-    
-    /* Precompute derivatives (old style) */
+    /* Precompute derivatives */
     
     /* Calculate temporaries and grid functions */
-    CCTK_REAL const uL  =  0;
+    CCTK_REAL uL = 0;
     
-    CCTK_REAL const rhoL  =  0;
+    CCTK_REAL rhoL = 0;
     
     
     /* Copy local copies back to grid functions */
     rho[index] = rhoL;
     u[index] = uL;
-    
-    /* Copy local copies back to subblock grid functions */
   }
   LC_ENDLOOP3 (WT_Gaussian);
 }

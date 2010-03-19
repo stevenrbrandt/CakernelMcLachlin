@@ -29,15 +29,15 @@ ML_BSSN_SetGroupTags (void)
   set_group_tags (0, 0, 0, "ML_BSSN::ML_mom");
   
   int const checkpoint = rhs_timelevels > 1;
-  set_group_tags (checkpoint, checkpoint, 0, "ML_BSSN::ML_dtlapserhs");
-  set_group_tags (checkpoint, checkpoint, 0, "ML_BSSN::ML_dtshiftrhs");
-  set_group_tags (checkpoint, checkpoint, 0, "ML_BSSN::ML_Gammarhs");
-  set_group_tags (checkpoint, checkpoint, 0, "ML_BSSN::ML_lapserhs");
   set_group_tags (checkpoint, checkpoint, 0, "ML_BSSN::ML_log_confacrhs");
   set_group_tags (checkpoint, checkpoint, 0, "ML_BSSN::ML_metricrhs");
-  set_group_tags (checkpoint, checkpoint, 0, "ML_BSSN::ML_shiftrhs");
+  set_group_tags (checkpoint, checkpoint, 0, "ML_BSSN::ML_Gammarhs");
   set_group_tags (checkpoint, checkpoint, 0, "ML_BSSN::ML_trace_curvrhs");
   set_group_tags (checkpoint, checkpoint, 0, "ML_BSSN::ML_curvrhs");
+  set_group_tags (checkpoint, checkpoint, 0, "ML_BSSN::ML_lapserhs");
+  set_group_tags (checkpoint, checkpoint, 0, "ML_BSSN::ML_dtlapserhs");
+  set_group_tags (checkpoint, checkpoint, 0, "ML_BSSN::ML_shiftrhs");
+  set_group_tags (checkpoint, checkpoint, 0, "ML_BSSN::ML_dtshiftrhs");
   
   return 0;
 }
