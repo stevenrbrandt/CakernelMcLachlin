@@ -365,11 +365,6 @@ if (CCTK_EQUALS(my_initial_data, "ADMBase"))
   } "ML_BSSN_convertFromADMBaseGamma"
 }
 
-schedule ML_BSSN_RHS IN NoSuchGroup
-{
-  LANG: C
-} "ML_BSSN_RHS"
-
 schedule ML_BSSN_RHS1 IN ML_BSSN_evolCalcGroup
 {
   LANG: C

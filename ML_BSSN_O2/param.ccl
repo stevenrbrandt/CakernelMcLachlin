@@ -207,12 +207,6 @@ CCTK_INT ML_BSSN_O2_convertFromADMBaseGamma_calc_every "ML_BSSN_O2_convertFromAD
 } 1
 
 restricted:
-CCTK_INT ML_BSSN_O2_RHS_calc_every "ML_BSSN_O2_RHS_calc_every"
-{
-  *:* :: ""
-} 1
-
-restricted:
 CCTK_INT ML_BSSN_O2_RHS1_calc_every "ML_BSSN_O2_RHS1_calc_every"
 {
   *:* :: ""
@@ -298,12 +292,6 @@ CCTK_INT ML_BSSN_O2_convertFromADMBase_calc_offset "ML_BSSN_O2_convertFromADMBas
 
 restricted:
 CCTK_INT ML_BSSN_O2_convertFromADMBaseGamma_calc_offset "ML_BSSN_O2_convertFromADMBaseGamma_calc_offset"
-{
-  *:* :: ""
-} 0
-
-restricted:
-CCTK_INT ML_BSSN_O2_RHS_calc_offset "ML_BSSN_O2_RHS_calc_offset"
 {
   *:* :: ""
 } 0

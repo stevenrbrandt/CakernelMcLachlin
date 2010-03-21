@@ -434,8 +434,7 @@ convertToADMBaseFakeDtLapseShiftCalc =
 evolCalc =
 {
   Name -> BSSN <> "_RHS",
-  (* Schedule -> {"IN " <> BSSN <> "_evolCalcGroup"}, *)
-  Schedule -> {"IN NoSuchGroup"},
+  Schedule -> {"IN " <> BSSN <> "_evolCalcGroup"},
   (*
   Where -> Interior,
   *)
@@ -1183,7 +1182,7 @@ calculations =
   initialCalc,
   convertFromADMBaseCalc,
   convertFromADMBaseGammaCalc,
-  evolCalc,
+  (* evolCalc, *)
   evol1Calc, evol2Calc,
   RHSStaticBoundaryCalc,
   RHSRadiativeBoundaryCalc,
