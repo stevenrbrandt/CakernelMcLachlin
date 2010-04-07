@@ -185,13 +185,13 @@ CCTK_INT ML_BSSN_O8_MaxNumEvolvedVars "Number of evolved variables used by this 
 restricted:
 CCTK_INT timelevels "Number of active timelevels"
 {
-  0:4 :: ""
+  0:3 :: ""
 } 3
 
 restricted:
 CCTK_INT rhs_timelevels "Number of active RHS timelevels"
 {
-  0:4 :: ""
+  0:3 :: ""
 } 1
 
 restricted:

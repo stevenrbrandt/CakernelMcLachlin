@@ -463,7 +463,7 @@ evolCalc =
                  Gt[ua,lb,lc], Xtn[ua], Rt[la,lb], Rphi[la,lb], R[la,lb],
                  Atm[ua,lb], Atu[ua,ub],
                  e4phi, em4phi, cdphi[la], cdphi2[la,lb], g[la,lb], detg,
-                 gu[ua,ub], G[ua,lb,lc], Ats[la,lb], trAts, eta, theta,
+                 gu[ua,ub], Ats[la,lb], trAts, eta, theta,
                  rho, S[la], trS, fac1, fac2},
   Equations -> 
   {
@@ -510,9 +510,6 @@ evolCalc =
     detg        -> detgExpr,
     (* gu[ua,ub] -> 1/detg detgExpr MatrixInverse [g[ua,ub]], *)
     gu[ua,ub]   -> em4phi gtu[ua,ub],
-    G[ua,lb,lc] -> Gt[ua,lb,lc]
-                   + 2 (KD[ua,lb] cdphi[lc] + KD[ua,lc] cdphi[lb] 
-                        - gtu[ua,ud] gt[lb,lc] cdphi[ld]),
     
     R[la,lb] -> Rt[la,lb] + Rphi[la,lb],
     
@@ -556,7 +553,9 @@ evolCalc =
                       + addMatter (- 16 pi alpha gtu[ui,uj] S[lj]),
     
     (* PRD 62, 044034 (2000), eqn. (11) *)
-    dot[trK]       -> - gu[ua,ub] CD[alpha,la,lb]
+    dot[trK]       -> - em4phi ( gtu[ua,ub] ( PD[alpha,la,lb]
+                                + 2 cdphi[la] PD[alpha,lb] )
+                                - Xtn[ua] PD[alpha,la] )
                       + alpha (Atm[ua,lb] Atm[ub,la] + (1/3) trK^2)
                       + beta[ua] PDu[trK,la]
     (* Equation (4.21) in Baumgarte & Shapiro (Phys. Rept. 376 (2003) 41-131) *)
@@ -564,7 +563,9 @@ evolCalc =
 
     (* PRD 62, 044034 (2000), eqn. (12) *)
     (* TODO: Should we use the Hamiltonian constraint to make Rij tracefree? *)
-    Ats[la,lb]     -> - CD[alpha,la,lb] + alpha R[la,lb],
+    Ats[la,lb]     -> - CDt[alpha,la,lb] +
+                      + 2 (PD[alpha,la] cdphi[lb] + PD[alpha,lb] cdphi[la] )
+                      + alpha R[la,lb],
     trAts          -> gu[ua,ub] Ats[la,lb],
     dot[At[la,lb]] -> + em4phi (+ Ats[la,lb] - (1/3) g[la,lb] trAts )
                       + alpha (trK At[la,lb] - 2 At[la,lc] Atm[uc,lb])
@@ -610,11 +611,10 @@ evol1Calc =
   Where -> InteriorNoSync,
   Shorthands -> {dir[ua],
                  detgt, gtu[ua,ub],
-                 Gt[ua,lb,lc], Xtn[ua], Rt[la,lb], Rphi[la,lb], R[la,lb],
+                 Gt[ua,lb,lc], Xtn[ua],
                  Atm[ua,lb], Atu[ua,ub],
-                 e4phi, em4phi, cdphi[la], cdphi2[la,lb], g[la,lb], detg,
-                 eta, theta,
-                 rho, S[la], trS, fac1, fac2},
+                 e4phi, em4phi, cdphi[la], eta, theta,
+                 rho, S[la], trS, fac1},
   Equations -> 
   {
     dir[ua] -> Sign[beta[ua]],
@@ -636,13 +636,35 @@ evol1Calc =
     Atm[ua,lb] -> gtu[ua,uc] At[lc,lb],
     Atu[ua,ub] -> Atm[ua,lc] gtu[ub,uc],
     
+    e4phi       -> IfThen [conformalMethod, 1/phi^2, Exp[4 phi]],
+    em4phi      -> 1 / e4phi,
+
     (* Matter terms *)
     
+    (* rho = n^a n^b T_ab *)
+    rho -> addMatter
+           (1/alpha^2 (T00 - 2 beta[ui] T0[li] + beta[ui] beta[uj] T[li,lj])),
+
+    (* trS = gamma^ij T_ij  *)
+    trS -> addMatter (em4phi gtu[ui,uj] T[li,lj]),
+
     (* S_i = -p^a_i n^b T_ab, where p^a_i = delta^a_i + n^a n_i *)
     S[li] -> addMatter (-1/alpha (T0[li] - beta[uj] T[li,lj])),
     
     (* RHS terms *)
     
+    (* PRD 62, 044034 (2000), eqn. (11) *)
+    (* Note, Covariant derivatives with respect to the physical metric
+       has been replaced with derivatives with respect to the
+       conformal metric *)
+    dot[trK]       -> - em4phi ( gtu[ua,ub] ( PD[alpha,la,lb]
+                                + 2 cdphi[la] PD[alpha,lb] )
+                                - Xtn[ua] PD[alpha,la] )
+                      + alpha (Atm[ua,lb] Atm[ub,la] + (1/3) trK^2)
+                      + beta[ua] PDu[trK,la]
+    (* Equation (4.21) in Baumgarte & Shapiro (Phys. Rept. 376 (2003) 41-131) *)
+                      + addMatter (4 pi alpha (rho + trS)),
+
     (* PRD 62, 044034 (2000), eqn. (10) *)
     (* PRD 67 084023 (2003), eqn. (16) and (23) *)
     dot[phi]       -> IfThen [conformalMethod, 1/3 phi, -1/6] alpha trK
@@ -654,6 +676,7 @@ evol1Calc =
                       + beta[uc] PDu[gt[la,lb],lc]
                       + gt[la,lc] PD[beta[uc],lb] + gt[lb,lc] PD[beta[uc],la]
                       - (2/3) gt[la,lb] PD[beta[uc],lc],
+
     (* PRD 62, 044034 (2000), eqn. (20) *)
     (* PRD 67 084023 (2003), eqn (26) *)
     dot[Xt[ui]]    -> - 2 Atu[ui,uj] PD[alpha,lj]
@@ -671,6 +694,14 @@ evol1Calc =
     eta -> etaExpr,
     theta -> thetaExpr,
     
+    (* dot[alpha] -> - harmonicF alpha^harmonicN trK, *)
+    (* dot[alpha] -> - harmonicF alpha^harmonicN A + Lie[alpha, beta], *)
+    dot[alpha] -> - harmonicF alpha^harmonicN (
+                    (1 - LapseAdvectionCoeff) A + LapseAdvectionCoeff trK)
+                  + LapseAdvectionCoeff beta[ua] PDu[alpha,la],
+
+    dot[A]     -> (1 - LapseAdvectionCoeff) (dot[trK] - AlphaDriver A),
+
     (* dot[beta[ua]] -> eta Xt[ua], *)
     (* dot[beta[ua]] -> ShiftGammaCoeff alpha^ShiftAlphaPower B[ua], *)
     dot[beta[ua]] -> + theta ShiftGammaCoeff B[ua]
@@ -699,7 +730,7 @@ evol2Calc =
                  Rt[la,lb], Rphi[la,lb], R[la,lb],
                  Atm[ua,lb],
                  e4phi, em4phi, cdphi[la], cdphi2[la,lb], g[la,lb], detg,
-                 gu[ua,ub], G[ua,lb,lc], Ats[la,lb], trAts,
+                 gu[ua,ub], Ats[la,lb], trAts,
                  rho, S[la], trS, fac1, fac2},
   Equations -> 
   {
@@ -746,33 +777,24 @@ evol2Calc =
     g[la,lb]    -> e4phi gt[la,lb],
     (* gu[ua,ub] -> 1/detg detgExpr MatrixInverse [g[ua,ub]], *)
     gu[ua,ub]   -> em4phi gtu[ua,ub],
-    G[ua,lb,lc] -> Gt[ua,lb,lc]
-                   + 2 (KD[ua,lb] cdphi[lc] + KD[ua,lc] cdphi[lb] 
-                        - gtu[ua,ud] gt[lb,lc] cdphi[ld]),
     
     R[la,lb] -> Rt[la,lb] + Rphi[la,lb],
     
     (* Matter terms *)
-    
-    (* rho = n^a n^b T_ab *)
-    rho -> addMatter
-           (1/alpha^2 (T00 - 2 beta[ui] T0[li] + beta[ui] beta[uj] T[li,lj])),
     
     (* trS = gamma^ij T_ij  *)
     trS -> addMatter (gu[ui,uj] T[li,lj]),
     
     (* RHS terms *)
     
-    (* PRD 62, 044034 (2000), eqn. (11) *)
-    dot[trK]       -> - gu[ua,ub] CD[alpha,la,lb]
-                      + alpha (Atm[ua,lb] Atm[ub,la] + (1/3) trK^2)
-                      + beta[ua] PDu[trK,la]
-    (* Equation (4.21) in Baumgarte & Shapiro (Phys. Rept. 376 (2003) 41-131) *)
-                      + addMatter (4 pi alpha (rho + trS)),
-
     (* PRD 62, 044034 (2000), eqn. (12) *)
     (* TODO: Should we use the Hamiltonian constraint to make Rij tracefree? *)
-    Ats[la,lb]     -> - CD[alpha,la,lb] + alpha R[la,lb],
+    (* Note, Covariant derivatives with respect to the physical metric
+       has been replaced with derivatives with respect to the
+       conformal metric *)
+    Ats[la,lb]     -> - CDt[alpha,la,lb] +
+                      + 2 (PD[alpha,la] cdphi[lb] + PD[alpha,lb] cdphi[la] )
+                      + alpha R[la,lb],
     trAts          -> gu[ua,ub] Ats[la,lb],
     dot[At[la,lb]] -> + em4phi (+ Ats[la,lb] - (1/3) g[la,lb] trAts )
                       + alpha (trK At[la,lb] - 2 At[la,lc] Atm[uc,lb])
@@ -781,15 +803,7 @@ evol2Calc =
                       - (2/3) At[la,lb] PD[beta[uc],lc]
     (* Equation (4.23) in Baumgarte & Shapiro (Phys. Rept. 376 (2003) 41-131) *)
                       + addMatter (- em4phi alpha 8 pi
-                                     (T[la,lb] - (1/3) g[la,lb] trS)),
-    
-    (* dot[alpha] -> - harmonicF alpha^harmonicN trK, *)
-    (* dot[alpha] -> - harmonicF alpha^harmonicN A + Lie[alpha, beta], *)
-    dot[alpha] -> - harmonicF alpha^harmonicN (
-                    (1 - LapseAdvectionCoeff) A + LapseAdvectionCoeff trK)
-                  + LapseAdvectionCoeff beta[ua] PDu[alpha,la],
-
-    dot[A]     -> (1 - LapseAdvectionCoeff) (dot[trK] - AlphaDriver A)
+                                     (T[la,lb] - (1/3) g[la,lb] trS))
   }
 };
 
@@ -1249,7 +1263,7 @@ CreateKrancThornTT [groups, ".", BSSN,
 (* matter: 0 or 1
    (matter seems cheap; it should be always enabled) *)
 
-createCode[2, False, 4, 1];
-createCode[4, False, 4, 1];
-createCode[4, True,  4, 1];
-createCode[8, False, 4, 1];
+createCode[2, False, 3, 1]; 
+createCode[4, False, 3, 1];
+createCode[4, True,  3, 1];
+createCode[8, False, 3, 1];
