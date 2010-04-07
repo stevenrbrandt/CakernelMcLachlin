@@ -103,6 +103,12 @@ CCTK_REAL SpatialBetaDriverRadius "Radius at which the BetaDriver starts to be r
 } 1000000000000
 
 restricted:
+CCTK_REAL SpatialShiftGammaCoeffRadius "Radius at which the ShiftGammaCoefficient starts to be reduced"
+{
+  "*:*" :: ""
+} 1000000000000
+
+restricted:
 CCTK_INT harmonicN "d/dt alpha = - f alpha^n K  (harmonic=2, 1+log=1)"
 {
   *:* :: ""

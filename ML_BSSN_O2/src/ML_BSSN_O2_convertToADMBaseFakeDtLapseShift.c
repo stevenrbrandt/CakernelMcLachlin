@@ -92,6 +92,7 @@ void ML_BSSN_O2_convertToADMBaseFakeDtLapseShift_Body(cGH const * restrict const
     CCTK_REAL  B1L = B1[index];
     CCTK_REAL  B2L = B2[index];
     CCTK_REAL  B3L = B3[index];
+    CCTK_REAL  rL = r[index];
     CCTK_REAL  trKL = trK[index];
     
     /* Include user supplied include files */
@@ -99,14 +100,17 @@ void ML_BSSN_O2_convertToADMBaseFakeDtLapseShift_Body(cGH const * restrict const
     /* Precompute derivatives */
     
     /* Calculate temporaries and grid functions */
+    CCTK_REAL theta = IfThen(rL > SpatialShiftGammaCoeffRadius,exp(1 - 
+      rL*INV(SpatialShiftGammaCoeffRadius)),1);
+    
     CCTK_REAL dtalpL = harmonicF*(AL*(-1 + LapseAdvectionCoeff) - 
       LapseAdvectionCoeff*trKL)*pow(alphaL,harmonicN);
     
-    CCTK_REAL dtbetaxL = B1L*ShiftGammaCoeff;
+    CCTK_REAL dtbetaxL = B1L*ShiftGammaCoeff*theta;
     
-    CCTK_REAL dtbetayL = B2L*ShiftGammaCoeff;
+    CCTK_REAL dtbetayL = B2L*ShiftGammaCoeff*theta;
     
-    CCTK_REAL dtbetazL = B3L*ShiftGammaCoeff;
+    CCTK_REAL dtbetazL = B3L*ShiftGammaCoeff*theta;
     
     
     /* Copy local copies back to grid functions */

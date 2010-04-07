@@ -119,6 +119,7 @@ void ML_BSSN_convertFromADMBaseGamma_Body(cGH const * restrict const cctkGH, int
     CCTK_REAL  gt22L = gt22[index];
     CCTK_REAL  gt23L = gt23[index];
     CCTK_REAL  gt33L = gt33[index];
+    CCTK_REAL  rL = r[index];
     
     /* Include user supplied include files */
     
@@ -247,32 +248,44 @@ void ML_BSSN_convertFromADMBaseGamma_Body(cGH const * restrict const cctkGH, int
     CCTK_REAL AL = -(dtalpL*(-1 + 
       LapseAdvectionCoeff)*INV(harmonicF)*pow(alphaL,-harmonicN));
     
-    CCTK_REAL B1L = 6*IfThen(ShiftGammaCoeff != 
-      0,dtbetaxL*INV(ShiftGammaCoeff),0) + IfThen(ShiftGammaCoeff != 
-      0,(dtbetaxL - PDupwindNth1(betax, i, j, 
-      k)*beta1L*ShiftAdvectionCoeff)*INV(ShiftGammaCoeff),0) + 
-      IfThen(ShiftGammaCoeff != 0,(dtbetaxL - PDupwindNth2(betax, i, j, 
-      k)*beta2L*ShiftAdvectionCoeff)*INV(ShiftGammaCoeff),0) + 
-      IfThen(ShiftGammaCoeff != 0,(dtbetaxL - PDupwindNth3(betax, i, j, 
-      k)*beta3L*ShiftAdvectionCoeff)*INV(ShiftGammaCoeff),0);
+    CCTK_REAL theta = IfThen(rL > SpatialShiftGammaCoeffRadius,exp(1 - 
+      rL*INV(SpatialShiftGammaCoeffRadius)),1);
     
-    CCTK_REAL B2L = 6*IfThen(ShiftGammaCoeff != 
-      0,dtbetayL*INV(ShiftGammaCoeff),0) + IfThen(ShiftGammaCoeff != 
-      0,(dtbetayL - PDupwindNth1(betay, i, j, 
-      k)*beta1L*ShiftAdvectionCoeff)*INV(ShiftGammaCoeff),0) + 
-      IfThen(ShiftGammaCoeff != 0,(dtbetayL - PDupwindNth2(betay, i, j, 
-      k)*beta2L*ShiftAdvectionCoeff)*INV(ShiftGammaCoeff),0) + 
-      IfThen(ShiftGammaCoeff != 0,(dtbetayL - PDupwindNth3(betay, i, j, 
-      k)*beta3L*ShiftAdvectionCoeff)*INV(ShiftGammaCoeff),0);
+    CCTK_REAL B1L = 6*IfThen(ShiftGammaCoeff*theta != 
+      0,dtbetaxL*INV(ShiftGammaCoeff)*INV(theta),0) + 
+      IfThen(ShiftGammaCoeff*theta != 0,(dtbetaxL - PDupwindNth1(betax, i, 
+      j, 
+      k)*beta1L*ShiftAdvectionCoeff*theta)*INV(ShiftGammaCoeff)*INV(theta),0) 
+      + IfThen(ShiftGammaCoeff*theta != 0,(dtbetaxL - PDupwindNth2(betax, i, 
+      j, 
+      k)*beta2L*ShiftAdvectionCoeff*theta)*INV(ShiftGammaCoeff)*INV(theta),0) 
+      + IfThen(ShiftGammaCoeff*theta != 0,(dtbetaxL - PDupwindNth3(betax, i, 
+      j, 
+      k)*beta3L*ShiftAdvectionCoeff*theta)*INV(ShiftGammaCoeff)*INV(theta),0);
     
-    CCTK_REAL B3L = 6*IfThen(ShiftGammaCoeff != 
-      0,dtbetazL*INV(ShiftGammaCoeff),0) + IfThen(ShiftGammaCoeff != 
-      0,(dtbetazL - PDupwindNth1(betaz, i, j, 
-      k)*beta1L*ShiftAdvectionCoeff)*INV(ShiftGammaCoeff),0) + 
-      IfThen(ShiftGammaCoeff != 0,(dtbetazL - PDupwindNth2(betaz, i, j, 
-      k)*beta2L*ShiftAdvectionCoeff)*INV(ShiftGammaCoeff),0) + 
-      IfThen(ShiftGammaCoeff != 0,(dtbetazL - PDupwindNth3(betaz, i, j, 
-      k)*beta3L*ShiftAdvectionCoeff)*INV(ShiftGammaCoeff),0);
+    CCTK_REAL B2L = 6*IfThen(ShiftGammaCoeff*theta != 
+      0,dtbetayL*INV(ShiftGammaCoeff)*INV(theta),0) + 
+      IfThen(ShiftGammaCoeff*theta != 0,(dtbetayL - PDupwindNth1(betay, i, 
+      j, 
+      k)*beta1L*ShiftAdvectionCoeff*theta)*INV(ShiftGammaCoeff)*INV(theta),0) 
+      + IfThen(ShiftGammaCoeff*theta != 0,(dtbetayL - PDupwindNth2(betay, i, 
+      j, 
+      k)*beta2L*ShiftAdvectionCoeff*theta)*INV(ShiftGammaCoeff)*INV(theta),0) 
+      + IfThen(ShiftGammaCoeff*theta != 0,(dtbetayL - PDupwindNth3(betay, i, 
+      j, 
+      k)*beta3L*ShiftAdvectionCoeff*theta)*INV(ShiftGammaCoeff)*INV(theta),0);
+    
+    CCTK_REAL B3L = 6*IfThen(ShiftGammaCoeff*theta != 
+      0,dtbetazL*INV(ShiftGammaCoeff)*INV(theta),0) + 
+      IfThen(ShiftGammaCoeff*theta != 0,(dtbetazL - PDupwindNth1(betaz, i, 
+      j, 
+      k)*beta1L*ShiftAdvectionCoeff*theta)*INV(ShiftGammaCoeff)*INV(theta),0) 
+      + IfThen(ShiftGammaCoeff*theta != 0,(dtbetazL - PDupwindNth2(betaz, i, 
+      j, 
+      k)*beta2L*ShiftAdvectionCoeff*theta)*INV(ShiftGammaCoeff)*INV(theta),0) 
+      + IfThen(ShiftGammaCoeff*theta != 0,(dtbetazL - PDupwindNth3(betaz, i, 
+      j, 
+      k)*beta3L*ShiftAdvectionCoeff*theta)*INV(ShiftGammaCoeff)*INV(theta),0);
     
     
     /* Copy local copies back to grid functions */

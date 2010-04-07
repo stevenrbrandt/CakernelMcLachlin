@@ -489,17 +489,20 @@ void ML_BSSN_O2_RHS1_Body(cGH const * restrict const cctkGH, int const dir, int 
     CCTK_REAL eta = BetaDriver*IfThen(rL > 
       SpatialBetaDriverRadius,SpatialBetaDriverRadius*INV(rL),1);
     
+    CCTK_REAL theta = IfThen(rL > SpatialShiftGammaCoeffRadius,exp(1 - 
+      rL*INV(SpatialShiftGammaCoeffRadius)),1);
+    
     CCTK_REAL beta1rhsL = (PDupwindNth1(beta1, i, j, k)*beta1L + 
       PDupwindNth2(beta1, i, j, k)*beta2L + PDupwindNth3(beta1, i, j, 
-      k)*beta3L)*ShiftAdvectionCoeff + B1L*ShiftGammaCoeff;
+      k)*beta3L)*ShiftAdvectionCoeff + B1L*ShiftGammaCoeff*theta;
     
     CCTK_REAL beta2rhsL = (PDupwindNth1(beta2, i, j, k)*beta1L + 
       PDupwindNth2(beta2, i, j, k)*beta2L + PDupwindNth3(beta2, i, j, 
-      k)*beta3L)*ShiftAdvectionCoeff + B2L*ShiftGammaCoeff;
+      k)*beta3L)*ShiftAdvectionCoeff + B2L*ShiftGammaCoeff*theta;
     
     CCTK_REAL beta3rhsL = (PDupwindNth1(beta3, i, j, k)*beta1L + 
       PDupwindNth2(beta3, i, j, k)*beta2L + PDupwindNth3(beta3, i, j, 
-      k)*beta3L)*ShiftAdvectionCoeff + B3L*ShiftGammaCoeff;
+      k)*beta3L)*ShiftAdvectionCoeff + B3L*ShiftGammaCoeff*theta;
     
     CCTK_REAL B1rhsL = -(B1L*eta) + ((PDupwindNth1(B1, i, j, k) - 
       PDupwindNth1(Xt1, i, j, k))*beta1L + (PDupwindNth2(B1, i, j, k) - 

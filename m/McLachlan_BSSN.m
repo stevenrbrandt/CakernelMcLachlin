@@ -188,6 +188,8 @@ T11=eTxx; T12=eTxy; T22=eTyy; T13=eTxz; T23=eTyz; T33=eTzz;
 (* Expressions *)
 (******************************************************************************)
 
+pi = N[Pi,40];
+
 detgExpr  = Det [MatrixOfComponents [g [la,lb]]];
 ddetgExpr[la_] =
   Sum [D[Det[MatrixOfComponents[g[la, lb]]], X] PD[X, la],
@@ -198,7 +200,11 @@ ddetgtExpr[la_] =
   Sum [D[Det[MatrixOfComponents[gt[la, lb]]], X] PD[X, la],
        {X, Union[Flatten[MatrixOfComponents[gt[la, lb]]]]}];
 
-pi = N[Pi,40]; 
+etaExpr = BetaDriver
+          IfThen [r > SpatialBetaDriverRadius, SpatialBetaDriverRadius / r, 1];
+thetaExpr = IfThen [r > SpatialShiftGammaCoeffRadius,
+                    Exp [1 - r / SpatialShiftGammaCoeffRadius],
+                    1];
 
 (******************************************************************************)
 (* Groups *)
@@ -331,7 +337,7 @@ convertFromADMBaseGammaCalc =
      synchronise again after extrapolating because extrapolation does
      not fill ghost zones, but this is irrelevant here.)  *)
   Shorthands -> {dir[ua],
-                 detgt, gtu[ua,ub], Gt[ua,lb,lc]},
+                 detgt, gtu[ua,ub], Gt[ua,lb,lc], theta},
   Equations -> 
   {
     dir[ua] -> Sign[beta[ua]],
@@ -344,13 +350,15 @@ convertFromADMBaseGammaCalc =
     
     A -> - admdtalpha / (harmonicF alpha^harmonicN) (LapseAdvectionCoeff - 1),
     
+    theta -> thetaExpr,
+    
     (* If ShiftGammaCoeff=0, then B^i is not evolved, in the sense
        that it does not influence the time evolution of other
        variables.  *)
-    B[ua] -> IfThen [ShiftGammaCoeff != 0,
-                     1/ShiftGammaCoeff
+    B[ua] -> IfThen [theta ShiftGammaCoeff != 0,
+                     1 / (theta ShiftGammaCoeff)
                      (+ admdtbeta[ua]
-                      - ShiftAdvectionCoeff beta[ub] PDu[admbeta[ua],lb]),
+                      - theta ShiftAdvectionCoeff beta[ub] PDu[admbeta[ua],lb]),
                      0]
   }
 };
@@ -381,16 +389,18 @@ convertToADMBaseDtLapseShiftCalc =
   Schedule -> {"IN " <> BSSN <> "_convertToADMBaseGroup"},
   ConditionalOnKeyword -> {"dt_lapse_shift_method", "correct"},
   Where -> Interior,
-  Shorthands -> {dir[ua]},
+  Shorthands -> {dir[ua], theta},
   Equations -> 
   {
     dir[ua] -> Sign[beta[ua]],
+    
+    theta -> thetaExpr,
     
     (* see RHS *)
     admdtalpha -> - harmonicF alpha^harmonicN
                     ((1 - LapseAdvectionCoeff) A + LapseAdvectionCoeff trK)
                   + LapseAdvectionCoeff beta[ua] PDu[alpha,la],
-    admdtbeta[ua] -> + ShiftGammaCoeff B[ua]
+    admdtbeta[ua] -> + theta ShiftGammaCoeff B[ua]
                      + ShiftAdvectionCoeff beta[ub] PDu[beta[ua],lb]
   }
 };
@@ -401,12 +411,15 @@ convertToADMBaseDtLapseShiftBoundaryCalc =
   Schedule -> {"IN " <> BSSN <> "_convertToADMBaseGroup"},
   ConditionalOnKeyword -> {"dt_lapse_shift_method", "correct"},
   Where -> BoundaryWithGhosts,
+  Shorthands -> {theta},
   Equations ->
   {
+    theta -> thetaExpr,
+    
     (* see RHS, but omit derivatives near the boundary *)
     admdtalpha -> - harmonicF alpha^harmonicN
                     ((1 - LapseAdvectionCoeff) A + LapseAdvectionCoeff trK),
-    admdtbeta[ua] -> + ShiftGammaCoeff B[ua]
+    admdtbeta[ua] -> + theta ShiftGammaCoeff B[ua]
   }
 };
 
@@ -416,14 +429,17 @@ convertToADMBaseFakeDtLapseShiftCalc =
   Schedule -> {"IN " <> BSSN <> "_convertToADMBaseGroup"},
   ConditionalOnKeyword -> {"dt_lapse_shift_method", "noLapseShiftAdvection"},
   Where -> Everywhere,
+  Shorthands -> {theta},
   Equations ->
   {
+    theta -> thetaExpr,
+    
     (* see RHS, but omit derivatives everywhere (which is wrong, but
        faster, since it does not require synchronisation or boundary
        conditions) *)
     admdtalpha -> - harmonicF alpha^harmonicN
                     ((1 - LapseAdvectionCoeff) A + LapseAdvectionCoeff trK),
-    admdtbeta[ua] -> + ShiftGammaCoeff B[ua]
+    admdtbeta[ua] -> + theta ShiftGammaCoeff B[ua]
   }
 };
 
@@ -447,7 +463,7 @@ evolCalc =
                  Gt[ua,lb,lc], Xtn[ua], Rt[la,lb], Rphi[la,lb], R[la,lb],
                  Atm[ua,lb], Atu[ua,ub],
                  e4phi, em4phi, cdphi[la], cdphi2[la,lb], g[la,lb], detg,
-                 gu[ua,ub], G[ua,lb,lc], Ats[la,lb], trAts, eta,
+                 gu[ua,ub], G[ua,lb,lc], Ats[la,lb], trAts, eta, theta,
                  rho, S[la], trS, fac1, fac2},
   Equations -> 
   {
@@ -567,12 +583,12 @@ evolCalc =
 
     dot[A]     -> (1 - LapseAdvectionCoeff) (dot[trK] - AlphaDriver A),
     
-    eta -> BetaDriver
-           IfThen [r > SpatialBetaDriverRadius, SpatialBetaDriverRadius / r, 1],
+    eta -> etaExpr,
+    theta -> thetaExpr,
     
     (* dot[beta[ua]] -> eta Xt[ua], *)
     (* dot[beta[ua]] -> ShiftGammaCoeff alpha^ShiftAlphaPower B[ua], *)
-    dot[beta[ua]] -> + ShiftGammaCoeff B[ua]
+    dot[beta[ua]] -> + theta ShiftGammaCoeff B[ua]
                      + ShiftAdvectionCoeff beta[ub] PDu[beta[ua],lb],
 
     dot[B[ua]]    -> + dot[Xt[ua]] - eta B[ua]
@@ -596,7 +612,8 @@ evol1Calc =
                  detgt, gtu[ua,ub],
                  Gt[ua,lb,lc], Xtn[ua], Rt[la,lb], Rphi[la,lb], R[la,lb],
                  Atm[ua,lb], Atu[ua,ub],
-                 e4phi, em4phi, cdphi[la], cdphi2[la,lb], g[la,lb], detg, eta,
+                 e4phi, em4phi, cdphi[la], cdphi2[la,lb], g[la,lb], detg,
+                 eta, theta,
                  rho, S[la], trS, fac1, fac2},
   Equations -> 
   {
@@ -651,12 +668,12 @@ evol1Calc =
     (* Equation (4.28) in Baumgarte & Shapiro (Phys. Rept. 376 (2003) 41-131) *)
                       + addMatter (- 16 pi alpha gtu[ui,uj] S[lj]),
     
-    eta -> BetaDriver
-           IfThen [r > SpatialBetaDriverRadius, SpatialBetaDriverRadius / r, 1],
+    eta -> etaExpr,
+    theta -> thetaExpr,
     
     (* dot[beta[ua]] -> eta Xt[ua], *)
     (* dot[beta[ua]] -> ShiftGammaCoeff alpha^ShiftAlphaPower B[ua], *)
-    dot[beta[ua]] -> + ShiftGammaCoeff B[ua]
+    dot[beta[ua]] -> + theta ShiftGammaCoeff B[ua]
                      + ShiftAdvectionCoeff beta[ub] PDu[beta[ua],lb],
 
     dot[B[ua]]    -> + dot[Xt[ua]] - eta B[ua]
@@ -1168,6 +1185,12 @@ realParameters =
   {
     Name -> SpatialBetaDriverRadius,
     Description -> "Radius at which the BetaDriver starts to be reduced",
+    AllowedValues -> {{Value -> "(0:*", Description -> "Positive"}},
+    Default -> 10^12
+  },
+  {
+    Name -> SpatialShiftGammaCoeffRadius,
+    Description -> "Radius at which the ShiftGammaCoefficient starts to be reduced",
     AllowedValues -> {{Value -> "(0:*", Description -> "Positive"}},
     Default -> 10^12
   }

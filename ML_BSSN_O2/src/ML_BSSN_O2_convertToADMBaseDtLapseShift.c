@@ -95,6 +95,7 @@ void ML_BSSN_O2_convertToADMBaseDtLapseShift_Body(cGH const * restrict const cct
     CCTK_REAL  beta1L = beta1[index];
     CCTK_REAL  beta2L = beta2[index];
     CCTK_REAL  beta3L = beta3[index];
+    CCTK_REAL  rL = r[index];
     CCTK_REAL  trKL = trK[index];
     
     /* Include user supplied include files */
@@ -108,6 +109,9 @@ void ML_BSSN_O2_convertToADMBaseDtLapseShift_Body(cGH const * restrict const cct
     
     int dir3 = Sign(beta3L);
     
+    CCTK_REAL theta = IfThen(rL > SpatialShiftGammaCoeffRadius,exp(1 - 
+      rL*INV(SpatialShiftGammaCoeffRadius)),1);
+    
     CCTK_REAL dtalpL = (PDupwindNth1(alpha, i, j, k)*beta1L + 
       PDupwindNth2(alpha, i, j, k)*beta2L + PDupwindNth3(alpha, i, j, 
       k)*beta3L)*LapseAdvectionCoeff + harmonicF*(AL*(-1 + 
@@ -115,15 +119,15 @@ void ML_BSSN_O2_convertToADMBaseDtLapseShift_Body(cGH const * restrict const cct
     
     CCTK_REAL dtbetaxL = (PDupwindNth1(beta1, i, j, k)*beta1L + 
       PDupwindNth2(beta1, i, j, k)*beta2L + PDupwindNth3(beta1, i, j, 
-      k)*beta3L)*ShiftAdvectionCoeff + B1L*ShiftGammaCoeff;
+      k)*beta3L)*ShiftAdvectionCoeff + B1L*ShiftGammaCoeff*theta;
     
     CCTK_REAL dtbetayL = (PDupwindNth1(beta2, i, j, k)*beta1L + 
       PDupwindNth2(beta2, i, j, k)*beta2L + PDupwindNth3(beta2, i, j, 
-      k)*beta3L)*ShiftAdvectionCoeff + B2L*ShiftGammaCoeff;
+      k)*beta3L)*ShiftAdvectionCoeff + B2L*ShiftGammaCoeff*theta;
     
     CCTK_REAL dtbetazL = (PDupwindNth1(beta3, i, j, k)*beta1L + 
       PDupwindNth2(beta3, i, j, k)*beta2L + PDupwindNth3(beta3, i, j, 
-      k)*beta3L)*ShiftAdvectionCoeff + B3L*ShiftGammaCoeff;
+      k)*beta3L)*ShiftAdvectionCoeff + B3L*ShiftGammaCoeff*theta;
     
     
     /* Copy local copies back to grid functions */
