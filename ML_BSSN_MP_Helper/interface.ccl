@@ -2,6 +2,7 @@ IMPLEMENTS: ML_BSSN_MP_Helper
 
 INHERITS: ADMBase CoordGauge ML_BSSN_MP
 
+USES INCLUDE: Slicing.h
 USES INCLUDE: Symmetry.h
 
 

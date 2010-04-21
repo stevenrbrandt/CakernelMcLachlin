@@ -1,6 +1,5 @@
 #include <cctk.h>
-
-#include "CactusEinstein/CoordGauge/src/Slicing.h"
+#include <Slicing.h>
 
 int
 ML_BSSN_O2_RegisterSlicing (void)
