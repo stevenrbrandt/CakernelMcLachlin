@@ -55,6 +55,12 @@ CCTK_INT verbose "verbose"
 } 0
 
 restricted:
+CCTK_REAL LapseACoeff "Whether to evolve A in time"
+{
+  "*:*" :: ""
+} 0
+
+restricted:
 CCTK_REAL harmonicF "d/dt alpha = - f alpha^n K   (harmonic=1, 1+log=2)"
 {
   "*:*" :: ""
@@ -65,6 +71,12 @@ CCTK_REAL AlphaDriver "AlphaDriver"
 {
   "*:*" :: ""
 } 0
+
+restricted:
+CCTK_REAL ShiftBCoeff "Whether to evolve B^i in time"
+{
+  "*:*" :: ""
+} 1
 
 restricted:
 CCTK_REAL ShiftGammaCoeff "ShiftGammaCoeff"
@@ -107,6 +119,12 @@ CCTK_REAL SpatialShiftGammaCoeffRadius "Radius at which the ShiftGammaCoefficien
 {
   "*:*" :: ""
 } 1000000000000
+
+restricted:
+CCTK_REAL EpsDiss "Dissipation strength"
+{
+  "*:*" :: ""
+} 0
 
 restricted:
 CCTK_INT harmonicN "d/dt alpha = - f alpha^n K  (harmonic=2, 1+log=1)"
