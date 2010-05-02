@@ -14,6 +14,17 @@ IO::out_dir = $parfile
 
 
 
+ActiveThorns = "TerminationTrigger"
+
+TerminationTrigger::max_walltime          =  0.0   # hours
+TerminationTrigger::on_remaining_walltime = 15.0   # minutes
+
+TerminationTrigger::termination_from_file   = yes
+TerminationTrigger::create_termination_file = yes
+TerminationTrigger::termination_file        = "../TERMINATE"
+
+
+
 ActiveThorns = "AEILocalInterp"
 
 ActiveThorns = "Fortran"
@@ -23,8 +34,6 @@ ActiveThorns = "GSL"
 ActiveThorns = "GenericFD"
 
 ActiveThorns = "HDF5"
-
-ActiveThorns = "LocalInterp"
 
 ActiveThorns = "LoopControl"
 
@@ -36,7 +45,7 @@ ActiveThorns = "InitBase"
 
 
 
-ActiveThorns = "Carpet CarpetLib CarpetInterp CarpetReduce CarpetSlab"
+ActiveThorns = "Carpet CarpetLib CarpetInterp CarpetReduce"
 
 Carpet::verbose           = no
 Carpet::veryverbose       = no
@@ -149,7 +158,7 @@ CarpetTracker::surface[0] = 0
 
 CarpetRegrid2::regrid_every            = 0
 CarpetRegrid2::freeze_unaligned_levels = yes
-CarpetRegrid2::symmetry_rotating90     = yes
+#CarpetRegrid2::symmetry_rotating90     = yes
 CarpetRegrid2::verbose                 = yes
 
 CarpetRegrid2::num_centres = 1
@@ -204,9 +213,11 @@ ADMBase::dtshift_evolution_method = "ML_BSSN"
 
 ML_BSSN::timelevels = 3
 
-ML_BSSN::harmonicN           = 1      # 1+log
 ML_BSSN::harmonicF           = 2.0    # 1+log
+ML_BSSN::harmonicN           = 1      # 1+log
 ML_BSSN::ShiftGammaCoeff     = 0.75
+ML_BSSN::LapseACoeff         = 1.0
+ML_BSSN::ShiftBCoeff         = 1.0
 ML_BSSN::AlphaDriver         = 1.0
 ML_BSSN::BetaDriver          = 1.0
 ML_BSSN::LapseAdvectionCoeff = 0.0
@@ -274,6 +285,16 @@ AHFinderDirect::reset_horizon_after_not_finding    [1] = no
 
 
 
+ActiveThorns = "QuasiLocalMeasures"
+
+QuasiLocalMeasures::verbose              = yes
+QuasiLocalMeasures::interpolator         = "Lagrange polynomial interpolation"
+QuasiLocalMeasures::interpolator_options = "order=4"
+QuasiLocalMeasures::spatial_order        = 4
+QuasiLocalMeasures::surface_index[0]     = 0
+
+
+
 ActiveThorns = "CarpetIOBasic"
 
 IOBasic::outInfo_every      = 1280
@@ -281,6 +302,8 @@ IOBasic::outInfo_reductions = "norm2"
 IOBasic::outInfo_vars       = "
         Carpet::physical_time_per_hour
         ML_ADMConstraints::H
+        SphericalSurface::sf_radius
+        QuasiLocalMeasures::qlm_spin
 "
 
 
@@ -301,6 +324,14 @@ IOScalar::outScalar_vars  = "
         ML_ADMConstraints::ML_Ham
         ML_ADMConstraints::ML_mom
         SphericalSurface::sf_radius
+        QuasiLocalMeasures::qlm_newman_penrose
+        QuasiLocalMeasures::qlm_weyl_scalars
+        QuasiLocalMeasures::qlm_ricci_scalars
+        QuasiLocalMeasures::qlm_twometric
+        QuasiLocalMeasures::qlm_killing_vector
+        QuasiLocalMeasures::qlm_killed_twometric
+        QuasiLocalMeasures::qlm_invariant_coordinates
+        QuasiLocalMeasures::qlm_3determinant
 "
 
 
@@ -330,6 +361,11 @@ IOASCII::out0D_vars  = "
         SphericalSurface::sf_radius
         SphericalSurface::sf_origin
         SphericalSurface::sf_coordinate_descriptors
+        QuasiLocalMeasures::qlm_state
+        QuasiLocalMeasures::qlm_grid_int
+        QuasiLocalMeasures::qlm_grid_real
+        QuasiLocalMeasures::qlm_scalars
+        QuasiLocalMeasures::qlm_multipole_moments
 "
 
 IOASCII::out1D_every = 1280
@@ -344,6 +380,19 @@ IOASCII::out1D_vars  = "
         ML_ADMConstraints::ML_Ham
         ML_ADMConstraints::ML_mom
         SphericalSurface::sf_radius
+        QuasiLocalMeasures::qlm_shapes
+        QuasiLocalMeasures::qlm_coordinates
+        QuasiLocalMeasures::qlm_tetrad_l
+        QuasiLocalMeasures::qlm_tetrad_n
+        QuasiLocalMeasures::qlm_tetrad_m
+        QuasiLocalMeasures::qlm_newman_penrose
+        QuasiLocalMeasures::qlm_weyl_scalars
+        QuasiLocalMeasures::qlm_ricci_scalars
+        QuasiLocalMeasures::qlm_twometric
+        QuasiLocalMeasures::qlm_killing_vector
+        QuasiLocalMeasures::qlm_killed_twometric
+        QuasiLocalMeasures::qlm_invariant_coordinates
+        QuasiLocalMeasures::qlm_3determinant
 "
 
 IOASCII::out2D_every = 1280

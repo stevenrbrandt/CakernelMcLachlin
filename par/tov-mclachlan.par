@@ -14,6 +14,17 @@ IO::out_dir = $parfile
 
 
 
+ActiveThorns = "TerminationTrigger"
+
+TerminationTrigger::max_walltime          =  0.0   # hours
+TerminationTrigger::on_remaining_walltime = 15.0   # minutes
+
+TerminationTrigger::termination_from_file   = yes
+TerminationTrigger::create_termination_file = yes
+TerminationTrigger::termination_file        = "../TERMINATE"
+
+
+
 ActiveThorns = "AEILocalInterp"
 
 ActiveThorns = "Constants"
@@ -26,11 +37,7 @@ ActiveThorns = "GenericFD"
 
 ActiveThorns = "HDF5"
 
-ActiveThorns = "LocalInterp"
-
 ActiveThorns = "LoopControl"
-
-ActiveThorns = "Slab"
 
 
 
@@ -38,7 +45,7 @@ ActiveThorns = "InitBase"
 
 
 
-ActiveThorns = "Carpet CarpetLib CarpetInterp CarpetReduce CarpetSlab"
+ActiveThorns = "Carpet CarpetLib CarpetInterp CarpetReduce"
 
 Carpet::verbose           = no
 Carpet::veryverbose       = no
@@ -101,7 +108,7 @@ NaNChecker::check_vars      = "
 
 
 
-ActiveThorns = "Boundary CartGrid3D CoordBase ReflectionSymmetry RotatingSymmetry90 SymBase"
+ActiveThorns = "Boundary CartGrid3D CoordBase ReflectionSymmetry SymBase"
 
 CoordBase::domainsize = "minmax"
 
@@ -128,7 +135,11 @@ CoordBase::boundary_shiftout_z_lower = 1
 
 CartGrid3D::type = "coordbase"
 
+ReflectionSymmetry::reflection_x   = yes
+ReflectionSymmetry::reflection_y   = yes
 ReflectionSymmetry::reflection_z   = yes
+ReflectionSymmetry::avoid_origin_x = no
+ReflectionSymmetry::avoid_origin_y = no
 ReflectionSymmetry::avoid_origin_z = no
 
 
