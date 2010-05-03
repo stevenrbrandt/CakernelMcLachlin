@@ -533,6 +533,7 @@ convertToADMBaseDtLapseShiftBoundaryCalc =
   Shorthands -> {eta, theta},
   Equations ->
   {
+    eta -> etaExpr,
     theta -> thetaExpr,
     
     (* see RHS, but omit derivatives near the boundary *)
