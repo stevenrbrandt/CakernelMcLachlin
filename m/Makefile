@@ -67,6 +67,7 @@ clean:
 	rm -f McLachlan_ADM.out McLachlan_ADM.err
 	rm -f McLachlan_BSSN.out McLachlan_BSSN.err
 	rm -f McLachlan_ADMConstraints.out McLachlan_ADMConstraints.err
+	rm -f McLachlan_ADMQuantities.out McLachlan_ADMQuantities.err
 	rm -f WaveToy.out WaveToy.err
 	rm -f hydro.out hydro.err
 

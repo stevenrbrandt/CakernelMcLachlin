@@ -8,7 +8,6 @@ inherits:   ADMBase ML_BSSN TmunuBase Grid GenericFD Boundary
 
 USES INCLUDE: GenericFD.h
 USES INCLUDE: Symmetry.h
-USES INCLUDE: Vectors.hh
 USES INCLUDE: sbp_calc_coeffs.h
 USES INCLUDE: Boundary.h
 USES INCLUDE: loopcontrol.h
