@@ -595,7 +595,8 @@ evolCalc =
   Where -> InteriorNoSync,
   Shorthands -> {dir[ua],
                  detgt, gtu[ua,ub],
-                 Gt[ua,lb,lc], Xtn[ua], Rt[la,lb], Rphi[la,lb], R[la,lb],
+                 Gt[ua,lb,lc], Gtl[la,lb,lc], Gtlu[la,lb,uc], Xtn[ua],
+                 Rt[la,lb], Rphi[la,lb], R[la,lb],
                  Atm[ua,lb], Atu[ua,ub],
                  e4phi, em4phi, cdphi[la], cdphi2[la,lb], g[la,lb], detg,
                  gu[ua,ub], Ats[la,lb], trAts, eta, theta,
@@ -610,9 +611,11 @@ evolCalc =
     
     (* This leads to simpler code... *)
     gtu[ua,ub]   -> 1/detgt detgtExpr MatrixInverse [gt[ua,ub]],
-    Gt[ua,lb,lc] -> 1/2 gtu[ua,ud]
-                    (PD[gt[lb,ld],lc] + PD[gt[lc,ld],lb] - PD[gt[lb,lc],ld]),
-    
+    Gtl[la,lb,lc]  -> 1/2
+                      (PD[gt[lb,la],lc] + PD[gt[lc,la],lb] - PD[gt[lb,lc],la]),
+    Gtlu[la,lb,uc] -> gtu[uc,ud] Gtl[la,lb,ld],
+    Gt[ua,lb,lc]   -> gtu[ua,ud] Gtl[ld,lb,lc],
+ 
     (* The conformal connection functions calculated from the conformal metric,
        used instead of Xt where no derivatives of Xt are taken *)
     Xtn[ui] -> gtu[uj,uk] Gt[ui,lj,lk],
@@ -621,11 +624,11 @@ evolCalc =
     Rt[li,lj] -> - (1/2) gtu[ul,um] PD[gt[li,lj],ll,lm]
                  + (1/2) gt[lk,li] PD[Xt[uk],lj]
                  + (1/2) gt[lk,lj] PD[Xt[uk],li]
-                 + (1/2) Xtn[uk] gt[li,ln] Gt[un,lj,lk]
-                 + (1/2) Xtn[uk] gt[lj,ln] Gt[un,li,lk]
-                 + gtu[ul,um] (+ Gt[uk,ll,li] gt[lj,ln] Gt[un,lk,lm]
-                               + Gt[uk,ll,lj] gt[li,ln] Gt[un,lk,lm]
-                               + Gt[uk,li,lm] gt[lk,ln] Gt[un,ll,lj]),
+                 + (1/2) Xtn[uk] Gtl[li,lj,lk]
+                 + (1/2) Xtn[uk] Gtl[lj,li,lk]
+                 + (+ Gt[uk,li,ll] Gtlu[lj,lk,ul]
+                    + Gt[uk,lj,ll] Gtlu[li,lk,ul]
+                    + Gt[uk,li,ll] Gtlu[lk,lj,ul]),
 
     fac1 -> IfThen [conformalMethod, -1/(2 phi), 1],
     cdphi[la] -> fac1 CDt[phi,la],
