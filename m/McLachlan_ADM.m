@@ -1,5 +1,5 @@
-$Path = Join[$Path, {"../../../kranc/Tools/CodeGen",
-                     "../../../kranc/Tools/MathematicaMisc"}];
+$Path = Join[$Path, {"../../../repos/Kranc/Tools/CodeGen",
+                     "../../../repos/Kranc/Tools/MathematicaMisc"}];
  
 Get["KrancThorn`"];
 
