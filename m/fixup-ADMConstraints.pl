@@ -18,10 +18,10 @@ close FILE or die;
 #}
 
 $lines[33] = <<EOF;
-  ierr = Boundary_SelectGroupForBC (cctkGH, CCTK_ALL_FACES, 1, -1, "${thorn}::ML_Ham", "scalar");
+  ierr = Boundary_SelectGroupForBC (cctkGH, CCTK_ALL_FACES, boundary_width, -1, "${thorn}::ML_Ham", "scalar");
   if (ierr<0) CCTK_WARN (CCTK_WARN_ABORT, "Failed to select boundary condition for ${thorn}::ML_Ham");
 
-  ierr = Boundary_SelectGroupForBC (cctkGH, CCTK_ALL_FACES, 1, -1, "${thorn}::ML_mom", "scalar");
+  ierr = Boundary_SelectGroupForBC (cctkGH, CCTK_ALL_FACES, boundary_width, -1, "${thorn}::ML_mom", "scalar");
   if (ierr<0) CCTK_WARN (CCTK_WARN_ABORT, "Failed to select boundary condition for ${thorn}::ML_mom");
 EOF
 
