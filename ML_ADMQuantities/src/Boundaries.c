@@ -31,10 +31,10 @@ void ML_ADMQuantities_SelectBoundConds(CCTK_ARGUMENTS)
   DECLARE_CCTK_PARAMETERS;
   
   CCTK_INT ierr = 0;
-  ierr = Boundary_SelectGroupForBC (cctkGH, CCTK_ALL_FACES, 1, -1, "ML_ADMQuantities::ML_Jadm", "scalar");
+  ierr = Boundary_SelectGroupForBC (cctkGH, CCTK_ALL_FACES, boundary_width, -1, "ML_ADMQuantities::ML_Jadm", "scalar");
   if (ierr<0) CCTK_WARN (CCTK_WARN_ABORT, "Failed to select boundary condition for ML_ADMQuantities::ML_Jadm");
 
-  ierr = Boundary_SelectGroupForBC (cctkGH, CCTK_ALL_FACES, 1, -1, "ML_ADMQuantities::ML_Madm", "scalar");
+  ierr = Boundary_SelectGroupForBC (cctkGH, CCTK_ALL_FACES, boundary_width, -1, "ML_ADMQuantities::ML_Madm", "scalar");
   if (ierr<0) CCTK_WARN (CCTK_WARN_ABORT, "Failed to select boundary condition for ML_ADMQuantities::ML_Madm");
 }
 

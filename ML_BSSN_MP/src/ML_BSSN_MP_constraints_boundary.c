@@ -20,6 +20,30 @@
 #define CUB(x) ((x) * (x) * (x))
 #define QAD(x) ((x) * (x) * (x) * (x))
 
+void ML_BSSN_MP_constraints_boundary_SelectBCs(CCTK_ARGUMENTS)
+{
+  DECLARE_CCTK_ARGUMENTS;
+  DECLARE_CCTK_PARAMETERS;
+  
+  CCTK_INT ierr = 0;
+  ierr = Boundary_SelectGroupForBC(cctkGH, CCTK_ALL_FACES, GenericFD_GetBoundaryWidth(cctkGH), -1 /* no table */, "ML_BSSN_MP::ML_cons_detg","flat");
+  if (ierr < 0)
+    CCTK_WARN(1, "Failed to register flat BC for ML_BSSN_MP::ML_cons_detg.");
+  ierr = Boundary_SelectGroupForBC(cctkGH, CCTK_ALL_FACES, GenericFD_GetBoundaryWidth(cctkGH), -1 /* no table */, "ML_BSSN_MP::ML_cons_Gamma","flat");
+  if (ierr < 0)
+    CCTK_WARN(1, "Failed to register flat BC for ML_BSSN_MP::ML_cons_Gamma.");
+  ierr = Boundary_SelectGroupForBC(cctkGH, CCTK_ALL_FACES, GenericFD_GetBoundaryWidth(cctkGH), -1 /* no table */, "ML_BSSN_MP::ML_cons_traceA","flat");
+  if (ierr < 0)
+    CCTK_WARN(1, "Failed to register flat BC for ML_BSSN_MP::ML_cons_traceA.");
+  ierr = Boundary_SelectGroupForBC(cctkGH, CCTK_ALL_FACES, GenericFD_GetBoundaryWidth(cctkGH), -1 /* no table */, "ML_BSSN_MP::ML_Ham","flat");
+  if (ierr < 0)
+    CCTK_WARN(1, "Failed to register flat BC for ML_BSSN_MP::ML_Ham.");
+  ierr = Boundary_SelectGroupForBC(cctkGH, CCTK_ALL_FACES, GenericFD_GetBoundaryWidth(cctkGH), -1 /* no table */, "ML_BSSN_MP::ML_mom","flat");
+  if (ierr < 0)
+    CCTK_WARN(1, "Failed to register flat BC for ML_BSSN_MP::ML_mom.");
+  return;
+}
+
 void ML_BSSN_MP_constraints_boundary_Body(cGH const * restrict const cctkGH, int const dir, int const face, CCTK_REAL const normal[3], CCTK_REAL const tangentA[3], CCTK_REAL const tangentB[3], int const min[3], int const max[3], int const n_subblock_gfs, CCTK_REAL * restrict const subblock_gfs[])
 {
   DECLARE_CCTK_ARGUMENTS;

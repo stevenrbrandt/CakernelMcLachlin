@@ -20,6 +20,21 @@
 #define CUB(x) ((x) * (x) * (x))
 #define QAD(x) ((x) * (x) * (x) * (x))
 
+void ML_BSSN_convertToADMBaseDtLapseShiftBoundary_SelectBCs(CCTK_ARGUMENTS)
+{
+  DECLARE_CCTK_ARGUMENTS;
+  DECLARE_CCTK_PARAMETERS;
+  
+  CCTK_INT ierr = 0;
+  ierr = Boundary_SelectGroupForBC(cctkGH, CCTK_ALL_FACES, GenericFD_GetBoundaryWidth(cctkGH), -1 /* no table */, "ADMBase::dtlapse","flat");
+  if (ierr < 0)
+    CCTK_WARN(1, "Failed to register flat BC for ADMBase::dtlapse.");
+  ierr = Boundary_SelectGroupForBC(cctkGH, CCTK_ALL_FACES, GenericFD_GetBoundaryWidth(cctkGH), -1 /* no table */, "ADMBase::dtshift","flat");
+  if (ierr < 0)
+    CCTK_WARN(1, "Failed to register flat BC for ADMBase::dtshift.");
+  return;
+}
+
 void ML_BSSN_convertToADMBaseDtLapseShiftBoundary_Body(cGH const * restrict const cctkGH, int const dir, int const face, CCTK_REAL const normal[3], CCTK_REAL const tangentA[3], CCTK_REAL const tangentB[3], int const min[3], int const max[3], int const n_subblock_gfs, CCTK_REAL * restrict const subblock_gfs[])
 {
   DECLARE_CCTK_ARGUMENTS;

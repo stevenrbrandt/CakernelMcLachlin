@@ -20,22 +20,7 @@
 #define CUB(x) ((x) * (x) * (x))
 #define QAD(x) ((x) * (x) * (x) * (x))
 
-void WT_RHS_SelectBCs(CCTK_ARGUMENTS)
-{
-  DECLARE_CCTK_ARGUMENTS;
-  DECLARE_CCTK_PARAMETERS;
-  
-  CCTK_INT ierr = 0;
-  ierr = Boundary_SelectGroupForBC(cctkGH, CCTK_ALL_FACES, GenericFD_GetBoundaryWidth(cctkGH), -1 /* no table */, "ML_WaveToy::WT_rhorhs","flat");
-  if (ierr < 0)
-    CCTK_WARN(1, "Failed to register flat BC for ML_WaveToy::WT_rhorhs.");
-  ierr = Boundary_SelectGroupForBC(cctkGH, CCTK_ALL_FACES, GenericFD_GetBoundaryWidth(cctkGH), -1 /* no table */, "ML_WaveToy::WT_urhs","flat");
-  if (ierr < 0)
-    CCTK_WARN(1, "Failed to register flat BC for ML_WaveToy::WT_urhs.");
-  return;
-}
-
-void WT_RHS_Body(cGH const * restrict const cctkGH, int const dir, int const face, CCTK_REAL const normal[3], CCTK_REAL const tangentA[3], CCTK_REAL const tangentB[3], int const min[3], int const max[3], int const n_subblock_gfs, CCTK_REAL * restrict const subblock_gfs[])
+void hydro_prim2con_Body(cGH const * restrict const cctkGH, int const dir, int const face, CCTK_REAL const normal[3], CCTK_REAL const tangentA[3], CCTK_REAL const tangentB[3], int const min[3], int const max[3], int const n_subblock_gfs, CCTK_REAL * restrict const subblock_gfs[])
 {
   DECLARE_CCTK_ARGUMENTS;
   DECLARE_CCTK_PARAMETERS;
@@ -45,10 +30,10 @@ void WT_RHS_Body(cGH const * restrict const cctkGH, int const dir, int const fac
   
   if (verbose > 1)
   {
-    CCTK_VInfo(CCTK_THORNSTRING,"Entering WT_RHS_Body");
+    CCTK_VInfo(CCTK_THORNSTRING,"Entering hydro_prim2con_Body");
   }
   
-  if (cctk_iteration % WT_RHS_calc_every != WT_RHS_calc_offset)
+  if (cctk_iteration % hydro_prim2con_calc_every != hydro_prim2con_calc_offset)
   {
     return;
   }
@@ -75,58 +60,69 @@ void WT_RHS_Body(cGH const * restrict const cctkGH, int const dir, int const fac
   CCTK_REAL const hdzi = 0.5 * dzi;
   
   /* Initialize predefined quantities */
-  CCTK_REAL const p1o12dx = INV(dx)/12.;
-  CCTK_REAL const p1o12dy = INV(dy)/12.;
-  CCTK_REAL const p1o12dz = INV(dz)/12.;
-  CCTK_REAL const p1o144dxdy = (INV(dx)*INV(dy))/144.;
-  CCTK_REAL const p1o144dxdz = (INV(dx)*INV(dz))/144.;
-  CCTK_REAL const p1o144dydz = (INV(dy)*INV(dz))/144.;
-  CCTK_REAL const pm1o12dx2 = -pow(dx,-2)/12.;
-  CCTK_REAL const pm1o12dy2 = -pow(dy,-2)/12.;
-  CCTK_REAL const pm1o12dz2 = -pow(dz,-2)/12.;
+  CCTK_REAL const p1o2dx = khalf*INV(dx);
+  CCTK_REAL const p1o2dy = khalf*INV(dy);
+  CCTK_REAL const p1o2dz = khalf*INV(dz);
+  CCTK_REAL const p1o4dxdy = (INV(dx)*INV(dy))/4.;
+  CCTK_REAL const p1o4dxdz = (INV(dx)*INV(dz))/4.;
+  CCTK_REAL const p1o4dydz = (INV(dy)*INV(dz))/4.;
+  CCTK_REAL const p1odx2 = pow(dx,-2);
+  CCTK_REAL const p1ody2 = pow(dy,-2);
+  CCTK_REAL const p1odz2 = pow(dz,-2);
   
   /* Loop over the grid points */
   #pragma omp parallel
-  LC_LOOP3 (WT_RHS,
+  LC_LOOP3 (hydro_prim2con,
             i,j,k, min[0],min[1],min[2], max[0],max[1],max[2],
             cctk_lsh[0],cctk_lsh[1],cctk_lsh[2])
   {
     // int index = INITVALUE;
     int const index = CCTK_GFINDEX3D(cctkGH,i,j,k);
     /* Declare derivatives */
-    // CCTK_REAL PDstandardNth11u = INITVALUE;
-    // CCTK_REAL PDstandardNth22u = INITVALUE;
-    // CCTK_REAL PDstandardNth33u = INITVALUE;
     
     /* Assign local copies of grid functions */
+    CCTK_REAL  epsL = eps[index];
+    CCTK_REAL  massL = mass[index];
     CCTK_REAL  rhoL = rho[index];
-    CCTK_REAL  uL = u[index];
+    CCTK_REAL  vel1L = vel1[index];
+    CCTK_REAL  vel2L = vel2[index];
+    CCTK_REAL  vel3L = vel3[index];
+    CCTK_REAL  volL = vol[index];
     
     /* Include user supplied include files */
     
     /* Precompute derivatives */
-    CCTK_REAL const PDstandardNth11u = PDstandardNth11(u, i, j, k);
-    CCTK_REAL const PDstandardNth22u = PDstandardNth22(u, i, j, k);
-    CCTK_REAL const PDstandardNth33u = PDstandardNth33(u, i, j, k);
     
     /* Calculate temporaries and grid functions */
-    CCTK_REAL urhsL = rhoL;
+    volL = CUB(h);
     
-    CCTK_REAL rhorhsL = PDstandardNth11u + PDstandardNth22u + 
-      PDstandardNth33u;
+    massL = rhoL*volL;
+    
+    CCTK_REAL mom1L = massL*vel1L;
+    
+    CCTK_REAL mom2L = massL*vel2L;
+    
+    CCTK_REAL mom3L = massL*vel3L;
+    
+    CCTK_REAL eneL = khalf*massL*(2*epsL + SQR(vel1L) + SQR(vel2L) + 
+      SQR(vel3L));
     
     
     /* Copy local copies back to grid functions */
-    rhorhs[index] = rhorhsL;
-    urhs[index] = urhsL;
+    ene[index] = eneL;
+    mass[index] = massL;
+    mom1[index] = mom1L;
+    mom2[index] = mom2L;
+    mom3[index] = mom3L;
+    vol[index] = volL;
   }
-  LC_ENDLOOP3 (WT_RHS);
+  LC_ENDLOOP3 (hydro_prim2con);
 }
 
-void WT_RHS(CCTK_ARGUMENTS)
+void hydro_prim2con(CCTK_ARGUMENTS)
 {
   DECLARE_CCTK_ARGUMENTS;
   DECLARE_CCTK_PARAMETERS;
   
-  GenericFD_LoopOverInterior(cctkGH, &WT_RHS_Body);
+  GenericFD_LoopOverEverything(cctkGH, &hydro_prim2con_Body);
 }

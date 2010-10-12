@@ -11,7 +11,6 @@
 #include "cctk_Parameters.h"
 #include "GenericFD.h"
 #include "Differencing.h"
-#include "Vectors.hh"
 #include "loopcontrol.h"
 
 /* Define macros used in calculations */
@@ -21,7 +20,7 @@
 #define CUB(x) ((x) * (x) * (x))
 #define QAD(x) ((x) * (x) * (x) * (x))
 
-static void hydro_soundWave_Body(cGH const * restrict const cctkGH, int const dir, int const face, CCTK_REAL const normal[3], CCTK_REAL const tangentA[3], CCTK_REAL const tangentB[3], int const min[3], int const max[3], int const n_subblock_gfs, CCTK_REAL * restrict const subblock_gfs[])
+void hydro_con2prim_Body(cGH const * restrict const cctkGH, int const dir, int const face, CCTK_REAL const normal[3], CCTK_REAL const tangentA[3], CCTK_REAL const tangentB[3], int const min[3], int const max[3], int const n_subblock_gfs, CCTK_REAL * restrict const subblock_gfs[])
 {
   DECLARE_CCTK_ARGUMENTS;
   DECLARE_CCTK_PARAMETERS;
@@ -31,10 +30,10 @@ static void hydro_soundWave_Body(cGH const * restrict const cctkGH, int const di
   
   if (verbose > 1)
   {
-    CCTK_VInfo(CCTK_THORNSTRING,"Entering hydro_soundWave_Body");
+    CCTK_VInfo(CCTK_THORNSTRING,"Entering hydro_con2prim_Body");
   }
   
-  if (cctk_iteration % hydro_soundWave_calc_every != hydro_soundWave_calc_offset)
+  if (cctk_iteration % hydro_con2prim_calc_every != hydro_con2prim_calc_offset)
   {
     return;
   }
@@ -73,7 +72,7 @@ static void hydro_soundWave_Body(cGH const * restrict const cctkGH, int const di
   
   /* Loop over the grid points */
   #pragma omp parallel
-  LC_LOOP3 (hydro_soundWave,
+  LC_LOOP3 (hydro_con2prim,
             i,j,k, min[0],min[1],min[2], max[0],max[1],max[2],
             cctk_lsh[0],cctk_lsh[1],cctk_lsh[2])
   {
@@ -82,39 +81,52 @@ static void hydro_soundWave_Body(cGH const * restrict const cctkGH, int const di
     /* Declare derivatives */
     
     /* Assign local copies of grid functions */
-    CCTK_REAL_VEC  xL = vec_load(x[index]);
+    CCTK_REAL  eneL = ene[index];
+    CCTK_REAL  epsL = eps[index];
+    CCTK_REAL  massL = mass[index];
+    CCTK_REAL  mom1L = mom1[index];
+    CCTK_REAL  mom2L = mom2[index];
+    CCTK_REAL  mom3L = mom3[index];
+    CCTK_REAL  rhoL = rho[index];
+    CCTK_REAL  vel1L = vel1[index];
+    CCTK_REAL  vel2L = vel2[index];
+    CCTK_REAL  vel3L = vel3[index];
+    CCTK_REAL  volL = vol[index];
     
     /* Include user supplied include files */
     
     /* Precompute derivatives */
     
     /* Calculate temporaries and grid functions */
-    CCTK_REAL_VEC rhoL = 1.;
+    rhoL = massL*INV(volL);
     
-    CCTK_REAL_VEC vel1L = A*Sin(2*Pi*xL*INV(L));
+    vel1L = mom1L*INV(massL);
     
-    CCTK_REAL_VEC vel2L = A*Sin(2*Pi*xL*INV(L));
+    vel2L = mom2L*INV(massL);
     
-    CCTK_REAL_VEC vel3L = A*Sin(2*Pi*xL*INV(L));
+    vel3L = mom3L*INV(massL);
     
-    CCTK_REAL_VEC epsL = 1.;
+    epsL = khalf*INV(massL)*(2*eneL - massL*(SQR(vel1L) + SQR(vel2L) + 
+      SQR(vel3L)));
+    
+    CCTK_REAL pressL = epsL*Gamma*rhoL;
     
     
     /* Copy local copies back to grid functions */
-    vec_store_nta(eps[index],epsL);
-    vec_store_nta(rho[index],rhoL);
-    vec_store_nta(vel1[index],vel1L);
-    vec_store_nta(vel2[index],vel2L);
-    vec_store_nta(vel3[index],vel3L);
-  i += CCTK_REAL_VEC_SIZE-1;
+    eps[index] = epsL;
+    press[index] = pressL;
+    rho[index] = rhoL;
+    vel1[index] = vel1L;
+    vel2[index] = vel2L;
+    vel3[index] = vel3L;
   }
-  LC_ENDLOOP3 (hydro_soundWave);
+  LC_ENDLOOP3 (hydro_con2prim);
 }
 
-extern "C" void hydro_soundWave(CCTK_ARGUMENTS)
+void hydro_con2prim(CCTK_ARGUMENTS)
 {
   DECLARE_CCTK_ARGUMENTS;
   DECLARE_CCTK_PARAMETERS;
   
-  GenericFD_LoopOverEverything(cctkGH, &hydro_soundWave_Body);
+  GenericFD_LoopOverEverything(cctkGH, &hydro_con2prim_Body);
 }

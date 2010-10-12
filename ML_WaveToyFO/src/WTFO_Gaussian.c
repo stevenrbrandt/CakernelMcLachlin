@@ -11,7 +11,6 @@
 #include "cctk_Parameters.h"
 #include "GenericFD.h"
 #include "Differencing.h"
-#include "Vectors.hh"
 #include "loopcontrol.h"
 
 /* Define macros used in calculations */
@@ -21,7 +20,7 @@
 #define CUB(x) ((x) * (x) * (x))
 #define QAD(x) ((x) * (x) * (x) * (x))
 
-static void hydro_vacuum_Body(cGH const * restrict const cctkGH, int const dir, int const face, CCTK_REAL const normal[3], CCTK_REAL const tangentA[3], CCTK_REAL const tangentB[3], int const min[3], int const max[3], int const n_subblock_gfs, CCTK_REAL * restrict const subblock_gfs[])
+void WTFO_Gaussian_Body(cGH const * restrict const cctkGH, int const dir, int const face, CCTK_REAL const normal[3], CCTK_REAL const tangentA[3], CCTK_REAL const tangentB[3], int const min[3], int const max[3], int const n_subblock_gfs, CCTK_REAL * restrict const subblock_gfs[])
 {
   DECLARE_CCTK_ARGUMENTS;
   DECLARE_CCTK_PARAMETERS;
@@ -31,10 +30,10 @@ static void hydro_vacuum_Body(cGH const * restrict const cctkGH, int const dir, 
   
   if (verbose > 1)
   {
-    CCTK_VInfo(CCTK_THORNSTRING,"Entering hydro_vacuum_Body");
+    CCTK_VInfo(CCTK_THORNSTRING,"Entering WTFO_Gaussian_Body");
   }
   
-  if (cctk_iteration % hydro_vacuum_calc_every != hydro_vacuum_calc_offset)
+  if (cctk_iteration % WTFO_Gaussian_calc_every != WTFO_Gaussian_calc_offset)
   {
     return;
   }
@@ -61,19 +60,19 @@ static void hydro_vacuum_Body(cGH const * restrict const cctkGH, int const dir, 
   CCTK_REAL const hdzi = 0.5 * dzi;
   
   /* Initialize predefined quantities */
-  CCTK_REAL const p1o2dx = khalf*INV(dx);
-  CCTK_REAL const p1o2dy = khalf*INV(dy);
-  CCTK_REAL const p1o2dz = khalf*INV(dz);
-  CCTK_REAL const p1o4dxdy = (INV(dx)*INV(dy))/4.;
-  CCTK_REAL const p1o4dxdz = (INV(dx)*INV(dz))/4.;
-  CCTK_REAL const p1o4dydz = (INV(dy)*INV(dz))/4.;
-  CCTK_REAL const p1odx2 = pow(dx,-2);
-  CCTK_REAL const p1ody2 = pow(dy,-2);
-  CCTK_REAL const p1odz2 = pow(dz,-2);
+  CCTK_REAL const p1o12dx = INV(dx)/12.;
+  CCTK_REAL const p1o12dy = INV(dy)/12.;
+  CCTK_REAL const p1o12dz = INV(dz)/12.;
+  CCTK_REAL const p1o144dxdy = (INV(dx)*INV(dy))/144.;
+  CCTK_REAL const p1o144dxdz = (INV(dx)*INV(dz))/144.;
+  CCTK_REAL const p1o144dydz = (INV(dy)*INV(dz))/144.;
+  CCTK_REAL const pm1o12dx2 = -pow(dx,-2)/12.;
+  CCTK_REAL const pm1o12dy2 = -pow(dy,-2)/12.;
+  CCTK_REAL const pm1o12dz2 = -pow(dz,-2)/12.;
   
   /* Loop over the grid points */
   #pragma omp parallel
-  LC_LOOP3 (hydro_vacuum,
+  LC_LOOP3 (WTFO_Gaussian,
             i,j,k, min[0],min[1],min[2], max[0],max[1],max[2],
             cctk_lsh[0],cctk_lsh[1],cctk_lsh[2])
   {
@@ -88,32 +87,31 @@ static void hydro_vacuum_Body(cGH const * restrict const cctkGH, int const dir, 
     /* Precompute derivatives */
     
     /* Calculate temporaries and grid functions */
-    CCTK_REAL_VEC rhoL = 0;
+    CCTK_REAL uL = 0;
     
-    CCTK_REAL_VEC vel1L = 0;
+    CCTK_REAL v1L = 0;
     
-    CCTK_REAL_VEC vel2L = 0;
+    CCTK_REAL v2L = 0;
     
-    CCTK_REAL_VEC vel3L = 0;
+    CCTK_REAL v3L = 0;
     
-    CCTK_REAL_VEC epsL = 0;
+    CCTK_REAL rhoL = 0;
     
     
     /* Copy local copies back to grid functions */
-    vec_store_nta(eps[index],epsL);
-    vec_store_nta(rho[index],rhoL);
-    vec_store_nta(vel1[index],vel1L);
-    vec_store_nta(vel2[index],vel2L);
-    vec_store_nta(vel3[index],vel3L);
-  i += CCTK_REAL_VEC_SIZE-1;
+    rho[index] = rhoL;
+    u[index] = uL;
+    v1[index] = v1L;
+    v2[index] = v2L;
+    v3[index] = v3L;
   }
-  LC_ENDLOOP3 (hydro_vacuum);
+  LC_ENDLOOP3 (WTFO_Gaussian);
 }
 
-extern "C" void hydro_vacuum(CCTK_ARGUMENTS)
+void WTFO_Gaussian(CCTK_ARGUMENTS)
 {
   DECLARE_CCTK_ARGUMENTS;
   DECLARE_CCTK_PARAMETERS;
   
-  GenericFD_LoopOverEverything(cctkGH, &hydro_vacuum_Body);
+  GenericFD_LoopOverEverything(cctkGH, &WTFO_Gaussian_Body);
 }

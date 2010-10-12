@@ -31,10 +31,10 @@ void ML_ADMConstraints_MP_SelectBoundConds(CCTK_ARGUMENTS)
   DECLARE_CCTK_PARAMETERS;
   
   CCTK_INT ierr = 0;
-  ierr = Boundary_SelectGroupForBC (cctkGH, CCTK_ALL_FACES, 1, -1, "ML_ADMConstraints_MP::ML_Ham", "scalar");
+  ierr = Boundary_SelectGroupForBC (cctkGH, CCTK_ALL_FACES, boundary_width, -1, "ML_ADMConstraints_MP::ML_Ham", "scalar");
   if (ierr<0) CCTK_WARN (CCTK_WARN_ABORT, "Failed to select boundary condition for ML_ADMConstraints_MP::ML_Ham");
 
-  ierr = Boundary_SelectGroupForBC (cctkGH, CCTK_ALL_FACES, 1, -1, "ML_ADMConstraints_MP::ML_mom", "scalar");
+  ierr = Boundary_SelectGroupForBC (cctkGH, CCTK_ALL_FACES, boundary_width, -1, "ML_ADMConstraints_MP::ML_mom", "scalar");
   if (ierr<0) CCTK_WARN (CCTK_WARN_ABORT, "Failed to select boundary condition for ML_ADMConstraints_MP::ML_mom");
 }
 

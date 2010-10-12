@@ -11,7 +11,6 @@
 #include "cctk_Parameters.h"
 #include "GenericFD.h"
 #include "Differencing.h"
-#include "Vectors.hh"
 #include "loopcontrol.h"
 
 /* Define macros used in calculations */
@@ -21,7 +20,7 @@
 #define CUB(x) ((x) * (x) * (x))
 #define QAD(x) ((x) * (x) * (x) * (x))
 
-static void hydro_con2prim_Body(cGH const * restrict const cctkGH, int const dir, int const face, CCTK_REAL const normal[3], CCTK_REAL const tangentA[3], CCTK_REAL const tangentB[3], int const min[3], int const max[3], int const n_subblock_gfs, CCTK_REAL * restrict const subblock_gfs[])
+void hydro_vacuum_Body(cGH const * restrict const cctkGH, int const dir, int const face, CCTK_REAL const normal[3], CCTK_REAL const tangentA[3], CCTK_REAL const tangentB[3], int const min[3], int const max[3], int const n_subblock_gfs, CCTK_REAL * restrict const subblock_gfs[])
 {
   DECLARE_CCTK_ARGUMENTS;
   DECLARE_CCTK_PARAMETERS;
@@ -31,10 +30,10 @@ static void hydro_con2prim_Body(cGH const * restrict const cctkGH, int const dir
   
   if (verbose > 1)
   {
-    CCTK_VInfo(CCTK_THORNSTRING,"Entering hydro_con2prim_Body");
+    CCTK_VInfo(CCTK_THORNSTRING,"Entering hydro_vacuum_Body");
   }
   
-  if (cctk_iteration % hydro_con2prim_calc_every != hydro_con2prim_calc_offset)
+  if (cctk_iteration % hydro_vacuum_calc_every != hydro_vacuum_calc_offset)
   {
     return;
   }
@@ -73,7 +72,7 @@ static void hydro_con2prim_Body(cGH const * restrict const cctkGH, int const dir
   
   /* Loop over the grid points */
   #pragma omp parallel
-  LC_LOOP3 (hydro_con2prim,
+  LC_LOOP3 (hydro_vacuum,
             i,j,k, min[0],min[1],min[2], max[0],max[1],max[2],
             cctk_lsh[0],cctk_lsh[1],cctk_lsh[2])
   {
@@ -82,53 +81,37 @@ static void hydro_con2prim_Body(cGH const * restrict const cctkGH, int const dir
     /* Declare derivatives */
     
     /* Assign local copies of grid functions */
-    CCTK_REAL_VEC  eneL = vec_load(ene[index]);
-    CCTK_REAL_VEC  epsL = vec_load(eps[index]);
-    CCTK_REAL_VEC  massL = vec_load(mass[index]);
-    CCTK_REAL_VEC  mom1L = vec_load(mom1[index]);
-    CCTK_REAL_VEC  mom2L = vec_load(mom2[index]);
-    CCTK_REAL_VEC  mom3L = vec_load(mom3[index]);
-    CCTK_REAL_VEC  rhoL = vec_load(rho[index]);
-    CCTK_REAL_VEC  vel1L = vec_load(vel1[index]);
-    CCTK_REAL_VEC  vel2L = vec_load(vel2[index]);
-    CCTK_REAL_VEC  vel3L = vec_load(vel3[index]);
-    CCTK_REAL_VEC  volL = vec_load(vol[index]);
     
     /* Include user supplied include files */
     
     /* Precompute derivatives */
     
     /* Calculate temporaries and grid functions */
-    rhoL = massL*INV(volL);
+    CCTK_REAL rhoL = 0;
     
-    vel1L = mom1L*INV(massL);
+    CCTK_REAL vel1L = 0;
     
-    vel2L = mom2L*INV(massL);
+    CCTK_REAL vel2L = 0;
     
-    vel3L = mom3L*INV(massL);
+    CCTK_REAL vel3L = 0;
     
-    epsL = khalf*INV(massL)*(2*eneL - massL*(SQR(vel1L) + SQR(vel2L) + 
-      SQR(vel3L)));
-    
-    CCTK_REAL_VEC pressL = epsL*Gamma*rhoL;
+    CCTK_REAL epsL = 0;
     
     
     /* Copy local copies back to grid functions */
-    vec_store_nta(eps[index],epsL);
-    vec_store_nta(press[index],pressL);
-    vec_store_nta(rho[index],rhoL);
-    vec_store_nta(vel1[index],vel1L);
-    vec_store_nta(vel2[index],vel2L);
-    vec_store_nta(vel3[index],vel3L);
-  i += CCTK_REAL_VEC_SIZE-1;
+    eps[index] = epsL;
+    rho[index] = rhoL;
+    vel1[index] = vel1L;
+    vel2[index] = vel2L;
+    vel3[index] = vel3L;
   }
-  LC_ENDLOOP3 (hydro_con2prim);
+  LC_ENDLOOP3 (hydro_vacuum);
 }
 
-extern "C" void hydro_con2prim(CCTK_ARGUMENTS)
+void hydro_vacuum(CCTK_ARGUMENTS)
 {
   DECLARE_CCTK_ARGUMENTS;
   DECLARE_CCTK_PARAMETERS;
   
-  GenericFD_LoopOverEverything(cctkGH, &hydro_con2prim_Body);
+  GenericFD_LoopOverEverything(cctkGH, &hydro_vacuum_Body);
 }

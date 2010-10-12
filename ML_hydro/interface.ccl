@@ -8,7 +8,6 @@ inherits:   Grid GenericFD Boundary
 
 USES INCLUDE: GenericFD.h
 USES INCLUDE: Symmetry.h
-USES INCLUDE: Vectors.hh
 USES INCLUDE: sbp_calc_coeffs.h
 USES INCLUDE: Boundary.h
 USES INCLUDE: loopcontrol.h
@@ -26,7 +25,7 @@ CCTK_INT FUNCTION Boundary_SelectVarForBC(CCTK_POINTER_TO_CONST IN GH, CCTK_INT 
 USES FUNCTION Boundary_SelectVarForBC
 
 public:
-CCTK_REAL eneflux_group type=GF timelevels=1 tags='tensortypealias="U" tensorweight=1.0000000000000000000'
+CCTK_REAL eneflux_group type=GF timelevels=1 tags='tensortypealias="U" tensorweight=1'
 {
   eneflux1,
   eneflux2,
@@ -34,13 +33,13 @@ CCTK_REAL eneflux_group type=GF timelevels=1 tags='tensortypealias="U" tensorwei
 } "eneflux_group"
 
 public:
-CCTK_REAL eps_group type=GF timelevels=1 tags='tensortypealias="Scalar" tensorweight=1.0000000000000000000'
+CCTK_REAL eps_group type=GF timelevels=1 tags='tensortypealias="Scalar" tensorweight=1'
 {
   eps
 } "eps_group"
 
 public:
-CCTK_REAL massflux_group type=GF timelevels=1 tags='tensortypealias="U" tensorweight=1.0000000000000000000'
+CCTK_REAL massflux_group type=GF timelevels=1 tags='tensortypealias="U" tensorweight=1'
 {
   massflux1,
   massflux2,
@@ -48,7 +47,7 @@ CCTK_REAL massflux_group type=GF timelevels=1 tags='tensortypealias="U" tensorwe
 } "massflux_group"
 
 public:
-CCTK_REAL momflux_group type=GF timelevels=1 tags='tensortypealias="DU" tensorweight=1.0000000000000000000'
+CCTK_REAL momflux_group type=GF timelevels=1 tags='tensortypealias="DU" tensorweight=1'
 {
   momflux11,
   momflux12,
@@ -62,19 +61,19 @@ CCTK_REAL momflux_group type=GF timelevels=1 tags='tensortypealias="DU" tensorwe
 } "momflux_group"
 
 public:
-CCTK_REAL press_group type=GF timelevels=1 tags='tensortypealias="Scalar" tensorweight=1.0000000000000000000'
+CCTK_REAL press_group type=GF timelevels=1 tags='tensortypealias="Scalar" tensorweight=1'
 {
   press
 } "press_group"
 
 public:
-CCTK_REAL rho_group type=GF timelevels=1 tags='tensortypealias="Scalar" tensorweight=1.0000000000000000000'
+CCTK_REAL rho_group type=GF timelevels=1 tags='tensortypealias="Scalar" tensorweight=1'
 {
   rho
 } "rho_group"
 
 public:
-CCTK_REAL vel_group type=GF timelevels=1 tags='tensortypealias="U" tensorweight=1.0000000000000000000'
+CCTK_REAL vel_group type=GF timelevels=1 tags='tensortypealias="U" tensorweight=1'
 {
   vel1,
   vel2,
@@ -82,25 +81,25 @@ CCTK_REAL vel_group type=GF timelevels=1 tags='tensortypealias="U" tensorweight=
 } "vel_group"
 
 public:
-CCTK_REAL vol_group type=GF timelevels=1 tags='tensortypealias="Scalar" tensorweight=1.0000000000000000000'
+CCTK_REAL vol_group type=GF timelevels=1 tags='tensortypealias="Scalar" tensorweight=1'
 {
   vol
 } "vol_group"
 
 public:
-CCTK_REAL ene_group type=GF timelevels=3 tags='tensortypealias="Scalar" tensorweight=1.0000000000000000000'
+CCTK_REAL ene_group type=GF timelevels=3 tags='tensortypealias="Scalar" tensorweight=1'
 {
   ene
 } "ene_group"
 
 public:
-CCTK_REAL mass_group type=GF timelevels=3 tags='tensortypealias="Scalar" tensorweight=1.0000000000000000000'
+CCTK_REAL mass_group type=GF timelevels=3 tags='tensortypealias="Scalar" tensorweight=1'
 {
   mass
 } "mass_group"
 
 public:
-CCTK_REAL mom_group type=GF timelevels=3 tags='tensortypealias="D" tensorweight=1.0000000000000000000'
+CCTK_REAL mom_group type=GF timelevels=3 tags='tensortypealias="D" tensorweight=1'
 {
   mom1,
   mom2,
@@ -108,19 +107,19 @@ CCTK_REAL mom_group type=GF timelevels=3 tags='tensortypealias="D" tensorweight=
 } "mom_group"
 
 public:
-CCTK_REAL ene_grouprhs type=GF timelevels=3 tags='tensortypealias="Scalar" tensorweight=1.0000000000000000000'
+CCTK_REAL ene_grouprhs type=GF timelevels=3 tags='tensortypealias="Scalar" tensorweight=1'
 {
   enerhs
 } "ene_grouprhs"
 
 public:
-CCTK_REAL mass_grouprhs type=GF timelevels=3 tags='tensortypealias="Scalar" tensorweight=1.0000000000000000000'
+CCTK_REAL mass_grouprhs type=GF timelevels=3 tags='tensortypealias="Scalar" tensorweight=1'
 {
   massrhs
 } "mass_grouprhs"
 
 public:
-CCTK_REAL mom_grouprhs type=GF timelevels=3 tags='tensortypealias="D" tensorweight=1.0000000000000000000'
+CCTK_REAL mom_grouprhs type=GF timelevels=3 tags='tensortypealias="D" tensorweight=1'
 {
   mom1rhs,
   mom2rhs,

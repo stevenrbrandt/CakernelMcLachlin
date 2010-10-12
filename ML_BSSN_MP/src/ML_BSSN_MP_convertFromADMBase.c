@@ -131,13 +131,13 @@ void ML_BSSN_MP_convertFromADMBase_Body(cGH const * restrict const cctkGH, int c
     
     CCTK_REAL gu11 = INV(detg)*(g22*g33 - SQR(g23));
     
-    CCTK_REAL gu21 = (g13*g23 - g12*g33)*INV(detg);
+    CCTK_REAL gu12 = (g13*g23 - g12*g33)*INV(detg);
     
-    CCTK_REAL gu31 = (-(g13*g22) + g12*g23)*INV(detg);
+    CCTK_REAL gu13 = (-(g13*g22) + g12*g23)*INV(detg);
     
     CCTK_REAL gu22 = INV(detg)*(g11*g33 - SQR(g13));
     
-    CCTK_REAL gu32 = (g12*g13 - g11*g23)*INV(detg);
+    CCTK_REAL gu23 = (g12*g13 - g11*g23)*INV(detg);
     
     CCTK_REAL gu33 = INV(detg)*(g11*g22 - SQR(g12));
     
@@ -158,7 +158,7 @@ void ML_BSSN_MP_convertFromADMBase_Body(cGH const * restrict const cctkGH, int c
     
     CCTK_REAL gt33L = em4phi*g33;
     
-    trKL = gu11*kxxL + gu22*kyyL + 2*(gu21*kxyL + gu31*kxzL + gu32*kyzL) + 
+    trKL = gu11*kxxL + gu22*kyyL + 2*(gu12*kxyL + gu13*kxzL + gu23*kyzL) + 
       gu33*kzzL;
     
     CCTK_REAL At11L = em4phi*(kxxL - g11*kthird*trKL);

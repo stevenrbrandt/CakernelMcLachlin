@@ -20,28 +20,25 @@
 #define CUB(x) ((x) * (x) * (x))
 #define QAD(x) ((x) * (x) * (x) * (x))
 
-void ML_ADM_boundary_SelectBCs(CCTK_ARGUMENTS)
+void WTFO_RHS_SelectBCs(CCTK_ARGUMENTS)
 {
   DECLARE_CCTK_ARGUMENTS;
   DECLARE_CCTK_PARAMETERS;
   
   CCTK_INT ierr = 0;
-  ierr = Boundary_SelectGroupForBC(cctkGH, CCTK_ALL_FACES, GenericFD_GetBoundaryWidth(cctkGH), -1 /* no table */, "ML_ADM::ML_curv","flat");
+  ierr = Boundary_SelectGroupForBC(cctkGH, CCTK_ALL_FACES, GenericFD_GetBoundaryWidth(cctkGH), -1 /* no table */, "ML_WaveToyFO::WT_rhorhs","flat");
   if (ierr < 0)
-    CCTK_WARN(1, "Failed to register flat BC for ML_ADM::ML_curv.");
-  ierr = Boundary_SelectGroupForBC(cctkGH, CCTK_ALL_FACES, GenericFD_GetBoundaryWidth(cctkGH), -1 /* no table */, "ML_ADM::ML_lapse","flat");
+    CCTK_WARN(0, "Failed to register flat BC for ML_WaveToyFO::WT_rhorhs.");
+  ierr = Boundary_SelectGroupForBC(cctkGH, CCTK_ALL_FACES, GenericFD_GetBoundaryWidth(cctkGH), -1 /* no table */, "ML_WaveToyFO::WT_urhs","flat");
   if (ierr < 0)
-    CCTK_WARN(1, "Failed to register flat BC for ML_ADM::ML_lapse.");
-  ierr = Boundary_SelectGroupForBC(cctkGH, CCTK_ALL_FACES, GenericFD_GetBoundaryWidth(cctkGH), -1 /* no table */, "ML_ADM::ML_metric","flat");
+    CCTK_WARN(0, "Failed to register flat BC for ML_WaveToyFO::WT_urhs.");
+  ierr = Boundary_SelectGroupForBC(cctkGH, CCTK_ALL_FACES, GenericFD_GetBoundaryWidth(cctkGH), -1 /* no table */, "ML_WaveToyFO::WT_vrhs","flat");
   if (ierr < 0)
-    CCTK_WARN(1, "Failed to register flat BC for ML_ADM::ML_metric.");
-  ierr = Boundary_SelectGroupForBC(cctkGH, CCTK_ALL_FACES, GenericFD_GetBoundaryWidth(cctkGH), -1 /* no table */, "ML_ADM::ML_shift","flat");
-  if (ierr < 0)
-    CCTK_WARN(1, "Failed to register flat BC for ML_ADM::ML_shift.");
+    CCTK_WARN(0, "Failed to register flat BC for ML_WaveToyFO::WT_vrhs.");
   return;
 }
 
-void ML_ADM_boundary_Body(cGH const * restrict const cctkGH, int const dir, int const face, CCTK_REAL const normal[3], CCTK_REAL const tangentA[3], CCTK_REAL const tangentB[3], int const min[3], int const max[3], int const n_subblock_gfs, CCTK_REAL * restrict const subblock_gfs[])
+void WTFO_RHS_Body(cGH const * restrict const cctkGH, int const dir, int const face, CCTK_REAL const normal[3], CCTK_REAL const tangentA[3], CCTK_REAL const tangentB[3], int const min[3], int const max[3], int const n_subblock_gfs, CCTK_REAL * restrict const subblock_gfs[])
 {
   DECLARE_CCTK_ARGUMENTS;
   DECLARE_CCTK_PARAMETERS;
@@ -51,10 +48,10 @@ void ML_ADM_boundary_Body(cGH const * restrict const cctkGH, int const dir, int 
   
   if (verbose > 1)
   {
-    CCTK_VInfo(CCTK_THORNSTRING,"Entering ML_ADM_boundary_Body");
+    CCTK_VInfo(CCTK_THORNSTRING,"Entering WTFO_RHS_Body");
   }
   
-  if (cctk_iteration % ML_ADM_boundary_calc_every != ML_ADM_boundary_calc_offset)
+  if (cctk_iteration % WTFO_RHS_calc_every != WTFO_RHS_calc_offset)
   {
     return;
   }
@@ -93,79 +90,63 @@ void ML_ADM_boundary_Body(cGH const * restrict const cctkGH, int const dir, int 
   
   /* Loop over the grid points */
   #pragma omp parallel
-  LC_LOOP3 (ML_ADM_boundary,
+  LC_LOOP3 (WTFO_RHS,
             i,j,k, min[0],min[1],min[2], max[0],max[1],max[2],
             cctk_lsh[0],cctk_lsh[1],cctk_lsh[2])
   {
     // int index = INITVALUE;
     int const index = CCTK_GFINDEX3D(cctkGH,i,j,k);
     /* Declare derivatives */
+    // CCTK_REAL PDstandardNth1rho = INITVALUE;
+    // CCTK_REAL PDstandardNth2rho = INITVALUE;
+    // CCTK_REAL PDstandardNth3rho = INITVALUE;
+    // CCTK_REAL PDstandardNth1v1 = INITVALUE;
+    // CCTK_REAL PDstandardNth2v2 = INITVALUE;
+    // CCTK_REAL PDstandardNth3v3 = INITVALUE;
     
     /* Assign local copies of grid functions */
+    CCTK_REAL  rhoL = rho[index];
+    CCTK_REAL  v1L = v1[index];
+    CCTK_REAL  v2L = v2[index];
+    CCTK_REAL  v3L = v3[index];
     
     /* Include user supplied include files */
     
     /* Precompute derivatives */
+    CCTK_REAL const PDstandardNth1rho = PDstandardNth1(rho, i, j, k);
+    CCTK_REAL const PDstandardNth2rho = PDstandardNth2(rho, i, j, k);
+    CCTK_REAL const PDstandardNth3rho = PDstandardNth3(rho, i, j, k);
+    CCTK_REAL const PDstandardNth1v1 = PDstandardNth1(v1, i, j, k);
+    CCTK_REAL const PDstandardNth2v2 = PDstandardNth2(v2, i, j, k);
+    CCTK_REAL const PDstandardNth3v3 = PDstandardNth3(v3, i, j, k);
     
     /* Calculate temporaries and grid functions */
-    CCTK_REAL g11L = 1;
+    CCTK_REAL urhsL = rhoL;
     
-    CCTK_REAL g12L = 0;
+    CCTK_REAL rhorhsL = PDstandardNth1v1 + PDstandardNth2v2 + 
+      PDstandardNth3v3;
     
-    CCTK_REAL g13L = 0;
+    CCTK_REAL v1rhsL = PDstandardNth1rho;
     
-    CCTK_REAL g22L = 1;
+    CCTK_REAL v2rhsL = PDstandardNth2rho;
     
-    CCTK_REAL g23L = 0;
-    
-    CCTK_REAL g33L = 1;
-    
-    CCTK_REAL K11L = 0;
-    
-    CCTK_REAL K12L = 0;
-    
-    CCTK_REAL K13L = 0;
-    
-    CCTK_REAL K22L = 0;
-    
-    CCTK_REAL K23L = 0;
-    
-    CCTK_REAL K33L = 0;
-    
-    CCTK_REAL alphaL = 1;
-    
-    CCTK_REAL beta1L = 0;
-    
-    CCTK_REAL beta2L = 0;
-    
-    CCTK_REAL beta3L = 0;
+    CCTK_REAL v3rhsL = PDstandardNth3rho;
     
     
     /* Copy local copies back to grid functions */
-    alpha[index] = alphaL;
-    beta1[index] = beta1L;
-    beta2[index] = beta2L;
-    beta3[index] = beta3L;
-    g11[index] = g11L;
-    g12[index] = g12L;
-    g13[index] = g13L;
-    g22[index] = g22L;
-    g23[index] = g23L;
-    g33[index] = g33L;
-    K11[index] = K11L;
-    K12[index] = K12L;
-    K13[index] = K13L;
-    K22[index] = K22L;
-    K23[index] = K23L;
-    K33[index] = K33L;
+    rhorhs[index] = rhorhsL;
+    urhs[index] = urhsL;
+    v1rhs[index] = v1rhsL;
+    v2rhs[index] = v2rhsL;
+    v3rhs[index] = v3rhsL;
   }
-  LC_ENDLOOP3 (ML_ADM_boundary);
+  LC_ENDLOOP3 (WTFO_RHS);
 }
 
-void ML_ADM_boundary(CCTK_ARGUMENTS)
+void WTFO_RHS(CCTK_ARGUMENTS)
 {
   DECLARE_CCTK_ARGUMENTS;
   DECLARE_CCTK_PARAMETERS;
   
-  GenericFD_LoopOverBoundaryWithGhosts(cctkGH, &ML_ADM_boundary_Body);
+  GenericFD_LoopOverInterior(cctkGH, &WTFO_RHS_Body);
 }

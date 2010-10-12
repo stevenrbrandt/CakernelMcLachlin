@@ -42,7 +42,7 @@ schedule ML_ADMQuantities_O2_CheckBoundaries at BASEGRID
   OPTIONS: meta
 } "check boundaries treatment"
 
-schedule group ApplyBCs as ML_ADMQuantities_O2_ApplyBCs in MoL_PseudoEvolution  after ML_ADMQuantities_O2_SelectBoundConds
+schedule group ApplyBCs as ML_ADMQuantities_O2_ApplyBCs in MoL_PseudoEvolution after ML_ADMQuantities_O2_SelectBoundConds
 {
   # no language specified
 } "Apply boundary conditions controlled by thorn Boundary"

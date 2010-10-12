@@ -113,18 +113,18 @@ void ML_BSSN_enforce_Body(cGH const * restrict const cctkGH, int const dir, int 
     
     CCTK_REAL gtu11 = INV(detgt)*(gt22L*gt33L - SQR(gt23L));
     
-    CCTK_REAL gtu21 = (gt13L*gt23L - gt12L*gt33L)*INV(detgt);
+    CCTK_REAL gtu12 = (gt13L*gt23L - gt12L*gt33L)*INV(detgt);
     
-    CCTK_REAL gtu31 = (-(gt13L*gt22L) + gt12L*gt23L)*INV(detgt);
+    CCTK_REAL gtu13 = (-(gt13L*gt22L) + gt12L*gt23L)*INV(detgt);
     
     CCTK_REAL gtu22 = INV(detgt)*(gt11L*gt33L - SQR(gt13L));
     
-    CCTK_REAL gtu32 = (gt12L*gt13L - gt11L*gt23L)*INV(detgt);
+    CCTK_REAL gtu23 = (gt12L*gt13L - gt11L*gt23L)*INV(detgt);
     
     CCTK_REAL gtu33 = INV(detgt)*(gt11L*gt22L - SQR(gt12L));
     
-    CCTK_REAL trAt = At11L*gtu11 + At22L*gtu22 + 2*(At12L*gtu21 + 
-      At13L*gtu31 + At23L*gtu32) + At33L*gtu33;
+    CCTK_REAL trAt = At11L*gtu11 + At22L*gtu22 + 2*(At12L*gtu12 + 
+      At13L*gtu13 + At23L*gtu23) + At33L*gtu33;
     
     At11L = At11L - gt11L*kthird*trAt;
     

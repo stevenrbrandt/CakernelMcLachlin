@@ -132,7 +132,7 @@ if (CCTK_EQUALS (evolution_method, "ML_BSSN_O2")) {
   }
   else if  (CCTK_EQUALS (calculate_ADMBase_variables_at, "CCTK_EVOL"))
   {
-    SCHEDULE GROUP ML_BSSN_O2_convertToADMBaseGroupWrapper AT evol AFTER MoL_Evolution BEFORE (ADMBase_SetADMVars Whisky_PostStep)
+    SCHEDULE GROUP ML_BSSN_O2_convertToADMBaseGroupWrapper IN MoL_PseudoEvolution BEFORE (ADMBase_SetADMVars Whisky_PostStep)
     {
     } "Calculate ADM variables"
   }
@@ -143,7 +143,7 @@ if (CCTK_EQUALS (evolution_method, "ML_BSSN_O2")) {
     } "Calculate ADM variables"
   }
 
-  SCHEDULE GROUP ML_BSSN_O2_convertToADMBaseGroupWrapper AT CCTK_POST_RECOVER_VARIABLES 
+  SCHEDULE GROUP ML_BSSN_O2_convertToADMBaseGroupWrapper AT post_recover_variables
   {
   } "Calculate ADM variables"
 

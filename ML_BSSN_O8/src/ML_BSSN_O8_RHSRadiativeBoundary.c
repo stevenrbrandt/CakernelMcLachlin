@@ -20,6 +20,42 @@
 #define CUB(x) ((x) * (x) * (x))
 #define QAD(x) ((x) * (x) * (x) * (x))
 
+void ML_BSSN_O8_RHSRadiativeBoundary_SelectBCs(CCTK_ARGUMENTS)
+{
+  DECLARE_CCTK_ARGUMENTS;
+  DECLARE_CCTK_PARAMETERS;
+  
+  CCTK_INT ierr = 0;
+  ierr = Boundary_SelectGroupForBC(cctkGH, CCTK_ALL_FACES, GenericFD_GetBoundaryWidth(cctkGH), -1 /* no table */, "ML_BSSN_O8::ML_curvrhs","flat");
+  if (ierr < 0)
+    CCTK_WARN(1, "Failed to register flat BC for ML_BSSN_O8::ML_curvrhs.");
+  ierr = Boundary_SelectGroupForBC(cctkGH, CCTK_ALL_FACES, GenericFD_GetBoundaryWidth(cctkGH), -1 /* no table */, "ML_BSSN_O8::ML_dtlapserhs","flat");
+  if (ierr < 0)
+    CCTK_WARN(1, "Failed to register flat BC for ML_BSSN_O8::ML_dtlapserhs.");
+  ierr = Boundary_SelectGroupForBC(cctkGH, CCTK_ALL_FACES, GenericFD_GetBoundaryWidth(cctkGH), -1 /* no table */, "ML_BSSN_O8::ML_dtshiftrhs","flat");
+  if (ierr < 0)
+    CCTK_WARN(1, "Failed to register flat BC for ML_BSSN_O8::ML_dtshiftrhs.");
+  ierr = Boundary_SelectGroupForBC(cctkGH, CCTK_ALL_FACES, GenericFD_GetBoundaryWidth(cctkGH), -1 /* no table */, "ML_BSSN_O8::ML_Gammarhs","flat");
+  if (ierr < 0)
+    CCTK_WARN(1, "Failed to register flat BC for ML_BSSN_O8::ML_Gammarhs.");
+  ierr = Boundary_SelectGroupForBC(cctkGH, CCTK_ALL_FACES, GenericFD_GetBoundaryWidth(cctkGH), -1 /* no table */, "ML_BSSN_O8::ML_lapserhs","flat");
+  if (ierr < 0)
+    CCTK_WARN(1, "Failed to register flat BC for ML_BSSN_O8::ML_lapserhs.");
+  ierr = Boundary_SelectGroupForBC(cctkGH, CCTK_ALL_FACES, GenericFD_GetBoundaryWidth(cctkGH), -1 /* no table */, "ML_BSSN_O8::ML_log_confacrhs","flat");
+  if (ierr < 0)
+    CCTK_WARN(1, "Failed to register flat BC for ML_BSSN_O8::ML_log_confacrhs.");
+  ierr = Boundary_SelectGroupForBC(cctkGH, CCTK_ALL_FACES, GenericFD_GetBoundaryWidth(cctkGH), -1 /* no table */, "ML_BSSN_O8::ML_metricrhs","flat");
+  if (ierr < 0)
+    CCTK_WARN(1, "Failed to register flat BC for ML_BSSN_O8::ML_metricrhs.");
+  ierr = Boundary_SelectGroupForBC(cctkGH, CCTK_ALL_FACES, GenericFD_GetBoundaryWidth(cctkGH), -1 /* no table */, "ML_BSSN_O8::ML_shiftrhs","flat");
+  if (ierr < 0)
+    CCTK_WARN(1, "Failed to register flat BC for ML_BSSN_O8::ML_shiftrhs.");
+  ierr = Boundary_SelectGroupForBC(cctkGH, CCTK_ALL_FACES, GenericFD_GetBoundaryWidth(cctkGH), -1 /* no table */, "ML_BSSN_O8::ML_trace_curvrhs","flat");
+  if (ierr < 0)
+    CCTK_WARN(1, "Failed to register flat BC for ML_BSSN_O8::ML_trace_curvrhs.");
+  return;
+}
+
 void ML_BSSN_O8_RHSRadiativeBoundary_Body(cGH const * restrict const cctkGH, int const dir, int const face, CCTK_REAL const normal[3], CCTK_REAL const tangentA[3], CCTK_REAL const tangentB[3], int const min[3], int const max[3], int const n_subblock_gfs, CCTK_REAL * restrict const subblock_gfs[])
 {
   DECLARE_CCTK_ARGUMENTS;
@@ -137,13 +173,13 @@ void ML_BSSN_O8_RHSRadiativeBoundary_Body(cGH const * restrict const cctkGH, int
     
     CCTK_REAL gtu11 = INV(detgt)*(gt22L*gt33L - SQR(gt23L));
     
-    CCTK_REAL gtu21 = (gt13L*gt23L - gt12L*gt33L)*INV(detgt);
+    CCTK_REAL gtu12 = (gt13L*gt23L - gt12L*gt33L)*INV(detgt);
     
-    CCTK_REAL gtu31 = (-(gt13L*gt22L) + gt12L*gt23L)*INV(detgt);
+    CCTK_REAL gtu13 = (-(gt13L*gt22L) + gt12L*gt23L)*INV(detgt);
     
     CCTK_REAL gtu22 = INV(detgt)*(gt11L*gt33L - SQR(gt13L));
     
-    CCTK_REAL gtu32 = (gt12L*gt13L - gt11L*gt23L)*INV(detgt);
+    CCTK_REAL gtu23 = (gt12L*gt13L - gt11L*gt23L)*INV(detgt);
     
     CCTK_REAL gtu33 = INV(detgt)*(gt11L*gt22L - SQR(gt12L));
     
@@ -151,13 +187,13 @@ void ML_BSSN_O8_RHSRadiativeBoundary_Body(cGH const * restrict const cctkGH, int
     
     CCTK_REAL gu11 = em4phi*gtu11;
     
-    CCTK_REAL gu21 = em4phi*gtu21;
+    CCTK_REAL gu12 = em4phi*gtu12;
     
-    CCTK_REAL gu31 = em4phi*gtu31;
+    CCTK_REAL gu13 = em4phi*gtu13;
     
     CCTK_REAL gu22 = em4phi*gtu22;
     
-    CCTK_REAL gu32 = em4phi*gtu32;
+    CCTK_REAL gu23 = em4phi*gtu23;
     
     CCTK_REAL gu33 = em4phi*gtu33;
     
@@ -167,11 +203,11 @@ void ML_BSSN_O8_RHSRadiativeBoundary_Body(cGH const * restrict const cctkGH, int
     
     CCTK_REAL nn3 = normal[2];
     
-    CCTK_REAL nu1 = gu11*nn1 + gu21*nn2 + gu31*nn3;
+    CCTK_REAL nu1 = gu11*nn1 + gu12*nn2 + gu13*nn3;
     
-    CCTK_REAL nu2 = gu21*nn1 + gu22*nn2 + gu32*nn3;
+    CCTK_REAL nu2 = gu12*nn1 + gu22*nn2 + gu23*nn3;
     
-    CCTK_REAL nu3 = gu31*nn1 + gu32*nn2 + gu33*nn3;
+    CCTK_REAL nu3 = gu13*nn1 + gu23*nn2 + gu33*nn3;
     
     CCTK_REAL nlen2 = nn1*nu1 + nn2*nu2 + nn3*nu3;
     
