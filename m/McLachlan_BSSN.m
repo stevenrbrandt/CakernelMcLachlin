@@ -252,10 +252,10 @@ AssertSymmetricIncreasing [G[ua,lb,lc], lb, lc];
 AssertSymmetricIncreasing [Gtl[la,lb,lc], lb, lc];
 AssertSymmetricIncreasing [Gt[ua,lb,lc], lb, lc];
 AssertSymmetricIncreasing [gK[la,lb,lc], la, lb];
-Map [AssertSymmetricDecreasing,
+Map [AssertSymmetricIncreasing,
      {gu[ua,ub], gtu[ua,ub], Atu[ua,ub]}];
-AssertSymmetricDecreasing [dgtu[ua,ub,lc], ua, ub];
-AssertSymmetricDecreasing [ddgtu[ua,ub,lc,ld], ua, ub];
+AssertSymmetricIncreasing [dgtu[ua,ub,lc], ua, ub];
+AssertSymmetricIncreasing [ddgtu[ua,ub,lc,ld], ua, ub];
 AssertSymmetricIncreasing [ddgtu[ua,ub,lc,ld], lc, ld];
 
 DefineConnection [CD, PD, G];
