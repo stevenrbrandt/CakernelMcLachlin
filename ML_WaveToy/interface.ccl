@@ -25,25 +25,25 @@ CCTK_INT FUNCTION Boundary_SelectVarForBC(CCTK_POINTER_TO_CONST IN GH, CCTK_INT 
 USES FUNCTION Boundary_SelectVarForBC
 
 public:
-CCTK_REAL WT_rho type=GF timelevels=2 tags='tensortypealias="Scalar" tensorweight=1'
+CCTK_REAL WT_rho type=GF timelevels=2 tags='tensortypealias="Scalar" tensorweight=0'
 {
   rho
 } "WT_rho"
 
 public:
-CCTK_REAL WT_u type=GF timelevels=2 tags='tensortypealias="Scalar" tensorweight=1'
+CCTK_REAL WT_u type=GF timelevels=2 tags='tensortypealias="Scalar" tensorweight=0'
 {
   u
 } "WT_u"
 
 public:
-CCTK_REAL WT_rhorhs type=GF timelevels=2 tags='tensortypealias="Scalar" tensorweight=1'
+CCTK_REAL WT_rhorhs type=GF timelevels=2 tags='tensortypealias="Scalar" tensorweight=0'
 {
   rhorhs
 } "WT_rhorhs"
 
 public:
-CCTK_REAL WT_urhs type=GF timelevels=2 tags='tensortypealias="Scalar" tensorweight=1'
+CCTK_REAL WT_urhs type=GF timelevels=2 tags='tensortypealias="Scalar" tensorweight=0'
 {
   urhs
 } "WT_urhs"
