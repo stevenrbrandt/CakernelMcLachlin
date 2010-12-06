@@ -906,7 +906,7 @@ boundaryCalc =
 constraintsCalc =
 {
   Name -> BSSN <> "_constraints",
-  Schedule -> {"IN " <> BSSN <> "_constraintsCalcGroup"},
+  Schedule -> Automatic,
   Where -> Interior,
   Shorthands -> {detgt, ddetgt[la], gtu[ua,ub], Gt[ua,lb,lc], e4phi, em4phi,
                  g[la,lb], detg, gu[ua,ub], ddetg[la], G[ua,lb,lc],
@@ -1039,23 +1039,6 @@ constraintsCalc2 = PartialCalculation[constraintsCalc, "2",
     M[li],
     cA
   }];
-
-
-
-constraintsBoundaryCalc =
-{
-  Name -> BSSN <> "_constraints_boundary",
-  Schedule -> {"IN " <> BSSN <> "_constraintsCalcGroup AFTER " <> BSSN <> "_constraints"},
-  Where -> BoundaryWithGhosts,
-  Equations -> 
-  {
-    H       -> 0,
-    M[la]   -> 0,
-    cS      -> 0,
-    cXt[ua] -> 0,
-    cA      -> 0
-  }
-};
 
 (******************************************************************************)
 (* Implementations *)
@@ -1255,8 +1238,7 @@ calculations =
   convertToADMBaseDtLapseShiftBoundaryCalc,
   convertToADMBaseFakeDtLapseShiftCalc,
   (* constraintsCalc, *)
-  constraintsCalc1, constraintsCalc2,
-  constraintsBoundaryCalc
+  constraintsCalc1, constraintsCalc2
 };
 
 CreateKrancThornTT [groups, ".", BSSN,
