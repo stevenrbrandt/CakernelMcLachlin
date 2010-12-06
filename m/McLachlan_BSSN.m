@@ -10,7 +10,7 @@ SetSourceLanguage["C"];
 (* Options *)
 (******************************************************************************)
 
-createCode[derivOrder_, useGlobalDerivs_, evolutionTimelevels_, addMatter_] :=
+createCode[derivOrder_, useGlobalDerivs_, splitUpwindDerivs_, evolutionTimelevels_, addMatter_] :=
 Module[{},
 
 prefix = "ML_";
@@ -18,6 +18,7 @@ suffix =
   ""
   <> If [useGlobalDerivs, "_MP", ""]
   <> If [derivOrder!=4, "_O" <> ToString[derivOrder], ""]
+  <> If [splitUpwindDerivs, "", "_UPW"]
   (* <> If [evolutionTimelevels!=3, "_TL" <> ToString[evolutionTimelevels], ""] *)
   (* <> If [addMatter==1, "_M", ""] *)
   ;
@@ -187,30 +188,34 @@ FD     = PDstandardNth;
 FDu    = PDupwindNth;
 FDua   = PDupwindNthAnti;
 FDus   = PDupwindNthSymm;
-FDo    = PDonesided;
+(* FDo    = PDonesided; *)
 FDdiss = PDdissipationNth;
 
 ResetJacobians;
 If [useGlobalDerivs,
     DefineJacobian[PD, FD, J, dJ],
     DefineJacobian[PD, FD, KD, Zero3]];
-(*
 If [useGlobalDerivs,
     DefineJacobian[PDu, FDu, J, dJ],
     DefineJacobian[PDu, FDu, KD, Zero3]];
-*)
 If [useGlobalDerivs,
     DefineJacobian[PDua, FDua, J, dJ],
     DefineJacobian[PDua, FDua, KD, Zero3]];
 If [useGlobalDerivs,
     DefineJacobian[PDus, FDus, J, dJ],
     DefineJacobian[PDus, FDus, KD, Zero3]];
+(*
 If [useGlobalDerivs,
     DefineJacobian[PDo, FDo, J, dJ],
     DefineJacobian[PDo, FDo, KD, Zero3]];
+*)
 If [useGlobalDerivs,
     DefineJacobian[PDdiss, FDdiss, J, dJ],
     DefineJacobian[PDdiss, FDdiss, KD, Zero3]];
+
+If [splitUpwindDerivs,
+    Upwind[dir_, var_, idx_] := dir PDua[var,idx] + Abs[dir] PDus[var,idx],
+    Upwind[dir_, var_, idx_] := dir PDu[var,idx]];
 
 
 
@@ -277,6 +282,8 @@ T00=eTtt;
 T01=eTtx; T02=eTty; T03=eTtz;
 T11=eTxx; T12=eTxy; T22=eTyy; T13=eTxz; T23=eTyz; T33=eTzz;
 
+
+
 (******************************************************************************)
 (* Expressions *)
 (******************************************************************************)
@@ -293,14 +300,10 @@ ddetgtExpr[la_] =
   Sum [D[Det[MatrixOfComponents[gt[la, lb]]], X] PD[X, la],
        {X, Union[Flatten[MatrixOfComponents[gt[la, lb]]]]}];
 
-(*
-etaExpr = IfThen [r > SpatialBetaDriverRadius, SpatialBetaDriverRadius / r, 1];
-thetaExpr = IfThen [r > SpatialShiftGammaCoeffRadius,
-                    Exp [1 - r / SpatialShiftGammaCoeffRadius],
-                    1];
-*)
 etaExpr = Min [SpatialBetaDriverRadius / r, 1];
 thetaExpr = Min [Exp [1 - r / SpatialShiftGammaCoeffRadius], 1];
+
+
 
 (******************************************************************************)
 (* Groups *)
@@ -374,20 +377,32 @@ initialCalc =
   }
 };
 
+
+
 (******************************************************************************)
 (* Split a calculation *)
 (******************************************************************************)
 
-PartialCalculation[calc_, suffix_, evolVars_] :=
+PartialCalculation[calc_, suffix_, updates_, evolVars_] :=
 Module[
-  {vars, patterns, eqs, name},
-  vars      = Join[evolVars, lookup[calc, Shorthands]];
-  patterns  = Replace[vars, {    Tensor[n_,__]  ->     Tensor[n,__] ,
-                              dot[Tensor[n_,__]] -> dot[Tensor[n,__]]}, 1];
-  eqs       = FilterRules[lookup[calc, Equations], patterns];
-  name      = lookup[calc, Name] <> suffix;
-  mapReplace[mapReplace[calc, Equations, eqs], Name, name]
+  {name, calc1, replaces, calc2, vars, patterns, eqs, calc3},
+  (* Add suffix to name *)
+  name     = lookup[calc, Name] <> suffix;
+  calc1    = mapReplace[calc, Name, name];
+  (* Replace some entries in the calculation *)
+  (* replaces = Map[Function[rule, mapReplace[#, rule[[1]], rule[[2]]]&], updates]; *)
+  replaces = updates //. (lhs_ -> rhs_) -> (mapReplace[#, lhs, rhs]&);
+  calc2 = Apply[Composition, replaces][calc1];
+  (* Remove unnecessary equations *)
+  vars     = Join[evolVars, lookup[calc2, Shorthands]];
+  patterns = Replace[vars, {    Tensor[n_,__]  ->     Tensor[n,__] ,
+                            dot[Tensor[n_,__]] -> dot[Tensor[n,__]]}, 1];
+  eqs      = FilterRules[lookup[calc, Equations], patterns];
+  calc3    = mapReplace[calc2, Equations, eqs];
+  calc3
 ];
+
+
 
 (******************************************************************************)
 (* Convert from ADMBase *)
@@ -453,8 +468,7 @@ convertFromADMBaseGammaCalc =
     A -> IfThen [LapseACoeff != 0,
                  1 / (- harmonicF alpha^harmonicN)
                  (+ admdtalpha
-                  - LapseAdvectionCoeff beta[ua] PDua[alpha,la]
-                  - LapseAdvectionCoeff Abs[beta[ua]] PDus[alpha,la]),
+                  - LapseAdvectionCoeff Upwind[beta[ua], alpha, la]),
                  0],
     
     theta -> thetaExpr,
@@ -465,8 +479,7 @@ convertFromADMBaseGammaCalc =
     B[ua] -> IfThen [ShiftGammaCoeff ShiftBCoeff != 0,
                      1 / (theta ShiftGammaCoeff)
                      (+ admdtbeta[ua]
-                      - ShiftAdvectionCoeff beta[ub] PDua[beta[ua],lb]
-                      - ShiftAdvectionCoeff Abs[beta[ub]] PDus[beta[ua],lb]),
+                      - ShiftAdvectionCoeff Upwind[beta[ub], beta[ua], lb]),
                      0]
   }
 };
@@ -514,13 +527,11 @@ convertToADMBaseDtLapseShiftCalc =
     admdtalpha -> - harmonicF alpha^harmonicN
                     (+ LapseACoeff       A
                      + (1 - LapseACoeff) trK)
-                  + LapseAdvectionCoeff beta[ua] PDua[alpha,la]
-                  + LapseAdvectionCoeff Abs[beta[ua]] PDus[alpha,la],
+                  + LapseAdvectionCoeff Upwind[beta[ua], alpha, la],
     admdtbeta[ua] -> + theta ShiftGammaCoeff
                        (+ ShiftBCoeff        B[ua]
                         + (1 - ShiftBCoeff) (Xt[ua] - eta BetaDriver beta[ua]))
-                     + ShiftAdvectionCoeff beta[ub] PDua[beta[ua],lb]
-                     + ShiftAdvectionCoeff Abs[beta[ub]] PDus[beta[ua],lb]
+                     + ShiftAdvectionCoeff Upwind[beta[ub], beta[ua], lb]
   }
 };
 
@@ -670,15 +681,13 @@ evolCalc =
     (* PRD 62, 044034 (2000), eqn. (10) *)
     (* PRD 67 084023 (2003), eqn. (16) and (23) *)
     dot[phi]       -> IfThen [conformalMethod, 1/3 phi, -1/6] alpha trK
-                      + beta[ua] PDua[phi,la]
-                      + Abs[beta[ua]] PDus[phi,la]
+                      + Upwind[beta[ua], phi, la]
                       + epsdiss[ua] PDdiss[phi,la]
                       + IfThen [conformalMethod, -1/3 phi, 1/6] PD[beta[ua],la],
     
     (* PRD 62, 044034 (2000), eqn. (9) *)
     dot[gt[la,lb]] -> - 2 alpha At[la,lb]
-                      + beta[uc] PDua[gt[la,lb],lc]
-                      + Abs[beta[uc]] PDus[gt[la,lb],lc]
+                      + Upwind[beta[uc], gt[la,lb], lc]
                       + epsdiss[uc] PDdiss[gt[la,lb],lc]
                       + gt[la,lc] PD[beta[uc],lb] + gt[lb,lc] PD[beta[uc],la]
                       - (2/3) gt[la,lb] PD[beta[uc],lc],
@@ -690,8 +699,7 @@ evolCalc =
                                  + 6 Atu[ui,uj] cdphi[lj])
                       + gtu[uj,ul] PD[beta[ui],lj,ll]
                       + (1/3) gtu[ui,uj] PD[beta[ul],lj,ll]
-                      + beta[uj] PDua[Xt[ui],lj]
-                      + Abs[beta[uj]] PDus[Xt[ui],lj]
+                      + Upwind[beta[uj], Xt[ui], lj]
                       + epsdiss[uj] PDdiss[Xt[ui],lj]
                       - Xtn[uj] PD[beta[ui],lj] 
                       + (2/3) Xtn[ui] PD[beta[uj],lj]
@@ -704,8 +712,7 @@ evolCalc =
                                 + 2 cdphi[la] PD[alpha,lb] )
                                 - Xtn[ua] PD[alpha,la] )
                       + alpha (Atm[ua,lb] Atm[ub,la] + (1/3) trK^2)
-                      + beta[ua] PDua[trK,la]
-                      + Abs[beta[ua]] PDus[trK,la]
+                      + Upwind[beta[ua], trK, la]
                       + epsdiss[ua] PDdiss[trK,la]
     (* Equation (4.21) in Baumgarte & Shapiro (Phys. Rept. 376 (2003) 41-131) *)
                       + addMatter (4 pi alpha (rho + trS)),
@@ -719,8 +726,7 @@ evolCalc =
     trAts          -> gu[ua,ub] Ats[la,lb],
     dot[At[la,lb]] -> + em4phi (+ Ats[la,lb] - (1/3) g[la,lb] trAts )
                       + alpha (trK At[la,lb] - 2 At[la,lc] Atm[uc,lb])
-                      + beta[uc] PDua[At[la,lb],lc]
-                      + Abs[beta[uc]] PDus[At[la,lb],lc]
+                      + Upwind[beta[uc], At[la,lb], lc]
                       + epsdiss[uc] PDdiss[At[la,lb],lc]
                       + At[la,lc] PD[beta[uc],lb] + At[lb,lc] PD[beta[uc],la]
                       - (2/3) At[la,lb] PD[beta[uc],lc]
@@ -742,13 +748,11 @@ evolCalc =
     dot[alpha] -> - harmonicF alpha^harmonicN
                     (+ LapseACoeff       A
                      + (1 - LapseACoeff) trK)
-                  + LapseAdvectionCoeff beta[ua] PDua[alpha,la]
-                  + LapseAdvectionCoeff Abs[beta[ua]] PDus[alpha,la]
+                  + LapseAdvectionCoeff Upwind[beta[ua], alpha, la]
                   + epsdiss[ua] PDdiss[alpha,la],
 
     dot[A]     -> + LapseACoeff (dottrK - AlphaDriver A)
-                  + LapseAdvectionCoeff beta[ua] PDua[A,la]
-                  + LapseAdvectionCoeff Abs[beta[ua]] PDus[A,la]
+                  + LapseAdvectionCoeff Upwind[beta[ua], A, la]
                   + epsdiss[ua] PDdiss[A,la],
     
     eta -> etaExpr,
@@ -759,285 +763,40 @@ evolCalc =
     dot[beta[ua]] -> + theta ShiftGammaCoeff
                        (+ ShiftBCoeff        B[ua]
                         + (1 - ShiftBCoeff) (Xt[ua] - eta BetaDriver beta[ua]))
-                     + ShiftAdvectionCoeff beta[ub] PDua[beta[ua],lb]
-                     + ShiftAdvectionCoeff Abs[beta[ub]] PDus[beta[ua],lb]
+                     + ShiftAdvectionCoeff Upwind[beta[ub], beta[ua], lb]
                      + epsdiss[ub] PDdiss[beta[ua],lb],
 
     dot[B[ua]]    -> + ShiftBCoeff (dotXt[ua] - eta BetaDriver B[ua])
-                     + ShiftAdvectionCoeff beta[ub] (+ PDua[B[ua],lb]
-                                                     - PDua[Xt[ua],lb])
-                     + ShiftAdvectionCoeff Abs[beta[ub]] (+ PDus[B[ua],lb]
-                                                          - PDus[Xt[ua],lb])
+                     + ShiftAdvectionCoeff Upwind[beta[ub], B[ua], lb]
+                     - ShiftAdvectionCoeff Upwind[beta[ub], Xt[ua], lb]
                      + epsdiss[ub] PDdiss[B[ua],lb]
   }
 };
 
 evolCalc1 = PartialCalculation[evolCalc, "1",
- { dot[trK],
-   dot[phi],
-   dot[gt[la,lb]],
-   dot[Xt[ui]],
-   dot[alpha],
-   dot[A],
-   dot[beta[ua]],
-   dot[B[ua]]
+  {
+    ConditionalOnKeyword -> {"RHS_calculation", "split"}
+  },
+  {
+    dot[trK],
+    dot[phi],
+    dot[gt[la,lb]],
+    dot[Xt[ui]],
+    dot[alpha],
+    dot[A],
+    dot[beta[ua]],
+    dot[B[ua]]
   }];
 
-(*
-vars      = Join[evolVars1, lookup[evolCalc, Shorthands]];
-patterns  = Replace[vars, {    Tensor[n_,__]  ->     Tensor[n,__] ,
-                            dot[Tensor[n_,__]] -> dot[Tensor[n,__]]}, 1];
-eqs       = FilterRules[lookup[evolCalc, Equations], patterns];
-name      = lookup[evolCalc, Name] <> "1";
-evolCalc1 = mapReplace[mapReplace[evolCalc, Equations, eqs], Name, name];
-*)
-
-evolCalc2 = PartialCalculation[evolCalc, "2", {dot[At[la,lb]]}];
-
-evol1Calc =
-{
-  Name -> BSSN <> "_RHS1",
-  Schedule -> {"IN " <> BSSN <> "_evolCalcGroup"},
-  (*
-  Where -> Interior,
-  *)
-  (* Synchronise the RHS grid functions after this routine, so that
-     the refinement boundaries are set correctly before applying the
-     radiative boundary conditions.  *)
-  Where -> InteriorNoSync,
-  Shorthands -> {dir[ua],
-                 detgt, gtu[ua,ub],
-                 Gt[ua,lb,lc], Xtn[ua],
-                 Atm[ua,lb], Atu[ua,ub],
-                 e4phi, em4phi, cdphi[la], eta, theta,
-                 rho, S[la], trS, fac1, dottrK, dotXt[ua], epsdiss[ua]},
-  Equations -> 
+evolCalc2 = PartialCalculation[evolCalc, "2",
   {
-    dir[ua] -> Sign[beta[ua]],
-    
-    epsdiss[ua] -> EpsDiss,
-    
-    detgt -> 1 (* detgtExpr *),
-    
-    (* This leads to simpler code... *)
-    gtu[ua,ub]   -> 1/detgt detgtExpr MatrixInverse [gt[ua,ub]],
-    Gt[ua,lb,lc] -> 1/2 gtu[ua,ud]
-                    (PD[gt[lb,ld],lc] + PD[gt[lc,ld],lb] - PD[gt[lb,lc],ld]),
-    
-    (* The conformal connection functions calculated from the conformal metric,
-       used instead of Xt where no derivatives of Xt are taken *)
-    Xtn[ui] -> gtu[uj,uk] Gt[ui,lj,lk],
-
-    fac1 -> IfThen [conformalMethod, -1/(2 phi), 1],
-    cdphi[la] -> fac1 CDt[phi,la],
-
-    Atm[ua,lb] -> gtu[ua,uc] At[lc,lb],
-    Atu[ua,ub] -> Atm[ua,lc] gtu[ub,uc],
-    
-    e4phi       -> IfThen [conformalMethod, 1/phi^2, Exp[4 phi]],
-    em4phi      -> 1 / e4phi,
-
-    (* Matter terms *)
-    
-    (* rho = n^a n^b T_ab *)
-    rho -> addMatter
-           (1/alpha^2 (T00 - 2 beta[ui] T0[li] + beta[ui] beta[uj] T[li,lj])),
-
-    (* trS = gamma^ij T_ij  *)
-    trS -> addMatter (em4phi gtu[ui,uj] T[li,lj]),
-
-    (* S_i = -p^a_i n^b T_ab, where p^a_i = delta^a_i + n^a n_i *)
-    S[li] -> addMatter (-1/alpha (T0[li] - beta[uj] T[li,lj])),
-    
-    (* RHS terms *)
-    
-    (* PRD 62, 044034 (2000), eqn. (11) *)
-    (* Note, Covariant derivatives with respect to the physical metric
-       has been replaced with derivatives with respect to the
-       conformal metric *)
-    dottrK         -> - em4phi ( gtu[ua,ub] ( PD[alpha,la,lb]
-                                + 2 cdphi[la] PD[alpha,lb] )
-                                - Xtn[ua] PD[alpha,la] )
-                      + alpha (Atm[ua,lb] Atm[ub,la] + (1/3) trK^2)
-                      + beta[ua] PDua[trK,la]
-                      + Abs[beta[ua]] PDus[trK,la]
-                      + epsdiss[ua] PDdiss[trK,la]
-    (* Equation (4.21) in Baumgarte & Shapiro (Phys. Rept. 376 (2003) 41-131) *)
-                      + addMatter (4 pi alpha (rho + trS)),
-    dot[trK]       -> dottrK,
-
-    (* PRD 62, 044034 (2000), eqn. (10) *)
-    (* PRD 67 084023 (2003), eqn. (16) and (23) *)
-    dot[phi]       -> IfThen [conformalMethod, 1/3 phi, -1/6] alpha trK
-                      + beta[ua] PDua[phi,la]
-                      + Abs[beta[ua]] PDus[phi,la]
-                      + epsdiss[ua] PDdiss[phi,la]
-                      + IfThen [conformalMethod, -1/3 phi, 1/6] PD[beta[ua],la],
-    
-    (* PRD 62, 044034 (2000), eqn. (9) *)
-    dot[gt[la,lb]] -> - 2 alpha At[la,lb]
-                      + beta[uc] PDua[gt[la,lb],lc]
-                      + Abs[beta[uc]] PDus[gt[la,lb],lc]
-                      + epsdiss[uc] PDdiss[gt[la,lb],lc]
-                      + gt[la,lc] PD[beta[uc],lb] + gt[lb,lc] PD[beta[uc],la]
-                      - (2/3) gt[la,lb] PD[beta[uc],lc],
-
-    (* PRD 62, 044034 (2000), eqn. (20) *)
-    (* PRD 67 084023 (2003), eqn (26) *)
-    dotXt[ui]      -> - 2 Atu[ui,uj] PD[alpha,lj]
-                      + 2 alpha (+ Gt[ui,lj,lk] Atu[uk,uj]
-                                 - (2/3) gtu[ui,uj] PD[trK,lj]
-                                 + 6 Atu[ui,uj] cdphi[lj])
-                      + gtu[uj,ul] PD[beta[ui],lj,ll]
-                      + (1/3) gtu[ui,uj] PD[beta[ul],lj,ll]
-                      + beta[uj] PDua[Xt[ui],lj]
-                      + Abs[beta[uj]] PDus[Xt[ui],lj]
-                      + epsdiss[uj] PDdiss[Xt[ui],lj]
-                      - Xtn[uj] PD[beta[ui],lj] 
-                      + (2/3) Xtn[ui] PD[beta[uj],lj]
-    (* Equation (4.28) in Baumgarte & Shapiro (Phys. Rept. 376 (2003) 41-131) *)
-                      + addMatter (- 16 pi alpha gtu[ui,uj] S[lj]),
-    dot[Xt[ui]]    -> dotXt[ui],
-    
-    eta -> etaExpr,
-    theta -> thetaExpr,
-    
-    (* dot[alpha] -> - harmonicF alpha^harmonicN trK, *)
-    (* dot[alpha] -> - harmonicF alpha^harmonicN A + Lie[alpha, beta], *)
-(*
-    dot[alpha] -> - harmonicF alpha^harmonicN (
-                    (1 - LapseAdvectionCoeff) A + LapseAdvectionCoeff trK)
-                  + LapseAdvectionCoeff beta[ua] PDu[alpha,la],
-
-    dot[A]     -> (1 - LapseAdvectionCoeff) (dottrK - AlphaDriver A),
-*)
-    dot[alpha] -> - harmonicF alpha^harmonicN
-                    (+ LapseACoeff       A
-                     + (1 - LapseACoeff) trK)
-                  + LapseAdvectionCoeff beta[ua] PDua[alpha,la]
-                  + LapseAdvectionCoeff Abs[beta[ua]] PDus[alpha,la]
-                  + epsdiss[ua] PDdiss[alpha,la],
-
-    dot[A]     -> + LapseACoeff (dottrK - AlphaDriver A)
-                  + LapseAdvectionCoeff beta[ua] PDua[A,la]
-                  + LapseAdvectionCoeff Abs[beta[ua]] PDus[A,la]
-                  + epsdiss[ua] PDdiss[A,la],
-
-    (* dot[beta[ua]] -> eta Xt[ua], *)
-    (* dot[beta[ua]] -> ShiftGammaCoeff alpha^ShiftAlphaPower B[ua], *)
-    dot[beta[ua]] -> + theta ShiftGammaCoeff
-                       (+ ShiftBCoeff        B[ua]
-                        + (1 - ShiftBCoeff) (Xt[ua] - eta BetaDriver beta[ua]))
-                     + ShiftAdvectionCoeff beta[ub] PDua[beta[ua],lb]
-                     + ShiftAdvectionCoeff Abs[beta[ub]] PDus[beta[ua],lb]
-                     + epsdiss[ub] PDdiss[beta[ua],lb],
-
-    dot[B[ua]]    -> + ShiftBCoeff (dotXt[ua] - eta BetaDriver B[ua])
-                     + ShiftAdvectionCoeff beta[ub] (+ PDua[B[ua],lb]
-                                                     - PDua[Xt[ua],lb])
-                     + ShiftAdvectionCoeff Abs[beta[ub]] (+ PDus[B[ua],lb]
-                                                          - PDus[Xt[ua],lb])
-                     + epsdiss[ub] PDdiss[B[ua],lb]
-  }
-};
-
-evol2Calc =
-{
-  Name -> BSSN <> "_RHS2",
-  Schedule -> {"IN " <> BSSN <> "_evolCalcGroup"},
-  (*
-  Where -> Interior,
-  *)
-  (* Synchronise the RHS grid functions after this routine, so that
-     the refinement boundaries are set correctly before applying the
-     radiative boundary conditions.  *)
-  Where -> InteriorNoSync,
-  Shorthands -> {dir[ua],
-                 detgt, gtu[ua,ub],
-                 Gtl[la,lb,lc], Gtlu[la,lb,uc], Gt[ua,lb,lc], Xtn[ua],
-                 Rt[la,lb], Rphi[la,lb], R[la,lb],
-                 Atm[ua,lb],
-                 e4phi, em4phi, cdphi[la], cdphi2[la,lb], g[la,lb], detg,
-                 gu[ua,ub], Ats[la,lb], trAts,
-                 rho, S[la], trS, fac1, fac2, epsdiss[ua]},
-  Equations -> 
+    ConditionalOnKeyword -> {"RHS_calculation", "split"}
+  },
   {
-    dir[ua] -> Sign[beta[ua]],
-    
-    epsdiss[ua] -> EpsDiss,
-    
-    detgt -> 1 (* detgtExpr *),
-    
-    (* This leads to simpler code... *)
-    gtu[ua,ub]     -> 1/detgt detgtExpr MatrixInverse [gt[ua,ub]],
-    Gtl[la,lb,lc]  -> 1/2
-                      (PD[gt[lb,la],lc] + PD[gt[lc,la],lb] - PD[gt[lb,lc],la]),
-    Gtlu[la,lb,uc] -> gtu[uc,ud] Gtl[la,lb,ld],
-    Gt[ua,lb,lc]   -> gtu[ua,ud] Gtl[ld,lb,lc],
-    
-    (* The conformal connection functions calculated from the conformal metric,
-       used instead of Xt where no derivatives of Xt are taken *)
-    Xtn[ui] -> gtu[uj,uk] Gt[ui,lj,lk],
+    dot[At[la,lb]]
+  }];
 
-    (* PRD 62, 044034 (2000), eqn. (18) *)
-    Rt[li,lj] -> - (1/2) gtu[ul,um] PD[gt[li,lj],ll,lm]
-                 + (1/2) gt[lk,li] PD[Xt[uk],lj]
-                 + (1/2) gt[lk,lj] PD[Xt[uk],li]
-                 + (1/2) Xtn[uk] Gtl[li,lj,lk]
-                 + (1/2) Xtn[uk] Gtl[lj,li,lk]
-                 + (+ Gt[uk,li,ll] Gtlu[lj,lk,ul]
-                    + Gt[uk,lj,ll] Gtlu[li,lk,ul]
-                    + Gt[uk,li,ll] Gtlu[lk,lj,ul]),
 
-    fac1 -> IfThen [conformalMethod, -1/(2 phi), 1],
-    cdphi[la] -> fac1 CDt[phi,la],
-    fac2 -> IfThen [conformalMethod, 1/(2 phi^2), 0],
-    cdphi2[la,lb] -> fac1 CDt[phi,la,lb] + fac2 CDt[phi,la] CDt[phi,lb],
-
-    (* PRD 62, 044034 (2000), eqn. (15) *)
-    Rphi[li,lj] -> - 2 cdphi2[lj,li]
-                   - 2 gt[li,lj] gtu[ul,un] cdphi2[ll,ln]
-                   + 4 cdphi[li] cdphi[lj]
-                   - 4 gt[li,lj] gtu[ul,un] cdphi[ln] cdphi[ll],
-    
-    Atm[ua,lb] -> gtu[ua,uc] At[lc,lb],
-    
-    e4phi       -> IfThen [conformalMethod, 1/phi^2, Exp[4 phi]],
-    em4phi      -> 1 / e4phi,
-    g[la,lb]    -> e4phi gt[la,lb],
-    (* gu[ua,ub] -> 1/detg detgExpr MatrixInverse [g[ua,ub]], *)
-    gu[ua,ub]   -> em4phi gtu[ua,ub],
-    
-    R[la,lb] -> Rt[la,lb] + Rphi[la,lb],
-    
-    (* Matter terms *)
-    
-    (* trS = gamma^ij T_ij  *)
-    trS -> addMatter (gu[ui,uj] T[li,lj]),
-    
-    (* RHS terms *)
-    
-    (* PRD 62, 044034 (2000), eqn. (12) *)
-    (* TODO: Should we use the Hamiltonian constraint to make Rij tracefree? *)
-    (* Note, Covariant derivatives with respect to the physical metric
-       has been replaced with derivatives with respect to the
-       conformal metric *)
-    Ats[la,lb]     -> - CDt[alpha,la,lb] +
-                      + 2 (PD[alpha,la] cdphi[lb] + PD[alpha,lb] cdphi[la] )
-                      + alpha R[la,lb],
-    trAts          -> gu[ua,ub] Ats[la,lb],
-    dot[At[la,lb]] -> + em4phi (+ Ats[la,lb] - (1/3) g[la,lb] trAts )
-                      + alpha (trK At[la,lb] - 2 At[la,lc] Atm[uc,lb])
-                      + beta[uc] PDua[At[la,lb],lc]
-                      + Abs[beta[uc]] PDus[At[la,lb],lc]
-                      + epsdiss[uc] PDdiss[At[la,lb],lc]
-                      + At[la,lc] PD[beta[uc],lb] + At[lb,lc] PD[beta[uc],la]
-                      - (2/3) At[la,lb] PD[beta[uc],lc]
-    (* Equation (4.23) in Baumgarte & Shapiro (Phys. Rept. 376 (2003) 41-131) *)
-                      + addMatter (- em4phi alpha 8 pi
-                                     (T[la,lb] - (1/3) g[la,lb] trS))
-  }
-};
 
 RHSStaticBoundaryCalc =
 {
@@ -1266,6 +1025,23 @@ constraintsCalc =
   }
 };
 
+constraintsCalc1 = PartialCalculation[constraintsCalc, "1",
+  {},
+  {
+    H,
+    cS,
+    cXt[ua]
+  }];
+
+constraintsCalc2 = PartialCalculation[constraintsCalc, "2",
+  {},
+  {
+    M[li],
+    cA
+  }];
+
+
+
 constraintsBoundaryCalc =
 {
   Name -> BSSN <> "_constraints_boundary",
@@ -1471,14 +1247,15 @@ calculations =
   evolCalc1, evolCalc2,
   (* evol1Calc, evol2Calc, *)
   RHSStaticBoundaryCalc,
-  RHSRadiativeBoundaryCalc,
+  (* RHSRadiativeBoundaryCalc, *)
   enforceCalc,
   boundaryCalc,
   convertToADMBaseCalc,
   convertToADMBaseDtLapseShiftCalc,
   convertToADMBaseDtLapseShiftBoundaryCalc,
   convertToADMBaseFakeDtLapseShiftCalc,
-  constraintsCalc,
+  (* constraintsCalc, *)
+  constraintsCalc1, constraintsCalc2,
   constraintsBoundaryCalc
 };
 
@@ -1512,7 +1289,9 @@ CreateKrancThornTT [groups, ".", BSSN,
 (* matter: 0 or 1
    (matter seems cheap; it should be always enabled) *)
 
-createCode[2, False, 3, 1]; 
-createCode[4, False, 3, 1];
-createCode[4, True,  3, 1];
-createCode[8, False, 3, 1];
+createCode[2, False, True , 3, 1];
+createCode[4, False, True , 3, 1];
+createCode[4, False, False, 3, 1];
+createCode[4, True , True , 3, 1];
+createCode[8, False, True , 3, 1];
+createCode[8, True , True , 3, 1];
