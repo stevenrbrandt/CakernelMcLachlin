@@ -151,20 +151,10 @@ if (CCTK_EQUALS (evolution_method, "ML_BSSN")) {
   {
     LANG: C
     OPTIONS: level
-  } "Apply boundary conditions to ADMBase variables"
+  } "Select boundary conditions for ADMBase variables"
   
   SCHEDULE GROUP ApplyBCs AS ML_BSSN_ApplyBCsADMBase IN ML_BSSN_convertToADMBaseGroupWrapper AFTER ML_BSSN_SelectBCsADMBase
   {
   } "Apply boundary conditions to ADMBase variables"
   
-  
-  
-  SCHEDULE GROUP ML_BSSN_constraintsCalcGroup AT analysis
-  {
-    TRIGGERS: ML_BSSN::ML_Ham
-    TRIGGERS: ML_BSSN::ML_mom
-    TRIGGERS: ML_BSSN::ML_cons_detg
-    TRIGGERS: ML_BSSN::ML_cons_Gamma
-    TRIGGERS: ML_BSSN::ML_cons_traceA
-  } "Calculate BSSN constraints"
 }
