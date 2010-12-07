@@ -21,16 +21,6 @@ ML_BSSN::my_initial_boundary_condition = "extrapolate-gammas"
 #ML_BSSN::my_rhs_boundary_condition     = "NewRad"
 Boundary::radpower                     = 2
 
-ML_BSSN::ML_log_confac_bound = "none"
-ML_BSSN::ML_metric_bound     = "none"
-ML_BSSN::ML_Gamma_bound      = "none"
-ML_BSSN::ML_trace_curv_bound = "none"
-ML_BSSN::ML_curv_bound       = "none"
-ML_BSSN::ML_lapse_bound      = "none"
-ML_BSSN::ML_dtlapse_bound    = "none"
-ML_BSSN::ML_shift_bound      = "none"
-ML_BSSN::ML_dtshift_bound    = "none"
-
 Dissipation::order = 5
 Dissipation::vars  = "
         ML_BSSN::ML_log_confac
@@ -151,6 +141,9 @@ Exact::Minkowski_gauge_wave__diagonal = "no"
 Exact::rotation_euler_psi = -1.9216757376671543544
 Exact::rotation_euler_theta = 0.66214523564555227398
 Exact::rotation_euler_phi = 1.2199169159226388841
+
+Exact::exact_order = 4
+Exact::exact_eps = 2e-4
 
 #############################################################
 # Output
