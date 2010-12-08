@@ -227,7 +227,7 @@ groups = Join [declaredGroups, extraGroups];
 ADMQuantitiesCalc =
 {
   Name -> ADMQuantities,
-  Schedule -> {"IN MoL_PseudoEvolution BEFORE " <> ADMQuantities <> "_SelectBoundConds"},
+  Schedule -> Automatic,
   Where -> Interior,
   Shorthands -> {detgt, gtu[ua,ub], dgtu[ua,ub,lc],
                  Gtl[la,lb,lc], Gtlu[la,lb,uc], Gt[ua,lb,lc],
@@ -292,20 +292,6 @@ ADMQuantitiesCalc =
   }
 };
 
-(*
-ADMQuantitiesBoundaryCalc =
-{
-  Name -> ADMQuantities <> "_boundary",
-  Schedule -> {"IN MoL_PseudoEvolution BEFORE " <> ADMQuantities <> "_SelectBoundConds"},
-  Where -> BoundaryWithGhosts,
-  Equations -> 
-  {
-    Madm     -> 0,
-    Jadm[la] -> 0
-  }
-};
-*)
-
 (******************************************************************************)
 (* Implementations *)
 (******************************************************************************)
@@ -338,9 +324,6 @@ intParameters =
 calculations =
 {
   ADMQuantitiesCalc
-(*
-  ADMQuantitiesBoundaryCalc
-*)
 };
 
 CreateKrancThornTT [groups, ".", ADMQuantities,

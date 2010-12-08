@@ -223,7 +223,7 @@ groups = Join [declaredGroups, extraGroups];
 ADMConstraintsCalc =
 {
   Name -> ADMConstraints,
-  Schedule -> {"IN MoL_PseudoEvolution BEFORE " <> ADMConstraints <> "_SelectBoundConds"},
+  Schedule -> Automatic,
   Where -> Interior,
   Shorthands -> {detg, gu[ua,ub], G[ua,lb,lc],
                  R[la,lb], trR, Km[la,lb], trK,
@@ -259,20 +259,6 @@ ADMConstraintsCalc =
   }
 };
 
-(*
-ADMConstraintsBoundaryCalc =
-{
-  Name -> ADMConstraints <> "_boundary",
-  Schedule -> {"IN MoL_PseudoEvolution BEFORE " <> ADMConstraints <> "_SelectBoundConds"},
-  Where -> BoundaryWithGhosts,
-  Equations -> 
-  {
-    H     -> 0,
-    M[la] -> 0
-  }
-};
-*)
-
 (******************************************************************************)
 (* Implementations *)
 (******************************************************************************)
@@ -293,9 +279,6 @@ inheritedImplementations =
 calculations =
 {
   ADMConstraintsCalc
-(*
-  ADMConstraintsBoundaryCalc
-*)
 };
 
 CreateKrancThornTT [groups, ".", ADMConstraints,
