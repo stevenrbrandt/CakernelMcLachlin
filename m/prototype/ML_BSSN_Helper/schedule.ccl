@@ -56,12 +56,13 @@ if (CCTK_EQUALS (evolution_method, "ML_BSSN")) {
   
   
   
+  # Why would any of these two be necessary?
   #SCHEDULE GROUP ML_BSSN_evolCalcGroup AT postinitial AFTER MoL_PostStep
   #{
   #} "Calculate BSSN RHS"
-  SCHEDULE GROUP MoL_CalcRHS AT postinitial AFTER MoL_PostStep
-  {
-  } "Evaluate RHS"
+  #SCHEDULE GROUP MoL_CalcRHS AT postinitial AFTER MoL_PostStep
+  #{
+  #} "Evaluate RHS"
   
   SCHEDULE GROUP ML_BSSN_evolCalcGroup IN MoL_CalcRHS
   {
