@@ -25,7 +25,7 @@ CCTK_INT FUNCTION Boundary_SelectVarForBC(CCTK_POINTER_TO_CONST IN GH, CCTK_INT 
 USES FUNCTION Boundary_SelectVarForBC
 
 public:
-CCTK_REAL WT_w type=GF timelevels=1 tags='tensortypealias="U" tensorweight=1'
+CCTK_REAL WT_w type=GF timelevels=1 tags='tensortypealias="U" tensorweight=0'
 {
   w1,
   w2,
@@ -33,19 +33,19 @@ CCTK_REAL WT_w type=GF timelevels=1 tags='tensortypealias="U" tensorweight=1'
 } "WT_w"
 
 public:
-CCTK_REAL WT_rho type=GF timelevels=2 tags='tensortypealias="Scalar" tensorweight=1'
+CCTK_REAL WT_rho type=GF timelevels=2 tags='tensortypealias="Scalar" tensorweight=0'
 {
   rho
 } "WT_rho"
 
 public:
-CCTK_REAL WT_u type=GF timelevels=2 tags='tensortypealias="Scalar" tensorweight=1'
+CCTK_REAL WT_u type=GF timelevels=2 tags='tensortypealias="Scalar" tensorweight=0'
 {
   u
 } "WT_u"
 
 public:
-CCTK_REAL WT_v type=GF timelevels=2 tags='tensortypealias="D" tensorweight=1'
+CCTK_REAL WT_v type=GF timelevels=2 tags='tensortypealias="D" tensorweight=0'
 {
   v1,
   v2,
@@ -53,19 +53,19 @@ CCTK_REAL WT_v type=GF timelevels=2 tags='tensortypealias="D" tensorweight=1'
 } "WT_v"
 
 public:
-CCTK_REAL WT_rhorhs type=GF timelevels=2 tags='tensortypealias="Scalar" tensorweight=1'
+CCTK_REAL WT_rhorhs type=GF timelevels=2 tags='tensortypealias="Scalar" tensorweight=0'
 {
   rhorhs
 } "WT_rhorhs"
 
 public:
-CCTK_REAL WT_urhs type=GF timelevels=2 tags='tensortypealias="Scalar" tensorweight=1'
+CCTK_REAL WT_urhs type=GF timelevels=2 tags='tensortypealias="Scalar" tensorweight=0'
 {
   urhs
 } "WT_urhs"
 
 public:
-CCTK_REAL WT_vrhs type=GF timelevels=2 tags='tensortypealias="D" tensorweight=1'
+CCTK_REAL WT_vrhs type=GF timelevels=2 tags='tensortypealias="D" tensorweight=0'
 {
   v1rhs,
   v2rhs,

@@ -23,11 +23,42 @@ schedule ML_ADMConstraints_RegisterSymmetries in SymmetryRegister
   OPTIONS: meta
 } "register symmetries"
 
-schedule ML_ADMConstraints IN MoL_PseudoEvolution BEFORE ML_ADMConstraints_SelectBoundConds
+schedule group ML_ADMConstraints_group in MoL_PseudoEvolution
+{
+  # no language specified
+} "ML_ADMConstraints"
+
+schedule ML_ADMConstraints in ML_ADMConstraints_group
 {
   LANG: C
+} "ML_ADMConstraints"
+
+schedule ML_ADMConstraints_SelectBCs in ML_ADMConstraints_bc_group
+{
+  LANG: C
+  OPTIONS: level
   SYNC: ML_Ham
   SYNC: ML_mom
+} "ML_ADMConstraints_SelectBCs"
+
+schedule group ApplyBCs as ML_ADMConstraints_ApplyBCs in ML_ADMConstraints_bc_group after ML_ADMConstraints_SelectBCs
+{
+  # no language specified
+} "Apply BCs for groups set in ML_ADMConstraints"
+
+schedule group ML_ADMConstraints_bc_group in ML_ADMConstraints_group after ML_ADMConstraints
+{
+  # no language specified
+} "ML_ADMConstraints"
+
+schedule group ML_ADMConstraints_bc_group at CCTK_POSTRESTRICT
+{
+  # no language specified
+} "ML_ADMConstraints"
+
+schedule group ML_ADMConstraints_bc_group at CCTK_POSTRESTRICTINITIAL
+{
+  # no language specified
 } "ML_ADMConstraints"
 
 schedule ML_ADMConstraints_SelectBoundConds in MoL_PseudoEvolution

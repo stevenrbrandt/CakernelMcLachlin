@@ -28,13 +28,13 @@ void WTFO_RHS_SelectBCs(CCTK_ARGUMENTS)
   CCTK_INT ierr = 0;
   ierr = Boundary_SelectGroupForBC(cctkGH, CCTK_ALL_FACES, GenericFD_GetBoundaryWidth(cctkGH), -1 /* no table */, "ML_WaveToyFO::WT_rhorhs","flat");
   if (ierr < 0)
-    CCTK_WARN(0, "Failed to register flat BC for ML_WaveToyFO::WT_rhorhs.");
+    CCTK_WARN(1, "Failed to register flat BC for ML_WaveToyFO::WT_rhorhs.");
   ierr = Boundary_SelectGroupForBC(cctkGH, CCTK_ALL_FACES, GenericFD_GetBoundaryWidth(cctkGH), -1 /* no table */, "ML_WaveToyFO::WT_urhs","flat");
   if (ierr < 0)
-    CCTK_WARN(0, "Failed to register flat BC for ML_WaveToyFO::WT_urhs.");
+    CCTK_WARN(1, "Failed to register flat BC for ML_WaveToyFO::WT_urhs.");
   ierr = Boundary_SelectGroupForBC(cctkGH, CCTK_ALL_FACES, GenericFD_GetBoundaryWidth(cctkGH), -1 /* no table */, "ML_WaveToyFO::WT_vrhs","flat");
   if (ierr < 0)
-    CCTK_WARN(0, "Failed to register flat BC for ML_WaveToyFO::WT_vrhs.");
+    CCTK_WARN(1, "Failed to register flat BC for ML_WaveToyFO::WT_vrhs.");
   return;
 }
 
@@ -55,6 +55,9 @@ void WTFO_RHS_Body(cGH const * restrict const cctkGH, int const dir, int const f
   {
     return;
   }
+  
+  const char *groups[] = {"ML_WaveToyFO::WT_rho","ML_WaveToyFO::WT_rhorhs","ML_WaveToyFO::WT_urhs","ML_WaveToyFO::WT_v","ML_WaveToyFO::WT_vrhs"};
+  GenericFD_AssertGroupStorage(cctkGH, "WTFO_RHS", 5, groups);
   
   /* Include user-supplied include files */
   

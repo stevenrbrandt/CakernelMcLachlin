@@ -53,6 +53,9 @@ void ML_ADMQuantities_O2_Body(cGH const * restrict const cctkGH, int const dir, 
     return;
   }
   
+  const char *groups[] = {"grid::coordinates","Grid::coordinates","McLachlan::ML_curv","McLachlan::ML_Gamma","McLachlan::ML_lapse","McLachlan::ML_log_confac","McLachlan::ML_metric","McLachlan::ML_shift","McLachlan::ML_trace_curv","ML_ADMQuantities_O2::ML_Jadm","ML_ADMQuantities_O2::ML_Madm"};
+  GenericFD_AssertGroupStorage(cctkGH, "ML_ADMQuantities_O2", 11, groups);
+  
   /* Include user-supplied include files */
   
   /* Initialise finite differencing variables */

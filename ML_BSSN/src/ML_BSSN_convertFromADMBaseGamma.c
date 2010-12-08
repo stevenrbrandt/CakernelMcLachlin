@@ -56,6 +56,9 @@ void ML_BSSN_convertFromADMBaseGamma_Body(cGH const * restrict const cctkGH, int
     return;
   }
   
+  const char *groups[] = {"ADMBase::dtlapse","ADMBase::dtshift","grid::coordinates","Grid::coordinates","ML_BSSN::ML_dtlapse","ML_BSSN::ML_dtshift","ML_BSSN::ML_Gamma","ML_BSSN::ML_lapse","ML_BSSN::ML_metric","ML_BSSN::ML_shift"};
+  GenericFD_AssertGroupStorage(cctkGH, "ML_BSSN_convertFromADMBaseGamma", 10, groups);
+  
   /* Include user-supplied include files */
   
   /* Initialise finite differencing variables */
@@ -344,11 +347,11 @@ void ML_BSSN_convertFromADMBaseGamma_Body(cGH const * restrict const cctkGH, int
     CCTK_REAL B1L = 12*IfThen(ShiftBCoeff*ShiftGammaCoeff != 
       0,dtbetaxL*INV(ShiftGammaCoeff)*INV(theta),0) + 
       IfThen(ShiftBCoeff*ShiftGammaCoeff != 0,(dtbetaxL - 
-      beta1L*PDupwindNthAnti1beta1*ShiftAdvectionCoeff - 
-      PDupwindNthSymm1beta1*ShiftAdvectionCoeff*Abs(beta1L))*INV(ShiftGammaCoeff)*INV(theta),0) 
+      ShiftAdvectionCoeff*(beta1L*PDupwindNthAnti1beta1 + 
+      PDupwindNthSymm1beta1*Abs(beta1L)))*INV(ShiftGammaCoeff)*INV(theta),0) 
       + IfThen(ShiftBCoeff*ShiftGammaCoeff != 0,(dtbetaxL - 
-      beta2L*PDupwindNthAnti2beta1*ShiftAdvectionCoeff - 
-      PDupwindNthSymm2beta1*ShiftAdvectionCoeff*Abs(beta2L))*INV(ShiftGammaCoeff)*INV(theta),0) 
+      ShiftAdvectionCoeff*(beta2L*PDupwindNthAnti2beta1 + 
+      PDupwindNthSymm2beta1*Abs(beta2L)))*INV(ShiftGammaCoeff)*INV(theta),0) 
       + 2*(IfThen(ShiftBCoeff*ShiftGammaCoeff != 0,(dtbetaxL - 
       beta1L*PDupwindNthAnti1beta1*ShiftAdvectionCoeff)*INV(ShiftGammaCoeff)*INV(theta),0) 
       + IfThen(ShiftBCoeff*ShiftGammaCoeff != 0,(dtbetaxL - 
@@ -362,17 +365,17 @@ void ML_BSSN_convertFromADMBaseGamma_Body(cGH const * restrict const cctkGH, int
       + IfThen(ShiftBCoeff*ShiftGammaCoeff != 0,(dtbetaxL - 
       PDupwindNthSymm3beta1*ShiftAdvectionCoeff*Abs(beta3L))*INV(ShiftGammaCoeff)*INV(theta),0)) 
       + IfThen(ShiftBCoeff*ShiftGammaCoeff != 0,(dtbetaxL - 
-      beta3L*PDupwindNthAnti3beta1*ShiftAdvectionCoeff - 
-      PDupwindNthSymm3beta1*ShiftAdvectionCoeff*Abs(beta3L))*INV(ShiftGammaCoeff)*INV(theta),0);
+      ShiftAdvectionCoeff*(beta3L*PDupwindNthAnti3beta1 + 
+      PDupwindNthSymm3beta1*Abs(beta3L)))*INV(ShiftGammaCoeff)*INV(theta),0);
     
     CCTK_REAL B2L = 12*IfThen(ShiftBCoeff*ShiftGammaCoeff != 
       0,dtbetayL*INV(ShiftGammaCoeff)*INV(theta),0) + 
       IfThen(ShiftBCoeff*ShiftGammaCoeff != 0,(dtbetayL - 
-      beta1L*PDupwindNthAnti1beta2*ShiftAdvectionCoeff - 
-      PDupwindNthSymm1beta2*ShiftAdvectionCoeff*Abs(beta1L))*INV(ShiftGammaCoeff)*INV(theta),0) 
+      ShiftAdvectionCoeff*(beta1L*PDupwindNthAnti1beta2 + 
+      PDupwindNthSymm1beta2*Abs(beta1L)))*INV(ShiftGammaCoeff)*INV(theta),0) 
       + IfThen(ShiftBCoeff*ShiftGammaCoeff != 0,(dtbetayL - 
-      beta2L*PDupwindNthAnti2beta2*ShiftAdvectionCoeff - 
-      PDupwindNthSymm2beta2*ShiftAdvectionCoeff*Abs(beta2L))*INV(ShiftGammaCoeff)*INV(theta),0) 
+      ShiftAdvectionCoeff*(beta2L*PDupwindNthAnti2beta2 + 
+      PDupwindNthSymm2beta2*Abs(beta2L)))*INV(ShiftGammaCoeff)*INV(theta),0) 
       + 2*(IfThen(ShiftBCoeff*ShiftGammaCoeff != 0,(dtbetayL - 
       beta1L*PDupwindNthAnti1beta2*ShiftAdvectionCoeff)*INV(ShiftGammaCoeff)*INV(theta),0) 
       + IfThen(ShiftBCoeff*ShiftGammaCoeff != 0,(dtbetayL - 
@@ -386,17 +389,17 @@ void ML_BSSN_convertFromADMBaseGamma_Body(cGH const * restrict const cctkGH, int
       + IfThen(ShiftBCoeff*ShiftGammaCoeff != 0,(dtbetayL - 
       PDupwindNthSymm3beta2*ShiftAdvectionCoeff*Abs(beta3L))*INV(ShiftGammaCoeff)*INV(theta),0)) 
       + IfThen(ShiftBCoeff*ShiftGammaCoeff != 0,(dtbetayL - 
-      beta3L*PDupwindNthAnti3beta2*ShiftAdvectionCoeff - 
-      PDupwindNthSymm3beta2*ShiftAdvectionCoeff*Abs(beta3L))*INV(ShiftGammaCoeff)*INV(theta),0);
+      ShiftAdvectionCoeff*(beta3L*PDupwindNthAnti3beta2 + 
+      PDupwindNthSymm3beta2*Abs(beta3L)))*INV(ShiftGammaCoeff)*INV(theta),0);
     
     CCTK_REAL B3L = 12*IfThen(ShiftBCoeff*ShiftGammaCoeff != 
       0,dtbetazL*INV(ShiftGammaCoeff)*INV(theta),0) + 
       IfThen(ShiftBCoeff*ShiftGammaCoeff != 0,(dtbetazL - 
-      beta1L*PDupwindNthAnti1beta3*ShiftAdvectionCoeff - 
-      PDupwindNthSymm1beta3*ShiftAdvectionCoeff*Abs(beta1L))*INV(ShiftGammaCoeff)*INV(theta),0) 
+      ShiftAdvectionCoeff*(beta1L*PDupwindNthAnti1beta3 + 
+      PDupwindNthSymm1beta3*Abs(beta1L)))*INV(ShiftGammaCoeff)*INV(theta),0) 
       + IfThen(ShiftBCoeff*ShiftGammaCoeff != 0,(dtbetazL - 
-      beta2L*PDupwindNthAnti2beta3*ShiftAdvectionCoeff - 
-      PDupwindNthSymm2beta3*ShiftAdvectionCoeff*Abs(beta2L))*INV(ShiftGammaCoeff)*INV(theta),0) 
+      ShiftAdvectionCoeff*(beta2L*PDupwindNthAnti2beta3 + 
+      PDupwindNthSymm2beta3*Abs(beta2L)))*INV(ShiftGammaCoeff)*INV(theta),0) 
       + 2*(IfThen(ShiftBCoeff*ShiftGammaCoeff != 0,(dtbetazL - 
       beta1L*PDupwindNthAnti1beta3*ShiftAdvectionCoeff)*INV(ShiftGammaCoeff)*INV(theta),0) 
       + IfThen(ShiftBCoeff*ShiftGammaCoeff != 0,(dtbetazL - 
@@ -410,8 +413,8 @@ void ML_BSSN_convertFromADMBaseGamma_Body(cGH const * restrict const cctkGH, int
       + IfThen(ShiftBCoeff*ShiftGammaCoeff != 0,(dtbetazL - 
       PDupwindNthSymm3beta3*ShiftAdvectionCoeff*Abs(beta3L))*INV(ShiftGammaCoeff)*INV(theta),0)) 
       + IfThen(ShiftBCoeff*ShiftGammaCoeff != 0,(dtbetazL - 
-      beta3L*PDupwindNthAnti3beta3*ShiftAdvectionCoeff - 
-      PDupwindNthSymm3beta3*ShiftAdvectionCoeff*Abs(beta3L))*INV(ShiftGammaCoeff)*INV(theta),0);
+      ShiftAdvectionCoeff*(beta3L*PDupwindNthAnti3beta3 + 
+      PDupwindNthSymm3beta3*Abs(beta3L)))*INV(ShiftGammaCoeff)*INV(theta),0);
     
     
     /* Copy local copies back to grid functions */

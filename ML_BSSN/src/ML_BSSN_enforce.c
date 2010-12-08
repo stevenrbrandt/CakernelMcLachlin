@@ -38,6 +38,9 @@ void ML_BSSN_enforce_Body(cGH const * restrict const cctkGH, int const dir, int 
     return;
   }
   
+  const char *groups[] = {"ML_BSSN::ML_curv","ML_BSSN::ML_lapse","ML_BSSN::ML_metric"};
+  GenericFD_AssertGroupStorage(cctkGH, "ML_BSSN_enforce", 3, groups);
+  
   /* Include user-supplied include files */
   
   /* Initialise finite differencing variables */

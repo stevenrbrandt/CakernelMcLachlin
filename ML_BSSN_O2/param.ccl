@@ -249,12 +249,6 @@ CCTK_INT ML_BSSN_O2_RHSStaticBoundary_calc_every "ML_BSSN_O2_RHSStaticBoundary_c
 } 1
 
 restricted:
-CCTK_INT ML_BSSN_O2_RHSRadiativeBoundary_calc_every "ML_BSSN_O2_RHSRadiativeBoundary_calc_every"
-{
-  *:* :: ""
-} 1
-
-restricted:
 CCTK_INT ML_BSSN_O2_enforce_calc_every "ML_BSSN_O2_enforce_calc_every"
 {
   *:* :: ""
@@ -291,13 +285,13 @@ CCTK_INT ML_BSSN_O2_convertToADMBaseFakeDtLapseShift_calc_every "ML_BSSN_O2_conv
 } 1
 
 restricted:
-CCTK_INT ML_BSSN_O2_constraints_calc_every "ML_BSSN_O2_constraints_calc_every"
+CCTK_INT ML_BSSN_O2_constraints1_calc_every "ML_BSSN_O2_constraints1_calc_every"
 {
   *:* :: ""
 } 1
 
 restricted:
-CCTK_INT ML_BSSN_O2_constraints_boundary_calc_every "ML_BSSN_O2_constraints_boundary_calc_every"
+CCTK_INT ML_BSSN_O2_constraints2_calc_every "ML_BSSN_O2_constraints2_calc_every"
 {
   *:* :: ""
 } 1
@@ -339,12 +333,6 @@ CCTK_INT ML_BSSN_O2_RHSStaticBoundary_calc_offset "ML_BSSN_O2_RHSStaticBoundary_
 } 0
 
 restricted:
-CCTK_INT ML_BSSN_O2_RHSRadiativeBoundary_calc_offset "ML_BSSN_O2_RHSRadiativeBoundary_calc_offset"
-{
-  *:* :: ""
-} 0
-
-restricted:
 CCTK_INT ML_BSSN_O2_enforce_calc_offset "ML_BSSN_O2_enforce_calc_offset"
 {
   *:* :: ""
@@ -381,13 +369,13 @@ CCTK_INT ML_BSSN_O2_convertToADMBaseFakeDtLapseShift_calc_offset "ML_BSSN_O2_con
 } 0
 
 restricted:
-CCTK_INT ML_BSSN_O2_constraints_calc_offset "ML_BSSN_O2_constraints_calc_offset"
+CCTK_INT ML_BSSN_O2_constraints1_calc_offset "ML_BSSN_O2_constraints1_calc_offset"
 {
   *:* :: ""
 } 0
 
 restricted:
-CCTK_INT ML_BSSN_O2_constraints_boundary_calc_offset "ML_BSSN_O2_constraints_boundary_calc_offset"
+CCTK_INT ML_BSSN_O2_constraints2_calc_offset "ML_BSSN_O2_constraints2_calc_offset"
 {
   *:* :: ""
 } 0
@@ -702,7 +690,7 @@ KEYWORD ML_curv_bound "Boundary condition to implement"
   "scalar" :: "Dirichlet boundary condition"
   "newrad" :: "Improved radiative boundary condition"
   "skip" :: "skip boundary condition code"
-} "skip"
+} "none"
 
 private:
 KEYWORD ML_dtlapse_bound "Boundary condition to implement"
@@ -714,7 +702,7 @@ KEYWORD ML_dtlapse_bound "Boundary condition to implement"
   "scalar" :: "Dirichlet boundary condition"
   "newrad" :: "Improved radiative boundary condition"
   "skip" :: "skip boundary condition code"
-} "skip"
+} "none"
 
 private:
 KEYWORD ML_dtshift_bound "Boundary condition to implement"
@@ -726,7 +714,7 @@ KEYWORD ML_dtshift_bound "Boundary condition to implement"
   "scalar" :: "Dirichlet boundary condition"
   "newrad" :: "Improved radiative boundary condition"
   "skip" :: "skip boundary condition code"
-} "skip"
+} "none"
 
 private:
 KEYWORD ML_Gamma_bound "Boundary condition to implement"
@@ -738,7 +726,7 @@ KEYWORD ML_Gamma_bound "Boundary condition to implement"
   "scalar" :: "Dirichlet boundary condition"
   "newrad" :: "Improved radiative boundary condition"
   "skip" :: "skip boundary condition code"
-} "skip"
+} "none"
 
 private:
 KEYWORD ML_lapse_bound "Boundary condition to implement"
@@ -750,7 +738,7 @@ KEYWORD ML_lapse_bound "Boundary condition to implement"
   "scalar" :: "Dirichlet boundary condition"
   "newrad" :: "Improved radiative boundary condition"
   "skip" :: "skip boundary condition code"
-} "skip"
+} "none"
 
 private:
 KEYWORD ML_log_confac_bound "Boundary condition to implement"
@@ -762,7 +750,7 @@ KEYWORD ML_log_confac_bound "Boundary condition to implement"
   "scalar" :: "Dirichlet boundary condition"
   "newrad" :: "Improved radiative boundary condition"
   "skip" :: "skip boundary condition code"
-} "skip"
+} "none"
 
 private:
 KEYWORD ML_metric_bound "Boundary condition to implement"
@@ -774,7 +762,7 @@ KEYWORD ML_metric_bound "Boundary condition to implement"
   "scalar" :: "Dirichlet boundary condition"
   "newrad" :: "Improved radiative boundary condition"
   "skip" :: "skip boundary condition code"
-} "skip"
+} "none"
 
 private:
 KEYWORD ML_shift_bound "Boundary condition to implement"
@@ -786,7 +774,7 @@ KEYWORD ML_shift_bound "Boundary condition to implement"
   "scalar" :: "Dirichlet boundary condition"
   "newrad" :: "Improved radiative boundary condition"
   "skip" :: "skip boundary condition code"
-} "skip"
+} "none"
 
 private:
 KEYWORD ML_trace_curv_bound "Boundary condition to implement"
@@ -798,7 +786,7 @@ KEYWORD ML_trace_curv_bound "Boundary condition to implement"
   "scalar" :: "Dirichlet boundary condition"
   "newrad" :: "Improved radiative boundary condition"
   "skip" :: "skip boundary condition code"
-} "skip"
+} "none"
 
 private:
 CCTK_REAL At11_bound_speed "characteristic speed at boundary"

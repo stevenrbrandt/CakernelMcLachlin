@@ -205,7 +205,7 @@ KEYWORD ene_group_bound "Boundary condition to implement"
   "scalar" :: "Dirichlet boundary condition"
   "newrad" :: "Improved radiative boundary condition"
   "skip" :: "skip boundary condition code"
-} "skip"
+} "none"
 
 private:
 KEYWORD mass_group_bound "Boundary condition to implement"
@@ -217,7 +217,7 @@ KEYWORD mass_group_bound "Boundary condition to implement"
   "scalar" :: "Dirichlet boundary condition"
   "newrad" :: "Improved radiative boundary condition"
   "skip" :: "skip boundary condition code"
-} "skip"
+} "none"
 
 private:
 KEYWORD mom_group_bound "Boundary condition to implement"
@@ -229,7 +229,7 @@ KEYWORD mom_group_bound "Boundary condition to implement"
   "scalar" :: "Dirichlet boundary condition"
   "newrad" :: "Improved radiative boundary condition"
   "skip" :: "skip boundary condition code"
-} "skip"
+} "none"
 
 private:
 CCTK_REAL ene_bound_speed "characteristic speed at boundary"

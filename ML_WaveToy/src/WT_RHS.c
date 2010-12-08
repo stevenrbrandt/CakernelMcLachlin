@@ -53,6 +53,9 @@ void WT_RHS_Body(cGH const * restrict const cctkGH, int const dir, int const fac
     return;
   }
   
+  const char *groups[] = {"ML_WaveToy::WT_rho","ML_WaveToy::WT_rhorhs","ML_WaveToy::WT_u","ML_WaveToy::WT_urhs"};
+  GenericFD_AssertGroupStorage(cctkGH, "WT_RHS", 4, groups);
+  
   /* Include user-supplied include files */
   
   /* Initialise finite differencing variables */

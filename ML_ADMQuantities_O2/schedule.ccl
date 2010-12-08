@@ -23,11 +23,42 @@ schedule ML_ADMQuantities_O2_RegisterSymmetries in SymmetryRegister
   OPTIONS: meta
 } "register symmetries"
 
-schedule ML_ADMQuantities_O2 IN MoL_PseudoEvolution BEFORE ML_ADMQuantities_O2_SelectBoundConds
+schedule group ML_ADMQuantities_O2_group in MoL_PseudoEvolution
+{
+  # no language specified
+} "ML_ADMQuantities_O2"
+
+schedule ML_ADMQuantities_O2 in ML_ADMQuantities_O2_group
 {
   LANG: C
+} "ML_ADMQuantities_O2"
+
+schedule ML_ADMQuantities_O2_SelectBCs in ML_ADMQuantities_O2_bc_group
+{
+  LANG: C
+  OPTIONS: level
   SYNC: ML_Jadm
   SYNC: ML_Madm
+} "ML_ADMQuantities_O2_SelectBCs"
+
+schedule group ApplyBCs as ML_ADMQuantities_O2_ApplyBCs in ML_ADMQuantities_O2_bc_group after ML_ADMQuantities_O2_SelectBCs
+{
+  # no language specified
+} "Apply BCs for groups set in ML_ADMQuantities_O2"
+
+schedule group ML_ADMQuantities_O2_bc_group in ML_ADMQuantities_O2_group after ML_ADMQuantities_O2
+{
+  # no language specified
+} "ML_ADMQuantities_O2"
+
+schedule group ML_ADMQuantities_O2_bc_group at CCTK_POSTRESTRICT
+{
+  # no language specified
+} "ML_ADMQuantities_O2"
+
+schedule group ML_ADMQuantities_O2_bc_group at CCTK_POSTRESTRICTINITIAL
+{
+  # no language specified
 } "ML_ADMQuantities_O2"
 
 schedule ML_ADMQuantities_O2_SelectBoundConds in MoL_PseudoEvolution

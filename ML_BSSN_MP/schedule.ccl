@@ -312,15 +312,6 @@ if (CCTK_EQUALS(my_rhs_boundary_condition, "static"))
   } "ML_BSSN_MP_RHSStaticBoundary"
 }
 
-
-if (CCTK_EQUALS(my_rhs_boundary_condition, "radiative"))
-{
-  schedule ML_BSSN_MP_RHSRadiativeBoundary IN MoL_CalcRHS
-  {
-    LANG: C
-  } "ML_BSSN_MP_RHSRadiativeBoundary"
-}
-
 schedule ML_BSSN_MP_enforce IN MoL_PostStep BEFORE ML_BSSN_MP_SelectBoundConds
 {
   LANG: C
@@ -369,20 +360,82 @@ if (CCTK_EQUALS(dt_lapse_shift_method, "noLapseShiftAdvection"))
   } "ML_BSSN_MP_convertToADMBaseFakeDtLapseShift"
 }
 
-schedule ML_BSSN_MP_constraints IN ML_BSSN_MP_constraintsCalcGroup
+schedule group ML_BSSN_MP_constraints1_group in MoL_PseudoEvolution
+{
+  # no language specified
+} "ML_BSSN_MP_constraints1"
+
+schedule ML_BSSN_MP_constraints1 in ML_BSSN_MP_constraints1_group
 {
   LANG: C
+} "ML_BSSN_MP_constraints1"
+
+schedule ML_BSSN_MP_constraints1_SelectBCs in ML_BSSN_MP_constraints1_bc_group
+{
+  LANG: C
+  OPTIONS: level
   SYNC: ML_cons_detg
   SYNC: ML_cons_Gamma
-  SYNC: ML_cons_traceA
   SYNC: ML_Ham
-  SYNC: ML_mom
-} "ML_BSSN_MP_constraints"
+} "ML_BSSN_MP_constraints1_SelectBCs"
 
-schedule ML_BSSN_MP_constraints_boundary IN ML_BSSN_MP_constraintsCalcGroup AFTER ML_BSSN_MP_constraints
+schedule group ApplyBCs as ML_BSSN_MP_constraints1_ApplyBCs in ML_BSSN_MP_constraints1_bc_group after ML_BSSN_MP_constraints1_SelectBCs
+{
+  # no language specified
+} "Apply BCs for groups set in ML_BSSN_MP_constraints1"
+
+schedule group ML_BSSN_MP_constraints1_bc_group in ML_BSSN_MP_constraints1_group after ML_BSSN_MP_constraints1
+{
+  # no language specified
+} "ML_BSSN_MP_constraints1"
+
+schedule group ML_BSSN_MP_constraints1_bc_group at CCTK_POSTRESTRICT
+{
+  # no language specified
+} "ML_BSSN_MP_constraints1"
+
+schedule group ML_BSSN_MP_constraints1_bc_group at CCTK_POSTRESTRICTINITIAL
+{
+  # no language specified
+} "ML_BSSN_MP_constraints1"
+
+schedule group ML_BSSN_MP_constraints2_group in MoL_PseudoEvolution
+{
+  # no language specified
+} "ML_BSSN_MP_constraints2"
+
+schedule ML_BSSN_MP_constraints2 in ML_BSSN_MP_constraints2_group
 {
   LANG: C
-} "ML_BSSN_MP_constraints_boundary"
+} "ML_BSSN_MP_constraints2"
+
+schedule ML_BSSN_MP_constraints2_SelectBCs in ML_BSSN_MP_constraints2_bc_group
+{
+  LANG: C
+  OPTIONS: level
+  SYNC: ML_cons_traceA
+  SYNC: ML_mom
+} "ML_BSSN_MP_constraints2_SelectBCs"
+
+schedule group ApplyBCs as ML_BSSN_MP_constraints2_ApplyBCs in ML_BSSN_MP_constraints2_bc_group after ML_BSSN_MP_constraints2_SelectBCs
+{
+  # no language specified
+} "Apply BCs for groups set in ML_BSSN_MP_constraints2"
+
+schedule group ML_BSSN_MP_constraints2_bc_group in ML_BSSN_MP_constraints2_group after ML_BSSN_MP_constraints2
+{
+  # no language specified
+} "ML_BSSN_MP_constraints2"
+
+schedule group ML_BSSN_MP_constraints2_bc_group at CCTK_POSTRESTRICT
+{
+  # no language specified
+} "ML_BSSN_MP_constraints2"
+
+schedule group ML_BSSN_MP_constraints2_bc_group at CCTK_POSTRESTRICTINITIAL
+{
+  # no language specified
+} "ML_BSSN_MP_constraints2"
 
 schedule ML_BSSN_MP_SelectBoundConds in MoL_PostStep
 {

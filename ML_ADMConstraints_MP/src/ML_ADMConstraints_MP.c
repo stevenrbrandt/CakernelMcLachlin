@@ -53,6 +53,9 @@ void ML_ADMConstraints_MP_Body(cGH const * restrict const cctkGH, int const dir,
     return;
   }
   
+  const char *groups[] = {"ADMBase::curv","ADMBase::lapse","ADMBase::metric","ADMBase::shift","Coordinates::jacobian","Coordinates::jacobian2","ML_ADMConstraints_MP::ML_Ham","ML_ADMConstraints_MP::ML_mom"};
+  GenericFD_AssertGroupStorage(cctkGH, "ML_ADMConstraints_MP", 8, groups);
+  
   /* Include user-supplied include files */
   
   /* Initialise finite differencing variables */

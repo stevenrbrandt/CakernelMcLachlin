@@ -38,6 +38,9 @@ void ML_ADM_convertToADMBase_Body(cGH const * restrict const cctkGH, int const d
     return;
   }
   
+  const char *groups[] = {"ADMBase::curv","ADMBase::dtlapse","ADMBase::dtshift","ADMBase::lapse","ADMBase::metric","ADMBase::shift","ML_ADM::ML_curv","ML_ADM::ML_lapse","ML_ADM::ML_metric","ML_ADM::ML_shift"};
+  GenericFD_AssertGroupStorage(cctkGH, "ML_ADM_convertToADMBase", 10, groups);
+  
   /* Include user-supplied include files */
   
   /* Initialise finite differencing variables */

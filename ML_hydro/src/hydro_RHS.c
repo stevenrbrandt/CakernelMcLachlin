@@ -56,6 +56,9 @@ void hydro_RHS_Body(cGH const * restrict const cctkGH, int const dir, int const 
     return;
   }
   
+  const char *groups[] = {"ML_hydro::eneflux_group","ML_hydro::ene_grouprhs","ML_hydro::massflux_group","ML_hydro::mass_grouprhs","ML_hydro::momflux_group","ML_hydro::mom_grouprhs"};
+  GenericFD_AssertGroupStorage(cctkGH, "hydro_RHS", 6, groups);
+  
   /* Include user-supplied include files */
   
   /* Initialise finite differencing variables */

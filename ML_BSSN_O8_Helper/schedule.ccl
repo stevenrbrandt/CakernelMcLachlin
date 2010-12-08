@@ -56,12 +56,13 @@ if (CCTK_EQUALS (evolution_method, "ML_BSSN_O8")) {
   
   
   
+  # Why would any of these two be necessary?
   #SCHEDULE GROUP ML_BSSN_O8_evolCalcGroup AT postinitial AFTER MoL_PostStep
   #{
   #} "Calculate BSSN RHS"
-  SCHEDULE GROUP MoL_CalcRHS AT postinitial AFTER MoL_PostStep
-  {
-  } "Evaluate RHS"
+  #SCHEDULE GROUP MoL_CalcRHS AT postinitial AFTER MoL_PostStep
+  #{
+  #} "Evaluate RHS"
   
   SCHEDULE GROUP ML_BSSN_O8_evolCalcGroup IN MoL_CalcRHS
   {
@@ -151,20 +152,10 @@ if (CCTK_EQUALS (evolution_method, "ML_BSSN_O8")) {
   {
     LANG: C
     OPTIONS: level
-  } "Apply boundary conditions to ADMBase variables"
+  } "Select boundary conditions for ADMBase variables"
   
   SCHEDULE GROUP ApplyBCs AS ML_BSSN_O8_ApplyBCsADMBase IN ML_BSSN_O8_convertToADMBaseGroupWrapper AFTER ML_BSSN_O8_SelectBCsADMBase
   {
   } "Apply boundary conditions to ADMBase variables"
   
-  
-  
-  SCHEDULE GROUP ML_BSSN_O8_constraintsCalcGroup AT analysis
-  {
-    TRIGGERS: ML_BSSN_O8::ML_Ham
-    TRIGGERS: ML_BSSN_O8::ML_mom
-    TRIGGERS: ML_BSSN_O8::ML_cons_detg
-    TRIGGERS: ML_BSSN_O8::ML_cons_Gamma
-    TRIGGERS: ML_BSSN_O8::ML_cons_traceA
-  } "Calculate BSSN constraints"
 }

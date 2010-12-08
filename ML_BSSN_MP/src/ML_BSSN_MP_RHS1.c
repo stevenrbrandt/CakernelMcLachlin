@@ -71,6 +71,9 @@ void ML_BSSN_MP_RHS1_Body(cGH const * restrict const cctkGH, int const dir, int 
     return;
   }
   
+  const char *groups[] = {"Coordinates::jacobian","Coordinates::jacobian2","grid::coordinates","Grid::coordinates","ML_BSSN_MP::ML_curv","ML_BSSN_MP::ML_dtlapse","ML_BSSN_MP::ML_dtlapserhs","ML_BSSN_MP::ML_dtshift","ML_BSSN_MP::ML_dtshiftrhs","ML_BSSN_MP::ML_Gamma","ML_BSSN_MP::ML_Gammarhs","ML_BSSN_MP::ML_lapse","ML_BSSN_MP::ML_lapserhs","ML_BSSN_MP::ML_log_confac","ML_BSSN_MP::ML_log_confacrhs","ML_BSSN_MP::ML_metric","ML_BSSN_MP::ML_metricrhs","ML_BSSN_MP::ML_shift","ML_BSSN_MP::ML_shiftrhs","ML_BSSN_MP::ML_trace_curv","ML_BSSN_MP::ML_trace_curvrhs"};
+  GenericFD_AssertGroupStorage(cctkGH, "ML_BSSN_MP_RHS1", 21, groups);
+  
   /* Include user-supplied include files */
   
   /* Initialise finite differencing variables */
@@ -1507,16 +1510,11 @@ void ML_BSSN_MP_RHS1_Body(cGH const * restrict const cctkGH, int const dir, int 
       epsdiss3*J13L)*PDdissipationNth1B1 + (epsdiss1*J21L + epsdiss2*J22L + 
       epsdiss3*J23L)*PDdissipationNth2B1 + (epsdiss1*J31L + epsdiss2*J32L + 
       epsdiss3*J33L)*PDdissipationNth3B1 + (dotXt1 - 
-      B1L*BetaDriver*eta)*ShiftBCoeff + 
-      ShiftAdvectionCoeff*(beta1L*(J11L*(PDupwindNthAnti1B1 - 
-      PDupwindNthAnti1Xt1) + J21L*(PDupwindNthAnti2B1 - PDupwindNthAnti2Xt1) 
-      + J31L*(PDupwindNthAnti3B1 - PDupwindNthAnti3Xt1)) + 
-      beta2L*(J12L*(PDupwindNthAnti1B1 - PDupwindNthAnti1Xt1) + 
-      J22L*(PDupwindNthAnti2B1 - PDupwindNthAnti2Xt1) + 
-      J32L*(PDupwindNthAnti3B1 - PDupwindNthAnti3Xt1)) + 
-      beta3L*(J13L*(PDupwindNthAnti1B1 - PDupwindNthAnti1Xt1) + 
-      J23L*(PDupwindNthAnti2B1 - PDupwindNthAnti2Xt1) + 
-      J33L*(PDupwindNthAnti3B1 - PDupwindNthAnti3Xt1)) + 
+      B1L*BetaDriver*eta)*ShiftBCoeff + ShiftAdvectionCoeff*((beta1L*J11L + 
+      beta2L*J12L + beta3L*J13L)*(PDupwindNthAnti1B1 - PDupwindNthAnti1Xt1) + 
+      (beta1L*J21L + beta2L*J22L + beta3L*J23L)*(PDupwindNthAnti2B1 - 
+      PDupwindNthAnti2Xt1) + (beta1L*J31L + beta2L*J32L + 
+      beta3L*J33L)*(PDupwindNthAnti3B1 - PDupwindNthAnti3Xt1) + 
       (J11L*(PDupwindNthSymm1B1 - PDupwindNthSymm1Xt1) + 
       J21L*(PDupwindNthSymm2B1 - PDupwindNthSymm2Xt1) + 
       J31L*(PDupwindNthSymm3B1 - PDupwindNthSymm3Xt1))*Abs(beta1L) + 
@@ -1531,16 +1529,11 @@ void ML_BSSN_MP_RHS1_Body(cGH const * restrict const cctkGH, int const dir, int 
       epsdiss3*J13L)*PDdissipationNth1B2 + (epsdiss1*J21L + epsdiss2*J22L + 
       epsdiss3*J23L)*PDdissipationNth2B2 + (epsdiss1*J31L + epsdiss2*J32L + 
       epsdiss3*J33L)*PDdissipationNth3B2 + (dotXt2 - 
-      B2L*BetaDriver*eta)*ShiftBCoeff + 
-      ShiftAdvectionCoeff*(beta1L*(J11L*(PDupwindNthAnti1B2 - 
-      PDupwindNthAnti1Xt2) + J21L*(PDupwindNthAnti2B2 - PDupwindNthAnti2Xt2) 
-      + J31L*(PDupwindNthAnti3B2 - PDupwindNthAnti3Xt2)) + 
-      beta2L*(J12L*(PDupwindNthAnti1B2 - PDupwindNthAnti1Xt2) + 
-      J22L*(PDupwindNthAnti2B2 - PDupwindNthAnti2Xt2) + 
-      J32L*(PDupwindNthAnti3B2 - PDupwindNthAnti3Xt2)) + 
-      beta3L*(J13L*(PDupwindNthAnti1B2 - PDupwindNthAnti1Xt2) + 
-      J23L*(PDupwindNthAnti2B2 - PDupwindNthAnti2Xt2) + 
-      J33L*(PDupwindNthAnti3B2 - PDupwindNthAnti3Xt2)) + 
+      B2L*BetaDriver*eta)*ShiftBCoeff + ShiftAdvectionCoeff*((beta1L*J11L + 
+      beta2L*J12L + beta3L*J13L)*(PDupwindNthAnti1B2 - PDupwindNthAnti1Xt2) + 
+      (beta1L*J21L + beta2L*J22L + beta3L*J23L)*(PDupwindNthAnti2B2 - 
+      PDupwindNthAnti2Xt2) + (beta1L*J31L + beta2L*J32L + 
+      beta3L*J33L)*(PDupwindNthAnti3B2 - PDupwindNthAnti3Xt2) + 
       (J11L*(PDupwindNthSymm1B2 - PDupwindNthSymm1Xt2) + 
       J21L*(PDupwindNthSymm2B2 - PDupwindNthSymm2Xt2) + 
       J31L*(PDupwindNthSymm3B2 - PDupwindNthSymm3Xt2))*Abs(beta1L) + 
@@ -1555,16 +1548,11 @@ void ML_BSSN_MP_RHS1_Body(cGH const * restrict const cctkGH, int const dir, int 
       epsdiss3*J13L)*PDdissipationNth1B3 + (epsdiss1*J21L + epsdiss2*J22L + 
       epsdiss3*J23L)*PDdissipationNth2B3 + (epsdiss1*J31L + epsdiss2*J32L + 
       epsdiss3*J33L)*PDdissipationNth3B3 + (dotXt3 - 
-      B3L*BetaDriver*eta)*ShiftBCoeff + 
-      ShiftAdvectionCoeff*(beta1L*(J11L*(PDupwindNthAnti1B3 - 
-      PDupwindNthAnti1Xt3) + J21L*(PDupwindNthAnti2B3 - PDupwindNthAnti2Xt3) 
-      + J31L*(PDupwindNthAnti3B3 - PDupwindNthAnti3Xt3)) + 
-      beta2L*(J12L*(PDupwindNthAnti1B3 - PDupwindNthAnti1Xt3) + 
-      J22L*(PDupwindNthAnti2B3 - PDupwindNthAnti2Xt3) + 
-      J32L*(PDupwindNthAnti3B3 - PDupwindNthAnti3Xt3)) + 
-      beta3L*(J13L*(PDupwindNthAnti1B3 - PDupwindNthAnti1Xt3) + 
-      J23L*(PDupwindNthAnti2B3 - PDupwindNthAnti2Xt3) + 
-      J33L*(PDupwindNthAnti3B3 - PDupwindNthAnti3Xt3)) + 
+      B3L*BetaDriver*eta)*ShiftBCoeff + ShiftAdvectionCoeff*((beta1L*J11L + 
+      beta2L*J12L + beta3L*J13L)*(PDupwindNthAnti1B3 - PDupwindNthAnti1Xt3) + 
+      (beta1L*J21L + beta2L*J22L + beta3L*J23L)*(PDupwindNthAnti2B3 - 
+      PDupwindNthAnti2Xt3) + (beta1L*J31L + beta2L*J32L + 
+      beta3L*J33L)*(PDupwindNthAnti3B3 - PDupwindNthAnti3Xt3) + 
       (J11L*(PDupwindNthSymm1B3 - PDupwindNthSymm1Xt3) + 
       J21L*(PDupwindNthSymm2B3 - PDupwindNthSymm2Xt3) + 
       J31L*(PDupwindNthSymm3B3 - PDupwindNthSymm3Xt3))*Abs(beta1L) + 

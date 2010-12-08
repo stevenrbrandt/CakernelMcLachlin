@@ -28,7 +28,7 @@ void WTFO_constraints_SelectBCs(CCTK_ARGUMENTS)
   CCTK_INT ierr = 0;
   ierr = Boundary_SelectGroupForBC(cctkGH, CCTK_ALL_FACES, GenericFD_GetBoundaryWidth(cctkGH), -1 /* no table */, "ML_WaveToyFO::WT_w","flat");
   if (ierr < 0)
-    CCTK_WARN(0, "Failed to register flat BC for ML_WaveToyFO::WT_w.");
+    CCTK_WARN(1, "Failed to register flat BC for ML_WaveToyFO::WT_w.");
   return;
 }
 
@@ -49,6 +49,9 @@ void WTFO_constraints_Body(cGH const * restrict const cctkGH, int const dir, int
   {
     return;
   }
+  
+  const char *groups[] = {"ML_WaveToyFO::WT_v","ML_WaveToyFO::WT_w"};
+  GenericFD_AssertGroupStorage(cctkGH, "WTFO_constraints", 2, groups);
   
   /* Include user-supplied include files */
   

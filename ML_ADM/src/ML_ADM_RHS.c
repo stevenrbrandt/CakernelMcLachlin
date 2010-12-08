@@ -59,6 +59,9 @@ void ML_ADM_RHS_Body(cGH const * restrict const cctkGH, int const dir, int const
     return;
   }
   
+  const char *groups[] = {"ML_ADM::ML_curv","ML_ADM::ML_curvrhs","ML_ADM::ML_lapse","ML_ADM::ML_lapserhs","ML_ADM::ML_metric","ML_ADM::ML_metricrhs","ML_ADM::ML_shift","ML_ADM::ML_shiftrhs"};
+  GenericFD_AssertGroupStorage(cctkGH, "ML_ADM_RHS", 8, groups);
+  
   /* Include user-supplied include files */
   
   /* Initialise finite differencing variables */

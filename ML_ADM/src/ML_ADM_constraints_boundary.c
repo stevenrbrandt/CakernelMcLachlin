@@ -53,6 +53,9 @@ void ML_ADM_constraints_boundary_Body(cGH const * restrict const cctkGH, int con
     return;
   }
   
+  const char *groups[] = {"ML_ADM::ML_Ham","ML_ADM::ML_mom"};
+  GenericFD_AssertGroupStorage(cctkGH, "ML_ADM_constraints_boundary", 2, groups);
+  
   /* Include user-supplied include files */
   
   /* Initialise finite differencing variables */
