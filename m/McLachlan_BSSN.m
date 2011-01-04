@@ -864,6 +864,12 @@ enforceCalc =
   Shorthands -> {detgt, gtu[ua,ub], trAt},
   Equations -> 
   {
+    (* Enforcing the constraints needs to be a projection, because it
+       is applied in MoL_PostStep and may thus be applied multiple
+       times, not only during time evolution. Therefore detgt has to
+       be calculated correctly, without assuming that det gt_ij = 1,
+       which is not always the case (since we don't enforce it). On
+       the other hand, this may not be so important... *)
     detgt -> 1 (* detgtExpr *),
     gtu[ua,ub] -> 1/detgt detgtExpr MatrixInverse [gt[ua,ub]],
     
