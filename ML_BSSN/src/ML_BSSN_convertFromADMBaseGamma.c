@@ -56,9 +56,6 @@ void ML_BSSN_convertFromADMBaseGamma_Body(cGH const * restrict const cctkGH, int
     return;
   }
   
-  const char *groups[] = {"ADMBase::dtlapse","ADMBase::dtshift","grid::coordinates","Grid::coordinates","ML_BSSN::ML_dtlapse","ML_BSSN::ML_dtshift","ML_BSSN::ML_Gamma","ML_BSSN::ML_lapse","ML_BSSN::ML_metric","ML_BSSN::ML_shift"};
-  GenericFD_AssertGroupStorage(cctkGH, "ML_BSSN_convertFromADMBaseGamma", 10, groups);
-  
   /* Include user-supplied include files */
   
   /* Initialise finite differencing variables */

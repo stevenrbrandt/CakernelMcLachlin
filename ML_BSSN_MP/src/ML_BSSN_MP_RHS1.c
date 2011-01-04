@@ -71,9 +71,6 @@ void ML_BSSN_MP_RHS1_Body(cGH const * restrict const cctkGH, int const dir, int 
     return;
   }
   
-  const char *groups[] = {"Coordinates::jacobian","Coordinates::jacobian2","grid::coordinates","Grid::coordinates","ML_BSSN_MP::ML_curv","ML_BSSN_MP::ML_dtlapse","ML_BSSN_MP::ML_dtlapserhs","ML_BSSN_MP::ML_dtshift","ML_BSSN_MP::ML_dtshiftrhs","ML_BSSN_MP::ML_Gamma","ML_BSSN_MP::ML_Gammarhs","ML_BSSN_MP::ML_lapse","ML_BSSN_MP::ML_lapserhs","ML_BSSN_MP::ML_log_confac","ML_BSSN_MP::ML_log_confacrhs","ML_BSSN_MP::ML_metric","ML_BSSN_MP::ML_metricrhs","ML_BSSN_MP::ML_shift","ML_BSSN_MP::ML_shiftrhs","ML_BSSN_MP::ML_trace_curv","ML_BSSN_MP::ML_trace_curvrhs"};
-  GenericFD_AssertGroupStorage(cctkGH, "ML_BSSN_MP_RHS1", 21, groups);
-  
   /* Include user-supplied include files */
   
   /* Initialise finite differencing variables */
@@ -708,10 +705,10 @@ void ML_BSSN_MP_RHS1_Body(cGH const * restrict const cctkGH, int const dir, int 
       J21L*khalf*PDstandardNth2gt33 + J33L*PDstandardNth3gt13 - 
       J31L*khalf*PDstandardNth3gt33;
     
-    CCTK_REAL Gtl211 = khalf*(-(J12L*PDstandardNth1gt11) + 
-      2*J11L*PDstandardNth1gt12 - J22L*PDstandardNth2gt11 + 
-      2*J21L*PDstandardNth2gt12 - J32L*PDstandardNth3gt11 + 
-      2*J31L*PDstandardNth3gt12);
+    CCTK_REAL Gtl211 = -(J12L*khalf*PDstandardNth1gt11) + 
+      J11L*PDstandardNth1gt12 - J22L*khalf*PDstandardNth2gt11 + 
+      J21L*PDstandardNth2gt12 - J32L*khalf*PDstandardNth3gt11 + 
+      J31L*PDstandardNth3gt12;
     
     CCTK_REAL Gtl212 = khalf*(J11L*PDstandardNth1gt22 + 
       J21L*PDstandardNth2gt22 + J31L*PDstandardNth3gt22);
@@ -733,10 +730,10 @@ void ML_BSSN_MP_RHS1_Body(cGH const * restrict const cctkGH, int const dir, int 
       J22L*khalf*PDstandardNth2gt33 + J33L*PDstandardNth3gt23 - 
       J32L*khalf*PDstandardNth3gt33;
     
-    CCTK_REAL Gtl311 = khalf*(-(J13L*PDstandardNth1gt11) + 
-      2*J11L*PDstandardNth1gt13 - J23L*PDstandardNth2gt11 + 
-      2*J21L*PDstandardNth2gt13 - J33L*PDstandardNth3gt11 + 
-      2*J31L*PDstandardNth3gt13);
+    CCTK_REAL Gtl311 = -(J13L*khalf*PDstandardNth1gt11) + 
+      J11L*PDstandardNth1gt13 - J23L*khalf*PDstandardNth2gt11 + 
+      J21L*PDstandardNth2gt13 - J33L*khalf*PDstandardNth3gt11 + 
+      J31L*PDstandardNth3gt13;
     
     CCTK_REAL Gtl312 = khalf*(-(J13L*PDstandardNth1gt12) + 
       J12L*PDstandardNth1gt13 + J11L*PDstandardNth1gt23 - 
@@ -747,10 +744,10 @@ void ML_BSSN_MP_RHS1_Body(cGH const * restrict const cctkGH, int const dir, int 
     CCTK_REAL Gtl313 = khalf*(J11L*PDstandardNth1gt33 + 
       J21L*PDstandardNth2gt33 + J31L*PDstandardNth3gt33);
     
-    CCTK_REAL Gtl322 = khalf*(-(J13L*PDstandardNth1gt22) + 
-      2*J12L*PDstandardNth1gt23 - J23L*PDstandardNth2gt22 + 
-      2*J22L*PDstandardNth2gt23 - J33L*PDstandardNth3gt22 + 
-      2*J32L*PDstandardNth3gt23);
+    CCTK_REAL Gtl322 = -(J13L*khalf*PDstandardNth1gt22) + 
+      J12L*PDstandardNth1gt23 - J23L*khalf*PDstandardNth2gt22 + 
+      J22L*PDstandardNth2gt23 - J33L*khalf*PDstandardNth3gt22 + 
+      J32L*PDstandardNth3gt23;
     
     CCTK_REAL Gtl323 = khalf*(J12L*PDstandardNth1gt33 + 
       J22L*PDstandardNth2gt33 + J32L*PDstandardNth3gt33);

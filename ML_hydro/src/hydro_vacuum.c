@@ -38,9 +38,6 @@ void hydro_vacuum_Body(cGH const * restrict const cctkGH, int const dir, int con
     return;
   }
   
-  const char *groups[] = {"ML_hydro::eps_group","ML_hydro::rho_group","ML_hydro::vel_group"};
-  GenericFD_AssertGroupStorage(cctkGH, "hydro_vacuum", 3, groups);
-  
   /* Include user-supplied include files */
   
   /* Initialise finite differencing variables */

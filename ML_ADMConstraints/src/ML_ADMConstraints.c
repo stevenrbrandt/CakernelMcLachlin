@@ -53,9 +53,6 @@ void ML_ADMConstraints_Body(cGH const * restrict const cctkGH, int const dir, in
     return;
   }
   
-  const char *groups[] = {"ADMBase::curv","ADMBase::lapse","ADMBase::metric","ADMBase::shift","ML_ADMConstraints::ML_Ham","ML_ADMConstraints::ML_mom"};
-  GenericFD_AssertGroupStorage(cctkGH, "ML_ADMConstraints", 6, groups);
-  
   /* Include user-supplied include files */
   
   /* Initialise finite differencing variables */
@@ -84,9 +81,6 @@ void ML_ADMConstraints_Body(cGH const * restrict const cctkGH, int const dir, in
   CCTK_REAL const p1o144dxdy = (INV(dx)*INV(dy))/144.;
   CCTK_REAL const p1o144dxdz = (INV(dx)*INV(dz))/144.;
   CCTK_REAL const p1o144dydz = (INV(dy)*INV(dz))/144.;
-  CCTK_REAL const p1odx = INV(dx);
-  CCTK_REAL const p1ody = INV(dy);
-  CCTK_REAL const p1odz = INV(dz);
   CCTK_REAL const pm1o12dx2 = -pow(dx,-2)/12.;
   CCTK_REAL const pm1o12dy2 = -pow(dy,-2)/12.;
   CCTK_REAL const pm1o12dz2 = -pow(dz,-2)/12.;

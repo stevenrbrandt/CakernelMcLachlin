@@ -38,9 +38,6 @@ void ML_BSSN_MP_O8_enforce_Body(cGH const * restrict const cctkGH, int const dir
     return;
   }
   
-  const char *groups[] = {"ML_BSSN_MP_O8::ML_curv","ML_BSSN_MP_O8::ML_lapse","ML_BSSN_MP_O8::ML_metric"};
-  GenericFD_AssertGroupStorage(cctkGH, "ML_BSSN_MP_O8_enforce", 3, groups);
-  
   /* Include user-supplied include files */
   
   /* Initialise finite differencing variables */

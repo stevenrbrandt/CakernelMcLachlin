@@ -114,7 +114,7 @@ schedule ML_WaveToyFO_CheckBoundaries at BASEGRID
   OPTIONS: meta
 } "check boundaries treatment"
 
-schedule group ApplyBCs as ML_WaveToyFO_ApplyBCs in MoL_PostStep after ML_WaveToyFO_SelectBoundConds
+schedule group ApplyBCs as ML_WaveToyFO_ApplyBCs in MoL_PostStep  after ML_WaveToyFO_SelectBoundConds
 {
   # no language specified
 } "Apply boundary conditions controlled by thorn Boundary"

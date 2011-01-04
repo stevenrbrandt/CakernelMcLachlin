@@ -53,9 +53,6 @@ void ML_ADMConstraints_O2_Body(cGH const * restrict const cctkGH, int const dir,
     return;
   }
   
-  const char *groups[] = {"ADMBase::curv","ADMBase::lapse","ADMBase::metric","ADMBase::shift","ML_ADMConstraints_O2::ML_Ham","ML_ADMConstraints_O2::ML_mom"};
-  GenericFD_AssertGroupStorage(cctkGH, "ML_ADMConstraints_O2", 6, groups);
-  
   /* Include user-supplied include files */
   
   /* Initialise finite differencing variables */
@@ -84,15 +81,9 @@ void ML_ADMConstraints_O2_Body(cGH const * restrict const cctkGH, int const dir,
   CCTK_REAL const p1o4dxdy = (INV(dx)*INV(dy))/4.;
   CCTK_REAL const p1o4dxdz = (INV(dx)*INV(dz))/4.;
   CCTK_REAL const p1o4dydz = (INV(dy)*INV(dz))/4.;
-  CCTK_REAL const p1odx = INV(dx);
   CCTK_REAL const p1odx2 = pow(dx,-2);
-  CCTK_REAL const p1ody = INV(dy);
   CCTK_REAL const p1ody2 = pow(dy,-2);
-  CCTK_REAL const p1odz = INV(dz);
   CCTK_REAL const p1odz2 = pow(dz,-2);
-  CCTK_REAL const pm1o2dx = -(khalf*INV(dx));
-  CCTK_REAL const pm1o2dy = -(khalf*INV(dy));
-  CCTK_REAL const pm1o2dz = -(khalf*INV(dz));
   
   /* Loop over the grid points */
   #pragma omp parallel

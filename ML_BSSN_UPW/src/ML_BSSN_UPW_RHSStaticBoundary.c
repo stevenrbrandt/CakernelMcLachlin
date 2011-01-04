@@ -74,9 +74,6 @@ void ML_BSSN_UPW_RHSStaticBoundary_Body(cGH const * restrict const cctkGH, int c
     return;
   }
   
-  const char *groups[] = {"ML_BSSN_UPW::ML_curvrhs","ML_BSSN_UPW::ML_dtlapserhs","ML_BSSN_UPW::ML_dtshiftrhs","ML_BSSN_UPW::ML_Gammarhs","ML_BSSN_UPW::ML_lapserhs","ML_BSSN_UPW::ML_log_confacrhs","ML_BSSN_UPW::ML_metricrhs","ML_BSSN_UPW::ML_shiftrhs","ML_BSSN_UPW::ML_trace_curvrhs"};
-  GenericFD_AssertGroupStorage(cctkGH, "ML_BSSN_UPW_RHSStaticBoundary", 9, groups);
-  
   /* Include user-supplied include files */
   
   /* Initialise finite differencing variables */

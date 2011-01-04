@@ -374,8 +374,6 @@ schedule ML_BSSN_O8_constraints1_SelectBCs in ML_BSSN_O8_constraints1_bc_group
 {
   LANG: C
   OPTIONS: level
-  SYNC: ML_cons_detg
-  SYNC: ML_cons_Gamma
   SYNC: ML_Ham
 } "ML_BSSN_O8_constraints1_SelectBCs"
 
@@ -413,6 +411,8 @@ schedule ML_BSSN_O8_constraints2_SelectBCs in ML_BSSN_O8_constraints2_bc_group
 {
   LANG: C
   OPTIONS: level
+  SYNC: ML_cons_detg
+  SYNC: ML_cons_Gamma
   SYNC: ML_cons_traceA
   SYNC: ML_mom
 } "ML_BSSN_O8_constraints2_SelectBCs"
@@ -458,7 +458,7 @@ schedule ML_BSSN_O8_CheckBoundaries at BASEGRID
   OPTIONS: meta
 } "check boundaries treatment"
 
-schedule group ApplyBCs as ML_BSSN_O8_ApplyBCs in MoL_PostStep after ML_BSSN_O8_SelectBoundConds
+schedule group ApplyBCs as ML_BSSN_O8_ApplyBCs in MoL_PostStep  after ML_BSSN_O8_SelectBoundConds
 {
   # no language specified
 } "Apply boundary conditions controlled by thorn Boundary"

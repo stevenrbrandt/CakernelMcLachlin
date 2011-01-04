@@ -53,9 +53,6 @@ void ML_BSSN_convertToADMBaseDtLapseShiftBoundary_Body(cGH const * restrict cons
     return;
   }
   
-  const char *groups[] = {"ADMBase::dtlapse","ADMBase::dtshift","grid::coordinates","Grid::coordinates","ML_BSSN::ML_dtlapse","ML_BSSN::ML_dtshift","ML_BSSN::ML_Gamma","ML_BSSN::ML_lapse","ML_BSSN::ML_shift","ML_BSSN::ML_trace_curv"};
-  GenericFD_AssertGroupStorage(cctkGH, "ML_BSSN_convertToADMBaseDtLapseShiftBoundary", 10, groups);
-  
   /* Include user-supplied include files */
   
   /* Initialise finite differencing variables */

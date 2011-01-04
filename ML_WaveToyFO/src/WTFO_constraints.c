@@ -50,9 +50,6 @@ void WTFO_constraints_Body(cGH const * restrict const cctkGH, int const dir, int
     return;
   }
   
-  const char *groups[] = {"ML_WaveToyFO::WT_v","ML_WaveToyFO::WT_w"};
-  GenericFD_AssertGroupStorage(cctkGH, "WTFO_constraints", 2, groups);
-  
   /* Include user-supplied include files */
   
   /* Initialise finite differencing variables */

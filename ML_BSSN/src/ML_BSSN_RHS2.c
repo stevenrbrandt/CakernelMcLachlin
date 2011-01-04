@@ -50,9 +50,6 @@ void ML_BSSN_RHS2_Body(cGH const * restrict const cctkGH, int const dir, int con
     return;
   }
   
-  const char *groups[] = {"ML_BSSN::ML_curv","ML_BSSN::ML_curvrhs","ML_BSSN::ML_Gamma","ML_BSSN::ML_lapse","ML_BSSN::ML_log_confac","ML_BSSN::ML_metric","ML_BSSN::ML_shift","ML_BSSN::ML_trace_curv"};
-  GenericFD_AssertGroupStorage(cctkGH, "ML_BSSN_RHS2", 8, groups);
-  
   /* Include user-supplied include files */
   
   /* Initialise finite differencing variables */

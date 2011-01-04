@@ -38,9 +38,6 @@ void ML_BSSN_UPW_enforce_Body(cGH const * restrict const cctkGH, int const dir, 
     return;
   }
   
-  const char *groups[] = {"ML_BSSN_UPW::ML_curv","ML_BSSN_UPW::ML_lapse","ML_BSSN_UPW::ML_metric"};
-  GenericFD_AssertGroupStorage(cctkGH, "ML_BSSN_UPW_enforce", 3, groups);
-  
   /* Include user-supplied include files */
   
   /* Initialise finite differencing variables */

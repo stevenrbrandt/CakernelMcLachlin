@@ -38,9 +38,6 @@ void ML_BSSN_O2_convertToADMBase_Body(cGH const * restrict const cctkGH, int con
     return;
   }
   
-  const char *groups[] = {"ADMBase::curv","ADMBase::lapse","ADMBase::metric","ADMBase::shift","ML_BSSN_O2::ML_curv","ML_BSSN_O2::ML_lapse","ML_BSSN_O2::ML_log_confac","ML_BSSN_O2::ML_metric","ML_BSSN_O2::ML_shift","ML_BSSN_O2::ML_trace_curv"};
-  GenericFD_AssertGroupStorage(cctkGH, "ML_BSSN_O2_convertToADMBase", 10, groups);
-  
   /* Include user-supplied include files */
   
   /* Initialise finite differencing variables */

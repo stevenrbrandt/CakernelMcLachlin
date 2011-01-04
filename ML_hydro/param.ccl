@@ -3,11 +3,6 @@
 
 shares: GenericFD
 
-USES CCTK_INT stencil_width
-USES CCTK_INT stencil_width_x
-USES CCTK_INT stencil_width_y
-USES CCTK_INT stencil_width_z
-USES CCTK_INT boundary_width
 
 
 shares: MethodOfLines
@@ -15,7 +10,7 @@ shares: MethodOfLines
 USES CCTK_INT MoL_Num_Evolved_Vars
 
 restricted:
-CCTK_INT verbose "verbose"
+CCTK_INT verbose "verbose" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 0
@@ -58,85 +53,85 @@ KEYWORD initial_data "initial_data"
 } "vacuum"
 
 restricted:
-CCTK_INT ML_hydro_MaxNumEvolvedVars "Number of evolved variables used by this thorn" ACCUMULATOR-BASE=MethodofLines::MoL_Num_Evolved_Vars
+CCTK_INT ML_hydro_MaxNumEvolvedVars "Number of evolved variables used by this thorn" ACCUMULATOR-BASE=MethodofLines::MoL_Num_Evolved_Vars STEERABLE=RECOVER
 {
   5:5 :: "Number of evolved variables used by this thorn"
 } 5
 
 restricted:
-CCTK_INT timelevels "Number of active timelevels"
+CCTK_INT timelevels "Number of active timelevels" STEERABLE=RECOVER
 {
   0:3 :: ""
 } 3
 
 restricted:
-CCTK_INT rhs_timelevels "Number of active RHS timelevels"
+CCTK_INT rhs_timelevels "Number of active RHS timelevels" STEERABLE=RECOVER
 {
   0:3 :: ""
 } 1
 
 restricted:
-CCTK_INT hydro_vacuum_calc_every "hydro_vacuum_calc_every"
+CCTK_INT hydro_vacuum_calc_every "hydro_vacuum_calc_every" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 1
 
 restricted:
-CCTK_INT hydro_soundWave_calc_every "hydro_soundWave_calc_every"
+CCTK_INT hydro_soundWave_calc_every "hydro_soundWave_calc_every" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 1
 
 restricted:
-CCTK_INT hydro_prim2con_calc_every "hydro_prim2con_calc_every"
+CCTK_INT hydro_prim2con_calc_every "hydro_prim2con_calc_every" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 1
 
 restricted:
-CCTK_INT hydro_con2prim_calc_every "hydro_con2prim_calc_every"
+CCTK_INT hydro_con2prim_calc_every "hydro_con2prim_calc_every" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 1
 
 restricted:
-CCTK_INT hydro_RHS_calc_every "hydro_RHS_calc_every"
+CCTK_INT hydro_RHS_calc_every "hydro_RHS_calc_every" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 1
 
 restricted:
-CCTK_INT hydro_vacuum_calc_offset "hydro_vacuum_calc_offset"
+CCTK_INT hydro_vacuum_calc_offset "hydro_vacuum_calc_offset" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 0
 
 restricted:
-CCTK_INT hydro_soundWave_calc_offset "hydro_soundWave_calc_offset"
+CCTK_INT hydro_soundWave_calc_offset "hydro_soundWave_calc_offset" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 0
 
 restricted:
-CCTK_INT hydro_prim2con_calc_offset "hydro_prim2con_calc_offset"
+CCTK_INT hydro_prim2con_calc_offset "hydro_prim2con_calc_offset" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 0
 
 restricted:
-CCTK_INT hydro_con2prim_calc_offset "hydro_con2prim_calc_offset"
+CCTK_INT hydro_con2prim_calc_offset "hydro_con2prim_calc_offset" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 0
 
 restricted:
-CCTK_INT hydro_RHS_calc_offset "hydro_RHS_calc_offset"
+CCTK_INT hydro_RHS_calc_offset "hydro_RHS_calc_offset" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 0
 
 private:
-KEYWORD ene_bound "Boundary condition to implement"
+KEYWORD ene_bound "Boundary condition to implement" STEERABLE=ALWAYS
 {
   "flat" :: "Flat boundary condition"
   "none" :: "No boundary condition"
@@ -148,7 +143,7 @@ KEYWORD ene_bound "Boundary condition to implement"
 } "skip"
 
 private:
-KEYWORD mass_bound "Boundary condition to implement"
+KEYWORD mass_bound "Boundary condition to implement" STEERABLE=ALWAYS
 {
   "flat" :: "Flat boundary condition"
   "none" :: "No boundary condition"
@@ -160,7 +155,7 @@ KEYWORD mass_bound "Boundary condition to implement"
 } "skip"
 
 private:
-KEYWORD mom1_bound "Boundary condition to implement"
+KEYWORD mom1_bound "Boundary condition to implement" STEERABLE=ALWAYS
 {
   "flat" :: "Flat boundary condition"
   "none" :: "No boundary condition"
@@ -172,7 +167,7 @@ KEYWORD mom1_bound "Boundary condition to implement"
 } "skip"
 
 private:
-KEYWORD mom2_bound "Boundary condition to implement"
+KEYWORD mom2_bound "Boundary condition to implement" STEERABLE=ALWAYS
 {
   "flat" :: "Flat boundary condition"
   "none" :: "No boundary condition"
@@ -184,7 +179,7 @@ KEYWORD mom2_bound "Boundary condition to implement"
 } "skip"
 
 private:
-KEYWORD mom3_bound "Boundary condition to implement"
+KEYWORD mom3_bound "Boundary condition to implement" STEERABLE=ALWAYS
 {
   "flat" :: "Flat boundary condition"
   "none" :: "No boundary condition"
@@ -196,7 +191,7 @@ KEYWORD mom3_bound "Boundary condition to implement"
 } "skip"
 
 private:
-KEYWORD ene_group_bound "Boundary condition to implement"
+KEYWORD ene_group_bound "Boundary condition to implement" STEERABLE=ALWAYS
 {
   "flat" :: "Flat boundary condition"
   "none" :: "No boundary condition"
@@ -205,10 +200,10 @@ KEYWORD ene_group_bound "Boundary condition to implement"
   "scalar" :: "Dirichlet boundary condition"
   "newrad" :: "Improved radiative boundary condition"
   "skip" :: "skip boundary condition code"
-} "none"
+} "skip"
 
 private:
-KEYWORD mass_group_bound "Boundary condition to implement"
+KEYWORD mass_group_bound "Boundary condition to implement" STEERABLE=ALWAYS
 {
   "flat" :: "Flat boundary condition"
   "none" :: "No boundary condition"
@@ -217,10 +212,10 @@ KEYWORD mass_group_bound "Boundary condition to implement"
   "scalar" :: "Dirichlet boundary condition"
   "newrad" :: "Improved radiative boundary condition"
   "skip" :: "skip boundary condition code"
-} "none"
+} "skip"
 
 private:
-KEYWORD mom_group_bound "Boundary condition to implement"
+KEYWORD mom_group_bound "Boundary condition to implement" STEERABLE=ALWAYS
 {
   "flat" :: "Flat boundary condition"
   "none" :: "No boundary condition"
@@ -229,148 +224,148 @@ KEYWORD mom_group_bound "Boundary condition to implement"
   "scalar" :: "Dirichlet boundary condition"
   "newrad" :: "Improved radiative boundary condition"
   "skip" :: "skip boundary condition code"
-} "none"
+} "skip"
 
 private:
-CCTK_REAL ene_bound_speed "characteristic speed at boundary"
+CCTK_REAL ene_bound_speed "characteristic speed at boundary" STEERABLE=ALWAYS
 {
   "0:*" :: "outgoing characteristic speed > 0"
 } 1.
 
 private:
-CCTK_REAL mass_bound_speed "characteristic speed at boundary"
+CCTK_REAL mass_bound_speed "characteristic speed at boundary" STEERABLE=ALWAYS
 {
   "0:*" :: "outgoing characteristic speed > 0"
 } 1.
 
 private:
-CCTK_REAL mom1_bound_speed "characteristic speed at boundary"
+CCTK_REAL mom1_bound_speed "characteristic speed at boundary" STEERABLE=ALWAYS
 {
   "0:*" :: "outgoing characteristic speed > 0"
 } 1.
 
 private:
-CCTK_REAL mom2_bound_speed "characteristic speed at boundary"
+CCTK_REAL mom2_bound_speed "characteristic speed at boundary" STEERABLE=ALWAYS
 {
   "0:*" :: "outgoing characteristic speed > 0"
 } 1.
 
 private:
-CCTK_REAL mom3_bound_speed "characteristic speed at boundary"
+CCTK_REAL mom3_bound_speed "characteristic speed at boundary" STEERABLE=ALWAYS
 {
   "0:*" :: "outgoing characteristic speed > 0"
 } 1.
 
 private:
-CCTK_REAL ene_group_bound_speed "characteristic speed at boundary"
+CCTK_REAL ene_group_bound_speed "characteristic speed at boundary" STEERABLE=ALWAYS
 {
   "0:*" :: "outgoing characteristic speed > 0"
 } 1.
 
 private:
-CCTK_REAL mass_group_bound_speed "characteristic speed at boundary"
+CCTK_REAL mass_group_bound_speed "characteristic speed at boundary" STEERABLE=ALWAYS
 {
   "0:*" :: "outgoing characteristic speed > 0"
 } 1.
 
 private:
-CCTK_REAL mom_group_bound_speed "characteristic speed at boundary"
+CCTK_REAL mom_group_bound_speed "characteristic speed at boundary" STEERABLE=ALWAYS
 {
   "0:*" :: "outgoing characteristic speed > 0"
 } 1.
 
 private:
-CCTK_REAL ene_bound_limit "limit value for r -> infinity"
+CCTK_REAL ene_bound_limit "limit value for r -> infinity" STEERABLE=ALWAYS
 {
   "*:*" :: "value of limit value is unrestricted"
 } 0.
 
 private:
-CCTK_REAL mass_bound_limit "limit value for r -> infinity"
+CCTK_REAL mass_bound_limit "limit value for r -> infinity" STEERABLE=ALWAYS
 {
   "*:*" :: "value of limit value is unrestricted"
 } 0.
 
 private:
-CCTK_REAL mom1_bound_limit "limit value for r -> infinity"
+CCTK_REAL mom1_bound_limit "limit value for r -> infinity" STEERABLE=ALWAYS
 {
   "*:*" :: "value of limit value is unrestricted"
 } 0.
 
 private:
-CCTK_REAL mom2_bound_limit "limit value for r -> infinity"
+CCTK_REAL mom2_bound_limit "limit value for r -> infinity" STEERABLE=ALWAYS
 {
   "*:*" :: "value of limit value is unrestricted"
 } 0.
 
 private:
-CCTK_REAL mom3_bound_limit "limit value for r -> infinity"
+CCTK_REAL mom3_bound_limit "limit value for r -> infinity" STEERABLE=ALWAYS
 {
   "*:*" :: "value of limit value is unrestricted"
 } 0.
 
 private:
-CCTK_REAL ene_group_bound_limit "limit value for r -> infinity"
+CCTK_REAL ene_group_bound_limit "limit value for r -> infinity" STEERABLE=ALWAYS
 {
   "*:*" :: "value of limit value is unrestricted"
 } 0.
 
 private:
-CCTK_REAL mass_group_bound_limit "limit value for r -> infinity"
+CCTK_REAL mass_group_bound_limit "limit value for r -> infinity" STEERABLE=ALWAYS
 {
   "*:*" :: "value of limit value is unrestricted"
 } 0.
 
 private:
-CCTK_REAL mom_group_bound_limit "limit value for r -> infinity"
+CCTK_REAL mom_group_bound_limit "limit value for r -> infinity" STEERABLE=ALWAYS
 {
   "*:*" :: "value of limit value is unrestricted"
 } 0.
 
 private:
-CCTK_REAL ene_bound_scalar "Dirichlet boundary value"
+CCTK_REAL ene_bound_scalar "Dirichlet boundary value" STEERABLE=ALWAYS
 {
   "*:*" :: "unrestricted"
 } 0.
 
 private:
-CCTK_REAL mass_bound_scalar "Dirichlet boundary value"
+CCTK_REAL mass_bound_scalar "Dirichlet boundary value" STEERABLE=ALWAYS
 {
   "*:*" :: "unrestricted"
 } 0.
 
 private:
-CCTK_REAL mom1_bound_scalar "Dirichlet boundary value"
+CCTK_REAL mom1_bound_scalar "Dirichlet boundary value" STEERABLE=ALWAYS
 {
   "*:*" :: "unrestricted"
 } 0.
 
 private:
-CCTK_REAL mom2_bound_scalar "Dirichlet boundary value"
+CCTK_REAL mom2_bound_scalar "Dirichlet boundary value" STEERABLE=ALWAYS
 {
   "*:*" :: "unrestricted"
 } 0.
 
 private:
-CCTK_REAL mom3_bound_scalar "Dirichlet boundary value"
+CCTK_REAL mom3_bound_scalar "Dirichlet boundary value" STEERABLE=ALWAYS
 {
   "*:*" :: "unrestricted"
 } 0.
 
 private:
-CCTK_REAL ene_group_bound_scalar "Dirichlet boundary value"
+CCTK_REAL ene_group_bound_scalar "Dirichlet boundary value" STEERABLE=ALWAYS
 {
   "*:*" :: "unrestricted"
 } 0.
 
 private:
-CCTK_REAL mass_group_bound_scalar "Dirichlet boundary value"
+CCTK_REAL mass_group_bound_scalar "Dirichlet boundary value" STEERABLE=ALWAYS
 {
   "*:*" :: "unrestricted"
 } 0.
 
 private:
-CCTK_REAL mom_group_bound_scalar "Dirichlet boundary value"
+CCTK_REAL mom_group_bound_scalar "Dirichlet boundary value" STEERABLE=ALWAYS
 {
   "*:*" :: "unrestricted"
 } 0.

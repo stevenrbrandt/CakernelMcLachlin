@@ -38,9 +38,6 @@ void WTFO_Gaussian_Body(cGH const * restrict const cctkGH, int const dir, int co
     return;
   }
   
-  const char *groups[] = {"ML_WaveToyFO::WT_rho","ML_WaveToyFO::WT_u","ML_WaveToyFO::WT_v"};
-  GenericFD_AssertGroupStorage(cctkGH, "WTFO_Gaussian", 3, groups);
-  
   /* Include user-supplied include files */
   
   /* Initialise finite differencing variables */

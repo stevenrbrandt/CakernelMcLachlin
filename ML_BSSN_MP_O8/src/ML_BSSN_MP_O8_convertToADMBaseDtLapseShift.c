@@ -53,9 +53,6 @@ void ML_BSSN_MP_O8_convertToADMBaseDtLapseShift_Body(cGH const * restrict const 
     return;
   }
   
-  const char *groups[] = {"ADMBase::dtlapse","ADMBase::dtshift","Coordinates::jacobian","grid::coordinates","Grid::coordinates","ML_BSSN_MP_O8::ML_dtlapse","ML_BSSN_MP_O8::ML_dtshift","ML_BSSN_MP_O8::ML_Gamma","ML_BSSN_MP_O8::ML_lapse","ML_BSSN_MP_O8::ML_shift","ML_BSSN_MP_O8::ML_trace_curv"};
-  GenericFD_AssertGroupStorage(cctkGH, "ML_BSSN_MP_O8_convertToADMBaseDtLapseShift", 11, groups);
-  
   /* Include user-supplied include files */
   
   /* Initialise finite differencing variables */

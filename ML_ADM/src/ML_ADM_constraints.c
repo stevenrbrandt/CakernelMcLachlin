@@ -53,9 +53,6 @@ void ML_ADM_constraints_Body(cGH const * restrict const cctkGH, int const dir, i
     return;
   }
   
-  const char *groups[] = {"ML_ADM::ML_curv","ML_ADM::ML_Ham","ML_ADM::ML_metric","ML_ADM::ML_mom"};
-  GenericFD_AssertGroupStorage(cctkGH, "ML_ADM_constraints", 4, groups);
-  
   /* Include user-supplied include files */
   
   /* Initialise finite differencing variables */

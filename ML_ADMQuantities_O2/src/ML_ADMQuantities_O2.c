@@ -53,9 +53,6 @@ void ML_ADMQuantities_O2_Body(cGH const * restrict const cctkGH, int const dir, 
     return;
   }
   
-  const char *groups[] = {"grid::coordinates","Grid::coordinates","McLachlan::ML_curv","McLachlan::ML_Gamma","McLachlan::ML_lapse","McLachlan::ML_log_confac","McLachlan::ML_metric","McLachlan::ML_shift","McLachlan::ML_trace_curv","ML_ADMQuantities_O2::ML_Jadm","ML_ADMQuantities_O2::ML_Madm"};
-  GenericFD_AssertGroupStorage(cctkGH, "ML_ADMQuantities_O2", 11, groups);
-  
   /* Include user-supplied include files */
   
   /* Initialise finite differencing variables */
@@ -297,27 +294,27 @@ void ML_ADMQuantities_O2_Body(cGH const * restrict const cctkGH, int const dir, 
       PDstandardNth1gt33*SQR(gtu31);
     
     CCTK_REAL dgtu211 = -(gtu11*gtu21*PDstandardNth1gt11) - 
-      gtu11*gtu22*PDstandardNth1gt12 - gtu21*gtu31*PDstandardNth1gt13 - 
-      gtu11*gtu32*PDstandardNth1gt13 - gtu21*gtu22*PDstandardNth1gt22 - 
-      gtu22*gtu31*PDstandardNth1gt23 - gtu21*gtu32*PDstandardNth1gt23 - 
-      gtu31*gtu32*PDstandardNth1gt33 - PDstandardNth1gt12*SQR(gtu21);
+      gtu21*gtu31*PDstandardNth1gt13 - gtu11*gtu32*PDstandardNth1gt13 - 
+      gtu21*gtu22*PDstandardNth1gt22 - gtu22*gtu31*PDstandardNth1gt23 - 
+      gtu21*gtu32*PDstandardNth1gt23 - gtu31*gtu32*PDstandardNth1gt33 - 
+      PDstandardNth1gt12*(gtu11*gtu22 + SQR(gtu21));
     
-    CCTK_REAL dgtu311 = -(gtu11*gtu31*PDstandardNth1gt11) - 
-      gtu21*gtu31*PDstandardNth1gt12 - gtu11*gtu32*PDstandardNth1gt12 - 
-      gtu11*gtu33*PDstandardNth1gt13 - gtu21*gtu32*PDstandardNth1gt22 - 
-      gtu31*gtu32*PDstandardNth1gt23 - gtu21*gtu33*PDstandardNth1gt23 - 
-      gtu31*gtu33*PDstandardNth1gt33 - PDstandardNth1gt13*SQR(gtu31);
+    CCTK_REAL dgtu311 = -(gtu11*gtu31*PDstandardNth1gt11) - (gtu21*gtu31 + 
+      gtu11*gtu32)*PDstandardNth1gt12 - gtu11*gtu33*PDstandardNth1gt13 - 
+      gtu21*gtu32*PDstandardNth1gt22 - gtu31*gtu32*PDstandardNth1gt23 - 
+      gtu21*gtu33*PDstandardNth1gt23 - gtu31*gtu33*PDstandardNth1gt33 - 
+      PDstandardNth1gt13*SQR(gtu31);
     
     CCTK_REAL dgtu221 = -2*(gtu21*gtu22*PDstandardNth1gt12 + 
       gtu21*gtu32*PDstandardNth1gt13 + gtu22*gtu32*PDstandardNth1gt23) - 
       PDstandardNth1gt11*SQR(gtu21) - PDstandardNth1gt22*SQR(gtu22) - 
       PDstandardNth1gt33*SQR(gtu32);
     
-    CCTK_REAL dgtu321 = -(gtu21*gtu31*PDstandardNth1gt11) - 
-      gtu22*gtu31*PDstandardNth1gt12 - gtu21*gtu32*PDstandardNth1gt12 - 
-      gtu31*gtu32*PDstandardNth1gt13 - gtu21*gtu33*PDstandardNth1gt13 - 
-      gtu22*gtu32*PDstandardNth1gt22 - gtu22*gtu33*PDstandardNth1gt23 - 
-      gtu32*gtu33*PDstandardNth1gt33 - PDstandardNth1gt23*SQR(gtu32);
+    CCTK_REAL dgtu321 = -(gtu21*gtu31*PDstandardNth1gt11) - (gtu22*gtu31 + 
+      gtu21*gtu32)*PDstandardNth1gt12 - gtu31*gtu32*PDstandardNth1gt13 - 
+      gtu21*gtu33*PDstandardNth1gt13 - gtu22*gtu32*PDstandardNth1gt22 - 
+      gtu22*gtu33*PDstandardNth1gt23 - gtu32*gtu33*PDstandardNth1gt33 - 
+      PDstandardNth1gt23*SQR(gtu32);
     
     CCTK_REAL dgtu331 = -2*(gtu31*gtu32*PDstandardNth1gt12 + 
       gtu31*gtu33*PDstandardNth1gt13 + gtu32*gtu33*PDstandardNth1gt23) - 
@@ -330,27 +327,27 @@ void ML_ADMQuantities_O2_Body(cGH const * restrict const cctkGH, int const dir, 
       PDstandardNth2gt33*SQR(gtu31);
     
     CCTK_REAL dgtu212 = -(gtu11*gtu21*PDstandardNth2gt11) - 
-      gtu11*gtu22*PDstandardNth2gt12 - gtu21*gtu31*PDstandardNth2gt13 - 
-      gtu11*gtu32*PDstandardNth2gt13 - gtu21*gtu22*PDstandardNth2gt22 - 
-      gtu22*gtu31*PDstandardNth2gt23 - gtu21*gtu32*PDstandardNth2gt23 - 
-      gtu31*gtu32*PDstandardNth2gt33 - PDstandardNth2gt12*SQR(gtu21);
+      gtu21*gtu31*PDstandardNth2gt13 - gtu11*gtu32*PDstandardNth2gt13 - 
+      gtu21*gtu22*PDstandardNth2gt22 - gtu22*gtu31*PDstandardNth2gt23 - 
+      gtu21*gtu32*PDstandardNth2gt23 - gtu31*gtu32*PDstandardNth2gt33 - 
+      PDstandardNth2gt12*(gtu11*gtu22 + SQR(gtu21));
     
-    CCTK_REAL dgtu312 = -(gtu11*gtu31*PDstandardNth2gt11) - 
-      gtu21*gtu31*PDstandardNth2gt12 - gtu11*gtu32*PDstandardNth2gt12 - 
-      gtu11*gtu33*PDstandardNth2gt13 - gtu21*gtu32*PDstandardNth2gt22 - 
-      gtu31*gtu32*PDstandardNth2gt23 - gtu21*gtu33*PDstandardNth2gt23 - 
-      gtu31*gtu33*PDstandardNth2gt33 - PDstandardNth2gt13*SQR(gtu31);
+    CCTK_REAL dgtu312 = -(gtu11*gtu31*PDstandardNth2gt11) - (gtu21*gtu31 + 
+      gtu11*gtu32)*PDstandardNth2gt12 - gtu11*gtu33*PDstandardNth2gt13 - 
+      gtu21*gtu32*PDstandardNth2gt22 - gtu31*gtu32*PDstandardNth2gt23 - 
+      gtu21*gtu33*PDstandardNth2gt23 - gtu31*gtu33*PDstandardNth2gt33 - 
+      PDstandardNth2gt13*SQR(gtu31);
     
     CCTK_REAL dgtu222 = -2*(gtu21*gtu22*PDstandardNth2gt12 + 
       gtu21*gtu32*PDstandardNth2gt13 + gtu22*gtu32*PDstandardNth2gt23) - 
       PDstandardNth2gt11*SQR(gtu21) - PDstandardNth2gt22*SQR(gtu22) - 
       PDstandardNth2gt33*SQR(gtu32);
     
-    CCTK_REAL dgtu322 = -(gtu21*gtu31*PDstandardNth2gt11) - 
-      gtu22*gtu31*PDstandardNth2gt12 - gtu21*gtu32*PDstandardNth2gt12 - 
-      gtu31*gtu32*PDstandardNth2gt13 - gtu21*gtu33*PDstandardNth2gt13 - 
-      gtu22*gtu32*PDstandardNth2gt22 - gtu22*gtu33*PDstandardNth2gt23 - 
-      gtu32*gtu33*PDstandardNth2gt33 - PDstandardNth2gt23*SQR(gtu32);
+    CCTK_REAL dgtu322 = -(gtu21*gtu31*PDstandardNth2gt11) - (gtu22*gtu31 + 
+      gtu21*gtu32)*PDstandardNth2gt12 - gtu31*gtu32*PDstandardNth2gt13 - 
+      gtu21*gtu33*PDstandardNth2gt13 - gtu22*gtu32*PDstandardNth2gt22 - 
+      gtu22*gtu33*PDstandardNth2gt23 - gtu32*gtu33*PDstandardNth2gt33 - 
+      PDstandardNth2gt23*SQR(gtu32);
     
     CCTK_REAL dgtu332 = -2*(gtu31*gtu32*PDstandardNth2gt12 + 
       gtu31*gtu33*PDstandardNth2gt13 + gtu32*gtu33*PDstandardNth2gt23) - 
@@ -363,27 +360,27 @@ void ML_ADMQuantities_O2_Body(cGH const * restrict const cctkGH, int const dir, 
       PDstandardNth3gt33*SQR(gtu31);
     
     CCTK_REAL dgtu213 = -(gtu11*gtu21*PDstandardNth3gt11) - 
-      gtu11*gtu22*PDstandardNth3gt12 - gtu21*gtu31*PDstandardNth3gt13 - 
-      gtu11*gtu32*PDstandardNth3gt13 - gtu21*gtu22*PDstandardNth3gt22 - 
-      gtu22*gtu31*PDstandardNth3gt23 - gtu21*gtu32*PDstandardNth3gt23 - 
-      gtu31*gtu32*PDstandardNth3gt33 - PDstandardNth3gt12*SQR(gtu21);
+      gtu21*gtu31*PDstandardNth3gt13 - gtu11*gtu32*PDstandardNth3gt13 - 
+      gtu21*gtu22*PDstandardNth3gt22 - gtu22*gtu31*PDstandardNth3gt23 - 
+      gtu21*gtu32*PDstandardNth3gt23 - gtu31*gtu32*PDstandardNth3gt33 - 
+      PDstandardNth3gt12*(gtu11*gtu22 + SQR(gtu21));
     
-    CCTK_REAL dgtu313 = -(gtu11*gtu31*PDstandardNth3gt11) - 
-      gtu21*gtu31*PDstandardNth3gt12 - gtu11*gtu32*PDstandardNth3gt12 - 
-      gtu11*gtu33*PDstandardNth3gt13 - gtu21*gtu32*PDstandardNth3gt22 - 
-      gtu31*gtu32*PDstandardNth3gt23 - gtu21*gtu33*PDstandardNth3gt23 - 
-      gtu31*gtu33*PDstandardNth3gt33 - PDstandardNth3gt13*SQR(gtu31);
+    CCTK_REAL dgtu313 = -(gtu11*gtu31*PDstandardNth3gt11) - (gtu21*gtu31 + 
+      gtu11*gtu32)*PDstandardNth3gt12 - gtu11*gtu33*PDstandardNth3gt13 - 
+      gtu21*gtu32*PDstandardNth3gt22 - gtu31*gtu32*PDstandardNth3gt23 - 
+      gtu21*gtu33*PDstandardNth3gt23 - gtu31*gtu33*PDstandardNth3gt33 - 
+      PDstandardNth3gt13*SQR(gtu31);
     
     CCTK_REAL dgtu223 = -2*(gtu21*gtu22*PDstandardNth3gt12 + 
       gtu21*gtu32*PDstandardNth3gt13 + gtu22*gtu32*PDstandardNth3gt23) - 
       PDstandardNth3gt11*SQR(gtu21) - PDstandardNth3gt22*SQR(gtu22) - 
       PDstandardNth3gt33*SQR(gtu32);
     
-    CCTK_REAL dgtu323 = -(gtu21*gtu31*PDstandardNth3gt11) - 
-      gtu22*gtu31*PDstandardNth3gt12 - gtu21*gtu32*PDstandardNth3gt12 - 
-      gtu31*gtu32*PDstandardNth3gt13 - gtu21*gtu33*PDstandardNth3gt13 - 
-      gtu22*gtu32*PDstandardNth3gt22 - gtu22*gtu33*PDstandardNth3gt23 - 
-      gtu32*gtu33*PDstandardNth3gt33 - PDstandardNth3gt23*SQR(gtu32);
+    CCTK_REAL dgtu323 = -(gtu21*gtu31*PDstandardNth3gt11) - (gtu22*gtu31 + 
+      gtu21*gtu32)*PDstandardNth3gt12 - gtu31*gtu32*PDstandardNth3gt13 - 
+      gtu21*gtu33*PDstandardNth3gt13 - gtu22*gtu32*PDstandardNth3gt22 - 
+      gtu22*gtu33*PDstandardNth3gt23 - gtu32*gtu33*PDstandardNth3gt33 - 
+      PDstandardNth3gt23*SQR(gtu32);
     
     CCTK_REAL dgtu333 = -2*(gtu31*gtu32*PDstandardNth3gt12 + 
       gtu31*gtu33*PDstandardNth3gt13 + gtu32*gtu33*PDstandardNth3gt23) - 

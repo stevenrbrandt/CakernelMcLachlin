@@ -3,11 +3,6 @@
 
 shares: GenericFD
 
-USES CCTK_INT stencil_width
-USES CCTK_INT stencil_width_x
-USES CCTK_INT stencil_width_y
-USES CCTK_INT stencil_width_z
-USES CCTK_INT boundary_width
 
 
 shares: MethodOfLines
@@ -15,37 +10,37 @@ shares: MethodOfLines
 USES CCTK_INT MoL_Num_Evolved_Vars
 
 restricted:
-CCTK_INT verbose "verbose"
+CCTK_INT verbose "verbose" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 0
 
 restricted:
-CCTK_INT ML_ADMConstraints_O2_MaxNumEvolvedVars "Number of evolved variables used by this thorn" ACCUMULATOR-BASE=MethodofLines::MoL_Num_Evolved_Vars
+CCTK_INT ML_ADMConstraints_O2_MaxNumEvolvedVars "Number of evolved variables used by this thorn" ACCUMULATOR-BASE=MethodofLines::MoL_Num_Evolved_Vars STEERABLE=RECOVER
 {
   0:0 :: "Number of evolved variables used by this thorn"
 } 0
 
 restricted:
-CCTK_INT timelevels "Number of active timelevels"
+CCTK_INT timelevels "Number of active timelevels" STEERABLE=RECOVER
 {
   0:3 :: ""
 } 3
 
 restricted:
-CCTK_INT rhs_timelevels "Number of active RHS timelevels"
+CCTK_INT rhs_timelevels "Number of active RHS timelevels" STEERABLE=RECOVER
 {
   0:3 :: ""
 } 1
 
 restricted:
-CCTK_INT ML_ADMConstraints_O2_calc_every "ML_ADMConstraints_O2_calc_every"
+CCTK_INT ML_ADMConstraints_O2_calc_every "ML_ADMConstraints_O2_calc_every" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 1
 
 restricted:
-CCTK_INT ML_ADMConstraints_O2_calc_offset "ML_ADMConstraints_O2_calc_offset"
+CCTK_INT ML_ADMConstraints_O2_calc_offset "ML_ADMConstraints_O2_calc_offset" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 0

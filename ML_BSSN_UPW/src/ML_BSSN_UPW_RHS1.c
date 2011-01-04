@@ -71,9 +71,6 @@ void ML_BSSN_UPW_RHS1_Body(cGH const * restrict const cctkGH, int const dir, int
     return;
   }
   
-  const char *groups[] = {"grid::coordinates","Grid::coordinates","ML_BSSN_UPW::ML_curv","ML_BSSN_UPW::ML_dtlapse","ML_BSSN_UPW::ML_dtlapserhs","ML_BSSN_UPW::ML_dtshift","ML_BSSN_UPW::ML_dtshiftrhs","ML_BSSN_UPW::ML_Gamma","ML_BSSN_UPW::ML_Gammarhs","ML_BSSN_UPW::ML_lapse","ML_BSSN_UPW::ML_lapserhs","ML_BSSN_UPW::ML_log_confac","ML_BSSN_UPW::ML_log_confacrhs","ML_BSSN_UPW::ML_metric","ML_BSSN_UPW::ML_metricrhs","ML_BSSN_UPW::ML_shift","ML_BSSN_UPW::ML_shiftrhs","ML_BSSN_UPW::ML_trace_curv","ML_BSSN_UPW::ML_trace_curvrhs"};
-  GenericFD_AssertGroupStorage(cctkGH, "ML_BSSN_UPW_RHS1", 19, groups);
-  
   /* Include user-supplied include files */
   
   /* Initialise finite differencing variables */

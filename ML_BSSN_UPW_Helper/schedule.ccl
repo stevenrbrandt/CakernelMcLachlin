@@ -139,14 +139,14 @@ if (CCTK_EQUALS (evolution_method, "ML_BSSN_UPW")) {
   }
   else if  (CCTK_EQUALS (calculate_ADMBase_variables_at, "CCTK_ANALYSIS"))
   {
+    SCHEDULE GROUP ML_BSSN_UPW_convertToADMBaseGroupWrapper AT post_recover_variables
+    {
+    } "Calculate ADM variables"
+    
     SCHEDULE GROUP ML_BSSN_UPW_convertToADMBaseGroupWrapper AT analysis BEFORE (ADMBase_SetADMVars Whisky_PostStep)
     {
     } "Calculate ADM variables"
   }
-
-  SCHEDULE GROUP ML_BSSN_UPW_convertToADMBaseGroupWrapper AT post_recover_variables
-  {
-  } "Calculate ADM variables"
 
   SCHEDULE ML_BSSN_UPW_SelectBCsADMBase IN ML_BSSN_UPW_convertToADMBaseGroupWrapper AFTER ML_BSSN_UPW_convertToADMBaseGroup
   {

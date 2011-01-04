@@ -38,9 +38,6 @@ void WT_Gaussian_Body(cGH const * restrict const cctkGH, int const dir, int cons
     return;
   }
   
-  const char *groups[] = {"ML_WaveToy::WT_rho","ML_WaveToy::WT_u"};
-  GenericFD_AssertGroupStorage(cctkGH, "WT_Gaussian", 2, groups);
-  
   /* Include user-supplied include files */
   
   /* Initialise finite differencing variables */

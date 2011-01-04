@@ -38,9 +38,6 @@ void hydro_con2prim_Body(cGH const * restrict const cctkGH, int const dir, int c
     return;
   }
   
-  const char *groups[] = {"ML_hydro::ene_group","ML_hydro::eps_group","ML_hydro::mass_group","ML_hydro::mom_group","ML_hydro::press_group","ML_hydro::rho_group","ML_hydro::vel_group","ML_hydro::vol_group"};
-  GenericFD_AssertGroupStorage(cctkGH, "hydro_con2prim", 8, groups);
-  
   /* Include user-supplied include files */
   
   /* Initialise finite differencing variables */

@@ -38,9 +38,6 @@ void ML_ADM_Minkowski_Body(cGH const * restrict const cctkGH, int const dir, int
     return;
   }
   
-  const char *groups[] = {"ML_ADM::ML_curv","ML_ADM::ML_lapse","ML_ADM::ML_metric","ML_ADM::ML_shift"};
-  GenericFD_AssertGroupStorage(cctkGH, "ML_ADM_Minkowski", 4, groups);
-  
   /* Include user-supplied include files */
   
   /* Initialise finite differencing variables */

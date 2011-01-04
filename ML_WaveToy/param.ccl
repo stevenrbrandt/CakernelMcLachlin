@@ -3,11 +3,6 @@
 
 shares: GenericFD
 
-USES CCTK_INT stencil_width
-USES CCTK_INT stencil_width_x
-USES CCTK_INT stencil_width_y
-USES CCTK_INT stencil_width_z
-USES CCTK_INT boundary_width
 
 
 shares: MethodOfLines
@@ -15,55 +10,55 @@ shares: MethodOfLines
 USES CCTK_INT MoL_Num_Evolved_Vars
 
 restricted:
-CCTK_INT verbose "verbose"
+CCTK_INT verbose "verbose" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 0
 
 restricted:
-CCTK_INT ML_WaveToy_MaxNumEvolvedVars "Number of evolved variables used by this thorn" ACCUMULATOR-BASE=MethodofLines::MoL_Num_Evolved_Vars
+CCTK_INT ML_WaveToy_MaxNumEvolvedVars "Number of evolved variables used by this thorn" ACCUMULATOR-BASE=MethodofLines::MoL_Num_Evolved_Vars STEERABLE=RECOVER
 {
   2:2 :: "Number of evolved variables used by this thorn"
 } 2
 
 restricted:
-CCTK_INT timelevels "Number of active timelevels"
+CCTK_INT timelevels "Number of active timelevels" STEERABLE=RECOVER
 {
   0:2 :: ""
 } 2
 
 restricted:
-CCTK_INT rhs_timelevels "Number of active RHS timelevels"
+CCTK_INT rhs_timelevels "Number of active RHS timelevels" STEERABLE=RECOVER
 {
   0:2 :: ""
 } 1
 
 restricted:
-CCTK_INT WT_Gaussian_calc_every "WT_Gaussian_calc_every"
+CCTK_INT WT_Gaussian_calc_every "WT_Gaussian_calc_every" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 1
 
 restricted:
-CCTK_INT WT_RHS_calc_every "WT_RHS_calc_every"
+CCTK_INT WT_RHS_calc_every "WT_RHS_calc_every" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 1
 
 restricted:
-CCTK_INT WT_Gaussian_calc_offset "WT_Gaussian_calc_offset"
+CCTK_INT WT_Gaussian_calc_offset "WT_Gaussian_calc_offset" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 0
 
 restricted:
-CCTK_INT WT_RHS_calc_offset "WT_RHS_calc_offset"
+CCTK_INT WT_RHS_calc_offset "WT_RHS_calc_offset" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 0
 
 private:
-KEYWORD rho_bound "Boundary condition to implement"
+KEYWORD rho_bound "Boundary condition to implement" STEERABLE=ALWAYS
 {
   "flat" :: "Flat boundary condition"
   "none" :: "No boundary condition"
@@ -75,7 +70,7 @@ KEYWORD rho_bound "Boundary condition to implement"
 } "skip"
 
 private:
-KEYWORD u_bound "Boundary condition to implement"
+KEYWORD u_bound "Boundary condition to implement" STEERABLE=ALWAYS
 {
   "flat" :: "Flat boundary condition"
   "none" :: "No boundary condition"
@@ -87,7 +82,7 @@ KEYWORD u_bound "Boundary condition to implement"
 } "skip"
 
 private:
-KEYWORD WT_rho_bound "Boundary condition to implement"
+KEYWORD WT_rho_bound "Boundary condition to implement" STEERABLE=ALWAYS
 {
   "flat" :: "Flat boundary condition"
   "none" :: "No boundary condition"
@@ -96,10 +91,10 @@ KEYWORD WT_rho_bound "Boundary condition to implement"
   "scalar" :: "Dirichlet boundary condition"
   "newrad" :: "Improved radiative boundary condition"
   "skip" :: "skip boundary condition code"
-} "none"
+} "skip"
 
 private:
-KEYWORD WT_u_bound "Boundary condition to implement"
+KEYWORD WT_u_bound "Boundary condition to implement" STEERABLE=ALWAYS
 {
   "flat" :: "Flat boundary condition"
   "none" :: "No boundary condition"
@@ -108,76 +103,76 @@ KEYWORD WT_u_bound "Boundary condition to implement"
   "scalar" :: "Dirichlet boundary condition"
   "newrad" :: "Improved radiative boundary condition"
   "skip" :: "skip boundary condition code"
-} "none"
+} "skip"
 
 private:
-CCTK_REAL rho_bound_speed "characteristic speed at boundary"
+CCTK_REAL rho_bound_speed "characteristic speed at boundary" STEERABLE=ALWAYS
 {
   "0:*" :: "outgoing characteristic speed > 0"
 } 1.
 
 private:
-CCTK_REAL u_bound_speed "characteristic speed at boundary"
+CCTK_REAL u_bound_speed "characteristic speed at boundary" STEERABLE=ALWAYS
 {
   "0:*" :: "outgoing characteristic speed > 0"
 } 1.
 
 private:
-CCTK_REAL WT_rho_bound_speed "characteristic speed at boundary"
+CCTK_REAL WT_rho_bound_speed "characteristic speed at boundary" STEERABLE=ALWAYS
 {
   "0:*" :: "outgoing characteristic speed > 0"
 } 1.
 
 private:
-CCTK_REAL WT_u_bound_speed "characteristic speed at boundary"
+CCTK_REAL WT_u_bound_speed "characteristic speed at boundary" STEERABLE=ALWAYS
 {
   "0:*" :: "outgoing characteristic speed > 0"
 } 1.
 
 private:
-CCTK_REAL rho_bound_limit "limit value for r -> infinity"
+CCTK_REAL rho_bound_limit "limit value for r -> infinity" STEERABLE=ALWAYS
 {
   "*:*" :: "value of limit value is unrestricted"
 } 0.
 
 private:
-CCTK_REAL u_bound_limit "limit value for r -> infinity"
+CCTK_REAL u_bound_limit "limit value for r -> infinity" STEERABLE=ALWAYS
 {
   "*:*" :: "value of limit value is unrestricted"
 } 0.
 
 private:
-CCTK_REAL WT_rho_bound_limit "limit value for r -> infinity"
+CCTK_REAL WT_rho_bound_limit "limit value for r -> infinity" STEERABLE=ALWAYS
 {
   "*:*" :: "value of limit value is unrestricted"
 } 0.
 
 private:
-CCTK_REAL WT_u_bound_limit "limit value for r -> infinity"
+CCTK_REAL WT_u_bound_limit "limit value for r -> infinity" STEERABLE=ALWAYS
 {
   "*:*" :: "value of limit value is unrestricted"
 } 0.
 
 private:
-CCTK_REAL rho_bound_scalar "Dirichlet boundary value"
+CCTK_REAL rho_bound_scalar "Dirichlet boundary value" STEERABLE=ALWAYS
 {
   "*:*" :: "unrestricted"
 } 0.
 
 private:
-CCTK_REAL u_bound_scalar "Dirichlet boundary value"
+CCTK_REAL u_bound_scalar "Dirichlet boundary value" STEERABLE=ALWAYS
 {
   "*:*" :: "unrestricted"
 } 0.
 
 private:
-CCTK_REAL WT_rho_bound_scalar "Dirichlet boundary value"
+CCTK_REAL WT_rho_bound_scalar "Dirichlet boundary value" STEERABLE=ALWAYS
 {
   "*:*" :: "unrestricted"
 } 0.
 
 private:
-CCTK_REAL WT_u_bound_scalar "Dirichlet boundary value"
+CCTK_REAL WT_u_bound_scalar "Dirichlet boundary value" STEERABLE=ALWAYS
 {
   "*:*" :: "unrestricted"
 } 0.
