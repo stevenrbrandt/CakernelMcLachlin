@@ -1034,15 +1034,15 @@ constraintsCalc =
 constraintsCalc1 = PartialCalculation[constraintsCalc, "1",
   {},
   {
-    H,
-    cS,
-    cXt[ua]
+    H
   }];
 
 constraintsCalc2 = PartialCalculation[constraintsCalc, "2",
   {},
   {
     M[li],
+    cS,
+    cXt[ua],
     cA
   }];
 
