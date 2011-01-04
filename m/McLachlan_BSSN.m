@@ -908,7 +908,9 @@ constraintsCalc =
   Name -> BSSN <> "_constraints",
   Schedule -> Automatic,
   Where -> Interior,
-  Shorthands -> {detgt, ddetgt[la], gtu[ua,ub], Gt[ua,lb,lc], e4phi, em4phi,
+  Shorthands -> {detgt, ddetgt[la], gtu[ua,ub],
+                 Gt[ua,lb,lc], Gtl[la,lb,lc], Gtlu[la,lb,uc], Xtn[ua],
+                 e4phi, em4phi,
                  g[la,lb], detg, gu[ua,ub], ddetg[la], G[ua,lb,lc],
                  Rt[la,lb], Rphi[la,lb], R[la,lb], trR, Atm[la,lb],
                  gK[la,lb,lc], cdphi[la], cdphi2[la,lb],
@@ -917,23 +919,27 @@ constraintsCalc =
   {
     detgt        -> 1 (* detgtExpr *),
     ddetgt[la]   -> 0 (* ddetgtExpr[la] *),
-    gtu[ua,ub]   -> 1/detgt detgtExpr MatrixInverse [gt[ua,ub]],
-    Gt[ua,lb,lc] -> 1/2 gtu[ua,ud]
-                    (PD[gt[lb,ld],lc] + PD[gt[lc,ld],lb] - PD[gt[lb,lc],ld]),
     
+    (* This leads to simpler code... *)
+    gtu[ua,ub]   -> 1/detgt detgtExpr MatrixInverse [gt[ua,ub]],
+    Gtl[la,lb,lc]  -> 1/2
+                      (PD[gt[lb,la],lc] + PD[gt[lc,la],lb] - PD[gt[lb,lc],la]),
+    Gtlu[la,lb,uc] -> gtu[uc,ud] Gtl[la,lb,ld],
+    Gt[ua,lb,lc]   -> gtu[ua,ud] Gtl[ld,lb,lc],
+    
+    (* The conformal connection functions calculated from the conformal metric,
+       used instead of Xt where no derivatives of Xt are taken *)
+    Xtn[ui] -> gtu[uj,uk] Gt[ui,lj,lk],
+
     (* PRD 62, 044034 (2000), eqn. (18) *)
-    (* Note: This differs from the Goddard formulation,
-             which is e.g. described in PRD 70 (2004) 124025, eqn. (6).
-             Goddard has a Gamma^k replaced by its definition in terms
-             of metric derivatives.  *)
     Rt[li,lj] -> - (1/2) gtu[ul,um] PD[gt[li,lj],ll,lm]
                  + (1/2) gt[lk,li] PD[Xt[uk],lj]
                  + (1/2) gt[lk,lj] PD[Xt[uk],li]
-                 + (1/2) Xt[uk] gt[li,ln] Gt[un,lj,lk]
-                 + (1/2) Xt[uk] gt[lj,ln] Gt[un,li,lk]
-                 + gtu[ul,um] (+ Gt[uk,ll,li] gt[lj,ln] Gt[un,lk,lm]
-                               + Gt[uk,ll,lj] gt[li,ln] Gt[un,lk,lm]
-                               + Gt[uk,li,lm] gt[lk,ln] Gt[un,ll,lj]),
+                 + (1/2) Xtn[uk] Gtl[li,lj,lk]
+                 + (1/2) Xtn[uk] Gtl[lj,li,lk]
+                 + (+ Gt[uk,li,ll] Gtlu[lj,lk,ul]
+                    + Gt[uk,lj,ll] Gtlu[li,lk,ul]
+                    + Gt[uk,li,ll] Gtlu[lk,lj,ul]),
 
     (* From the long turducken paper.
        This expression seems to give the same result as the one from 044034.  *)
