@@ -200,7 +200,7 @@ KEYWORD ene_group_bound "Boundary condition to implement" STEERABLE=ALWAYS
   "scalar" :: "Dirichlet boundary condition"
   "newrad" :: "Improved radiative boundary condition"
   "skip" :: "skip boundary condition code"
-} "skip"
+} "none"
 
 private:
 KEYWORD mass_group_bound "Boundary condition to implement" STEERABLE=ALWAYS
@@ -212,7 +212,7 @@ KEYWORD mass_group_bound "Boundary condition to implement" STEERABLE=ALWAYS
   "scalar" :: "Dirichlet boundary condition"
   "newrad" :: "Improved radiative boundary condition"
   "skip" :: "skip boundary condition code"
-} "skip"
+} "none"
 
 private:
 KEYWORD mom_group_bound "Boundary condition to implement" STEERABLE=ALWAYS
@@ -224,7 +224,7 @@ KEYWORD mom_group_bound "Boundary condition to implement" STEERABLE=ALWAYS
   "scalar" :: "Dirichlet boundary condition"
   "newrad" :: "Improved radiative boundary condition"
   "skip" :: "skip boundary condition code"
-} "skip"
+} "none"
 
 private:
 CCTK_REAL ene_bound_speed "characteristic speed at boundary" STEERABLE=ALWAYS

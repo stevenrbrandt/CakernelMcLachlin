@@ -333,7 +333,7 @@ KEYWORD ML_curv_bound "Boundary condition to implement" STEERABLE=ALWAYS
   "scalar" :: "Dirichlet boundary condition"
   "newrad" :: "Improved radiative boundary condition"
   "skip" :: "skip boundary condition code"
-} "skip"
+} "none"
 
 private:
 KEYWORD ML_lapse_bound "Boundary condition to implement" STEERABLE=ALWAYS
@@ -345,7 +345,7 @@ KEYWORD ML_lapse_bound "Boundary condition to implement" STEERABLE=ALWAYS
   "scalar" :: "Dirichlet boundary condition"
   "newrad" :: "Improved radiative boundary condition"
   "skip" :: "skip boundary condition code"
-} "skip"
+} "none"
 
 private:
 KEYWORD ML_metric_bound "Boundary condition to implement" STEERABLE=ALWAYS
@@ -357,7 +357,7 @@ KEYWORD ML_metric_bound "Boundary condition to implement" STEERABLE=ALWAYS
   "scalar" :: "Dirichlet boundary condition"
   "newrad" :: "Improved radiative boundary condition"
   "skip" :: "skip boundary condition code"
-} "skip"
+} "none"
 
 private:
 KEYWORD ML_shift_bound "Boundary condition to implement" STEERABLE=ALWAYS
@@ -369,7 +369,7 @@ KEYWORD ML_shift_bound "Boundary condition to implement" STEERABLE=ALWAYS
   "scalar" :: "Dirichlet boundary condition"
   "newrad" :: "Improved radiative boundary condition"
   "skip" :: "skip boundary condition code"
-} "skip"
+} "none"
 
 private:
 CCTK_REAL K11_bound_speed "characteristic speed at boundary" STEERABLE=ALWAYS

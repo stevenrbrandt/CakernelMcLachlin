@@ -139,7 +139,7 @@ KEYWORD WT_rho_bound "Boundary condition to implement" STEERABLE=ALWAYS
   "scalar" :: "Dirichlet boundary condition"
   "newrad" :: "Improved radiative boundary condition"
   "skip" :: "skip boundary condition code"
-} "skip"
+} "none"
 
 private:
 KEYWORD WT_u_bound "Boundary condition to implement" STEERABLE=ALWAYS
@@ -151,7 +151,7 @@ KEYWORD WT_u_bound "Boundary condition to implement" STEERABLE=ALWAYS
   "scalar" :: "Dirichlet boundary condition"
   "newrad" :: "Improved radiative boundary condition"
   "skip" :: "skip boundary condition code"
-} "skip"
+} "none"
 
 private:
 KEYWORD WT_v_bound "Boundary condition to implement" STEERABLE=ALWAYS
@@ -163,7 +163,7 @@ KEYWORD WT_v_bound "Boundary condition to implement" STEERABLE=ALWAYS
   "scalar" :: "Dirichlet boundary condition"
   "newrad" :: "Improved radiative boundary condition"
   "skip" :: "skip boundary condition code"
-} "skip"
+} "none"
 
 private:
 CCTK_REAL rho_bound_speed "characteristic speed at boundary" STEERABLE=ALWAYS

@@ -73,7 +73,7 @@ schedule ML_ADMConstraints_CheckBoundaries at BASEGRID
   OPTIONS: meta
 } "check boundaries treatment"
 
-schedule group ApplyBCs as ML_ADMConstraints_ApplyBCs in MoL_PseudoEvolution  after ML_ADMConstraints_SelectBoundConds
+schedule group ApplyBCs as ML_ADMConstraints_ApplyBCs in MoL_PseudoEvolution after ML_ADMConstraints_SelectBoundConds
 {
   # no language specified
 } "Apply boundary conditions controlled by thorn Boundary"

@@ -458,7 +458,7 @@ schedule ML_BSSN_O8_CheckBoundaries at BASEGRID
   OPTIONS: meta
 } "check boundaries treatment"
 
-schedule group ApplyBCs as ML_BSSN_O8_ApplyBCs in MoL_PostStep  after ML_BSSN_O8_SelectBoundConds
+schedule group ApplyBCs as ML_BSSN_O8_ApplyBCs in MoL_PostStep after ML_BSSN_O8_SelectBoundConds
 {
   # no language specified
 } "Apply boundary conditions controlled by thorn Boundary"
