@@ -39,8 +39,6 @@ ActiveThorns = "LoopControl"
 
 ActiveThorns = "Slab"
 
-ActiveThorns = "SpinHarmonics"
-
 ActiveThorns = "TGRtensor"
 
 
@@ -61,7 +59,7 @@ Carpet::verbose           = no
 Carpet::veryverbose       = no
 Carpet::schedule_barriers = no
 Carpet::storage_verbose   = no
-Carpet::timers_verbose    = no
+#Carpet::timers_verbose    = no
 CarpetLib::output_bboxes  = no
 
 Carpet::domain_from_coordbase = yes
@@ -338,10 +336,32 @@ Dissipation::vars  = "
 ActiveThorns = "ML_ADMConstraints"
 
 
+ActiveThorns = "WeylScal4 Multipole"
+WeylScal4::offset                    = 1e-8 
+WeylScal4::fd_order                  = "4th" 
+WeylScal4::verbose                   = 0 
+
+Multipole::nradii = 8
+Multipole::out_every = 128
+Multipole::radius[0] = 15
+Multipole::radius[1] = 30
+Multipole::radius[2] = 40
+Multipole::radius[3] = 50
+Multipole::radius[4] = 60
+Multipole::radius[5] = 70
+Multipole::radius[6] = 80
+Multipole::radius[7] = 90
+Multipole::variables = "WeylScal4::Psi4r{sw=-2 cmplx='WeylScal4::Psi4i' name='Psi4'}"
+Multipole::l_mode = 4
+Multipole::m_mode = 4
+
 
 ActiveThorns = "AHFinderDirect"
 
-AHFinderDirect::find_every = 128
+AHFinderDirect::run_at_CCTK_ANALYSIS = yes
+AHFinderDirect::run_at_CCTK_POSTSTEP = no
+
+AHFinderDirect::find_every = 256
 
 AHFinderDirect::run_at_CCTK_POST_RECOVER_VARIABLES = no
 
@@ -441,6 +461,8 @@ IOScalar::outScalar_vars  = "
         ADMBase::shift
         ADMBase::dtlapse
         ADMBase::dtshift
+        WEYLSCAL4::Psi4r
+        WEYLSCAL4::Psi4i
         ML_ADMConstraints::ML_Ham
         ML_ADMConstraints::ML_mom
         SphericalSurface::sf_radius
@@ -473,6 +495,8 @@ IOASCII::out0D_vars  = "
         ADMBase::shift
         ADMBase::dtlapse
         ADMBase::dtshift
+        WEYLSCAL4::Psi4r
+        WEYLSCAL4::Psi4i
         ML_ADMConstraints::ML_Ham
         ML_ADMConstraints::ML_mom
         SphericalSurface::sf_active
@@ -497,6 +521,8 @@ IOASCII::out1D_vars  = "
         ADMBase::shift
         ADMBase::dtlapse
         ADMBase::dtshift
+        WEYLSCAL4::Psi4r
+        WEYLSCAL4::Psi4i
         ML_ADMConstraints::ML_Ham
         ML_ADMConstraints::ML_mom
         SphericalSurface::sf_radius
@@ -538,6 +564,8 @@ IOHDF5::out_vars               = "
         ADMBase::shift
         ADMBase::dtlapse
         ADMBase::dtshift
+        WEYLSCAL4::Psi4r
+        WEYLSCAL4::Psi4i
         ML_ADMConstraints::ML_Ham
         ML_ADMConstraints::ML_mom
 "
