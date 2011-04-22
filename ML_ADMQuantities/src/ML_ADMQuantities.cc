@@ -53,7 +53,7 @@ static void ML_ADMQuantities_Body(cGH const * restrict const cctkGH, int const d
     return;
   }
   
-  const char *groups[] = {"grid::coordinates","Grid::coordinates","McLachlan::ML_curv","McLachlan::ML_Gamma","McLachlan::ML_lapse","McLachlan::ML_log_confac","McLachlan::ML_metric","McLachlan::ML_shift","McLachlan::ML_trace_curv","ML_ADMQuantities::ML_Jadm","ML_ADMQuantities::ML_Madm"};
+  const char *groups[] = {"grid::coordinates","Grid::coordinates","ML_BSSN::ML_curv","ML_BSSN::ML_Gamma","ML_BSSN::ML_lapse","ML_BSSN::ML_log_confac","ML_BSSN::ML_metric","ML_BSSN::ML_shift","ML_BSSN::ML_trace_curv","ML_ADMQuantities::ML_Jadm","ML_ADMQuantities::ML_Madm"};
   GenericFD_AssertGroupStorage(cctkGH, "ML_ADMQuantities", 11, groups);
   
   /* Include user-supplied include files */
