@@ -23,6 +23,10 @@ ML_BSSN_MP_O8::my_rhs_boundary_condition     = "static"
 
 ML_BSSN_MP_O8::EpsDiss             = 0.1
 
+GenericFD::jacobian_group = "Coordinates::jacobian"
+GenericFD::jacobian_derivative_group = "Coordinates::jacobian2"
+GenericFD::jacobian_identity_map = 0
+
 Boundary::radpower                     = 2
 
 #############################################################
