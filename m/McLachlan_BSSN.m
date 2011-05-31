@@ -616,8 +616,6 @@ evolCalc =
   {
     dir[ua] -> Sign[beta[ua]],
     
-    epsdiss[ua] -> EpsDiss,
-    
     detgt -> 1 (* detgtExpr *),
     
     (* This leads to simpler code... *)
@@ -682,13 +680,11 @@ evolCalc =
     (* PRD 67 084023 (2003), eqn. (16) and (23) *)
     dot[phi]       -> IfThen [conformalMethod, 1/3 phi, -1/6] alpha trK
                       + Upwind[beta[ua], phi, la]
-                      + epsdiss[ua] PDdiss[phi,la]
                       + IfThen [conformalMethod, -1/3 phi, 1/6] PD[beta[ua],la],
     
     (* PRD 62, 044034 (2000), eqn. (9) *)
     dot[gt[la,lb]] -> - 2 alpha At[la,lb]
                       + Upwind[beta[uc], gt[la,lb], lc]
-                      + epsdiss[uc] PDdiss[gt[la,lb],lc]
                       + gt[la,lc] PD[beta[uc],lb] + gt[lb,lc] PD[beta[uc],la]
                       - (2/3) gt[la,lb] PD[beta[uc],lc],
     (* PRD 62, 044034 (2000), eqn. (20) *)
@@ -704,8 +700,7 @@ evolCalc =
                       + (2/3) Xtn[ui] PD[beta[uj],lj]
     (* Equation (4.28) in Baumgarte & Shapiro (Phys. Rept. 376 (2003) 41-131) *)
                       + addMatter (- 16 pi alpha gtu[ui,uj] S[lj]),
-    dot[Xt[ui]]    -> dotXt[ui]
-                      + epsdiss[uj] PDdiss[Xt[ui],lj],
+    dot[Xt[ui]]    -> dotXt[ui],
 
     (* PRD 62, 044034 (2000), eqn. (11) *)
     dottrK         -> - em4phi ( gtu[ua,ub] ( PD[alpha,la,lb]
@@ -713,7 +708,6 @@ evolCalc =
                                 - Xtn[ua] PD[alpha,la] )
                       + alpha (Atm[ua,lb] Atm[ub,la] + (1/3) trK^2)
                       + Upwind[beta[ua], trK, la]
-                      + epsdiss[ua] PDdiss[trK,la]
     (* Equation (4.21) in Baumgarte & Shapiro (Phys. Rept. 376 (2003) 41-131) *)
                       + addMatter (4 pi alpha (rho + trS)),
     dot[trK]       -> dottrK,
@@ -727,7 +721,6 @@ evolCalc =
     dot[At[la,lb]] -> + em4phi (+ Ats[la,lb] - (1/3) g[la,lb] trAts )
                       + alpha (trK At[la,lb] - 2 At[la,lc] Atm[uc,lb])
                       + Upwind[beta[uc], At[la,lb], lc]
-                      + epsdiss[uc] PDdiss[At[la,lb],lc]
                       + At[la,lc] PD[beta[uc],lb] + At[lb,lc] PD[beta[uc],la]
                       - (2/3) At[la,lb] PD[beta[uc],lc]
     (* Equation (4.23) in Baumgarte & Shapiro (Phys. Rept. 376 (2003) 41-131) *)
@@ -739,21 +732,19 @@ evolCalc =
 (*
     dot[alpha] -> - harmonicF alpha^harmonicN (
                     (1 - LapseAdvectionCoeff) A + LapseAdvectionCoeff trK)
-                  + LapseAdvectionCoeff beta[ua] PDu[alpha,la]
-                  + epsdiss[ua] PDdiss[alpha,la],
+                  + LapseAdvectionCoeff beta[ua] PDu[alpha,la],
 
-    dot[A]     -> (1 - LapseAdvectionCoeff) (dottrK - AlphaDriver A)
-                  + epsdiss[ua] PDdiss[A,la],
+
+    dot[A]     -> (1 - LapseAdvectionCoeff) (dottrK - AlphaDriver A),
+
 *)
     dot[alpha] -> - harmonicF alpha^harmonicN
                     (+ LapseACoeff       A
                      + (1 - LapseACoeff) trK)
-                  + LapseAdvectionCoeff Upwind[beta[ua], alpha, la]
-                  + epsdiss[ua] PDdiss[alpha,la],
+                  + LapseAdvectionCoeff Upwind[beta[ua], alpha, la],
 
     dot[A]     -> + LapseACoeff (dottrK - AlphaDriver A)
-                  + LapseAdvectionCoeff Upwind[beta[ua], A, la]
-                  + epsdiss[ua] PDdiss[A,la],
+                  + LapseAdvectionCoeff Upwind[beta[ua], A, la],
     
     eta -> etaExpr,
     theta -> thetaExpr,
@@ -763,13 +754,12 @@ evolCalc =
     dot[beta[ua]] -> + theta ShiftGammaCoeff
                        (+ ShiftBCoeff        B[ua]
                         + (1 - ShiftBCoeff) (Xt[ua] - eta BetaDriver beta[ua]))
-                     + ShiftAdvectionCoeff Upwind[beta[ub], beta[ua], lb]
-                     + epsdiss[ub] PDdiss[beta[ua],lb],
+                     + ShiftAdvectionCoeff Upwind[beta[ub], beta[ua], lb],
 
     dot[B[ua]]    -> + ShiftBCoeff (dotXt[ua] - eta BetaDriver B[ua])
                      + ShiftAdvectionCoeff Upwind[beta[ub], B[ua], lb]
                      - ShiftAdvectionCoeff Upwind[beta[ub], Xt[ua], lb]
-                     + epsdiss[ub] PDdiss[B[ua],lb]
+
   }
 };
 
@@ -797,6 +787,21 @@ evolCalc2 = PartialCalculation[evolCalc, "2",
   }];
 
 
+dissCalc =
+{
+  Name -> BSSN <> "_Dissipation",
+  Schedule -> {"IN " <> BSSN <> "_evolCalcGroup after " <> BSSN <> "_RHS2"},
+  ConditionalOnKeyword -> {"apply_dissipation", "always"},
+  Where -> InteriorNoSync,
+  Shorthands -> {epsdiss[ua]},
+  Equations ->
+  {
+    epsdiss[ua] -> EpsDiss,
+    Sequence@@Table[
+      dot[var]       -> dot[var] + epsdiss[ux] PDdiss[var,lx],
+      {var, {phi, gt[la,lb], Xt[ui], trK, At[la,lb], alpha, A, beta[ua], B[ua]}}]
+  }
+};
 
 RHSStaticBoundaryCalc =
 {
@@ -1142,7 +1147,17 @@ keywordParameters =
                       "noLapseShiftAdvection" (* omit lapse and shift advection terms (faster) *)
                      },
     Default -> "correct"
+  },
+  {
+    Name -> "apply_dissipation",
+    Description -> "Whether to apply dissipation to the RHSs",
+    AllowedValues -> {"always",
+                      "never" (* yes and no keyword values confuse Cactus, and Kranc
+                                 doesn't support boolean parameters *)
+                     },
+    Default -> "always"
   }
+
 };
 
 intParameters =
@@ -1240,6 +1255,7 @@ calculations =
   convertFromADMBaseGammaCalc,
   (* evolCalc, *)
   evolCalc1, evolCalc2,
+  dissCalc,
   (* evol1Calc, evol2Calc, *)
   RHSStaticBoundaryCalc,
   (* RHSRadiativeBoundaryCalc, *)
