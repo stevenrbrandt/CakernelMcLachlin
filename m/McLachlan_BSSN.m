@@ -679,12 +679,10 @@ evolCalc =
     (* PRD 62, 044034 (2000), eqn. (10) *)
     (* PRD 67 084023 (2003), eqn. (16) and (23) *)
     dot[phi]       -> IfThen [conformalMethod, 1/3 phi, -1/6] alpha trK
-                      + Upwind[beta[ua], phi, la]
                       + IfThen [conformalMethod, -1/3 phi, 1/6] PD[beta[ua],la],
     
     (* PRD 62, 044034 (2000), eqn. (9) *)
     dot[gt[la,lb]] -> - 2 alpha At[la,lb]
-                      + Upwind[beta[uc], gt[la,lb], lc]
                       + gt[la,lc] PD[beta[uc],lb] + gt[lb,lc] PD[beta[uc],la]
                       - (2/3) gt[la,lb] PD[beta[uc],lc],
     (* PRD 62, 044034 (2000), eqn. (20) *)
@@ -695,7 +693,6 @@ evolCalc =
                                  + 6 Atu[ui,uj] cdphi[lj])
                       + gtu[uj,ul] PD[beta[ui],lj,ll]
                       + (1/3) gtu[ui,uj] PD[beta[ul],lj,ll]
-                      + Upwind[beta[uj], Xt[ui], lj]
                       - Xtn[uj] PD[beta[ui],lj] 
                       + (2/3) Xtn[ui] PD[beta[uj],lj]
     (* Equation (4.28) in Baumgarte & Shapiro (Phys. Rept. 376 (2003) 41-131) *)
@@ -707,7 +704,6 @@ evolCalc =
                                 + 2 cdphi[la] PD[alpha,lb] )
                                 - Xtn[ua] PD[alpha,la] )
                       + alpha (Atm[ua,lb] Atm[ub,la] + (1/3) trK^2)
-                      + Upwind[beta[ua], trK, la]
     (* Equation (4.21) in Baumgarte & Shapiro (Phys. Rept. 376 (2003) 41-131) *)
                       + addMatter (4 pi alpha (rho + trS)),
     dot[trK]       -> dottrK,
@@ -720,7 +716,6 @@ evolCalc =
     trAts          -> gu[ua,ub] Ats[la,lb],
     dot[At[la,lb]] -> + em4phi (+ Ats[la,lb] - (1/3) g[la,lb] trAts )
                       + alpha (trK At[la,lb] - 2 At[la,lc] Atm[uc,lb])
-                      + Upwind[beta[uc], At[la,lb], lc]
                       + At[la,lc] PD[beta[uc],lb] + At[lb,lc] PD[beta[uc],la]
                       - (2/3) At[la,lb] PD[beta[uc],lc]
     (* Equation (4.23) in Baumgarte & Shapiro (Phys. Rept. 376 (2003) 41-131) *)
@@ -740,11 +735,10 @@ evolCalc =
 *)
     dot[alpha] -> - harmonicF alpha^harmonicN
                     (+ LapseACoeff       A
-                     + (1 - LapseACoeff) trK)
-                  + LapseAdvectionCoeff Upwind[beta[ua], alpha, la],
+                     + (1 - LapseACoeff) trK),
 
-    dot[A]     -> + LapseACoeff (dottrK - AlphaDriver A)
-                  + LapseAdvectionCoeff Upwind[beta[ua], A, la],
+    dot[A]     -> + LapseACoeff (dottrK - AlphaDriver A),
+
     
     eta -> etaExpr,
     theta -> thetaExpr,
@@ -753,13 +747,49 @@ evolCalc =
     (* dot[beta[ua]] -> ShiftGammaCoeff alpha^ShiftAlphaPower B[ua], *)
     dot[beta[ua]] -> + theta ShiftGammaCoeff
                        (+ ShiftBCoeff        B[ua]
-                        + (1 - ShiftBCoeff) (Xt[ua] - eta BetaDriver beta[ua]))
-                     + ShiftAdvectionCoeff Upwind[beta[ub], beta[ua], lb],
+                        + (1 - ShiftBCoeff) (Xt[ua] - eta BetaDriver beta[ua])),
 
     dot[B[ua]]    -> + ShiftBCoeff (dotXt[ua] - eta BetaDriver B[ua])
-                     + ShiftAdvectionCoeff Upwind[beta[ub], B[ua], lb]
-                     - ShiftAdvectionCoeff Upwind[beta[ub], Xt[ua], lb]
 
+  }
+};
+
+advectCalc =
+{
+  Name -> BSSN <> "_Advect",
+  Schedule -> {"IN " <> BSSN <> "_evolCalcGroup after " <> BSSN <> "_RHS2"},
+  (*
+  Where -> Interior,
+  *)
+  (* Synchronise the RHS grid functions after this routine, so that
+     the refinement boundaries are set correctly before applying the
+     radiative boundary conditions.  *)
+  Where -> InteriorNoSync,
+  Shorthands -> {dir[ua]},
+  Equations ->
+  {
+           dir[ua] -> Sign[beta[ua]],
+
+          dot[phi] -> dot[phi] + Upwind[beta[ua], phi, la],
+
+    dot[gt[la,lb]] -> dot[gt[la,lb]] + Upwind[beta[uc], gt[la,lb], lc],
+
+       dot[Xt[ui]] -> dot[Xt[ui]] + Upwind[beta[uj], Xt[ui], lj],
+
+          dot[trK] -> dot[trK] + Upwind[beta[ua], trK, la],
+
+    dot[At[la,lb]] -> dot[At[la,lb]] + Upwind[beta[uc], At[la,lb], lc],
+
+        dot[alpha] -> dot[alpha] + LapseAdvectionCoeff Upwind[beta[ua], alpha, la],
+
+            dot[A] -> dot[A] + LapseAdvectionCoeff Upwind[beta[ua], A, la],
+
+     dot[beta[ua]] -> dot[beta[ua]] + ShiftAdvectionCoeff Upwind[beta[ub], beta[ua], lb],
+
+        dot[B[ua]] -> dot[B[ua]]
+                      + ShiftBCoeff Upwind[beta[uj], Xt[ua], lj] (* take care *)
+                      + ShiftAdvectionCoeff Upwind[beta[ub], B[ua], lb]
+                      - ShiftAdvectionCoeff Upwind[beta[ub], Xt[ua], lb]
   }
 };
 
@@ -1256,6 +1286,7 @@ calculations =
   (* evolCalc, *)
   evolCalc1, evolCalc2,
   dissCalc,
+  advectCalc,
   (* evol1Calc, evol2Calc, *)
   RHSStaticBoundaryCalc,
   (* RHSRadiativeBoundaryCalc, *)
