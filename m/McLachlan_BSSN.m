@@ -457,6 +457,25 @@ convertFromADMBaseGammaCalc =
   }
 };
 
+(* Initialise the Gamma variables to 0.  This is necessary with
+   multipatch because convertFromADMBaseGamma does not perform the
+   conversion in the boundary points, and the order in which symmetry
+   (interpatch) and outer boundary conditions is applied means that
+   points which are both interpatch and symmetry points are never
+   initialised. *)
+initGammaCalc =
+{
+  Name -> BSSN <> "_InitGamma",
+  Schedule -> {"AT initial BEFORE " <> BSSN <> "_convertFromADMBaseGamma"},
+  ConditionalOnKeyword -> {"my_initial_data", "ADMBase"},
+  Where -> Everywhere,
+  Equations -> 
+  {
+    Xt[ua] -> 0
+  }
+};
+
+
 (******************************************************************************)
 (* Convert to ADMBase *)
 (******************************************************************************)
@@ -1254,6 +1273,7 @@ calculations =
 {
   initialCalc,
   convertFromADMBaseCalc,
+  initGammaCalc,
   convertFromADMBaseGammaCalc,
   (* evolCalc, *)
   evolCalc1, evolCalc2,
