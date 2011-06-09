@@ -560,15 +560,13 @@ static void ML_BSSN_UPW_RHS1_Body(cGH const * restrict const cctkGH, int const d
       gtu12*(PDstandardNth22beta2 + PDstandardNth23beta3) + 
       3*(PDupwindNth1(&Xt1[index])*beta1L + 
       PDupwindNth2(&Xt1[index])*beta2L + PDupwindNth3(&Xt1[index])*beta3L 
-      + epsdiss1*PDdissipationNth1Xt1 + epsdiss2*PDdissipationNth2Xt1 + 
-      epsdiss3*PDdissipationNth3Xt1 + gtu22*PDstandardNth22beta1 + 
-      gtu33*PDstandardNth33beta1) + gtu13*(PDstandardNth23beta2 + 
-      PDstandardNth33beta3) - 6*(Atu11*PDstandardNth1alpha + 
-      Atu12*PDstandardNth2alpha + Atu13*PDstandardNth3alpha) + 
-      6*(gtu23*PDstandardNth23beta1 + alphaL*(6*(Atu11*cdphi1 + Atu12*cdphi2 
-      + Atu13*cdphi3) + Atu11*Gt111 + Atu22*Gt122 + 2*(Atu12*Gt112 + 
-      Atu13*Gt113 + Atu23*Gt123) + Atu33*Gt133 - 
-      0.666666666666666666666666666667*(gtu11*PDstandardNth1trK + 
+      + gtu22*PDstandardNth22beta1 + gtu33*PDstandardNth33beta1) + 
+      gtu13*(PDstandardNth23beta2 + PDstandardNth33beta3) - 
+      6*(Atu11*PDstandardNth1alpha + Atu12*PDstandardNth2alpha + 
+      Atu13*PDstandardNth3alpha) + 6*(gtu23*PDstandardNth23beta1 + 
+      alphaL*(6*(Atu11*cdphi1 + Atu12*cdphi2 + Atu13*cdphi3) + Atu11*Gt111 + 
+      Atu22*Gt122 + 2*(Atu12*Gt112 + Atu13*Gt113 + Atu23*Gt123) + Atu33*Gt133 
+      - 0.666666666666666666666666666667*(gtu11*PDstandardNth1trK + 
       gtu12*PDstandardNth2trK + gtu13*PDstandardNth3trK))) - 
       150.7964473723100754462068823974161384415*alphaL*(gtu11*S1 + gtu12*S2 + 
       gtu13*S3) + (-3*PDstandardNth1beta1 + 2*(PDstandardNth1beta1 + 
@@ -581,15 +579,14 @@ static void ML_BSSN_UPW_RHS1_Body(cGH const * restrict const cctkGH, int const d
       gtu22*(PDstandardNth12beta1 + 4*PDstandardNth22beta2 + 
       PDstandardNth23beta3) + 3*(PDupwindNth1(&Xt2[index])*beta1L + 
       PDupwindNth2(&Xt2[index])*beta2L + PDupwindNth3(&Xt2[index])*beta3L 
-      + epsdiss1*PDdissipationNth1Xt2 + epsdiss2*PDdissipationNth2Xt2 + 
-      epsdiss3*PDdissipationNth3Xt2 + gtu11*PDstandardNth11beta2 + 
-      gtu33*PDstandardNth33beta2) + gtu23*(PDstandardNth13beta1 + 
-      7*PDstandardNth23beta2 + PDstandardNth33beta3) - 
-      6*(Atu12*PDstandardNth1alpha + Atu22*PDstandardNth2alpha + 
-      Atu23*PDstandardNth3alpha) + 6*(gtu13*PDstandardNth13beta2 + 
-      alphaL*(6*(Atu12*cdphi1 + Atu22*cdphi2 + Atu23*cdphi3) + Atu11*Gt211 + 
-      Atu22*Gt222 + 2*(Atu12*Gt212 + Atu13*Gt213 + Atu23*Gt223) + Atu33*Gt233 
-      - 0.666666666666666666666666666667*(gtu12*PDstandardNth1trK + 
+      + gtu11*PDstandardNth11beta2 + gtu33*PDstandardNth33beta2) + 
+      gtu23*(PDstandardNth13beta1 + 7*PDstandardNth23beta2 + 
+      PDstandardNth33beta3) - 6*(Atu12*PDstandardNth1alpha + 
+      Atu22*PDstandardNth2alpha + Atu23*PDstandardNth3alpha) + 
+      6*(gtu13*PDstandardNth13beta2 + alphaL*(6*(Atu12*cdphi1 + Atu22*cdphi2 
+      + Atu23*cdphi3) + Atu11*Gt211 + Atu22*Gt222 + 2*(Atu12*Gt212 + 
+      Atu13*Gt213 + Atu23*Gt223) + Atu33*Gt233 - 
+      0.666666666666666666666666666667*(gtu12*PDstandardNth1trK + 
       gtu22*PDstandardNth2trK + gtu23*PDstandardNth3trK))) - 
       150.7964473723100754462068823974161384415*alphaL*(gtu12*S1 + gtu22*S2 + 
       gtu23*S3) + 2*(PDstandardNth1beta1 + PDstandardNth2beta2 + 
@@ -601,28 +598,29 @@ static void ML_BSSN_UPW_RHS1_Body(cGH const * restrict const cctkGH, int const d
       PDstandardNth12beta2 + 7*PDstandardNth13beta3) + 
       3*(PDupwindNth1(&Xt3[index])*beta1L + 
       PDupwindNth2(&Xt3[index])*beta2L + PDupwindNth3(&Xt3[index])*beta3L 
-      + epsdiss1*PDdissipationNth1Xt3 + epsdiss2*PDdissipationNth2Xt3 + 
-      epsdiss3*PDdissipationNth3Xt3 + gtu11*PDstandardNth11beta3 + 
-      gtu22*PDstandardNth22beta3) + gtu23*(PDstandardNth12beta1 + 
-      PDstandardNth22beta2 + 7*PDstandardNth23beta3) + 
-      gtu33*(PDstandardNth13beta1 + PDstandardNth23beta2 + 
-      4*PDstandardNth33beta3) - 6*(Atu13*PDstandardNth1alpha + 
-      Atu23*PDstandardNth2alpha + Atu33*PDstandardNth3alpha) + 
-      6*(gtu12*PDstandardNth12beta3 + alphaL*(6*(Atu13*cdphi1 + Atu23*cdphi2 
-      + Atu33*cdphi3) + Atu11*Gt311 + Atu22*Gt322 + 2*(Atu12*Gt312 + 
-      Atu13*Gt313 + Atu23*Gt323) + Atu33*Gt333 - 
-      0.666666666666666666666666666667*(gtu13*PDstandardNth1trK + 
+      + gtu11*PDstandardNth11beta3 + gtu22*PDstandardNth22beta3) + 
+      gtu23*(PDstandardNth12beta1 + PDstandardNth22beta2 + 
+      7*PDstandardNth23beta3) + gtu33*(PDstandardNth13beta1 + 
+      PDstandardNth23beta2 + 4*PDstandardNth33beta3) - 
+      6*(Atu13*PDstandardNth1alpha + Atu23*PDstandardNth2alpha + 
+      Atu33*PDstandardNth3alpha) + 6*(gtu12*PDstandardNth12beta3 + 
+      alphaL*(6*(Atu13*cdphi1 + Atu23*cdphi2 + Atu33*cdphi3) + Atu11*Gt311 + 
+      Atu22*Gt322 + 2*(Atu12*Gt312 + Atu13*Gt313 + Atu23*Gt323) + Atu33*Gt333 
+      - 0.666666666666666666666666666667*(gtu13*PDstandardNth1trK + 
       gtu23*PDstandardNth2trK + gtu33*PDstandardNth3trK))) - 
       150.7964473723100754462068823974161384415*alphaL*(gtu13*S1 + gtu23*S2 + 
       gtu33*S3) + 2*(PDstandardNth1beta1 + PDstandardNth2beta2 + 
       PDstandardNth3beta3)*Xtn3 - 3*(PDstandardNth1beta3*Xtn1 + 
       PDstandardNth2beta3*Xtn2 + PDstandardNth3beta3*Xtn3));
     
-    CCTK_REAL Xt1rhsL = dotXt1;
+    CCTK_REAL Xt1rhsL = dotXt1 + epsdiss1*PDdissipationNth1Xt1 + 
+      epsdiss2*PDdissipationNth2Xt1 + epsdiss3*PDdissipationNth3Xt1;
     
-    CCTK_REAL Xt2rhsL = dotXt2;
+    CCTK_REAL Xt2rhsL = dotXt2 + epsdiss1*PDdissipationNth1Xt2 + 
+      epsdiss2*PDdissipationNth2Xt2 + epsdiss3*PDdissipationNth3Xt2;
     
-    CCTK_REAL Xt3rhsL = dotXt3;
+    CCTK_REAL Xt3rhsL = dotXt3 + epsdiss1*PDdissipationNth1Xt3 + 
+      epsdiss2*PDdissipationNth2Xt3 + epsdiss3*PDdissipationNth3Xt3;
     
     CCTK_REAL dottrK = PDupwindNth1(&trK[index])*beta1L + 
       PDupwindNth2(&trK[index])*beta2L + PDupwindNth3(&trK[index])*beta3L 

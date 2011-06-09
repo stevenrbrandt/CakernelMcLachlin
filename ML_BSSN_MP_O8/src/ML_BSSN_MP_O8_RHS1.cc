@@ -830,10 +830,7 @@ static void ML_BSSN_MP_O8_RHS1_Body(cGH const * restrict const cctkGH, int const
       J32L*PDupwindNthSymm3gt33)*Abs(beta2L) + (J13L*PDupwindNthSymm1gt33 + 
       J23L*PDupwindNthSymm2gt33 + J33L*PDupwindNthSymm3gt33)*Abs(beta3L);
     
-    CCTK_REAL dotXt1 = (epsdiss1*J11L + epsdiss2*J12L + 
-      epsdiss3*J13L)*PDdissipationNth1Xt1 + (epsdiss1*J21L + epsdiss2*J22L + 
-      epsdiss3*J23L)*PDdissipationNth2Xt1 + (epsdiss1*J31L + epsdiss2*J32L + 
-      epsdiss3*J33L)*PDdissipationNth3Xt1 - 2*((Atu11*J11L + Atu12*J12L + 
+    CCTK_REAL dotXt1 = -2*((Atu11*J11L + Atu12*J12L + 
       Atu13*J13L)*PDstandardNth1alpha + (Atu11*J21L + Atu12*J22L + 
       Atu13*J23L)*PDstandardNth2alpha + (Atu11*J31L + Atu12*J32L + 
       Atu13*J33L)*PDstandardNth3alpha) + 
@@ -945,10 +942,7 @@ static void ML_BSSN_MP_O8_RHS1_Body(cGH const * restrict const cctkGH, int const
       dJ333L*PDstandardNth3beta3 + PDstandardNth11beta3*SQR(J13L) + 
       PDstandardNth22beta3*SQR(J23L) + PDstandardNth33beta3*SQR(J33L)));
     
-    CCTK_REAL dotXt2 = (epsdiss1*J11L + epsdiss2*J12L + 
-      epsdiss3*J13L)*PDdissipationNth1Xt2 + (epsdiss1*J21L + epsdiss2*J22L + 
-      epsdiss3*J23L)*PDdissipationNth2Xt2 + (epsdiss1*J31L + epsdiss2*J32L + 
-      epsdiss3*J33L)*PDdissipationNth3Xt2 - 2*((Atu12*J11L + Atu22*J12L + 
+    CCTK_REAL dotXt2 = -2*((Atu12*J11L + Atu22*J12L + 
       Atu23*J13L)*PDstandardNth1alpha + (Atu12*J21L + Atu22*J22L + 
       Atu23*J23L)*PDstandardNth2alpha + (Atu12*J31L + Atu22*J32L + 
       Atu23*J33L)*PDstandardNth3alpha) + 
@@ -1060,10 +1054,7 @@ static void ML_BSSN_MP_O8_RHS1_Body(cGH const * restrict const cctkGH, int const
       dJ333L*PDstandardNth3beta3 + PDstandardNth11beta3*SQR(J13L) + 
       PDstandardNth22beta3*SQR(J23L) + PDstandardNth33beta3*SQR(J33L)));
     
-    CCTK_REAL dotXt3 = (epsdiss1*J11L + epsdiss2*J12L + 
-      epsdiss3*J13L)*PDdissipationNth1Xt3 + (epsdiss1*J21L + epsdiss2*J22L + 
-      epsdiss3*J23L)*PDdissipationNth2Xt3 + (epsdiss1*J31L + epsdiss2*J32L + 
-      epsdiss3*J33L)*PDdissipationNth3Xt3 - 2*((Atu13*J11L + Atu23*J12L + 
+    CCTK_REAL dotXt3 = -2*((Atu13*J11L + Atu23*J12L + 
       Atu33*J13L)*PDstandardNth1alpha + (Atu13*J21L + Atu23*J22L + 
       Atu33*J23L)*PDstandardNth2alpha + (Atu13*J31L + Atu23*J32L + 
       Atu33*J33L)*PDstandardNth3alpha) + 
@@ -1175,11 +1166,20 @@ static void ML_BSSN_MP_O8_RHS1_Body(cGH const * restrict const cctkGH, int const
       dJ333L*PDstandardNth3beta3 + PDstandardNth11beta3*SQR(J13L) + 
       PDstandardNth22beta3*SQR(J23L) + PDstandardNth33beta3*SQR(J33L)));
     
-    CCTK_REAL Xt1rhsL = dotXt1;
+    CCTK_REAL Xt1rhsL = dotXt1 + (epsdiss1*J11L + epsdiss2*J12L + 
+      epsdiss3*J13L)*PDdissipationNth1Xt1 + (epsdiss1*J21L + epsdiss2*J22L + 
+      epsdiss3*J23L)*PDdissipationNth2Xt1 + (epsdiss1*J31L + epsdiss2*J32L + 
+      epsdiss3*J33L)*PDdissipationNth3Xt1;
     
-    CCTK_REAL Xt2rhsL = dotXt2;
+    CCTK_REAL Xt2rhsL = dotXt2 + (epsdiss1*J11L + epsdiss2*J12L + 
+      epsdiss3*J13L)*PDdissipationNth1Xt2 + (epsdiss1*J21L + epsdiss2*J22L + 
+      epsdiss3*J23L)*PDdissipationNth2Xt2 + (epsdiss1*J31L + epsdiss2*J32L + 
+      epsdiss3*J33L)*PDdissipationNth3Xt2;
     
-    CCTK_REAL Xt3rhsL = dotXt3;
+    CCTK_REAL Xt3rhsL = dotXt3 + (epsdiss1*J11L + epsdiss2*J12L + 
+      epsdiss3*J13L)*PDdissipationNth1Xt3 + (epsdiss1*J21L + epsdiss2*J22L + 
+      epsdiss3*J23L)*PDdissipationNth2Xt3 + (epsdiss1*J31L + epsdiss2*J32L + 
+      epsdiss3*J33L)*PDdissipationNth3Xt3;
     
     CCTK_REAL dottrK = (epsdiss1*J11L + epsdiss2*J12L + 
       epsdiss3*J13L)*PDdissipationNth1trK + (epsdiss1*J21L + epsdiss2*J22L + 

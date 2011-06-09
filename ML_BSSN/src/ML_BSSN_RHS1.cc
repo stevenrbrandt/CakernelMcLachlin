@@ -684,12 +684,10 @@ static void ML_BSSN_RHS1_Body(cGH const * restrict const cctkGH, int const dir, 
       gtu13*S3) + (-3*PDstandardNth1beta1 + 2*(PDstandardNth1beta1 + 
       PDstandardNth2beta2 + PDstandardNth3beta3))*Xtn1 - 
       3*(PDstandardNth2beta1*Xtn2 + PDstandardNth3beta1*Xtn3) + 
-      3*(epsdiss1*PDdissipationNth1Xt1 + epsdiss2*PDdissipationNth2Xt1 + 
-      epsdiss3*PDdissipationNth3Xt1 + gtu22*PDstandardNth22beta1 + 
-      gtu33*PDstandardNth33beta1 + beta1L*PDupwindNthAnti1Xt1 + 
-      beta2L*PDupwindNthAnti2Xt1 + beta3L*PDupwindNthAnti3Xt1 + 
-      PDupwindNthSymm1Xt1*Abs(beta1L) + PDupwindNthSymm2Xt1*Abs(beta2L) + 
-      PDupwindNthSymm3Xt1*Abs(beta3L)));
+      3*(gtu22*PDstandardNth22beta1 + gtu33*PDstandardNth33beta1 + 
+      beta1L*PDupwindNthAnti1Xt1 + beta2L*PDupwindNthAnti2Xt1 + 
+      beta3L*PDupwindNthAnti3Xt1 + PDupwindNthSymm1Xt1*Abs(beta1L) + 
+      PDupwindNthSymm2Xt1*Abs(beta2L) + PDupwindNthSymm3Xt1*Abs(beta3L)));
     
     CCTK_REAL dotXt2 = 
       0.333333333333333333333333333333*(gtu12*(PDstandardNth11beta1 + 
@@ -707,12 +705,10 @@ static void ML_BSSN_RHS1_Body(cGH const * restrict const cctkGH, int const dir, 
       gtu23*S3) + 2*(PDstandardNth1beta1 + PDstandardNth2beta2 + 
       PDstandardNth3beta3)*Xtn2 - 3*(PDstandardNth1beta2*Xtn1 + 
       PDstandardNth2beta2*Xtn2 + PDstandardNth3beta2*Xtn3) + 
-      3*(epsdiss1*PDdissipationNth1Xt2 + epsdiss2*PDdissipationNth2Xt2 + 
-      epsdiss3*PDdissipationNth3Xt2 + gtu11*PDstandardNth11beta2 + 
-      gtu33*PDstandardNth33beta2 + beta1L*PDupwindNthAnti1Xt2 + 
-      beta2L*PDupwindNthAnti2Xt2 + beta3L*PDupwindNthAnti3Xt2 + 
-      PDupwindNthSymm1Xt2*Abs(beta1L) + PDupwindNthSymm2Xt2*Abs(beta2L) + 
-      PDupwindNthSymm3Xt2*Abs(beta3L)));
+      3*(gtu11*PDstandardNth11beta2 + gtu33*PDstandardNth33beta2 + 
+      beta1L*PDupwindNthAnti1Xt2 + beta2L*PDupwindNthAnti2Xt2 + 
+      beta3L*PDupwindNthAnti3Xt2 + PDupwindNthSymm1Xt2*Abs(beta1L) + 
+      PDupwindNthSymm2Xt2*Abs(beta2L) + PDupwindNthSymm3Xt2*Abs(beta3L)));
     
     CCTK_REAL dotXt3 = 
       0.333333333333333333333333333333*(gtu13*(PDstandardNth11beta1 + 
@@ -730,18 +726,19 @@ static void ML_BSSN_RHS1_Body(cGH const * restrict const cctkGH, int const dir, 
       gtu33*S3) + 2*(PDstandardNth1beta1 + PDstandardNth2beta2 + 
       PDstandardNth3beta3)*Xtn3 - 3*(PDstandardNth1beta3*Xtn1 + 
       PDstandardNth2beta3*Xtn2 + PDstandardNth3beta3*Xtn3) + 
-      3*(epsdiss1*PDdissipationNth1Xt3 + epsdiss2*PDdissipationNth2Xt3 + 
-      epsdiss3*PDdissipationNth3Xt3 + gtu11*PDstandardNth11beta3 + 
-      gtu22*PDstandardNth22beta3 + beta1L*PDupwindNthAnti1Xt3 + 
-      beta2L*PDupwindNthAnti2Xt3 + beta3L*PDupwindNthAnti3Xt3 + 
-      PDupwindNthSymm1Xt3*Abs(beta1L) + PDupwindNthSymm2Xt3*Abs(beta2L) + 
-      PDupwindNthSymm3Xt3*Abs(beta3L)));
+      3*(gtu11*PDstandardNth11beta3 + gtu22*PDstandardNth22beta3 + 
+      beta1L*PDupwindNthAnti1Xt3 + beta2L*PDupwindNthAnti2Xt3 + 
+      beta3L*PDupwindNthAnti3Xt3 + PDupwindNthSymm1Xt3*Abs(beta1L) + 
+      PDupwindNthSymm2Xt3*Abs(beta2L) + PDupwindNthSymm3Xt3*Abs(beta3L)));
     
-    CCTK_REAL Xt1rhsL = dotXt1;
+    CCTK_REAL Xt1rhsL = dotXt1 + epsdiss1*PDdissipationNth1Xt1 + 
+      epsdiss2*PDdissipationNth2Xt1 + epsdiss3*PDdissipationNth3Xt1;
     
-    CCTK_REAL Xt2rhsL = dotXt2;
+    CCTK_REAL Xt2rhsL = dotXt2 + epsdiss1*PDdissipationNth1Xt2 + 
+      epsdiss2*PDdissipationNth2Xt2 + epsdiss3*PDdissipationNth3Xt2;
     
-    CCTK_REAL Xt3rhsL = dotXt3;
+    CCTK_REAL Xt3rhsL = dotXt3 + epsdiss1*PDdissipationNth1Xt3 + 
+      epsdiss2*PDdissipationNth2Xt3 + epsdiss3*PDdissipationNth3Xt3;
     
     CCTK_REAL dottrK = epsdiss1*PDdissipationNth1trK + 
       epsdiss2*PDdissipationNth2trK + epsdiss3*PDdissipationNth3trK + 
