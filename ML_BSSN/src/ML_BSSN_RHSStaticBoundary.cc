@@ -6,6 +6,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "cctk.h"
 #include "cctk_Arguments.h"
 #include "cctk_Parameters.h"
@@ -77,15 +78,20 @@ static void ML_BSSN_RHSStaticBoundary_Body(cGH const * restrict const cctkGH, in
   const char *groups[] = {"ML_BSSN::ML_curvrhs","ML_BSSN::ML_dtlapserhs","ML_BSSN::ML_dtshiftrhs","ML_BSSN::ML_Gammarhs","ML_BSSN::ML_lapserhs","ML_BSSN::ML_log_confacrhs","ML_BSSN::ML_metricrhs","ML_BSSN::ML_shiftrhs","ML_BSSN::ML_trace_curvrhs"};
   GenericFD_AssertGroupStorage(cctkGH, "ML_BSSN_RHSStaticBoundary", 9, groups);
   
+  
   /* Include user-supplied include files */
   
   /* Initialise finite differencing variables */
   ptrdiff_t const di = 1;
   ptrdiff_t const dj = CCTK_GFINDEX3D(cctkGH,0,1,0) - CCTK_GFINDEX3D(cctkGH,0,0,0);
   ptrdiff_t const dk = CCTK_GFINDEX3D(cctkGH,0,0,1) - CCTK_GFINDEX3D(cctkGH,0,0,0);
+  ptrdiff_t const cdi = sizeof(CCTK_REAL) * di;
+  ptrdiff_t const cdj = sizeof(CCTK_REAL) * dj;
+  ptrdiff_t const cdk = sizeof(CCTK_REAL) * dk;
   CCTK_REAL const dx = ToReal(CCTK_DELTA_SPACE(0));
   CCTK_REAL const dy = ToReal(CCTK_DELTA_SPACE(1));
   CCTK_REAL const dz = ToReal(CCTK_DELTA_SPACE(2));
+  CCTK_REAL const dt = ToReal(CCTK_DELTA_TIME);
   CCTK_REAL const dxi = INV(dx);
   CCTK_REAL const dyi = INV(dy);
   CCTK_REAL const dzi = INV(dz);
@@ -127,6 +133,8 @@ static void ML_BSSN_RHSStaticBoundary_Body(cGH const * restrict const cctkGH, in
     ptrdiff_t const index = di*i + dj*j + dk*k;
     
     /* Assign local copies of grid functions */
+    
+    
     
     /* Include user supplied include files */
     
@@ -182,7 +190,6 @@ static void ML_BSSN_RHSStaticBoundary_Body(cGH const * restrict const cctkGH, in
     CCTK_REAL B2rhsL = 0;
     
     CCTK_REAL B3rhsL = 0;
-    
     
     /* Copy local copies back to grid functions */
     alpharhs[index] = alpharhsL;

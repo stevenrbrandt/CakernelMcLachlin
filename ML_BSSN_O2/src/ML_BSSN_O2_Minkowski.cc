@@ -6,6 +6,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "cctk.h"
 #include "cctk_Arguments.h"
 #include "cctk_Parameters.h"
@@ -41,15 +42,20 @@ static void ML_BSSN_O2_Minkowski_Body(cGH const * restrict const cctkGH, int con
   const char *groups[] = {"ML_BSSN_O2::ML_curv","ML_BSSN_O2::ML_dtlapse","ML_BSSN_O2::ML_dtshift","ML_BSSN_O2::ML_Gamma","ML_BSSN_O2::ML_lapse","ML_BSSN_O2::ML_log_confac","ML_BSSN_O2::ML_metric","ML_BSSN_O2::ML_shift","ML_BSSN_O2::ML_trace_curv"};
   GenericFD_AssertGroupStorage(cctkGH, "ML_BSSN_O2_Minkowski", 9, groups);
   
+  
   /* Include user-supplied include files */
   
   /* Initialise finite differencing variables */
   ptrdiff_t const di = 1;
   ptrdiff_t const dj = CCTK_GFINDEX3D(cctkGH,0,1,0) - CCTK_GFINDEX3D(cctkGH,0,0,0);
   ptrdiff_t const dk = CCTK_GFINDEX3D(cctkGH,0,0,1) - CCTK_GFINDEX3D(cctkGH,0,0,0);
+  ptrdiff_t const cdi = sizeof(CCTK_REAL) * di;
+  ptrdiff_t const cdj = sizeof(CCTK_REAL) * dj;
+  ptrdiff_t const cdk = sizeof(CCTK_REAL) * dk;
   CCTK_REAL const dx = ToReal(CCTK_DELTA_SPACE(0));
   CCTK_REAL const dy = ToReal(CCTK_DELTA_SPACE(1));
   CCTK_REAL const dz = ToReal(CCTK_DELTA_SPACE(2));
+  CCTK_REAL const dt = ToReal(CCTK_DELTA_TIME);
   CCTK_REAL const dxi = INV(dx);
   CCTK_REAL const dyi = INV(dy);
   CCTK_REAL const dzi = INV(dz);
@@ -97,6 +103,8 @@ static void ML_BSSN_O2_Minkowski_Body(cGH const * restrict const cctkGH, int con
     ptrdiff_t const index = di*i + dj*j + dk*k;
     
     /* Assign local copies of grid functions */
+    
+    
     
     /* Include user supplied include files */
     
@@ -152,7 +160,6 @@ static void ML_BSSN_O2_Minkowski_Body(cGH const * restrict const cctkGH, int con
     CCTK_REAL B2L = 0;
     
     CCTK_REAL B3L = 0;
-    
     
     /* Copy local copies back to grid functions */
     A[index] = AL;

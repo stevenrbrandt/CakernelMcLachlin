@@ -6,6 +6,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "cctk.h"
 #include "cctk_Arguments.h"
 #include "cctk_Parameters.h"
@@ -41,15 +42,20 @@ static void ML_BSSN_convertFromADMBase_Body(cGH const * restrict const cctkGH, i
   const char *groups[] = {"ADMBase::curv","ADMBase::lapse","ADMBase::metric","ADMBase::shift","ML_BSSN::ML_curv","ML_BSSN::ML_lapse","ML_BSSN::ML_log_confac","ML_BSSN::ML_metric","ML_BSSN::ML_shift","ML_BSSN::ML_trace_curv"};
   GenericFD_AssertGroupStorage(cctkGH, "ML_BSSN_convertFromADMBase", 10, groups);
   
+  
   /* Include user-supplied include files */
   
   /* Initialise finite differencing variables */
   ptrdiff_t const di = 1;
   ptrdiff_t const dj = CCTK_GFINDEX3D(cctkGH,0,1,0) - CCTK_GFINDEX3D(cctkGH,0,0,0);
   ptrdiff_t const dk = CCTK_GFINDEX3D(cctkGH,0,0,1) - CCTK_GFINDEX3D(cctkGH,0,0,0);
+  ptrdiff_t const cdi = sizeof(CCTK_REAL) * di;
+  ptrdiff_t const cdj = sizeof(CCTK_REAL) * dj;
+  ptrdiff_t const cdk = sizeof(CCTK_REAL) * dk;
   CCTK_REAL const dx = ToReal(CCTK_DELTA_SPACE(0));
   CCTK_REAL const dy = ToReal(CCTK_DELTA_SPACE(1));
   CCTK_REAL const dz = ToReal(CCTK_DELTA_SPACE(2));
+  CCTK_REAL const dt = ToReal(CCTK_DELTA_TIME);
   CCTK_REAL const dxi = INV(dx);
   CCTK_REAL const dyi = INV(dy);
   CCTK_REAL const dzi = INV(dz);
@@ -91,6 +97,7 @@ static void ML_BSSN_convertFromADMBase_Body(cGH const * restrict const cctkGH, i
     ptrdiff_t const index = di*i + dj*j + dk*k;
     
     /* Assign local copies of grid functions */
+    
     CCTK_REAL alpL = alp[index];
     CCTK_REAL betaxL = betax[index];
     CCTK_REAL betayL = betay[index];
@@ -109,6 +116,7 @@ static void ML_BSSN_convertFromADMBase_Body(cGH const * restrict const cctkGH, i
     CCTK_REAL kzzL = kzz[index];
     CCTK_REAL phiL = phi[index];
     CCTK_REAL trKL = trK[index];
+    
     
     /* Include user supplied include files */
     
@@ -142,11 +150,20 @@ static void ML_BSSN_convertFromADMBase_Body(cGH const * restrict const cctkGH, i
     
     CCTK_REAL gu33 = INV(detg)*(g11*g22 - SQR(g12));
     
-    phiL = 
-      IfThen(ToReal(conformalMethod),pow(detg,-0.166666666666666666666666666667),0.0833333333333333333333333333333*Log(detg));
+    CCTK_REAL em4phi;
     
-    CCTK_REAL em4phi = 
-      IfThen(ToReal(conformalMethod),SQR(phiL),exp(-4*phiL));
+    if (conformalMethod)
+    {
+      phiL = pow(detg,-0.166666666666666666666666666667);
+      
+      em4phi = SQR(phiL);
+    }
+    else
+    {
+      phiL = 0.0833333333333333333333333333333*Log(detg);
+      
+      em4phi = exp(-4*phiL);
+    }
     
     CCTK_REAL gt11L = em4phi*g11;
     
@@ -188,7 +205,6 @@ static void ML_BSSN_convertFromADMBase_Body(cGH const * restrict const cctkGH, i
     CCTK_REAL beta2L = betayL;
     
     CCTK_REAL beta3L = betazL;
-    
     
     /* Copy local copies back to grid functions */
     alpha[index] = alphaL;

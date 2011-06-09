@@ -6,6 +6,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "cctk.h"
 #include "cctk_Arguments.h"
 #include "cctk_Parameters.h"
@@ -62,15 +63,21 @@ static void ML_BSSN_MP_O8_constraints2_Body(cGH const * restrict const cctkGH, i
   const char *groups[] = {"Coordinates::jacobian","ML_BSSN_MP_O8::ML_cons_detg","ML_BSSN_MP_O8::ML_cons_Gamma","ML_BSSN_MP_O8::ML_cons_traceA","ML_BSSN_MP_O8::ML_curv","ML_BSSN_MP_O8::ML_Gamma","ML_BSSN_MP_O8::ML_lapse","ML_BSSN_MP_O8::ML_log_confac","ML_BSSN_MP_O8::ML_metric","ML_BSSN_MP_O8::ML_mom","ML_BSSN_MP_O8::ML_shift","ML_BSSN_MP_O8::ML_trace_curv"};
   GenericFD_AssertGroupStorage(cctkGH, "ML_BSSN_MP_O8_constraints2", 12, groups);
   
+  GenericFD_EnsureStencilFits(cctkGH, "ML_BSSN_MP_O8_constraints2", 4, 4, 4);
+  
   /* Include user-supplied include files */
   
   /* Initialise finite differencing variables */
   ptrdiff_t const di = 1;
   ptrdiff_t const dj = CCTK_GFINDEX3D(cctkGH,0,1,0) - CCTK_GFINDEX3D(cctkGH,0,0,0);
   ptrdiff_t const dk = CCTK_GFINDEX3D(cctkGH,0,0,1) - CCTK_GFINDEX3D(cctkGH,0,0,0);
+  ptrdiff_t const cdi = sizeof(CCTK_REAL) * di;
+  ptrdiff_t const cdj = sizeof(CCTK_REAL) * dj;
+  ptrdiff_t const cdk = sizeof(CCTK_REAL) * dk;
   CCTK_REAL const dx = ToReal(CCTK_DELTA_SPACE(0));
   CCTK_REAL const dy = ToReal(CCTK_DELTA_SPACE(1));
   CCTK_REAL const dz = ToReal(CCTK_DELTA_SPACE(2));
+  CCTK_REAL const dt = ToReal(CCTK_DELTA_TIME);
   CCTK_REAL const dxi = INV(dx);
   CCTK_REAL const dyi = INV(dy);
   CCTK_REAL const dzi = INV(dz);
@@ -118,6 +125,7 @@ static void ML_BSSN_MP_O8_constraints2_Body(cGH const * restrict const cctkGH, i
     ptrdiff_t const index = di*i + dj*j + dk*k;
     
     /* Assign local copies of grid functions */
+    
     CCTK_REAL alphaL = alpha[index];
     CCTK_REAL At11L = At11[index];
     CCTK_REAL At12L = At12[index];
@@ -128,15 +136,6 @@ static void ML_BSSN_MP_O8_constraints2_Body(cGH const * restrict const cctkGH, i
     CCTK_REAL beta1L = beta1[index];
     CCTK_REAL beta2L = beta2[index];
     CCTK_REAL beta3L = beta3[index];
-    CCTK_REAL eTtxL = (*stress_energy_state) ? eTtx[index] : ToReal(0.0);
-    CCTK_REAL eTtyL = (*stress_energy_state) ? eTty[index] : ToReal(0.0);
-    CCTK_REAL eTtzL = (*stress_energy_state) ? eTtz[index] : ToReal(0.0);
-    CCTK_REAL eTxxL = (*stress_energy_state) ? eTxx[index] : ToReal(0.0);
-    CCTK_REAL eTxyL = (*stress_energy_state) ? eTxy[index] : ToReal(0.0);
-    CCTK_REAL eTxzL = (*stress_energy_state) ? eTxz[index] : ToReal(0.0);
-    CCTK_REAL eTyyL = (*stress_energy_state) ? eTyy[index] : ToReal(0.0);
-    CCTK_REAL eTyzL = (*stress_energy_state) ? eTyz[index] : ToReal(0.0);
-    CCTK_REAL eTzzL = (*stress_energy_state) ? eTzz[index] : ToReal(0.0);
     CCTK_REAL gt11L = gt11[index];
     CCTK_REAL gt12L = gt12[index];
     CCTK_REAL gt13L = gt13[index];
@@ -157,6 +156,33 @@ static void ML_BSSN_MP_O8_constraints2_Body(cGH const * restrict const cctkGH, i
     CCTK_REAL Xt1L = Xt1[index];
     CCTK_REAL Xt2L = Xt2[index];
     CCTK_REAL Xt3L = Xt3[index];
+    
+    CCTK_REAL eTtxL, eTtyL, eTtzL, eTxxL, eTxyL, eTxzL, eTyyL, eTyzL, eTzzL;
+    
+    if (*stress_energy_state)
+    {
+      eTtxL = eTtx[index];
+      eTtyL = eTty[index];
+      eTtzL = eTtz[index];
+      eTxxL = eTxx[index];
+      eTxyL = eTxy[index];
+      eTxzL = eTxz[index];
+      eTyyL = eTyy[index];
+      eTyzL = eTyz[index];
+      eTzzL = eTzz[index];
+    }
+    else
+    {
+      eTtxL = ToReal(0.0);
+      eTtyL = ToReal(0.0);
+      eTtzL = ToReal(0.0);
+      eTxxL = ToReal(0.0);
+      eTxyL = ToReal(0.0);
+      eTxzL = ToReal(0.0);
+      eTyyL = ToReal(0.0);
+      eTyzL = ToReal(0.0);
+      eTzzL = ToReal(0.0);
+    }
     
     /* Include user supplied include files */
     
@@ -452,7 +478,6 @@ static void ML_BSSN_MP_O8_constraints2_Body(cGH const * restrict const cctkGH, i
     
     CCTK_REAL cAL = At11L*gtu11 + At22L*gtu22 + 2*(At12L*gtu12 + 
       At13L*gtu13 + At23L*gtu23) + At33L*gtu33;
-    
     
     /* Copy local copies back to grid functions */
     cA[index] = cAL;

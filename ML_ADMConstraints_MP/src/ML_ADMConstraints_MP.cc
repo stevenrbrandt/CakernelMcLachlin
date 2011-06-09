@@ -6,6 +6,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "cctk.h"
 #include "cctk_Arguments.h"
 #include "cctk_Parameters.h"
@@ -56,15 +57,21 @@ static void ML_ADMConstraints_MP_Body(cGH const * restrict const cctkGH, int con
   const char *groups[] = {"ADMBase::curv","ADMBase::lapse","ADMBase::metric","ADMBase::shift","Coordinates::jacobian","Coordinates::jacobian2","ML_ADMConstraints_MP::ML_Ham","ML_ADMConstraints_MP::ML_mom"};
   GenericFD_AssertGroupStorage(cctkGH, "ML_ADMConstraints_MP", 8, groups);
   
+  GenericFD_EnsureStencilFits(cctkGH, "ML_ADMConstraints_MP", 2, 2, 2);
+  
   /* Include user-supplied include files */
   
   /* Initialise finite differencing variables */
   ptrdiff_t const di = 1;
   ptrdiff_t const dj = CCTK_GFINDEX3D(cctkGH,0,1,0) - CCTK_GFINDEX3D(cctkGH,0,0,0);
   ptrdiff_t const dk = CCTK_GFINDEX3D(cctkGH,0,0,1) - CCTK_GFINDEX3D(cctkGH,0,0,0);
+  ptrdiff_t const cdi = sizeof(CCTK_REAL) * di;
+  ptrdiff_t const cdj = sizeof(CCTK_REAL) * dj;
+  ptrdiff_t const cdk = sizeof(CCTK_REAL) * dk;
   CCTK_REAL const dx = ToReal(CCTK_DELTA_SPACE(0));
   CCTK_REAL const dy = ToReal(CCTK_DELTA_SPACE(1));
   CCTK_REAL const dz = ToReal(CCTK_DELTA_SPACE(2));
+  CCTK_REAL const dt = ToReal(CCTK_DELTA_TIME);
   CCTK_REAL const dxi = INV(dx);
   CCTK_REAL const dyi = INV(dy);
   CCTK_REAL const dzi = INV(dz);
@@ -97,6 +104,7 @@ static void ML_ADMConstraints_MP_Body(cGH const * restrict const cctkGH, int con
     ptrdiff_t const index = di*i + dj*j + dk*k;
     
     /* Assign local copies of grid functions */
+    
     CCTK_REAL alpL = alp[index];
     CCTK_REAL betaxL = betax[index];
     CCTK_REAL betayL = betay[index];
@@ -119,16 +127,6 @@ static void ML_ADMConstraints_MP_Body(cGH const * restrict const cctkGH, int con
     CCTK_REAL dJ322L = dJ322[index];
     CCTK_REAL dJ323L = dJ323[index];
     CCTK_REAL dJ333L = dJ333[index];
-    CCTK_REAL eTttL = (*stress_energy_state) ? eTtt[index] : ToReal(0.0);
-    CCTK_REAL eTtxL = (*stress_energy_state) ? eTtx[index] : ToReal(0.0);
-    CCTK_REAL eTtyL = (*stress_energy_state) ? eTty[index] : ToReal(0.0);
-    CCTK_REAL eTtzL = (*stress_energy_state) ? eTtz[index] : ToReal(0.0);
-    CCTK_REAL eTxxL = (*stress_energy_state) ? eTxx[index] : ToReal(0.0);
-    CCTK_REAL eTxyL = (*stress_energy_state) ? eTxy[index] : ToReal(0.0);
-    CCTK_REAL eTxzL = (*stress_energy_state) ? eTxz[index] : ToReal(0.0);
-    CCTK_REAL eTyyL = (*stress_energy_state) ? eTyy[index] : ToReal(0.0);
-    CCTK_REAL eTyzL = (*stress_energy_state) ? eTyz[index] : ToReal(0.0);
-    CCTK_REAL eTzzL = (*stress_energy_state) ? eTzz[index] : ToReal(0.0);
     CCTK_REAL gxxL = gxx[index];
     CCTK_REAL gxyL = gxy[index];
     CCTK_REAL gxzL = gxz[index];
@@ -150,6 +148,35 @@ static void ML_ADMConstraints_MP_Body(cGH const * restrict const cctkGH, int con
     CCTK_REAL kyyL = kyy[index];
     CCTK_REAL kyzL = kyz[index];
     CCTK_REAL kzzL = kzz[index];
+    
+    CCTK_REAL eTttL, eTtxL, eTtyL, eTtzL, eTxxL, eTxyL, eTxzL, eTyyL, eTyzL, eTzzL;
+    
+    if (*stress_energy_state)
+    {
+      eTttL = eTtt[index];
+      eTtxL = eTtx[index];
+      eTtyL = eTty[index];
+      eTtzL = eTtz[index];
+      eTxxL = eTxx[index];
+      eTxyL = eTxy[index];
+      eTxzL = eTxz[index];
+      eTyyL = eTyy[index];
+      eTyzL = eTyz[index];
+      eTzzL = eTzz[index];
+    }
+    else
+    {
+      eTttL = ToReal(0.0);
+      eTtxL = ToReal(0.0);
+      eTtyL = ToReal(0.0);
+      eTtzL = ToReal(0.0);
+      eTxxL = ToReal(0.0);
+      eTxyL = ToReal(0.0);
+      eTxzL = ToReal(0.0);
+      eTyyL = ToReal(0.0);
+      eTyzL = ToReal(0.0);
+      eTzzL = ToReal(0.0);
+    }
     
     /* Include user supplied include files */
     
@@ -975,7 +1002,6 @@ static void ML_ADMConstraints_MP_Body(cGH const * restrict const cctkGH, int con
       J12L*PDstandardNth1kzz - J23L*PDstandardNth2kyz + 
       J22L*PDstandardNth2kzz - J33L*PDstandardNth3kyz + 
       J32L*PDstandardNth3kzz) - 25.13274122871834590770114706623602307358*S3;
-    
     
     /* Copy local copies back to grid functions */
     H[index] = HL;

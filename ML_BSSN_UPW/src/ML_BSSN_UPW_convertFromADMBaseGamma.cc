@@ -6,6 +6,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "cctk.h"
 #include "cctk_Arguments.h"
 #include "cctk_Parameters.h"
@@ -59,15 +60,21 @@ static void ML_BSSN_UPW_convertFromADMBaseGamma_Body(cGH const * restrict const 
   const char *groups[] = {"ADMBase::dtlapse","ADMBase::dtshift","grid::coordinates","Grid::coordinates","ML_BSSN_UPW::ML_dtlapse","ML_BSSN_UPW::ML_dtshift","ML_BSSN_UPW::ML_Gamma","ML_BSSN_UPW::ML_lapse","ML_BSSN_UPW::ML_metric","ML_BSSN_UPW::ML_shift"};
   GenericFD_AssertGroupStorage(cctkGH, "ML_BSSN_UPW_convertFromADMBaseGamma", 10, groups);
   
+  GenericFD_EnsureStencilFits(cctkGH, "ML_BSSN_UPW_convertFromADMBaseGamma", 3, 3, 3);
+  
   /* Include user-supplied include files */
   
   /* Initialise finite differencing variables */
   ptrdiff_t const di = 1;
   ptrdiff_t const dj = CCTK_GFINDEX3D(cctkGH,0,1,0) - CCTK_GFINDEX3D(cctkGH,0,0,0);
   ptrdiff_t const dk = CCTK_GFINDEX3D(cctkGH,0,0,1) - CCTK_GFINDEX3D(cctkGH,0,0,0);
+  ptrdiff_t const cdi = sizeof(CCTK_REAL) * di;
+  ptrdiff_t const cdj = sizeof(CCTK_REAL) * dj;
+  ptrdiff_t const cdk = sizeof(CCTK_REAL) * dk;
   CCTK_REAL const dx = ToReal(CCTK_DELTA_SPACE(0));
   CCTK_REAL const dy = ToReal(CCTK_DELTA_SPACE(1));
   CCTK_REAL const dz = ToReal(CCTK_DELTA_SPACE(2));
+  CCTK_REAL const dt = ToReal(CCTK_DELTA_TIME);
   CCTK_REAL const dxi = INV(dx);
   CCTK_REAL const dyi = INV(dy);
   CCTK_REAL const dzi = INV(dz);
@@ -109,6 +116,7 @@ static void ML_BSSN_UPW_convertFromADMBaseGamma_Body(cGH const * restrict const 
     ptrdiff_t const index = di*i + dj*j + dk*k;
     
     /* Assign local copies of grid functions */
+    
     CCTK_REAL alphaL = alpha[index];
     CCTK_REAL beta1L = beta1[index];
     CCTK_REAL beta2L = beta2[index];
@@ -124,6 +132,7 @@ static void ML_BSSN_UPW_convertFromADMBaseGamma_Body(cGH const * restrict const 
     CCTK_REAL gt23L = gt23[index];
     CCTK_REAL gt33L = gt33[index];
     CCTK_REAL rL = r[index];
+    
     
     /* Include user supplied include files */
     
@@ -275,7 +284,6 @@ static void ML_BSSN_UPW_convertFromADMBaseGamma_Body(cGH const * restrict const 
       (PDupwindNth1(&beta3[index])*beta1L + 
       PDupwindNth2(&beta3[index])*beta2L + 
       PDupwindNth3(&beta3[index])*beta3L)*ToReal(ShiftAdvectionCoeff)),0);
-    
     
     /* Copy local copies back to grid functions */
     A[index] = AL;

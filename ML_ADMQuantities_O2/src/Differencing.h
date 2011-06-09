@@ -1,18 +1,216 @@
-#define PDstandardNth1(u) (p1o2dx*(-(u)[di*(-1)+dj*(0)+dk*(0)] + (u)[di*(1)+dj*(0)+dk*(0)]))
-#define PDstandardNth2(u) (p1o2dy*(-(u)[di*(0)+dj*(-1)+dk*(0)] + (u)[di*(0)+dj*(1)+dk*(0)]))
-#define PDstandardNth3(u) (p1o2dz*(-(u)[di*(0)+dj*(0)+dk*(-1)] + (u)[di*(0)+dj*(0)+dk*(1)]))
-#define PDstandardNth11(u) (p1odx2*(-2*(u)[di*(0)+dj*(0)+dk*(0)] + (u)[di*(-1)+dj*(0)+dk*(0)] + (u)[di*(1)+dj*(0)+dk*(0)]))
-#define PDstandardNth22(u) (p1ody2*(-2*(u)[di*(0)+dj*(0)+dk*(0)] + (u)[di*(0)+dj*(-1)+dk*(0)] + (u)[di*(0)+dj*(1)+dk*(0)]))
-#define PDstandardNth33(u) (p1odz2*(-2*(u)[di*(0)+dj*(0)+dk*(0)] + (u)[di*(0)+dj*(0)+dk*(-1)] + (u)[di*(0)+dj*(0)+dk*(1)]))
-#define PDstandardNth12(u) (p1o4dxdy*((u)[di*(-1)+dj*(-1)+dk*(0)] - (u)[di*(-1)+dj*(1)+dk*(0)] - (u)[di*(1)+dj*(-1)+dk*(0)] + (u)[di*(1)+dj*(1)+dk*(0)]))
-#define PDstandardNth13(u) (p1o4dxdz*((u)[di*(-1)+dj*(0)+dk*(-1)] - (u)[di*(-1)+dj*(0)+dk*(1)] - (u)[di*(1)+dj*(0)+dk*(-1)] + (u)[di*(1)+dj*(0)+dk*(1)]))
-#define PDstandardNth21(u) (p1o4dxdy*((u)[di*(-1)+dj*(-1)+dk*(0)] - (u)[di*(-1)+dj*(1)+dk*(0)] - (u)[di*(1)+dj*(-1)+dk*(0)] + (u)[di*(1)+dj*(1)+dk*(0)]))
-#define PDstandardNth23(u) (p1o4dydz*((u)[di*(0)+dj*(-1)+dk*(-1)] - (u)[di*(0)+dj*(-1)+dk*(1)] - (u)[di*(0)+dj*(1)+dk*(-1)] + (u)[di*(0)+dj*(1)+dk*(1)]))
-#define PDstandardNth31(u) (p1o4dxdz*((u)[di*(-1)+dj*(0)+dk*(-1)] - (u)[di*(-1)+dj*(0)+dk*(1)] - (u)[di*(1)+dj*(0)+dk*(-1)] + (u)[di*(1)+dj*(0)+dk*(1)]))
-#define PDstandardNth32(u) (p1o4dydz*((u)[di*(0)+dj*(-1)+dk*(-1)] - (u)[di*(0)+dj*(-1)+dk*(1)] - (u)[di*(0)+dj*(1)+dk*(-1)] + (u)[di*(0)+dj*(1)+dk*(1)]))
-#define PDupwindNth1(u) (pm1o2dx*(3*(u)[di*(0)+dj*(0)+dk*(0)] + (u)[di*(2*dir1)+dj*(0)+dk*(0)] - 4*(u)[di*(dir1)+dj*(0)+dk*(0)])*dir1)
-#define PDupwindNth2(u) (pm1o2dy*(3*(u)[di*(0)+dj*(0)+dk*(0)] + (u)[di*(0)+dj*(2*dir2)+dk*(0)] - 4*(u)[di*(0)+dj*(dir2)+dk*(0)])*dir2)
-#define PDupwindNth3(u) (pm1o2dz*(3*(u)[di*(0)+dj*(0)+dk*(0)] + (u)[di*(0)+dj*(0)+dk*(2*dir3)] - 4*(u)[di*(0)+dj*(0)+dk*(dir3)])*dir3)
-#define PDonesided1(u) (p1odx*(-(u)[di*(0)+dj*(0)+dk*(0)] + (u)[di*(dir1)+dj*(0)+dk*(0)])*dir1)
-#define PDonesided2(u) (p1ody*(-(u)[di*(0)+dj*(0)+dk*(0)] + (u)[di*(0)+dj*(dir2)+dk*(0)])*dir2)
-#define PDonesided3(u) (p1odz*(-(u)[di*(0)+dj*(0)+dk*(0)] + (u)[di*(0)+dj*(0)+dk*(dir3)])*dir3)
+#ifndef KRANC_DIFF_FUNCTIONS
+#  define PDstandardNth1(u) ((-(*(CCTK_REAL const*)&((char const*)(u))[cdi*(-1)+cdj*(0)+cdk*(0)]) + (*(CCTK_REAL const*)&((char const*)(u))[cdi*(1)+cdj*(0)+cdk*(0)]))*p1o2dx)
+#else
+#  define PDstandardNth1(u) (PDstandardNth1_impl(u,p1o2dx,cdj,cdk))
+static CCTK_REAL PDstandardNth1_impl(CCTK_REAL const* restrict const u, CCTK_REAL const p1o2dx, ptrdiff_t const cdj, ptrdiff_t const cdk) CCTK_ATTRIBUTE_NOINLINE CCTK_ATTRIBUTE_UNUSED;
+static CCTK_REAL PDstandardNth1_impl(CCTK_REAL const* restrict const u, CCTK_REAL const p1o2dx, ptrdiff_t const cdj, ptrdiff_t const cdk)
+{
+  ptrdiff_t const cdi=sizeof(CCTK_REAL);
+  return (-(*(CCTK_REAL const*)&((char const*)(u))[cdi*(-1)+cdj*(0)+cdk*(0)]) + (*(CCTK_REAL const*)&((char const*)(u))[cdi*(1)+cdj*(0)+cdk*(0)]))*p1o2dx;
+}
+#endif
+
+#ifndef KRANC_DIFF_FUNCTIONS
+#  define PDstandardNth2(u) ((-(*(CCTK_REAL const*)&((char const*)(u))[cdi*(0)+cdj*(-1)+cdk*(0)]) + (*(CCTK_REAL const*)&((char const*)(u))[cdi*(0)+cdj*(1)+cdk*(0)]))*p1o2dy)
+#else
+#  define PDstandardNth2(u) (PDstandardNth2_impl(u,p1o2dy,cdj,cdk))
+static CCTK_REAL PDstandardNth2_impl(CCTK_REAL const* restrict const u, CCTK_REAL const p1o2dy, ptrdiff_t const cdj, ptrdiff_t const cdk) CCTK_ATTRIBUTE_NOINLINE CCTK_ATTRIBUTE_UNUSED;
+static CCTK_REAL PDstandardNth2_impl(CCTK_REAL const* restrict const u, CCTK_REAL const p1o2dy, ptrdiff_t const cdj, ptrdiff_t const cdk)
+{
+  ptrdiff_t const cdi=sizeof(CCTK_REAL);
+  return (-(*(CCTK_REAL const*)&((char const*)(u))[cdi*(0)+cdj*(-1)+cdk*(0)]) + (*(CCTK_REAL const*)&((char const*)(u))[cdi*(0)+cdj*(1)+cdk*(0)]))*p1o2dy;
+}
+#endif
+
+#ifndef KRANC_DIFF_FUNCTIONS
+#  define PDstandardNth3(u) ((-(*(CCTK_REAL const*)&((char const*)(u))[cdi*(0)+cdj*(0)+cdk*(-1)]) + (*(CCTK_REAL const*)&((char const*)(u))[cdi*(0)+cdj*(0)+cdk*(1)]))*p1o2dz)
+#else
+#  define PDstandardNth3(u) (PDstandardNth3_impl(u,p1o2dz,cdj,cdk))
+static CCTK_REAL PDstandardNth3_impl(CCTK_REAL const* restrict const u, CCTK_REAL const p1o2dz, ptrdiff_t const cdj, ptrdiff_t const cdk) CCTK_ATTRIBUTE_NOINLINE CCTK_ATTRIBUTE_UNUSED;
+static CCTK_REAL PDstandardNth3_impl(CCTK_REAL const* restrict const u, CCTK_REAL const p1o2dz, ptrdiff_t const cdj, ptrdiff_t const cdk)
+{
+  ptrdiff_t const cdi=sizeof(CCTK_REAL);
+  return (-(*(CCTK_REAL const*)&((char const*)(u))[cdi*(0)+cdj*(0)+cdk*(-1)]) + (*(CCTK_REAL const*)&((char const*)(u))[cdi*(0)+cdj*(0)+cdk*(1)]))*p1o2dz;
+}
+#endif
+
+#ifndef KRANC_DIFF_FUNCTIONS
+#  define PDstandardNth11(u) ((-2*(*(CCTK_REAL const*)&((char const*)(u))[cdi*(0)+cdj*(0)+cdk*(0)]) + (*(CCTK_REAL const*)&((char const*)(u))[cdi*(-1)+cdj*(0)+cdk*(0)]) + (*(CCTK_REAL const*)&((char const*)(u))[cdi*(1)+cdj*(0)+cdk*(0)]))*p1odx2)
+#else
+#  define PDstandardNth11(u) (PDstandardNth11_impl(u,p1odx2,cdj,cdk))
+static CCTK_REAL PDstandardNth11_impl(CCTK_REAL const* restrict const u, CCTK_REAL const p1odx2, ptrdiff_t const cdj, ptrdiff_t const cdk) CCTK_ATTRIBUTE_NOINLINE CCTK_ATTRIBUTE_UNUSED;
+static CCTK_REAL PDstandardNth11_impl(CCTK_REAL const* restrict const u, CCTK_REAL const p1odx2, ptrdiff_t const cdj, ptrdiff_t const cdk)
+{
+  ptrdiff_t const cdi=sizeof(CCTK_REAL);
+  return (-2*(*(CCTK_REAL const*)&((char const*)(u))[cdi*(0)+cdj*(0)+cdk*(0)]) + (*(CCTK_REAL const*)&((char const*)(u))[cdi*(-1)+cdj*(0)+cdk*(0)]) + (*(CCTK_REAL const*)&((char const*)(u))[cdi*(1)+cdj*(0)+cdk*(0)]))*p1odx2;
+}
+#endif
+
+#ifndef KRANC_DIFF_FUNCTIONS
+#  define PDstandardNth22(u) ((-2*(*(CCTK_REAL const*)&((char const*)(u))[cdi*(0)+cdj*(0)+cdk*(0)]) + (*(CCTK_REAL const*)&((char const*)(u))[cdi*(0)+cdj*(-1)+cdk*(0)]) + (*(CCTK_REAL const*)&((char const*)(u))[cdi*(0)+cdj*(1)+cdk*(0)]))*p1ody2)
+#else
+#  define PDstandardNth22(u) (PDstandardNth22_impl(u,p1ody2,cdj,cdk))
+static CCTK_REAL PDstandardNth22_impl(CCTK_REAL const* restrict const u, CCTK_REAL const p1ody2, ptrdiff_t const cdj, ptrdiff_t const cdk) CCTK_ATTRIBUTE_NOINLINE CCTK_ATTRIBUTE_UNUSED;
+static CCTK_REAL PDstandardNth22_impl(CCTK_REAL const* restrict const u, CCTK_REAL const p1ody2, ptrdiff_t const cdj, ptrdiff_t const cdk)
+{
+  ptrdiff_t const cdi=sizeof(CCTK_REAL);
+  return (-2*(*(CCTK_REAL const*)&((char const*)(u))[cdi*(0)+cdj*(0)+cdk*(0)]) + (*(CCTK_REAL const*)&((char const*)(u))[cdi*(0)+cdj*(-1)+cdk*(0)]) + (*(CCTK_REAL const*)&((char const*)(u))[cdi*(0)+cdj*(1)+cdk*(0)]))*p1ody2;
+}
+#endif
+
+#ifndef KRANC_DIFF_FUNCTIONS
+#  define PDstandardNth33(u) ((-2*(*(CCTK_REAL const*)&((char const*)(u))[cdi*(0)+cdj*(0)+cdk*(0)]) + (*(CCTK_REAL const*)&((char const*)(u))[cdi*(0)+cdj*(0)+cdk*(-1)]) + (*(CCTK_REAL const*)&((char const*)(u))[cdi*(0)+cdj*(0)+cdk*(1)]))*p1odz2)
+#else
+#  define PDstandardNth33(u) (PDstandardNth33_impl(u,p1odz2,cdj,cdk))
+static CCTK_REAL PDstandardNth33_impl(CCTK_REAL const* restrict const u, CCTK_REAL const p1odz2, ptrdiff_t const cdj, ptrdiff_t const cdk) CCTK_ATTRIBUTE_NOINLINE CCTK_ATTRIBUTE_UNUSED;
+static CCTK_REAL PDstandardNth33_impl(CCTK_REAL const* restrict const u, CCTK_REAL const p1odz2, ptrdiff_t const cdj, ptrdiff_t const cdk)
+{
+  ptrdiff_t const cdi=sizeof(CCTK_REAL);
+  return (-2*(*(CCTK_REAL const*)&((char const*)(u))[cdi*(0)+cdj*(0)+cdk*(0)]) + (*(CCTK_REAL const*)&((char const*)(u))[cdi*(0)+cdj*(0)+cdk*(-1)]) + (*(CCTK_REAL const*)&((char const*)(u))[cdi*(0)+cdj*(0)+cdk*(1)]))*p1odz2;
+}
+#endif
+
+#ifndef KRANC_DIFF_FUNCTIONS
+#  define PDstandardNth12(u) (((*(CCTK_REAL const*)&((char const*)(u))[cdi*(-1)+cdj*(-1)+cdk*(0)]) - (*(CCTK_REAL const*)&((char const*)(u))[cdi*(-1)+cdj*(1)+cdk*(0)]) - (*(CCTK_REAL const*)&((char const*)(u))[cdi*(1)+cdj*(-1)+cdk*(0)]) + (*(CCTK_REAL const*)&((char const*)(u))[cdi*(1)+cdj*(1)+cdk*(0)]))*p1o4dxdy)
+#else
+#  define PDstandardNth12(u) (PDstandardNth12_impl(u,p1o4dxdy,cdj,cdk))
+static CCTK_REAL PDstandardNth12_impl(CCTK_REAL const* restrict const u, CCTK_REAL const p1o4dxdy, ptrdiff_t const cdj, ptrdiff_t const cdk) CCTK_ATTRIBUTE_NOINLINE CCTK_ATTRIBUTE_UNUSED;
+static CCTK_REAL PDstandardNth12_impl(CCTK_REAL const* restrict const u, CCTK_REAL const p1o4dxdy, ptrdiff_t const cdj, ptrdiff_t const cdk)
+{
+  ptrdiff_t const cdi=sizeof(CCTK_REAL);
+  return ((*(CCTK_REAL const*)&((char const*)(u))[cdi*(-1)+cdj*(-1)+cdk*(0)]) - (*(CCTK_REAL const*)&((char const*)(u))[cdi*(-1)+cdj*(1)+cdk*(0)]) - (*(CCTK_REAL const*)&((char const*)(u))[cdi*(1)+cdj*(-1)+cdk*(0)]) + (*(CCTK_REAL const*)&((char const*)(u))[cdi*(1)+cdj*(1)+cdk*(0)]))*p1o4dxdy;
+}
+#endif
+
+#ifndef KRANC_DIFF_FUNCTIONS
+#  define PDstandardNth13(u) (((*(CCTK_REAL const*)&((char const*)(u))[cdi*(-1)+cdj*(0)+cdk*(-1)]) - (*(CCTK_REAL const*)&((char const*)(u))[cdi*(-1)+cdj*(0)+cdk*(1)]) - (*(CCTK_REAL const*)&((char const*)(u))[cdi*(1)+cdj*(0)+cdk*(-1)]) + (*(CCTK_REAL const*)&((char const*)(u))[cdi*(1)+cdj*(0)+cdk*(1)]))*p1o4dxdz)
+#else
+#  define PDstandardNth13(u) (PDstandardNth13_impl(u,p1o4dxdz,cdj,cdk))
+static CCTK_REAL PDstandardNth13_impl(CCTK_REAL const* restrict const u, CCTK_REAL const p1o4dxdz, ptrdiff_t const cdj, ptrdiff_t const cdk) CCTK_ATTRIBUTE_NOINLINE CCTK_ATTRIBUTE_UNUSED;
+static CCTK_REAL PDstandardNth13_impl(CCTK_REAL const* restrict const u, CCTK_REAL const p1o4dxdz, ptrdiff_t const cdj, ptrdiff_t const cdk)
+{
+  ptrdiff_t const cdi=sizeof(CCTK_REAL);
+  return ((*(CCTK_REAL const*)&((char const*)(u))[cdi*(-1)+cdj*(0)+cdk*(-1)]) - (*(CCTK_REAL const*)&((char const*)(u))[cdi*(-1)+cdj*(0)+cdk*(1)]) - (*(CCTK_REAL const*)&((char const*)(u))[cdi*(1)+cdj*(0)+cdk*(-1)]) + (*(CCTK_REAL const*)&((char const*)(u))[cdi*(1)+cdj*(0)+cdk*(1)]))*p1o4dxdz;
+}
+#endif
+
+#ifndef KRANC_DIFF_FUNCTIONS
+#  define PDstandardNth21(u) (((*(CCTK_REAL const*)&((char const*)(u))[cdi*(-1)+cdj*(-1)+cdk*(0)]) - (*(CCTK_REAL const*)&((char const*)(u))[cdi*(-1)+cdj*(1)+cdk*(0)]) - (*(CCTK_REAL const*)&((char const*)(u))[cdi*(1)+cdj*(-1)+cdk*(0)]) + (*(CCTK_REAL const*)&((char const*)(u))[cdi*(1)+cdj*(1)+cdk*(0)]))*p1o4dxdy)
+#else
+#  define PDstandardNth21(u) (PDstandardNth21_impl(u,p1o4dxdy,cdj,cdk))
+static CCTK_REAL PDstandardNth21_impl(CCTK_REAL const* restrict const u, CCTK_REAL const p1o4dxdy, ptrdiff_t const cdj, ptrdiff_t const cdk) CCTK_ATTRIBUTE_NOINLINE CCTK_ATTRIBUTE_UNUSED;
+static CCTK_REAL PDstandardNth21_impl(CCTK_REAL const* restrict const u, CCTK_REAL const p1o4dxdy, ptrdiff_t const cdj, ptrdiff_t const cdk)
+{
+  ptrdiff_t const cdi=sizeof(CCTK_REAL);
+  return ((*(CCTK_REAL const*)&((char const*)(u))[cdi*(-1)+cdj*(-1)+cdk*(0)]) - (*(CCTK_REAL const*)&((char const*)(u))[cdi*(-1)+cdj*(1)+cdk*(0)]) - (*(CCTK_REAL const*)&((char const*)(u))[cdi*(1)+cdj*(-1)+cdk*(0)]) + (*(CCTK_REAL const*)&((char const*)(u))[cdi*(1)+cdj*(1)+cdk*(0)]))*p1o4dxdy;
+}
+#endif
+
+#ifndef KRANC_DIFF_FUNCTIONS
+#  define PDstandardNth23(u) (((*(CCTK_REAL const*)&((char const*)(u))[cdi*(0)+cdj*(-1)+cdk*(-1)]) - (*(CCTK_REAL const*)&((char const*)(u))[cdi*(0)+cdj*(-1)+cdk*(1)]) - (*(CCTK_REAL const*)&((char const*)(u))[cdi*(0)+cdj*(1)+cdk*(-1)]) + (*(CCTK_REAL const*)&((char const*)(u))[cdi*(0)+cdj*(1)+cdk*(1)]))*p1o4dydz)
+#else
+#  define PDstandardNth23(u) (PDstandardNth23_impl(u,p1o4dydz,cdj,cdk))
+static CCTK_REAL PDstandardNth23_impl(CCTK_REAL const* restrict const u, CCTK_REAL const p1o4dydz, ptrdiff_t const cdj, ptrdiff_t const cdk) CCTK_ATTRIBUTE_NOINLINE CCTK_ATTRIBUTE_UNUSED;
+static CCTK_REAL PDstandardNth23_impl(CCTK_REAL const* restrict const u, CCTK_REAL const p1o4dydz, ptrdiff_t const cdj, ptrdiff_t const cdk)
+{
+  ptrdiff_t const cdi=sizeof(CCTK_REAL);
+  return ((*(CCTK_REAL const*)&((char const*)(u))[cdi*(0)+cdj*(-1)+cdk*(-1)]) - (*(CCTK_REAL const*)&((char const*)(u))[cdi*(0)+cdj*(-1)+cdk*(1)]) - (*(CCTK_REAL const*)&((char const*)(u))[cdi*(0)+cdj*(1)+cdk*(-1)]) + (*(CCTK_REAL const*)&((char const*)(u))[cdi*(0)+cdj*(1)+cdk*(1)]))*p1o4dydz;
+}
+#endif
+
+#ifndef KRANC_DIFF_FUNCTIONS
+#  define PDstandardNth31(u) (((*(CCTK_REAL const*)&((char const*)(u))[cdi*(-1)+cdj*(0)+cdk*(-1)]) - (*(CCTK_REAL const*)&((char const*)(u))[cdi*(-1)+cdj*(0)+cdk*(1)]) - (*(CCTK_REAL const*)&((char const*)(u))[cdi*(1)+cdj*(0)+cdk*(-1)]) + (*(CCTK_REAL const*)&((char const*)(u))[cdi*(1)+cdj*(0)+cdk*(1)]))*p1o4dxdz)
+#else
+#  define PDstandardNth31(u) (PDstandardNth31_impl(u,p1o4dxdz,cdj,cdk))
+static CCTK_REAL PDstandardNth31_impl(CCTK_REAL const* restrict const u, CCTK_REAL const p1o4dxdz, ptrdiff_t const cdj, ptrdiff_t const cdk) CCTK_ATTRIBUTE_NOINLINE CCTK_ATTRIBUTE_UNUSED;
+static CCTK_REAL PDstandardNth31_impl(CCTK_REAL const* restrict const u, CCTK_REAL const p1o4dxdz, ptrdiff_t const cdj, ptrdiff_t const cdk)
+{
+  ptrdiff_t const cdi=sizeof(CCTK_REAL);
+  return ((*(CCTK_REAL const*)&((char const*)(u))[cdi*(-1)+cdj*(0)+cdk*(-1)]) - (*(CCTK_REAL const*)&((char const*)(u))[cdi*(-1)+cdj*(0)+cdk*(1)]) - (*(CCTK_REAL const*)&((char const*)(u))[cdi*(1)+cdj*(0)+cdk*(-1)]) + (*(CCTK_REAL const*)&((char const*)(u))[cdi*(1)+cdj*(0)+cdk*(1)]))*p1o4dxdz;
+}
+#endif
+
+#ifndef KRANC_DIFF_FUNCTIONS
+#  define PDstandardNth32(u) (((*(CCTK_REAL const*)&((char const*)(u))[cdi*(0)+cdj*(-1)+cdk*(-1)]) - (*(CCTK_REAL const*)&((char const*)(u))[cdi*(0)+cdj*(-1)+cdk*(1)]) - (*(CCTK_REAL const*)&((char const*)(u))[cdi*(0)+cdj*(1)+cdk*(-1)]) + (*(CCTK_REAL const*)&((char const*)(u))[cdi*(0)+cdj*(1)+cdk*(1)]))*p1o4dydz)
+#else
+#  define PDstandardNth32(u) (PDstandardNth32_impl(u,p1o4dydz,cdj,cdk))
+static CCTK_REAL PDstandardNth32_impl(CCTK_REAL const* restrict const u, CCTK_REAL const p1o4dydz, ptrdiff_t const cdj, ptrdiff_t const cdk) CCTK_ATTRIBUTE_NOINLINE CCTK_ATTRIBUTE_UNUSED;
+static CCTK_REAL PDstandardNth32_impl(CCTK_REAL const* restrict const u, CCTK_REAL const p1o4dydz, ptrdiff_t const cdj, ptrdiff_t const cdk)
+{
+  ptrdiff_t const cdi=sizeof(CCTK_REAL);
+  return ((*(CCTK_REAL const*)&((char const*)(u))[cdi*(0)+cdj*(-1)+cdk*(-1)]) - (*(CCTK_REAL const*)&((char const*)(u))[cdi*(0)+cdj*(-1)+cdk*(1)]) - (*(CCTK_REAL const*)&((char const*)(u))[cdi*(0)+cdj*(1)+cdk*(-1)]) + (*(CCTK_REAL const*)&((char const*)(u))[cdi*(0)+cdj*(1)+cdk*(1)]))*p1o4dydz;
+}
+#endif
+
+#ifndef KRANC_DIFF_FUNCTIONS
+#  define PDupwindNth1(u) ((3*(*(CCTK_REAL const*)&((char const*)(u))[cdi*(0)+cdj*(0)+cdk*(0)]) + (*(CCTK_REAL const*)&((char const*)(u))[cdi*(2*dir1)+cdj*(0)+cdk*(0)]) - 4*(*(CCTK_REAL const*)&((char const*)(u))[cdi*(dir1)+cdj*(0)+cdk*(0)]))*pm1o2dx*dir1)
+#else
+#  define PDupwindNth1(u) (PDupwindNth1_impl(u,pm1o2dx,cdj,cdk,dir1,dir2,dir3))
+static CCTK_REAL PDupwindNth1_impl(CCTK_REAL const* restrict const u, CCTK_REAL const pm1o2dx, ptrdiff_t const cdj, ptrdiff_t const cdk, ptrdiff_t const dir1, ptrdiff_t const dir2, ptrdiff_t const dir3) CCTK_ATTRIBUTE_NOINLINE CCTK_ATTRIBUTE_UNUSED;
+static CCTK_REAL PDupwindNth1_impl(CCTK_REAL const* restrict const u, CCTK_REAL const pm1o2dx, ptrdiff_t const cdj, ptrdiff_t const cdk, ptrdiff_t const dir1, ptrdiff_t const dir2, ptrdiff_t const dir3)
+{
+  ptrdiff_t const cdi=sizeof(CCTK_REAL);
+  return (3*(*(CCTK_REAL const*)&((char const*)(u))[cdi*(0)+cdj*(0)+cdk*(0)]) + (*(CCTK_REAL const*)&((char const*)(u))[cdi*(2*dir1)+cdj*(0)+cdk*(0)]) - 4*(*(CCTK_REAL const*)&((char const*)(u))[cdi*(dir1)+cdj*(0)+cdk*(0)]))*pm1o2dx*dir1;
+}
+#endif
+
+#ifndef KRANC_DIFF_FUNCTIONS
+#  define PDupwindNth2(u) ((3*(*(CCTK_REAL const*)&((char const*)(u))[cdi*(0)+cdj*(0)+cdk*(0)]) + (*(CCTK_REAL const*)&((char const*)(u))[cdi*(0)+cdj*(2*dir2)+cdk*(0)]) - 4*(*(CCTK_REAL const*)&((char const*)(u))[cdi*(0)+cdj*(dir2)+cdk*(0)]))*pm1o2dy*dir2)
+#else
+#  define PDupwindNth2(u) (PDupwindNth2_impl(u,pm1o2dy,cdj,cdk,dir1,dir2,dir3))
+static CCTK_REAL PDupwindNth2_impl(CCTK_REAL const* restrict const u, CCTK_REAL const pm1o2dy, ptrdiff_t const cdj, ptrdiff_t const cdk, ptrdiff_t const dir1, ptrdiff_t const dir2, ptrdiff_t const dir3) CCTK_ATTRIBUTE_NOINLINE CCTK_ATTRIBUTE_UNUSED;
+static CCTK_REAL PDupwindNth2_impl(CCTK_REAL const* restrict const u, CCTK_REAL const pm1o2dy, ptrdiff_t const cdj, ptrdiff_t const cdk, ptrdiff_t const dir1, ptrdiff_t const dir2, ptrdiff_t const dir3)
+{
+  ptrdiff_t const cdi=sizeof(CCTK_REAL);
+  return (3*(*(CCTK_REAL const*)&((char const*)(u))[cdi*(0)+cdj*(0)+cdk*(0)]) + (*(CCTK_REAL const*)&((char const*)(u))[cdi*(0)+cdj*(2*dir2)+cdk*(0)]) - 4*(*(CCTK_REAL const*)&((char const*)(u))[cdi*(0)+cdj*(dir2)+cdk*(0)]))*pm1o2dy*dir2;
+}
+#endif
+
+#ifndef KRANC_DIFF_FUNCTIONS
+#  define PDupwindNth3(u) ((3*(*(CCTK_REAL const*)&((char const*)(u))[cdi*(0)+cdj*(0)+cdk*(0)]) + (*(CCTK_REAL const*)&((char const*)(u))[cdi*(0)+cdj*(0)+cdk*(2*dir3)]) - 4*(*(CCTK_REAL const*)&((char const*)(u))[cdi*(0)+cdj*(0)+cdk*(dir3)]))*pm1o2dz*dir3)
+#else
+#  define PDupwindNth3(u) (PDupwindNth3_impl(u,pm1o2dz,cdj,cdk,dir1,dir2,dir3))
+static CCTK_REAL PDupwindNth3_impl(CCTK_REAL const* restrict const u, CCTK_REAL const pm1o2dz, ptrdiff_t const cdj, ptrdiff_t const cdk, ptrdiff_t const dir1, ptrdiff_t const dir2, ptrdiff_t const dir3) CCTK_ATTRIBUTE_NOINLINE CCTK_ATTRIBUTE_UNUSED;
+static CCTK_REAL PDupwindNth3_impl(CCTK_REAL const* restrict const u, CCTK_REAL const pm1o2dz, ptrdiff_t const cdj, ptrdiff_t const cdk, ptrdiff_t const dir1, ptrdiff_t const dir2, ptrdiff_t const dir3)
+{
+  ptrdiff_t const cdi=sizeof(CCTK_REAL);
+  return (3*(*(CCTK_REAL const*)&((char const*)(u))[cdi*(0)+cdj*(0)+cdk*(0)]) + (*(CCTK_REAL const*)&((char const*)(u))[cdi*(0)+cdj*(0)+cdk*(2*dir3)]) - 4*(*(CCTK_REAL const*)&((char const*)(u))[cdi*(0)+cdj*(0)+cdk*(dir3)]))*pm1o2dz*dir3;
+}
+#endif
+
+#ifndef KRANC_DIFF_FUNCTIONS
+#  define PDonesided1(u) ((-(*(CCTK_REAL const*)&((char const*)(u))[cdi*(0)+cdj*(0)+cdk*(0)]) + (*(CCTK_REAL const*)&((char const*)(u))[cdi*(dir1)+cdj*(0)+cdk*(0)]))*p1odx*dir1)
+#else
+#  define PDonesided1(u) (PDonesided1_impl(u,p1odx,cdj,cdk,dir1,dir2,dir3))
+static CCTK_REAL PDonesided1_impl(CCTK_REAL const* restrict const u, CCTK_REAL const p1odx, ptrdiff_t const cdj, ptrdiff_t const cdk, ptrdiff_t const dir1, ptrdiff_t const dir2, ptrdiff_t const dir3) CCTK_ATTRIBUTE_NOINLINE CCTK_ATTRIBUTE_UNUSED;
+static CCTK_REAL PDonesided1_impl(CCTK_REAL const* restrict const u, CCTK_REAL const p1odx, ptrdiff_t const cdj, ptrdiff_t const cdk, ptrdiff_t const dir1, ptrdiff_t const dir2, ptrdiff_t const dir3)
+{
+  ptrdiff_t const cdi=sizeof(CCTK_REAL);
+  return (-(*(CCTK_REAL const*)&((char const*)(u))[cdi*(0)+cdj*(0)+cdk*(0)]) + (*(CCTK_REAL const*)&((char const*)(u))[cdi*(dir1)+cdj*(0)+cdk*(0)]))*p1odx*dir1;
+}
+#endif
+
+#ifndef KRANC_DIFF_FUNCTIONS
+#  define PDonesided2(u) ((-(*(CCTK_REAL const*)&((char const*)(u))[cdi*(0)+cdj*(0)+cdk*(0)]) + (*(CCTK_REAL const*)&((char const*)(u))[cdi*(0)+cdj*(dir2)+cdk*(0)]))*p1ody*dir2)
+#else
+#  define PDonesided2(u) (PDonesided2_impl(u,p1ody,cdj,cdk,dir1,dir2,dir3))
+static CCTK_REAL PDonesided2_impl(CCTK_REAL const* restrict const u, CCTK_REAL const p1ody, ptrdiff_t const cdj, ptrdiff_t const cdk, ptrdiff_t const dir1, ptrdiff_t const dir2, ptrdiff_t const dir3) CCTK_ATTRIBUTE_NOINLINE CCTK_ATTRIBUTE_UNUSED;
+static CCTK_REAL PDonesided2_impl(CCTK_REAL const* restrict const u, CCTK_REAL const p1ody, ptrdiff_t const cdj, ptrdiff_t const cdk, ptrdiff_t const dir1, ptrdiff_t const dir2, ptrdiff_t const dir3)
+{
+  ptrdiff_t const cdi=sizeof(CCTK_REAL);
+  return (-(*(CCTK_REAL const*)&((char const*)(u))[cdi*(0)+cdj*(0)+cdk*(0)]) + (*(CCTK_REAL const*)&((char const*)(u))[cdi*(0)+cdj*(dir2)+cdk*(0)]))*p1ody*dir2;
+}
+#endif
+
+#ifndef KRANC_DIFF_FUNCTIONS
+#  define PDonesided3(u) ((-(*(CCTK_REAL const*)&((char const*)(u))[cdi*(0)+cdj*(0)+cdk*(0)]) + (*(CCTK_REAL const*)&((char const*)(u))[cdi*(0)+cdj*(0)+cdk*(dir3)]))*p1odz*dir3)
+#else
+#  define PDonesided3(u) (PDonesided3_impl(u,p1odz,cdj,cdk,dir1,dir2,dir3))
+static CCTK_REAL PDonesided3_impl(CCTK_REAL const* restrict const u, CCTK_REAL const p1odz, ptrdiff_t const cdj, ptrdiff_t const cdk, ptrdiff_t const dir1, ptrdiff_t const dir2, ptrdiff_t const dir3) CCTK_ATTRIBUTE_NOINLINE CCTK_ATTRIBUTE_UNUSED;
+static CCTK_REAL PDonesided3_impl(CCTK_REAL const* restrict const u, CCTK_REAL const p1odz, ptrdiff_t const cdj, ptrdiff_t const cdk, ptrdiff_t const dir1, ptrdiff_t const dir2, ptrdiff_t const dir3)
+{
+  ptrdiff_t const cdi=sizeof(CCTK_REAL);
+  return (-(*(CCTK_REAL const*)&((char const*)(u))[cdi*(0)+cdj*(0)+cdk*(0)]) + (*(CCTK_REAL const*)&((char const*)(u))[cdi*(0)+cdj*(0)+cdk*(dir3)]))*p1odz*dir3;
+}
+#endif
+

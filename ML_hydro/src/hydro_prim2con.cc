@@ -6,6 +6,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "cctk.h"
 #include "cctk_Arguments.h"
 #include "cctk_Parameters.h"
@@ -41,15 +42,20 @@ static void hydro_prim2con_Body(cGH const * restrict const cctkGH, int const dir
   const char *groups[] = {"ML_hydro::ene_group","ML_hydro::eps_group","ML_hydro::mass_group","ML_hydro::mom_group","ML_hydro::rho_group","ML_hydro::vel_group","ML_hydro::vol_group"};
   GenericFD_AssertGroupStorage(cctkGH, "hydro_prim2con", 7, groups);
   
+  
   /* Include user-supplied include files */
   
   /* Initialise finite differencing variables */
   ptrdiff_t const di = 1;
   ptrdiff_t const dj = CCTK_GFINDEX3D(cctkGH,0,1,0) - CCTK_GFINDEX3D(cctkGH,0,0,0);
   ptrdiff_t const dk = CCTK_GFINDEX3D(cctkGH,0,0,1) - CCTK_GFINDEX3D(cctkGH,0,0,0);
+  ptrdiff_t const cdi = sizeof(CCTK_REAL) * di;
+  ptrdiff_t const cdj = sizeof(CCTK_REAL) * dj;
+  ptrdiff_t const cdk = sizeof(CCTK_REAL) * dk;
   CCTK_REAL const dx = ToReal(CCTK_DELTA_SPACE(0));
   CCTK_REAL const dy = ToReal(CCTK_DELTA_SPACE(1));
   CCTK_REAL const dz = ToReal(CCTK_DELTA_SPACE(2));
+  CCTK_REAL const dt = ToReal(CCTK_DELTA_TIME);
   CCTK_REAL const dxi = INV(dx);
   CCTK_REAL const dyi = INV(dy);
   CCTK_REAL const dzi = INV(dz);
@@ -82,6 +88,7 @@ static void hydro_prim2con_Body(cGH const * restrict const cctkGH, int const dir
     ptrdiff_t const index = di*i + dj*j + dk*k;
     
     /* Assign local copies of grid functions */
+    
     CCTK_REAL epsL = eps[index];
     CCTK_REAL massL = mass[index];
     CCTK_REAL rhoL = rho[index];
@@ -89,6 +96,7 @@ static void hydro_prim2con_Body(cGH const * restrict const cctkGH, int const dir
     CCTK_REAL vel2L = vel2[index];
     CCTK_REAL vel3L = vel3[index];
     CCTK_REAL volL = vol[index];
+    
     
     /* Include user supplied include files */
     
@@ -107,7 +115,6 @@ static void hydro_prim2con_Body(cGH const * restrict const cctkGH, int const dir
     
     CCTK_REAL eneL = 0.5*massL*(2*epsL + SQR(vel1L) + SQR(vel2L) + 
       SQR(vel3L));
-    
     
     /* Copy local copies back to grid functions */
     ene[index] = eneL;

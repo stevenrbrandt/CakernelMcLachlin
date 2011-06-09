@@ -6,6 +6,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "cctk.h"
 #include "cctk_Arguments.h"
 #include "cctk_Parameters.h"
@@ -41,15 +42,20 @@ static void ML_BSSN_MP_O8_convertToADMBaseFakeDtLapseShift_Body(cGH const * rest
   const char *groups[] = {"ADMBase::dtlapse","ADMBase::dtshift","grid::coordinates","Grid::coordinates","ML_BSSN_MP_O8::ML_dtlapse","ML_BSSN_MP_O8::ML_dtshift","ML_BSSN_MP_O8::ML_Gamma","ML_BSSN_MP_O8::ML_lapse","ML_BSSN_MP_O8::ML_shift","ML_BSSN_MP_O8::ML_trace_curv"};
   GenericFD_AssertGroupStorage(cctkGH, "ML_BSSN_MP_O8_convertToADMBaseFakeDtLapseShift", 10, groups);
   
+  
   /* Include user-supplied include files */
   
   /* Initialise finite differencing variables */
   ptrdiff_t const di = 1;
   ptrdiff_t const dj = CCTK_GFINDEX3D(cctkGH,0,1,0) - CCTK_GFINDEX3D(cctkGH,0,0,0);
   ptrdiff_t const dk = CCTK_GFINDEX3D(cctkGH,0,0,1) - CCTK_GFINDEX3D(cctkGH,0,0,0);
+  ptrdiff_t const cdi = sizeof(CCTK_REAL) * di;
+  ptrdiff_t const cdj = sizeof(CCTK_REAL) * dj;
+  ptrdiff_t const cdk = sizeof(CCTK_REAL) * dk;
   CCTK_REAL const dx = ToReal(CCTK_DELTA_SPACE(0));
   CCTK_REAL const dy = ToReal(CCTK_DELTA_SPACE(1));
   CCTK_REAL const dz = ToReal(CCTK_DELTA_SPACE(2));
+  CCTK_REAL const dt = ToReal(CCTK_DELTA_TIME);
   CCTK_REAL const dxi = INV(dx);
   CCTK_REAL const dyi = INV(dy);
   CCTK_REAL const dzi = INV(dz);
@@ -97,6 +103,7 @@ static void ML_BSSN_MP_O8_convertToADMBaseFakeDtLapseShift_Body(cGH const * rest
     ptrdiff_t const index = di*i + dj*j + dk*k;
     
     /* Assign local copies of grid functions */
+    
     CCTK_REAL AL = A[index];
     CCTK_REAL alphaL = alpha[index];
     CCTK_REAL B1L = B1[index];
@@ -110,6 +117,7 @@ static void ML_BSSN_MP_O8_convertToADMBaseFakeDtLapseShift_Body(cGH const * rest
     CCTK_REAL Xt1L = Xt1[index];
     CCTK_REAL Xt2L = Xt2[index];
     CCTK_REAL Xt3L = Xt3[index];
+    
     
     /* Include user supplied include files */
     
@@ -136,7 +144,6 @@ static void ML_BSSN_MP_O8_convertToADMBaseFakeDtLapseShift_Body(cGH const * rest
     CCTK_REAL dtbetazL = theta*(Xt3L + beta3L*eta*ToReal(BetaDriver)*(-1 + 
       ToReal(ShiftBCoeff)) + (B3L - 
       Xt3L)*ToReal(ShiftBCoeff))*ToReal(ShiftGammaCoeff);
-    
     
     /* Copy local copies back to grid functions */
     dtalp[index] = dtalpL;

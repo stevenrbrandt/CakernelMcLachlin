@@ -6,6 +6,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "cctk.h"
 #include "cctk_Arguments.h"
 #include "cctk_Parameters.h"
@@ -62,15 +63,20 @@ static void ML_ADM_boundary_Body(cGH const * restrict const cctkGH, int const di
   const char *groups[] = {"ML_ADM::ML_curv","ML_ADM::ML_lapse","ML_ADM::ML_metric","ML_ADM::ML_shift"};
   GenericFD_AssertGroupStorage(cctkGH, "ML_ADM_boundary", 4, groups);
   
+  
   /* Include user-supplied include files */
   
   /* Initialise finite differencing variables */
   ptrdiff_t const di = 1;
   ptrdiff_t const dj = CCTK_GFINDEX3D(cctkGH,0,1,0) - CCTK_GFINDEX3D(cctkGH,0,0,0);
   ptrdiff_t const dk = CCTK_GFINDEX3D(cctkGH,0,0,1) - CCTK_GFINDEX3D(cctkGH,0,0,0);
+  ptrdiff_t const cdi = sizeof(CCTK_REAL) * di;
+  ptrdiff_t const cdj = sizeof(CCTK_REAL) * dj;
+  ptrdiff_t const cdk = sizeof(CCTK_REAL) * dk;
   CCTK_REAL const dx = ToReal(CCTK_DELTA_SPACE(0));
   CCTK_REAL const dy = ToReal(CCTK_DELTA_SPACE(1));
   CCTK_REAL const dz = ToReal(CCTK_DELTA_SPACE(2));
+  CCTK_REAL const dt = ToReal(CCTK_DELTA_TIME);
   CCTK_REAL const dxi = INV(dx);
   CCTK_REAL const dyi = INV(dy);
   CCTK_REAL const dzi = INV(dz);
@@ -103,6 +109,8 @@ static void ML_ADM_boundary_Body(cGH const * restrict const cctkGH, int const di
     ptrdiff_t const index = di*i + dj*j + dk*k;
     
     /* Assign local copies of grid functions */
+    
+    
     
     /* Include user supplied include files */
     
@@ -140,7 +148,6 @@ static void ML_ADM_boundary_Body(cGH const * restrict const cctkGH, int const di
     CCTK_REAL beta2L = 0;
     
     CCTK_REAL beta3L = 0;
-    
     
     /* Copy local copies back to grid functions */
     alpha[index] = alphaL;
