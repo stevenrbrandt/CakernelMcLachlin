@@ -189,6 +189,13 @@ KEYWORD dt_lapse_shift_method "Treatment of ADMBase dtlapse and dtshift"
   "noLapseShiftAdvection" :: "noLapseShiftAdvection"
 } "correct"
 
+private:
+KEYWORD apply_dissipation "Whether to apply dissipation to the RHSs"
+{
+  "always" :: "always"
+  "never" :: "never"
+} "always"
+
 restricted:
 CCTK_INT ML_BSSN_MP_O8_MaxNumEvolvedVars "Number of evolved variables used by this thorn" ACCUMULATOR-BASE=MethodofLines::MoL_Num_Evolved_Vars STEERABLE=RECOVER
 {
@@ -233,6 +240,12 @@ CCTK_INT ML_BSSN_MP_O8_RHS1_calc_every "ML_BSSN_MP_O8_RHS1_calc_every" STEERABLE
 
 restricted:
 CCTK_INT ML_BSSN_MP_O8_RHS2_calc_every "ML_BSSN_MP_O8_RHS2_calc_every" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 1
+
+restricted:
+CCTK_INT ML_BSSN_MP_O8_Dissipation_calc_every "ML_BSSN_MP_O8_Dissipation_calc_every" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 1
@@ -317,6 +330,12 @@ CCTK_INT ML_BSSN_MP_O8_RHS1_calc_offset "ML_BSSN_MP_O8_RHS1_calc_offset" STEERAB
 
 restricted:
 CCTK_INT ML_BSSN_MP_O8_RHS2_calc_offset "ML_BSSN_MP_O8_RHS2_calc_offset" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 0
+
+restricted:
+CCTK_INT ML_BSSN_MP_O8_Dissipation_calc_offset "ML_BSSN_MP_O8_Dissipation_calc_offset" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 0

@@ -304,6 +304,15 @@ schedule ML_BSSN_MP_O8_RHS2 IN ML_BSSN_MP_O8_evolCalcGroup
 } "ML_BSSN_MP_O8_RHS2"
 
 
+if (CCTK_EQUALS(apply_dissipation, "always"))
+{
+  schedule ML_BSSN_MP_O8_Dissipation IN ML_BSSN_MP_O8_evolCalcGroup after ML_BSSN_MP_O8_RHS2
+  {
+    LANG: C
+  } "ML_BSSN_MP_O8_Dissipation"
+}
+
+
 if (CCTK_EQUALS(my_rhs_boundary_condition, "static"))
 {
   schedule ML_BSSN_MP_O8_RHSStaticBoundary IN MoL_CalcRHS
