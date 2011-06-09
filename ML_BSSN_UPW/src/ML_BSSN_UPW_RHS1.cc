@@ -75,7 +75,7 @@ static void ML_BSSN_UPW_RHS1_Body(cGH const * restrict const cctkGH, int const d
   const char *groups[] = {"grid::coordinates","Grid::coordinates","ML_BSSN_UPW::ML_curv","ML_BSSN_UPW::ML_dtlapse","ML_BSSN_UPW::ML_dtlapserhs","ML_BSSN_UPW::ML_dtshift","ML_BSSN_UPW::ML_dtshiftrhs","ML_BSSN_UPW::ML_Gamma","ML_BSSN_UPW::ML_Gammarhs","ML_BSSN_UPW::ML_lapse","ML_BSSN_UPW::ML_lapserhs","ML_BSSN_UPW::ML_log_confac","ML_BSSN_UPW::ML_log_confacrhs","ML_BSSN_UPW::ML_metric","ML_BSSN_UPW::ML_metricrhs","ML_BSSN_UPW::ML_shift","ML_BSSN_UPW::ML_shiftrhs","ML_BSSN_UPW::ML_trace_curv","ML_BSSN_UPW::ML_trace_curvrhs"};
   GenericFD_AssertGroupStorage(cctkGH, "ML_BSSN_UPW_RHS1", 19, groups);
   
-  GenericFD_EnsureStencilFits(cctkGH, "ML_BSSN_UPW_RHS1", 3, 3, 3);
+  GenericFD_EnsureStencilFits(cctkGH, "ML_BSSN_UPW_RHS1", 2, 2, 2);
   
   /* Include user-supplied include files */
   
@@ -417,80 +417,52 @@ static void ML_BSSN_UPW_RHS1_Body(cGH const * restrict const cctkGH, int const d
     CCTK_REAL trS = em4phi*(eTxxL*gtu11 + eTyyL*gtu22 + 2*(eTxyL*gtu12 + 
       eTxzL*gtu13 + eTyzL*gtu23) + eTzzL*gtu33);
     
-    CCTK_REAL phirhsL = PDupwindNth1(&phi[index])*beta1L + 
-      PDupwindNth2(&phi[index])*beta2L + PDupwindNth3(&phi[index])*beta3L 
-      + 
+    CCTK_REAL phirhsL = 
       IfThen(ToReal(conformalMethod),phiL*(-0.333333333333333333333333333333*(PDstandardNth1beta1 
       + PDstandardNth2beta2 + PDstandardNth3beta3) + 
       0.333333333333333333333333333333*alphaL*trKL),0.166666666666666666666666666667*(PDstandardNth1beta1 
       + PDstandardNth2beta2 + PDstandardNth3beta3) - 
       0.166666666666666666666666666667*alphaL*trKL);
     
-    CCTK_REAL gt11rhsL = -2*alphaL*At11L + 
-      PDupwindNth1(&gt11[index])*beta1L + 
-      PDupwindNth2(&gt11[index])*beta2L + 
-      PDupwindNth3(&gt11[index])*beta3L + 2*(gt12L*PDstandardNth1beta2 + 
-      gt13L*PDstandardNth1beta3) + 
-      gt11L*(1.33333333333333333333333333333*PDstandardNth1beta1 - 
-      0.666666666666666666666666666667*(PDstandardNth2beta2 + 
+    CCTK_REAL gt11rhsL = -0.666666666666666666666666666667*(3*alphaL*At11L 
+      - 3*(gt12L*PDstandardNth1beta2 + gt13L*PDstandardNth1beta3) + 
+      gt11L*(-2*PDstandardNth1beta1 + PDstandardNth2beta2 + 
       PDstandardNth3beta3));
     
-    CCTK_REAL gt12rhsL = -2*alphaL*At12L + 
-      PDupwindNth1(&gt12[index])*beta1L + 
-      PDupwindNth2(&gt12[index])*beta2L + 
-      PDupwindNth3(&gt12[index])*beta3L + gt22L*PDstandardNth1beta2 + 
-      gt23L*PDstandardNth1beta3 + gt11L*PDstandardNth2beta1 + 
-      gt13L*PDstandardNth2beta3 + 
-      gt12L*(0.333333333333333333333333333333*(PDstandardNth1beta1 + 
-      PDstandardNth2beta2) - 
-      0.666666666666666666666666666667*PDstandardNth3beta3);
+    CCTK_REAL gt12rhsL = 0.333333333333333333333333333333*(-6*alphaL*At12L 
+      + 3*(gt22L*PDstandardNth1beta2 + gt23L*PDstandardNth1beta3 + 
+      gt11L*PDstandardNth2beta1 + gt13L*PDstandardNth2beta3) + 
+      gt12L*(PDstandardNth1beta1 + PDstandardNth2beta2 - 
+      2*PDstandardNth3beta3));
     
-    CCTK_REAL gt13rhsL = -2*alphaL*At13L + 
-      PDupwindNth1(&gt13[index])*beta1L + 
-      PDupwindNth2(&gt13[index])*beta2L + 
-      PDupwindNth3(&gt13[index])*beta3L + gt23L*PDstandardNth1beta2 + 
-      gt33L*PDstandardNth1beta3 + gt11L*PDstandardNth3beta1 + 
-      gt12L*PDstandardNth3beta2 + 
-      gt13L*(-0.666666666666666666666666666667*PDstandardNth2beta2 + 
-      0.333333333333333333333333333333*(PDstandardNth1beta1 + 
+    CCTK_REAL gt13rhsL = 0.333333333333333333333333333333*(-6*alphaL*At13L 
+      + 3*(gt23L*PDstandardNth1beta2 + gt33L*PDstandardNth1beta3 + 
+      gt11L*PDstandardNth3beta1 + gt12L*PDstandardNth3beta2) + 
+      gt13L*(PDstandardNth1beta1 - 2*PDstandardNth2beta2 + 
       PDstandardNth3beta3));
     
-    CCTK_REAL gt22rhsL = -2*alphaL*At22L + 
-      PDupwindNth1(&gt22[index])*beta1L + 
-      PDupwindNth2(&gt22[index])*beta2L + 
-      PDupwindNth3(&gt22[index])*beta3L + 2*(gt12L*PDstandardNth2beta1 + 
-      gt23L*PDstandardNth2beta3) + 
-      gt22L*(1.33333333333333333333333333333*PDstandardNth2beta2 - 
-      0.666666666666666666666666666667*(PDstandardNth1beta1 + 
+    CCTK_REAL gt22rhsL = -0.666666666666666666666666666667*(3*alphaL*At22L 
+      - 3*(gt12L*PDstandardNth2beta1 + gt23L*PDstandardNth2beta3) + 
+      gt22L*(PDstandardNth1beta1 - 2*PDstandardNth2beta2 + 
       PDstandardNth3beta3));
     
-    CCTK_REAL gt23rhsL = -2*alphaL*At23L + 
-      PDupwindNth1(&gt23[index])*beta1L + 
-      PDupwindNth2(&gt23[index])*beta2L + 
-      PDupwindNth3(&gt23[index])*beta3L + gt13L*PDstandardNth2beta1 + 
-      gt33L*PDstandardNth2beta3 + gt12L*PDstandardNth3beta1 + 
-      gt22L*PDstandardNth3beta2 + 
-      gt23L*(-0.666666666666666666666666666667*PDstandardNth1beta1 + 
-      0.333333333333333333333333333333*(PDstandardNth2beta2 + 
+    CCTK_REAL gt23rhsL = 0.333333333333333333333333333333*(-6*alphaL*At23L 
+      + 3*(gt13L*PDstandardNth2beta1 + gt33L*PDstandardNth2beta3 + 
+      gt12L*PDstandardNth3beta1 + gt22L*PDstandardNth3beta2) + 
+      gt23L*(-2*PDstandardNth1beta1 + PDstandardNth2beta2 + 
       PDstandardNth3beta3));
     
-    CCTK_REAL gt33rhsL = -2*alphaL*At33L + 
-      PDupwindNth1(&gt33[index])*beta1L + 
-      PDupwindNth2(&gt33[index])*beta2L + 
-      PDupwindNth3(&gt33[index])*beta3L + 2*(gt13L*PDstandardNth3beta1 + 
-      gt23L*PDstandardNth3beta2) + 
-      gt33L*(-0.666666666666666666666666666667*(PDstandardNth1beta1 + 
-      PDstandardNth2beta2) + 
-      1.33333333333333333333333333333*PDstandardNth3beta3);
+    CCTK_REAL gt33rhsL = -0.666666666666666666666666666667*(3*alphaL*At33L 
+      - 3*(gt13L*PDstandardNth3beta1 + gt23L*PDstandardNth3beta2) + 
+      gt33L*(PDstandardNth1beta1 + PDstandardNth2beta2 - 
+      2*PDstandardNth3beta3));
     
     CCTK_REAL dotXt1 = 
       0.333333333333333333333333333333*(7*(gtu12*PDstandardNth12beta1 + 
       gtu13*PDstandardNth13beta1) + gtu11*(4*PDstandardNth11beta1 + 
       PDstandardNth12beta2 + PDstandardNth13beta3) + 
       gtu12*(PDstandardNth22beta2 + PDstandardNth23beta3) + 
-      3*(PDupwindNth1(&Xt1[index])*beta1L + 
-      PDupwindNth2(&Xt1[index])*beta2L + PDupwindNth3(&Xt1[index])*beta3L 
-      + gtu22*PDstandardNth22beta1 + gtu33*PDstandardNth33beta1) + 
+      3*(gtu22*PDstandardNth22beta1 + gtu33*PDstandardNth33beta1) + 
       gtu13*(PDstandardNth23beta2 + PDstandardNth33beta3) - 
       6*(Atu11*PDstandardNth1alpha + Atu12*PDstandardNth2alpha + 
       Atu13*PDstandardNth3alpha) + 6*(gtu23*PDstandardNth23beta1 + 
@@ -507,16 +479,14 @@ static void ML_BSSN_UPW_RHS1_Body(cGH const * restrict const cctkGH, int const d
       0.333333333333333333333333333333*(gtu12*(PDstandardNth11beta1 + 
       7*PDstandardNth12beta2 + PDstandardNth13beta3) + 
       gtu22*(PDstandardNth12beta1 + 4*PDstandardNth22beta2 + 
-      PDstandardNth23beta3) + 3*(PDupwindNth1(&Xt2[index])*beta1L + 
-      PDupwindNth2(&Xt2[index])*beta2L + PDupwindNth3(&Xt2[index])*beta3L 
-      + gtu11*PDstandardNth11beta2 + gtu33*PDstandardNth33beta2) + 
-      gtu23*(PDstandardNth13beta1 + 7*PDstandardNth23beta2 + 
-      PDstandardNth33beta3) - 6*(Atu12*PDstandardNth1alpha + 
-      Atu22*PDstandardNth2alpha + Atu23*PDstandardNth3alpha) + 
-      6*(gtu13*PDstandardNth13beta2 + alphaL*(6*(Atu12*cdphi1 + Atu22*cdphi2 
-      + Atu23*cdphi3) + Atu11*Gt211 + Atu22*Gt222 + 2*(Atu12*Gt212 + 
-      Atu13*Gt213 + Atu23*Gt223) + Atu33*Gt233 - 
-      0.666666666666666666666666666667*(gtu12*PDstandardNth1trK + 
+      PDstandardNth23beta3) + 3*(gtu11*PDstandardNth11beta2 + 
+      gtu33*PDstandardNth33beta2) + gtu23*(PDstandardNth13beta1 + 
+      7*PDstandardNth23beta2 + PDstandardNth33beta3) - 
+      6*(Atu12*PDstandardNth1alpha + Atu22*PDstandardNth2alpha + 
+      Atu23*PDstandardNth3alpha) + 6*(gtu13*PDstandardNth13beta2 + 
+      alphaL*(6*(Atu12*cdphi1 + Atu22*cdphi2 + Atu23*cdphi3) + Atu11*Gt211 + 
+      Atu22*Gt222 + 2*(Atu12*Gt212 + Atu13*Gt213 + Atu23*Gt223) + Atu33*Gt233 
+      - 0.666666666666666666666666666667*(gtu12*PDstandardNth1trK + 
       gtu22*PDstandardNth2trK + gtu23*PDstandardNth3trK))) - 
       150.7964473723100754462068823974161384415*alphaL*(gtu12*S1 + gtu22*S2 + 
       gtu23*S3) + 2*(PDstandardNth1beta1 + PDstandardNth2beta2 + 
@@ -526,9 +496,7 @@ static void ML_BSSN_UPW_RHS1_Body(cGH const * restrict const cctkGH, int const d
     CCTK_REAL dotXt3 = 
       0.333333333333333333333333333333*(gtu13*(PDstandardNth11beta1 + 
       PDstandardNth12beta2 + 7*PDstandardNth13beta3) + 
-      3*(PDupwindNth1(&Xt3[index])*beta1L + 
-      PDupwindNth2(&Xt3[index])*beta2L + PDupwindNth3(&Xt3[index])*beta3L 
-      + gtu11*PDstandardNth11beta3 + gtu22*PDstandardNth22beta3) + 
+      3*(gtu11*PDstandardNth11beta3 + gtu22*PDstandardNth22beta3) + 
       gtu23*(PDstandardNth12beta1 + PDstandardNth22beta2 + 
       7*PDstandardNth23beta3) + gtu33*(PDstandardNth13beta1 + 
       PDstandardNth23beta2 + 4*PDstandardNth33beta3) - 
@@ -549,17 +517,15 @@ static void ML_BSSN_UPW_RHS1_Body(cGH const * restrict const cctkGH, int const d
     
     CCTK_REAL Xt3rhsL = dotXt3;
     
-    CCTK_REAL dottrK = PDupwindNth1(&trK[index])*beta1L + 
-      PDupwindNth2(&trK[index])*beta2L + PDupwindNth3(&trK[index])*beta3L 
-      - em4phi*(gtu11*PDstandardNth11alpha + gtu22*PDstandardNth22alpha + 
-      gtu33*(PDstandardNth33alpha + 2*cdphi3*PDstandardNth3alpha) + 
-      2*(gtu12*PDstandardNth12alpha + gtu13*(PDstandardNth13alpha + 
-      cdphi1*PDstandardNth3alpha) + gtu23*(PDstandardNth23alpha + 
-      cdphi2*PDstandardNth3alpha)) + PDstandardNth1alpha*(2*(cdphi1*gtu11 + 
-      cdphi2*gtu12 + cdphi3*gtu13) - Xtn1) + 
-      PDstandardNth2alpha*(2*(cdphi1*gtu12 + cdphi2*gtu22 + cdphi3*gtu23) - 
-      Xtn2) - PDstandardNth3alpha*Xtn3) + alphaL*(2*(Atm12*Atm21 + 
-      Atm13*Atm31 + Atm23*Atm32) + 
+    CCTK_REAL dottrK = -(em4phi*(gtu11*PDstandardNth11alpha + 
+      gtu22*PDstandardNth22alpha + gtu33*(PDstandardNth33alpha + 
+      2*cdphi3*PDstandardNth3alpha) + 2*(gtu12*PDstandardNth12alpha + 
+      gtu13*(PDstandardNth13alpha + cdphi1*PDstandardNth3alpha) + 
+      gtu23*(PDstandardNth23alpha + cdphi2*PDstandardNth3alpha)) + 
+      PDstandardNth1alpha*(2*(cdphi1*gtu11 + cdphi2*gtu12 + cdphi3*gtu13) - 
+      Xtn1) + PDstandardNth2alpha*(2*(cdphi1*gtu12 + cdphi2*gtu22 + 
+      cdphi3*gtu23) - Xtn2) - PDstandardNth3alpha*Xtn3)) + 
+      alphaL*(2*(Atm12*Atm21 + Atm13*Atm31 + Atm23*Atm32) + 
       12.56637061435917295385057353311801153679*(rho + trS) + SQR(Atm11) + 
       SQR(Atm22) + SQR(Atm33) + 0.333333333333333333333333333333*SQR(trKL));
     
@@ -567,55 +533,36 @@ static void ML_BSSN_UPW_RHS1_Body(cGH const * restrict const cctkGH, int const d
     
     CCTK_REAL alpharhsL = 
       -(pow(alphaL,ToReal(harmonicN))*ToReal(harmonicF)*(trKL + (AL - 
-      trKL)*ToReal(LapseACoeff))) + (PDupwindNth1(&alpha[index])*beta1L + 
-      PDupwindNth2(&alpha[index])*beta2L + 
-      PDupwindNth3(&alpha[index])*beta3L)*ToReal(LapseAdvectionCoeff);
+      trKL)*ToReal(LapseACoeff)));
     
     CCTK_REAL ArhsL = (dottrK - 
-      AL*ToReal(AlphaDriver))*ToReal(LapseACoeff) + 
-      (PDupwindNth1(&A[index])*beta1L + PDupwindNth2(&A[index])*beta2L + 
-      PDupwindNth3(&A[index])*beta3L)*ToReal(LapseAdvectionCoeff);
+      AL*ToReal(AlphaDriver))*ToReal(LapseACoeff);
     
     CCTK_REAL eta = fmin(1,INV(rL)*ToReal(SpatialBetaDriverRadius));
     
     CCTK_REAL theta = fmin(1,exp(1 - 
       rL*INV(ToReal(SpatialShiftGammaCoeffRadius))));
     
-    CCTK_REAL beta1rhsL = (PDupwindNth1(&beta1[index])*beta1L + 
-      PDupwindNth2(&beta1[index])*beta2L + 
-      PDupwindNth3(&beta1[index])*beta3L)*ToReal(ShiftAdvectionCoeff) + 
-      theta*(Xt1L + beta1L*eta*ToReal(BetaDriver)*(-1 + ToReal(ShiftBCoeff)) 
-      + (B1L - Xt1L)*ToReal(ShiftBCoeff))*ToReal(ShiftGammaCoeff);
+    CCTK_REAL beta1rhsL = theta*(Xt1L + beta1L*eta*ToReal(BetaDriver)*(-1 
+      + ToReal(ShiftBCoeff)) + (B1L - 
+      Xt1L)*ToReal(ShiftBCoeff))*ToReal(ShiftGammaCoeff);
     
-    CCTK_REAL beta2rhsL = (PDupwindNth1(&beta2[index])*beta1L + 
-      PDupwindNth2(&beta2[index])*beta2L + 
-      PDupwindNth3(&beta2[index])*beta3L)*ToReal(ShiftAdvectionCoeff) + 
-      theta*(Xt2L + beta2L*eta*ToReal(BetaDriver)*(-1 + ToReal(ShiftBCoeff)) 
-      + (B2L - Xt2L)*ToReal(ShiftBCoeff))*ToReal(ShiftGammaCoeff);
+    CCTK_REAL beta2rhsL = theta*(Xt2L + beta2L*eta*ToReal(BetaDriver)*(-1 
+      + ToReal(ShiftBCoeff)) + (B2L - 
+      Xt2L)*ToReal(ShiftBCoeff))*ToReal(ShiftGammaCoeff);
     
-    CCTK_REAL beta3rhsL = (PDupwindNth1(&beta3[index])*beta1L + 
-      PDupwindNth2(&beta3[index])*beta2L + 
-      PDupwindNth3(&beta3[index])*beta3L)*ToReal(ShiftAdvectionCoeff) + 
-      theta*(Xt3L + beta3L*eta*ToReal(BetaDriver)*(-1 + ToReal(ShiftBCoeff)) 
-      + (B3L - Xt3L)*ToReal(ShiftBCoeff))*ToReal(ShiftGammaCoeff);
+    CCTK_REAL beta3rhsL = theta*(Xt3L + beta3L*eta*ToReal(BetaDriver)*(-1 
+      + ToReal(ShiftBCoeff)) + (B3L - 
+      Xt3L)*ToReal(ShiftBCoeff))*ToReal(ShiftGammaCoeff);
     
-    CCTK_REAL B1rhsL = ((PDupwindNth1(&B1[index]) - 
-      PDupwindNth1(&Xt1[index]))*beta1L + (PDupwindNth2(&B1[index]) - 
-      PDupwindNth2(&Xt1[index]))*beta2L + (PDupwindNth3(&B1[index]) - 
-      PDupwindNth3(&Xt1[index]))*beta3L)*ToReal(ShiftAdvectionCoeff) + 
-      (dotXt1 - B1L*eta*ToReal(BetaDriver))*ToReal(ShiftBCoeff);
+    CCTK_REAL B1rhsL = (dotXt1 - 
+      B1L*eta*ToReal(BetaDriver))*ToReal(ShiftBCoeff);
     
-    CCTK_REAL B2rhsL = ((PDupwindNth1(&B2[index]) - 
-      PDupwindNth1(&Xt2[index]))*beta1L + (PDupwindNth2(&B2[index]) - 
-      PDupwindNth2(&Xt2[index]))*beta2L + (PDupwindNth3(&B2[index]) - 
-      PDupwindNth3(&Xt2[index]))*beta3L)*ToReal(ShiftAdvectionCoeff) + 
-      (dotXt2 - B2L*eta*ToReal(BetaDriver))*ToReal(ShiftBCoeff);
+    CCTK_REAL B2rhsL = (dotXt2 - 
+      B2L*eta*ToReal(BetaDriver))*ToReal(ShiftBCoeff);
     
-    CCTK_REAL B3rhsL = ((PDupwindNth1(&B3[index]) - 
-      PDupwindNth1(&Xt3[index]))*beta1L + (PDupwindNth2(&B3[index]) - 
-      PDupwindNth2(&Xt3[index]))*beta2L + (PDupwindNth3(&B3[index]) - 
-      PDupwindNth3(&Xt3[index]))*beta3L)*ToReal(ShiftAdvectionCoeff) + 
-      (dotXt3 - B3L*eta*ToReal(BetaDriver))*ToReal(ShiftBCoeff);
+    CCTK_REAL B3rhsL = (dotXt3 - 
+      B3L*eta*ToReal(BetaDriver))*ToReal(ShiftBCoeff);
     
     /* Copy local copies back to grid functions */
     alpharhs[index] = alpharhsL;

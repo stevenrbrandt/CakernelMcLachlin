@@ -54,7 +54,7 @@ static void ML_BSSN_UPW_RHS2_Body(cGH const * restrict const cctkGH, int const d
   const char *groups[] = {"ML_BSSN_UPW::ML_curv","ML_BSSN_UPW::ML_curvrhs","ML_BSSN_UPW::ML_Gamma","ML_BSSN_UPW::ML_lapse","ML_BSSN_UPW::ML_log_confac","ML_BSSN_UPW::ML_metric","ML_BSSN_UPW::ML_shift","ML_BSSN_UPW::ML_trace_curv"};
   GenericFD_AssertGroupStorage(cctkGH, "ML_BSSN_UPW_RHS2", 8, groups);
   
-  GenericFD_EnsureStencilFits(cctkGH, "ML_BSSN_UPW_RHS2", 3, 3, 3);
+  GenericFD_EnsureStencilFits(cctkGH, "ML_BSSN_UPW_RHS2", 2, 2, 2);
   
   /* Include user-supplied include files */
   
@@ -642,9 +642,7 @@ static void ML_BSSN_UPW_RHS2_Body(cGH const * restrict const cctkGH, int const d
       + Ats23*gu23) + Ats33*gu33;
     
     CCTK_REAL At11rhsL = -2.*alphaL*(At11L*Atm11 + At12L*Atm21 + 
-      At13L*Atm31) + PDupwindNth1(&At11[index])*beta1L + 
-      PDupwindNth2(&At11[index])*beta2L + 
-      PDupwindNth3(&At11[index])*beta3L + 2.*(At12L*PDstandardNth1beta2 + 
+      At13L*Atm31) + 2.*(At12L*PDstandardNth1beta2 + 
       At13L*PDstandardNth1beta3) + 
       At11L*(1.333333333333333333333333333333333333333*PDstandardNth1beta1 - 
       0.6666666666666666666666666666666666666667*(PDstandardNth2beta2 + 
@@ -654,11 +652,8 @@ static void ML_BSSN_UPW_RHS2_Body(cGH const * restrict const cctkGH, int const d
       8.377580409572781969233715688745341024526*g11*trS));
     
     CCTK_REAL At12rhsL = -2.*alphaL*(At11L*Atm12 + At12L*Atm22 + 
-      At13L*Atm32) + PDupwindNth1(&At12[index])*beta1L + 
-      PDupwindNth2(&At12[index])*beta2L + 
-      PDupwindNth3(&At12[index])*beta3L + At22L*PDstandardNth1beta2 + 
-      At23L*PDstandardNth1beta3 + At11L*PDstandardNth2beta1 + 
-      At13L*PDstandardNth2beta3 + 
+      At13L*Atm32) + At22L*PDstandardNth1beta2 + At23L*PDstandardNth1beta3 + 
+      At11L*PDstandardNth2beta1 + At13L*PDstandardNth2beta3 + 
       At12L*(0.3333333333333333333333333333333333333333*(PDstandardNth1beta1 
       + PDstandardNth2beta2) - 
       0.6666666666666666666666666666666666666667*PDstandardNth3beta3 + 
@@ -668,11 +663,8 @@ static void ML_BSSN_UPW_RHS2_Body(cGH const * restrict const cctkGH, int const d
       8.377580409572781969233715688745341024526*g12*trS));
     
     CCTK_REAL At13rhsL = -2.*alphaL*(At11L*Atm13 + At12L*Atm23 + 
-      At13L*Atm33) + PDupwindNth1(&At13[index])*beta1L + 
-      PDupwindNth2(&At13[index])*beta2L + 
-      PDupwindNth3(&At13[index])*beta3L + At23L*PDstandardNth1beta2 + 
-      At33L*PDstandardNth1beta3 + At11L*PDstandardNth3beta1 + 
-      At12L*PDstandardNth3beta2 + 
+      At13L*Atm33) + At23L*PDstandardNth1beta2 + At33L*PDstandardNth1beta3 + 
+      At11L*PDstandardNth3beta1 + At12L*PDstandardNth3beta2 + 
       At13L*(-0.6666666666666666666666666666666666666667*PDstandardNth2beta2 
       + 0.3333333333333333333333333333333333333333*(PDstandardNth1beta1 + 
       PDstandardNth3beta3) + alphaL*trKL) + em4phi*(Ats13 - 
@@ -681,9 +673,7 @@ static void ML_BSSN_UPW_RHS2_Body(cGH const * restrict const cctkGH, int const d
       8.377580409572781969233715688745341024526*g13*trS));
     
     CCTK_REAL At22rhsL = -2.*alphaL*(At12L*Atm12 + At22L*Atm22 + 
-      At23L*Atm32) + PDupwindNth1(&At22[index])*beta1L + 
-      PDupwindNth2(&At22[index])*beta2L + 
-      PDupwindNth3(&At22[index])*beta3L + 2.*(At12L*PDstandardNth2beta1 + 
+      At23L*Atm32) + 2.*(At12L*PDstandardNth2beta1 + 
       At23L*PDstandardNth2beta3) + 
       At22L*(1.333333333333333333333333333333333333333*PDstandardNth2beta2 - 
       0.6666666666666666666666666666666666666667*(PDstandardNth1beta1 + 
@@ -693,11 +683,8 @@ static void ML_BSSN_UPW_RHS2_Body(cGH const * restrict const cctkGH, int const d
       8.377580409572781969233715688745341024526*g22*trS));
     
     CCTK_REAL At23rhsL = -2.*alphaL*(At12L*Atm13 + At22L*Atm23 + 
-      At23L*Atm33) + PDupwindNth1(&At23[index])*beta1L + 
-      PDupwindNth2(&At23[index])*beta2L + 
-      PDupwindNth3(&At23[index])*beta3L + At13L*PDstandardNth2beta1 + 
-      At33L*PDstandardNth2beta3 + At12L*PDstandardNth3beta1 + 
-      At22L*PDstandardNth3beta2 + 
+      At23L*Atm33) + At13L*PDstandardNth2beta1 + At33L*PDstandardNth2beta3 + 
+      At12L*PDstandardNth3beta1 + At22L*PDstandardNth3beta2 + 
       At23L*(-0.6666666666666666666666666666666666666667*PDstandardNth1beta1 
       + 0.3333333333333333333333333333333333333333*(PDstandardNth2beta2 + 
       PDstandardNth3beta3) + alphaL*trKL) + em4phi*(Ats23 - 
@@ -706,9 +693,7 @@ static void ML_BSSN_UPW_RHS2_Body(cGH const * restrict const cctkGH, int const d
       8.377580409572781969233715688745341024526*g23*trS));
     
     CCTK_REAL At33rhsL = -2.*alphaL*(At13L*Atm13 + At23L*Atm23 + 
-      At33L*Atm33) + PDupwindNth1(&At33[index])*beta1L + 
-      PDupwindNth2(&At33[index])*beta2L + 
-      PDupwindNth3(&At33[index])*beta3L + 2.*(At13L*PDstandardNth3beta1 + 
+      At33L*Atm33) + 2.*(At13L*PDstandardNth3beta1 + 
       At23L*PDstandardNth3beta2) + 
       At33L*(-0.6666666666666666666666666666666666666667*(PDstandardNth1beta1 
       + PDstandardNth2beta2) + 

@@ -251,6 +251,12 @@ CCTK_INT ML_BSSN_Dissipation_calc_every "ML_BSSN_Dissipation_calc_every" STEERAB
 } 1
 
 restricted:
+CCTK_INT ML_BSSN_Advect_calc_every "ML_BSSN_Advect_calc_every" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 1
+
+restricted:
 CCTK_INT ML_BSSN_RHSStaticBoundary_calc_every "ML_BSSN_RHSStaticBoundary_calc_every" STEERABLE=ALWAYS
 {
   *:* :: ""
@@ -336,6 +342,12 @@ CCTK_INT ML_BSSN_RHS2_calc_offset "ML_BSSN_RHS2_calc_offset" STEERABLE=ALWAYS
 
 restricted:
 CCTK_INT ML_BSSN_Dissipation_calc_offset "ML_BSSN_Dissipation_calc_offset" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 0
+
+restricted:
+CCTK_INT ML_BSSN_Advect_calc_offset "ML_BSSN_Advect_calc_offset" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 0
