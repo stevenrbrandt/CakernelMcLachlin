@@ -700,13 +700,13 @@ evolCalc =
                       + gtu[uj,ul] PD[beta[ui],lj,ll]
                       + (1/3) gtu[ui,uj] PD[beta[ul],lj,ll]
                       + Upwind[beta[uj], Xt[ui], lj]
-                      + epsdiss[uj] PDdiss[Xt[ui],lj]
                       - Xtn[uj] PD[beta[ui],lj] 
                       + (2/3) Xtn[ui] PD[beta[uj],lj]
     (* Equation (4.28) in Baumgarte & Shapiro (Phys. Rept. 376 (2003) 41-131) *)
                       + addMatter (- 16 pi alpha gtu[ui,uj] S[lj]),
-    dot[Xt[ui]]    -> dotXt[ui],
-    
+    dot[Xt[ui]]    -> dotXt[ui]
+                      + epsdiss[uj] PDdiss[Xt[ui],lj],
+
     (* PRD 62, 044034 (2000), eqn. (11) *)
     dottrK         -> - em4phi ( gtu[ua,ub] ( PD[alpha,la,lb]
                                 + 2 cdphi[la] PD[alpha,lb] )
