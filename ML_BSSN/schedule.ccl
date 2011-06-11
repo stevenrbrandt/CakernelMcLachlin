@@ -284,6 +284,15 @@ if (CCTK_EQUALS(my_initial_data, "ADMBase"))
 
 if (CCTK_EQUALS(my_initial_data, "ADMBase"))
 {
+  schedule ML_BSSN_InitGamma AT initial BEFORE ML_BSSN_convertFromADMBaseGamma
+  {
+    LANG: C
+  } "ML_BSSN_InitGamma"
+}
+
+
+if (CCTK_EQUALS(my_initial_data, "ADMBase"))
+{
   schedule ML_BSSN_convertFromADMBaseGamma AT initial AFTER ML_BSSN_convertFromADMBase
   {
     LANG: C

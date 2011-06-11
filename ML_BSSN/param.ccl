@@ -227,6 +227,12 @@ CCTK_INT ML_BSSN_convertFromADMBase_calc_every "ML_BSSN_convertFromADMBase_calc_
 } 1
 
 restricted:
+CCTK_INT ML_BSSN_InitGamma_calc_every "ML_BSSN_InitGamma_calc_every" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 1
+
+restricted:
 CCTK_INT ML_BSSN_convertFromADMBaseGamma_calc_every "ML_BSSN_convertFromADMBaseGamma_calc_every" STEERABLE=ALWAYS
 {
   *:* :: ""
@@ -318,6 +324,12 @@ CCTK_INT ML_BSSN_Minkowski_calc_offset "ML_BSSN_Minkowski_calc_offset" STEERABLE
 
 restricted:
 CCTK_INT ML_BSSN_convertFromADMBase_calc_offset "ML_BSSN_convertFromADMBase_calc_offset" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 0
+
+restricted:
+CCTK_INT ML_BSSN_InitGamma_calc_offset "ML_BSSN_InitGamma_calc_offset" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 0
