@@ -273,20 +273,20 @@ static void ML_BSSN_UPW_convertFromADMBaseGamma_Body(cGH const * restrict const 
     
     if (ShiftBCoeff*ShiftGammaCoeff != 0)
     {
-      B1L = INV(theta)*INV(ToReal(ShiftGammaCoeff))*(dtbetaxL - 
+      B1L = -(INV(theta)*INV(ToReal(ShiftGammaCoeff))*(-dtbetaxL + 
         (PDupwindNth1(&beta1[index])*beta1L + 
         PDupwindNth2(&beta1[index])*beta2L + 
-        PDupwindNth3(&beta1[index])*beta3L)*ToReal(ShiftAdvectionCoeff));
+        PDupwindNth3(&beta1[index])*beta3L)*ToReal(ShiftAdvectionCoeff)));
       
-      B2L = INV(theta)*INV(ToReal(ShiftGammaCoeff))*(dtbetayL - 
+      B2L = -(INV(theta)*INV(ToReal(ShiftGammaCoeff))*(-dtbetayL + 
         (PDupwindNth1(&beta2[index])*beta1L + 
         PDupwindNth2(&beta2[index])*beta2L + 
-        PDupwindNth3(&beta2[index])*beta3L)*ToReal(ShiftAdvectionCoeff));
+        PDupwindNth3(&beta2[index])*beta3L)*ToReal(ShiftAdvectionCoeff)));
       
-      B3L = INV(theta)*INV(ToReal(ShiftGammaCoeff))*(dtbetazL - 
+      B3L = -(INV(theta)*INV(ToReal(ShiftGammaCoeff))*(-dtbetazL + 
         (PDupwindNth1(&beta3[index])*beta1L + 
         PDupwindNth2(&beta3[index])*beta2L + 
-        PDupwindNth3(&beta3[index])*beta3L)*ToReal(ShiftAdvectionCoeff));
+        PDupwindNth3(&beta3[index])*beta3L)*ToReal(ShiftAdvectionCoeff)));
     }
     else
     {

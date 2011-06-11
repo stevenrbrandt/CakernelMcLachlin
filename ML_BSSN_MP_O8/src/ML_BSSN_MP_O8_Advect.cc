@@ -569,17 +569,18 @@ static void ML_BSSN_MP_O8_Advect_Body(cGH const * restrict const cctkGH, int con
     B1rhsL = B1rhsL + ((beta1L*J11L + beta2L*J12L + 
       beta3L*J13L)*(PDupwindNthAnti1B1 - PDupwindNthAnti1Xt1) + (beta1L*J21L 
       + beta2L*J22L + beta3L*J23L)*(PDupwindNthAnti2B1 - PDupwindNthAnti2Xt1) 
-      + (beta1L*J31L + beta2L*J32L + beta3L*J33L)*(PDupwindNthAnti3B1 - 
-      PDupwindNthAnti3Xt1) + (J11L*(PDupwindNthSymm1B1 - PDupwindNthSymm1Xt1) 
-      + J21L*(PDupwindNthSymm2B1 - PDupwindNthSymm2Xt1) + 
-      J31L*(PDupwindNthSymm3B1 - PDupwindNthSymm3Xt1))*Abs(beta1L) + 
-      (J12L*(PDupwindNthSymm1B1 - PDupwindNthSymm1Xt1) + 
-      J22L*(PDupwindNthSymm2B1 - PDupwindNthSymm2Xt1) + 
-      J32L*(PDupwindNthSymm3B1 - PDupwindNthSymm3Xt1))*Abs(beta2L) + 
-      (J13L*(PDupwindNthSymm1B1 - PDupwindNthSymm1Xt1) + 
-      J23L*(PDupwindNthSymm2B1 - PDupwindNthSymm2Xt1) + 
+      + (beta1L*J31L + beta2L*J32L + beta3L*J33L)*PDupwindNthAnti3B1 + 
+      (-(beta1L*J31L) - beta2L*J32L - beta3L*J33L)*PDupwindNthAnti3Xt1 + 
+      J11L*(PDupwindNthSymm1B1 - PDupwindNthSymm1Xt1)*Abs(beta1L) + 
+      J21L*(PDupwindNthSymm2B1 - PDupwindNthSymm2Xt1)*Abs(beta1L) + 
+      J31L*(PDupwindNthSymm3B1 - PDupwindNthSymm3Xt1)*Abs(beta1L) + 
+      J12L*(PDupwindNthSymm1B1 - PDupwindNthSymm1Xt1)*Abs(beta2L) + 
+      J22L*(PDupwindNthSymm2B1 - PDupwindNthSymm2Xt1)*Abs(beta2L) + 
+      J32L*(PDupwindNthSymm3B1 - PDupwindNthSymm3Xt1)*Abs(beta2L) + 
+      J13L*(PDupwindNthSymm1B1 - PDupwindNthSymm1Xt1)*Abs(beta3L) + 
+      J23L*(PDupwindNthSymm2B1 - PDupwindNthSymm2Xt1)*Abs(beta3L) + 
       J33L*(PDupwindNthSymm3B1 - 
-      PDupwindNthSymm3Xt1))*Abs(beta3L))*ToReal(ShiftAdvectionCoeff) + 
+      PDupwindNthSymm3Xt1)*Abs(beta3L))*ToReal(ShiftAdvectionCoeff) + 
       ((beta1L*J11L + beta2L*J12L + beta3L*J13L)*PDupwindNthAnti1Xt1 + 
       (beta1L*J21L + beta2L*J22L + beta3L*J23L)*PDupwindNthAnti2Xt1 + 
       (beta1L*J31L + beta2L*J32L + beta3L*J33L)*PDupwindNthAnti3Xt1 + 
@@ -592,17 +593,18 @@ static void ML_BSSN_MP_O8_Advect_Body(cGH const * restrict const cctkGH, int con
     B2rhsL = B2rhsL + ((beta1L*J11L + beta2L*J12L + 
       beta3L*J13L)*(PDupwindNthAnti1B2 - PDupwindNthAnti1Xt2) + (beta1L*J21L 
       + beta2L*J22L + beta3L*J23L)*(PDupwindNthAnti2B2 - PDupwindNthAnti2Xt2) 
-      + (beta1L*J31L + beta2L*J32L + beta3L*J33L)*(PDupwindNthAnti3B2 - 
-      PDupwindNthAnti3Xt2) + (J11L*(PDupwindNthSymm1B2 - PDupwindNthSymm1Xt2) 
-      + J21L*(PDupwindNthSymm2B2 - PDupwindNthSymm2Xt2) + 
-      J31L*(PDupwindNthSymm3B2 - PDupwindNthSymm3Xt2))*Abs(beta1L) + 
-      (J12L*(PDupwindNthSymm1B2 - PDupwindNthSymm1Xt2) + 
-      J22L*(PDupwindNthSymm2B2 - PDupwindNthSymm2Xt2) + 
-      J32L*(PDupwindNthSymm3B2 - PDupwindNthSymm3Xt2))*Abs(beta2L) + 
-      (J13L*(PDupwindNthSymm1B2 - PDupwindNthSymm1Xt2) + 
-      J23L*(PDupwindNthSymm2B2 - PDupwindNthSymm2Xt2) + 
+      + (beta1L*J31L + beta2L*J32L + beta3L*J33L)*PDupwindNthAnti3B2 + 
+      (-(beta1L*J31L) - beta2L*J32L - beta3L*J33L)*PDupwindNthAnti3Xt2 + 
+      J11L*(PDupwindNthSymm1B2 - PDupwindNthSymm1Xt2)*Abs(beta1L) + 
+      J21L*(PDupwindNthSymm2B2 - PDupwindNthSymm2Xt2)*Abs(beta1L) + 
+      J31L*(PDupwindNthSymm3B2 - PDupwindNthSymm3Xt2)*Abs(beta1L) + 
+      J12L*(PDupwindNthSymm1B2 - PDupwindNthSymm1Xt2)*Abs(beta2L) + 
+      J22L*(PDupwindNthSymm2B2 - PDupwindNthSymm2Xt2)*Abs(beta2L) + 
+      J32L*(PDupwindNthSymm3B2 - PDupwindNthSymm3Xt2)*Abs(beta2L) + 
+      J13L*(PDupwindNthSymm1B2 - PDupwindNthSymm1Xt2)*Abs(beta3L) + 
+      J23L*(PDupwindNthSymm2B2 - PDupwindNthSymm2Xt2)*Abs(beta3L) + 
       J33L*(PDupwindNthSymm3B2 - 
-      PDupwindNthSymm3Xt2))*Abs(beta3L))*ToReal(ShiftAdvectionCoeff) + 
+      PDupwindNthSymm3Xt2)*Abs(beta3L))*ToReal(ShiftAdvectionCoeff) + 
       ((beta1L*J11L + beta2L*J12L + beta3L*J13L)*PDupwindNthAnti1Xt2 + 
       (beta1L*J21L + beta2L*J22L + beta3L*J23L)*PDupwindNthAnti2Xt2 + 
       (beta1L*J31L + beta2L*J32L + beta3L*J33L)*PDupwindNthAnti3Xt2 + 
@@ -615,17 +617,18 @@ static void ML_BSSN_MP_O8_Advect_Body(cGH const * restrict const cctkGH, int con
     B3rhsL = B3rhsL + ((beta1L*J11L + beta2L*J12L + 
       beta3L*J13L)*(PDupwindNthAnti1B3 - PDupwindNthAnti1Xt3) + (beta1L*J21L 
       + beta2L*J22L + beta3L*J23L)*(PDupwindNthAnti2B3 - PDupwindNthAnti2Xt3) 
-      + (beta1L*J31L + beta2L*J32L + beta3L*J33L)*(PDupwindNthAnti3B3 - 
-      PDupwindNthAnti3Xt3) + (J11L*(PDupwindNthSymm1B3 - PDupwindNthSymm1Xt3) 
-      + J21L*(PDupwindNthSymm2B3 - PDupwindNthSymm2Xt3) + 
-      J31L*(PDupwindNthSymm3B3 - PDupwindNthSymm3Xt3))*Abs(beta1L) + 
-      (J12L*(PDupwindNthSymm1B3 - PDupwindNthSymm1Xt3) + 
-      J22L*(PDupwindNthSymm2B3 - PDupwindNthSymm2Xt3) + 
-      J32L*(PDupwindNthSymm3B3 - PDupwindNthSymm3Xt3))*Abs(beta2L) + 
-      (J13L*(PDupwindNthSymm1B3 - PDupwindNthSymm1Xt3) + 
-      J23L*(PDupwindNthSymm2B3 - PDupwindNthSymm2Xt3) + 
+      + (beta1L*J31L + beta2L*J32L + beta3L*J33L)*PDupwindNthAnti3B3 + 
+      (-(beta1L*J31L) - beta2L*J32L - beta3L*J33L)*PDupwindNthAnti3Xt3 + 
+      J11L*(PDupwindNthSymm1B3 - PDupwindNthSymm1Xt3)*Abs(beta1L) + 
+      J21L*(PDupwindNthSymm2B3 - PDupwindNthSymm2Xt3)*Abs(beta1L) + 
+      J31L*(PDupwindNthSymm3B3 - PDupwindNthSymm3Xt3)*Abs(beta1L) + 
+      J12L*(PDupwindNthSymm1B3 - PDupwindNthSymm1Xt3)*Abs(beta2L) + 
+      J22L*(PDupwindNthSymm2B3 - PDupwindNthSymm2Xt3)*Abs(beta2L) + 
+      J32L*(PDupwindNthSymm3B3 - PDupwindNthSymm3Xt3)*Abs(beta2L) + 
+      J13L*(PDupwindNthSymm1B3 - PDupwindNthSymm1Xt3)*Abs(beta3L) + 
+      J23L*(PDupwindNthSymm2B3 - PDupwindNthSymm2Xt3)*Abs(beta3L) + 
       J33L*(PDupwindNthSymm3B3 - 
-      PDupwindNthSymm3Xt3))*Abs(beta3L))*ToReal(ShiftAdvectionCoeff) + 
+      PDupwindNthSymm3Xt3)*Abs(beta3L))*ToReal(ShiftAdvectionCoeff) + 
       ((beta1L*J11L + beta2L*J12L + beta3L*J13L)*PDupwindNthAnti1Xt3 + 
       (beta1L*J21L + beta2L*J22L + beta3L*J23L)*PDupwindNthAnti2Xt3 + 
       (beta1L*J31L + beta2L*J32L + beta3L*J33L)*PDupwindNthAnti3Xt3 + 

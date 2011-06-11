@@ -286,29 +286,35 @@ static void ML_BSSN_UPW_Advect_Body(cGH const * restrict const cctkGH, int const
       PDupwindNth2(&beta3[index])*beta2L + 
       PDupwindNth3(&beta3[index])*beta3L)*ToReal(ShiftAdvectionCoeff);
     
-    B1rhsL = B1rhsL + ((PDupwindNth1(&B1[index]) - 
-      PDupwindNth1(&Xt1[index]))*beta1L + (PDupwindNth2(&B1[index]) - 
-      PDupwindNth2(&Xt1[index]))*beta2L + (PDupwindNth3(&B1[index]) - 
-      PDupwindNth3(&Xt1[index]))*beta3L)*ToReal(ShiftAdvectionCoeff) + 
-      (PDupwindNth1(&Xt1[index])*beta1L + 
-      PDupwindNth2(&Xt1[index])*beta2L + 
-      PDupwindNth3(&Xt1[index])*beta3L)*ToReal(ShiftBCoeff);
+    B1rhsL = B1rhsL + beta1L*((PDupwindNth1(&B1[index]) - 
+      PDupwindNth1(&Xt1[index]))*ToReal(ShiftAdvectionCoeff) + 
+      PDupwindNth1(&Xt1[index])*ToReal(ShiftBCoeff)) + 
+      beta2L*((PDupwindNth2(&B1[index]) - 
+      PDupwindNth2(&Xt1[index]))*ToReal(ShiftAdvectionCoeff) + 
+      PDupwindNth2(&Xt1[index])*ToReal(ShiftBCoeff)) + 
+      beta3L*((PDupwindNth3(&B1[index]) - 
+      PDupwindNth3(&Xt1[index]))*ToReal(ShiftAdvectionCoeff) + 
+      PDupwindNth3(&Xt1[index])*ToReal(ShiftBCoeff));
     
-    B2rhsL = B2rhsL + ((PDupwindNth1(&B2[index]) - 
-      PDupwindNth1(&Xt2[index]))*beta1L + (PDupwindNth2(&B2[index]) - 
-      PDupwindNth2(&Xt2[index]))*beta2L + (PDupwindNth3(&B2[index]) - 
-      PDupwindNth3(&Xt2[index]))*beta3L)*ToReal(ShiftAdvectionCoeff) + 
-      (PDupwindNth1(&Xt2[index])*beta1L + 
-      PDupwindNth2(&Xt2[index])*beta2L + 
-      PDupwindNth3(&Xt2[index])*beta3L)*ToReal(ShiftBCoeff);
+    B2rhsL = B2rhsL + beta1L*((PDupwindNth1(&B2[index]) - 
+      PDupwindNth1(&Xt2[index]))*ToReal(ShiftAdvectionCoeff) + 
+      PDupwindNth1(&Xt2[index])*ToReal(ShiftBCoeff)) + 
+      beta2L*((PDupwindNth2(&B2[index]) - 
+      PDupwindNth2(&Xt2[index]))*ToReal(ShiftAdvectionCoeff) + 
+      PDupwindNth2(&Xt2[index])*ToReal(ShiftBCoeff)) + 
+      beta3L*((PDupwindNth3(&B2[index]) - 
+      PDupwindNth3(&Xt2[index]))*ToReal(ShiftAdvectionCoeff) + 
+      PDupwindNth3(&Xt2[index])*ToReal(ShiftBCoeff));
     
-    B3rhsL = B3rhsL + ((PDupwindNth1(&B3[index]) - 
-      PDupwindNth1(&Xt3[index]))*beta1L + (PDupwindNth2(&B3[index]) - 
-      PDupwindNth2(&Xt3[index]))*beta2L + (PDupwindNth3(&B3[index]) - 
-      PDupwindNth3(&Xt3[index]))*beta3L)*ToReal(ShiftAdvectionCoeff) + 
-      (PDupwindNth1(&Xt3[index])*beta1L + 
-      PDupwindNth2(&Xt3[index])*beta2L + 
-      PDupwindNth3(&Xt3[index])*beta3L)*ToReal(ShiftBCoeff);
+    B3rhsL = B3rhsL + beta1L*((PDupwindNth1(&B3[index]) - 
+      PDupwindNth1(&Xt3[index]))*ToReal(ShiftAdvectionCoeff) + 
+      PDupwindNth1(&Xt3[index])*ToReal(ShiftBCoeff)) + 
+      beta2L*((PDupwindNth2(&B3[index]) - 
+      PDupwindNth2(&Xt3[index]))*ToReal(ShiftAdvectionCoeff) + 
+      PDupwindNth2(&Xt3[index])*ToReal(ShiftBCoeff)) + 
+      beta3L*((PDupwindNth3(&B3[index]) - 
+      PDupwindNth3(&Xt3[index]))*ToReal(ShiftAdvectionCoeff) + 
+      PDupwindNth3(&Xt3[index])*ToReal(ShiftBCoeff));
     
     /* Copy local copies back to grid functions */
     alpharhs[index] = alpharhsL;
