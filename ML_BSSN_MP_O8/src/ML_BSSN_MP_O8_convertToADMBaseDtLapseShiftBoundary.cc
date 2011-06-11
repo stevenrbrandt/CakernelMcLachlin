@@ -109,6 +109,51 @@ static void ML_BSSN_MP_O8_convertToADMBaseDtLapseShiftBoundary_Body(cGH const * 
   CCTK_REAL const pm1o840dy = -0.00119047619047619047619047619048*INV(dy);
   CCTK_REAL const pm1o840dz = -0.00119047619047619047619047619048*INV(dz);
   
+  /* Jacobian variable pointers */
+  bool const use_jacobian = (!CCTK_IsFunctionAliased("MultiPatch_GetMap") || MultiPatch_GetMap(cctkGH) != jacobian_identity_map)
+                       && strlen(jacobian_group) > 0;
+  if (use_jacobian && strlen(jacobian_derivative_group) == 0)
+  {
+    CCTK_WARN (1, "GenericFD::jacobian_group and GenericFD::jacobian_derivative_group must both be set to valid group names");
+  }
+  
+  CCTK_REAL const *restrict jacobian_ptrs[9];
+  if (use_jacobian) GenericFD_GroupDataPointers(cctkGH, jacobian_group,
+                                                9, jacobian_ptrs);
+  
+  CCTK_REAL const *restrict const J11 = use_jacobian ? jacobian_ptrs[0] : 0;
+  CCTK_REAL const *restrict const J12 = use_jacobian ? jacobian_ptrs[1] : 0;
+  CCTK_REAL const *restrict const J13 = use_jacobian ? jacobian_ptrs[2] : 0;
+  CCTK_REAL const *restrict const J21 = use_jacobian ? jacobian_ptrs[3] : 0;
+  CCTK_REAL const *restrict const J22 = use_jacobian ? jacobian_ptrs[4] : 0;
+  CCTK_REAL const *restrict const J23 = use_jacobian ? jacobian_ptrs[5] : 0;
+  CCTK_REAL const *restrict const J31 = use_jacobian ? jacobian_ptrs[6] : 0;
+  CCTK_REAL const *restrict const J32 = use_jacobian ? jacobian_ptrs[7] : 0;
+  CCTK_REAL const *restrict const J33 = use_jacobian ? jacobian_ptrs[8] : 0;
+  
+  CCTK_REAL const *restrict jacobian_derivative_ptrs[18];
+  if (use_jacobian) GenericFD_GroupDataPointers(cctkGH, jacobian_derivative_group,
+                                                18, jacobian_derivative_ptrs);
+  
+  CCTK_REAL const *restrict const dJ111 = use_jacobian ? jacobian_derivative_ptrs[0] : 0;
+  CCTK_REAL const *restrict const dJ112 = use_jacobian ? jacobian_derivative_ptrs[1] : 0;
+  CCTK_REAL const *restrict const dJ113 = use_jacobian ? jacobian_derivative_ptrs[2] : 0;
+  CCTK_REAL const *restrict const dJ122 = use_jacobian ? jacobian_derivative_ptrs[3] : 0;
+  CCTK_REAL const *restrict const dJ123 = use_jacobian ? jacobian_derivative_ptrs[4] : 0;
+  CCTK_REAL const *restrict const dJ133 = use_jacobian ? jacobian_derivative_ptrs[5] : 0;
+  CCTK_REAL const *restrict const dJ211 = use_jacobian ? jacobian_derivative_ptrs[6] : 0;
+  CCTK_REAL const *restrict const dJ212 = use_jacobian ? jacobian_derivative_ptrs[7] : 0;
+  CCTK_REAL const *restrict const dJ213 = use_jacobian ? jacobian_derivative_ptrs[8] : 0;
+  CCTK_REAL const *restrict const dJ222 = use_jacobian ? jacobian_derivative_ptrs[9] : 0;
+  CCTK_REAL const *restrict const dJ223 = use_jacobian ? jacobian_derivative_ptrs[10] : 0;
+  CCTK_REAL const *restrict const dJ233 = use_jacobian ? jacobian_derivative_ptrs[11] : 0;
+  CCTK_REAL const *restrict const dJ311 = use_jacobian ? jacobian_derivative_ptrs[12] : 0;
+  CCTK_REAL const *restrict const dJ312 = use_jacobian ? jacobian_derivative_ptrs[13] : 0;
+  CCTK_REAL const *restrict const dJ313 = use_jacobian ? jacobian_derivative_ptrs[14] : 0;
+  CCTK_REAL const *restrict const dJ322 = use_jacobian ? jacobian_derivative_ptrs[15] : 0;
+  CCTK_REAL const *restrict const dJ323 = use_jacobian ? jacobian_derivative_ptrs[16] : 0;
+  CCTK_REAL const *restrict const dJ333 = use_jacobian ? jacobian_derivative_ptrs[17] : 0;
+  
   /* Loop over the grid points */
   #pragma omp parallel
   LC_LOOP3 (ML_BSSN_MP_O8_convertToADMBaseDtLapseShiftBoundary,
@@ -132,6 +177,7 @@ static void ML_BSSN_MP_O8_convertToADMBaseDtLapseShiftBoundary_Body(cGH const * 
     CCTK_REAL Xt1L = Xt1[index];
     CCTK_REAL Xt2L = Xt2[index];
     CCTK_REAL Xt3L = Xt3[index];
+    
     
     
     /* Include user supplied include files */

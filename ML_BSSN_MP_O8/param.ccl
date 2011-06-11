@@ -37,6 +37,9 @@ EXTENDS CCTK_KEYWORD dtshift_evolution_method "dtshift_evolution_method"
 
 shares: GenericFD
 
+USES CCTK_STRING jacobian_group
+USES CCTK_STRING jacobian_derivative_group
+USES CCTK_INT jacobian_identity_map
 
 
 shares: MethodOfLines
