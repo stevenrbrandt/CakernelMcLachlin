@@ -357,7 +357,7 @@ static void ML_BSSN_UPW_RHS1_Body(cGH const * restrict const cctkGH, int const d
     CCTK_REAL Xtn3 = Gt311*gtu11 + Gt322*gtu22 + 2*(Gt312*gtu12 + 
       Gt313*gtu13 + Gt323*gtu23) + Gt333*gtu33;
     
-    CCTK_REAL fac1 = IfThen(ToReal(conformalMethod),-0.5*INV(phiL),1);
+    CCTK_REAL fac1 = IfThen(conformalMethod,-0.5*INV(phiL),1);
     
     CCTK_REAL cdphi1 = fac1*PDstandardNth1phi;
     
@@ -395,8 +395,7 @@ static void ML_BSSN_UPW_RHS1_Body(cGH const * restrict const cctkGH, int const d
     
     CCTK_REAL Atu33 = Atm31*gtu13 + Atm32*gtu23 + Atm33*gtu33;
     
-    CCTK_REAL e4phi = 
-      IfThen(ToReal(conformalMethod),INV(SQR(phiL)),exp(4*phiL));
+    CCTK_REAL e4phi = IfThen(conformalMethod,INV(SQR(phiL)),exp(4*phiL));
     
     CCTK_REAL em4phi = INV(e4phi);
     
@@ -418,7 +417,7 @@ static void ML_BSSN_UPW_RHS1_Body(cGH const * restrict const cctkGH, int const d
       eTxzL*gtu13 + eTyzL*gtu23) + eTzzL*gtu33);
     
     CCTK_REAL phirhsL = 
-      IfThen(ToReal(conformalMethod),phiL*(-0.333333333333333333333333333333*(PDstandardNth1beta1 
+      IfThen(conformalMethod,phiL*(-0.333333333333333333333333333333*(PDstandardNth1beta1 
       + PDstandardNth2beta2 + PDstandardNth3beta3) + 
       0.333333333333333333333333333333*alphaL*trKL),0.166666666666666666666666666667*(PDstandardNth1beta1 
       + PDstandardNth2beta2 + PDstandardNth3beta3) - 

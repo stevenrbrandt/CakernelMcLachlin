@@ -350,7 +350,7 @@ static void ML_BSSN_MP_O8_constraints2_Body(cGH const * restrict const cctkGH, i
     
     CCTK_REAL Gt333 = Gtl133*gtu13 + Gtl233*gtu23 + Gtl333*gtu33;
     
-    CCTK_REAL fac1 = IfThen(ToReal(conformalMethod),-0.5*INV(phiL),1);
+    CCTK_REAL fac1 = IfThen(conformalMethod,-0.5*INV(phiL),1);
     
     CCTK_REAL cdphi1 = fac1*(J11L*PDstandardNth1phi + 
       J21L*PDstandardNth2phi + J31L*PDstandardNth3phi);

@@ -732,7 +732,7 @@ static void ML_BSSN_MP_O8_constraints1_Body(cGH const * restrict const cctkGH, i
       dJ333L*PDstandardNth3gt33 + PDstandardNth11gt33*SQR(J13L) + 
       PDstandardNth22gt33*SQR(J23L) + PDstandardNth33gt33*SQR(J33L)));
     
-    CCTK_REAL fac1 = IfThen(ToReal(conformalMethod),-0.5*INV(phiL),1);
+    CCTK_REAL fac1 = IfThen(conformalMethod,-0.5*INV(phiL),1);
     
     CCTK_REAL cdphi1 = fac1*(J11L*PDstandardNth1phi + 
       J21L*PDstandardNth2phi + J31L*PDstandardNth3phi);
@@ -743,7 +743,7 @@ static void ML_BSSN_MP_O8_constraints1_Body(cGH const * restrict const cctkGH, i
     CCTK_REAL cdphi3 = fac1*(J13L*PDstandardNth1phi + 
       J23L*PDstandardNth2phi + J33L*PDstandardNth3phi);
     
-    CCTK_REAL fac2 = IfThen(ToReal(conformalMethod),0.5*INV(SQR(phiL)),0);
+    CCTK_REAL fac2 = IfThen(conformalMethod,0.5*INV(SQR(phiL)),0);
     
     CCTK_REAL cdphi211 = fac1*((dJ111L - Gt111*J11L - Gt211*J12L - 
       Gt311*J13L)*PDstandardNth1phi + 2*(J11L*(J21L*PDstandardNth12phi + 
@@ -847,8 +847,7 @@ static void ML_BSSN_MP_O8_constraints1_Body(cGH const * restrict const cctkGH, i
       + 2*SQR(cdphi1)) + gtu22*(cdphi222 + 2*SQR(cdphi2))) + 2*(-1 + 
       gt33L*gtu33)*SQR(cdphi3));
     
-    CCTK_REAL e4phi = 
-      IfThen(ToReal(conformalMethod),INV(SQR(phiL)),exp(4*phiL));
+    CCTK_REAL e4phi = IfThen(conformalMethod,INV(SQR(phiL)),exp(4*phiL));
     
     CCTK_REAL em4phi = INV(e4phi);
     

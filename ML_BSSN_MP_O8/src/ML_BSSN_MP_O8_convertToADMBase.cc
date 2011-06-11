@@ -135,8 +135,7 @@ static void ML_BSSN_MP_O8_convertToADMBase_Body(cGH const * restrict const cctkG
     /* Precompute derivatives */
     
     /* Calculate temporaries and grid functions */
-    CCTK_REAL e4phi = 
-      IfThen(ToReal(conformalMethod),INV(SQR(phiL)),exp(4*phiL));
+    CCTK_REAL e4phi = IfThen(conformalMethod,INV(SQR(phiL)),exp(4*phiL));
     
     gxxL = e4phi*gt11L;
     

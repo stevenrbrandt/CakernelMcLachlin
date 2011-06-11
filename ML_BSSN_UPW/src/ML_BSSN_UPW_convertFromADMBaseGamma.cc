@@ -258,32 +258,28 @@ static void ML_BSSN_UPW_convertFromADMBaseGamma_Body(cGH const * restrict const 
     CCTK_REAL Xt3L = Gt311*gtu11 + Gt322*gtu22 + 2*(Gt312*gtu12 + 
       Gt313*gtu13 + Gt323*gtu23) + Gt333*gtu33;
     
-    CCTK_REAL AL = IfThen(ToReal(LapseACoeff) != 
-      0,-(INV(ToReal(harmonicF))*pow(alphaL,-ToReal(harmonicN))*(9*dtalpL - 
+    CCTK_REAL AL = IfThen(LapseACoeff != 0,(-9*dtalpL + 
       (PDupwindNth1(&alpha[index])*beta1L + 
       PDupwindNth2(&alpha[index])*beta2L + 
-      PDupwindNth3(&alpha[index])*beta3L)*ToReal(LapseAdvectionCoeff))),0);
+      PDupwindNth3(&alpha[index])*beta3L)*LapseAdvectionCoeff)*INV(harmonicF)*pow(alphaL,-harmonicN),0);
     
     CCTK_REAL theta = fmin(1,exp(1 - 
       rL*INV(ToReal(SpatialShiftGammaCoeffRadius))));
     
-    CCTK_REAL B1L = IfThen(ToReal(ShiftBCoeff)*ToReal(ShiftGammaCoeff) != 
-      0,INV(theta)*INV(ToReal(ShiftGammaCoeff))*(9*dtbetaxL - 
+    CCTK_REAL B1L = IfThen(ShiftBCoeff*ShiftGammaCoeff != 0,(9*dtbetaxL - 
       (PDupwindNth1(&beta1[index])*beta1L + 
       PDupwindNth2(&beta1[index])*beta2L + 
-      PDupwindNth3(&beta1[index])*beta3L)*ToReal(ShiftAdvectionCoeff)),0);
+      PDupwindNth3(&beta1[index])*beta3L)*ShiftAdvectionCoeff)*INV(ShiftGammaCoeff)*INV(theta),0);
     
-    CCTK_REAL B2L = IfThen(ToReal(ShiftBCoeff)*ToReal(ShiftGammaCoeff) != 
-      0,INV(theta)*INV(ToReal(ShiftGammaCoeff))*(9*dtbetayL - 
+    CCTK_REAL B2L = IfThen(ShiftBCoeff*ShiftGammaCoeff != 0,(9*dtbetayL - 
       (PDupwindNth1(&beta2[index])*beta1L + 
       PDupwindNth2(&beta2[index])*beta2L + 
-      PDupwindNth3(&beta2[index])*beta3L)*ToReal(ShiftAdvectionCoeff)),0);
+      PDupwindNth3(&beta2[index])*beta3L)*ShiftAdvectionCoeff)*INV(ShiftGammaCoeff)*INV(theta),0);
     
-    CCTK_REAL B3L = IfThen(ToReal(ShiftBCoeff)*ToReal(ShiftGammaCoeff) != 
-      0,INV(theta)*INV(ToReal(ShiftGammaCoeff))*(9*dtbetazL - 
+    CCTK_REAL B3L = IfThen(ShiftBCoeff*ShiftGammaCoeff != 0,(9*dtbetazL - 
       (PDupwindNth1(&beta3[index])*beta1L + 
       PDupwindNth2(&beta3[index])*beta2L + 
-      PDupwindNth3(&beta3[index])*beta3L)*ToReal(ShiftAdvectionCoeff)),0);
+      PDupwindNth3(&beta3[index])*beta3L)*ShiftAdvectionCoeff)*INV(ShiftGammaCoeff)*INV(theta),0);
     
     /* Copy local copies back to grid functions */
     A[index] = AL;
