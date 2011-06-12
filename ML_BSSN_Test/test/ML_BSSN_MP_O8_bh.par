@@ -61,7 +61,6 @@ Carpet::ghost_size                      = 5
 Carpet::init_3_timelevels               = "no"
 Carpet::max_memory_size_MB              = 500
 Carpet::poison_new_timelevels           = yes
-Carpet::poison_value                    = 0
 
 NaNChecker::check_every                 = 1
 NaNChecker::verbose                     = "all"

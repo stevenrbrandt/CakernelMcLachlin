@@ -70,6 +70,7 @@ CoordBase::dz                           = 0.1
 Carpet::ghost_size                      = 3
 Carpet::domain_from_coordbase           = "yes"
 Carpet::init_3_timelevels               = "no"
+Carpet::poison_new_timelevels           = yes
 
 #############################################################
 # Timers
