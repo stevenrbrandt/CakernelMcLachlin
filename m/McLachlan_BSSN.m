@@ -845,6 +845,28 @@ RHSStaticBoundaryCalc =
   }
 };
 
+(* Initialise the RHS variables in ANALYSIS in case they are going to
+   be output - the noninterior points cannot be filled, so we define
+   them to be zero *)
+initRHSCalc =
+{
+  Name -> BSSN <> "_InitRHS",
+  Schedule -> {"AT ANALYSIS before " <> BSSN <> "_evolCalcGroup"},
+  Where -> Everywhere,
+  Equations -> 
+  {
+    dot[phi]       -> 0,
+    dot[gt[la,lb]] -> 0,
+    dot[trK]       -> 0,
+    dot[At[la,lb]] -> 0,
+    dot[Xt[ua]]    -> 0,
+    dot[alpha]     -> 0,
+    dot[A]         -> 0,
+    dot[beta[ua]]  -> 0,
+    dot[B[ua]]     -> 0
+  }
+};
+
 RHSRadiativeBoundaryCalc =
 {
   Name -> BSSN <> "_RHSRadiativeBoundary",
@@ -1279,6 +1301,7 @@ calculations =
   evolCalc1, evolCalc2,
   dissCalc,
   advectCalc,
+  initRHSCalc,
   (* evol1Calc, evol2Calc, *)
   RHSStaticBoundaryCalc,
   (* RHSRadiativeBoundaryCalc, *)
