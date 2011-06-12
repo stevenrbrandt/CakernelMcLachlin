@@ -110,6 +110,8 @@ MethodOfLines::initial_data_is_crap   = "no"
 ADMBase::initial_data = "exact"
 ADMBase::initial_lapse = "exact"
 ADMBase::initial_shift = "exact"
+ADMBase::initial_dtlapse = "exact"
+ADMBase::initial_dtshift = "exact"
 
 Exact::exact_model = "Minkowski/shifted gauge wave"
 Exact::Minkowski_gauge_wave__what_fn = "sin"
