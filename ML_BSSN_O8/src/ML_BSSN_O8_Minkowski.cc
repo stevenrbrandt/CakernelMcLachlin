@@ -111,7 +111,7 @@ static void ML_BSSN_O8_Minkowski_Body(cGH const * restrict const cctkGH, int con
     /* Precompute derivatives */
     
     /* Calculate temporaries and grid functions */
-    CCTK_REAL phiL = IfThen(conformalMethod,1,0);
+    CCTK_REAL phiL = IfThen(ToReal(conformalMethod),1,0);
     
     CCTK_REAL gt11L = 1;
     

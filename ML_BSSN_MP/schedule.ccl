@@ -284,15 +284,6 @@ if (CCTK_EQUALS(my_initial_data, "ADMBase"))
 
 if (CCTK_EQUALS(my_initial_data, "ADMBase"))
 {
-  schedule ML_BSSN_MP_InitGamma AT initial BEFORE ML_BSSN_MP_convertFromADMBaseGamma
-  {
-    LANG: C
-  } "ML_BSSN_MP_InitGamma"
-}
-
-
-if (CCTK_EQUALS(my_initial_data, "ADMBase"))
-{
   schedule ML_BSSN_MP_convertFromADMBaseGamma AT initial AFTER ML_BSSN_MP_convertFromADMBase
   {
     LANG: C
@@ -311,20 +302,6 @@ schedule ML_BSSN_MP_RHS2 IN ML_BSSN_MP_evolCalcGroup
 {
   LANG: C
 } "ML_BSSN_MP_RHS2"
-
-
-if (CCTK_EQUALS(apply_dissipation, "always"))
-{
-  schedule ML_BSSN_MP_Dissipation IN ML_BSSN_MP_evolCalcGroup after ML_BSSN_MP_RHS2
-  {
-    LANG: C
-  } "ML_BSSN_MP_Dissipation"
-}
-
-schedule ML_BSSN_MP_Advect IN ML_BSSN_MP_evolCalcGroup after ML_BSSN_MP_RHS2
-{
-  LANG: C
-} "ML_BSSN_MP_Advect"
 
 
 if (CCTK_EQUALS(my_rhs_boundary_condition, "static"))

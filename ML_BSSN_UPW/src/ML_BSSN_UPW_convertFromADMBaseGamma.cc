@@ -258,45 +258,32 @@ static void ML_BSSN_UPW_convertFromADMBaseGamma_Body(cGH const * restrict const 
     CCTK_REAL Xt3L = Gt311*gtu11 + Gt322*gtu22 + 2*(Gt312*gtu12 + 
       Gt313*gtu13 + Gt323*gtu23) + Gt333*gtu33;
     
-    CCTK_REAL AL = IfThen(LapseACoeff != 
-      0,INV(ToReal(harmonicF))*pow(alphaL,-ToReal(harmonicN))*(-dtalpL + 
+    CCTK_REAL AL = IfThen(ToReal(LapseACoeff) != 
+      0,-(INV(ToReal(harmonicF))*pow(alphaL,-ToReal(harmonicN))*(9*dtalpL - 
       (PDupwindNth1(&alpha[index])*beta1L + 
       PDupwindNth2(&alpha[index])*beta2L + 
-      PDupwindNth3(&alpha[index])*beta3L)*ToReal(LapseAdvectionCoeff)),0);
+      PDupwindNth3(&alpha[index])*beta3L)*ToReal(LapseAdvectionCoeff))),0);
     
     CCTK_REAL theta = fmin(1,exp(1 - 
       rL*INV(ToReal(SpatialShiftGammaCoeffRadius))));
     
-    CCTK_REAL B1L;
-    CCTK_REAL B2L;
-    CCTK_REAL B3L;
+    CCTK_REAL B1L = IfThen(ToReal(ShiftBCoeff)*ToReal(ShiftGammaCoeff) != 
+      0,INV(theta)*INV(ToReal(ShiftGammaCoeff))*(9*dtbetaxL - 
+      (PDupwindNth1(&beta1[index])*beta1L + 
+      PDupwindNth2(&beta1[index])*beta2L + 
+      PDupwindNth3(&beta1[index])*beta3L)*ToReal(ShiftAdvectionCoeff)),0);
     
-    if (ShiftBCoeff*ShiftGammaCoeff != 0)
-    {
-      B1L = -(INV(theta)*INV(ToReal(ShiftGammaCoeff))*(-dtbetaxL + 
-        (PDupwindNth1(&beta1[index])*beta1L + 
-        PDupwindNth2(&beta1[index])*beta2L + 
-        PDupwindNth3(&beta1[index])*beta3L)*ToReal(ShiftAdvectionCoeff)));
-      
-      B2L = -(INV(theta)*INV(ToReal(ShiftGammaCoeff))*(-dtbetayL + 
-        (PDupwindNth1(&beta2[index])*beta1L + 
-        PDupwindNth2(&beta2[index])*beta2L + 
-        PDupwindNth3(&beta2[index])*beta3L)*ToReal(ShiftAdvectionCoeff)));
-      
-      B3L = -(INV(theta)*INV(ToReal(ShiftGammaCoeff))*(-dtbetazL + 
-        (PDupwindNth1(&beta3[index])*beta1L + 
-        PDupwindNth2(&beta3[index])*beta2L + 
-        PDupwindNth3(&beta3[index])*beta3L)*ToReal(ShiftAdvectionCoeff)));
-    }
-    else
-    {
-      B1L = 0;
-      
-      B2L = 0;
-      
-      B3L = 0;
-    }
+    CCTK_REAL B2L = IfThen(ToReal(ShiftBCoeff)*ToReal(ShiftGammaCoeff) != 
+      0,INV(theta)*INV(ToReal(ShiftGammaCoeff))*(9*dtbetayL - 
+      (PDupwindNth1(&beta2[index])*beta1L + 
+      PDupwindNth2(&beta2[index])*beta2L + 
+      PDupwindNth3(&beta2[index])*beta3L)*ToReal(ShiftAdvectionCoeff)),0);
     
+    CCTK_REAL B3L = IfThen(ToReal(ShiftBCoeff)*ToReal(ShiftGammaCoeff) != 
+      0,INV(theta)*INV(ToReal(ShiftGammaCoeff))*(9*dtbetazL - 
+      (PDupwindNth1(&beta3[index])*beta1L + 
+      PDupwindNth2(&beta3[index])*beta2L + 
+      PDupwindNth3(&beta3[index])*beta3L)*ToReal(ShiftAdvectionCoeff)),0);
     
     /* Copy local copies back to grid functions */
     A[index] = AL;
