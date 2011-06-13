@@ -189,6 +189,13 @@ KEYWORD dt_lapse_shift_method "Treatment of ADMBase dtlapse and dtshift"
   "noLapseShiftAdvection" :: "noLapseShiftAdvection"
 } "correct"
 
+private:
+KEYWORD apply_dissipation "Whether to apply dissipation to the RHSs"
+{
+  "always" :: "always"
+  "never" :: "never"
+} "always"
+
 restricted:
 CCTK_INT ML_BSSN_UPW_MaxNumEvolvedVars "Number of evolved variables used by this thorn" ACCUMULATOR-BASE=MethodofLines::MoL_Num_Evolved_Vars STEERABLE=RECOVER
 {
@@ -220,6 +227,12 @@ CCTK_INT ML_BSSN_UPW_convertFromADMBase_calc_every "ML_BSSN_UPW_convertFromADMBa
 } 1
 
 restricted:
+CCTK_INT ML_BSSN_UPW_InitGamma_calc_every "ML_BSSN_UPW_InitGamma_calc_every" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 1
+
+restricted:
 CCTK_INT ML_BSSN_UPW_convertFromADMBaseGamma_calc_every "ML_BSSN_UPW_convertFromADMBaseGamma_calc_every" STEERABLE=ALWAYS
 {
   *:* :: ""
@@ -233,6 +246,18 @@ CCTK_INT ML_BSSN_UPW_RHS1_calc_every "ML_BSSN_UPW_RHS1_calc_every" STEERABLE=ALW
 
 restricted:
 CCTK_INT ML_BSSN_UPW_RHS2_calc_every "ML_BSSN_UPW_RHS2_calc_every" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 1
+
+restricted:
+CCTK_INT ML_BSSN_UPW_Dissipation_calc_every "ML_BSSN_UPW_Dissipation_calc_every" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 1
+
+restricted:
+CCTK_INT ML_BSSN_UPW_Advect_calc_every "ML_BSSN_UPW_Advect_calc_every" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 1
@@ -304,6 +329,12 @@ CCTK_INT ML_BSSN_UPW_convertFromADMBase_calc_offset "ML_BSSN_UPW_convertFromADMB
 } 0
 
 restricted:
+CCTK_INT ML_BSSN_UPW_InitGamma_calc_offset "ML_BSSN_UPW_InitGamma_calc_offset" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 0
+
+restricted:
 CCTK_INT ML_BSSN_UPW_convertFromADMBaseGamma_calc_offset "ML_BSSN_UPW_convertFromADMBaseGamma_calc_offset" STEERABLE=ALWAYS
 {
   *:* :: ""
@@ -317,6 +348,18 @@ CCTK_INT ML_BSSN_UPW_RHS1_calc_offset "ML_BSSN_UPW_RHS1_calc_offset" STEERABLE=A
 
 restricted:
 CCTK_INT ML_BSSN_UPW_RHS2_calc_offset "ML_BSSN_UPW_RHS2_calc_offset" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 0
+
+restricted:
+CCTK_INT ML_BSSN_UPW_Dissipation_calc_offset "ML_BSSN_UPW_Dissipation_calc_offset" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 0
+
+restricted:
+CCTK_INT ML_BSSN_UPW_Advect_calc_offset "ML_BSSN_UPW_Advect_calc_offset" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 0

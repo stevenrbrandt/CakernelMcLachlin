@@ -10,13 +10,13 @@ SetSourceLanguage["C"];
 (* Options *)
 (******************************************************************************)
 
-createCode[derivOrder_, useGlobalDerivs_, splitUpwindDerivs_, evolutionTimelevels_, addMatter_] :=
+createCode[derivOrder_, useJacobian_, splitUpwindDerivs_, evolutionTimelevels_, addMatter_] :=
 Module[{},
 
 prefix = "ML_";
 suffix =
   ""
-  <> If [useGlobalDerivs, "_MP", ""]
+  <> If [useJacobian, "_MP", ""]
   <> If [derivOrder!=4, "_O" <> ToString[derivOrder], ""]
   <> If [splitUpwindDerivs, "", "_UPW"]
   (* <> If [evolutionTimelevels!=3, "_TL" <> ToString[evolutionTimelevels], ""] *)
@@ -184,34 +184,12 @@ derivatives = Join[derivatives,
   {i,1,3}]]
 ];
 
-FD     = PDstandardNth;
-FDu    = PDupwindNth;
-FDua   = PDupwindNthAnti;
-FDus   = PDupwindNthSymm;
-(* FDo    = PDonesided; *)
-FDdiss = PDdissipationNth;
-
-ResetJacobians;
-If [useGlobalDerivs,
-    DefineJacobian[PD, FD, J, dJ],
-    DefineJacobian[PD, FD, KD, Zero3]];
-If [useGlobalDerivs,
-    DefineJacobian[PDu, FDu, J, dJ],
-    DefineJacobian[PDu, FDu, KD, Zero3]];
-If [useGlobalDerivs,
-    DefineJacobian[PDua, FDua, J, dJ],
-    DefineJacobian[PDua, FDua, KD, Zero3]];
-If [useGlobalDerivs,
-    DefineJacobian[PDus, FDus, J, dJ],
-    DefineJacobian[PDus, FDus, KD, Zero3]];
-(*
-If [useGlobalDerivs,
-    DefineJacobian[PDo, FDo, J, dJ],
-    DefineJacobian[PDo, FDo, KD, Zero3]];
-*)
-If [useGlobalDerivs,
-    DefineJacobian[PDdiss, FDdiss, J, dJ],
-    DefineJacobian[PDdiss, FDdiss, KD, Zero3]];
+PD     = PDstandardNth;
+PDu    = PDupwindNth;
+PDua   = PDupwindNthAnti;
+PDus   = PDupwindNthSymm;
+(* PDo    = PDonesided; *)
+PDdiss = PDdissipationNth;
 
 If [splitUpwindDerivs,
     Upwind[dir_, var_, idx_] := dir PDua[var,idx] + Abs[dir] PDus[var,idx],
@@ -252,7 +230,6 @@ SetTensorAttribute[cS,  TensorWeight, +2  ];
 Map [AssertSymmetricIncreasing,
      {admg[la,lb], admK[la,lb], g[la,lb], K[la,lb], R[la,lb], cdphi2[la,lb],
       gt[la,lb], At[la,lb], Ats[la,lb], Rt[la,lb], Rphi[la,lb], T[la,lb]}];
-AssertSymmetricIncreasing [dJ[ua,lb,lc], lb, lc];
 AssertSymmetricIncreasing [G[ua,lb,lc], lb, lc];
 AssertSymmetricIncreasing [Gtl[la,lb,lc], lb, lc];
 AssertSymmetricIncreasing [Gt[ua,lb,lc], lb, lc];
@@ -343,11 +320,7 @@ extraGroups =
    {"ADMBase::dtshift", {dtbetax, dtbetay, dtbetaz}},
    {"TmunuBase::stress_energy_scalar", {eTtt}},
    {"TmunuBase::stress_energy_vector", {eTtx, eTty, eTtz}},
-   {"TmunuBase::stress_energy_tensor", {eTxx, eTxy, eTxz, eTyy, eTyz, eTzz}},
-   {"Coordinates::jacobian",  {J11, J12, J13, J21, J22, J23, J31, J32, J33}},
-   {"Coordinates::jacobian2", {dJ111, dJ112, dJ113, dJ122, dJ123, dJ133,
-                               dJ211, dJ212, dJ213, dJ222, dJ223, dJ233,
-                               dJ311, dJ312, dJ313, dJ322, dJ323, dJ333}}
+   {"TmunuBase::stress_energy_tensor", {eTxx, eTxy, eTxz, eTyy, eTyz, eTzz}}
 };
 
 
@@ -484,6 +457,25 @@ convertFromADMBaseGammaCalc =
   }
 };
 
+(* Initialise the Gamma variables to 0.  This is necessary with
+   multipatch because convertFromADMBaseGamma does not perform the
+   conversion in the boundary points, and the order in which symmetry
+   (interpatch) and outer boundary conditions is applied means that
+   points which are both interpatch and symmetry points are never
+   initialised. *)
+initGammaCalc =
+{
+  Name -> BSSN <> "_InitGamma",
+  Schedule -> {"AT initial BEFORE " <> BSSN <> "_convertFromADMBaseGamma"},
+  ConditionalOnKeyword -> {"my_initial_data", "ADMBase"},
+  Where -> Everywhere,
+  Equations -> 
+  {
+    Xt[ua] -> 0
+  }
+};
+
+
 (******************************************************************************)
 (* Convert to ADMBase *)
 (******************************************************************************)
@@ -616,8 +608,6 @@ evolCalc =
   {
     dir[ua] -> Sign[beta[ua]],
     
-    epsdiss[ua] -> EpsDiss,
-    
     detgt -> 1 (* detgtExpr *),
     
     (* This leads to simpler code... *)
@@ -681,14 +671,10 @@ evolCalc =
     (* PRD 62, 044034 (2000), eqn. (10) *)
     (* PRD 67 084023 (2003), eqn. (16) and (23) *)
     dot[phi]       -> IfThen [conformalMethod, 1/3 phi, -1/6] alpha trK
-                      + Upwind[beta[ua], phi, la]
-                      + epsdiss[ua] PDdiss[phi,la]
                       + IfThen [conformalMethod, -1/3 phi, 1/6] PD[beta[ua],la],
     
     (* PRD 62, 044034 (2000), eqn. (9) *)
     dot[gt[la,lb]] -> - 2 alpha At[la,lb]
-                      + Upwind[beta[uc], gt[la,lb], lc]
-                      + epsdiss[uc] PDdiss[gt[la,lb],lc]
                       + gt[la,lc] PD[beta[uc],lb] + gt[lb,lc] PD[beta[uc],la]
                       - (2/3) gt[la,lb] PD[beta[uc],lc],
     (* PRD 62, 044034 (2000), eqn. (20) *)
@@ -699,21 +685,17 @@ evolCalc =
                                  + 6 Atu[ui,uj] cdphi[lj])
                       + gtu[uj,ul] PD[beta[ui],lj,ll]
                       + (1/3) gtu[ui,uj] PD[beta[ul],lj,ll]
-                      + Upwind[beta[uj], Xt[ui], lj]
-                      + epsdiss[uj] PDdiss[Xt[ui],lj]
                       - Xtn[uj] PD[beta[ui],lj] 
                       + (2/3) Xtn[ui] PD[beta[uj],lj]
     (* Equation (4.28) in Baumgarte & Shapiro (Phys. Rept. 376 (2003) 41-131) *)
                       + addMatter (- 16 pi alpha gtu[ui,uj] S[lj]),
     dot[Xt[ui]]    -> dotXt[ui],
-    
+
     (* PRD 62, 044034 (2000), eqn. (11) *)
     dottrK         -> - em4phi ( gtu[ua,ub] ( PD[alpha,la,lb]
                                 + 2 cdphi[la] PD[alpha,lb] )
                                 - Xtn[ua] PD[alpha,la] )
                       + alpha (Atm[ua,lb] Atm[ub,la] + (1/3) trK^2)
-                      + Upwind[beta[ua], trK, la]
-                      + epsdiss[ua] PDdiss[trK,la]
     (* Equation (4.21) in Baumgarte & Shapiro (Phys. Rept. 376 (2003) 41-131) *)
                       + addMatter (4 pi alpha (rho + trS)),
     dot[trK]       -> dottrK,
@@ -726,8 +708,6 @@ evolCalc =
     trAts          -> gu[ua,ub] Ats[la,lb],
     dot[At[la,lb]] -> + em4phi (+ Ats[la,lb] - (1/3) g[la,lb] trAts )
                       + alpha (trK At[la,lb] - 2 At[la,lc] Atm[uc,lb])
-                      + Upwind[beta[uc], At[la,lb], lc]
-                      + epsdiss[uc] PDdiss[At[la,lb],lc]
                       + At[la,lc] PD[beta[uc],lb] + At[lb,lc] PD[beta[uc],la]
                       - (2/3) At[la,lb] PD[beta[uc],lc]
     (* Equation (4.23) in Baumgarte & Shapiro (Phys. Rept. 376 (2003) 41-131) *)
@@ -739,21 +719,18 @@ evolCalc =
 (*
     dot[alpha] -> - harmonicF alpha^harmonicN (
                     (1 - LapseAdvectionCoeff) A + LapseAdvectionCoeff trK)
-                  + LapseAdvectionCoeff beta[ua] PDu[alpha,la]
-                  + epsdiss[ua] PDdiss[alpha,la],
+                  + LapseAdvectionCoeff beta[ua] PDu[alpha,la],
 
-    dot[A]     -> (1 - LapseAdvectionCoeff) (dottrK - AlphaDriver A)
-                  + epsdiss[ua] PDdiss[A,la],
+
+    dot[A]     -> (1 - LapseAdvectionCoeff) (dottrK - AlphaDriver A),
+
 *)
     dot[alpha] -> - harmonicF alpha^harmonicN
                     (+ LapseACoeff       A
-                     + (1 - LapseACoeff) trK)
-                  + LapseAdvectionCoeff Upwind[beta[ua], alpha, la]
-                  + epsdiss[ua] PDdiss[alpha,la],
+                     + (1 - LapseACoeff) trK),
 
-    dot[A]     -> + LapseACoeff (dottrK - AlphaDriver A)
-                  + LapseAdvectionCoeff Upwind[beta[ua], A, la]
-                  + epsdiss[ua] PDdiss[A,la],
+    dot[A]     -> + LapseACoeff (dottrK - AlphaDriver A),
+
     
     eta -> etaExpr,
     theta -> thetaExpr,
@@ -762,14 +739,49 @@ evolCalc =
     (* dot[beta[ua]] -> ShiftGammaCoeff alpha^ShiftAlphaPower B[ua], *)
     dot[beta[ua]] -> + theta ShiftGammaCoeff
                        (+ ShiftBCoeff        B[ua]
-                        + (1 - ShiftBCoeff) (Xt[ua] - eta BetaDriver beta[ua]))
-                     + ShiftAdvectionCoeff Upwind[beta[ub], beta[ua], lb]
-                     + epsdiss[ub] PDdiss[beta[ua],lb],
+                        + (1 - ShiftBCoeff) (Xt[ua] - eta BetaDriver beta[ua])),
 
     dot[B[ua]]    -> + ShiftBCoeff (dotXt[ua] - eta BetaDriver B[ua])
-                     + ShiftAdvectionCoeff Upwind[beta[ub], B[ua], lb]
-                     - ShiftAdvectionCoeff Upwind[beta[ub], Xt[ua], lb]
-                     + epsdiss[ub] PDdiss[B[ua],lb]
+
+  }
+};
+
+advectCalc =
+{
+  Name -> BSSN <> "_Advect",
+  Schedule -> {"IN " <> BSSN <> "_evolCalcGroup after " <> BSSN <> "_RHS2"},
+  (*
+  Where -> Interior,
+  *)
+  (* Synchronise the RHS grid functions after this routine, so that
+     the refinement boundaries are set correctly before applying the
+     radiative boundary conditions.  *)
+  Where -> InteriorNoSync,
+  Shorthands -> {dir[ua]},
+  Equations ->
+  {
+           dir[ua] -> Sign[beta[ua]],
+
+          dot[phi] -> dot[phi] + Upwind[beta[ua], phi, la],
+
+    dot[gt[la,lb]] -> dot[gt[la,lb]] + Upwind[beta[uc], gt[la,lb], lc],
+
+       dot[Xt[ui]] -> dot[Xt[ui]] + Upwind[beta[uj], Xt[ui], lj],
+
+          dot[trK] -> dot[trK] + Upwind[beta[ua], trK, la],
+
+    dot[At[la,lb]] -> dot[At[la,lb]] + Upwind[beta[uc], At[la,lb], lc],
+
+        dot[alpha] -> dot[alpha] + LapseAdvectionCoeff Upwind[beta[ua], alpha, la],
+
+            dot[A] -> dot[A] + LapseAdvectionCoeff Upwind[beta[ua], A, la],
+
+     dot[beta[ua]] -> dot[beta[ua]] + ShiftAdvectionCoeff Upwind[beta[ub], beta[ua], lb],
+
+        dot[B[ua]] -> dot[B[ua]]
+                      + ShiftBCoeff Upwind[beta[uj], Xt[ua], lj] (* take care *)
+                      + ShiftAdvectionCoeff Upwind[beta[ub], B[ua], lb]
+                      - ShiftAdvectionCoeff Upwind[beta[ub], Xt[ua], lb]
   }
 };
 
@@ -797,6 +809,21 @@ evolCalc2 = PartialCalculation[evolCalc, "2",
   }];
 
 
+dissCalc =
+{
+  Name -> BSSN <> "_Dissipation",
+  Schedule -> {"IN " <> BSSN <> "_evolCalcGroup after " <> BSSN <> "_RHS2"},
+  ConditionalOnKeyword -> {"apply_dissipation", "always"},
+  Where -> InteriorNoSync,
+  Shorthands -> {epsdiss[ua]},
+  Equations ->
+  {
+    epsdiss[ua] -> EpsDiss,
+    Sequence@@Table[
+      dot[var]       -> dot[var] + epsdiss[ux] PDdiss[var,lx],
+      {var, {phi, gt[la,lb], Xt[ui], trK, At[la,lb], alpha, A, beta[ua], B[ua]}}]
+  }
+};
 
 RHSStaticBoundaryCalc =
 {
@@ -1058,8 +1085,7 @@ constraintsCalc2 = PartialCalculation[constraintsCalc, "2",
 
 inheritedImplementations =
   Join[{"ADMBase"},
-       If [addMatter!=0, {"TmunuBase"}, {}],
-       If [useGlobalDerivs, {"Coordinates"}, {}]];
+       If [addMatter!=0, {"TmunuBase"}, {}]];
 
 (******************************************************************************)
 (* Parameters *)
@@ -1142,7 +1168,17 @@ keywordParameters =
                       "noLapseShiftAdvection" (* omit lapse and shift advection terms (faster) *)
                      },
     Default -> "correct"
+  },
+  {
+    Name -> "apply_dissipation",
+    Description -> "Whether to apply dissipation to the RHSs",
+    AllowedValues -> {"always",
+                      "never" (* yes and no keyword values confuse Cactus, and Kranc
+                                 doesn't support boolean parameters *)
+                     },
+    Default -> "always"
   }
+
 };
 
 intParameters =
@@ -1237,9 +1273,12 @@ calculations =
 {
   initialCalc,
   convertFromADMBaseCalc,
+  initGammaCalc,
   convertFromADMBaseGammaCalc,
   (* evolCalc, *)
   evolCalc1, evolCalc2,
+  dissCalc,
+  advectCalc,
   (* evol1Calc, evol2Calc, *)
   RHSStaticBoundaryCalc,
   (* RHSRadiativeBoundaryCalc, *)
@@ -1265,7 +1304,8 @@ CreateKrancThornTT [groups, ".", BSSN,
   ExtendedKeywordParameters -> extendedKeywordParameters,
   KeywordParameters -> keywordParameters,
   IntParameters -> intParameters,
-  RealParameters -> realParameters
+  RealParameters -> realParameters,
+  UseJacobian -> useJacobian
 ];
 
 ];
@@ -1277,7 +1317,7 @@ CreateKrancThornTT [groups, ".", BSSN,
 (******************************************************************************)
 
 (* derivative order: 2, 4, 6, 8, ... *)
-(* useGlobalDerivs: False or True *)
+(* useJacobian: False or True *)
 (* timelevels: 2 or 3
    (keep this at 3; this is better chosen with a run-time parameter) *)
 (* matter: 0 or 1

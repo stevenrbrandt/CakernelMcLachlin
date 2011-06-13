@@ -2,7 +2,7 @@
 
 implements: ML_BSSN_MP_O8
 
-inherits:   ADMBase TmunuBase Coordinates Grid GenericFD Boundary
+inherits:   ADMBase TmunuBase Grid GenericFD Boundary
 
 
 

@@ -54,7 +54,7 @@ static void ML_BSSN_RHS2_Body(cGH const * restrict const cctkGH, int const dir, 
   const char *groups[] = {"ML_BSSN::ML_curv","ML_BSSN::ML_curvrhs","ML_BSSN::ML_Gamma","ML_BSSN::ML_lapse","ML_BSSN::ML_log_confac","ML_BSSN::ML_metric","ML_BSSN::ML_shift","ML_BSSN::ML_trace_curv"};
   GenericFD_AssertGroupStorage(cctkGH, "ML_BSSN_RHS2", 8, groups);
   
-  GenericFD_EnsureStencilFits(cctkGH, "ML_BSSN_RHS2", 3, 3, 3);
+  GenericFD_EnsureStencilFits(cctkGH, "ML_BSSN_RHS2", 2, 2, 2);
   
   /* Include user-supplied include files */
   
@@ -166,60 +166,6 @@ static void ML_BSSN_RHS2_Body(cGH const * restrict const cctkGH, int const dir, 
     CCTK_REAL const PDstandardNth12alpha = PDstandardNth12(&alpha[index]);
     CCTK_REAL const PDstandardNth13alpha = PDstandardNth13(&alpha[index]);
     CCTK_REAL const PDstandardNth23alpha = PDstandardNth23(&alpha[index]);
-    CCTK_REAL const PDdissipationNth1At11 = PDdissipationNth1(&At11[index]);
-    CCTK_REAL const PDdissipationNth2At11 = PDdissipationNth2(&At11[index]);
-    CCTK_REAL const PDdissipationNth3At11 = PDdissipationNth3(&At11[index]);
-    CCTK_REAL const PDupwindNthAnti1At11 = PDupwindNthAnti1(&At11[index]);
-    CCTK_REAL const PDupwindNthSymm1At11 = PDupwindNthSymm1(&At11[index]);
-    CCTK_REAL const PDupwindNthAnti2At11 = PDupwindNthAnti2(&At11[index]);
-    CCTK_REAL const PDupwindNthSymm2At11 = PDupwindNthSymm2(&At11[index]);
-    CCTK_REAL const PDupwindNthAnti3At11 = PDupwindNthAnti3(&At11[index]);
-    CCTK_REAL const PDupwindNthSymm3At11 = PDupwindNthSymm3(&At11[index]);
-    CCTK_REAL const PDdissipationNth1At12 = PDdissipationNth1(&At12[index]);
-    CCTK_REAL const PDdissipationNth2At12 = PDdissipationNth2(&At12[index]);
-    CCTK_REAL const PDdissipationNth3At12 = PDdissipationNth3(&At12[index]);
-    CCTK_REAL const PDupwindNthAnti1At12 = PDupwindNthAnti1(&At12[index]);
-    CCTK_REAL const PDupwindNthSymm1At12 = PDupwindNthSymm1(&At12[index]);
-    CCTK_REAL const PDupwindNthAnti2At12 = PDupwindNthAnti2(&At12[index]);
-    CCTK_REAL const PDupwindNthSymm2At12 = PDupwindNthSymm2(&At12[index]);
-    CCTK_REAL const PDupwindNthAnti3At12 = PDupwindNthAnti3(&At12[index]);
-    CCTK_REAL const PDupwindNthSymm3At12 = PDupwindNthSymm3(&At12[index]);
-    CCTK_REAL const PDdissipationNth1At13 = PDdissipationNth1(&At13[index]);
-    CCTK_REAL const PDdissipationNth2At13 = PDdissipationNth2(&At13[index]);
-    CCTK_REAL const PDdissipationNth3At13 = PDdissipationNth3(&At13[index]);
-    CCTK_REAL const PDupwindNthAnti1At13 = PDupwindNthAnti1(&At13[index]);
-    CCTK_REAL const PDupwindNthSymm1At13 = PDupwindNthSymm1(&At13[index]);
-    CCTK_REAL const PDupwindNthAnti2At13 = PDupwindNthAnti2(&At13[index]);
-    CCTK_REAL const PDupwindNthSymm2At13 = PDupwindNthSymm2(&At13[index]);
-    CCTK_REAL const PDupwindNthAnti3At13 = PDupwindNthAnti3(&At13[index]);
-    CCTK_REAL const PDupwindNthSymm3At13 = PDupwindNthSymm3(&At13[index]);
-    CCTK_REAL const PDdissipationNth1At22 = PDdissipationNth1(&At22[index]);
-    CCTK_REAL const PDdissipationNth2At22 = PDdissipationNth2(&At22[index]);
-    CCTK_REAL const PDdissipationNth3At22 = PDdissipationNth3(&At22[index]);
-    CCTK_REAL const PDupwindNthAnti1At22 = PDupwindNthAnti1(&At22[index]);
-    CCTK_REAL const PDupwindNthSymm1At22 = PDupwindNthSymm1(&At22[index]);
-    CCTK_REAL const PDupwindNthAnti2At22 = PDupwindNthAnti2(&At22[index]);
-    CCTK_REAL const PDupwindNthSymm2At22 = PDupwindNthSymm2(&At22[index]);
-    CCTK_REAL const PDupwindNthAnti3At22 = PDupwindNthAnti3(&At22[index]);
-    CCTK_REAL const PDupwindNthSymm3At22 = PDupwindNthSymm3(&At22[index]);
-    CCTK_REAL const PDdissipationNth1At23 = PDdissipationNth1(&At23[index]);
-    CCTK_REAL const PDdissipationNth2At23 = PDdissipationNth2(&At23[index]);
-    CCTK_REAL const PDdissipationNth3At23 = PDdissipationNth3(&At23[index]);
-    CCTK_REAL const PDupwindNthAnti1At23 = PDupwindNthAnti1(&At23[index]);
-    CCTK_REAL const PDupwindNthSymm1At23 = PDupwindNthSymm1(&At23[index]);
-    CCTK_REAL const PDupwindNthAnti2At23 = PDupwindNthAnti2(&At23[index]);
-    CCTK_REAL const PDupwindNthSymm2At23 = PDupwindNthSymm2(&At23[index]);
-    CCTK_REAL const PDupwindNthAnti3At23 = PDupwindNthAnti3(&At23[index]);
-    CCTK_REAL const PDupwindNthSymm3At23 = PDupwindNthSymm3(&At23[index]);
-    CCTK_REAL const PDdissipationNth1At33 = PDdissipationNth1(&At33[index]);
-    CCTK_REAL const PDdissipationNth2At33 = PDdissipationNth2(&At33[index]);
-    CCTK_REAL const PDdissipationNth3At33 = PDdissipationNth3(&At33[index]);
-    CCTK_REAL const PDupwindNthAnti1At33 = PDupwindNthAnti1(&At33[index]);
-    CCTK_REAL const PDupwindNthSymm1At33 = PDupwindNthSymm1(&At33[index]);
-    CCTK_REAL const PDupwindNthAnti2At33 = PDupwindNthAnti2(&At33[index]);
-    CCTK_REAL const PDupwindNthSymm2At33 = PDupwindNthSymm2(&At33[index]);
-    CCTK_REAL const PDupwindNthAnti3At33 = PDupwindNthAnti3(&At33[index]);
-    CCTK_REAL const PDupwindNthSymm3At33 = PDupwindNthSymm3(&At33[index]);
     CCTK_REAL const PDstandardNth1beta1 = PDstandardNth1(&beta1[index]);
     CCTK_REAL const PDstandardNth2beta1 = PDstandardNth2(&beta1[index]);
     CCTK_REAL const PDstandardNth3beta1 = PDstandardNth3(&beta1[index]);
@@ -308,12 +254,6 @@ static void ML_BSSN_RHS2_Body(cGH const * restrict const cctkGH, int const dir, 
     ptrdiff_t dir2 = Sign(beta2L);
     
     ptrdiff_t dir3 = Sign(beta3L);
-    
-    CCTK_REAL epsdiss1 = ToReal(EpsDiss);
-    
-    CCTK_REAL epsdiss2 = ToReal(EpsDiss);
-    
-    CCTK_REAL epsdiss3 = ToReal(EpsDiss);
     
     CCTK_REAL detgt = 1;
     
@@ -467,15 +407,16 @@ static void ML_BSSN_RHS2_Body(cGH const * restrict const cctkGH, int const dir, 
     CCTK_REAL Xtn3 = Gt311*gtu11 + Gt322*gtu22 + 2*(Gt312*gtu12 + 
       Gt313*gtu13 + Gt323*gtu23) + Gt333*gtu33;
     
-    CCTK_REAL Rt11 = 3*(Gt111*Gtlu111 + Gt112*Gtlu112 + Gt113*Gtlu113) + 
-      2*(Gt211*Gtlu121 + Gt212*Gtlu122 + Gt213*Gtlu123 + Gt311*Gtlu131 + 
-      Gt312*Gtlu132 + Gt313*Gtlu133) + Gt211*Gtlu211 + Gt212*Gtlu212 + 
+    CCTK_REAL Rt11 = 0.5*(6*(Gt111*Gtlu111 + Gt112*Gtlu112 + 
+      Gt113*Gtlu113) + 4*(Gt211*Gtlu121 + Gt212*Gtlu122 + Gt213*Gtlu123 + 
+      Gt311*Gtlu131 + Gt312*Gtlu132 + Gt313*Gtlu133) - 
+      gtu11*PDstandardNth11gt11 - 2*gtu12*PDstandardNth12gt11 - 
+      2*gtu13*PDstandardNth13gt11 + 2*(Gt211*Gtlu211 + Gt212*Gtlu212 + 
       Gt213*Gtlu213 + Gt311*Gtlu311 + Gt312*Gtlu312 + Gt313*Gtlu313 + 
-      gt11L*PDstandardNth1Xt1 + gt12L*PDstandardNth1Xt2 + 
-      gt13L*PDstandardNth1Xt3 + 0.5*(-(gtu11*PDstandardNth11gt11) - 
-      2*gtu12*PDstandardNth12gt11 - 2*gtu13*PDstandardNth13gt11 - 
-      gtu22*PDstandardNth22gt11 - 2*gtu23*PDstandardNth23gt11 - 
-      gtu33*PDstandardNth33gt11) + Gtl111*Xtn1 + Gtl112*Xtn2 + Gtl113*Xtn3;
+      gt11L*PDstandardNth1Xt1) + 2*gt12L*PDstandardNth1Xt2 + 
+      2*gt13L*PDstandardNth1Xt3 - gtu22*PDstandardNth22gt11 - 
+      2*gtu23*PDstandardNth23gt11 - gtu33*PDstandardNth33gt11 + 2*Gtl111*Xtn1 
+      + 2*Gtl112*Xtn2 + 2*Gtl113*Xtn3);
     
     CCTK_REAL Rt12 = 0.5*(4*(Gt211*Gtlu221 + Gt212*Gtlu222 + 
       Gt213*Gtlu223) + 2*(Gt112*Gtlu111 + Gt122*Gtlu112 + Gt123*Gtlu113 + 
@@ -507,15 +448,16 @@ static void ML_BSSN_RHS2_Body(cGH const * restrict const cctkGH, int const dir, 
       gt13L*PDstandardNth3Xt3 + Gtl113*Xtn1 + Gtl311*Xtn1 + Gtl123*Xtn2 + 
       Gtl312*Xtn2 + Gtl133*Xtn3 + Gtl313*Xtn3);
     
-    CCTK_REAL Rt22 = Gt112*(Gtlu121 + 2*Gtlu211) + Gt122*(Gtlu122 + 
-      2*Gtlu212) + Gt123*(Gtlu123 + 2*Gtlu213) + 3*(Gt212*Gtlu221 + 
-      Gt222*Gtlu222 + Gt223*Gtlu223) + 2*(Gt312*Gtlu231 + Gt322*Gtlu232 + 
-      Gt323*Gtlu233) + Gt312*Gtlu321 + Gt322*Gtlu322 + Gt323*Gtlu323 + 
-      gt12L*PDstandardNth2Xt1 + gt22L*PDstandardNth2Xt2 + 
-      gt23L*PDstandardNth2Xt3 + 0.5*(-(gtu11*PDstandardNth11gt22) - 
-      2*gtu12*PDstandardNth12gt22 - 2*gtu13*PDstandardNth13gt22 - 
-      gtu22*PDstandardNth22gt22 - 2*gtu23*PDstandardNth23gt22 - 
-      gtu33*PDstandardNth33gt22) + Gtl212*Xtn1 + Gtl222*Xtn2 + Gtl223*Xtn3;
+    CCTK_REAL Rt22 = 0.5*(6*(Gt212*Gtlu221 + Gt222*Gtlu222 + 
+      Gt223*Gtlu223) + 4*(Gt112*Gtlu211 + Gt122*Gtlu212 + Gt123*Gtlu213 + 
+      Gt312*Gtlu231 + Gt322*Gtlu232 + Gt323*Gtlu233) - 
+      gtu11*PDstandardNth11gt22 - 2*gtu12*PDstandardNth12gt22 - 
+      2*gtu13*PDstandardNth13gt22 - gtu22*PDstandardNth22gt22 - 
+      2*gtu23*PDstandardNth23gt22 + 2*(Gt112*Gtlu121 + Gt122*Gtlu122 + 
+      Gt123*Gtlu123 + Gt312*Gtlu321 + Gt322*Gtlu322 + Gt323*Gtlu323 + 
+      gt12L*PDstandardNth2Xt1) + 2*gt22L*PDstandardNth2Xt2 + 
+      2*gt23L*PDstandardNth2Xt3 - gtu33*PDstandardNth33gt22 + 2*Gtl212*Xtn1 + 
+      2*Gtl222*Xtn2 + 2*Gtl223*Xtn3);
     
     CCTK_REAL Rt23 = 0.5*(2*(Gt112*Gtlu131 + Gt122*Gtlu132 + Gt123*Gtlu133 
       + Gt113*Gtlu211 + Gt123*Gtlu212 + Gt133*Gtlu213 + Gt213*Gtlu221 + 
@@ -532,17 +474,18 @@ static void ML_BSSN_RHS2_Body(cGH const * restrict const cctkGH, int const dir, 
       gt23L*PDstandardNth3Xt3 + Gtl213*Xtn1 + Gtl312*Xtn1 + Gtl223*Xtn2 + 
       Gtl322*Xtn2 + Gtl233*Xtn3 + Gtl323*Xtn3);
     
-    CCTK_REAL Rt33 = Gt113*(Gtlu131 + 2*Gtlu311) + Gt123*(Gtlu132 + 
-      2*Gtlu312) + Gt133*(Gtlu133 + 2*Gtlu313) + Gt213*(Gtlu231 + 2*Gtlu321) 
-      + Gt223*(Gtlu232 + 2*Gtlu322) + Gt233*(Gtlu233 + 2*Gtlu323) + 
-      3*(Gt313*Gtlu331 + Gt323*Gtlu332 + Gt333*Gtlu333) + 
-      0.5*(-(gtu11*PDstandardNth11gt33) - 2*gtu12*PDstandardNth12gt33 - 
-      2*gtu13*PDstandardNth13gt33 - gtu22*PDstandardNth22gt33 - 
-      2*gtu23*PDstandardNth23gt33 - gtu33*PDstandardNth33gt33) + 
-      gt13L*PDstandardNth3Xt1 + gt23L*PDstandardNth3Xt2 + 
-      gt33L*PDstandardNth3Xt3 + Gtl313*Xtn1 + Gtl323*Xtn2 + Gtl333*Xtn3;
+    CCTK_REAL Rt33 = 0.5*(4*(Gt113*Gtlu311 + Gt123*Gtlu312 + Gt133*Gtlu313 
+      + Gt213*Gtlu321 + Gt223*Gtlu322 + Gt233*Gtlu323) + 6*(Gt313*Gtlu331 + 
+      Gt323*Gtlu332 + Gt333*Gtlu333) - gtu11*PDstandardNth11gt33 - 
+      2*gtu12*PDstandardNth12gt33 - 2*gtu13*PDstandardNth13gt33 - 
+      gtu22*PDstandardNth22gt33 - 2*gtu23*PDstandardNth23gt33 - 
+      gtu33*PDstandardNth33gt33 + 2*(Gt113*Gtlu131 + Gt123*Gtlu132 + 
+      Gt133*Gtlu133 + Gt213*Gtlu231 + Gt223*Gtlu232 + Gt233*Gtlu233 + 
+      gt13L*PDstandardNth3Xt1) + 2*gt23L*PDstandardNth3Xt2 + 
+      2*gt33L*PDstandardNth3Xt3 + 2*Gtl313*Xtn1 + 2*Gtl323*Xtn2 + 
+      2*Gtl333*Xtn3);
     
-    CCTK_REAL fac1 = IfThen(ToReal(conformalMethod),-0.5*INV(phiL),1);
+    CCTK_REAL fac1 = IfThen(conformalMethod,-0.5*INV(phiL),1);
     
     CCTK_REAL cdphi1 = fac1*PDstandardNth1phi;
     
@@ -550,7 +493,7 @@ static void ML_BSSN_RHS2_Body(cGH const * restrict const cctkGH, int const dir, 
     
     CCTK_REAL cdphi3 = fac1*PDstandardNth3phi;
     
-    CCTK_REAL fac2 = IfThen(ToReal(conformalMethod),0.5*INV(SQR(phiL)),0);
+    CCTK_REAL fac2 = IfThen(conformalMethod,0.5*INV(SQR(phiL)),0);
     
     CCTK_REAL cdphi211 = -(fac1*(-PDstandardNth11phi + 
       Gt111*PDstandardNth1phi + Gt211*PDstandardNth2phi + 
@@ -630,8 +573,7 @@ static void ML_BSSN_RHS2_Body(cGH const * restrict const cctkGH, int const dir, 
     
     CCTK_REAL Atm33 = At13L*gtu13 + At23L*gtu23 + At33L*gtu33;
     
-    CCTK_REAL e4phi = 
-      IfThen(ToReal(conformalMethod),INV(SQR(phiL)),exp(4*phiL));
+    CCTK_REAL e4phi = IfThen(conformalMethod,INV(SQR(phiL)),exp(4*phiL));
     
     CCTK_REAL em4phi = INV(e4phi);
     
@@ -702,99 +644,66 @@ static void ML_BSSN_RHS2_Body(cGH const * restrict const cctkGH, int const dir, 
       + Ats23*gu23) + Ats33*gu33;
     
     CCTK_REAL At11rhsL = -2.*alphaL*(At11L*Atm11 + At12L*Atm21 + 
-      At13L*Atm31) + epsdiss1*PDdissipationNth1At11 + 
-      epsdiss2*PDdissipationNth2At11 + epsdiss3*PDdissipationNth3At11 + 
-      2.*(At12L*PDstandardNth1beta2 + At13L*PDstandardNth1beta3) + 
-      beta1L*PDupwindNthAnti1At11 + beta2L*PDupwindNthAnti2At11 + 
-      beta3L*PDupwindNthAnti3At11 + 
+      At13L*Atm31) + 2.*(At12L*PDstandardNth1beta2 + 
+      At13L*PDstandardNth1beta3) + 
       At11L*(1.333333333333333333333333333333333333333*PDstandardNth1beta1 - 
       0.6666666666666666666666666666666666666667*(PDstandardNth2beta2 + 
       PDstandardNth3beta3) + alphaL*trKL) + em4phi*(Ats11 - 
       0.3333333333333333333333333333333333333333*g11*trAts + 
       alphaL*(-25.13274122871834590770114706623602307358*eTxxL + 
-      8.377580409572781969233715688745341024526*g11*trS)) + 
-      PDupwindNthSymm1At11*Abs(beta1L) + PDupwindNthSymm2At11*Abs(beta2L) + 
-      PDupwindNthSymm3At11*Abs(beta3L);
+      8.377580409572781969233715688745341024526*g11*trS));
     
     CCTK_REAL At12rhsL = -2.*alphaL*(At11L*Atm12 + At12L*Atm22 + 
-      At13L*Atm32) + epsdiss1*PDdissipationNth1At12 + 
-      epsdiss2*PDdissipationNth2At12 + epsdiss3*PDdissipationNth3At12 + 
-      At22L*PDstandardNth1beta2 + At23L*PDstandardNth1beta3 + 
+      At13L*Atm32) + At22L*PDstandardNth1beta2 + At23L*PDstandardNth1beta3 + 
       At11L*PDstandardNth2beta1 + At13L*PDstandardNth2beta3 + 
-      beta1L*PDupwindNthAnti1At12 + beta2L*PDupwindNthAnti2At12 + 
-      beta3L*PDupwindNthAnti3At12 + 
       At12L*(0.3333333333333333333333333333333333333333*(PDstandardNth1beta1 
       + PDstandardNth2beta2) - 
       0.6666666666666666666666666666666666666667*PDstandardNth3beta3 + 
       alphaL*trKL) + em4phi*(Ats12 - 
       0.3333333333333333333333333333333333333333*g12*trAts + 
       alphaL*(-25.13274122871834590770114706623602307358*eTxyL + 
-      8.377580409572781969233715688745341024526*g12*trS)) + 
-      PDupwindNthSymm1At12*Abs(beta1L) + PDupwindNthSymm2At12*Abs(beta2L) + 
-      PDupwindNthSymm3At12*Abs(beta3L);
+      8.377580409572781969233715688745341024526*g12*trS));
     
     CCTK_REAL At13rhsL = -2.*alphaL*(At11L*Atm13 + At12L*Atm23 + 
-      At13L*Atm33) + epsdiss1*PDdissipationNth1At13 + 
-      epsdiss2*PDdissipationNth2At13 + epsdiss3*PDdissipationNth3At13 + 
-      At23L*PDstandardNth1beta2 + At33L*PDstandardNth1beta3 + 
+      At13L*Atm33) + At23L*PDstandardNth1beta2 + At33L*PDstandardNth1beta3 + 
       At11L*PDstandardNth3beta1 + At12L*PDstandardNth3beta2 + 
-      beta1L*PDupwindNthAnti1At13 + beta2L*PDupwindNthAnti2At13 + 
-      beta3L*PDupwindNthAnti3At13 + 
       At13L*(-0.6666666666666666666666666666666666666667*PDstandardNth2beta2 
       + 0.3333333333333333333333333333333333333333*(PDstandardNth1beta1 + 
       PDstandardNth3beta3) + alphaL*trKL) + em4phi*(Ats13 - 
       0.3333333333333333333333333333333333333333*g13*trAts + 
       alphaL*(-25.13274122871834590770114706623602307358*eTxzL + 
-      8.377580409572781969233715688745341024526*g13*trS)) + 
-      PDupwindNthSymm1At13*Abs(beta1L) + PDupwindNthSymm2At13*Abs(beta2L) + 
-      PDupwindNthSymm3At13*Abs(beta3L);
+      8.377580409572781969233715688745341024526*g13*trS));
     
     CCTK_REAL At22rhsL = -2.*alphaL*(At12L*Atm12 + At22L*Atm22 + 
-      At23L*Atm32) + epsdiss1*PDdissipationNth1At22 + 
-      epsdiss2*PDdissipationNth2At22 + epsdiss3*PDdissipationNth3At22 + 
-      2.*(At12L*PDstandardNth2beta1 + At23L*PDstandardNth2beta3) + 
-      beta1L*PDupwindNthAnti1At22 + beta2L*PDupwindNthAnti2At22 + 
-      beta3L*PDupwindNthAnti3At22 + 
+      At23L*Atm32) + 2.*(At12L*PDstandardNth2beta1 + 
+      At23L*PDstandardNth2beta3) + 
       At22L*(1.333333333333333333333333333333333333333*PDstandardNth2beta2 - 
       0.6666666666666666666666666666666666666667*(PDstandardNth1beta1 + 
       PDstandardNth3beta3) + alphaL*trKL) + em4phi*(Ats22 - 
       0.3333333333333333333333333333333333333333*g22*trAts + 
       alphaL*(-25.13274122871834590770114706623602307358*eTyyL + 
-      8.377580409572781969233715688745341024526*g22*trS)) + 
-      PDupwindNthSymm1At22*Abs(beta1L) + PDupwindNthSymm2At22*Abs(beta2L) + 
-      PDupwindNthSymm3At22*Abs(beta3L);
+      8.377580409572781969233715688745341024526*g22*trS));
     
     CCTK_REAL At23rhsL = -2.*alphaL*(At12L*Atm13 + At22L*Atm23 + 
-      At23L*Atm33) + epsdiss1*PDdissipationNth1At23 + 
-      epsdiss2*PDdissipationNth2At23 + epsdiss3*PDdissipationNth3At23 + 
-      At13L*PDstandardNth2beta1 + At33L*PDstandardNth2beta3 + 
+      At23L*Atm33) + At13L*PDstandardNth2beta1 + At33L*PDstandardNth2beta3 + 
       At12L*PDstandardNth3beta1 + At22L*PDstandardNth3beta2 + 
-      beta1L*PDupwindNthAnti1At23 + beta2L*PDupwindNthAnti2At23 + 
-      beta3L*PDupwindNthAnti3At23 + 
       At23L*(-0.6666666666666666666666666666666666666667*PDstandardNth1beta1 
       + 0.3333333333333333333333333333333333333333*(PDstandardNth2beta2 + 
       PDstandardNth3beta3) + alphaL*trKL) + em4phi*(Ats23 - 
       0.3333333333333333333333333333333333333333*g23*trAts + 
       alphaL*(-25.13274122871834590770114706623602307358*eTyzL + 
-      8.377580409572781969233715688745341024526*g23*trS)) + 
-      PDupwindNthSymm1At23*Abs(beta1L) + PDupwindNthSymm2At23*Abs(beta2L) + 
-      PDupwindNthSymm3At23*Abs(beta3L);
+      8.377580409572781969233715688745341024526*g23*trS));
     
     CCTK_REAL At33rhsL = -2.*alphaL*(At13L*Atm13 + At23L*Atm23 + 
-      At33L*Atm33) + epsdiss1*PDdissipationNth1At33 + 
-      epsdiss2*PDdissipationNth2At33 + epsdiss3*PDdissipationNth3At33 + 
-      2.*(At13L*PDstandardNth3beta1 + At23L*PDstandardNth3beta2) + 
-      beta1L*PDupwindNthAnti1At33 + beta2L*PDupwindNthAnti2At33 + 
-      beta3L*PDupwindNthAnti3At33 + 
+      At33L*Atm33) + 2.*(At13L*PDstandardNth3beta1 + 
+      At23L*PDstandardNth3beta2) + 
       At33L*(-0.6666666666666666666666666666666666666667*(PDstandardNth1beta1 
       + PDstandardNth2beta2) + 
       1.333333333333333333333333333333333333333*PDstandardNth3beta3 + 
       alphaL*trKL) + em4phi*(Ats33 - 
       0.3333333333333333333333333333333333333333*g33*trAts + 
       alphaL*(-25.13274122871834590770114706623602307358*eTzzL + 
-      8.377580409572781969233715688745341024526*g33*trS)) + 
-      PDupwindNthSymm1At33*Abs(beta1L) + PDupwindNthSymm2At33*Abs(beta2L) + 
-      PDupwindNthSymm3At33*Abs(beta3L);
+      8.377580409572781969233715688745341024526*g33*trS));
     
     /* Copy local copies back to grid functions */
     At11rhs[index] = At11rhsL;
