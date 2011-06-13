@@ -326,6 +326,11 @@ schedule ML_BSSN_UPW_Advect IN ML_BSSN_UPW_evolCalcGroup after ML_BSSN_UPW_RHS2
   LANG: C
 } "ML_BSSN_UPW_Advect"
 
+schedule ML_BSSN_UPW_InitRHS AT ANALYSIS before ML_BSSN_UPW_evolCalcGroup
+{
+  LANG: C
+} "ML_BSSN_UPW_InitRHS"
+
 
 if (CCTK_EQUALS(my_rhs_boundary_condition, "static"))
 {

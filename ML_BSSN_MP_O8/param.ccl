@@ -266,6 +266,12 @@ CCTK_INT ML_BSSN_MP_O8_Advect_calc_every "ML_BSSN_MP_O8_Advect_calc_every" STEER
 } 1
 
 restricted:
+CCTK_INT ML_BSSN_MP_O8_InitRHS_calc_every "ML_BSSN_MP_O8_InitRHS_calc_every" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 1
+
+restricted:
 CCTK_INT ML_BSSN_MP_O8_RHSStaticBoundary_calc_every "ML_BSSN_MP_O8_RHSStaticBoundary_calc_every" STEERABLE=ALWAYS
 {
   *:* :: ""
@@ -363,6 +369,12 @@ CCTK_INT ML_BSSN_MP_O8_Dissipation_calc_offset "ML_BSSN_MP_O8_Dissipation_calc_o
 
 restricted:
 CCTK_INT ML_BSSN_MP_O8_Advect_calc_offset "ML_BSSN_MP_O8_Advect_calc_offset" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 0
+
+restricted:
+CCTK_INT ML_BSSN_MP_O8_InitRHS_calc_offset "ML_BSSN_MP_O8_InitRHS_calc_offset" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 0
