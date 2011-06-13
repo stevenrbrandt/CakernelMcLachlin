@@ -158,9 +158,9 @@ ADMConstraintsCalc =
     gu[ua,ub] -> 1/detg detgExpr MatrixInverse[g[ua,ub]],
     G[ua,lb,lc] -> 1/2 gu[ua,ud]
                    (PD[g[lb,ld],lc] + PD[g[lc,ld],lb] - PD[g[lb,lc],ld]),
-    R[la,lb] -> G[uc,ld,la] G[lc,lb,ud] - G[uc,la,lb] G[lc,ld,ud]
-                + 1/2 gu[uc,ud] (- PD[g[lc,ld],la,lb] + PD[g[lc,la],ld,lb]
-                                 - PD[g[la,lb],lc,ld] + PD[g[ld,lb],lc,la]),
+    R[la,lb] -> G[u1,l2,la] G[l1,lb,u2] - G[u1,la,lb] G[l1,l2,u2]
+                + 1/2 gu[u1,u2] (- PD[g[l1,l2],la,lb] + PD[g[l1,la],l2,lb]
+                                 - PD[g[la,lb],l1,l2] + PD[g[l2,lb],l1,la]),
     trR -> R[la,lb] gu[ua,ub],
 
     Km[ua,lb] -> gu[ua,uc] K[lc,lb],

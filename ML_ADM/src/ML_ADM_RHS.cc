@@ -296,14 +296,14 @@ static void ML_ADM_RHS_Body(cGH const * restrict const cctkGH, int const dir, in
       + gu32*(-PDstandardNth2g33 + 2*PDstandardNth3g23) + 
       gu33*PDstandardNth3g33);
     
-    CCTK_REAL R11 = 0.5*(4*G213*G312 - 2*(G111*G212 + G223*G311 + 
-      G111*G313) + G211*(2*G112 - 2*G222 - 2*G323) + G311*(2*G113 - 2*G333) + 
-      (-gu23 - gu32)*PDstandardNth11g23 + gu23*PDstandardNth13g12 + 
-      gu32*PDstandardNth13g12 + gu22*(-PDstandardNth11g22 + 
-      2*PDstandardNth12g12 - PDstandardNth22g11) + gu23*(PDstandardNth12g13 - 
-      PDstandardNth23g11) + gu32*(PDstandardNth12g13 - PDstandardNth23g11) + 
-      gu33*(-PDstandardNth11g33 + 2*PDstandardNth13g13 - PDstandardNth33g11) 
-      + 2*SQR(G212) + 2*SQR(G313));
+    CCTK_REAL R11 = 2*(G112*G211 + G113*G311 + G213*G312) - G111*(G111 + 
+      G212 + G313) - G211*(G112 + G222 + G323) - G311*(G113 + G223 + G333) + 
+      0.5*(-(gu22*(PDstandardNth11g22 - 2*PDstandardNth12g12 + 
+      PDstandardNth22g11)) + gu23*(-PDstandardNth11g23 + PDstandardNth12g13 + 
+      PDstandardNth13g12 - PDstandardNth23g11) + gu32*(-PDstandardNth11g23 + 
+      PDstandardNth12g13 + PDstandardNth13g12 - PDstandardNth23g11) - 
+      gu33*(PDstandardNth11g33 - 2*PDstandardNth13g13 + PDstandardNth33g11)) 
+      + SQR(G111) + SQR(G212) + SQR(G313);
     
     CCTK_REAL R12 = 0.5*(2*(G122*G211 + G123*G311 + G213*G322 + G313*G323) 
       - 2*(G112*G212 + G112*G313 + G212*G323 + G312*G333 + 
@@ -323,14 +323,14 @@ static void ML_ADM_RHS_Body(cGH const * restrict const cctkGH, int const dir, in
       gu23*(PDstandardNth12g33 - PDstandardNth13g23 - PDstandardNth23g13 + 
       PDstandardNth33g12));
     
-    CCTK_REAL R22 = 0.5*(4*G123*G312 + G122*(-2*G111 + 2*G212 - 2*G313) - 
-      2*(G112*G222 + G113*G322 + G222*G323) + G322*(2*G223 - 2*G333) + (gu13 
-      + gu31)*PDstandardNth12g23 + (-gu13 - gu31)*PDstandardNth13g22 + 
-      gu11*(-PDstandardNth11g22 + 2*PDstandardNth12g12 - PDstandardNth22g11) 
-      + (-gu13 - gu31)*PDstandardNth22g13 + gu13*PDstandardNth23g12 + 
-      gu31*PDstandardNth23g12 + gu33*(-PDstandardNth22g33 + 
-      2*PDstandardNth23g23 - PDstandardNth33g22) + 2*SQR(G112) + 
-      2*SQR(G323));
+    CCTK_REAL R22 = -(G122*(G111 + G212 + G313)) + 2*(G122*G212 + 
+      G123*G312 + G223*G322) - G222*(G112 + G222 + G323) - G322*(G113 + G223 
+      + G333) + 0.5*(-(gu11*(PDstandardNth11g22 - 2*PDstandardNth12g12 + 
+      PDstandardNth22g11)) + gu13*(PDstandardNth12g23 - PDstandardNth13g22 - 
+      PDstandardNth22g13 + PDstandardNth23g12) + gu31*(PDstandardNth12g23 - 
+      PDstandardNth13g22 - PDstandardNth22g13 + PDstandardNth23g12) - 
+      gu33*(PDstandardNth22g33 - 2*PDstandardNth23g23 + PDstandardNth33g22)) 
+      + SQR(G112) + SQR(G222) + SQR(G323);
     
     CCTK_REAL R23 = 0.5*(2*(G112*G113 + G122*G213 + G133*G312 + G233*G322) 
       + gu11*(-PDstandardNth11g23 + PDstandardNth12g13 + PDstandardNth13g12 - 
@@ -340,15 +340,14 @@ static void ML_ADM_RHS_Body(cGH const * restrict const cctkGH, int const dir, in
       gu13*(PDstandardNth12g33 - PDstandardNth13g23 - PDstandardNth23g13 + 
       PDstandardNth33g12) + gu23*(PDstandardNth22g33 + PDstandardNth33g22));
     
-    CCTK_REAL R33 = 0.5*(4*G123*G213 - 2*(G111*G133 + G133*G212 + 
-      G112*G233 + G222*G233 + G113*G333 + G223*G333) + (-gu12 - 
-      gu21)*PDstandardNth12g33 + 2*(G133*G313 + G233*G323 + 
-      gu11*PDstandardNth13g13) + gu12*PDstandardNth13g23 + 
-      gu21*PDstandardNth13g23 + gu12*PDstandardNth23g13 + 
-      gu21*PDstandardNth23g13 + gu11*(-PDstandardNth11g33 - 
-      PDstandardNth33g11) - (gu12 + gu21)*PDstandardNth33g12 + 
-      gu22*(-PDstandardNth22g33 + 2*PDstandardNth23g23 - PDstandardNth33g22) 
-      + 2*SQR(G113) + 2*SQR(G223));
+    CCTK_REAL R33 = -(G133*(G111 + G212 + G313)) + 2*(G123*G213 + 
+      G133*G313) + G233*(-G112 - G222 + G323) - G333*(G113 + G223 + G333) + 
+      0.5*(-(gu11*(PDstandardNth11g33 - 2*PDstandardNth13g13 + 
+      PDstandardNth33g11)) + gu12*(-PDstandardNth12g33 + PDstandardNth13g23 + 
+      PDstandardNth23g13 - PDstandardNth33g12) + gu21*(-PDstandardNth12g33 + 
+      PDstandardNth13g23 + PDstandardNth23g13 - PDstandardNth33g12) - 
+      gu22*(PDstandardNth22g33 - 2*PDstandardNth23g23 + PDstandardNth33g22)) 
+      + SQR(G113) + SQR(G223) + SQR(G333);
     
     CCTK_REAL Km11 = gu11*K11L + gu12*K12L + gu13*K13L;
     
@@ -408,7 +407,7 @@ static void ML_ADM_RHS_Body(cGH const * restrict const cctkGH, int const dir, in
       K13L*PDstandardNth1beta3) + beta1L*PDstandardNth1K11 + 
       G211*PDstandardNth2alpha + beta2L*PDstandardNth2K11 + 
       G311*PDstandardNth3alpha + beta3L*PDstandardNth3K11 + 
-      alphaL*(-2*(K12L*Km21 + K13L*Km31) + R11 + K11L*(-2*Km11 + trK));
+      alphaL*(-2*(K11L*Km11 + K12L*Km21 + K13L*Km31) + R11 + K11L*trK);
     
     CCTK_REAL K12rhsL = -PDstandardNth12alpha + G112*PDstandardNth1alpha + 
       K22L*PDstandardNth1beta2 + K23L*PDstandardNth1beta3 + 
@@ -416,8 +415,8 @@ static void ML_ADM_RHS_Body(cGH const * restrict const cctkGH, int const dir, in
       K11L*PDstandardNth2beta1 + K12L*(PDstandardNth1beta1 + 
       PDstandardNth2beta2) + K13L*PDstandardNth2beta3 + 
       beta2L*PDstandardNth2K12 + G312*PDstandardNth3alpha + 
-      beta3L*PDstandardNth3K12 + alphaL*(-2*(K11L*Km12 + K13L*Km32) + R12 + 
-      K12L*(-2*Km22 + trK));
+      beta3L*PDstandardNth3K12 + alphaL*(-2*(K11L*Km12 + K12L*Km22 + 
+      K13L*Km32) + R12 + K12L*trK);
     
     CCTK_REAL K13rhsL = -PDstandardNth13alpha + G113*PDstandardNth1alpha + 
       K23L*PDstandardNth1beta2 + K33L*PDstandardNth1beta3 + 
@@ -433,8 +432,8 @@ static void ML_ADM_RHS_Body(cGH const * restrict const cctkGH, int const dir, in
       G222*PDstandardNth2alpha + 2*(K12L*PDstandardNth2beta1 + 
       K22L*PDstandardNth2beta2 + K23L*PDstandardNth2beta3) + 
       beta2L*PDstandardNth2K22 + G322*PDstandardNth3alpha + 
-      beta3L*PDstandardNth3K22 + alphaL*(-2*(K12L*Km12 + K23L*Km32) + R22 + 
-      K22L*(-2*Km22 + trK));
+      beta3L*PDstandardNth3K22 + alphaL*(-2*(K12L*Km12 + K22L*Km22 + 
+      K23L*Km32) + R22 + K22L*trK);
     
     CCTK_REAL K23rhsL = G123*PDstandardNth1alpha + 
       beta1L*PDstandardNth1K23 - PDstandardNth23alpha + 

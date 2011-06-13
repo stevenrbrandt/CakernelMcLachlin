@@ -147,7 +147,7 @@ static void ML_BSSN_MP_O8_boundary_Body(cGH const * restrict const cctkGH, int c
     /* Precompute derivatives */
     
     /* Calculate temporaries and grid functions */
-    CCTK_REAL phiL = IfThen(conformalMethod,1,0);
+    CCTK_REAL phiL = IfThen(ToReal(conformalMethod),1,0);
     
     CCTK_REAL gt11L = 1;
     

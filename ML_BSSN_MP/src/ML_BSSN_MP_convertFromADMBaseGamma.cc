@@ -378,8 +378,8 @@ static void ML_BSSN_MP_convertFromADMBaseGamma_Body(cGH const * restrict const c
     CCTK_REAL Xt3L = Gt311*gtu11 + Gt322*gtu22 + 2*(Gt312*gtu12 + 
       Gt313*gtu13 + Gt323*gtu23) + Gt333*gtu33;
     
-    CCTK_REAL AL = IfThen(LapseACoeff != 
-      0,-(INV(ToReal(harmonicF))*pow(alphaL,-ToReal(harmonicN))*(dtalpL - 
+    CCTK_REAL AL = IfThen(ToReal(LapseACoeff) != 
+      0,3*INV(ToReal(harmonicF))*pow(alphaL,-ToReal(harmonicN))*(-9*dtalpL + 
       ((beta1L*J11L + beta2L*J12L + beta3L*J13L)*PDupwindNthAnti1alpha + 
       (beta1L*J21L + beta2L*J22L + beta3L*J23L)*PDupwindNthAnti2alpha + 
       (beta1L*J31L + beta2L*J32L + beta3L*J33L)*PDupwindNthAnti3alpha + 
@@ -387,56 +387,43 @@ static void ML_BSSN_MP_convertFromADMBaseGamma_Body(cGH const * restrict const c
       J31L*PDupwindNthSymm3alpha)*Abs(beta1L) + (J12L*PDupwindNthSymm1alpha + 
       J22L*PDupwindNthSymm2alpha + J32L*PDupwindNthSymm3alpha)*Abs(beta2L) + 
       (J13L*PDupwindNthSymm1alpha + J23L*PDupwindNthSymm2alpha + 
-      J33L*PDupwindNthSymm3alpha)*Abs(beta3L))*ToReal(LapseAdvectionCoeff))),0);
+      J33L*PDupwindNthSymm3alpha)*Abs(beta3L))*ToReal(LapseAdvectionCoeff)),0);
     
     CCTK_REAL theta = fmin(1,exp(1 - 
       rL*INV(ToReal(SpatialShiftGammaCoeffRadius))));
     
-    CCTK_REAL B1L;
-    CCTK_REAL B2L;
-    CCTK_REAL B3L;
+    CCTK_REAL B1L = IfThen(ToReal(ShiftBCoeff)*ToReal(ShiftGammaCoeff) != 
+      0,INV(theta)*INV(ToReal(ShiftGammaCoeff))*(27*dtbetaxL - 
+      3*((beta1L*J11L + beta2L*J12L + beta3L*J13L)*PDupwindNthAnti1beta1 + 
+      (beta1L*J21L + beta2L*J22L + beta3L*J23L)*PDupwindNthAnti2beta1 + 
+      (beta1L*J31L + beta2L*J32L + beta3L*J33L)*PDupwindNthAnti3beta1 + 
+      (J11L*PDupwindNthSymm1beta1 + J21L*PDupwindNthSymm2beta1 + 
+      J31L*PDupwindNthSymm3beta1)*Abs(beta1L) + (J12L*PDupwindNthSymm1beta1 + 
+      J22L*PDupwindNthSymm2beta1 + J32L*PDupwindNthSymm3beta1)*Abs(beta2L) + 
+      (J13L*PDupwindNthSymm1beta1 + J23L*PDupwindNthSymm2beta1 + 
+      J33L*PDupwindNthSymm3beta1)*Abs(beta3L))*ToReal(ShiftAdvectionCoeff)),0);
     
-    if (ShiftBCoeff*ShiftGammaCoeff != 0)
-    {
-      B1L = INV(theta)*INV(ToReal(ShiftGammaCoeff))*(dtbetaxL - 
-        ((beta1L*J11L + beta2L*J12L + beta3L*J13L)*PDupwindNthAnti1beta1 + 
-        (beta1L*J21L + beta2L*J22L + beta3L*J23L)*PDupwindNthAnti2beta1 + 
-        (beta1L*J31L + beta2L*J32L + beta3L*J33L)*PDupwindNthAnti3beta1 + 
-        (J11L*PDupwindNthSymm1beta1 + J21L*PDupwindNthSymm2beta1 + 
-        J31L*PDupwindNthSymm3beta1)*Abs(beta1L) + (J12L*PDupwindNthSymm1beta1 + 
-        J22L*PDupwindNthSymm2beta1 + J32L*PDupwindNthSymm3beta1)*Abs(beta2L) + 
-        (J13L*PDupwindNthSymm1beta1 + J23L*PDupwindNthSymm2beta1 + 
-        J33L*PDupwindNthSymm3beta1)*Abs(beta3L))*ToReal(ShiftAdvectionCoeff));
-      
-      B2L = INV(theta)*INV(ToReal(ShiftGammaCoeff))*(dtbetayL - 
-        ((beta1L*J11L + beta2L*J12L + beta3L*J13L)*PDupwindNthAnti1beta2 + 
-        (beta1L*J21L + beta2L*J22L + beta3L*J23L)*PDupwindNthAnti2beta2 + 
-        (beta1L*J31L + beta2L*J32L + beta3L*J33L)*PDupwindNthAnti3beta2 + 
-        (J11L*PDupwindNthSymm1beta2 + J21L*PDupwindNthSymm2beta2 + 
-        J31L*PDupwindNthSymm3beta2)*Abs(beta1L) + (J12L*PDupwindNthSymm1beta2 + 
-        J22L*PDupwindNthSymm2beta2 + J32L*PDupwindNthSymm3beta2)*Abs(beta2L) + 
-        (J13L*PDupwindNthSymm1beta2 + J23L*PDupwindNthSymm2beta2 + 
-        J33L*PDupwindNthSymm3beta2)*Abs(beta3L))*ToReal(ShiftAdvectionCoeff));
-      
-      B3L = INV(theta)*INV(ToReal(ShiftGammaCoeff))*(dtbetazL - 
-        ((beta1L*J11L + beta2L*J12L + beta3L*J13L)*PDupwindNthAnti1beta3 + 
-        (beta1L*J21L + beta2L*J22L + beta3L*J23L)*PDupwindNthAnti2beta3 + 
-        (beta1L*J31L + beta2L*J32L + beta3L*J33L)*PDupwindNthAnti3beta3 + 
-        (J11L*PDupwindNthSymm1beta3 + J21L*PDupwindNthSymm2beta3 + 
-        J31L*PDupwindNthSymm3beta3)*Abs(beta1L) + (J12L*PDupwindNthSymm1beta3 + 
-        J22L*PDupwindNthSymm2beta3 + J32L*PDupwindNthSymm3beta3)*Abs(beta2L) + 
-        (J13L*PDupwindNthSymm1beta3 + J23L*PDupwindNthSymm2beta3 + 
-        J33L*PDupwindNthSymm3beta3)*Abs(beta3L))*ToReal(ShiftAdvectionCoeff));
-    }
-    else
-    {
-      B1L = 0;
-      
-      B2L = 0;
-      
-      B3L = 0;
-    }
+    CCTK_REAL B2L = IfThen(ToReal(ShiftBCoeff)*ToReal(ShiftGammaCoeff) != 
+      0,INV(theta)*INV(ToReal(ShiftGammaCoeff))*(27*dtbetayL - 
+      3*((beta1L*J11L + beta2L*J12L + beta3L*J13L)*PDupwindNthAnti1beta2 + 
+      (beta1L*J21L + beta2L*J22L + beta3L*J23L)*PDupwindNthAnti2beta2 + 
+      (beta1L*J31L + beta2L*J32L + beta3L*J33L)*PDupwindNthAnti3beta2 + 
+      (J11L*PDupwindNthSymm1beta2 + J21L*PDupwindNthSymm2beta2 + 
+      J31L*PDupwindNthSymm3beta2)*Abs(beta1L) + (J12L*PDupwindNthSymm1beta2 + 
+      J22L*PDupwindNthSymm2beta2 + J32L*PDupwindNthSymm3beta2)*Abs(beta2L) + 
+      (J13L*PDupwindNthSymm1beta2 + J23L*PDupwindNthSymm2beta2 + 
+      J33L*PDupwindNthSymm3beta2)*Abs(beta3L))*ToReal(ShiftAdvectionCoeff)),0);
     
+    CCTK_REAL B3L = IfThen(ToReal(ShiftBCoeff)*ToReal(ShiftGammaCoeff) != 
+      0,INV(theta)*INV(ToReal(ShiftGammaCoeff))*(27*dtbetazL - 
+      3*((beta1L*J11L + beta2L*J12L + beta3L*J13L)*PDupwindNthAnti1beta3 + 
+      (beta1L*J21L + beta2L*J22L + beta3L*J23L)*PDupwindNthAnti2beta3 + 
+      (beta1L*J31L + beta2L*J32L + beta3L*J33L)*PDupwindNthAnti3beta3 + 
+      (J11L*PDupwindNthSymm1beta3 + J21L*PDupwindNthSymm2beta3 + 
+      J31L*PDupwindNthSymm3beta3)*Abs(beta1L) + (J12L*PDupwindNthSymm1beta3 + 
+      J22L*PDupwindNthSymm2beta3 + J32L*PDupwindNthSymm3beta3)*Abs(beta2L) + 
+      (J13L*PDupwindNthSymm1beta3 + J23L*PDupwindNthSymm2beta3 + 
+      J33L*PDupwindNthSymm3beta3)*Abs(beta3L))*ToReal(ShiftAdvectionCoeff)),0);
     
     /* Copy local copies back to grid functions */
     A[index] = AL;

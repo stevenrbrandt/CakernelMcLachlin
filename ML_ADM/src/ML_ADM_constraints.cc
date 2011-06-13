@@ -266,13 +266,12 @@ static void ML_ADM_constraints_Body(cGH const * restrict const cctkGH, int const
       gu33*PDstandardNth3g33);
     
     CCTK_REAL R11 = -(G111*(G111 + G122 + G133)) - G211*(G211 + G222 + 
-      G233) - G311*(G311 + G322 + G333) - 0.5*gu22*(PDstandardNth11g22 - 
-      2*PDstandardNth12g12 + PDstandardNth22g11) + 
-      0.5*gu23*(-PDstandardNth11g23 + PDstandardNth12g13 + PDstandardNth13g12 
-      - PDstandardNth23g11) + 0.5*gu32*(-PDstandardNth11g23 + 
-      PDstandardNth12g13 + PDstandardNth13g12 - PDstandardNth23g11) - 
-      0.5*gu33*(PDstandardNth11g33 - 2*PDstandardNth13g13 + 
-      PDstandardNth33g11) + SQR(G111) + SQR(G112) + SQR(G113) + SQR(G211) + 
+      G233) - G311*(G311 + G322 + G333) + 0.5*(-(gu22*(PDstandardNth11g22 - 
+      2*PDstandardNth12g12 + PDstandardNth22g11)) + gu23*(-PDstandardNth11g23 
+      + PDstandardNth12g13 + PDstandardNth13g12 - PDstandardNth23g11) + 
+      gu32*(-PDstandardNth11g23 + PDstandardNth12g13 + PDstandardNth13g12 - 
+      PDstandardNth23g11) - gu33*(PDstandardNth11g33 - 2*PDstandardNth13g13 + 
+      PDstandardNth33g11)) + SQR(G111) + SQR(G112) + SQR(G113) + SQR(G211) + 
       SQR(G212) + SQR(G213) + SQR(G311) + SQR(G312) + SQR(G313);
     
     CCTK_REAL R12 = 0.5*(2*(G113*G123 + G213*G223 + G313*G323) - 
@@ -293,13 +292,12 @@ static void ML_ADM_constraints_Body(cGH const * restrict const cctkGH, int const
       PDstandardNth23g13 + PDstandardNth33g12));
     
     CCTK_REAL R22 = -(G122*(G111 + G122 + G133)) - G222*(G211 + G222 + 
-      G233) - G322*(G311 + G322 + G333) - 0.5*gu11*(PDstandardNth11g22 - 
-      2*PDstandardNth12g12 + PDstandardNth22g11) + 
-      0.5*gu13*(PDstandardNth12g23 - PDstandardNth13g22 - PDstandardNth22g13 
-      + PDstandardNth23g12) + 0.5*gu31*(PDstandardNth12g23 - 
-      PDstandardNth13g22 - PDstandardNth22g13 + PDstandardNth23g12) - 
-      0.5*gu33*(PDstandardNth22g33 - 2*PDstandardNth23g23 + 
-      PDstandardNth33g22) + SQR(G112) + SQR(G122) + SQR(G123) + SQR(G212) + 
+      G233) - G322*(G311 + G322 + G333) + 0.5*(-(gu11*(PDstandardNth11g22 - 
+      2*PDstandardNth12g12 + PDstandardNth22g11)) + gu13*(PDstandardNth12g23 
+      - PDstandardNth13g22 - PDstandardNth22g13 + PDstandardNth23g12) + 
+      gu31*(PDstandardNth12g23 - PDstandardNth13g22 - PDstandardNth22g13 + 
+      PDstandardNth23g12) - gu33*(PDstandardNth22g33 - 2*PDstandardNth23g23 + 
+      PDstandardNth33g22)) + SQR(G112) + SQR(G122) + SQR(G123) + SQR(G212) + 
       SQR(G222) + SQR(G223) + SQR(G312) + SQR(G322) + SQR(G323);
     
     CCTK_REAL R23 = 0.5*(2*(G112*G113 + G212*G213 + G312*G313) + 
@@ -311,13 +309,12 @@ static void ML_ADM_constraints_Body(cGH const * restrict const cctkGH, int const
       gu23*(PDstandardNth22g33 + PDstandardNth33g22));
     
     CCTK_REAL R33 = -(G133*(G111 + G122 + G133)) - G233*(G211 + G222 + 
-      G233) - G333*(G311 + G322 + G333) - 0.5*gu11*(PDstandardNth11g33 - 
-      2*PDstandardNth13g13 + PDstandardNth33g11) + 
-      0.5*gu12*(-PDstandardNth12g33 + PDstandardNth13g23 + PDstandardNth23g13 
-      - PDstandardNth33g12) + 0.5*gu21*(-PDstandardNth12g33 + 
-      PDstandardNth13g23 + PDstandardNth23g13 - PDstandardNth33g12) - 
-      0.5*gu22*(PDstandardNth22g33 - 2*PDstandardNth23g23 + 
-      PDstandardNth33g22) + SQR(G113) + SQR(G123) + SQR(G133) + SQR(G213) + 
+      G233) - G333*(G311 + G322 + G333) + 0.5*(-(gu11*(PDstandardNth11g33 - 
+      2*PDstandardNth13g13 + PDstandardNth33g11)) + gu12*(-PDstandardNth12g33 
+      + PDstandardNth13g23 + PDstandardNth23g13 - PDstandardNth33g12) + 
+      gu21*(-PDstandardNth12g33 + PDstandardNth13g23 + PDstandardNth23g13 - 
+      PDstandardNth33g12) - gu22*(PDstandardNth22g33 - 2*PDstandardNth23g23 + 
+      PDstandardNth33g22)) + SQR(G113) + SQR(G123) + SQR(G133) + SQR(G213) + 
       SQR(G223) + SQR(G233) + SQR(G313) + SQR(G323) + SQR(G333);
     
     CCTK_REAL trR = gu11*R11 + (gu12 + gu21)*R12 + (gu13 + gu31)*R13 + 

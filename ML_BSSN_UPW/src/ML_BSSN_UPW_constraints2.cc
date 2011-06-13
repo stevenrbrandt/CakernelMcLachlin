@@ -305,7 +305,7 @@ static void ML_BSSN_UPW_constraints2_Body(cGH const * restrict const cctkGH, int
     
     CCTK_REAL Gt333 = Gtl133*gtu13 + Gtl233*gtu23 + Gtl333*gtu33;
     
-    CCTK_REAL fac1 = IfThen(conformalMethod,-0.5*INV(phiL),1);
+    CCTK_REAL fac1 = IfThen(ToReal(conformalMethod),-0.5*INV(phiL),1);
     
     CCTK_REAL cdphi1 = fac1*PDstandardNth1phi;
     
