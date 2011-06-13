@@ -6,6 +6,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "cctk.h"
 #include "cctk_Arguments.h"
 #include "cctk_Parameters.h"
@@ -53,15 +54,21 @@ static void WTFO_constraints_Body(cGH const * restrict const cctkGH, int const d
   const char *groups[] = {"ML_WaveToyFO::WT_v","ML_WaveToyFO::WT_w"};
   GenericFD_AssertGroupStorage(cctkGH, "WTFO_constraints", 2, groups);
   
+  GenericFD_EnsureStencilFits(cctkGH, "WTFO_constraints", 2, 2, 2);
+  
   /* Include user-supplied include files */
   
   /* Initialise finite differencing variables */
   ptrdiff_t const di = 1;
   ptrdiff_t const dj = CCTK_GFINDEX3D(cctkGH,0,1,0) - CCTK_GFINDEX3D(cctkGH,0,0,0);
   ptrdiff_t const dk = CCTK_GFINDEX3D(cctkGH,0,0,1) - CCTK_GFINDEX3D(cctkGH,0,0,0);
+  ptrdiff_t const cdi = sizeof(CCTK_REAL) * di;
+  ptrdiff_t const cdj = sizeof(CCTK_REAL) * dj;
+  ptrdiff_t const cdk = sizeof(CCTK_REAL) * dk;
   CCTK_REAL const dx = ToReal(CCTK_DELTA_SPACE(0));
   CCTK_REAL const dy = ToReal(CCTK_DELTA_SPACE(1));
   CCTK_REAL const dz = ToReal(CCTK_DELTA_SPACE(2));
+  CCTK_REAL const dt = ToReal(CCTK_DELTA_TIME);
   CCTK_REAL const dxi = INV(dx);
   CCTK_REAL const dyi = INV(dy);
   CCTK_REAL const dzi = INV(dz);
@@ -94,9 +101,11 @@ static void WTFO_constraints_Body(cGH const * restrict const cctkGH, int const d
     ptrdiff_t const index = di*i + dj*j + dk*k;
     
     /* Assign local copies of grid functions */
+    
     CCTK_REAL v1L = v1[index];
     CCTK_REAL v2L = v2[index];
     CCTK_REAL v3L = v3[index];
+    
     
     /* Include user supplied include files */
     
@@ -114,7 +123,6 @@ static void WTFO_constraints_Body(cGH const * restrict const cctkGH, int const d
     CCTK_REAL w2L = PDstandardNth1v3 - PDstandardNth3v1;
     
     CCTK_REAL w3L = -PDstandardNth1v2 + PDstandardNth2v1;
-    
     
     /* Copy local copies back to grid functions */
     w1[index] = w1L;
