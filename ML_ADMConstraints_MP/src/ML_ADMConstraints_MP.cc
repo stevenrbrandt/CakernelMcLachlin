@@ -490,191 +490,183 @@ static void ML_ADMConstraints_MP_Body(cGH const * restrict const cctkGH, int con
       PDstandardNth33gxx*(-2*gu32*J32L*J33L - gu22*SQR(J32L)) + 
       gu33*(2*J31L*J33L*PDstandardNth33gxz - PDstandardNth33gxx*SQR(J33L)));
     
-    CCTK_REAL R12 = G113*G123 - G112*G133 + G212*G222 + G213*G223 + 
-      G212*(-G222 - G233) + G312*G322 + G313*G323 + G312*(-G322 - G333) + 
-      0.5*(gu32*((J13L*J22L - J12L*J23L)*PDstandardNth12gxy + (-(J13L*J22L) + 
-      J12L*J23L)*PDstandardNth12gxy + (J13L*J32L - 
-      J12L*J33L)*PDstandardNth13gxy + (-(J13L*J32L) + 
-      J12L*J33L)*PDstandardNth13gxy) + gu22*((J12L*J21L - 
-      J11L*J22L)*PDstandardNth12gyy + (-(J12L*J21L) + 
-      J11L*J22L)*PDstandardNth12gyy + (J12L*J31L - 
-      J11L*J32L)*PDstandardNth13gyy + (-(J12L*J31L) + 
-      J11L*J32L)*PDstandardNth13gyy) + gu31*(J13L*(J12L*PDstandardNth11gxx - 
-      J11L*PDstandardNth11gxy - J21L*PDstandardNth12gxy - 
-      J31L*PDstandardNth13gxy) + J11L*(-(J23L*PDstandardNth12gxy) + 
-      2*J21L*PDstandardNth12gyz - J33L*PDstandardNth13gxy) + 
-      J12L*(-(J11L*PDstandardNth11gxz) + J23L*PDstandardNth12gxx - 
-      J21L*PDstandardNth12gxz - J31L*PDstandardNth13gxz) + 
-      dJ123L*PDstandardNth1gxx - dJ113L*PDstandardNth1gxy - 
-      dJ112L*PDstandardNth1gxz + dJ111L*PDstandardNth1gyz + 
-      J23L*(J22L*PDstandardNth22gxx - J21L*PDstandardNth22gxy) + 
-      J33L*(J12L*PDstandardNth13gxx - J21L*PDstandardNth23gxy) + 
-      J31L*(2*J11L*PDstandardNth13gyz - J23L*PDstandardNth23gxy) + 
-      J32L*(J13L*PDstandardNth13gxx - J11L*PDstandardNth13gxz - 
-      J21L*PDstandardNth23gxz) + J22L*(J13L*PDstandardNth12gxx - 
-      J11L*PDstandardNth12gxz - J21L*PDstandardNth22gxz - 
-      J31L*PDstandardNth23gxz) + 2*J21L*J31L*PDstandardNth23gyz + 
-      dJ223L*PDstandardNth2gxx - dJ213L*PDstandardNth2gxy - 
-      dJ212L*PDstandardNth2gxz + dJ211L*PDstandardNth2gyz + 
-      J32L*J33L*PDstandardNth33gxx + J33L*(J22L*PDstandardNth23gxx - 
-      J31L*PDstandardNth33gxy) + J32L*(J23L*PDstandardNth23gxx - 
-      J31L*PDstandardNth33gxz) + dJ323L*PDstandardNth3gxx - 
-      dJ313L*PDstandardNth3gxy - dJ312L*PDstandardNth3gxz + 
-      dJ311L*PDstandardNth3gyz + PDstandardNth11gyz*SQR(J11L) + 
-      PDstandardNth22gyz*SQR(J21L) + PDstandardNth33gyz*SQR(J31L)) + 
-      gu21*(-2*J11L*J12L*PDstandardNth11gxy + 2*J12L*J22L*PDstandardNth12gxx 
-      - 2*J12L*J21L*PDstandardNth12gxy - 2*J11L*J22L*PDstandardNth12gxy + 
-      2*J11L*J21L*PDstandardNth12gyy + 2*J12L*J32L*PDstandardNth13gxx - 
-      2*J12L*J31L*PDstandardNth13gxy - 2*J11L*J32L*PDstandardNth13gxy + 
-      2*J11L*J31L*PDstandardNth13gyy + dJ122L*PDstandardNth1gxx - 
-      2*dJ112L*PDstandardNth1gxy + dJ111L*PDstandardNth1gyy - 
-      2*J21L*J22L*PDstandardNth22gxy + 2*J22L*J32L*PDstandardNth23gxx - 
-      2*J22L*J31L*PDstandardNth23gxy - 2*J21L*J32L*PDstandardNth23gxy + 
-      2*J21L*J31L*PDstandardNth23gyy + dJ222L*PDstandardNth2gxx - 
-      2*dJ212L*PDstandardNth2gxy + dJ211L*PDstandardNth2gyy - 
-      2*J31L*J32L*PDstandardNth33gxy + dJ322L*PDstandardNth3gxx - 
-      2*dJ312L*PDstandardNth3gxy + dJ311L*PDstandardNth3gyy + 
-      PDstandardNth11gyy*SQR(J11L) + PDstandardNth11gxx*SQR(J12L) + 
-      PDstandardNth22gyy*SQR(J21L) + PDstandardNth22gxx*SQR(J22L) + 
-      PDstandardNth33gyy*SQR(J31L) + PDstandardNth33gxx*SQR(J32L)) + 
-      gu32*(J13L*(-(J12L*PDstandardNth11gxy) + J11L*PDstandardNth11gyy - 
-      J22L*PDstandardNth12gxy - J32L*PDstandardNth13gxy) + 
-      J12L*(-(J11L*PDstandardNth11gyz) - J23L*PDstandardNth12gxy - 
-      J21L*PDstandardNth12gyz - J33L*PDstandardNth13gxy - 
-      J31L*PDstandardNth13gyz) + J11L*(J23L*PDstandardNth12gyy - 
-      J32L*PDstandardNth13gyz) - dJ123L*PDstandardNth1gxy + 
-      dJ122L*PDstandardNth1gxz + dJ113L*PDstandardNth1gyy - 
-      dJ112L*PDstandardNth1gyz + J22L*(2*J12L*PDstandardNth12gxz - 
-      J11L*PDstandardNth12gyz - J23L*PDstandardNth22gxy) + 
-      J21L*(J13L*PDstandardNth12gyy - J22L*PDstandardNth22gyz) + 
-      2*J22L*J32L*PDstandardNth23gxz + J23L*J31L*PDstandardNth23gyy + 
-      J21L*J33L*PDstandardNth23gyy + J31L*(J13L*PDstandardNth13gyy - 
-      J22L*PDstandardNth23gyz) + J21L*(J23L*PDstandardNth22gyy - 
-      J32L*PDstandardNth23gyz) - dJ223L*PDstandardNth2gxy + 
-      dJ222L*PDstandardNth2gxz + dJ213L*PDstandardNth2gyy - 
-      dJ212L*PDstandardNth2gyz + J33L*(J11L*PDstandardNth13gyy - 
-      J22L*PDstandardNth23gxy - J32L*PDstandardNth33gxy) + 
-      J31L*J33L*PDstandardNth33gyy + J32L*(2*J12L*PDstandardNth13gxz - 
-      J23L*PDstandardNth23gxy - J31L*PDstandardNth33gyz) - 
-      dJ323L*PDstandardNth3gxy + dJ322L*PDstandardNth3gxz + 
-      dJ313L*PDstandardNth3gyy - dJ312L*PDstandardNth3gyz + 
-      PDstandardNth11gxz*SQR(J12L) + PDstandardNth22gxz*SQR(J22L) + 
-      PDstandardNth33gxz*SQR(J32L)) + gu33*(-2*J13L*J23L*PDstandardNth12gxy + 
-      J12L*(J13L*PDstandardNth11gxz - J11L*PDstandardNth11gzz - 
-      J21L*PDstandardNth12gzz) + J11L*(J13L*PDstandardNth11gyz - 
-      J22L*PDstandardNth12gzz) - 2*J13L*J33L*PDstandardNth13gxy + 
-      J12L*J33L*PDstandardNth13gxz + J11L*J33L*PDstandardNth13gyz + 
-      J12L*(J23L*PDstandardNth12gxz - J31L*PDstandardNth13gzz) + 
-      J11L*(J23L*PDstandardNth12gyz - J32L*PDstandardNth13gzz) - 
-      dJ133L*PDstandardNth1gxy + dJ123L*PDstandardNth1gxz + 
-      dJ113L*PDstandardNth1gyz - dJ112L*PDstandardNth1gzz + 
-      J22L*J23L*PDstandardNth22gxz + J21L*J23L*PDstandardNth22gyz + 
-      J22L*(J13L*PDstandardNth12gxz - J21L*PDstandardNth22gzz) - 
-      2*J23L*J33L*PDstandardNth23gxy + J23L*J32L*PDstandardNth23gxz + 
-      J22L*J33L*PDstandardNth23gxz + J23L*J31L*PDstandardNth23gyz + 
-      J21L*J33L*PDstandardNth23gyz + J31L*(J13L*PDstandardNth13gyz - 
-      J22L*PDstandardNth23gzz) + J21L*(J13L*PDstandardNth12gyz - 
-      J32L*PDstandardNth23gzz) - dJ233L*PDstandardNth2gxy + 
-      dJ223L*PDstandardNth2gxz + dJ213L*PDstandardNth2gyz - 
-      dJ212L*PDstandardNth2gzz + J32L*J33L*PDstandardNth33gxz + 
-      J31L*J33L*PDstandardNth33gyz + J32L*(J13L*PDstandardNth13gxz - 
-      J31L*PDstandardNth33gzz) - dJ333L*PDstandardNth3gxy + 
-      dJ323L*PDstandardNth3gxz + dJ313L*PDstandardNth3gyz - 
-      dJ312L*PDstandardNth3gzz - PDstandardNth11gxy*SQR(J13L) - 
-      PDstandardNth22gxy*SQR(J23L) - PDstandardNth33gxy*SQR(J33L)));
+    CCTK_REAL R12 = 0.5*(-2*(G112*G133 + G212*G233 + G312*G333 + 
+      gu21*J11L*J12L*PDstandardNth11gxy) + 2*(G113*G123 + G213*G223 + 
+      G313*G323 + gu21*J12L*J22L*PDstandardNth12gxx) + 
+      J12L*(-(gu32*J13L*PDstandardNth11gxy) + 
+      J11L*(-(gu31*PDstandardNth11gxz) - gu33*PDstandardNth11gzz) - 
+      gu31*J21L*PDstandardNth12gxz) + J11L*J22L*(-2*gu21*PDstandardNth12gxy - 
+      gu32*PDstandardNth12gyz) + J12L*(gu31*J23L*PDstandardNth12gxx - 
+      gu32*J21L*PDstandardNth12gyz) + J12L*J21L*(-2*gu21*PDstandardNth12gxy - 
+      gu33*PDstandardNth12gzz) + J11L*(gu33*J13L*PDstandardNth11gyz + 
+      gu31*(-(J23L*PDstandardNth12gxy) - J33L*PDstandardNth13gxy)) + 
+      J12L*(gu33*J13L*PDstandardNth11gxz + gu32*(-(J11L*PDstandardNth11gyz) - 
+      J23L*PDstandardNth12gxy - J33L*PDstandardNth13gxy)) + 
+      J12L*(2*gu32*J22L*PDstandardNth12gxz - gu31*J31L*PDstandardNth13gxz) + 
+      J12L*(gu33*J23L*PDstandardNth12gxz - gu32*J31L*PDstandardNth13gyz) + 
+      J11L*(2*gu21*J21L*PDstandardNth12gyy - gu32*J32L*PDstandardNth13gyz) + 
+      J11L*(gu32*J23L*PDstandardNth12gyy - gu33*J32L*PDstandardNth13gzz) + 
+      (dJ122L*gu21 + dJ123L*gu31)*PDstandardNth1gxx - 
+      2*dJ112L*gu21*PDstandardNth1gxy + dJ111L*gu21*PDstandardNth1gyy + 
+      gu32*J21L*J23L*PDstandardNth22gyy + gu33*J21L*J23L*PDstandardNth22gyz + 
+      gu32*(J13L*J31L*PDstandardNth13gyy - J21L*J22L*PDstandardNth22gyz) + 
+      gu33*(-2*J13L*J23L*PDstandardNth12gxy + 
+      J22L*(-(J11L*PDstandardNth12gzz) - J21L*PDstandardNth22gzz)) + 
+      2*gu21*J22L*J32L*PDstandardNth23gxx + gu31*J23L*J32L*PDstandardNth23gxx 
+      + gu31*J22L*J33L*PDstandardNth23gxx - 
+      2*gu21*J22L*J31L*PDstandardNth23gxy - 
+      2*gu21*J21L*J32L*PDstandardNth23gxy - 
+      2*gu33*J23L*J33L*PDstandardNth23gxy + 
+      J33L*(-2*gu33*J13L*PDstandardNth13gxy - gu31*J21L*PDstandardNth23gxy) + 
+      J33L*(gu33*J12L*PDstandardNth13gxz - gu32*J22L*PDstandardNth23gxy) + 
+      J31L*(-2*gu21*J12L*PDstandardNth13gxy - gu31*J23L*PDstandardNth23gxy) + 
+      J32L*(2*gu21*J12L*PDstandardNth13gxx - gu32*J23L*PDstandardNth23gxy) + 
+      2*gu32*J22L*J32L*PDstandardNth23gxz + gu33*J23L*J32L*PDstandardNth23gxz 
+      + gu33*J22L*J33L*PDstandardNth23gxz + 
+      J32L*(-2*gu21*J11L*PDstandardNth13gxy - gu31*J21L*PDstandardNth23gxz) + 
+      gu31*(-(J11L*J32L*PDstandardNth13gxz) + J22L*(J13L*PDstandardNth12gxx - 
+      J11L*PDstandardNth12gxz - J31L*PDstandardNth23gxz)) + 
+      2*gu21*J21L*J31L*PDstandardNth23gyy + gu32*J23L*J31L*PDstandardNth23gyy 
+      + gu32*J21L*J33L*PDstandardNth23gyy + 
+      2*gu31*J21L*J31L*PDstandardNth23gyz + gu33*J23L*J31L*PDstandardNth23gyz 
+      + gu33*J21L*J33L*PDstandardNth23gyz + 
+      J32L*(gu33*J13L*PDstandardNth13gxz - gu32*J21L*PDstandardNth23gyz) + 
+      J31L*(2*gu21*J11L*PDstandardNth13gyy - gu32*J22L*PDstandardNth23gyz) + 
+      J31L*(2*gu31*J11L*PDstandardNth13gyz - gu33*J22L*PDstandardNth23gzz) + 
+      gu33*(J13L*J31L*PDstandardNth13gyz - J21L*J32L*PDstandardNth23gzz) + 
+      (dJ222L*gu21 + dJ223L*gu31)*PDstandardNth2gxx - 
+      2*dJ212L*gu21*PDstandardNth2gxy + gu31*(2*J11L*J21L*PDstandardNth12gyz 
+      - dJ113L*PDstandardNth1gxy - dJ213L*PDstandardNth2gxy) + 
+      gu32*(J11L*J33L*PDstandardNth13gyy - dJ223L*PDstandardNth2gxy) + 
+      gu33*(J11L*J33L*PDstandardNth13gyz - dJ233L*PDstandardNth2gxy) + 
+      dJ222L*gu32*PDstandardNth2gxz + dJ223L*gu33*PDstandardNth2gxz + 
+      gu31*(J13L*J32L*PDstandardNth13gxx - dJ112L*PDstandardNth1gxz - 
+      dJ212L*PDstandardNth2gxz) + dJ211L*gu21*PDstandardNth2gyy + 
+      dJ213L*gu32*PDstandardNth2gyy + dJ211L*gu31*PDstandardNth2gyz + 
+      dJ213L*gu33*PDstandardNth2gyz + gu32*(J13L*J21L*PDstandardNth12gyy - 
+      dJ123L*PDstandardNth1gxy - dJ212L*PDstandardNth2gyz) + 
+      gu33*(J13L*J22L*PDstandardNth12gxz - J12L*J31L*PDstandardNth13gzz - 
+      dJ212L*PDstandardNth2gzz) + gu31*J32L*J33L*PDstandardNth33gxx - 
+      2*gu21*J31L*J32L*PDstandardNth33gxy + gu31*(dJ111L*PDstandardNth1gyz - 
+      J31L*J33L*PDstandardNth33gxy) + gu32*(dJ122L*PDstandardNth1gxz - 
+      J32L*J33L*PDstandardNth33gxy) + gu33*J32L*J33L*PDstandardNth33gxz + 
+      gu31*(J22L*J23L*PDstandardNth22gxx - J31L*J32L*PDstandardNth33gxz) + 
+      gu32*J31L*J33L*PDstandardNth33gyy + gu33*J31L*J33L*PDstandardNth33gyz + 
+      gu32*(dJ113L*PDstandardNth1gyy - J31L*J32L*PDstandardNth33gyz) + 
+      gu33*(J13L*J21L*PDstandardNth12gyz - dJ133L*PDstandardNth1gxy - 
+      J31L*J32L*PDstandardNth33gzz) + dJ322L*gu21*PDstandardNth3gxx + 
+      dJ323L*gu31*PDstandardNth3gxx - 2*dJ312L*gu21*PDstandardNth3gxy + 
+      gu31*(J12L*J33L*PDstandardNth13gxx - J21L*J23L*PDstandardNth22gxy - 
+      dJ313L*PDstandardNth3gxy) + gu32*(J13L*(J11L*PDstandardNth11gyy - 
+      J22L*PDstandardNth12gxy - J32L*PDstandardNth13gxy) - 
+      dJ112L*PDstandardNth1gyz - dJ323L*PDstandardNth3gxy) + 
+      gu33*(dJ123L*PDstandardNth1gxz - dJ333L*PDstandardNth3gxy) + 
+      dJ322L*gu32*PDstandardNth3gxz + dJ323L*gu33*PDstandardNth3gxz + 
+      gu31*(J13L*(J12L*PDstandardNth11gxx - J11L*PDstandardNth11gxy - 
+      J21L*PDstandardNth12gxy - J31L*PDstandardNth13gxy) - 
+      J21L*J22L*PDstandardNth22gxz - dJ312L*PDstandardNth3gxz) + 
+      dJ311L*gu21*PDstandardNth3gyy + dJ313L*gu32*PDstandardNth3gyy + 
+      dJ311L*gu31*PDstandardNth3gyz + dJ313L*gu33*PDstandardNth3gyz + 
+      gu32*(2*J12L*J32L*PDstandardNth13gxz - J22L*J23L*PDstandardNth22gxy - 
+      dJ312L*PDstandardNth3gyz) + gu33*(dJ113L*PDstandardNth1gyz - 
+      dJ312L*PDstandardNth3gzz) + gu21*PDstandardNth11gyy*SQR(J11L) + 
+      gu31*PDstandardNth11gyz*SQR(J11L) + gu21*PDstandardNth11gxx*SQR(J12L) + 
+      gu32*PDstandardNth11gxz*SQR(J12L) + gu33*(J11L*J23L*PDstandardNth12gyz 
+      - dJ112L*PDstandardNth1gzz - PDstandardNth11gxy*SQR(J13L)) + 
+      gu21*PDstandardNth22gyy*SQR(J21L) + gu31*PDstandardNth22gyz*SQR(J21L) + 
+      gu21*PDstandardNth22gxx*SQR(J22L) + gu32*PDstandardNth22gxz*SQR(J22L) + 
+      PDstandardNth22gxy*(-2*gu21*J21L*J22L - gu33*SQR(J23L)) + 
+      gu21*PDstandardNth33gyy*SQR(J31L) + gu31*PDstandardNth33gyz*SQR(J31L) + 
+      gu21*PDstandardNth33gxx*SQR(J32L) + gu32*PDstandardNth33gxz*SQR(J32L) + 
+      gu33*(J22L*J23L*PDstandardNth22gxz - PDstandardNth33gxy*SQR(J33L)));
     
-    CCTK_REAL R13 = -(G113*G122) + G112*G123 + G212*G223 + G213*(-G222 - 
-      G233) + G213*G233 + G312*G323 + G313*(-G322 - G333) + G313*G333 + 
-      0.5*(gu32*((J13L*J22L - J12L*J23L)*PDstandardNth12gxz + (-(J13L*J22L) + 
-      J12L*J23L)*PDstandardNth12gxz + (J13L*J32L - 
-      J12L*J33L)*PDstandardNth13gxz + (-(J13L*J32L) + 
-      J12L*J33L)*PDstandardNth13gxz) + gu33*((J13L*J21L - 
-      J11L*J23L)*PDstandardNth12gzz + (-(J13L*J21L) + 
-      J11L*J23L)*PDstandardNth12gzz + (J13L*J31L - 
-      J11L*J33L)*PDstandardNth13gzz + (-(J13L*J31L) + 
-      J11L*J33L)*PDstandardNth13gzz) + gu21*(J13L*(J12L*PDstandardNth11gxx - 
-      J11L*PDstandardNth11gxy - J21L*PDstandardNth12gxy - 
-      J31L*PDstandardNth13gxy) + J11L*(-(J23L*PDstandardNth12gxy) + 
-      2*J21L*PDstandardNth12gyz - J33L*PDstandardNth13gxy) + 
-      J12L*(-(J11L*PDstandardNth11gxz) + J23L*PDstandardNth12gxx - 
-      J21L*PDstandardNth12gxz - J31L*PDstandardNth13gxz) + 
-      dJ123L*PDstandardNth1gxx - dJ113L*PDstandardNth1gxy - 
-      dJ112L*PDstandardNth1gxz + dJ111L*PDstandardNth1gyz + 
-      J23L*(J22L*PDstandardNth22gxx - J21L*PDstandardNth22gxy) + 
-      J33L*(J12L*PDstandardNth13gxx - J21L*PDstandardNth23gxy) + 
-      J31L*(2*J11L*PDstandardNth13gyz - J23L*PDstandardNth23gxy) + 
-      J32L*(J13L*PDstandardNth13gxx - J11L*PDstandardNth13gxz - 
-      J21L*PDstandardNth23gxz) + J22L*(J13L*PDstandardNth12gxx - 
-      J11L*PDstandardNth12gxz - J21L*PDstandardNth22gxz - 
-      J31L*PDstandardNth23gxz) + 2*J21L*J31L*PDstandardNth23gyz + 
-      dJ223L*PDstandardNth2gxx - dJ213L*PDstandardNth2gxy - 
-      dJ212L*PDstandardNth2gxz + dJ211L*PDstandardNth2gyz + 
-      J32L*J33L*PDstandardNth33gxx + J33L*(J22L*PDstandardNth23gxx - 
-      J31L*PDstandardNth33gxy) + J32L*(J23L*PDstandardNth23gxx - 
-      J31L*PDstandardNth33gxz) + dJ323L*PDstandardNth3gxx - 
-      dJ313L*PDstandardNth3gxy - dJ312L*PDstandardNth3gxz + 
-      dJ311L*PDstandardNth3gyz + PDstandardNth11gyz*SQR(J11L) + 
-      PDstandardNth22gyz*SQR(J21L) + PDstandardNth33gyz*SQR(J31L)) + 
-      gu22*(-2*J12L*J22L*PDstandardNth12gxz + J13L*(J12L*PDstandardNth11gxy - 
-      J11L*PDstandardNth11gyy - J21L*PDstandardNth12gyy) + 
-      J11L*J22L*PDstandardNth12gyz + J13L*J32L*PDstandardNth13gxy - 
-      2*J12L*J32L*PDstandardNth13gxz + J13L*(J22L*PDstandardNth12gxy - 
-      J31L*PDstandardNth13gyy) + J11L*(J12L*PDstandardNth11gyz - 
-      J23L*PDstandardNth12gyy - J33L*PDstandardNth13gyy) + 
-      J11L*J32L*PDstandardNth13gyz + dJ123L*PDstandardNth1gxy - 
-      dJ122L*PDstandardNth1gxz - dJ113L*PDstandardNth1gyy + 
-      dJ112L*PDstandardNth1gyz + J22L*J23L*PDstandardNth22gxy + 
-      J23L*(J12L*PDstandardNth12gxy - J21L*PDstandardNth22gyy) + 
-      J21L*J22L*PDstandardNth22gyz + J23L*J32L*PDstandardNth23gxy + 
-      J22L*J33L*PDstandardNth23gxy - 2*J22L*J32L*PDstandardNth23gxz + 
-      J31L*(J12L*PDstandardNth13gyz - J23L*PDstandardNth23gyy) + 
-      J21L*(J12L*PDstandardNth12gyz - J33L*PDstandardNth23gyy) + 
-      J22L*J31L*PDstandardNth23gyz + J21L*J32L*PDstandardNth23gyz + 
-      dJ223L*PDstandardNth2gxy - dJ222L*PDstandardNth2gxz - 
-      dJ213L*PDstandardNth2gyy + dJ212L*PDstandardNth2gyz + 
-      J32L*J33L*PDstandardNth33gxy + J33L*(J12L*PDstandardNth13gxy - 
-      J31L*PDstandardNth33gyy) + J31L*J32L*PDstandardNth33gyz + 
-      dJ323L*PDstandardNth3gxy - dJ322L*PDstandardNth3gxz - 
-      dJ313L*PDstandardNth3gyy + dJ312L*PDstandardNth3gyz - 
-      PDstandardNth11gxz*SQR(J12L) - PDstandardNth22gxz*SQR(J22L) - 
-      PDstandardNth33gxz*SQR(J32L)) + gu31*(-2*J11L*J13L*PDstandardNth11gxz + 
-      2*J13L*J23L*PDstandardNth12gxx - 2*J13L*J21L*PDstandardNth12gxz - 
-      2*J11L*J23L*PDstandardNth12gxz + 2*J11L*J21L*PDstandardNth12gzz + 
-      2*J13L*J33L*PDstandardNth13gxx - 2*J13L*J31L*PDstandardNth13gxz - 
-      2*J11L*J33L*PDstandardNth13gxz + 2*J11L*J31L*PDstandardNth13gzz + 
-      dJ133L*PDstandardNth1gxx - 2*dJ113L*PDstandardNth1gxz + 
-      dJ111L*PDstandardNth1gzz - 2*J21L*J23L*PDstandardNth22gxz + 
-      2*J23L*J33L*PDstandardNth23gxx - 2*J23L*J31L*PDstandardNth23gxz - 
-      2*J21L*J33L*PDstandardNth23gxz + 2*J21L*J31L*PDstandardNth23gzz + 
-      dJ233L*PDstandardNth2gxx - 2*dJ213L*PDstandardNth2gxz + 
-      dJ211L*PDstandardNth2gzz - 2*J31L*J33L*PDstandardNth33gxz + 
-      dJ333L*PDstandardNth3gxx - 2*dJ313L*PDstandardNth3gxz + 
-      dJ311L*PDstandardNth3gzz + PDstandardNth11gzz*SQR(J11L) + 
-      PDstandardNth11gxx*SQR(J13L) + PDstandardNth22gzz*SQR(J21L) + 
-      PDstandardNth22gxx*SQR(J23L) + PDstandardNth33gzz*SQR(J31L) + 
-      PDstandardNth33gxx*SQR(J33L)) + gu32*(J13L*(-(J12L*PDstandardNth11gxz) 
-      - J11L*PDstandardNth11gyz - J22L*PDstandardNth12gxz - 
-      J32L*PDstandardNth13gxz) + J12L*(J11L*PDstandardNth11gzz - 
-      J23L*PDstandardNth12gxz - J33L*PDstandardNth13gxz) + 
-      J13L*(2*J23L*PDstandardNth12gxy - J21L*PDstandardNth12gyz - 
-      J31L*PDstandardNth13gyz) + J11L*(-(J23L*PDstandardNth12gyz) + 
-      J22L*PDstandardNth12gzz - J33L*PDstandardNth13gyz) + 
-      dJ133L*PDstandardNth1gxy - dJ123L*PDstandardNth1gxz - 
-      dJ113L*PDstandardNth1gyz + dJ112L*PDstandardNth1gzz + 
-      J22L*(-(J23L*PDstandardNth22gxz) + J21L*PDstandardNth22gzz) + 
-      J32L*(J11L*PDstandardNth13gzz - J23L*PDstandardNth23gxz) + 
-      J31L*(J12L*PDstandardNth13gzz - J23L*PDstandardNth23gyz) + 
-      J21L*(J12L*PDstandardNth12gzz - J23L*PDstandardNth22gyz - 
-      J33L*PDstandardNth23gyz) + J22L*J31L*PDstandardNth23gzz + 
-      J21L*J32L*PDstandardNth23gzz + dJ233L*PDstandardNth2gxy - 
-      dJ223L*PDstandardNth2gxz - dJ213L*PDstandardNth2gyz + 
-      dJ212L*PDstandardNth2gzz + J33L*(2*J23L*PDstandardNth23gxy - 
-      J32L*PDstandardNth33gxz) + J33L*(2*J13L*PDstandardNth13gxy - 
-      J22L*PDstandardNth23gxz - J31L*PDstandardNth33gyz) + 
-      J31L*J32L*PDstandardNth33gzz + dJ333L*PDstandardNth3gxy - 
-      dJ323L*PDstandardNth3gxz - dJ313L*PDstandardNth3gyz + 
-      dJ312L*PDstandardNth3gzz + PDstandardNth11gxy*SQR(J13L) + 
-      PDstandardNth22gxy*SQR(J23L) + PDstandardNth33gxy*SQR(J33L)));
+    CCTK_REAL R13 = 0.5*(2*(G112*G123 + G212*G223 + G312*G323 + 
+      gu31*J13L*J23L*PDstandardNth12gxx) + J12L*J23L*(gu22*PDstandardNth12gxy 
+      - gu32*PDstandardNth12gxz) - 2*(G113*G122 + G213*G222 + G313*G322 + 
+      gu31*J11L*J13L*PDstandardNth11gxz + gu31*J13L*J21L*PDstandardNth12gxz) 
+      + J11L*J23L*(-2*gu31*PDstandardNth12gxz - gu32*PDstandardNth12gyz) + 
+      J12L*(-2*gu22*J22L*PDstandardNth12gxz - gu21*J31L*PDstandardNth13gxz) + 
+      J12L*(J13L*(gu22*PDstandardNth11gxy - gu32*PDstandardNth11gxz) + 
+      J11L*(-(gu21*PDstandardNth11gxz) + gu22*PDstandardNth11gyz) - 
+      gu21*J21L*PDstandardNth12gxz - gu32*J33L*PDstandardNth13gxz) + 
+      J13L*(-(gu22*J21L*PDstandardNth12gyy) + gu32*(2*J23L*PDstandardNth12gxy 
+      - J32L*PDstandardNth13gxz)) + J11L*(gu32*J12L*PDstandardNth11gzz + 
+      gu21*(-(J22L*PDstandardNth12gxz) - J32L*PDstandardNth13gxz)) + 
+      J11L*(J13L*(-(gu22*PDstandardNth11gyy) - gu32*PDstandardNth11gyz) + 
+      J23L*(-(gu21*PDstandardNth12gxy) - gu22*PDstandardNth12gyy) - 
+      gu22*J33L*PDstandardNth13gyy) + J11L*(2*gu21*J21L*PDstandardNth12gyz - 
+      gu32*J33L*PDstandardNth13gyz) + J13L*(J22L*(gu22*PDstandardNth12gxy - 
+      gu32*PDstandardNth12gxz) + gu32*(-(J21L*PDstandardNth12gyz) - 
+      J31L*PDstandardNth13gyz)) + (dJ123L*gu21 + 
+      dJ133L*gu31)*PDstandardNth1gxx - 2*dJ113L*gu31*PDstandardNth1gxz + 
+      dJ111L*gu31*PDstandardNth1gzz + J21L*(2*gu31*J11L*PDstandardNth12gzz - 
+      gu21*J23L*PDstandardNth22gxy) + gu32*J21L*J22L*PDstandardNth22gzz + 
+      gu21*J23L*J32L*PDstandardNth23gxx + gu21*J22L*J33L*PDstandardNth23gxx + 
+      2*gu31*J23L*J33L*PDstandardNth23gxx + gu22*J23L*J32L*PDstandardNth23gxy 
+      + gu22*J22L*J33L*PDstandardNth23gxy + 
+      2*gu32*J23L*J33L*PDstandardNth23gxy + 
+      J33L*(2*gu31*J13L*PDstandardNth13gxx - gu21*J21L*PDstandardNth23gxy) + 
+      gu21*(-(J13L*J21L*PDstandardNth12gxy) - J11L*J33L*PDstandardNth13gxy + 
+      J23L*(J12L*PDstandardNth12gxx - J31L*PDstandardNth23gxy)) - 
+      2*gu31*J23L*J31L*PDstandardNth23gxz - 
+      2*gu22*J22L*J32L*PDstandardNth23gxz - 
+      2*gu31*J21L*J33L*PDstandardNth23gxz + 
+      J32L*(-2*gu22*J12L*PDstandardNth13gxz - gu21*J21L*PDstandardNth23gxz) + 
+      J31L*(-2*gu31*J13L*PDstandardNth13gxz - gu21*J22L*PDstandardNth23gxz) + 
+      J33L*(-2*gu31*J11L*PDstandardNth13gxz - gu32*J22L*PDstandardNth23gxz) + 
+      J32L*(gu22*J11L*PDstandardNth13gyz - gu32*J23L*PDstandardNth23gxz) + 
+      gu22*(J12L*J31L*PDstandardNth13gyz - J21L*J33L*PDstandardNth23gyy) + 
+      gu22*(J12L*J21L*PDstandardNth12gyz + J31L*(-(J13L*PDstandardNth13gyy) - 
+      J23L*PDstandardNth23gyy)) + 2*gu21*J21L*J31L*PDstandardNth23gyz + 
+      gu22*J22L*J31L*PDstandardNth23gyz + gu22*J21L*J32L*PDstandardNth23gyz + 
+      J31L*(2*gu21*J11L*PDstandardNth13gyz - gu32*J23L*PDstandardNth23gyz) + 
+      gu32*(J11L*J32L*PDstandardNth13gzz - J21L*J33L*PDstandardNth23gyz) + 
+      2*gu31*J21L*J31L*PDstandardNth23gzz + gu32*J22L*J31L*PDstandardNth23gzz 
+      + gu32*J21L*J32L*PDstandardNth23gzz + (dJ223L*gu21 + 
+      dJ233L*gu31)*PDstandardNth2gxx + dJ223L*gu22*PDstandardNth2gxy + 
+      dJ233L*gu32*PDstandardNth2gxy + gu21*(J13L*J32L*PDstandardNth13gxx - 
+      dJ113L*PDstandardNth1gxy - dJ213L*PDstandardNth2gxy) - 
+      2*dJ213L*gu31*PDstandardNth2gxz + gu21*(J12L*J33L*PDstandardNth13gxx - 
+      dJ112L*PDstandardNth1gxz - dJ212L*PDstandardNth2gxz) + 
+      gu22*(dJ123L*PDstandardNth1gxy - dJ222L*PDstandardNth2gxz) + 
+      gu32*(dJ133L*PDstandardNth1gxy - dJ223L*PDstandardNth2gxz) + 
+      gu22*(J11L*J22L*PDstandardNth12gyz - dJ122L*PDstandardNth1gxz - 
+      dJ213L*PDstandardNth2gyy) + dJ211L*gu21*PDstandardNth2gyz + 
+      dJ212L*gu22*PDstandardNth2gyz + gu32*(J12L*J21L*PDstandardNth12gzz - 
+      dJ123L*PDstandardNth1gxz - dJ213L*PDstandardNth2gyz) + 
+      dJ211L*gu31*PDstandardNth2gzz + dJ212L*gu32*PDstandardNth2gzz + 
+      gu21*J32L*J33L*PDstandardNth33gxx + gu22*J32L*J33L*PDstandardNth33gxy + 
+      J31L*(2*gu31*J11L*PDstandardNth13gzz - gu21*J33L*PDstandardNth33gxy) - 
+      2*gu31*J31L*J33L*PDstandardNth33gxz + gu21*(dJ111L*PDstandardNth1gyz - 
+      J31L*J32L*PDstandardNth33gxz) + gu32*(J11L*J22L*PDstandardNth12gzz - 
+      dJ113L*PDstandardNth1gyz - J32L*J33L*PDstandardNth33gxz) + 
+      gu22*(J13L*J32L*PDstandardNth13gxy - dJ113L*PDstandardNth1gyy - 
+      J31L*J33L*PDstandardNth33gyy) + gu22*J31L*J32L*PDstandardNth33gyz + 
+      gu32*(dJ112L*PDstandardNth1gzz - J31L*J33L*PDstandardNth33gyz) + 
+      gu32*J31L*J32L*PDstandardNth33gzz + dJ323L*gu21*PDstandardNth3gxx + 
+      dJ333L*gu31*PDstandardNth3gxx + dJ323L*gu22*PDstandardNth3gxy + 
+      dJ333L*gu32*PDstandardNth3gxy + gu21*(J22L*J23L*PDstandardNth22gxx - 
+      dJ313L*PDstandardNth3gxy) - 2*dJ313L*gu31*PDstandardNth3gxz + 
+      gu21*(J13L*(J12L*PDstandardNth11gxx - J11L*PDstandardNth11gxy - 
+      J31L*PDstandardNth13gxy) + J22L*(J13L*PDstandardNth12gxx - 
+      J21L*PDstandardNth22gxz) - dJ312L*PDstandardNth3gxz) + 
+      gu22*(dJ112L*PDstandardNth1gyz - dJ322L*PDstandardNth3gxz) + 
+      gu32*(2*J13L*J33L*PDstandardNth13gxy - J22L*J23L*PDstandardNth22gxz - 
+      dJ323L*PDstandardNth3gxz) + gu22*(J22L*J23L*PDstandardNth22gxy - 
+      dJ313L*PDstandardNth3gyy) + dJ311L*gu21*PDstandardNth3gyz + 
+      dJ312L*gu22*PDstandardNth3gyz + gu32*(J12L*J31L*PDstandardNth13gzz - 
+      J21L*J23L*PDstandardNth22gyz - dJ313L*PDstandardNth3gyz) + 
+      dJ311L*gu31*PDstandardNth3gzz + dJ312L*gu32*PDstandardNth3gzz + 
+      gu21*PDstandardNth11gyz*SQR(J11L) + gu31*PDstandardNth11gzz*SQR(J11L) + 
+      gu22*(J12L*J33L*PDstandardNth13gxy - J21L*J23L*PDstandardNth22gyy - 
+      PDstandardNth11gxz*SQR(J12L)) + gu31*PDstandardNth11gxx*SQR(J13L) + 
+      gu32*PDstandardNth11gxy*SQR(J13L) + gu21*PDstandardNth22gyz*SQR(J21L) + 
+      gu31*PDstandardNth22gzz*SQR(J21L) + 
+      PDstandardNth22gxz*(-2*gu31*J21L*J23L - gu22*SQR(J22L)) + 
+      gu31*PDstandardNth22gxx*SQR(J23L) + gu32*PDstandardNth22gxy*SQR(J23L) + 
+      gu21*PDstandardNth33gyz*SQR(J31L) + gu31*PDstandardNth33gzz*SQR(J31L) + 
+      gu22*(J21L*J22L*PDstandardNth22gyz - PDstandardNth33gxz*SQR(J32L)) + 
+      gu31*PDstandardNth33gxx*SQR(J33L) + gu32*PDstandardNth33gxy*SQR(J33L));
     
     CCTK_REAL R22 = 0.5*(gu31*(-4*J12L*J22L*PDstandardNth12gxz - 
       2*J13L*J21L*PDstandardNth12gyy + 2*J11L*J22L*PDstandardNth12gyz + 
@@ -738,98 +730,94 @@ static void ML_ADMConstraints_MP_Body(cGH const * restrict const cctkGH, int con
       dJ222L*PDstandardNth2gzz - PDstandardNth33gzz*SQR(J32L)) + 
       PDstandardNth33gyy*(-2*gu31*J31L*J33L - gu33*SQR(J33L)));
     
-    CCTK_REAL R23 = G112*G113 - G111*G123 + G212*G213 + G223*(-G211 - 
-      G233) + G223*G233 + G312*G313 + G323*(-G311 - G333) + G323*G333 + 
-      0.5*(gu31*((J13L*J22L - J12L*J23L)*PDstandardNth12gxz + (-(J13L*J22L) + 
-      J12L*J23L)*PDstandardNth12gxz + (J13L*J32L - 
-      J12L*J33L)*PDstandardNth13gxz + (-(J13L*J32L) + 
-      J12L*J33L)*PDstandardNth13gxz) + gu33*((J13L*J22L - 
-      J12L*J23L)*PDstandardNth12gzz + (-(J13L*J22L) + 
-      J12L*J23L)*PDstandardNth12gzz + (J13L*J32L - 
-      J12L*J33L)*PDstandardNth13gzz + (-(J13L*J32L) + 
-      J12L*J33L)*PDstandardNth13gzz) + gu11*(J13L*J21L*PDstandardNth12gxy + 
-      J12L*J21L*PDstandardNth12gxz - 2*J11L*J21L*PDstandardNth12gyz + 
+    CCTK_REAL R23 = 0.5*(2*(G112*G113 + G212*G213 + G312*G313 + 
+      gu31*J13L*J23L*PDstandardNth12gxy + gu32*J13L*J23L*PDstandardNth12gyy) 
+      - 2*(G111*G123 + G211*G223 + G311*G323 + 
+      gu32*J12L*J13L*PDstandardNth11gyz + gu11*J11L*J21L*PDstandardNth12gyz) 
+      + J12L*(-2*gu32*J23L*PDstandardNth12gyz - gu11*J33L*PDstandardNth13gxx) 
+      + J12L*(J13L*(-(gu21*PDstandardNth11gxy) - gu31*PDstandardNth11gxz) + 
+      J11L*(gu11*PDstandardNth11gxz - gu21*PDstandardNth11gyz) + 
+      gu31*J11L*PDstandardNth11gzz + J23L*(-(gu11*PDstandardNth12gxx) - 
+      gu21*PDstandardNth12gxy) + gu21*(2*J22L*PDstandardNth12gxz - 
+      J21L*PDstandardNth12gyz - J33L*PDstandardNth13gxy)) + 
+      J13L*(-2*gu32*J22L*PDstandardNth12gyz - gu31*J32L*PDstandardNth13gxz) + 
+      J11L*J33L*(gu11*PDstandardNth13gxy - gu31*PDstandardNth13gyz) + 
+      J12L*(gu31*J21L*PDstandardNth12gzz - gu21*J31L*PDstandardNth13gyz) + 
+      J11L*(J13L*(gu21*PDstandardNth11gyy - gu31*PDstandardNth11gyz) + 
+      J23L*(gu11*PDstandardNth12gxy - gu31*PDstandardNth12gyz) + 
+      gu21*(J23L*PDstandardNth12gyy - J32L*PDstandardNth13gyz)) + 
+      dJ133L*gu32*PDstandardNth1gyy - 2*dJ123L*gu32*PDstandardNth1gyz + 
+      dJ122L*gu32*PDstandardNth1gzz + J22L*(gu21*(-(J13L*PDstandardNth12gxy) 
+      - J11L*PDstandardNth12gyz) + gu11*(J11L*PDstandardNth12gxz - 
+      J23L*PDstandardNth22gxx)) + J22L*(2*gu32*J12L*PDstandardNth12gzz - 
+      gu21*J23L*PDstandardNth22gxy) + gu11*(J11L*J32L*PDstandardNth13gxz - 
+      J22L*J33L*PDstandardNth23gxx) + gu11*J23L*J31L*PDstandardNth23gxy + 
+      gu11*J21L*J33L*PDstandardNth23gxy + 2*gu31*J23L*J33L*PDstandardNth23gxy 
+      + J33L*(2*gu32*J13L*PDstandardNth13gyy - gu21*J22L*PDstandardNth23gxy) 
+      + gu21*(J11L*J33L*PDstandardNth13gyy - J23L*J32L*PDstandardNth23gxy) + 
+      gu11*J22L*J31L*PDstandardNth23gxz + gu11*J21L*J32L*PDstandardNth23gxz + 
+      2*gu21*J22L*J32L*PDstandardNth23gxz + 
+      J33L*(-2*gu32*J12L*PDstandardNth13gyz - gu31*J22L*PDstandardNth23gxz) + 
+      J32L*(-2*gu32*J13L*PDstandardNth13gyz - gu31*J23L*PDstandardNth23gxz) + 
+      gu21*J23L*J31L*PDstandardNth23gyy + gu21*J21L*J33L*PDstandardNth23gyy + 
+      2*gu32*J23L*J33L*PDstandardNth23gyy - 
+      2*gu11*J21L*J31L*PDstandardNth23gyz - 
+      2*gu32*J23L*J32L*PDstandardNth23gyz - 
+      2*gu32*J22L*J33L*PDstandardNth23gyz + 
+      J32L*(2*gu32*J12L*PDstandardNth13gzz - gu21*J21L*PDstandardNth23gyz) + 
+      J31L*(-2*gu11*J11L*PDstandardNth13gyz - gu21*J22L*PDstandardNth23gyz) + 
+      gu31*(J11L*J32L*PDstandardNth13gzz - J23L*J31L*PDstandardNth23gyz) + 
+      gu31*(dJ133L*PDstandardNth1gxy - J21L*J33L*PDstandardNth23gyz) + 
+      gu31*J22L*J31L*PDstandardNth23gzz + gu31*J21L*J32L*PDstandardNth23gzz + 
+      2*gu32*J22L*J32L*PDstandardNth23gzz + 
+      gu11*(J13L*J21L*PDstandardNth12gxy + J12L*J21L*PDstandardNth12gxz + 
       J13L*(-(J12L*PDstandardNth11gxx) + J11L*PDstandardNth11gxy - 
-      J22L*PDstandardNth12gxx - J32L*PDstandardNth13gxx) + 
-      J12L*(J11L*PDstandardNth11gxz - J23L*PDstandardNth12gxx - 
-      J33L*PDstandardNth13gxx) + J13L*J31L*PDstandardNth13gxy + 
-      J12L*J31L*PDstandardNth13gxz - 2*J11L*J31L*PDstandardNth13gyz - 
-      dJ123L*PDstandardNth1gxx + dJ113L*PDstandardNth1gxy + 
-      dJ112L*PDstandardNth1gxz - dJ111L*PDstandardNth1gyz + 
-      J23L*(J11L*PDstandardNth12gxy - J22L*PDstandardNth22gxx) + 
-      J21L*J23L*PDstandardNth22gxy + J21L*J22L*PDstandardNth22gxz + 
-      J32L*(J11L*PDstandardNth13gxz - J23L*PDstandardNth23gxx) + 
-      J22L*(J11L*PDstandardNth12gxz - J33L*PDstandardNth23gxx) + 
-      J23L*J31L*PDstandardNth23gxy + J21L*J33L*PDstandardNth23gxy + 
-      J22L*J31L*PDstandardNth23gxz + J21L*J32L*PDstandardNth23gxz - 
-      2*J21L*J31L*PDstandardNth23gyz - dJ223L*PDstandardNth2gxx + 
-      dJ213L*PDstandardNth2gxy + dJ212L*PDstandardNth2gxz - 
-      dJ211L*PDstandardNth2gyz + J33L*(J11L*PDstandardNth13gxy - 
-      J32L*PDstandardNth33gxx) + J31L*J33L*PDstandardNth33gxy + 
-      J31L*J32L*PDstandardNth33gxz - dJ323L*PDstandardNth3gxx + 
-      dJ313L*PDstandardNth3gxy + dJ312L*PDstandardNth3gxz - 
-      dJ311L*PDstandardNth3gyz - PDstandardNth11gyz*SQR(J11L) - 
-      PDstandardNth22gyz*SQR(J21L) - PDstandardNth33gyz*SQR(J31L)) + 
-      gu21*(J13L*(-(J12L*PDstandardNth11gxy) + J11L*PDstandardNth11gyy - 
-      J22L*PDstandardNth12gxy - J32L*PDstandardNth13gxy) + 
-      J12L*(-(J11L*PDstandardNth11gyz) - J23L*PDstandardNth12gxy - 
-      J21L*PDstandardNth12gyz - J33L*PDstandardNth13gxy - 
-      J31L*PDstandardNth13gyz) + J11L*(J23L*PDstandardNth12gyy - 
-      J32L*PDstandardNth13gyz) - dJ123L*PDstandardNth1gxy + 
-      dJ122L*PDstandardNth1gxz + dJ113L*PDstandardNth1gyy - 
-      dJ112L*PDstandardNth1gyz + J22L*(2*J12L*PDstandardNth12gxz - 
-      J11L*PDstandardNth12gyz - J23L*PDstandardNth22gxy) + 
-      J21L*(J13L*PDstandardNth12gyy - J22L*PDstandardNth22gyz) + 
-      2*J22L*J32L*PDstandardNth23gxz + J23L*J31L*PDstandardNth23gyy + 
-      J21L*J33L*PDstandardNth23gyy + J31L*(J13L*PDstandardNth13gyy - 
-      J22L*PDstandardNth23gyz) + J21L*(J23L*PDstandardNth22gyy - 
-      J32L*PDstandardNth23gyz) - dJ223L*PDstandardNth2gxy + 
-      dJ222L*PDstandardNth2gxz + dJ213L*PDstandardNth2gyy - 
-      dJ212L*PDstandardNth2gyz + J33L*(J11L*PDstandardNth13gyy - 
-      J22L*PDstandardNth23gxy - J32L*PDstandardNth33gxy) + 
-      J31L*J33L*PDstandardNth33gyy + J32L*(2*J12L*PDstandardNth13gxz - 
-      J23L*PDstandardNth23gxy - J31L*PDstandardNth33gyz) - 
-      dJ323L*PDstandardNth3gxy + dJ322L*PDstandardNth3gxz + 
-      dJ313L*PDstandardNth3gyy - dJ312L*PDstandardNth3gyz + 
-      PDstandardNth11gxz*SQR(J12L) + PDstandardNth22gxz*SQR(J22L) + 
-      PDstandardNth33gxz*SQR(J32L)) + gu31*(J13L*(-(J12L*PDstandardNth11gxz) 
-      - J11L*PDstandardNth11gyz - J22L*PDstandardNth12gxz - 
-      J32L*PDstandardNth13gxz) + J12L*(J11L*PDstandardNth11gzz - 
-      J23L*PDstandardNth12gxz - J33L*PDstandardNth13gxz) + 
-      J13L*(2*J23L*PDstandardNth12gxy - J21L*PDstandardNth12gyz - 
-      J31L*PDstandardNth13gyz) + J11L*(-(J23L*PDstandardNth12gyz) + 
-      J22L*PDstandardNth12gzz - J33L*PDstandardNth13gyz) + 
-      dJ133L*PDstandardNth1gxy - dJ123L*PDstandardNth1gxz - 
-      dJ113L*PDstandardNth1gyz + dJ112L*PDstandardNth1gzz + 
-      J22L*(-(J23L*PDstandardNth22gxz) + J21L*PDstandardNth22gzz) + 
-      J32L*(J11L*PDstandardNth13gzz - J23L*PDstandardNth23gxz) + 
-      J31L*(J12L*PDstandardNth13gzz - J23L*PDstandardNth23gyz) + 
-      J21L*(J12L*PDstandardNth12gzz - J23L*PDstandardNth22gyz - 
-      J33L*PDstandardNth23gyz) + J22L*J31L*PDstandardNth23gzz + 
-      J21L*J32L*PDstandardNth23gzz + dJ233L*PDstandardNth2gxy - 
-      dJ223L*PDstandardNth2gxz - dJ213L*PDstandardNth2gyz + 
-      dJ212L*PDstandardNth2gzz + J33L*(2*J23L*PDstandardNth23gxy - 
-      J32L*PDstandardNth33gxz) + J33L*(2*J13L*PDstandardNth13gxy - 
-      J22L*PDstandardNth23gxz - J31L*PDstandardNth33gyz) + 
-      J31L*J32L*PDstandardNth33gzz + dJ333L*PDstandardNth3gxy - 
-      dJ323L*PDstandardNth3gxz - dJ313L*PDstandardNth3gyz + 
-      dJ312L*PDstandardNth3gzz + PDstandardNth11gxy*SQR(J13L) + 
-      PDstandardNth22gxy*SQR(J23L) + PDstandardNth33gxy*SQR(J33L)) + 
-      gu32*(-2*J12L*J13L*PDstandardNth11gyz + 2*J13L*J23L*PDstandardNth12gyy 
-      - 2*J13L*J22L*PDstandardNth12gyz - 2*J12L*J23L*PDstandardNth12gyz + 
-      2*J12L*J22L*PDstandardNth12gzz + 2*J13L*J33L*PDstandardNth13gyy - 
-      2*J13L*J32L*PDstandardNth13gyz - 2*J12L*J33L*PDstandardNth13gyz + 
-      2*J12L*J32L*PDstandardNth13gzz + dJ133L*PDstandardNth1gyy - 
-      2*dJ123L*PDstandardNth1gyz + dJ122L*PDstandardNth1gzz - 
-      2*J22L*J23L*PDstandardNth22gyz + 2*J23L*J33L*PDstandardNth23gyy - 
-      2*J23L*J32L*PDstandardNth23gyz - 2*J22L*J33L*PDstandardNth23gyz + 
-      2*J22L*J32L*PDstandardNth23gzz + dJ233L*PDstandardNth2gyy - 
-      2*dJ223L*PDstandardNth2gyz + dJ222L*PDstandardNth2gzz - 
-      2*J32L*J33L*PDstandardNth33gyz + dJ333L*PDstandardNth3gyy - 
-      2*dJ323L*PDstandardNth3gyz + dJ322L*PDstandardNth3gzz + 
-      PDstandardNth11gzz*SQR(J12L) + PDstandardNth11gyy*SQR(J13L) + 
-      PDstandardNth22gzz*SQR(J22L) + PDstandardNth22gyy*SQR(J23L) + 
-      PDstandardNth33gzz*SQR(J32L) + PDstandardNth33gyy*SQR(J33L)));
+      J22L*PDstandardNth12gxx - J32L*PDstandardNth13gxx) - 
+      dJ123L*PDstandardNth1gxx - dJ223L*PDstandardNth2gxx) + 
+      dJ213L*gu11*PDstandardNth2gxy + dJ233L*gu31*PDstandardNth2gxy + 
+      gu21*(J13L*(J21L*PDstandardNth12gyy - J32L*PDstandardNth13gxy) - 
+      dJ123L*PDstandardNth1gxy - dJ223L*PDstandardNth2gxy) + 
+      dJ212L*gu11*PDstandardNth2gxz + dJ222L*gu21*PDstandardNth2gxz + 
+      gu31*(2*J13L*J33L*PDstandardNth13gxy - dJ123L*PDstandardNth1gxz - 
+      dJ223L*PDstandardNth2gxz) + dJ213L*gu21*PDstandardNth2gyy + 
+      dJ233L*gu32*PDstandardNth2gyy - 2*dJ223L*gu32*PDstandardNth2gyz + 
+      gu11*(dJ113L*PDstandardNth1gxy - dJ211L*PDstandardNth2gyz) + 
+      gu21*(dJ122L*PDstandardNth1gxz - dJ212L*PDstandardNth2gyz) + 
+      gu31*((-(J13L*J22L) - J12L*J23L)*PDstandardNth12gxz - 
+      J13L*J21L*PDstandardNth12gyz - J12L*J33L*PDstandardNth13gxz - 
+      dJ113L*PDstandardNth1gyz - dJ213L*PDstandardNth2gyz) + 
+      dJ212L*gu31*PDstandardNth2gzz + dJ222L*gu32*PDstandardNth2gzz + 
+      gu11*(dJ112L*PDstandardNth1gxz - J32L*J33L*PDstandardNth33gxx) + 
+      gu11*J31L*J33L*PDstandardNth33gxy + gu21*(dJ113L*PDstandardNth1gyy - 
+      J32L*J33L*PDstandardNth33gxy) + gu11*J31L*J32L*PDstandardNth33gxz + 
+      gu31*(dJ112L*PDstandardNth1gzz - J32L*J33L*PDstandardNth33gxz) + 
+      gu21*J31L*J33L*PDstandardNth33gyy - 2*gu32*J32L*J33L*PDstandardNth33gyz 
+      + gu21*(-(dJ112L*PDstandardNth1gyz) + J32L*(2*J12L*PDstandardNth13gxz - 
+      J31L*PDstandardNth33gyz)) + gu31*(J22L*(J11L*PDstandardNth12gzz - 
+      J23L*PDstandardNth22gxz) + J31L*(-(J13L*PDstandardNth13gyz) - 
+      J33L*PDstandardNth33gyz)) + gu31*J31L*J32L*PDstandardNth33gzz + 
+      gu11*(J13L*J31L*PDstandardNth13gxy - dJ111L*PDstandardNth1gyz - 
+      dJ323L*PDstandardNth3gxx) + dJ313L*gu11*PDstandardNth3gxy + 
+      dJ333L*gu31*PDstandardNth3gxy + gu21*(J21L*J23L*PDstandardNth22gyy - 
+      dJ323L*PDstandardNth3gxy) + dJ312L*gu11*PDstandardNth3gxz + 
+      dJ322L*gu21*PDstandardNth3gxz + gu31*(J12L*J31L*PDstandardNth13gzz - 
+      J21L*J23L*PDstandardNth22gyz - dJ323L*PDstandardNth3gxz) + 
+      dJ313L*gu21*PDstandardNth3gyy + dJ333L*gu32*PDstandardNth3gyy - 
+      2*dJ323L*gu32*PDstandardNth3gyz + gu11*(J21L*J23L*PDstandardNth22gxy - 
+      dJ311L*PDstandardNth3gyz) + gu21*(J13L*J31L*PDstandardNth13gyy - 
+      J21L*J22L*PDstandardNth22gyz - dJ312L*PDstandardNth3gyz) + 
+      gu31*(J21L*J22L*PDstandardNth22gzz - dJ313L*PDstandardNth3gyz) + 
+      dJ312L*gu31*PDstandardNth3gzz + dJ322L*gu32*PDstandardNth3gzz + 
+      gu11*(J21L*J22L*PDstandardNth22gxz - PDstandardNth11gyz*SQR(J11L)) + 
+      gu21*PDstandardNth11gxz*SQR(J12L) + gu32*PDstandardNth11gzz*SQR(J12L) + 
+      gu31*PDstandardNth11gxy*SQR(J13L) + gu32*PDstandardNth11gyy*SQR(J13L) + 
+      PDstandardNth22gyz*(-2*gu32*J22L*J23L - gu11*SQR(J21L)) + 
+      gu21*PDstandardNth22gxz*SQR(J22L) + gu32*PDstandardNth22gzz*SQR(J22L) + 
+      gu31*PDstandardNth22gxy*SQR(J23L) + gu32*PDstandardNth22gyy*SQR(J23L) + 
+      gu11*(J12L*J31L*PDstandardNth13gxz - J23L*J32L*PDstandardNth23gxx - 
+      PDstandardNth33gyz*SQR(J31L)) + gu21*PDstandardNth33gxz*SQR(J32L) + 
+      gu32*PDstandardNth33gzz*SQR(J32L) + gu31*PDstandardNth33gxy*SQR(J33L) + 
+      gu32*PDstandardNth33gyy*SQR(J33L));
     
     CCTK_REAL R33 = 0.5*(gu21*(-4*J13L*J23L*PDstandardNth12gxy + 
       2*J13L*J22L*PDstandardNth12gxz + 2*J13L*J21L*PDstandardNth12gyz - 
