@@ -13,8 +13,8 @@ SetSourceLanguage["C"];
 (* derivative order: 2, 4, 6, 8, ... *)
 derivOrder = 4;
 
-(* useGlobalDerivs: True or False *)
-useGlobalDerivs = False;
+(* useJacobian: True or False *)
+useJacobian = False;
 
 (* timelevels: 2 or 3
    (keep this at 3; this is better chosen with a run-time parameter) *)
@@ -27,7 +27,7 @@ addMatter = 0;
 
 prefix = "ML_";
 suffix =
-  If [useGlobalDerivs, "_MP", ""] <>
+  If [useJacobian, "_MP", ""] <>
   If [derivOrder!=4, "_O" <> ToString[derivOrder], ""] <>
   If [evolutionTimelevels!=3, "_TL" <> ToString[evolutionTimelevels], ""] <>
   If [addMatter!=0, "_M", ""];
@@ -48,11 +48,7 @@ derivatives =
                            StandardCenteredDifferenceOperator[1,derivOrder/2,j]
 };
 
-FD = PDstandardNth;
-
-If [useGlobalDerivs,
-    DefineJacobian[PD, FD, J, dJ],
-    DefineJacobian[PD, FD, KD, Zero3]];
+PD = PDstandardNth;
 
 
 
@@ -63,7 +59,6 @@ If [useGlobalDerivs,
 (* Register the tensor quantities with the TensorTools package *)
 Map [DefineTensor,
      {xx, rr, th, ph,
-      J, dJ,
       g, K, alpha, beta, H, M, detg, gu, G, R, trR, Km, trK,
       Psi0re, Psi0im, Psi1re, Psi1im, Psi2re, Psi2im, Psi3re, Psi3im,
       Psi4re, Psi4im,
@@ -94,7 +89,6 @@ SetTensorAttribute[Psi3im, TensorManualCartesianParities, {-1,-1,+1}];
 Map [AssertSymmetricIncreasing,
      {g[la,lb], K[la,lb], R[la,lb],
       gt[la,lb], At[la,lb], Ats[la,lb], Rt[la,lb], Rphi[la,lb], T[la,lb]}];
-AssertSymmetricIncreasing [dJ[ua,lb,lc], lb, lc];
 AssertSymmetricIncreasing [G[ua,lb,lc], lb, lc];
 AssertSymmetricIncreasing [Gt[ua,lb,lc], lb, lc];
 AssertSymmetricIncreasing [gK[la,lb,lc], la, lb];
@@ -147,11 +141,7 @@ extraGroups =
    {"ADMBase::lapse",    {alp}},
    {"ADMBase::dtlapse",  {dtalp}},
    {"ADMBase::shift",    {betax, betay, betaz}},
-   {"ADMBase::dtshift",  {dtbetax, dtbetay, dtbetaz}},
-   {"Coordinates::jacobian", {J11, J12, J13, J21, J22, J23, J31, J32, J33}},
-   {"Coordinates::jacobian2", {dJ111, dJ112, dJ113, dJ122, dJ123, dJ133,
-                               dJ211, dJ212, dJ213, dJ222, dJ223, dJ233,
-                               dJ311, dJ312, dJ313, dJ322, dJ323, dJ333}}
+   {"ADMBase::dtshift",  {dtbetax, dtbetay, dtbetaz}}
 };
 
 
@@ -303,9 +293,7 @@ WeylScalarsBoundaryCalc =
 (* Implementations *)
 (******************************************************************************)
 
-inheritedImplementations =
-  Join[{"ADMBase"},
-       If [useGlobalDerivs, {"Coordinates"}, {}]];
+inheritedImplementations = {"ADMBase"};
 
 (******************************************************************************)
 (* Construct the thorns *)
@@ -322,5 +310,6 @@ CreateKrancThornTT [groupsWeylScalars, ".", WeylScalars,
   DeclaredGroups -> declaredGroupNamesWeylScalars,
   PartialDerivatives -> derivatives,
   EvolutionTimelevels -> evolutionTimelevels,
+  UseJacobian -> useJacobian,
   UseLoopControl -> True
 ];

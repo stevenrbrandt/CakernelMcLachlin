@@ -206,7 +206,6 @@ Map [DefineTensor,
      {normal, tangentA, tangentB, dir,
       nn, nu, nlen, nlen2, su, vg,
       xx, rr, th, ph,
-      J, dJ,
       admg, admK, admalpha, admdtalpha, admbeta, admdtbeta, H, M,
       g, detg, gu, G, R, trR, Km, trK, cdphi, cdphi2,
       phi, gt, At, Xt, Xtn, alpha, A, beta, B, Atm, Atu, trA, Ats, trAts,
@@ -1321,14 +1320,14 @@ CreateKrancThornTT [groups, ".", BSSN,
   PartialDerivatives -> derivatives,
   EvolutionTimelevels -> evolutionTimelevels,
   DefaultEvolutionTimelevels -> 3,
+  UseJacobian -> useJacobian,
   UseLoopControl -> True,
   InheritedImplementations -> inheritedImplementations,
   InheritedKeywordParameters -> inheritedKeywordParameters,
   ExtendedKeywordParameters -> extendedKeywordParameters,
   KeywordParameters -> keywordParameters,
   IntParameters -> intParameters,
-  RealParameters -> realParameters,
-  UseJacobian -> useJacobian
+  RealParameters -> realParameters
 ];
 
 ];

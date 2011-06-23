@@ -14,8 +14,8 @@ SetSourceLanguage["C"];
 (* derivative order: 2, 4, 6, 8, ... *)
 derivOrder = 4;
 
-(* useGlobalDerivs: True or False *)
-useGlobalDerivs = False;
+(* useJacobian: True or False *)
+useJacobian = False;
 
 (* timelevels: 2 or 3
    (keep this at 3; this is better chosen with a run-time parameter) *)
@@ -28,7 +28,7 @@ addMatter = 0;
 
 prefix = "ML_";
 suffix =
-  If [useGlobalDerivs, "_MP", ""] <>
+  If [useJacobian, "_MP", ""] <>
   If [derivOrder!=4, "_O" <> ToString[derivOrder], ""] <>
   If [evolutionTimelevels!=3, "_TL" <> ToString[evolutionTimelevels], ""] <>
   If [addMatter!=0, "_M", ""];
@@ -49,11 +49,7 @@ derivatives =
                            StandardCenteredDifferenceOperator[1,derivOrder/2,j]
 };
 
-FD = PDstandardNth;
-
-If [useGlobalDerivs,
-    DefineJacobian[PD, FD, J, dJ],
-    DefineJacobian[PD, FD, KD, Zero3]];
+PD = PDstandardNth;
 
 
 
@@ -63,14 +59,12 @@ If [useGlobalDerivs,
 
 (* Register the tensor quantities with the TensorTools package *)
 Map [DefineTensor,
-     {J, dJ,
-      g, K, alpha, beta, H, M, detg, gu, G, R, trR, Km, trK,
+     {g, K, alpha, beta, H, M, detg, gu, G, R, trR, Km, trK,
       T00, T0, T, rho, S}];
 
 Map [AssertSymmetricIncreasing,
      {g[la,lb], K[la,lb], R[la,lb],
       T[la,lb]}];
-AssertSymmetricIncreasing [dJ[ua,lb,lc], lb, lc];
 AssertSymmetricIncreasing [G[ua,lb,lc], lb, lc];
 
 DefineConnection [CD, PD, G];
@@ -126,11 +120,7 @@ extraGroups =
    {"ADMBase::dtshift",  {dtbetax, dtbetay, dtbetaz}},
    {"TmunuBase::stress_energy_scalar", {eTtt}},
    {"TmunuBase::stress_energy_vector", {eTtx, eTty, eTtz}},
-   {"TmunuBase::stress_energy_tensor", {eTxx, eTxy, eTxz, eTyy, eTyz, eTzz}},
-   {"Coordinates::jacobian", {J11, J12, J13, J21, J22, J23, J31, J32, J33}},
-   {"Coordinates::jacobian2", {dJ111, dJ112, dJ113, dJ122, dJ123, dJ133,
-                               dJ211, dJ212, dJ213, dJ222, dJ223, dJ233,
-                               dJ311, dJ312, dJ313, dJ322, dJ323, dJ333}}
+   {"TmunuBase::stress_energy_tensor", {eTxx, eTxy, eTxz, eTyy, eTyz, eTzz}}
 };
 
 
@@ -319,8 +309,7 @@ constraintsBoundaryCalc =
 
 inheritedImplementations =
   Join[{"ADMBase"},
-       If [addMatter!=0, {"TmunuBase"}, {}],
-       If [useGlobalDerivs, {"Coordinates"}, {}]];
+       If [addMatter!=0, {"TmunuBase"}, {}]];
 
 (******************************************************************************)
 (* Parameters *)
@@ -380,6 +369,7 @@ CreateKrancThornTT [groups, ".", ADM,
   DeclaredGroups -> declaredGroupNames,
   PartialDerivatives -> derivatives,
   EvolutionTimelevels -> evolutionTimelevels,
+  UseJacobian -> useJacobian,
   UseLoopControl -> True,
   InheritedImplementations -> inheritedImplementations,
   KeywordParameters -> keywordParameters

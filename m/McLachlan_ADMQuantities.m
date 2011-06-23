@@ -10,13 +10,13 @@ SetSourceLanguage["C"];
 (* Options *)
 (******************************************************************************)
 
-createCode[derivOrder_, useGlobalDerivs_, evolutionTimelevels_, addMatter_] :=
+createCode[derivOrder_, useJacobian_, evolutionTimelevels_, addMatter_] :=
 Module[{},
 
 prefix = "ML_";
 suffix =
   ""
-  <> If [useGlobalDerivs, "_MP", ""]
+  <> If [useJacobian, "_MP", ""]
   <> If [derivOrder!=4, "_O" <> ToString[derivOrder], ""]
   (* <> If [evolutionTimelevels!=3, "_TL" <> ToString[evolutionTimelevels], ""] *)
   (* <> If [addMatter==1, "_M", ""] *)
@@ -106,20 +106,9 @@ derivatives =
   PDonesided[3] -> dir[3] (-1 + shift[3]^dir[3]) / spacing[3]
 };
 
-FD  = PDstandardNth;
-FDu = PDupwindNth;
-FDo = PDonesided;
-
-ResetJacobians;
-If [useGlobalDerivs,
-    DefineJacobian[PD, FD, J, dJ],
-    DefineJacobian[PD, FD, KD, Zero3]];
-If [useGlobalDerivs,
-    DefineJacobian[PDu, FDu, J, dJ],
-    DefineJacobian[PDu, FDu, KD, Zero3]];
-If [useGlobalDerivs,
-    DefineJacobian[PDo, FDo, J, dJ],
-    DefineJacobian[PDo, FDo, KD, Zero3]];
+PD  = PDstandardNth;
+PDu = PDupwindNth;
+PDo = PDonesided;
 
 
 
@@ -131,7 +120,6 @@ If [useGlobalDerivs,
 Map [DefineTensor,
      {normal, tangentA, tangentB, dir,
       nn, nu, nlen, nlen2, su, vg,
-      J, dJ,
       g, K, alpha, beta, detg, gu, G, R, trR, Km, trK,
       phi, gt, At, Xt, Xtn, alpha, A, beta, B, Atm, Atu, trA, Ats, trAts,
       ephi, detgt, gtu, ddetgt, dgtu, ddgtu, Gtl, Gtlu, Gt,
@@ -142,7 +130,6 @@ Map [DefineTensor,
 
 Map [AssertSymmetricIncreasing,
      {gt[la,lb], At[la,lb], Rt[la,lb], T[la,lb]}];
-AssertSymmetricIncreasing [dJ[ua,lb,lc], lb, lc];
 AssertSymmetricIncreasing [G[ua,lb,lc], lb, lc];
 AssertSymmetricIncreasing [Gtl[la,lb,lc], lb, lc];
 AssertSymmetricIncreasing [Gt[ua,lb,lc], lb, lc];
@@ -209,11 +196,7 @@ extraGroups =
    {"ML_BSSN::ML_shift",      {beta1, beta2, beta3}},
    {"TmunuBase::stress_energy_scalar", {eTtt}},
    {"TmunuBase::stress_energy_vector", {eTtx, eTty, eTtz}},
-   {"TmunuBase::stress_energy_tensor", {eTxx, eTxy, eTxz, eTyy, eTyz, eTzz}},
-   {"Coordinates::jacobian",  {J11, J12, J13, J21, J22, J23, J31, J32, J33}},
-   {"Coordinates::jacobian2", {dJ111, dJ112, dJ113, dJ122, dJ123, dJ133,
-                               dJ211, dJ212, dJ213, dJ222, dJ223, dJ233,
-                               dJ311, dJ312, dJ313, dJ322, dJ323, dJ333}}
+   {"TmunuBase::stress_energy_tensor", {eTxx, eTxy, eTxz, eTyy, eTyz, eTzz}}
 };
 
 
@@ -299,8 +282,7 @@ ADMQuantitiesCalc =
 inheritedImplementations =
   Join[{"ADMBase"},
        {prefix <> "BSSN" <> suffix},
-       If [addMatter!=0, {"TmunuBase"}, {}],
-       If [useGlobalDerivs, {"Coordinates"}, {}]];
+       If [addMatter!=0, {"TmunuBase"}, {}]];
 
 (******************************************************************************)
 (* Parameters *)
@@ -331,6 +313,7 @@ CreateKrancThornTT [groups, ".", ADMQuantities,
   DeclaredGroups -> declaredGroupNames,
   PartialDerivatives -> derivatives,
   EvolutionTimelevels -> evolutionTimelevels,
+  UseJacobian -> useJacobian,
   UseLoopControl -> True,
   InheritedImplementations -> inheritedImplementations,
   IntParameters -> intParameters
@@ -345,7 +328,7 @@ CreateKrancThornTT [groups, ".", ADMQuantities,
 (******************************************************************************)
 
 (* derivative order: 2, 4, 6, 8, ... *)
-(* useGlobalDerivs: False or True *)
+(* useJacobian: False or True *)
 (* timelevels: 2 or 3
    (keep this at 3; this is better chosen with a run-time parameter) *)
 (* matter: 0 or 1
