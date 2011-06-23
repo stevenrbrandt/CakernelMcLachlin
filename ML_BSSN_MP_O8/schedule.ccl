@@ -315,18 +315,18 @@ schedule ML_BSSN_MP_O8_RHS2 IN ML_BSSN_MP_O8_evolCalcGroup
 
 if (CCTK_EQUALS(apply_dissipation, "always"))
 {
-  schedule ML_BSSN_MP_O8_Dissipation IN ML_BSSN_MP_O8_evolCalcGroup after ML_BSSN_MP_O8_RHS2
+  schedule ML_BSSN_MP_O8_Dissipation IN ML_BSSN_MP_O8_evolCalcGroup AFTER (ML_BSSN_MP_O8_RHS1 ML_BSSN_MP_O8_RHS2)
   {
     LANG: C
   } "ML_BSSN_MP_O8_Dissipation"
 }
 
-schedule ML_BSSN_MP_O8_Advect IN ML_BSSN_MP_O8_evolCalcGroup after ML_BSSN_MP_O8_RHS2
+schedule ML_BSSN_MP_O8_Advect IN ML_BSSN_MP_O8_evolCalcGroup AFTER (ML_BSSN_MP_O8_RHS1 ML_BSSN_MP_O8_RHS2)
 {
   LANG: C
 } "ML_BSSN_MP_O8_Advect"
 
-schedule ML_BSSN_MP_O8_InitRHS AT ANALYSIS before ML_BSSN_MP_O8_evolCalcGroup
+schedule ML_BSSN_MP_O8_InitRHS AT analysis BEFORE ML_BSSN_MP_O8_evolCalcGroup
 {
   LANG: C
 } "ML_BSSN_MP_O8_InitRHS"

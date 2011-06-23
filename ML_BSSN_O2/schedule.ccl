@@ -315,18 +315,18 @@ schedule ML_BSSN_O2_RHS2 IN ML_BSSN_O2_evolCalcGroup
 
 if (CCTK_EQUALS(apply_dissipation, "always"))
 {
-  schedule ML_BSSN_O2_Dissipation IN ML_BSSN_O2_evolCalcGroup after ML_BSSN_O2_RHS2
+  schedule ML_BSSN_O2_Dissipation IN ML_BSSN_O2_evolCalcGroup AFTER (ML_BSSN_O2_RHS1 ML_BSSN_O2_RHS2)
   {
     LANG: C
   } "ML_BSSN_O2_Dissipation"
 }
 
-schedule ML_BSSN_O2_Advect IN ML_BSSN_O2_evolCalcGroup after ML_BSSN_O2_RHS2
+schedule ML_BSSN_O2_Advect IN ML_BSSN_O2_evolCalcGroup AFTER (ML_BSSN_O2_RHS1 ML_BSSN_O2_RHS2)
 {
   LANG: C
 } "ML_BSSN_O2_Advect"
 
-schedule ML_BSSN_O2_InitRHS AT ANALYSIS before ML_BSSN_O2_evolCalcGroup
+schedule ML_BSSN_O2_InitRHS AT analysis BEFORE ML_BSSN_O2_evolCalcGroup
 {
   LANG: C
 } "ML_BSSN_O2_InitRHS"
