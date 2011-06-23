@@ -649,7 +649,6 @@ static void ML_BSSN_MP_O8_convertFromADMBaseGamma_Body(cGH const * restrict cons
       B3L = 0;
     }
     
-    
     /* Copy local copies back to grid functions */
     A[index] = AL;
     B1[index] = B1L;

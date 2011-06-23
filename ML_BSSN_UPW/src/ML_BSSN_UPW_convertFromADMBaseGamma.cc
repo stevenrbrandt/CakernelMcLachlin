@@ -297,7 +297,6 @@ static void ML_BSSN_UPW_convertFromADMBaseGamma_Body(cGH const * restrict const 
       B3L = 0;
     }
     
-    
     /* Copy local copies back to grid functions */
     A[index] = AL;
     B1[index] = B1L;
