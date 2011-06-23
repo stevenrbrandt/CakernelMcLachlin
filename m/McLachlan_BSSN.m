@@ -748,7 +748,8 @@ evolCalc =
 advectCalc =
 {
   Name -> BSSN <> "_Advect",
-  Schedule -> {"IN " <> BSSN <> "_evolCalcGroup after " <> BSSN <> "_RHS2"},
+  Schedule -> {"IN " <> BSSN <> "_evolCalcGroup " <>
+               "AFTER (" <> BSSN <> "_RHS1 " <> BSSN <> "_RHS2)"},
   (*
   Where -> Interior,
   *)
@@ -811,7 +812,8 @@ evolCalc2 = PartialCalculation[evolCalc, "2",
 dissCalc =
 {
   Name -> BSSN <> "_Dissipation",
-  Schedule -> {"IN " <> BSSN <> "_evolCalcGroup after " <> BSSN <> "_RHS2"},
+  Schedule -> {"IN " <> BSSN <> "_evolCalcGroup " <>
+               "AFTER (" <> BSSN <> "_RHS1 " <> BSSN <> "_RHS2)"},
   ConditionalOnKeyword -> {"apply_dissipation", "always"},
   Where -> InteriorNoSync,
   Shorthands -> {epsdiss[ua]},
@@ -844,13 +846,13 @@ RHSStaticBoundaryCalc =
   }
 };
 
-(* Initialise the RHS variables in ANALYSIS in case they are going to
+(* Initialise the RHS variables in analysis in case they are going to
    be output - the noninterior points cannot be filled, so we define
    them to be zero *)
 initRHSCalc =
 {
   Name -> BSSN <> "_InitRHS",
-  Schedule -> {"AT ANALYSIS before " <> BSSN <> "_evolCalcGroup"},
+  Schedule -> {"AT analysis BEFORE " <> BSSN <> "_evolCalcGroup"},
   Where -> Everywhere,
   Equations -> 
   {
