@@ -235,7 +235,7 @@ evolCalc =
     dot[g[la,lb]] -> -2 alpha K[la,lb]
                      + Lie[g[la,lb], beta],
     dot[K[la,lb]] -> - CD[alpha,la,lb]
-                     + alpha (+ R[la,lb] + K[la,lb] trK - 2 K[la,lc] Km[uc,lb])
+                     + alpha * (R[la,lb] + K[la,lb] trK - 2 K[la,lc] Km[uc,lb])
                      + Lie[K[la,lb], beta],
     dot[alpha]    -> 0,
     dot[beta[ua]] -> 0
