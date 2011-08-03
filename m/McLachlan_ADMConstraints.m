@@ -138,6 +138,7 @@ ADMConstraintsCalc =
   Name -> ADMConstraints,
   Schedule -> Automatic,
   Where -> Interior,
+  After -> "MoL_PostStep",
   Shorthands -> {detg, gu[ua,ub], G[ua,lb,lc],
                  R[la,lb], trR, Km[la,lb], trK,
                  rho, S[la]},

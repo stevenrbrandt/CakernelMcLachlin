@@ -808,7 +808,6 @@ evolCalc2 = PartialCalculation[evolCalc, "2",
     dot[At[la,lb]]
   }];
 
-
 dissCalc =
 {
   Name -> BSSN <> "_Dissipation",
@@ -825,6 +824,24 @@ dissCalc =
       {var, {phi, gt[la,lb], Xt[ui], trK, At[la,lb], alpha, A, beta[ua], B[ua]}}]
   }
 };
+
+dissCalcs =
+Table[
+{
+  Name -> BSSN <> "_Dissipation_" <> ToString[var /. {Tensor[n_,__] -> n}],
+  Schedule -> {"IN " <> BSSN <> "_evolCalcGroup " <>
+               "AFTER (" <> BSSN <> "_RHS1 " <> BSSN <> "_RHS2)"},
+  ConditionalOnKeyword -> {"apply_dissipation", "always"},
+  Where -> InteriorNoSync,
+  Shorthands -> {epsdiss[ua]},
+  Equations ->
+  {
+    epsdiss[ua] -> EpsDiss,
+    dot[var]    -> dot[var] + epsdiss[ux] PDdiss[var,lx]
+  }
+},
+  {var, {phi, gt[la,lb], Xt[ui], trK, At[la,lb], alpha, A, beta[ua], B[ua]}}
+];
 
 RHSStaticBoundaryCalc =
 {
@@ -910,11 +927,14 @@ RHSRadiativeBoundaryCalc =
 enforceCalc =
 {
   Name -> BSSN <> "_enforce",
-  Schedule -> {"IN MoL_PostStep BEFORE " <> BSSN <> "_SelectBoundConds"},
+  Schedule -> {"IN MoL_PostStepModify"},
   Shorthands -> {detgt, gtu[ua,ub], trAt},
   Equations -> 
   {
-    (* Enforcing the constraints needs to be a projection, because it
+    (* The following comment is still interesting, but is not correct
+       any more since it is now scheduled in MoL_PostStepModify instead:
+
+       Enforcing the constraints needs to be a projection, because it
        is applied in MoL_PostStep and may thus be applied multiple
        times, not only during time evolution. Therefore detgt has to
        be calculated correctly, without assuming that det gt_ij = 1,
@@ -963,6 +983,7 @@ constraintsCalc =
 {
   Name -> BSSN <> "_constraints",
   Schedule -> Automatic,
+  After -> "MoL_PostStep",
   Where -> Interior,
   Shorthands -> {detgt, ddetgt[la], gtu[ua,ub],
                  Gt[ua,lb,lc], Gtl[la,lb,lc], Gtlu[la,lb,uc], Xtn[ua],
@@ -1293,6 +1314,7 @@ realParameters =
 (******************************************************************************)
 
 calculations =
+Join[
 {
   initialCalc,
   convertFromADMBaseCalc,
@@ -1314,7 +1336,9 @@ calculations =
   convertToADMBaseFakeDtLapseShiftCalc,
   (* constraintsCalc, *)
   constraintsCalc1, constraintsCalc2
-};
+},
+  {} (*dissCalcs*)
+];
 
 CreateKrancThornTT [groups, ".", BSSN,
   Calculations -> calculations,

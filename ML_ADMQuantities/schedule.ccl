@@ -23,7 +23,7 @@ schedule ML_ADMQuantities_RegisterSymmetries in SymmetryRegister
   OPTIONS: meta
 } "register symmetries"
 
-schedule group ML_ADMQuantities_group in MoL_PseudoEvolution
+schedule group ML_ADMQuantities_group in MoL_PseudoEvolution after MoL_PostStep
 {
   # no language specified
 } "ML_ADMQuantities"
@@ -51,17 +51,12 @@ schedule group ML_ADMQuantities_bc_group in ML_ADMQuantities_group after ML_ADMQ
   # no language specified
 } "ML_ADMQuantities"
 
-schedule group ML_ADMQuantities_bc_group at CCTK_POSTRESTRICT
+schedule group ML_ADMQuantities_bc_group in MoL_PseudoEvolutionBoundaries after MoL_PostStep
 {
   # no language specified
 } "ML_ADMQuantities"
 
-schedule group ML_ADMQuantities_bc_group at CCTK_POSTRESTRICTINITIAL
-{
-  # no language specified
-} "ML_ADMQuantities"
-
-schedule ML_ADMQuantities_SelectBoundConds in MoL_PseudoEvolution
+schedule ML_ADMQuantities_SelectBoundConds in MoL_PostStep
 {
   LANG: C
   OPTIONS: level
@@ -73,7 +68,7 @@ schedule ML_ADMQuantities_CheckBoundaries at BASEGRID
   OPTIONS: meta
 } "check boundaries treatment"
 
-schedule group ApplyBCs as ML_ADMQuantities_ApplyBCs in MoL_PseudoEvolution after ML_ADMQuantities_SelectBoundConds
+schedule group ApplyBCs as ML_ADMQuantities_ApplyBCs in MoL_PostStep after ML_ADMQuantities_SelectBoundConds
 {
   # no language specified
 } "Apply boundary conditions controlled by thorn Boundary"

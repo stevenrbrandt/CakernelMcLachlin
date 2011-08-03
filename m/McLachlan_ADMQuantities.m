@@ -212,6 +212,7 @@ ADMQuantitiesCalc =
   Name -> ADMQuantities,
   Schedule -> Automatic,
   Where -> Interior,
+  After -> "MoL_PostStep",
   Shorthands -> {detgt, gtu[ua,ub], dgtu[ua,ub,lc],
                  Gtl[la,lb,lc], Gtlu[la,lb,uc], Gt[ua,lb,lc],
                  Xtn[ua], Rt[la,lb], trRt,

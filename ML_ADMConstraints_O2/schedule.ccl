@@ -23,7 +23,7 @@ schedule ML_ADMConstraints_O2_RegisterSymmetries in SymmetryRegister
   OPTIONS: meta
 } "register symmetries"
 
-schedule group ML_ADMConstraints_O2_group in MoL_PseudoEvolution
+schedule group ML_ADMConstraints_O2_group in MoL_PseudoEvolution after MoL_PostStep
 {
   # no language specified
 } "ML_ADMConstraints_O2"
@@ -51,17 +51,12 @@ schedule group ML_ADMConstraints_O2_bc_group in ML_ADMConstraints_O2_group after
   # no language specified
 } "ML_ADMConstraints_O2"
 
-schedule group ML_ADMConstraints_O2_bc_group at CCTK_POSTRESTRICT
+schedule group ML_ADMConstraints_O2_bc_group in MoL_PseudoEvolutionBoundaries after MoL_PostStep
 {
   # no language specified
 } "ML_ADMConstraints_O2"
 
-schedule group ML_ADMConstraints_O2_bc_group at CCTK_POSTRESTRICTINITIAL
-{
-  # no language specified
-} "ML_ADMConstraints_O2"
-
-schedule ML_ADMConstraints_O2_SelectBoundConds in MoL_PseudoEvolution
+schedule ML_ADMConstraints_O2_SelectBoundConds in MoL_PostStep
 {
   LANG: C
   OPTIONS: level
@@ -73,7 +68,7 @@ schedule ML_ADMConstraints_O2_CheckBoundaries at BASEGRID
   OPTIONS: meta
 } "check boundaries treatment"
 
-schedule group ApplyBCs as ML_ADMConstraints_O2_ApplyBCs in MoL_PseudoEvolution after ML_ADMConstraints_O2_SelectBoundConds
+schedule group ApplyBCs as ML_ADMConstraints_O2_ApplyBCs in MoL_PostStep after ML_ADMConstraints_O2_SelectBoundConds
 {
   # no language specified
 } "Apply boundary conditions controlled by thorn Boundary"
