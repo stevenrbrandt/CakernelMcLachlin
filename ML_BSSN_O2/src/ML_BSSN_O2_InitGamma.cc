@@ -13,13 +13,14 @@
 #include "GenericFD.h"
 #include "Differencing.h"
 #include "loopcontrol.h"
+#include "vectors.h"
 
 /* Define macros used in calculations */
 #define INITVALUE (42)
 #define QAD(x) (SQR(SQR(x)))
-#define INV(x) ((1.0) / (x))
-#define SQR(x) ((x) * (x))
-#define CUB(x) ((x) * (x) * (x))
+#define INV(x) (kdiv(ToReal(1.0),x))
+#define SQR(x) (kmul(x,x))
+#define CUB(x) (kmul(x,SQR(x)))
 
 static void ML_BSSN_O2_InitGamma_Body(cGH const * restrict const cctkGH, int const dir, int const face, CCTK_REAL const normal[3], CCTK_REAL const tangentA[3], CCTK_REAL const tangentB[3], int const min[3], int const max[3], int const n_subblock_gfs, CCTK_REAL * restrict const subblock_gfs[])
 {
@@ -52,53 +53,54 @@ static void ML_BSSN_O2_InitGamma_Body(cGH const * restrict const cctkGH, int con
   ptrdiff_t const cdi = sizeof(CCTK_REAL) * di;
   ptrdiff_t const cdj = sizeof(CCTK_REAL) * dj;
   ptrdiff_t const cdk = sizeof(CCTK_REAL) * dk;
-  CCTK_REAL const dx = ToReal(CCTK_DELTA_SPACE(0));
-  CCTK_REAL const dy = ToReal(CCTK_DELTA_SPACE(1));
-  CCTK_REAL const dz = ToReal(CCTK_DELTA_SPACE(2));
-  CCTK_REAL const dt = ToReal(CCTK_DELTA_TIME);
-  CCTK_REAL const dxi = INV(dx);
-  CCTK_REAL const dyi = INV(dy);
-  CCTK_REAL const dzi = INV(dz);
-  CCTK_REAL const khalf = 0.5;
-  CCTK_REAL const kthird = 1/3.0;
-  CCTK_REAL const ktwothird = 2.0/3.0;
-  CCTK_REAL const kfourthird = 4.0/3.0;
-  CCTK_REAL const keightthird = 8.0/3.0;
-  CCTK_REAL const hdxi = 0.5 * dxi;
-  CCTK_REAL const hdyi = 0.5 * dyi;
-  CCTK_REAL const hdzi = 0.5 * dzi;
+  CCTK_REAL_VEC const dx = ToReal(CCTK_DELTA_SPACE(0));
+  CCTK_REAL_VEC const dy = ToReal(CCTK_DELTA_SPACE(1));
+  CCTK_REAL_VEC const dz = ToReal(CCTK_DELTA_SPACE(2));
+  CCTK_REAL_VEC const dt = ToReal(CCTK_DELTA_TIME);
+  CCTK_REAL_VEC const dxi = INV(dx);
+  CCTK_REAL_VEC const dyi = INV(dy);
+  CCTK_REAL_VEC const dzi = INV(dz);
+  CCTK_REAL_VEC const khalf = ToReal(0.5);
+  CCTK_REAL_VEC const kthird = ToReal(1.0/3.0);
+  CCTK_REAL_VEC const ktwothird = ToReal(2.0/3.0);
+  CCTK_REAL_VEC const kfourthird = ToReal(4.0/3.0);
+  CCTK_REAL_VEC const keightthird = ToReal(8.0/3.0);
+  CCTK_REAL_VEC const hdxi = kmul(ToReal(0.5), dxi);
+  CCTK_REAL_VEC const hdyi = kmul(ToReal(0.5), dyi);
+  CCTK_REAL_VEC const hdzi = kmul(ToReal(0.5), dzi);
   
   /* Initialize predefined quantities */
-  CCTK_REAL const p1o16dx = 0.0625*INV(dx);
-  CCTK_REAL const p1o16dy = 0.0625*INV(dy);
-  CCTK_REAL const p1o16dz = 0.0625*INV(dz);
-  CCTK_REAL const p1o2dx = 0.5*INV(dx);
-  CCTK_REAL const p1o2dy = 0.5*INV(dy);
-  CCTK_REAL const p1o2dz = 0.5*INV(dz);
-  CCTK_REAL const p1o4dx = 0.25*INV(dx);
-  CCTK_REAL const p1o4dxdy = 0.25*INV(dx)*INV(dy);
-  CCTK_REAL const p1o4dxdz = 0.25*INV(dx)*INV(dz);
-  CCTK_REAL const p1o4dy = 0.25*INV(dy);
-  CCTK_REAL const p1o4dydz = 0.25*INV(dy)*INV(dz);
-  CCTK_REAL const p1o4dz = 0.25*INV(dz);
-  CCTK_REAL const p1odx = INV(dx);
-  CCTK_REAL const p1odx2 = INV(SQR(dx));
-  CCTK_REAL const p1ody = INV(dy);
-  CCTK_REAL const p1ody2 = INV(SQR(dy));
-  CCTK_REAL const p1odz = INV(dz);
-  CCTK_REAL const p1odz2 = INV(SQR(dz));
-  CCTK_REAL const pm1o2dx = -0.5*INV(dx);
-  CCTK_REAL const pm1o2dy = -0.5*INV(dy);
-  CCTK_REAL const pm1o2dz = -0.5*INV(dz);
-  CCTK_REAL const pm1o4dx = -0.25*INV(dx);
-  CCTK_REAL const pm1o4dy = -0.25*INV(dy);
-  CCTK_REAL const pm1o4dz = -0.25*INV(dz);
+  CCTK_REAL_VEC const p1o16dx = kmul(INV(dx),ToReal(0.0625));
+  CCTK_REAL_VEC const p1o16dy = kmul(INV(dy),ToReal(0.0625));
+  CCTK_REAL_VEC const p1o16dz = kmul(INV(dz),ToReal(0.0625));
+  CCTK_REAL_VEC const p1o2dx = kmul(INV(dx),ToReal(0.5));
+  CCTK_REAL_VEC const p1o2dy = kmul(INV(dy),ToReal(0.5));
+  CCTK_REAL_VEC const p1o2dz = kmul(INV(dz),ToReal(0.5));
+  CCTK_REAL_VEC const p1o4dx = kmul(INV(dx),ToReal(0.25));
+  CCTK_REAL_VEC const p1o4dxdy = kmul(INV(dx),kmul(INV(dy),ToReal(0.25)));
+  CCTK_REAL_VEC const p1o4dxdz = kmul(INV(dx),kmul(INV(dz),ToReal(0.25)));
+  CCTK_REAL_VEC const p1o4dy = kmul(INV(dy),ToReal(0.25));
+  CCTK_REAL_VEC const p1o4dydz = kmul(INV(dy),kmul(INV(dz),ToReal(0.25)));
+  CCTK_REAL_VEC const p1o4dz = kmul(INV(dz),ToReal(0.25));
+  CCTK_REAL_VEC const p1odx = INV(dx);
+  CCTK_REAL_VEC const p1odx2 = INV(SQR(dx));
+  CCTK_REAL_VEC const p1ody = INV(dy);
+  CCTK_REAL_VEC const p1ody2 = INV(SQR(dy));
+  CCTK_REAL_VEC const p1odz = INV(dz);
+  CCTK_REAL_VEC const p1odz2 = INV(SQR(dz));
+  CCTK_REAL_VEC const pm1o2dx = kmul(INV(dx),ToReal(-0.5));
+  CCTK_REAL_VEC const pm1o2dy = kmul(INV(dy),ToReal(-0.5));
+  CCTK_REAL_VEC const pm1o2dz = kmul(INV(dz),ToReal(-0.5));
+  CCTK_REAL_VEC const pm1o4dx = kmul(INV(dx),ToReal(-0.25));
+  CCTK_REAL_VEC const pm1o4dy = kmul(INV(dy),ToReal(-0.25));
+  CCTK_REAL_VEC const pm1o4dz = kmul(INV(dz),ToReal(-0.25));
   
   /* Loop over the grid points */
   #pragma omp parallel
-  LC_LOOP3 (ML_BSSN_O2_InitGamma,
+  LC_LOOP3VEC (ML_BSSN_O2_InitGamma,
     i,j,k, min[0],min[1],min[2], max[0],max[1],max[2],
-    cctk_lsh[0],cctk_lsh[1],cctk_lsh[2])
+    cctk_lsh[0],cctk_lsh[1],cctk_lsh[2],
+    CCTK_REAL_VEC_SIZE)
   {
     ptrdiff_t const index = di*i + dj*j + dk*k;
     
@@ -111,18 +113,52 @@ static void ML_BSSN_O2_InitGamma_Body(cGH const * restrict const cctkGH, int con
     /* Precompute derivatives */
     
     /* Calculate temporaries and grid functions */
-    CCTK_REAL Xt1L = 0;
+    CCTK_REAL_VEC Xt1L = ToReal(0);
     
-    CCTK_REAL Xt2L = 0;
+    CCTK_REAL_VEC Xt2L = ToReal(0);
     
-    CCTK_REAL Xt3L = 0;
+    CCTK_REAL_VEC Xt3L = ToReal(0);
+    
+    /* If necessary, store only partial vectors after the first iteration */
+    
+    if (CCTK_REAL_VEC_SIZE > 2 && CCTK_BUILTIN_EXPECT(i < lc_imin && i+CCTK_REAL_VEC_SIZE > lc_imax, 0))
+    {
+      ptrdiff_t const elt_count_lo = lc_imin-i;
+      ptrdiff_t const elt_count_hi = lc_imax-i;
+      vec_store_nta_partial_mid(Xt1[index],Xt1L,elt_count_lo,elt_count_hi);
+      vec_store_nta_partial_mid(Xt2[index],Xt2L,elt_count_lo,elt_count_hi);
+      vec_store_nta_partial_mid(Xt3[index],Xt3L,elt_count_lo,elt_count_hi);
+      break;
+    }
+    
+    /* If necessary, store only partial vectors after the first iteration */
+    
+    if (CCTK_REAL_VEC_SIZE > 1 && CCTK_BUILTIN_EXPECT(i < lc_imin, 0))
+    {
+      ptrdiff_t const elt_count = lc_imin-i;
+      vec_store_nta_partial_hi(Xt1[index],Xt1L,elt_count);
+      vec_store_nta_partial_hi(Xt2[index],Xt2L,elt_count);
+      vec_store_nta_partial_hi(Xt3[index],Xt3L,elt_count);
+      continue;
+    }
+    
+    /* If necessary, store only partial vectors after the last iteration */
+    
+    if (CCTK_REAL_VEC_SIZE > 1 && CCTK_BUILTIN_EXPECT(i+CCTK_REAL_VEC_SIZE > lc_imax, 0))
+    {
+      ptrdiff_t const elt_count = lc_imax-i;
+      vec_store_nta_partial_lo(Xt1[index],Xt1L,elt_count);
+      vec_store_nta_partial_lo(Xt2[index],Xt2L,elt_count);
+      vec_store_nta_partial_lo(Xt3[index],Xt3L,elt_count);
+      break;
+    }
     
     /* Copy local copies back to grid functions */
-    Xt1[index] = Xt1L;
-    Xt2[index] = Xt2L;
-    Xt3[index] = Xt3L;
+    vec_store_nta(Xt1[index],Xt1L);
+    vec_store_nta(Xt2[index],Xt2L);
+    vec_store_nta(Xt3[index],Xt3L);
   }
-  LC_ENDLOOP3 (ML_BSSN_O2_InitGamma);
+  LC_ENDLOOP3VEC (ML_BSSN_O2_InitGamma);
 }
 
 extern "C" void ML_BSSN_O2_InitGamma(CCTK_ARGUMENTS)

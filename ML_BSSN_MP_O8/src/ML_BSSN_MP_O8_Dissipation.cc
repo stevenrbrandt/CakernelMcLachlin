@@ -13,13 +13,14 @@
 #include "GenericFD.h"
 #include "Differencing.h"
 #include "loopcontrol.h"
+#include "vectors.h"
 
 /* Define macros used in calculations */
 #define INITVALUE (42)
 #define QAD(x) (SQR(SQR(x)))
-#define INV(x) ((1.0) / (x))
-#define SQR(x) ((x) * (x))
-#define CUB(x) ((x) * (x) * (x))
+#define INV(x) (kdiv(ToReal(1.0),x))
+#define SQR(x) (kmul(x,x))
+#define CUB(x) (kmul(x,SQR(x)))
 
 extern "C" void ML_BSSN_MP_O8_Dissipation_SelectBCs(CCTK_ARGUMENTS)
 {
@@ -89,47 +90,44 @@ static void ML_BSSN_MP_O8_Dissipation_Body(cGH const * restrict const cctkGH, in
   ptrdiff_t const cdi = sizeof(CCTK_REAL) * di;
   ptrdiff_t const cdj = sizeof(CCTK_REAL) * dj;
   ptrdiff_t const cdk = sizeof(CCTK_REAL) * dk;
-  CCTK_REAL const dx = ToReal(CCTK_DELTA_SPACE(0));
-  CCTK_REAL const dy = ToReal(CCTK_DELTA_SPACE(1));
-  CCTK_REAL const dz = ToReal(CCTK_DELTA_SPACE(2));
-  CCTK_REAL const dt = ToReal(CCTK_DELTA_TIME);
-  CCTK_REAL const dxi = INV(dx);
-  CCTK_REAL const dyi = INV(dy);
-  CCTK_REAL const dzi = INV(dz);
-  CCTK_REAL const khalf = 0.5;
-  CCTK_REAL const kthird = 1/3.0;
-  CCTK_REAL const ktwothird = 2.0/3.0;
-  CCTK_REAL const kfourthird = 4.0/3.0;
-  CCTK_REAL const keightthird = 8.0/3.0;
-  CCTK_REAL const hdxi = 0.5 * dxi;
-  CCTK_REAL const hdyi = 0.5 * dyi;
-  CCTK_REAL const hdzi = 0.5 * dzi;
+  CCTK_REAL_VEC const dx = ToReal(CCTK_DELTA_SPACE(0));
+  CCTK_REAL_VEC const dy = ToReal(CCTK_DELTA_SPACE(1));
+  CCTK_REAL_VEC const dz = ToReal(CCTK_DELTA_SPACE(2));
+  CCTK_REAL_VEC const dt = ToReal(CCTK_DELTA_TIME);
+  CCTK_REAL_VEC const dxi = INV(dx);
+  CCTK_REAL_VEC const dyi = INV(dy);
+  CCTK_REAL_VEC const dzi = INV(dz);
+  CCTK_REAL_VEC const khalf = ToReal(0.5);
+  CCTK_REAL_VEC const kthird = ToReal(1.0/3.0);
+  CCTK_REAL_VEC const ktwothird = ToReal(2.0/3.0);
+  CCTK_REAL_VEC const kfourthird = ToReal(4.0/3.0);
+  CCTK_REAL_VEC const keightthird = ToReal(8.0/3.0);
+  CCTK_REAL_VEC const hdxi = kmul(ToReal(0.5), dxi);
+  CCTK_REAL_VEC const hdyi = kmul(ToReal(0.5), dyi);
+  CCTK_REAL_VEC const hdzi = kmul(ToReal(0.5), dzi);
   
   /* Initialize predefined quantities */
-  CCTK_REAL const p1o1024dx = 0.0009765625*INV(dx);
-  CCTK_REAL const p1o1024dy = 0.0009765625*INV(dy);
-  CCTK_REAL const p1o1024dz = 0.0009765625*INV(dz);
-  CCTK_REAL const p1o1680dx = 0.000595238095238095238095238095238*INV(dx);
-  CCTK_REAL const p1o1680dy = 0.000595238095238095238095238095238*INV(dy);
-  CCTK_REAL const p1o1680dz = 0.000595238095238095238095238095238*INV(dz);
-  CCTK_REAL const p1o5040dx2 = 0.000198412698412698412698412698413*INV(SQR(dx));
-  CCTK_REAL const p1o5040dy2 = 0.000198412698412698412698412698413*INV(SQR(dy));
-  CCTK_REAL const p1o5040dz2 = 0.000198412698412698412698412698413*INV(SQR(dz));
-  CCTK_REAL const p1o560dx = 0.00178571428571428571428571428571*INV(dx);
-  CCTK_REAL const p1o560dy = 0.00178571428571428571428571428571*INV(dy);
-  CCTK_REAL const p1o560dz = 0.00178571428571428571428571428571*INV(dz);
-  CCTK_REAL const p1o705600dxdy = 1.41723356009070294784580498866e-6*INV(dx)*INV(dy);
-  CCTK_REAL const p1o705600dxdz = 1.41723356009070294784580498866e-6*INV(dx)*INV(dz);
-  CCTK_REAL const p1o705600dydz = 1.41723356009070294784580498866e-6*INV(dy)*INV(dz);
-  CCTK_REAL const p1o840dx = 0.00119047619047619047619047619048*INV(dx);
-  CCTK_REAL const p1o840dy = 0.00119047619047619047619047619048*INV(dy);
-  CCTK_REAL const p1o840dz = 0.00119047619047619047619047619048*INV(dz);
-  CCTK_REAL const p1odx = INV(dx);
-  CCTK_REAL const p1ody = INV(dy);
-  CCTK_REAL const p1odz = INV(dz);
-  CCTK_REAL const pm1o840dx = -0.00119047619047619047619047619048*INV(dx);
-  CCTK_REAL const pm1o840dy = -0.00119047619047619047619047619048*INV(dy);
-  CCTK_REAL const pm1o840dz = -0.00119047619047619047619047619048*INV(dz);
+  CCTK_REAL_VEC const p1o1024dx = kmul(INV(dx),ToReal(0.0009765625));
+  CCTK_REAL_VEC const p1o1024dy = kmul(INV(dy),ToReal(0.0009765625));
+  CCTK_REAL_VEC const p1o1024dz = kmul(INV(dz),ToReal(0.0009765625));
+  CCTK_REAL_VEC const p1o1680dx = kmul(INV(dx),ToReal(0.000595238095238095238095238095238));
+  CCTK_REAL_VEC const p1o1680dy = kmul(INV(dy),ToReal(0.000595238095238095238095238095238));
+  CCTK_REAL_VEC const p1o1680dz = kmul(INV(dz),ToReal(0.000595238095238095238095238095238));
+  CCTK_REAL_VEC const p1o5040dx2 = kmul(INV(SQR(dx)),ToReal(0.000198412698412698412698412698413));
+  CCTK_REAL_VEC const p1o5040dy2 = kmul(INV(SQR(dy)),ToReal(0.000198412698412698412698412698413));
+  CCTK_REAL_VEC const p1o5040dz2 = kmul(INV(SQR(dz)),ToReal(0.000198412698412698412698412698413));
+  CCTK_REAL_VEC const p1o560dx = kmul(INV(dx),ToReal(0.00178571428571428571428571428571));
+  CCTK_REAL_VEC const p1o560dy = kmul(INV(dy),ToReal(0.00178571428571428571428571428571));
+  CCTK_REAL_VEC const p1o560dz = kmul(INV(dz),ToReal(0.00178571428571428571428571428571));
+  CCTK_REAL_VEC const p1o705600dxdy = kmul(INV(dx),kmul(INV(dy),ToReal(1.41723356009070294784580498866e-6)));
+  CCTK_REAL_VEC const p1o705600dxdz = kmul(INV(dx),kmul(INV(dz),ToReal(1.41723356009070294784580498866e-6)));
+  CCTK_REAL_VEC const p1o705600dydz = kmul(INV(dy),kmul(INV(dz),ToReal(1.41723356009070294784580498866e-6)));
+  CCTK_REAL_VEC const p1o840dx = kmul(INV(dx),ToReal(0.00119047619047619047619047619048));
+  CCTK_REAL_VEC const p1o840dy = kmul(INV(dy),ToReal(0.00119047619047619047619047619048));
+  CCTK_REAL_VEC const p1o840dz = kmul(INV(dz),ToReal(0.00119047619047619047619047619048));
+  CCTK_REAL_VEC const p1odx = INV(dx);
+  CCTK_REAL_VEC const p1ody = INV(dy);
+  CCTK_REAL_VEC const p1odz = INV(dz);
   
   /* Jacobian variable pointers */
   bool const use_jacobian = (!CCTK_IsFunctionAliased("MultiPatch_GetMap") || MultiPatch_GetMap(cctkGH) != jacobian_identity_map)
@@ -178,463 +176,464 @@ static void ML_BSSN_MP_O8_Dissipation_Body(cGH const * restrict const cctkGH, in
   
   /* Loop over the grid points */
   #pragma omp parallel
-  LC_LOOP3 (ML_BSSN_MP_O8_Dissipation,
+  LC_LOOP3VEC (ML_BSSN_MP_O8_Dissipation,
     i,j,k, min[0],min[1],min[2], max[0],max[1],max[2],
-    cctk_lsh[0],cctk_lsh[1],cctk_lsh[2])
+    cctk_lsh[0],cctk_lsh[1],cctk_lsh[2],
+    CCTK_REAL_VEC_SIZE)
   {
     ptrdiff_t const index = di*i + dj*j + dk*k;
     
     /* Assign local copies of grid functions */
     
-    CCTK_REAL AL = A[index];
-    CCTK_REAL alphaL = alpha[index];
-    CCTK_REAL alpharhsL = alpharhs[index];
-    CCTK_REAL ArhsL = Arhs[index];
-    CCTK_REAL At11L = At11[index];
-    CCTK_REAL At11rhsL = At11rhs[index];
-    CCTK_REAL At12L = At12[index];
-    CCTK_REAL At12rhsL = At12rhs[index];
-    CCTK_REAL At13L = At13[index];
-    CCTK_REAL At13rhsL = At13rhs[index];
-    CCTK_REAL At22L = At22[index];
-    CCTK_REAL At22rhsL = At22rhs[index];
-    CCTK_REAL At23L = At23[index];
-    CCTK_REAL At23rhsL = At23rhs[index];
-    CCTK_REAL At33L = At33[index];
-    CCTK_REAL At33rhsL = At33rhs[index];
-    CCTK_REAL B1L = B1[index];
-    CCTK_REAL B1rhsL = B1rhs[index];
-    CCTK_REAL B2L = B2[index];
-    CCTK_REAL B2rhsL = B2rhs[index];
-    CCTK_REAL B3L = B3[index];
-    CCTK_REAL B3rhsL = B3rhs[index];
-    CCTK_REAL beta1L = beta1[index];
-    CCTK_REAL beta1rhsL = beta1rhs[index];
-    CCTK_REAL beta2L = beta2[index];
-    CCTK_REAL beta2rhsL = beta2rhs[index];
-    CCTK_REAL beta3L = beta3[index];
-    CCTK_REAL beta3rhsL = beta3rhs[index];
-    CCTK_REAL gt11L = gt11[index];
-    CCTK_REAL gt11rhsL = gt11rhs[index];
-    CCTK_REAL gt12L = gt12[index];
-    CCTK_REAL gt12rhsL = gt12rhs[index];
-    CCTK_REAL gt13L = gt13[index];
-    CCTK_REAL gt13rhsL = gt13rhs[index];
-    CCTK_REAL gt22L = gt22[index];
-    CCTK_REAL gt22rhsL = gt22rhs[index];
-    CCTK_REAL gt23L = gt23[index];
-    CCTK_REAL gt23rhsL = gt23rhs[index];
-    CCTK_REAL gt33L = gt33[index];
-    CCTK_REAL gt33rhsL = gt33rhs[index];
-    CCTK_REAL phiL = phi[index];
-    CCTK_REAL phirhsL = phirhs[index];
-    CCTK_REAL trKL = trK[index];
-    CCTK_REAL trKrhsL = trKrhs[index];
-    CCTK_REAL Xt1L = Xt1[index];
-    CCTK_REAL Xt1rhsL = Xt1rhs[index];
-    CCTK_REAL Xt2L = Xt2[index];
-    CCTK_REAL Xt2rhsL = Xt2rhs[index];
-    CCTK_REAL Xt3L = Xt3[index];
-    CCTK_REAL Xt3rhsL = Xt3rhs[index];
+    CCTK_REAL_VEC AL = vec_load(A[index]);
+    CCTK_REAL_VEC alphaL = vec_load(alpha[index]);
+    CCTK_REAL_VEC alpharhsL = vec_load(alpharhs[index]);
+    CCTK_REAL_VEC ArhsL = vec_load(Arhs[index]);
+    CCTK_REAL_VEC At11L = vec_load(At11[index]);
+    CCTK_REAL_VEC At11rhsL = vec_load(At11rhs[index]);
+    CCTK_REAL_VEC At12L = vec_load(At12[index]);
+    CCTK_REAL_VEC At12rhsL = vec_load(At12rhs[index]);
+    CCTK_REAL_VEC At13L = vec_load(At13[index]);
+    CCTK_REAL_VEC At13rhsL = vec_load(At13rhs[index]);
+    CCTK_REAL_VEC At22L = vec_load(At22[index]);
+    CCTK_REAL_VEC At22rhsL = vec_load(At22rhs[index]);
+    CCTK_REAL_VEC At23L = vec_load(At23[index]);
+    CCTK_REAL_VEC At23rhsL = vec_load(At23rhs[index]);
+    CCTK_REAL_VEC At33L = vec_load(At33[index]);
+    CCTK_REAL_VEC At33rhsL = vec_load(At33rhs[index]);
+    CCTK_REAL_VEC B1L = vec_load(B1[index]);
+    CCTK_REAL_VEC B1rhsL = vec_load(B1rhs[index]);
+    CCTK_REAL_VEC B2L = vec_load(B2[index]);
+    CCTK_REAL_VEC B2rhsL = vec_load(B2rhs[index]);
+    CCTK_REAL_VEC B3L = vec_load(B3[index]);
+    CCTK_REAL_VEC B3rhsL = vec_load(B3rhs[index]);
+    CCTK_REAL_VEC beta1L = vec_load(beta1[index]);
+    CCTK_REAL_VEC beta1rhsL = vec_load(beta1rhs[index]);
+    CCTK_REAL_VEC beta2L = vec_load(beta2[index]);
+    CCTK_REAL_VEC beta2rhsL = vec_load(beta2rhs[index]);
+    CCTK_REAL_VEC beta3L = vec_load(beta3[index]);
+    CCTK_REAL_VEC beta3rhsL = vec_load(beta3rhs[index]);
+    CCTK_REAL_VEC gt11L = vec_load(gt11[index]);
+    CCTK_REAL_VEC gt11rhsL = vec_load(gt11rhs[index]);
+    CCTK_REAL_VEC gt12L = vec_load(gt12[index]);
+    CCTK_REAL_VEC gt12rhsL = vec_load(gt12rhs[index]);
+    CCTK_REAL_VEC gt13L = vec_load(gt13[index]);
+    CCTK_REAL_VEC gt13rhsL = vec_load(gt13rhs[index]);
+    CCTK_REAL_VEC gt22L = vec_load(gt22[index]);
+    CCTK_REAL_VEC gt22rhsL = vec_load(gt22rhs[index]);
+    CCTK_REAL_VEC gt23L = vec_load(gt23[index]);
+    CCTK_REAL_VEC gt23rhsL = vec_load(gt23rhs[index]);
+    CCTK_REAL_VEC gt33L = vec_load(gt33[index]);
+    CCTK_REAL_VEC gt33rhsL = vec_load(gt33rhs[index]);
+    CCTK_REAL_VEC phiL = vec_load(phi[index]);
+    CCTK_REAL_VEC phirhsL = vec_load(phirhs[index]);
+    CCTK_REAL_VEC trKL = vec_load(trK[index]);
+    CCTK_REAL_VEC trKrhsL = vec_load(trKrhs[index]);
+    CCTK_REAL_VEC Xt1L = vec_load(Xt1[index]);
+    CCTK_REAL_VEC Xt1rhsL = vec_load(Xt1rhs[index]);
+    CCTK_REAL_VEC Xt2L = vec_load(Xt2[index]);
+    CCTK_REAL_VEC Xt2rhsL = vec_load(Xt2rhs[index]);
+    CCTK_REAL_VEC Xt3L = vec_load(Xt3[index]);
+    CCTK_REAL_VEC Xt3rhsL = vec_load(Xt3rhs[index]);
     
     
-    CCTK_REAL J11L, J12L, J13L, J21L, J22L, J23L, J31L, J32L, J33L;
+    CCTK_REAL_VEC J11L, J12L, J13L, J21L, J22L, J23L, J31L, J32L, J33L;
     
     if (use_jacobian)
     {
-      J11L = J11[index];
-      J12L = J12[index];
-      J13L = J13[index];
-      J21L = J21[index];
-      J22L = J22[index];
-      J23L = J23[index];
-      J31L = J31[index];
-      J32L = J32[index];
-      J33L = J33[index];
+      J11L = vec_load(J11[index]);
+      J12L = vec_load(J12[index]);
+      J13L = vec_load(J13[index]);
+      J21L = vec_load(J21[index]);
+      J22L = vec_load(J22[index]);
+      J23L = vec_load(J23[index]);
+      J31L = vec_load(J31[index]);
+      J32L = vec_load(J32[index]);
+      J33L = vec_load(J33[index]);
     }
     
     /* Include user supplied include files */
     
     /* Precompute derivatives */
-    CCTK_REAL const PDdissipationNth1A = PDdissipationNth1(&A[index]);
-    CCTK_REAL const PDdissipationNth2A = PDdissipationNth2(&A[index]);
-    CCTK_REAL const PDdissipationNth3A = PDdissipationNth3(&A[index]);
-    CCTK_REAL const PDdissipationNth1alpha = PDdissipationNth1(&alpha[index]);
-    CCTK_REAL const PDdissipationNth2alpha = PDdissipationNth2(&alpha[index]);
-    CCTK_REAL const PDdissipationNth3alpha = PDdissipationNth3(&alpha[index]);
-    CCTK_REAL const PDdissipationNth1At11 = PDdissipationNth1(&At11[index]);
-    CCTK_REAL const PDdissipationNth2At11 = PDdissipationNth2(&At11[index]);
-    CCTK_REAL const PDdissipationNth3At11 = PDdissipationNth3(&At11[index]);
-    CCTK_REAL const PDdissipationNth1At12 = PDdissipationNth1(&At12[index]);
-    CCTK_REAL const PDdissipationNth2At12 = PDdissipationNth2(&At12[index]);
-    CCTK_REAL const PDdissipationNth3At12 = PDdissipationNth3(&At12[index]);
-    CCTK_REAL const PDdissipationNth1At13 = PDdissipationNth1(&At13[index]);
-    CCTK_REAL const PDdissipationNth2At13 = PDdissipationNth2(&At13[index]);
-    CCTK_REAL const PDdissipationNth3At13 = PDdissipationNth3(&At13[index]);
-    CCTK_REAL const PDdissipationNth1At22 = PDdissipationNth1(&At22[index]);
-    CCTK_REAL const PDdissipationNth2At22 = PDdissipationNth2(&At22[index]);
-    CCTK_REAL const PDdissipationNth3At22 = PDdissipationNth3(&At22[index]);
-    CCTK_REAL const PDdissipationNth1At23 = PDdissipationNth1(&At23[index]);
-    CCTK_REAL const PDdissipationNth2At23 = PDdissipationNth2(&At23[index]);
-    CCTK_REAL const PDdissipationNth3At23 = PDdissipationNth3(&At23[index]);
-    CCTK_REAL const PDdissipationNth1At33 = PDdissipationNth1(&At33[index]);
-    CCTK_REAL const PDdissipationNth2At33 = PDdissipationNth2(&At33[index]);
-    CCTK_REAL const PDdissipationNth3At33 = PDdissipationNth3(&At33[index]);
-    CCTK_REAL const PDdissipationNth1B1 = PDdissipationNth1(&B1[index]);
-    CCTK_REAL const PDdissipationNth2B1 = PDdissipationNth2(&B1[index]);
-    CCTK_REAL const PDdissipationNth3B1 = PDdissipationNth3(&B1[index]);
-    CCTK_REAL const PDdissipationNth1B2 = PDdissipationNth1(&B2[index]);
-    CCTK_REAL const PDdissipationNth2B2 = PDdissipationNth2(&B2[index]);
-    CCTK_REAL const PDdissipationNth3B2 = PDdissipationNth3(&B2[index]);
-    CCTK_REAL const PDdissipationNth1B3 = PDdissipationNth1(&B3[index]);
-    CCTK_REAL const PDdissipationNth2B3 = PDdissipationNth2(&B3[index]);
-    CCTK_REAL const PDdissipationNth3B3 = PDdissipationNth3(&B3[index]);
-    CCTK_REAL const PDdissipationNth1beta1 = PDdissipationNth1(&beta1[index]);
-    CCTK_REAL const PDdissipationNth2beta1 = PDdissipationNth2(&beta1[index]);
-    CCTK_REAL const PDdissipationNth3beta1 = PDdissipationNth3(&beta1[index]);
-    CCTK_REAL const PDdissipationNth1beta2 = PDdissipationNth1(&beta2[index]);
-    CCTK_REAL const PDdissipationNth2beta2 = PDdissipationNth2(&beta2[index]);
-    CCTK_REAL const PDdissipationNth3beta2 = PDdissipationNth3(&beta2[index]);
-    CCTK_REAL const PDdissipationNth1beta3 = PDdissipationNth1(&beta3[index]);
-    CCTK_REAL const PDdissipationNth2beta3 = PDdissipationNth2(&beta3[index]);
-    CCTK_REAL const PDdissipationNth3beta3 = PDdissipationNth3(&beta3[index]);
-    CCTK_REAL const PDdissipationNth1gt11 = PDdissipationNth1(&gt11[index]);
-    CCTK_REAL const PDdissipationNth2gt11 = PDdissipationNth2(&gt11[index]);
-    CCTK_REAL const PDdissipationNth3gt11 = PDdissipationNth3(&gt11[index]);
-    CCTK_REAL const PDdissipationNth1gt12 = PDdissipationNth1(&gt12[index]);
-    CCTK_REAL const PDdissipationNth2gt12 = PDdissipationNth2(&gt12[index]);
-    CCTK_REAL const PDdissipationNth3gt12 = PDdissipationNth3(&gt12[index]);
-    CCTK_REAL const PDdissipationNth1gt13 = PDdissipationNth1(&gt13[index]);
-    CCTK_REAL const PDdissipationNth2gt13 = PDdissipationNth2(&gt13[index]);
-    CCTK_REAL const PDdissipationNth3gt13 = PDdissipationNth3(&gt13[index]);
-    CCTK_REAL const PDdissipationNth1gt22 = PDdissipationNth1(&gt22[index]);
-    CCTK_REAL const PDdissipationNth2gt22 = PDdissipationNth2(&gt22[index]);
-    CCTK_REAL const PDdissipationNth3gt22 = PDdissipationNth3(&gt22[index]);
-    CCTK_REAL const PDdissipationNth1gt23 = PDdissipationNth1(&gt23[index]);
-    CCTK_REAL const PDdissipationNth2gt23 = PDdissipationNth2(&gt23[index]);
-    CCTK_REAL const PDdissipationNth3gt23 = PDdissipationNth3(&gt23[index]);
-    CCTK_REAL const PDdissipationNth1gt33 = PDdissipationNth1(&gt33[index]);
-    CCTK_REAL const PDdissipationNth2gt33 = PDdissipationNth2(&gt33[index]);
-    CCTK_REAL const PDdissipationNth3gt33 = PDdissipationNth3(&gt33[index]);
-    CCTK_REAL const PDdissipationNth1phi = PDdissipationNth1(&phi[index]);
-    CCTK_REAL const PDdissipationNth2phi = PDdissipationNth2(&phi[index]);
-    CCTK_REAL const PDdissipationNth3phi = PDdissipationNth3(&phi[index]);
-    CCTK_REAL const PDdissipationNth1trK = PDdissipationNth1(&trK[index]);
-    CCTK_REAL const PDdissipationNth2trK = PDdissipationNth2(&trK[index]);
-    CCTK_REAL const PDdissipationNth3trK = PDdissipationNth3(&trK[index]);
-    CCTK_REAL const PDdissipationNth1Xt1 = PDdissipationNth1(&Xt1[index]);
-    CCTK_REAL const PDdissipationNth2Xt1 = PDdissipationNth2(&Xt1[index]);
-    CCTK_REAL const PDdissipationNth3Xt1 = PDdissipationNth3(&Xt1[index]);
-    CCTK_REAL const PDdissipationNth1Xt2 = PDdissipationNth1(&Xt2[index]);
-    CCTK_REAL const PDdissipationNth2Xt2 = PDdissipationNth2(&Xt2[index]);
-    CCTK_REAL const PDdissipationNth3Xt2 = PDdissipationNth3(&Xt2[index]);
-    CCTK_REAL const PDdissipationNth1Xt3 = PDdissipationNth1(&Xt3[index]);
-    CCTK_REAL const PDdissipationNth2Xt3 = PDdissipationNth2(&Xt3[index]);
-    CCTK_REAL const PDdissipationNth3Xt3 = PDdissipationNth3(&Xt3[index]);
+    CCTK_REAL_VEC const PDdissipationNth1A = PDdissipationNth1(&A[index]);
+    CCTK_REAL_VEC const PDdissipationNth2A = PDdissipationNth2(&A[index]);
+    CCTK_REAL_VEC const PDdissipationNth3A = PDdissipationNth3(&A[index]);
+    CCTK_REAL_VEC const PDdissipationNth1alpha = PDdissipationNth1(&alpha[index]);
+    CCTK_REAL_VEC const PDdissipationNth2alpha = PDdissipationNth2(&alpha[index]);
+    CCTK_REAL_VEC const PDdissipationNth3alpha = PDdissipationNth3(&alpha[index]);
+    CCTK_REAL_VEC const PDdissipationNth1At11 = PDdissipationNth1(&At11[index]);
+    CCTK_REAL_VEC const PDdissipationNth2At11 = PDdissipationNth2(&At11[index]);
+    CCTK_REAL_VEC const PDdissipationNth3At11 = PDdissipationNth3(&At11[index]);
+    CCTK_REAL_VEC const PDdissipationNth1At12 = PDdissipationNth1(&At12[index]);
+    CCTK_REAL_VEC const PDdissipationNth2At12 = PDdissipationNth2(&At12[index]);
+    CCTK_REAL_VEC const PDdissipationNth3At12 = PDdissipationNth3(&At12[index]);
+    CCTK_REAL_VEC const PDdissipationNth1At13 = PDdissipationNth1(&At13[index]);
+    CCTK_REAL_VEC const PDdissipationNth2At13 = PDdissipationNth2(&At13[index]);
+    CCTK_REAL_VEC const PDdissipationNth3At13 = PDdissipationNth3(&At13[index]);
+    CCTK_REAL_VEC const PDdissipationNth1At22 = PDdissipationNth1(&At22[index]);
+    CCTK_REAL_VEC const PDdissipationNth2At22 = PDdissipationNth2(&At22[index]);
+    CCTK_REAL_VEC const PDdissipationNth3At22 = PDdissipationNth3(&At22[index]);
+    CCTK_REAL_VEC const PDdissipationNth1At23 = PDdissipationNth1(&At23[index]);
+    CCTK_REAL_VEC const PDdissipationNth2At23 = PDdissipationNth2(&At23[index]);
+    CCTK_REAL_VEC const PDdissipationNth3At23 = PDdissipationNth3(&At23[index]);
+    CCTK_REAL_VEC const PDdissipationNth1At33 = PDdissipationNth1(&At33[index]);
+    CCTK_REAL_VEC const PDdissipationNth2At33 = PDdissipationNth2(&At33[index]);
+    CCTK_REAL_VEC const PDdissipationNth3At33 = PDdissipationNth3(&At33[index]);
+    CCTK_REAL_VEC const PDdissipationNth1B1 = PDdissipationNth1(&B1[index]);
+    CCTK_REAL_VEC const PDdissipationNth2B1 = PDdissipationNth2(&B1[index]);
+    CCTK_REAL_VEC const PDdissipationNth3B1 = PDdissipationNth3(&B1[index]);
+    CCTK_REAL_VEC const PDdissipationNth1B2 = PDdissipationNth1(&B2[index]);
+    CCTK_REAL_VEC const PDdissipationNth2B2 = PDdissipationNth2(&B2[index]);
+    CCTK_REAL_VEC const PDdissipationNth3B2 = PDdissipationNth3(&B2[index]);
+    CCTK_REAL_VEC const PDdissipationNth1B3 = PDdissipationNth1(&B3[index]);
+    CCTK_REAL_VEC const PDdissipationNth2B3 = PDdissipationNth2(&B3[index]);
+    CCTK_REAL_VEC const PDdissipationNth3B3 = PDdissipationNth3(&B3[index]);
+    CCTK_REAL_VEC const PDdissipationNth1beta1 = PDdissipationNth1(&beta1[index]);
+    CCTK_REAL_VEC const PDdissipationNth2beta1 = PDdissipationNth2(&beta1[index]);
+    CCTK_REAL_VEC const PDdissipationNth3beta1 = PDdissipationNth3(&beta1[index]);
+    CCTK_REAL_VEC const PDdissipationNth1beta2 = PDdissipationNth1(&beta2[index]);
+    CCTK_REAL_VEC const PDdissipationNth2beta2 = PDdissipationNth2(&beta2[index]);
+    CCTK_REAL_VEC const PDdissipationNth3beta2 = PDdissipationNth3(&beta2[index]);
+    CCTK_REAL_VEC const PDdissipationNth1beta3 = PDdissipationNth1(&beta3[index]);
+    CCTK_REAL_VEC const PDdissipationNth2beta3 = PDdissipationNth2(&beta3[index]);
+    CCTK_REAL_VEC const PDdissipationNth3beta3 = PDdissipationNth3(&beta3[index]);
+    CCTK_REAL_VEC const PDdissipationNth1gt11 = PDdissipationNth1(&gt11[index]);
+    CCTK_REAL_VEC const PDdissipationNth2gt11 = PDdissipationNth2(&gt11[index]);
+    CCTK_REAL_VEC const PDdissipationNth3gt11 = PDdissipationNth3(&gt11[index]);
+    CCTK_REAL_VEC const PDdissipationNth1gt12 = PDdissipationNth1(&gt12[index]);
+    CCTK_REAL_VEC const PDdissipationNth2gt12 = PDdissipationNth2(&gt12[index]);
+    CCTK_REAL_VEC const PDdissipationNth3gt12 = PDdissipationNth3(&gt12[index]);
+    CCTK_REAL_VEC const PDdissipationNth1gt13 = PDdissipationNth1(&gt13[index]);
+    CCTK_REAL_VEC const PDdissipationNth2gt13 = PDdissipationNth2(&gt13[index]);
+    CCTK_REAL_VEC const PDdissipationNth3gt13 = PDdissipationNth3(&gt13[index]);
+    CCTK_REAL_VEC const PDdissipationNth1gt22 = PDdissipationNth1(&gt22[index]);
+    CCTK_REAL_VEC const PDdissipationNth2gt22 = PDdissipationNth2(&gt22[index]);
+    CCTK_REAL_VEC const PDdissipationNth3gt22 = PDdissipationNth3(&gt22[index]);
+    CCTK_REAL_VEC const PDdissipationNth1gt23 = PDdissipationNth1(&gt23[index]);
+    CCTK_REAL_VEC const PDdissipationNth2gt23 = PDdissipationNth2(&gt23[index]);
+    CCTK_REAL_VEC const PDdissipationNth3gt23 = PDdissipationNth3(&gt23[index]);
+    CCTK_REAL_VEC const PDdissipationNth1gt33 = PDdissipationNth1(&gt33[index]);
+    CCTK_REAL_VEC const PDdissipationNth2gt33 = PDdissipationNth2(&gt33[index]);
+    CCTK_REAL_VEC const PDdissipationNth3gt33 = PDdissipationNth3(&gt33[index]);
+    CCTK_REAL_VEC const PDdissipationNth1phi = PDdissipationNth1(&phi[index]);
+    CCTK_REAL_VEC const PDdissipationNth2phi = PDdissipationNth2(&phi[index]);
+    CCTK_REAL_VEC const PDdissipationNth3phi = PDdissipationNth3(&phi[index]);
+    CCTK_REAL_VEC const PDdissipationNth1trK = PDdissipationNth1(&trK[index]);
+    CCTK_REAL_VEC const PDdissipationNth2trK = PDdissipationNth2(&trK[index]);
+    CCTK_REAL_VEC const PDdissipationNth3trK = PDdissipationNth3(&trK[index]);
+    CCTK_REAL_VEC const PDdissipationNth1Xt1 = PDdissipationNth1(&Xt1[index]);
+    CCTK_REAL_VEC const PDdissipationNth2Xt1 = PDdissipationNth2(&Xt1[index]);
+    CCTK_REAL_VEC const PDdissipationNth3Xt1 = PDdissipationNth3(&Xt1[index]);
+    CCTK_REAL_VEC const PDdissipationNth1Xt2 = PDdissipationNth1(&Xt2[index]);
+    CCTK_REAL_VEC const PDdissipationNth2Xt2 = PDdissipationNth2(&Xt2[index]);
+    CCTK_REAL_VEC const PDdissipationNth3Xt2 = PDdissipationNth3(&Xt2[index]);
+    CCTK_REAL_VEC const PDdissipationNth1Xt3 = PDdissipationNth1(&Xt3[index]);
+    CCTK_REAL_VEC const PDdissipationNth2Xt3 = PDdissipationNth2(&Xt3[index]);
+    CCTK_REAL_VEC const PDdissipationNth3Xt3 = PDdissipationNth3(&Xt3[index]);
     
     /* Calculate temporaries and grid functions */
-    CCTK_REAL JacPDdissipationNth1A;
-    CCTK_REAL JacPDdissipationNth1alpha;
-    CCTK_REAL JacPDdissipationNth1At11;
-    CCTK_REAL JacPDdissipationNth1At12;
-    CCTK_REAL JacPDdissipationNth1At13;
-    CCTK_REAL JacPDdissipationNth1At22;
-    CCTK_REAL JacPDdissipationNth1At23;
-    CCTK_REAL JacPDdissipationNth1At33;
-    CCTK_REAL JacPDdissipationNth1B1;
-    CCTK_REAL JacPDdissipationNth1B2;
-    CCTK_REAL JacPDdissipationNth1B3;
-    CCTK_REAL JacPDdissipationNth1beta1;
-    CCTK_REAL JacPDdissipationNth1beta2;
-    CCTK_REAL JacPDdissipationNth1beta3;
-    CCTK_REAL JacPDdissipationNth1gt11;
-    CCTK_REAL JacPDdissipationNth1gt12;
-    CCTK_REAL JacPDdissipationNth1gt13;
-    CCTK_REAL JacPDdissipationNth1gt22;
-    CCTK_REAL JacPDdissipationNth1gt23;
-    CCTK_REAL JacPDdissipationNth1gt33;
-    CCTK_REAL JacPDdissipationNth1phi;
-    CCTK_REAL JacPDdissipationNth1trK;
-    CCTK_REAL JacPDdissipationNth1Xt1;
-    CCTK_REAL JacPDdissipationNth1Xt2;
-    CCTK_REAL JacPDdissipationNth1Xt3;
-    CCTK_REAL JacPDdissipationNth2A;
-    CCTK_REAL JacPDdissipationNth2alpha;
-    CCTK_REAL JacPDdissipationNth2At11;
-    CCTK_REAL JacPDdissipationNth2At12;
-    CCTK_REAL JacPDdissipationNth2At13;
-    CCTK_REAL JacPDdissipationNth2At22;
-    CCTK_REAL JacPDdissipationNth2At23;
-    CCTK_REAL JacPDdissipationNth2At33;
-    CCTK_REAL JacPDdissipationNth2B1;
-    CCTK_REAL JacPDdissipationNth2B2;
-    CCTK_REAL JacPDdissipationNth2B3;
-    CCTK_REAL JacPDdissipationNth2beta1;
-    CCTK_REAL JacPDdissipationNth2beta2;
-    CCTK_REAL JacPDdissipationNth2beta3;
-    CCTK_REAL JacPDdissipationNth2gt11;
-    CCTK_REAL JacPDdissipationNth2gt12;
-    CCTK_REAL JacPDdissipationNth2gt13;
-    CCTK_REAL JacPDdissipationNth2gt22;
-    CCTK_REAL JacPDdissipationNth2gt23;
-    CCTK_REAL JacPDdissipationNth2gt33;
-    CCTK_REAL JacPDdissipationNth2phi;
-    CCTK_REAL JacPDdissipationNth2trK;
-    CCTK_REAL JacPDdissipationNth2Xt1;
-    CCTK_REAL JacPDdissipationNth2Xt2;
-    CCTK_REAL JacPDdissipationNth2Xt3;
-    CCTK_REAL JacPDdissipationNth3A;
-    CCTK_REAL JacPDdissipationNth3alpha;
-    CCTK_REAL JacPDdissipationNth3At11;
-    CCTK_REAL JacPDdissipationNth3At12;
-    CCTK_REAL JacPDdissipationNth3At13;
-    CCTK_REAL JacPDdissipationNth3At22;
-    CCTK_REAL JacPDdissipationNth3At23;
-    CCTK_REAL JacPDdissipationNth3At33;
-    CCTK_REAL JacPDdissipationNth3B1;
-    CCTK_REAL JacPDdissipationNth3B2;
-    CCTK_REAL JacPDdissipationNth3B3;
-    CCTK_REAL JacPDdissipationNth3beta1;
-    CCTK_REAL JacPDdissipationNth3beta2;
-    CCTK_REAL JacPDdissipationNth3beta3;
-    CCTK_REAL JacPDdissipationNth3gt11;
-    CCTK_REAL JacPDdissipationNth3gt12;
-    CCTK_REAL JacPDdissipationNth3gt13;
-    CCTK_REAL JacPDdissipationNth3gt22;
-    CCTK_REAL JacPDdissipationNth3gt23;
-    CCTK_REAL JacPDdissipationNth3gt33;
-    CCTK_REAL JacPDdissipationNth3phi;
-    CCTK_REAL JacPDdissipationNth3trK;
-    CCTK_REAL JacPDdissipationNth3Xt1;
-    CCTK_REAL JacPDdissipationNth3Xt2;
-    CCTK_REAL JacPDdissipationNth3Xt3;
+    CCTK_REAL_VEC JacPDdissipationNth1A;
+    CCTK_REAL_VEC JacPDdissipationNth1alpha;
+    CCTK_REAL_VEC JacPDdissipationNth1At11;
+    CCTK_REAL_VEC JacPDdissipationNth1At12;
+    CCTK_REAL_VEC JacPDdissipationNth1At13;
+    CCTK_REAL_VEC JacPDdissipationNth1At22;
+    CCTK_REAL_VEC JacPDdissipationNth1At23;
+    CCTK_REAL_VEC JacPDdissipationNth1At33;
+    CCTK_REAL_VEC JacPDdissipationNth1B1;
+    CCTK_REAL_VEC JacPDdissipationNth1B2;
+    CCTK_REAL_VEC JacPDdissipationNth1B3;
+    CCTK_REAL_VEC JacPDdissipationNth1beta1;
+    CCTK_REAL_VEC JacPDdissipationNth1beta2;
+    CCTK_REAL_VEC JacPDdissipationNth1beta3;
+    CCTK_REAL_VEC JacPDdissipationNth1gt11;
+    CCTK_REAL_VEC JacPDdissipationNth1gt12;
+    CCTK_REAL_VEC JacPDdissipationNth1gt13;
+    CCTK_REAL_VEC JacPDdissipationNth1gt22;
+    CCTK_REAL_VEC JacPDdissipationNth1gt23;
+    CCTK_REAL_VEC JacPDdissipationNth1gt33;
+    CCTK_REAL_VEC JacPDdissipationNth1phi;
+    CCTK_REAL_VEC JacPDdissipationNth1trK;
+    CCTK_REAL_VEC JacPDdissipationNth1Xt1;
+    CCTK_REAL_VEC JacPDdissipationNth1Xt2;
+    CCTK_REAL_VEC JacPDdissipationNth1Xt3;
+    CCTK_REAL_VEC JacPDdissipationNth2A;
+    CCTK_REAL_VEC JacPDdissipationNth2alpha;
+    CCTK_REAL_VEC JacPDdissipationNth2At11;
+    CCTK_REAL_VEC JacPDdissipationNth2At12;
+    CCTK_REAL_VEC JacPDdissipationNth2At13;
+    CCTK_REAL_VEC JacPDdissipationNth2At22;
+    CCTK_REAL_VEC JacPDdissipationNth2At23;
+    CCTK_REAL_VEC JacPDdissipationNth2At33;
+    CCTK_REAL_VEC JacPDdissipationNth2B1;
+    CCTK_REAL_VEC JacPDdissipationNth2B2;
+    CCTK_REAL_VEC JacPDdissipationNth2B3;
+    CCTK_REAL_VEC JacPDdissipationNth2beta1;
+    CCTK_REAL_VEC JacPDdissipationNth2beta2;
+    CCTK_REAL_VEC JacPDdissipationNth2beta3;
+    CCTK_REAL_VEC JacPDdissipationNth2gt11;
+    CCTK_REAL_VEC JacPDdissipationNth2gt12;
+    CCTK_REAL_VEC JacPDdissipationNth2gt13;
+    CCTK_REAL_VEC JacPDdissipationNth2gt22;
+    CCTK_REAL_VEC JacPDdissipationNth2gt23;
+    CCTK_REAL_VEC JacPDdissipationNth2gt33;
+    CCTK_REAL_VEC JacPDdissipationNth2phi;
+    CCTK_REAL_VEC JacPDdissipationNth2trK;
+    CCTK_REAL_VEC JacPDdissipationNth2Xt1;
+    CCTK_REAL_VEC JacPDdissipationNth2Xt2;
+    CCTK_REAL_VEC JacPDdissipationNth2Xt3;
+    CCTK_REAL_VEC JacPDdissipationNth3A;
+    CCTK_REAL_VEC JacPDdissipationNth3alpha;
+    CCTK_REAL_VEC JacPDdissipationNth3At11;
+    CCTK_REAL_VEC JacPDdissipationNth3At12;
+    CCTK_REAL_VEC JacPDdissipationNth3At13;
+    CCTK_REAL_VEC JacPDdissipationNth3At22;
+    CCTK_REAL_VEC JacPDdissipationNth3At23;
+    CCTK_REAL_VEC JacPDdissipationNth3At33;
+    CCTK_REAL_VEC JacPDdissipationNth3B1;
+    CCTK_REAL_VEC JacPDdissipationNth3B2;
+    CCTK_REAL_VEC JacPDdissipationNth3B3;
+    CCTK_REAL_VEC JacPDdissipationNth3beta1;
+    CCTK_REAL_VEC JacPDdissipationNth3beta2;
+    CCTK_REAL_VEC JacPDdissipationNth3beta3;
+    CCTK_REAL_VEC JacPDdissipationNth3gt11;
+    CCTK_REAL_VEC JacPDdissipationNth3gt12;
+    CCTK_REAL_VEC JacPDdissipationNth3gt13;
+    CCTK_REAL_VEC JacPDdissipationNth3gt22;
+    CCTK_REAL_VEC JacPDdissipationNth3gt23;
+    CCTK_REAL_VEC JacPDdissipationNth3gt33;
+    CCTK_REAL_VEC JacPDdissipationNth3phi;
+    CCTK_REAL_VEC JacPDdissipationNth3trK;
+    CCTK_REAL_VEC JacPDdissipationNth3Xt1;
+    CCTK_REAL_VEC JacPDdissipationNth3Xt2;
+    CCTK_REAL_VEC JacPDdissipationNth3Xt3;
     
     if (use_jacobian)
     {
-      JacPDdissipationNth1A = J11L*PDdissipationNth1A + 
-        J21L*PDdissipationNth2A + J31L*PDdissipationNth3A;
+      JacPDdissipationNth1A = 
+        kmadd(J11L,PDdissipationNth1A,kmadd(J21L,PDdissipationNth2A,kmul(J31L,PDdissipationNth3A)));
       
-      JacPDdissipationNth1alpha = J11L*PDdissipationNth1alpha + 
-        J21L*PDdissipationNth2alpha + J31L*PDdissipationNth3alpha;
+      JacPDdissipationNth1alpha = 
+        kmadd(J11L,PDdissipationNth1alpha,kmadd(J21L,PDdissipationNth2alpha,kmul(J31L,PDdissipationNth3alpha)));
       
-      JacPDdissipationNth1At11 = J11L*PDdissipationNth1At11 + 
-        J21L*PDdissipationNth2At11 + J31L*PDdissipationNth3At11;
+      JacPDdissipationNth1At11 = 
+        kmadd(J11L,PDdissipationNth1At11,kmadd(J21L,PDdissipationNth2At11,kmul(J31L,PDdissipationNth3At11)));
       
-      JacPDdissipationNth1At12 = J11L*PDdissipationNth1At12 + 
-        J21L*PDdissipationNth2At12 + J31L*PDdissipationNth3At12;
+      JacPDdissipationNth1At12 = 
+        kmadd(J11L,PDdissipationNth1At12,kmadd(J21L,PDdissipationNth2At12,kmul(J31L,PDdissipationNth3At12)));
       
-      JacPDdissipationNth1At13 = J11L*PDdissipationNth1At13 + 
-        J21L*PDdissipationNth2At13 + J31L*PDdissipationNth3At13;
+      JacPDdissipationNth1At13 = 
+        kmadd(J11L,PDdissipationNth1At13,kmadd(J21L,PDdissipationNth2At13,kmul(J31L,PDdissipationNth3At13)));
       
-      JacPDdissipationNth1At22 = J11L*PDdissipationNth1At22 + 
-        J21L*PDdissipationNth2At22 + J31L*PDdissipationNth3At22;
+      JacPDdissipationNth1At22 = 
+        kmadd(J11L,PDdissipationNth1At22,kmadd(J21L,PDdissipationNth2At22,kmul(J31L,PDdissipationNth3At22)));
       
-      JacPDdissipationNth1At23 = J11L*PDdissipationNth1At23 + 
-        J21L*PDdissipationNth2At23 + J31L*PDdissipationNth3At23;
+      JacPDdissipationNth1At23 = 
+        kmadd(J11L,PDdissipationNth1At23,kmadd(J21L,PDdissipationNth2At23,kmul(J31L,PDdissipationNth3At23)));
       
-      JacPDdissipationNth1At33 = J11L*PDdissipationNth1At33 + 
-        J21L*PDdissipationNth2At33 + J31L*PDdissipationNth3At33;
+      JacPDdissipationNth1At33 = 
+        kmadd(J11L,PDdissipationNth1At33,kmadd(J21L,PDdissipationNth2At33,kmul(J31L,PDdissipationNth3At33)));
       
-      JacPDdissipationNth1B1 = J11L*PDdissipationNth1B1 + 
-        J21L*PDdissipationNth2B1 + J31L*PDdissipationNth3B1;
+      JacPDdissipationNth1B1 = 
+        kmadd(J11L,PDdissipationNth1B1,kmadd(J21L,PDdissipationNth2B1,kmul(J31L,PDdissipationNth3B1)));
       
-      JacPDdissipationNth1B2 = J11L*PDdissipationNth1B2 + 
-        J21L*PDdissipationNth2B2 + J31L*PDdissipationNth3B2;
+      JacPDdissipationNth1B2 = 
+        kmadd(J11L,PDdissipationNth1B2,kmadd(J21L,PDdissipationNth2B2,kmul(J31L,PDdissipationNth3B2)));
       
-      JacPDdissipationNth1B3 = J11L*PDdissipationNth1B3 + 
-        J21L*PDdissipationNth2B3 + J31L*PDdissipationNth3B3;
+      JacPDdissipationNth1B3 = 
+        kmadd(J11L,PDdissipationNth1B3,kmadd(J21L,PDdissipationNth2B3,kmul(J31L,PDdissipationNth3B3)));
       
-      JacPDdissipationNth1beta1 = J11L*PDdissipationNth1beta1 + 
-        J21L*PDdissipationNth2beta1 + J31L*PDdissipationNth3beta1;
+      JacPDdissipationNth1beta1 = 
+        kmadd(J11L,PDdissipationNth1beta1,kmadd(J21L,PDdissipationNth2beta1,kmul(J31L,PDdissipationNth3beta1)));
       
-      JacPDdissipationNth1beta2 = J11L*PDdissipationNth1beta2 + 
-        J21L*PDdissipationNth2beta2 + J31L*PDdissipationNth3beta2;
+      JacPDdissipationNth1beta2 = 
+        kmadd(J11L,PDdissipationNth1beta2,kmadd(J21L,PDdissipationNth2beta2,kmul(J31L,PDdissipationNth3beta2)));
       
-      JacPDdissipationNth1beta3 = J11L*PDdissipationNth1beta3 + 
-        J21L*PDdissipationNth2beta3 + J31L*PDdissipationNth3beta3;
+      JacPDdissipationNth1beta3 = 
+        kmadd(J11L,PDdissipationNth1beta3,kmadd(J21L,PDdissipationNth2beta3,kmul(J31L,PDdissipationNth3beta3)));
       
-      JacPDdissipationNth1gt11 = J11L*PDdissipationNth1gt11 + 
-        J21L*PDdissipationNth2gt11 + J31L*PDdissipationNth3gt11;
+      JacPDdissipationNth1gt11 = 
+        kmadd(J11L,PDdissipationNth1gt11,kmadd(J21L,PDdissipationNth2gt11,kmul(J31L,PDdissipationNth3gt11)));
       
-      JacPDdissipationNth1gt12 = J11L*PDdissipationNth1gt12 + 
-        J21L*PDdissipationNth2gt12 + J31L*PDdissipationNth3gt12;
+      JacPDdissipationNth1gt12 = 
+        kmadd(J11L,PDdissipationNth1gt12,kmadd(J21L,PDdissipationNth2gt12,kmul(J31L,PDdissipationNth3gt12)));
       
-      JacPDdissipationNth1gt13 = J11L*PDdissipationNth1gt13 + 
-        J21L*PDdissipationNth2gt13 + J31L*PDdissipationNth3gt13;
+      JacPDdissipationNth1gt13 = 
+        kmadd(J11L,PDdissipationNth1gt13,kmadd(J21L,PDdissipationNth2gt13,kmul(J31L,PDdissipationNth3gt13)));
       
-      JacPDdissipationNth1gt22 = J11L*PDdissipationNth1gt22 + 
-        J21L*PDdissipationNth2gt22 + J31L*PDdissipationNth3gt22;
+      JacPDdissipationNth1gt22 = 
+        kmadd(J11L,PDdissipationNth1gt22,kmadd(J21L,PDdissipationNth2gt22,kmul(J31L,PDdissipationNth3gt22)));
       
-      JacPDdissipationNth1gt23 = J11L*PDdissipationNth1gt23 + 
-        J21L*PDdissipationNth2gt23 + J31L*PDdissipationNth3gt23;
+      JacPDdissipationNth1gt23 = 
+        kmadd(J11L,PDdissipationNth1gt23,kmadd(J21L,PDdissipationNth2gt23,kmul(J31L,PDdissipationNth3gt23)));
       
-      JacPDdissipationNth1gt33 = J11L*PDdissipationNth1gt33 + 
-        J21L*PDdissipationNth2gt33 + J31L*PDdissipationNth3gt33;
+      JacPDdissipationNth1gt33 = 
+        kmadd(J11L,PDdissipationNth1gt33,kmadd(J21L,PDdissipationNth2gt33,kmul(J31L,PDdissipationNth3gt33)));
       
-      JacPDdissipationNth1phi = J11L*PDdissipationNth1phi + 
-        J21L*PDdissipationNth2phi + J31L*PDdissipationNth3phi;
+      JacPDdissipationNth1phi = 
+        kmadd(J11L,PDdissipationNth1phi,kmadd(J21L,PDdissipationNth2phi,kmul(J31L,PDdissipationNth3phi)));
       
-      JacPDdissipationNth1trK = J11L*PDdissipationNth1trK + 
-        J21L*PDdissipationNth2trK + J31L*PDdissipationNth3trK;
+      JacPDdissipationNth1trK = 
+        kmadd(J11L,PDdissipationNth1trK,kmadd(J21L,PDdissipationNth2trK,kmul(J31L,PDdissipationNth3trK)));
       
-      JacPDdissipationNth1Xt1 = J11L*PDdissipationNth1Xt1 + 
-        J21L*PDdissipationNth2Xt1 + J31L*PDdissipationNth3Xt1;
+      JacPDdissipationNth1Xt1 = 
+        kmadd(J11L,PDdissipationNth1Xt1,kmadd(J21L,PDdissipationNth2Xt1,kmul(J31L,PDdissipationNth3Xt1)));
       
-      JacPDdissipationNth1Xt2 = J11L*PDdissipationNth1Xt2 + 
-        J21L*PDdissipationNth2Xt2 + J31L*PDdissipationNth3Xt2;
+      JacPDdissipationNth1Xt2 = 
+        kmadd(J11L,PDdissipationNth1Xt2,kmadd(J21L,PDdissipationNth2Xt2,kmul(J31L,PDdissipationNth3Xt2)));
       
-      JacPDdissipationNth1Xt3 = J11L*PDdissipationNth1Xt3 + 
-        J21L*PDdissipationNth2Xt3 + J31L*PDdissipationNth3Xt3;
+      JacPDdissipationNth1Xt3 = 
+        kmadd(J11L,PDdissipationNth1Xt3,kmadd(J21L,PDdissipationNth2Xt3,kmul(J31L,PDdissipationNth3Xt3)));
       
-      JacPDdissipationNth2A = J12L*PDdissipationNth1A + 
-        J22L*PDdissipationNth2A + J32L*PDdissipationNth3A;
+      JacPDdissipationNth2A = 
+        kmadd(J12L,PDdissipationNth1A,kmadd(J22L,PDdissipationNth2A,kmul(J32L,PDdissipationNth3A)));
       
-      JacPDdissipationNth2alpha = J12L*PDdissipationNth1alpha + 
-        J22L*PDdissipationNth2alpha + J32L*PDdissipationNth3alpha;
+      JacPDdissipationNth2alpha = 
+        kmadd(J12L,PDdissipationNth1alpha,kmadd(J22L,PDdissipationNth2alpha,kmul(J32L,PDdissipationNth3alpha)));
       
-      JacPDdissipationNth2At11 = J12L*PDdissipationNth1At11 + 
-        J22L*PDdissipationNth2At11 + J32L*PDdissipationNth3At11;
+      JacPDdissipationNth2At11 = 
+        kmadd(J12L,PDdissipationNth1At11,kmadd(J22L,PDdissipationNth2At11,kmul(J32L,PDdissipationNth3At11)));
       
-      JacPDdissipationNth2At12 = J12L*PDdissipationNth1At12 + 
-        J22L*PDdissipationNth2At12 + J32L*PDdissipationNth3At12;
+      JacPDdissipationNth2At12 = 
+        kmadd(J12L,PDdissipationNth1At12,kmadd(J22L,PDdissipationNth2At12,kmul(J32L,PDdissipationNth3At12)));
       
-      JacPDdissipationNth2At13 = J12L*PDdissipationNth1At13 + 
-        J22L*PDdissipationNth2At13 + J32L*PDdissipationNth3At13;
+      JacPDdissipationNth2At13 = 
+        kmadd(J12L,PDdissipationNth1At13,kmadd(J22L,PDdissipationNth2At13,kmul(J32L,PDdissipationNth3At13)));
       
-      JacPDdissipationNth2At22 = J12L*PDdissipationNth1At22 + 
-        J22L*PDdissipationNth2At22 + J32L*PDdissipationNth3At22;
+      JacPDdissipationNth2At22 = 
+        kmadd(J12L,PDdissipationNth1At22,kmadd(J22L,PDdissipationNth2At22,kmul(J32L,PDdissipationNth3At22)));
       
-      JacPDdissipationNth2At23 = J12L*PDdissipationNth1At23 + 
-        J22L*PDdissipationNth2At23 + J32L*PDdissipationNth3At23;
+      JacPDdissipationNth2At23 = 
+        kmadd(J12L,PDdissipationNth1At23,kmadd(J22L,PDdissipationNth2At23,kmul(J32L,PDdissipationNth3At23)));
       
-      JacPDdissipationNth2At33 = J12L*PDdissipationNth1At33 + 
-        J22L*PDdissipationNth2At33 + J32L*PDdissipationNth3At33;
+      JacPDdissipationNth2At33 = 
+        kmadd(J12L,PDdissipationNth1At33,kmadd(J22L,PDdissipationNth2At33,kmul(J32L,PDdissipationNth3At33)));
       
-      JacPDdissipationNth2B1 = J12L*PDdissipationNth1B1 + 
-        J22L*PDdissipationNth2B1 + J32L*PDdissipationNth3B1;
+      JacPDdissipationNth2B1 = 
+        kmadd(J12L,PDdissipationNth1B1,kmadd(J22L,PDdissipationNth2B1,kmul(J32L,PDdissipationNth3B1)));
       
-      JacPDdissipationNth2B2 = J12L*PDdissipationNth1B2 + 
-        J22L*PDdissipationNth2B2 + J32L*PDdissipationNth3B2;
+      JacPDdissipationNth2B2 = 
+        kmadd(J12L,PDdissipationNth1B2,kmadd(J22L,PDdissipationNth2B2,kmul(J32L,PDdissipationNth3B2)));
       
-      JacPDdissipationNth2B3 = J12L*PDdissipationNth1B3 + 
-        J22L*PDdissipationNth2B3 + J32L*PDdissipationNth3B3;
+      JacPDdissipationNth2B3 = 
+        kmadd(J12L,PDdissipationNth1B3,kmadd(J22L,PDdissipationNth2B3,kmul(J32L,PDdissipationNth3B3)));
       
-      JacPDdissipationNth2beta1 = J12L*PDdissipationNth1beta1 + 
-        J22L*PDdissipationNth2beta1 + J32L*PDdissipationNth3beta1;
+      JacPDdissipationNth2beta1 = 
+        kmadd(J12L,PDdissipationNth1beta1,kmadd(J22L,PDdissipationNth2beta1,kmul(J32L,PDdissipationNth3beta1)));
       
-      JacPDdissipationNth2beta2 = J12L*PDdissipationNth1beta2 + 
-        J22L*PDdissipationNth2beta2 + J32L*PDdissipationNth3beta2;
+      JacPDdissipationNth2beta2 = 
+        kmadd(J12L,PDdissipationNth1beta2,kmadd(J22L,PDdissipationNth2beta2,kmul(J32L,PDdissipationNth3beta2)));
       
-      JacPDdissipationNth2beta3 = J12L*PDdissipationNth1beta3 + 
-        J22L*PDdissipationNth2beta3 + J32L*PDdissipationNth3beta3;
+      JacPDdissipationNth2beta3 = 
+        kmadd(J12L,PDdissipationNth1beta3,kmadd(J22L,PDdissipationNth2beta3,kmul(J32L,PDdissipationNth3beta3)));
       
-      JacPDdissipationNth2gt11 = J12L*PDdissipationNth1gt11 + 
-        J22L*PDdissipationNth2gt11 + J32L*PDdissipationNth3gt11;
+      JacPDdissipationNth2gt11 = 
+        kmadd(J12L,PDdissipationNth1gt11,kmadd(J22L,PDdissipationNth2gt11,kmul(J32L,PDdissipationNth3gt11)));
       
-      JacPDdissipationNth2gt12 = J12L*PDdissipationNth1gt12 + 
-        J22L*PDdissipationNth2gt12 + J32L*PDdissipationNth3gt12;
+      JacPDdissipationNth2gt12 = 
+        kmadd(J12L,PDdissipationNth1gt12,kmadd(J22L,PDdissipationNth2gt12,kmul(J32L,PDdissipationNth3gt12)));
       
-      JacPDdissipationNth2gt13 = J12L*PDdissipationNth1gt13 + 
-        J22L*PDdissipationNth2gt13 + J32L*PDdissipationNth3gt13;
+      JacPDdissipationNth2gt13 = 
+        kmadd(J12L,PDdissipationNth1gt13,kmadd(J22L,PDdissipationNth2gt13,kmul(J32L,PDdissipationNth3gt13)));
       
-      JacPDdissipationNth2gt22 = J12L*PDdissipationNth1gt22 + 
-        J22L*PDdissipationNth2gt22 + J32L*PDdissipationNth3gt22;
+      JacPDdissipationNth2gt22 = 
+        kmadd(J12L,PDdissipationNth1gt22,kmadd(J22L,PDdissipationNth2gt22,kmul(J32L,PDdissipationNth3gt22)));
       
-      JacPDdissipationNth2gt23 = J12L*PDdissipationNth1gt23 + 
-        J22L*PDdissipationNth2gt23 + J32L*PDdissipationNth3gt23;
+      JacPDdissipationNth2gt23 = 
+        kmadd(J12L,PDdissipationNth1gt23,kmadd(J22L,PDdissipationNth2gt23,kmul(J32L,PDdissipationNth3gt23)));
       
-      JacPDdissipationNth2gt33 = J12L*PDdissipationNth1gt33 + 
-        J22L*PDdissipationNth2gt33 + J32L*PDdissipationNth3gt33;
+      JacPDdissipationNth2gt33 = 
+        kmadd(J12L,PDdissipationNth1gt33,kmadd(J22L,PDdissipationNth2gt33,kmul(J32L,PDdissipationNth3gt33)));
       
-      JacPDdissipationNth2phi = J12L*PDdissipationNth1phi + 
-        J22L*PDdissipationNth2phi + J32L*PDdissipationNth3phi;
+      JacPDdissipationNth2phi = 
+        kmadd(J12L,PDdissipationNth1phi,kmadd(J22L,PDdissipationNth2phi,kmul(J32L,PDdissipationNth3phi)));
       
-      JacPDdissipationNth2trK = J12L*PDdissipationNth1trK + 
-        J22L*PDdissipationNth2trK + J32L*PDdissipationNth3trK;
+      JacPDdissipationNth2trK = 
+        kmadd(J12L,PDdissipationNth1trK,kmadd(J22L,PDdissipationNth2trK,kmul(J32L,PDdissipationNth3trK)));
       
-      JacPDdissipationNth2Xt1 = J12L*PDdissipationNth1Xt1 + 
-        J22L*PDdissipationNth2Xt1 + J32L*PDdissipationNth3Xt1;
+      JacPDdissipationNth2Xt1 = 
+        kmadd(J12L,PDdissipationNth1Xt1,kmadd(J22L,PDdissipationNth2Xt1,kmul(J32L,PDdissipationNth3Xt1)));
       
-      JacPDdissipationNth2Xt2 = J12L*PDdissipationNth1Xt2 + 
-        J22L*PDdissipationNth2Xt2 + J32L*PDdissipationNth3Xt2;
+      JacPDdissipationNth2Xt2 = 
+        kmadd(J12L,PDdissipationNth1Xt2,kmadd(J22L,PDdissipationNth2Xt2,kmul(J32L,PDdissipationNth3Xt2)));
       
-      JacPDdissipationNth2Xt3 = J12L*PDdissipationNth1Xt3 + 
-        J22L*PDdissipationNth2Xt3 + J32L*PDdissipationNth3Xt3;
+      JacPDdissipationNth2Xt3 = 
+        kmadd(J12L,PDdissipationNth1Xt3,kmadd(J22L,PDdissipationNth2Xt3,kmul(J32L,PDdissipationNth3Xt3)));
       
-      JacPDdissipationNth3A = J13L*PDdissipationNth1A + 
-        J23L*PDdissipationNth2A + J33L*PDdissipationNth3A;
+      JacPDdissipationNth3A = 
+        kmadd(J13L,PDdissipationNth1A,kmadd(J23L,PDdissipationNth2A,kmul(J33L,PDdissipationNth3A)));
       
-      JacPDdissipationNth3alpha = J13L*PDdissipationNth1alpha + 
-        J23L*PDdissipationNth2alpha + J33L*PDdissipationNth3alpha;
+      JacPDdissipationNth3alpha = 
+        kmadd(J13L,PDdissipationNth1alpha,kmadd(J23L,PDdissipationNth2alpha,kmul(J33L,PDdissipationNth3alpha)));
       
-      JacPDdissipationNth3At11 = J13L*PDdissipationNth1At11 + 
-        J23L*PDdissipationNth2At11 + J33L*PDdissipationNth3At11;
+      JacPDdissipationNth3At11 = 
+        kmadd(J13L,PDdissipationNth1At11,kmadd(J23L,PDdissipationNth2At11,kmul(J33L,PDdissipationNth3At11)));
       
-      JacPDdissipationNth3At12 = J13L*PDdissipationNth1At12 + 
-        J23L*PDdissipationNth2At12 + J33L*PDdissipationNth3At12;
+      JacPDdissipationNth3At12 = 
+        kmadd(J13L,PDdissipationNth1At12,kmadd(J23L,PDdissipationNth2At12,kmul(J33L,PDdissipationNth3At12)));
       
-      JacPDdissipationNth3At13 = J13L*PDdissipationNth1At13 + 
-        J23L*PDdissipationNth2At13 + J33L*PDdissipationNth3At13;
+      JacPDdissipationNth3At13 = 
+        kmadd(J13L,PDdissipationNth1At13,kmadd(J23L,PDdissipationNth2At13,kmul(J33L,PDdissipationNth3At13)));
       
-      JacPDdissipationNth3At22 = J13L*PDdissipationNth1At22 + 
-        J23L*PDdissipationNth2At22 + J33L*PDdissipationNth3At22;
+      JacPDdissipationNth3At22 = 
+        kmadd(J13L,PDdissipationNth1At22,kmadd(J23L,PDdissipationNth2At22,kmul(J33L,PDdissipationNth3At22)));
       
-      JacPDdissipationNth3At23 = J13L*PDdissipationNth1At23 + 
-        J23L*PDdissipationNth2At23 + J33L*PDdissipationNth3At23;
+      JacPDdissipationNth3At23 = 
+        kmadd(J13L,PDdissipationNth1At23,kmadd(J23L,PDdissipationNth2At23,kmul(J33L,PDdissipationNth3At23)));
       
-      JacPDdissipationNth3At33 = J13L*PDdissipationNth1At33 + 
-        J23L*PDdissipationNth2At33 + J33L*PDdissipationNth3At33;
+      JacPDdissipationNth3At33 = 
+        kmadd(J13L,PDdissipationNth1At33,kmadd(J23L,PDdissipationNth2At33,kmul(J33L,PDdissipationNth3At33)));
       
-      JacPDdissipationNth3B1 = J13L*PDdissipationNth1B1 + 
-        J23L*PDdissipationNth2B1 + J33L*PDdissipationNth3B1;
+      JacPDdissipationNth3B1 = 
+        kmadd(J13L,PDdissipationNth1B1,kmadd(J23L,PDdissipationNth2B1,kmul(J33L,PDdissipationNth3B1)));
       
-      JacPDdissipationNth3B2 = J13L*PDdissipationNth1B2 + 
-        J23L*PDdissipationNth2B2 + J33L*PDdissipationNth3B2;
+      JacPDdissipationNth3B2 = 
+        kmadd(J13L,PDdissipationNth1B2,kmadd(J23L,PDdissipationNth2B2,kmul(J33L,PDdissipationNth3B2)));
       
-      JacPDdissipationNth3B3 = J13L*PDdissipationNth1B3 + 
-        J23L*PDdissipationNth2B3 + J33L*PDdissipationNth3B3;
+      JacPDdissipationNth3B3 = 
+        kmadd(J13L,PDdissipationNth1B3,kmadd(J23L,PDdissipationNth2B3,kmul(J33L,PDdissipationNth3B3)));
       
-      JacPDdissipationNth3beta1 = J13L*PDdissipationNth1beta1 + 
-        J23L*PDdissipationNth2beta1 + J33L*PDdissipationNth3beta1;
+      JacPDdissipationNth3beta1 = 
+        kmadd(J13L,PDdissipationNth1beta1,kmadd(J23L,PDdissipationNth2beta1,kmul(J33L,PDdissipationNth3beta1)));
       
-      JacPDdissipationNth3beta2 = J13L*PDdissipationNth1beta2 + 
-        J23L*PDdissipationNth2beta2 + J33L*PDdissipationNth3beta2;
+      JacPDdissipationNth3beta2 = 
+        kmadd(J13L,PDdissipationNth1beta2,kmadd(J23L,PDdissipationNth2beta2,kmul(J33L,PDdissipationNth3beta2)));
       
-      JacPDdissipationNth3beta3 = J13L*PDdissipationNth1beta3 + 
-        J23L*PDdissipationNth2beta3 + J33L*PDdissipationNth3beta3;
+      JacPDdissipationNth3beta3 = 
+        kmadd(J13L,PDdissipationNth1beta3,kmadd(J23L,PDdissipationNth2beta3,kmul(J33L,PDdissipationNth3beta3)));
       
-      JacPDdissipationNth3gt11 = J13L*PDdissipationNth1gt11 + 
-        J23L*PDdissipationNth2gt11 + J33L*PDdissipationNth3gt11;
+      JacPDdissipationNth3gt11 = 
+        kmadd(J13L,PDdissipationNth1gt11,kmadd(J23L,PDdissipationNth2gt11,kmul(J33L,PDdissipationNth3gt11)));
       
-      JacPDdissipationNth3gt12 = J13L*PDdissipationNth1gt12 + 
-        J23L*PDdissipationNth2gt12 + J33L*PDdissipationNth3gt12;
+      JacPDdissipationNth3gt12 = 
+        kmadd(J13L,PDdissipationNth1gt12,kmadd(J23L,PDdissipationNth2gt12,kmul(J33L,PDdissipationNth3gt12)));
       
-      JacPDdissipationNth3gt13 = J13L*PDdissipationNth1gt13 + 
-        J23L*PDdissipationNth2gt13 + J33L*PDdissipationNth3gt13;
+      JacPDdissipationNth3gt13 = 
+        kmadd(J13L,PDdissipationNth1gt13,kmadd(J23L,PDdissipationNth2gt13,kmul(J33L,PDdissipationNth3gt13)));
       
-      JacPDdissipationNth3gt22 = J13L*PDdissipationNth1gt22 + 
-        J23L*PDdissipationNth2gt22 + J33L*PDdissipationNth3gt22;
+      JacPDdissipationNth3gt22 = 
+        kmadd(J13L,PDdissipationNth1gt22,kmadd(J23L,PDdissipationNth2gt22,kmul(J33L,PDdissipationNth3gt22)));
       
-      JacPDdissipationNth3gt23 = J13L*PDdissipationNth1gt23 + 
-        J23L*PDdissipationNth2gt23 + J33L*PDdissipationNth3gt23;
+      JacPDdissipationNth3gt23 = 
+        kmadd(J13L,PDdissipationNth1gt23,kmadd(J23L,PDdissipationNth2gt23,kmul(J33L,PDdissipationNth3gt23)));
       
-      JacPDdissipationNth3gt33 = J13L*PDdissipationNth1gt33 + 
-        J23L*PDdissipationNth2gt33 + J33L*PDdissipationNth3gt33;
+      JacPDdissipationNth3gt33 = 
+        kmadd(J13L,PDdissipationNth1gt33,kmadd(J23L,PDdissipationNth2gt33,kmul(J33L,PDdissipationNth3gt33)));
       
-      JacPDdissipationNth3phi = J13L*PDdissipationNth1phi + 
-        J23L*PDdissipationNth2phi + J33L*PDdissipationNth3phi;
+      JacPDdissipationNth3phi = 
+        kmadd(J13L,PDdissipationNth1phi,kmadd(J23L,PDdissipationNth2phi,kmul(J33L,PDdissipationNth3phi)));
       
-      JacPDdissipationNth3trK = J13L*PDdissipationNth1trK + 
-        J23L*PDdissipationNth2trK + J33L*PDdissipationNth3trK;
+      JacPDdissipationNth3trK = 
+        kmadd(J13L,PDdissipationNth1trK,kmadd(J23L,PDdissipationNth2trK,kmul(J33L,PDdissipationNth3trK)));
       
-      JacPDdissipationNth3Xt1 = J13L*PDdissipationNth1Xt1 + 
-        J23L*PDdissipationNth2Xt1 + J33L*PDdissipationNth3Xt1;
+      JacPDdissipationNth3Xt1 = 
+        kmadd(J13L,PDdissipationNth1Xt1,kmadd(J23L,PDdissipationNth2Xt1,kmul(J33L,PDdissipationNth3Xt1)));
       
-      JacPDdissipationNth3Xt2 = J13L*PDdissipationNth1Xt2 + 
-        J23L*PDdissipationNth2Xt2 + J33L*PDdissipationNth3Xt2;
+      JacPDdissipationNth3Xt2 = 
+        kmadd(J13L,PDdissipationNth1Xt2,kmadd(J23L,PDdissipationNth2Xt2,kmul(J33L,PDdissipationNth3Xt2)));
       
-      JacPDdissipationNth3Xt3 = J13L*PDdissipationNth1Xt3 + 
-        J23L*PDdissipationNth2Xt3 + J33L*PDdissipationNth3Xt3;
+      JacPDdissipationNth3Xt3 = 
+        kmadd(J13L,PDdissipationNth1Xt3,kmadd(J23L,PDdissipationNth2Xt3,kmul(J33L,PDdissipationNth3Xt3)));
     }
     else
     {
@@ -789,124 +788,215 @@ static void ML_BSSN_MP_O8_Dissipation_Body(cGH const * restrict const cctkGH, in
       JacPDdissipationNth3Xt3 = PDdissipationNth3Xt3;
     }
     
-    CCTK_REAL epsdiss1 = ToReal(EpsDiss);
+    CCTK_REAL_VEC epsdiss1 = ToReal(EpsDiss);
     
-    CCTK_REAL epsdiss2 = ToReal(EpsDiss);
+    CCTK_REAL_VEC epsdiss2 = ToReal(EpsDiss);
     
-    CCTK_REAL epsdiss3 = ToReal(EpsDiss);
+    CCTK_REAL_VEC epsdiss3 = ToReal(EpsDiss);
     
-    phirhsL = epsdiss1*JacPDdissipationNth1phi + 
-      epsdiss2*JacPDdissipationNth2phi + epsdiss3*JacPDdissipationNth3phi + 
-      phirhsL;
+    phirhsL = 
+      kmadd(epsdiss1,JacPDdissipationNth1phi,kmadd(epsdiss2,JacPDdissipationNth2phi,kmadd(epsdiss3,JacPDdissipationNth3phi,phirhsL)));
     
-    gt11rhsL = gt11rhsL + epsdiss1*JacPDdissipationNth1gt11 + 
-      epsdiss2*JacPDdissipationNth2gt11 + epsdiss3*JacPDdissipationNth3gt11;
+    gt11rhsL = 
+      kadd(gt11rhsL,kmadd(epsdiss1,JacPDdissipationNth1gt11,kmadd(epsdiss2,JacPDdissipationNth2gt11,kmul(epsdiss3,JacPDdissipationNth3gt11))));
     
-    gt12rhsL = gt12rhsL + epsdiss1*JacPDdissipationNth1gt12 + 
-      epsdiss2*JacPDdissipationNth2gt12 + epsdiss3*JacPDdissipationNth3gt12;
+    gt12rhsL = 
+      kadd(gt12rhsL,kmadd(epsdiss1,JacPDdissipationNth1gt12,kmadd(epsdiss2,JacPDdissipationNth2gt12,kmul(epsdiss3,JacPDdissipationNth3gt12))));
     
-    gt13rhsL = gt13rhsL + epsdiss1*JacPDdissipationNth1gt13 + 
-      epsdiss2*JacPDdissipationNth2gt13 + epsdiss3*JacPDdissipationNth3gt13;
+    gt13rhsL = 
+      kadd(gt13rhsL,kmadd(epsdiss1,JacPDdissipationNth1gt13,kmadd(epsdiss2,JacPDdissipationNth2gt13,kmul(epsdiss3,JacPDdissipationNth3gt13))));
     
-    gt22rhsL = gt22rhsL + epsdiss1*JacPDdissipationNth1gt22 + 
-      epsdiss2*JacPDdissipationNth2gt22 + epsdiss3*JacPDdissipationNth3gt22;
+    gt22rhsL = 
+      kadd(gt22rhsL,kmadd(epsdiss1,JacPDdissipationNth1gt22,kmadd(epsdiss2,JacPDdissipationNth2gt22,kmul(epsdiss3,JacPDdissipationNth3gt22))));
     
-    gt23rhsL = gt23rhsL + epsdiss1*JacPDdissipationNth1gt23 + 
-      epsdiss2*JacPDdissipationNth2gt23 + epsdiss3*JacPDdissipationNth3gt23;
+    gt23rhsL = 
+      kadd(gt23rhsL,kmadd(epsdiss1,JacPDdissipationNth1gt23,kmadd(epsdiss2,JacPDdissipationNth2gt23,kmul(epsdiss3,JacPDdissipationNth3gt23))));
     
-    gt33rhsL = gt33rhsL + epsdiss1*JacPDdissipationNth1gt33 + 
-      epsdiss2*JacPDdissipationNth2gt33 + epsdiss3*JacPDdissipationNth3gt33;
+    gt33rhsL = 
+      kadd(gt33rhsL,kmadd(epsdiss1,JacPDdissipationNth1gt33,kmadd(epsdiss2,JacPDdissipationNth2gt33,kmul(epsdiss3,JacPDdissipationNth3gt33))));
     
-    Xt1rhsL = epsdiss1*JacPDdissipationNth1Xt1 + 
-      epsdiss2*JacPDdissipationNth2Xt1 + epsdiss3*JacPDdissipationNth3Xt1 + 
-      Xt1rhsL;
+    Xt1rhsL = 
+      kmadd(epsdiss1,JacPDdissipationNth1Xt1,kmadd(epsdiss2,JacPDdissipationNth2Xt1,kmadd(epsdiss3,JacPDdissipationNth3Xt1,Xt1rhsL)));
     
-    Xt2rhsL = epsdiss1*JacPDdissipationNth1Xt2 + 
-      epsdiss2*JacPDdissipationNth2Xt2 + epsdiss3*JacPDdissipationNth3Xt2 + 
-      Xt2rhsL;
+    Xt2rhsL = 
+      kmadd(epsdiss1,JacPDdissipationNth1Xt2,kmadd(epsdiss2,JacPDdissipationNth2Xt2,kmadd(epsdiss3,JacPDdissipationNth3Xt2,Xt2rhsL)));
     
-    Xt3rhsL = epsdiss1*JacPDdissipationNth1Xt3 + 
-      epsdiss2*JacPDdissipationNth2Xt3 + epsdiss3*JacPDdissipationNth3Xt3 + 
-      Xt3rhsL;
+    Xt3rhsL = 
+      kmadd(epsdiss1,JacPDdissipationNth1Xt3,kmadd(epsdiss2,JacPDdissipationNth2Xt3,kmadd(epsdiss3,JacPDdissipationNth3Xt3,Xt3rhsL)));
     
-    trKrhsL = epsdiss1*JacPDdissipationNth1trK + 
-      epsdiss2*JacPDdissipationNth2trK + epsdiss3*JacPDdissipationNth3trK + 
-      trKrhsL;
+    trKrhsL = 
+      kmadd(epsdiss1,JacPDdissipationNth1trK,kmadd(epsdiss2,JacPDdissipationNth2trK,kmadd(epsdiss3,JacPDdissipationNth3trK,trKrhsL)));
     
-    At11rhsL = At11rhsL + epsdiss1*JacPDdissipationNth1At11 + 
-      epsdiss2*JacPDdissipationNth2At11 + epsdiss3*JacPDdissipationNth3At11;
+    At11rhsL = 
+      kadd(At11rhsL,kmadd(epsdiss1,JacPDdissipationNth1At11,kmadd(epsdiss2,JacPDdissipationNth2At11,kmul(epsdiss3,JacPDdissipationNth3At11))));
     
-    At12rhsL = At12rhsL + epsdiss1*JacPDdissipationNth1At12 + 
-      epsdiss2*JacPDdissipationNth2At12 + epsdiss3*JacPDdissipationNth3At12;
+    At12rhsL = 
+      kadd(At12rhsL,kmadd(epsdiss1,JacPDdissipationNth1At12,kmadd(epsdiss2,JacPDdissipationNth2At12,kmul(epsdiss3,JacPDdissipationNth3At12))));
     
-    At13rhsL = At13rhsL + epsdiss1*JacPDdissipationNth1At13 + 
-      epsdiss2*JacPDdissipationNth2At13 + epsdiss3*JacPDdissipationNth3At13;
+    At13rhsL = 
+      kadd(At13rhsL,kmadd(epsdiss1,JacPDdissipationNth1At13,kmadd(epsdiss2,JacPDdissipationNth2At13,kmul(epsdiss3,JacPDdissipationNth3At13))));
     
-    At22rhsL = At22rhsL + epsdiss1*JacPDdissipationNth1At22 + 
-      epsdiss2*JacPDdissipationNth2At22 + epsdiss3*JacPDdissipationNth3At22;
+    At22rhsL = 
+      kadd(At22rhsL,kmadd(epsdiss1,JacPDdissipationNth1At22,kmadd(epsdiss2,JacPDdissipationNth2At22,kmul(epsdiss3,JacPDdissipationNth3At22))));
     
-    At23rhsL = At23rhsL + epsdiss1*JacPDdissipationNth1At23 + 
-      epsdiss2*JacPDdissipationNth2At23 + epsdiss3*JacPDdissipationNth3At23;
+    At23rhsL = 
+      kadd(At23rhsL,kmadd(epsdiss1,JacPDdissipationNth1At23,kmadd(epsdiss2,JacPDdissipationNth2At23,kmul(epsdiss3,JacPDdissipationNth3At23))));
     
-    At33rhsL = At33rhsL + epsdiss1*JacPDdissipationNth1At33 + 
-      epsdiss2*JacPDdissipationNth2At33 + epsdiss3*JacPDdissipationNth3At33;
+    At33rhsL = 
+      kadd(At33rhsL,kmadd(epsdiss1,JacPDdissipationNth1At33,kmadd(epsdiss2,JacPDdissipationNth2At33,kmul(epsdiss3,JacPDdissipationNth3At33))));
     
-    alpharhsL = alpharhsL + epsdiss1*JacPDdissipationNth1alpha + 
-      epsdiss2*JacPDdissipationNth2alpha + 
-      epsdiss3*JacPDdissipationNth3alpha;
+    alpharhsL = 
+      kadd(alpharhsL,kmadd(epsdiss1,JacPDdissipationNth1alpha,kmadd(epsdiss2,JacPDdissipationNth2alpha,kmul(epsdiss3,JacPDdissipationNth3alpha))));
     
-    ArhsL = ArhsL + epsdiss1*JacPDdissipationNth1A + 
-      epsdiss2*JacPDdissipationNth2A + epsdiss3*JacPDdissipationNth3A;
+    ArhsL = 
+      kadd(ArhsL,kmadd(epsdiss1,JacPDdissipationNth1A,kmadd(epsdiss2,JacPDdissipationNth2A,kmul(epsdiss3,JacPDdissipationNth3A))));
     
-    beta1rhsL = beta1rhsL + epsdiss1*JacPDdissipationNth1beta1 + 
-      epsdiss2*JacPDdissipationNth2beta1 + 
-      epsdiss3*JacPDdissipationNth3beta1;
+    beta1rhsL = 
+      kadd(beta1rhsL,kmadd(epsdiss1,JacPDdissipationNth1beta1,kmadd(epsdiss2,JacPDdissipationNth2beta1,kmul(epsdiss3,JacPDdissipationNth3beta1))));
     
-    beta2rhsL = beta2rhsL + epsdiss1*JacPDdissipationNth1beta2 + 
-      epsdiss2*JacPDdissipationNth2beta2 + 
-      epsdiss3*JacPDdissipationNth3beta2;
+    beta2rhsL = 
+      kadd(beta2rhsL,kmadd(epsdiss1,JacPDdissipationNth1beta2,kmadd(epsdiss2,JacPDdissipationNth2beta2,kmul(epsdiss3,JacPDdissipationNth3beta2))));
     
-    beta3rhsL = beta3rhsL + epsdiss1*JacPDdissipationNth1beta3 + 
-      epsdiss2*JacPDdissipationNth2beta3 + 
-      epsdiss3*JacPDdissipationNth3beta3;
+    beta3rhsL = 
+      kadd(beta3rhsL,kmadd(epsdiss1,JacPDdissipationNth1beta3,kmadd(epsdiss2,JacPDdissipationNth2beta3,kmul(epsdiss3,JacPDdissipationNth3beta3))));
     
-    B1rhsL = B1rhsL + epsdiss1*JacPDdissipationNth1B1 + 
-      epsdiss2*JacPDdissipationNth2B1 + epsdiss3*JacPDdissipationNth3B1;
+    B1rhsL = 
+      kadd(B1rhsL,kmadd(epsdiss1,JacPDdissipationNth1B1,kmadd(epsdiss2,JacPDdissipationNth2B1,kmul(epsdiss3,JacPDdissipationNth3B1))));
     
-    B2rhsL = B2rhsL + epsdiss1*JacPDdissipationNth1B2 + 
-      epsdiss2*JacPDdissipationNth2B2 + epsdiss3*JacPDdissipationNth3B2;
+    B2rhsL = 
+      kadd(B2rhsL,kmadd(epsdiss1,JacPDdissipationNth1B2,kmadd(epsdiss2,JacPDdissipationNth2B2,kmul(epsdiss3,JacPDdissipationNth3B2))));
     
-    B3rhsL = B3rhsL + epsdiss1*JacPDdissipationNth1B3 + 
-      epsdiss2*JacPDdissipationNth2B3 + epsdiss3*JacPDdissipationNth3B3;
+    B3rhsL = 
+      kadd(B3rhsL,kmadd(epsdiss1,JacPDdissipationNth1B3,kmadd(epsdiss2,JacPDdissipationNth2B3,kmul(epsdiss3,JacPDdissipationNth3B3))));
+    
+    /* If necessary, store only partial vectors after the first iteration */
+    
+    if (CCTK_REAL_VEC_SIZE > 2 && CCTK_BUILTIN_EXPECT(i < lc_imin && i+CCTK_REAL_VEC_SIZE > lc_imax, 0))
+    {
+      ptrdiff_t const elt_count_lo = lc_imin-i;
+      ptrdiff_t const elt_count_hi = lc_imax-i;
+      vec_store_nta_partial_mid(alpharhs[index],alpharhsL,elt_count_lo,elt_count_hi);
+      vec_store_nta_partial_mid(Arhs[index],ArhsL,elt_count_lo,elt_count_hi);
+      vec_store_nta_partial_mid(At11rhs[index],At11rhsL,elt_count_lo,elt_count_hi);
+      vec_store_nta_partial_mid(At12rhs[index],At12rhsL,elt_count_lo,elt_count_hi);
+      vec_store_nta_partial_mid(At13rhs[index],At13rhsL,elt_count_lo,elt_count_hi);
+      vec_store_nta_partial_mid(At22rhs[index],At22rhsL,elt_count_lo,elt_count_hi);
+      vec_store_nta_partial_mid(At23rhs[index],At23rhsL,elt_count_lo,elt_count_hi);
+      vec_store_nta_partial_mid(At33rhs[index],At33rhsL,elt_count_lo,elt_count_hi);
+      vec_store_nta_partial_mid(B1rhs[index],B1rhsL,elt_count_lo,elt_count_hi);
+      vec_store_nta_partial_mid(B2rhs[index],B2rhsL,elt_count_lo,elt_count_hi);
+      vec_store_nta_partial_mid(B3rhs[index],B3rhsL,elt_count_lo,elt_count_hi);
+      vec_store_nta_partial_mid(beta1rhs[index],beta1rhsL,elt_count_lo,elt_count_hi);
+      vec_store_nta_partial_mid(beta2rhs[index],beta2rhsL,elt_count_lo,elt_count_hi);
+      vec_store_nta_partial_mid(beta3rhs[index],beta3rhsL,elt_count_lo,elt_count_hi);
+      vec_store_nta_partial_mid(gt11rhs[index],gt11rhsL,elt_count_lo,elt_count_hi);
+      vec_store_nta_partial_mid(gt12rhs[index],gt12rhsL,elt_count_lo,elt_count_hi);
+      vec_store_nta_partial_mid(gt13rhs[index],gt13rhsL,elt_count_lo,elt_count_hi);
+      vec_store_nta_partial_mid(gt22rhs[index],gt22rhsL,elt_count_lo,elt_count_hi);
+      vec_store_nta_partial_mid(gt23rhs[index],gt23rhsL,elt_count_lo,elt_count_hi);
+      vec_store_nta_partial_mid(gt33rhs[index],gt33rhsL,elt_count_lo,elt_count_hi);
+      vec_store_nta_partial_mid(phirhs[index],phirhsL,elt_count_lo,elt_count_hi);
+      vec_store_nta_partial_mid(trKrhs[index],trKrhsL,elt_count_lo,elt_count_hi);
+      vec_store_nta_partial_mid(Xt1rhs[index],Xt1rhsL,elt_count_lo,elt_count_hi);
+      vec_store_nta_partial_mid(Xt2rhs[index],Xt2rhsL,elt_count_lo,elt_count_hi);
+      vec_store_nta_partial_mid(Xt3rhs[index],Xt3rhsL,elt_count_lo,elt_count_hi);
+      break;
+    }
+    
+    /* If necessary, store only partial vectors after the first iteration */
+    
+    if (CCTK_REAL_VEC_SIZE > 1 && CCTK_BUILTIN_EXPECT(i < lc_imin, 0))
+    {
+      ptrdiff_t const elt_count = lc_imin-i;
+      vec_store_nta_partial_hi(alpharhs[index],alpharhsL,elt_count);
+      vec_store_nta_partial_hi(Arhs[index],ArhsL,elt_count);
+      vec_store_nta_partial_hi(At11rhs[index],At11rhsL,elt_count);
+      vec_store_nta_partial_hi(At12rhs[index],At12rhsL,elt_count);
+      vec_store_nta_partial_hi(At13rhs[index],At13rhsL,elt_count);
+      vec_store_nta_partial_hi(At22rhs[index],At22rhsL,elt_count);
+      vec_store_nta_partial_hi(At23rhs[index],At23rhsL,elt_count);
+      vec_store_nta_partial_hi(At33rhs[index],At33rhsL,elt_count);
+      vec_store_nta_partial_hi(B1rhs[index],B1rhsL,elt_count);
+      vec_store_nta_partial_hi(B2rhs[index],B2rhsL,elt_count);
+      vec_store_nta_partial_hi(B3rhs[index],B3rhsL,elt_count);
+      vec_store_nta_partial_hi(beta1rhs[index],beta1rhsL,elt_count);
+      vec_store_nta_partial_hi(beta2rhs[index],beta2rhsL,elt_count);
+      vec_store_nta_partial_hi(beta3rhs[index],beta3rhsL,elt_count);
+      vec_store_nta_partial_hi(gt11rhs[index],gt11rhsL,elt_count);
+      vec_store_nta_partial_hi(gt12rhs[index],gt12rhsL,elt_count);
+      vec_store_nta_partial_hi(gt13rhs[index],gt13rhsL,elt_count);
+      vec_store_nta_partial_hi(gt22rhs[index],gt22rhsL,elt_count);
+      vec_store_nta_partial_hi(gt23rhs[index],gt23rhsL,elt_count);
+      vec_store_nta_partial_hi(gt33rhs[index],gt33rhsL,elt_count);
+      vec_store_nta_partial_hi(phirhs[index],phirhsL,elt_count);
+      vec_store_nta_partial_hi(trKrhs[index],trKrhsL,elt_count);
+      vec_store_nta_partial_hi(Xt1rhs[index],Xt1rhsL,elt_count);
+      vec_store_nta_partial_hi(Xt2rhs[index],Xt2rhsL,elt_count);
+      vec_store_nta_partial_hi(Xt3rhs[index],Xt3rhsL,elt_count);
+      continue;
+    }
+    
+    /* If necessary, store only partial vectors after the last iteration */
+    
+    if (CCTK_REAL_VEC_SIZE > 1 && CCTK_BUILTIN_EXPECT(i+CCTK_REAL_VEC_SIZE > lc_imax, 0))
+    {
+      ptrdiff_t const elt_count = lc_imax-i;
+      vec_store_nta_partial_lo(alpharhs[index],alpharhsL,elt_count);
+      vec_store_nta_partial_lo(Arhs[index],ArhsL,elt_count);
+      vec_store_nta_partial_lo(At11rhs[index],At11rhsL,elt_count);
+      vec_store_nta_partial_lo(At12rhs[index],At12rhsL,elt_count);
+      vec_store_nta_partial_lo(At13rhs[index],At13rhsL,elt_count);
+      vec_store_nta_partial_lo(At22rhs[index],At22rhsL,elt_count);
+      vec_store_nta_partial_lo(At23rhs[index],At23rhsL,elt_count);
+      vec_store_nta_partial_lo(At33rhs[index],At33rhsL,elt_count);
+      vec_store_nta_partial_lo(B1rhs[index],B1rhsL,elt_count);
+      vec_store_nta_partial_lo(B2rhs[index],B2rhsL,elt_count);
+      vec_store_nta_partial_lo(B3rhs[index],B3rhsL,elt_count);
+      vec_store_nta_partial_lo(beta1rhs[index],beta1rhsL,elt_count);
+      vec_store_nta_partial_lo(beta2rhs[index],beta2rhsL,elt_count);
+      vec_store_nta_partial_lo(beta3rhs[index],beta3rhsL,elt_count);
+      vec_store_nta_partial_lo(gt11rhs[index],gt11rhsL,elt_count);
+      vec_store_nta_partial_lo(gt12rhs[index],gt12rhsL,elt_count);
+      vec_store_nta_partial_lo(gt13rhs[index],gt13rhsL,elt_count);
+      vec_store_nta_partial_lo(gt22rhs[index],gt22rhsL,elt_count);
+      vec_store_nta_partial_lo(gt23rhs[index],gt23rhsL,elt_count);
+      vec_store_nta_partial_lo(gt33rhs[index],gt33rhsL,elt_count);
+      vec_store_nta_partial_lo(phirhs[index],phirhsL,elt_count);
+      vec_store_nta_partial_lo(trKrhs[index],trKrhsL,elt_count);
+      vec_store_nta_partial_lo(Xt1rhs[index],Xt1rhsL,elt_count);
+      vec_store_nta_partial_lo(Xt2rhs[index],Xt2rhsL,elt_count);
+      vec_store_nta_partial_lo(Xt3rhs[index],Xt3rhsL,elt_count);
+      break;
+    }
     
     /* Copy local copies back to grid functions */
-    alpharhs[index] = alpharhsL;
-    Arhs[index] = ArhsL;
-    At11rhs[index] = At11rhsL;
-    At12rhs[index] = At12rhsL;
-    At13rhs[index] = At13rhsL;
-    At22rhs[index] = At22rhsL;
-    At23rhs[index] = At23rhsL;
-    At33rhs[index] = At33rhsL;
-    B1rhs[index] = B1rhsL;
-    B2rhs[index] = B2rhsL;
-    B3rhs[index] = B3rhsL;
-    beta1rhs[index] = beta1rhsL;
-    beta2rhs[index] = beta2rhsL;
-    beta3rhs[index] = beta3rhsL;
-    gt11rhs[index] = gt11rhsL;
-    gt12rhs[index] = gt12rhsL;
-    gt13rhs[index] = gt13rhsL;
-    gt22rhs[index] = gt22rhsL;
-    gt23rhs[index] = gt23rhsL;
-    gt33rhs[index] = gt33rhsL;
-    phirhs[index] = phirhsL;
-    trKrhs[index] = trKrhsL;
-    Xt1rhs[index] = Xt1rhsL;
-    Xt2rhs[index] = Xt2rhsL;
-    Xt3rhs[index] = Xt3rhsL;
+    vec_store_nta(alpharhs[index],alpharhsL);
+    vec_store_nta(Arhs[index],ArhsL);
+    vec_store_nta(At11rhs[index],At11rhsL);
+    vec_store_nta(At12rhs[index],At12rhsL);
+    vec_store_nta(At13rhs[index],At13rhsL);
+    vec_store_nta(At22rhs[index],At22rhsL);
+    vec_store_nta(At23rhs[index],At23rhsL);
+    vec_store_nta(At33rhs[index],At33rhsL);
+    vec_store_nta(B1rhs[index],B1rhsL);
+    vec_store_nta(B2rhs[index],B2rhsL);
+    vec_store_nta(B3rhs[index],B3rhsL);
+    vec_store_nta(beta1rhs[index],beta1rhsL);
+    vec_store_nta(beta2rhs[index],beta2rhsL);
+    vec_store_nta(beta3rhs[index],beta3rhsL);
+    vec_store_nta(gt11rhs[index],gt11rhsL);
+    vec_store_nta(gt12rhs[index],gt12rhsL);
+    vec_store_nta(gt13rhs[index],gt13rhsL);
+    vec_store_nta(gt22rhs[index],gt22rhsL);
+    vec_store_nta(gt23rhs[index],gt23rhsL);
+    vec_store_nta(gt33rhs[index],gt33rhsL);
+    vec_store_nta(phirhs[index],phirhsL);
+    vec_store_nta(trKrhs[index],trKrhsL);
+    vec_store_nta(Xt1rhs[index],Xt1rhsL);
+    vec_store_nta(Xt2rhs[index],Xt2rhsL);
+    vec_store_nta(Xt3rhs[index],Xt3rhsL);
   }
-  LC_ENDLOOP3 (ML_BSSN_MP_O8_Dissipation);
+  LC_ENDLOOP3VEC (ML_BSSN_MP_O8_Dissipation);
 }
 
 extern "C" void ML_BSSN_MP_O8_Dissipation(CCTK_ARGUMENTS)

@@ -340,7 +340,7 @@ if (CCTK_EQUALS(my_rhs_boundary_condition, "static"))
   } "ML_BSSN_O8_RHSStaticBoundary"
 }
 
-schedule ML_BSSN_O8_enforce IN MoL_PostStep BEFORE ML_BSSN_O8_SelectBoundConds
+schedule ML_BSSN_O8_enforce IN MoL_PostStepModify
 {
   LANG: C
 } "ML_BSSN_O8_enforce"
@@ -388,7 +388,7 @@ if (CCTK_EQUALS(dt_lapse_shift_method, "noLapseShiftAdvection"))
   } "ML_BSSN_O8_convertToADMBaseFakeDtLapseShift"
 }
 
-schedule group ML_BSSN_O8_constraints1_group in MoL_PseudoEvolution
+schedule group ML_BSSN_O8_constraints1_group in MoL_PseudoEvolution after MoL_PostStep
 {
   # no language specified
 } "ML_BSSN_O8_constraints1"
@@ -415,17 +415,12 @@ schedule group ML_BSSN_O8_constraints1_bc_group in ML_BSSN_O8_constraints1_group
   # no language specified
 } "ML_BSSN_O8_constraints1"
 
-schedule group ML_BSSN_O8_constraints1_bc_group at CCTK_POSTRESTRICT
+schedule group ML_BSSN_O8_constraints1_bc_group in MoL_PseudoEvolutionBoundaries after MoL_PostStep
 {
   # no language specified
 } "ML_BSSN_O8_constraints1"
 
-schedule group ML_BSSN_O8_constraints1_bc_group at CCTK_POSTRESTRICTINITIAL
-{
-  # no language specified
-} "ML_BSSN_O8_constraints1"
-
-schedule group ML_BSSN_O8_constraints2_group in MoL_PseudoEvolution
+schedule group ML_BSSN_O8_constraints2_group in MoL_PseudoEvolution after MoL_PostStep
 {
   # no language specified
 } "ML_BSSN_O8_constraints2"
@@ -455,12 +450,7 @@ schedule group ML_BSSN_O8_constraints2_bc_group in ML_BSSN_O8_constraints2_group
   # no language specified
 } "ML_BSSN_O8_constraints2"
 
-schedule group ML_BSSN_O8_constraints2_bc_group at CCTK_POSTRESTRICT
-{
-  # no language specified
-} "ML_BSSN_O8_constraints2"
-
-schedule group ML_BSSN_O8_constraints2_bc_group at CCTK_POSTRESTRICTINITIAL
+schedule group ML_BSSN_O8_constraints2_bc_group in MoL_PseudoEvolutionBoundaries after MoL_PostStep
 {
   # no language specified
 } "ML_BSSN_O8_constraints2"

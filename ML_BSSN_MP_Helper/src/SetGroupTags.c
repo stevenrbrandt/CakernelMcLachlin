@@ -15,29 +15,30 @@ ML_BSSN_MP_SetGroupTags (void)
 {
   DECLARE_CCTK_PARAMETERS;
   
-  set_group_tags (0, 0, 1, "ADMBase::metric");
-  set_group_tags (0, 0, 1, "ADMBase::curv");
-  set_group_tags (0, 0, 1, "ADMBase::lapse");
-  set_group_tags (0, 0, 1, "ADMBase::shift");
-  set_group_tags (0, 0, 1, "ADMBase::dtlapse");
-  set_group_tags (0, 0, 1, "ADMBase::dtshift");
+  int const checkpoint = timelevels > 1;
+  set_group_tags (checkpoint, checkpoint, 1, "ADMBase::metric");
+  set_group_tags (checkpoint, checkpoint, 1, "ADMBase::curv");
+  set_group_tags (checkpoint, checkpoint, 1, "ADMBase::lapse");
+  set_group_tags (checkpoint, checkpoint, 1, "ADMBase::shift");
+  set_group_tags (checkpoint, checkpoint, 1, "ADMBase::dtlapse");
+  set_group_tags (checkpoint, checkpoint, 1, "ADMBase::dtshift");
   
-  set_group_tags (0, 0, 0, "ML_BSSN_MP::ML_cons_detg");
-  set_group_tags (0, 0, 0, "ML_BSSN_MP::ML_cons_Gamma");
-  set_group_tags (0, 0, 0, "ML_BSSN_MP::ML_cons_traceA");
-  set_group_tags (0, 0, 0, "ML_BSSN_MP::ML_Ham");
-  set_group_tags (0, 0, 0, "ML_BSSN_MP::ML_mom");
+  set_group_tags (checkpoint, checkpoint, 0, "ML_BSSN_MP::ML_cons_detg");
+  set_group_tags (checkpoint, checkpoint, 0, "ML_BSSN_MP::ML_cons_Gamma");
+  set_group_tags (checkpoint, checkpoint, 0, "ML_BSSN_MP::ML_cons_traceA");
+  set_group_tags (checkpoint, checkpoint, 0, "ML_BSSN_MP::ML_Ham");
+  set_group_tags (checkpoint, checkpoint, 0, "ML_BSSN_MP::ML_mom");
   
-  int const checkpoint = rhs_timelevels > 1;
-  set_group_tags (checkpoint, checkpoint, 0, "ML_BSSN_MP::ML_log_confacrhs");
-  set_group_tags (checkpoint, checkpoint, 0, "ML_BSSN_MP::ML_metricrhs");
-  set_group_tags (checkpoint, checkpoint, 0, "ML_BSSN_MP::ML_Gammarhs");
-  set_group_tags (checkpoint, checkpoint, 0, "ML_BSSN_MP::ML_trace_curvrhs");
-  set_group_tags (checkpoint, checkpoint, 0, "ML_BSSN_MP::ML_curvrhs");
-  set_group_tags (checkpoint, checkpoint, 0, "ML_BSSN_MP::ML_lapserhs");
-  set_group_tags (checkpoint, checkpoint, 0, "ML_BSSN_MP::ML_dtlapserhs");
-  set_group_tags (checkpoint, checkpoint, 0, "ML_BSSN_MP::ML_shiftrhs");
-  set_group_tags (checkpoint, checkpoint, 0, "ML_BSSN_MP::ML_dtshiftrhs");
+  int const rhs_checkpoint = rhs_timelevels > 1;
+  set_group_tags (rhs_checkpoint, rhs_checkpoint, 0, "ML_BSSN_MP::ML_log_confacrhs");
+  set_group_tags (rhs_checkpoint, rhs_checkpoint, 0, "ML_BSSN_MP::ML_metricrhs");
+  set_group_tags (rhs_checkpoint, rhs_checkpoint, 0, "ML_BSSN_MP::ML_Gammarhs");
+  set_group_tags (rhs_checkpoint, rhs_checkpoint, 0, "ML_BSSN_MP::ML_trace_curvrhs");
+  set_group_tags (rhs_checkpoint, rhs_checkpoint, 0, "ML_BSSN_MP::ML_curvrhs");
+  set_group_tags (rhs_checkpoint, rhs_checkpoint, 0, "ML_BSSN_MP::ML_lapserhs");
+  set_group_tags (rhs_checkpoint, rhs_checkpoint, 0, "ML_BSSN_MP::ML_dtlapserhs");
+  set_group_tags (rhs_checkpoint, rhs_checkpoint, 0, "ML_BSSN_MP::ML_shiftrhs");
+  set_group_tags (rhs_checkpoint, rhs_checkpoint, 0, "ML_BSSN_MP::ML_dtshiftrhs");
   
   return 0;
 }
