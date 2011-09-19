@@ -142,6 +142,12 @@ CCTK_INT conformalMethod "Treatment of conformal factor"
   *:* :: ""
 } 0
 
+restricted:
+CCTK_INT fdOrder "fdOrder"
+{
+  *:* :: ""
+} 8
+
 private:
 KEYWORD my_initial_data "my_initial_data"
 {

@@ -37,6 +37,9 @@ EXTENDS CCTK_KEYWORD dtshift_evolution_method "dtshift_evolution_method"
 
 shares: GenericFD
 
+USES CCTK_STRING jacobian_group
+USES CCTK_STRING jacobian_derivative_group
+USES CCTK_INT jacobian_identity_map
 
 
 shares: MethodOfLines
@@ -138,6 +141,12 @@ CCTK_INT conformalMethod "Treatment of conformal factor"
 {
   *:* :: ""
 } 0
+
+restricted:
+CCTK_INT fdOrder "fdOrder"
+{
+  *:* :: ""
+} 4
 
 private:
 KEYWORD my_initial_data "my_initial_data"
