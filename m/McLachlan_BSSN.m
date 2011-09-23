@@ -81,8 +81,6 @@ derivatives =
     PDonesided[i] -> dir[i] (-1 + shift[i]^dir[i]) / spacing[i]} /. i->j, {j,1,3}],1]
 };
 
-(* Put[derivatives, "derivatives.m"]; *)
-
 PD     = PDstandardNth;
 PDu    = PDupwindNth;
 PDua   = PDupwindNthAnti;
