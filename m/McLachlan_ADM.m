@@ -11,27 +11,25 @@ SetSourceLanguage["C"];
 (* Options *)
 (******************************************************************************)
 
-(* derivative order: 2, 4, 6, 8, ... *)
-derivOrder = 4;
-
 (* useJacobian: True or False *)
-useJacobian = False;
+useJacobian = True;
 
 (* timelevels: 2 or 3
    (keep this at 3; this is better chosen with a run-time parameter) *)
 evolutionTimelevels = 3;
 
 (* matter: 0 or 1 *)
-addMatter = 0;
+addMatter = 1;
 
 
 
 prefix = "ML_";
 suffix =
-  If [useJacobian, "_MP", ""] <>
-  If [derivOrder!=4, "_O" <> ToString[derivOrder], ""] <>
+  (* If [useJacobian, "_MP", ""] <> *)
+  (* If [derivOrder!=4, "_O" <> ToString[derivOrder], ""] <> *)
   If [evolutionTimelevels!=3, "_TL" <> ToString[evolutionTimelevels], ""] <>
-  If [addMatter!=0, "_M", ""];
+  (* If [addMatter!=0, "_M", ""] <> *)
+  "";
 
 ADM = prefix <> "ADM" <> suffix;
 
@@ -43,10 +41,10 @@ KD = KroneckerDelta;
 
 derivatives =
 {
-  PDstandardNth[i_]     -> StandardCenteredDifferenceOperator[1,derivOrder/2,i],
-  PDstandardNth[i_, i_] -> StandardCenteredDifferenceOperator[2,derivOrder/2,i],
-  PDstandardNth[i_, j_] -> StandardCenteredDifferenceOperator[1,derivOrder/2,i]
-                           StandardCenteredDifferenceOperator[1,derivOrder/2,j]
+  PDstandardNth[i_]     -> StandardCenteredDifferenceOperator[1,fdOrder/2,i],
+  PDstandardNth[i_, i_] -> StandardCenteredDifferenceOperator[2,fdOrder/2,i],
+  PDstandardNth[i_, j_] -> StandardCenteredDifferenceOperator[1,fdOrder/2,i]
+                           StandardCenteredDifferenceOperator[1,fdOrder/2,j]
 };
 
 PD = PDstandardNth;
@@ -349,6 +347,15 @@ keywordParameters =
   }
 };
 
+intParameters =
+{
+  {
+    Name -> fdOrder,
+    Default -> 4,
+    AllowedValues -> {2,4,6,8}
+  }
+};
+
 (******************************************************************************)
 (* Construct the thorns *)
 (******************************************************************************)
@@ -371,6 +378,8 @@ CreateKrancThornTT [groups, ".", ADM,
   EvolutionTimelevels -> evolutionTimelevels,
   UseJacobian -> useJacobian,
   UseLoopControl -> True,
+  UseVectors -> True,
   InheritedImplementations -> inheritedImplementations,
-  KeywordParameters -> keywordParameters
+  KeywordParameters -> keywordParameters,
+  IntParameters -> intParameters
 ];
