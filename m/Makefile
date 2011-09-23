@@ -6,9 +6,9 @@ all: McLachlan_ADM.out McLachlan_BSSN.out McLachlan_ADMConstraints.out McLachlan
 	@echo
 
 McLachlan_ADM.out: McLachlan_ADM.m
-	rm -rf ML_ADM*
+	rm -rf ML_ADM
 	./runmath.sh $^
-	for thorn in ML_ADM*; do				\
+	for thorn in ML_ADM; do				\
 		./copy-if-changed.sh $$thorn ../$$thorn;	\
 	done
 
@@ -57,7 +57,7 @@ hydro.out: hydro.m
 	done
 
 clean:
-	rm -rf ML_ADM* ML_BSSN* ML_ADMConstraints*
+	rm -rf ML_ADM ML_BSSN* ML_ADMConstraints* ML_ADMQuantities*
 	rm -rf ML_WaveToy ML_WaveToyFO
 	rm -rf ML_hydro
 	rm -f McLachlan_ADM.out McLachlan_ADM.err
