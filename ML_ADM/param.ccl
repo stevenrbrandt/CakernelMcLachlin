@@ -3,6 +3,9 @@
 
 shares: GenericFD
 
+USES CCTK_STRING jacobian_group
+USES CCTK_STRING jacobian_derivative_group
+USES CCTK_INT jacobian_identity_map
 
 
 shares: MethodOfLines
@@ -14,6 +17,12 @@ CCTK_INT verbose "verbose" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 0
+
+restricted:
+CCTK_INT fdOrder "fdOrder"
+{
+  *:* :: ""
+} 4
 
 private:
 KEYWORD my_initial_data "my_initial_data"
