@@ -1,7 +1,3 @@
-$Path = Join[$Path, {"../../../repos/Kranc/Tools/CodeGen",
-                     "../../../repos/Kranc/Tools/MathematicaMisc"}];
-
-Get["KrancThorn`"];
 
 SetEnhancedTimes[False];
 SetSourceLanguage["C"];
