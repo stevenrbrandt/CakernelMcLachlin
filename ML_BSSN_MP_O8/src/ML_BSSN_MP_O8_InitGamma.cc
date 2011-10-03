@@ -40,8 +40,8 @@ static void ML_BSSN_MP_O8_InitGamma_Body(cGH const * restrict const cctkGH, int 
     return;
   }
   
-  const char *groups[] = {"ML_BSSN_MP_O8::ML_Gamma"};
-  GenericFD_AssertGroupStorage(cctkGH, "ML_BSSN_MP_O8_InitGamma", 1, groups);
+  const char *groups[] = {"ML_BSSN_MP_O8::ML_dtlapse","ML_BSSN_MP_O8::ML_dtshift","ML_BSSN_MP_O8::ML_Gamma"};
+  GenericFD_AssertGroupStorage(cctkGH, "ML_BSSN_MP_O8_InitGamma", 3, groups);
   
   switch(fdOrder)
   {
@@ -248,12 +248,24 @@ static void ML_BSSN_MP_O8_InitGamma_Body(cGH const * restrict const cctkGH, int 
     
     CCTK_REAL_VEC Xt3L = ToReal(0);
     
+    CCTK_REAL_VEC AL = ToReal(0);
+    
+    CCTK_REAL_VEC B1L = ToReal(0);
+    
+    CCTK_REAL_VEC B2L = ToReal(0);
+    
+    CCTK_REAL_VEC B3L = ToReal(0);
+    
     /* If necessary, store only partial vectors after the first iteration */
     
     if (CCTK_REAL_VEC_SIZE > 2 && CCTK_BUILTIN_EXPECT(i < lc_imin && i+CCTK_REAL_VEC_SIZE > lc_imax, 0))
     {
       ptrdiff_t const elt_count_lo = lc_imin-i;
       ptrdiff_t const elt_count_hi = lc_imax-i;
+      vec_store_nta_partial_mid(A[index],AL,elt_count_lo,elt_count_hi);
+      vec_store_nta_partial_mid(B1[index],B1L,elt_count_lo,elt_count_hi);
+      vec_store_nta_partial_mid(B2[index],B2L,elt_count_lo,elt_count_hi);
+      vec_store_nta_partial_mid(B3[index],B3L,elt_count_lo,elt_count_hi);
       vec_store_nta_partial_mid(Xt1[index],Xt1L,elt_count_lo,elt_count_hi);
       vec_store_nta_partial_mid(Xt2[index],Xt2L,elt_count_lo,elt_count_hi);
       vec_store_nta_partial_mid(Xt3[index],Xt3L,elt_count_lo,elt_count_hi);
@@ -265,6 +277,10 @@ static void ML_BSSN_MP_O8_InitGamma_Body(cGH const * restrict const cctkGH, int 
     if (CCTK_REAL_VEC_SIZE > 1 && CCTK_BUILTIN_EXPECT(i < lc_imin, 0))
     {
       ptrdiff_t const elt_count = lc_imin-i;
+      vec_store_nta_partial_hi(A[index],AL,elt_count);
+      vec_store_nta_partial_hi(B1[index],B1L,elt_count);
+      vec_store_nta_partial_hi(B2[index],B2L,elt_count);
+      vec_store_nta_partial_hi(B3[index],B3L,elt_count);
       vec_store_nta_partial_hi(Xt1[index],Xt1L,elt_count);
       vec_store_nta_partial_hi(Xt2[index],Xt2L,elt_count);
       vec_store_nta_partial_hi(Xt3[index],Xt3L,elt_count);
@@ -276,6 +292,10 @@ static void ML_BSSN_MP_O8_InitGamma_Body(cGH const * restrict const cctkGH, int 
     if (CCTK_REAL_VEC_SIZE > 1 && CCTK_BUILTIN_EXPECT(i+CCTK_REAL_VEC_SIZE > lc_imax, 0))
     {
       ptrdiff_t const elt_count = lc_imax-i;
+      vec_store_nta_partial_lo(A[index],AL,elt_count);
+      vec_store_nta_partial_lo(B1[index],B1L,elt_count);
+      vec_store_nta_partial_lo(B2[index],B2L,elt_count);
+      vec_store_nta_partial_lo(B3[index],B3L,elt_count);
       vec_store_nta_partial_lo(Xt1[index],Xt1L,elt_count);
       vec_store_nta_partial_lo(Xt2[index],Xt2L,elt_count);
       vec_store_nta_partial_lo(Xt3[index],Xt3L,elt_count);
@@ -283,6 +303,10 @@ static void ML_BSSN_MP_O8_InitGamma_Body(cGH const * restrict const cctkGH, int 
     }
     
     /* Copy local copies back to grid functions */
+    vec_store_nta(A[index],AL);
+    vec_store_nta(B1[index],B1L);
+    vec_store_nta(B2[index],B2L);
+    vec_store_nta(B3[index],B3L);
     vec_store_nta(Xt1[index],Xt1L);
     vec_store_nta(Xt2[index],Xt2L);
     vec_store_nta(Xt3[index],Xt3L);
