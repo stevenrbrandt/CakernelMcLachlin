@@ -363,7 +363,9 @@ initGammaCalc =
   Where -> Everywhere,
   Equations -> 
   {
-    Xt[ua] -> 0
+    Xt[ua] -> 0,
+    A      -> 0,
+    B[ua]  -> 0
   }
 };
 
