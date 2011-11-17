@@ -22,41 +22,13 @@
 #define SQR(x) (kmul(x,x))
 #define CUB(x) (kmul(x,SQR(x)))
 
-static void ML_BSSN_MP_O8_convertToADMBaseFakeDtLapseShift_Body(cGH const * restrict const cctkGH, int const dir, int const face, CCTK_REAL const normal[3], CCTK_REAL const tangentA[3], CCTK_REAL const tangentB[3], int const min[3], int const max[3], int const n_subblock_gfs, CCTK_REAL * restrict const subblock_gfs[])
+static void ML_BSSN_MP_O8_convertToADMBaseFakeDtLapseShift_Body(cGH const * restrict const cctkGH, int const dir, int const face, CCTK_REAL const normal[3], CCTK_REAL const tangentA[3], CCTK_REAL const tangentB[3], int const imin[3], int const imax[3], int const n_subblock_gfs, CCTK_REAL * restrict const subblock_gfs[])
 {
   DECLARE_CCTK_ARGUMENTS;
   DECLARE_CCTK_PARAMETERS;
   
   
   /* Declare finite differencing variables */
-  
-  if (verbose > 1)
-  {
-    CCTK_VInfo(CCTK_THORNSTRING,"Entering ML_BSSN_MP_O8_convertToADMBaseFakeDtLapseShift_Body");
-  }
-  
-  if (cctk_iteration % ML_BSSN_MP_O8_convertToADMBaseFakeDtLapseShift_calc_every != ML_BSSN_MP_O8_convertToADMBaseFakeDtLapseShift_calc_offset)
-  {
-    return;
-  }
-  
-  const char *groups[] = {"ADMBase::dtlapse","ADMBase::dtshift","grid::coordinates","Grid::coordinates","ML_BSSN_MP_O8::ML_dtlapse","ML_BSSN_MP_O8::ML_dtshift","ML_BSSN_MP_O8::ML_Gamma","ML_BSSN_MP_O8::ML_lapse","ML_BSSN_MP_O8::ML_shift","ML_BSSN_MP_O8::ML_trace_curv"};
-  GenericFD_AssertGroupStorage(cctkGH, "ML_BSSN_MP_O8_convertToADMBaseFakeDtLapseShift", 10, groups);
-  
-  switch(fdOrder)
-  {
-    case 2:
-      break;
-    
-    case 4:
-      break;
-    
-    case 6:
-      break;
-    
-    case 8:
-      break;
-  }
   
   /* Include user-supplied include files */
   
@@ -71,6 +43,7 @@ static void ML_BSSN_MP_O8_convertToADMBaseFakeDtLapseShift_Body(cGH const * rest
   CCTK_REAL_VEC const dy = ToReal(CCTK_DELTA_SPACE(1));
   CCTK_REAL_VEC const dz = ToReal(CCTK_DELTA_SPACE(2));
   CCTK_REAL_VEC const dt = ToReal(CCTK_DELTA_TIME);
+  CCTK_REAL_VEC const t = ToReal(cctk_time);
   CCTK_REAL_VEC const dxi = INV(dx);
   CCTK_REAL_VEC const dyi = INV(dy);
   CCTK_REAL_VEC const dzi = INV(dz);
@@ -208,10 +181,18 @@ static void ML_BSSN_MP_O8_convertToADMBaseFakeDtLapseShift_Body(cGH const * rest
   CCTK_REAL const *restrict const dJ323 = use_jacobian ? jacobian_derivative_ptrs[16] : 0;
   CCTK_REAL const *restrict const dJ333 = use_jacobian ? jacobian_derivative_ptrs[17] : 0;
   
+  /* Assign local copies of arrays functions */
+  
+  
+  
+  /* Calculate temporaries and arrays functions */
+  
+  /* Copy local copies back to grid functions */
+  
   /* Loop over the grid points */
   #pragma omp parallel
   LC_LOOP3VEC (ML_BSSN_MP_O8_convertToADMBaseFakeDtLapseShift,
-    i,j,k, min[0],min[1],min[2], max[0],max[1],max[2],
+    i,j,k, imin[0],imin[1],imin[2], imax[0],imax[1],imax[2],
     cctk_lsh[0],cctk_lsh[1],cctk_lsh[2],
     CCTK_REAL_VEC_SIZE)
   {
@@ -312,8 +293,6 @@ static void ML_BSSN_MP_O8_convertToADMBaseFakeDtLapseShift_Body(cGH const * rest
       vec_store_nta_partial_lo(dtbetaz[index],dtbetazL,elt_count);
       break;
     }
-    
-    /* Copy local copies back to grid functions */
     vec_store_nta(dtalp[index],dtalpL);
     vec_store_nta(dtbetax[index],dtbetaxL);
     vec_store_nta(dtbetay[index],dtbetayL);
@@ -327,5 +306,39 @@ extern "C" void ML_BSSN_MP_O8_convertToADMBaseFakeDtLapseShift(CCTK_ARGUMENTS)
   DECLARE_CCTK_ARGUMENTS;
   DECLARE_CCTK_PARAMETERS;
   
+  
+  if (verbose > 1)
+  {
+    CCTK_VInfo(CCTK_THORNSTRING,"Entering ML_BSSN_MP_O8_convertToADMBaseFakeDtLapseShift_Body");
+  }
+  
+  if (cctk_iteration % ML_BSSN_MP_O8_convertToADMBaseFakeDtLapseShift_calc_every != ML_BSSN_MP_O8_convertToADMBaseFakeDtLapseShift_calc_offset)
+  {
+    return;
+  }
+  
+  const char *groups[] = {"ADMBase::dtlapse","ADMBase::dtshift","grid::coordinates","Grid::coordinates","ML_BSSN_MP_O8::ML_dtlapse","ML_BSSN_MP_O8::ML_dtshift","ML_BSSN_MP_O8::ML_Gamma","ML_BSSN_MP_O8::ML_lapse","ML_BSSN_MP_O8::ML_shift","ML_BSSN_MP_O8::ML_trace_curv"};
+  GenericFD_AssertGroupStorage(cctkGH, "ML_BSSN_MP_O8_convertToADMBaseFakeDtLapseShift", 10, groups);
+  
+  switch(fdOrder)
+  {
+    case 2:
+      break;
+    
+    case 4:
+      break;
+    
+    case 6:
+      break;
+    
+    case 8:
+      break;
+  }
+  
   GenericFD_LoopOverEverything(cctkGH, &ML_BSSN_MP_O8_convertToADMBaseFakeDtLapseShift_Body);
+  
+  if (verbose > 1)
+  {
+    CCTK_VInfo(CCTK_THORNSTRING,"Leaving ML_BSSN_MP_O8_convertToADMBaseFakeDtLapseShift_Body");
+  }
 }

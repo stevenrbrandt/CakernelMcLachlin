@@ -17,5 +17,7 @@ extern "C" void ML_hydro_RegisterVars(CCTK_ARGUMENTS)
   ierr += MoLRegisterEvolved(CCTK_VarIndex("ML_hydro::mom1"),  CCTK_VarIndex("ML_hydro::mom1rhs"));
   ierr += MoLRegisterEvolved(CCTK_VarIndex("ML_hydro::mom2"),  CCTK_VarIndex("ML_hydro::mom2rhs"));
   ierr += MoLRegisterEvolved(CCTK_VarIndex("ML_hydro::mom3"),  CCTK_VarIndex("ML_hydro::mom3rhs"));
+  
+  /* Register all the evolved Array functions with MoL */
   return;
 }

@@ -28,5 +28,7 @@ extern "C" void ML_ADM_RegisterVars(CCTK_ARGUMENTS)
   ierr += MoLRegisterEvolved(CCTK_VarIndex("ML_ADM::beta1"),  CCTK_VarIndex("ML_ADM::beta1rhs"));
   ierr += MoLRegisterEvolved(CCTK_VarIndex("ML_ADM::beta2"),  CCTK_VarIndex("ML_ADM::beta2rhs"));
   ierr += MoLRegisterEvolved(CCTK_VarIndex("ML_ADM::beta3"),  CCTK_VarIndex("ML_ADM::beta3rhs"));
+  
+  /* Register all the evolved Array functions with MoL */
   return;
 }

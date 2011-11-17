@@ -36,28 +36,13 @@ extern "C" void WT_RHS_SelectBCs(CCTK_ARGUMENTS)
   return;
 }
 
-static void WT_RHS_Body(cGH const * restrict const cctkGH, int const dir, int const face, CCTK_REAL const normal[3], CCTK_REAL const tangentA[3], CCTK_REAL const tangentB[3], int const min[3], int const max[3], int const n_subblock_gfs, CCTK_REAL * restrict const subblock_gfs[])
+static void WT_RHS_Body(cGH const * restrict const cctkGH, int const dir, int const face, CCTK_REAL const normal[3], CCTK_REAL const tangentA[3], CCTK_REAL const tangentB[3], int const imin[3], int const imax[3], int const n_subblock_gfs, CCTK_REAL * restrict const subblock_gfs[])
 {
   DECLARE_CCTK_ARGUMENTS;
   DECLARE_CCTK_PARAMETERS;
   
   
   /* Declare finite differencing variables */
-  
-  if (verbose > 1)
-  {
-    CCTK_VInfo(CCTK_THORNSTRING,"Entering WT_RHS_Body");
-  }
-  
-  if (cctk_iteration % WT_RHS_calc_every != WT_RHS_calc_offset)
-  {
-    return;
-  }
-  
-  const char *groups[] = {"ML_WaveToy::WT_rho","ML_WaveToy::WT_rhorhs","ML_WaveToy::WT_u","ML_WaveToy::WT_urhs"};
-  GenericFD_AssertGroupStorage(cctkGH, "WT_RHS", 4, groups);
-  
-  GenericFD_EnsureStencilFits(cctkGH, "WT_RHS", 2, 2, 2);
   
   /* Include user-supplied include files */
   
@@ -72,6 +57,7 @@ static void WT_RHS_Body(cGH const * restrict const cctkGH, int const dir, int co
   CCTK_REAL const dy = ToReal(CCTK_DELTA_SPACE(1));
   CCTK_REAL const dz = ToReal(CCTK_DELTA_SPACE(2));
   CCTK_REAL const dt = ToReal(CCTK_DELTA_TIME);
+  CCTK_REAL const t = ToReal(cctk_time);
   CCTK_REAL const dxi = INV(dx);
   CCTK_REAL const dyi = INV(dy);
   CCTK_REAL const dzi = INV(dz);
@@ -95,10 +81,18 @@ static void WT_RHS_Body(cGH const * restrict const cctkGH, int const dir, int co
   CCTK_REAL const pm1o12dy2 = -0.0833333333333333333333333333333*INV(SQR(dy));
   CCTK_REAL const pm1o12dz2 = -0.0833333333333333333333333333333*INV(SQR(dz));
   
+  /* Assign local copies of arrays functions */
+  
+  
+  
+  /* Calculate temporaries and arrays functions */
+  
+  /* Copy local copies back to grid functions */
+  
   /* Loop over the grid points */
   #pragma omp parallel
   LC_LOOP3 (WT_RHS,
-    i,j,k, min[0],min[1],min[2], max[0],max[1],max[2],
+    i,j,k, imin[0],imin[1],imin[2], imax[0],imax[1],imax[2],
     cctk_lsh[0],cctk_lsh[1],cctk_lsh[2])
   {
     ptrdiff_t const index = di*i + dj*j + dk*k;
@@ -134,5 +128,26 @@ extern "C" void WT_RHS(CCTK_ARGUMENTS)
   DECLARE_CCTK_ARGUMENTS;
   DECLARE_CCTK_PARAMETERS;
   
+  
+  if (verbose > 1)
+  {
+    CCTK_VInfo(CCTK_THORNSTRING,"Entering WT_RHS_Body");
+  }
+  
+  if (cctk_iteration % WT_RHS_calc_every != WT_RHS_calc_offset)
+  {
+    return;
+  }
+  
+  const char *groups[] = {"ML_WaveToy::WT_rho","ML_WaveToy::WT_rhorhs","ML_WaveToy::WT_u","ML_WaveToy::WT_urhs"};
+  GenericFD_AssertGroupStorage(cctkGH, "WT_RHS", 4, groups);
+  
+  GenericFD_EnsureStencilFits(cctkGH, "WT_RHS", 2, 2, 2);
+  
   GenericFD_LoopOverInterior(cctkGH, &WT_RHS_Body);
+  
+  if (verbose > 1)
+  {
+    CCTK_VInfo(CCTK_THORNSTRING,"Leaving WT_RHS_Body");
+  }
 }

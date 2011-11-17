@@ -21,27 +21,13 @@
 #define SQR(x) ((x) * (x))
 #define CUB(x) ((x) * (x) * (x))
 
-static void hydro_con2prim_Body(cGH const * restrict const cctkGH, int const dir, int const face, CCTK_REAL const normal[3], CCTK_REAL const tangentA[3], CCTK_REAL const tangentB[3], int const min[3], int const max[3], int const n_subblock_gfs, CCTK_REAL * restrict const subblock_gfs[])
+static void hydro_con2prim_Body(cGH const * restrict const cctkGH, int const dir, int const face, CCTK_REAL const normal[3], CCTK_REAL const tangentA[3], CCTK_REAL const tangentB[3], int const imin[3], int const imax[3], int const n_subblock_gfs, CCTK_REAL * restrict const subblock_gfs[])
 {
   DECLARE_CCTK_ARGUMENTS;
   DECLARE_CCTK_PARAMETERS;
   
   
   /* Declare finite differencing variables */
-  
-  if (verbose > 1)
-  {
-    CCTK_VInfo(CCTK_THORNSTRING,"Entering hydro_con2prim_Body");
-  }
-  
-  if (cctk_iteration % hydro_con2prim_calc_every != hydro_con2prim_calc_offset)
-  {
-    return;
-  }
-  
-  const char *groups[] = {"ML_hydro::ene_group","ML_hydro::eps_group","ML_hydro::mass_group","ML_hydro::mom_group","ML_hydro::press_group","ML_hydro::rho_group","ML_hydro::vel_group","ML_hydro::vol_group"};
-  GenericFD_AssertGroupStorage(cctkGH, "hydro_con2prim", 8, groups);
-  
   
   /* Include user-supplied include files */
   
@@ -56,6 +42,7 @@ static void hydro_con2prim_Body(cGH const * restrict const cctkGH, int const dir
   CCTK_REAL const dy = ToReal(CCTK_DELTA_SPACE(1));
   CCTK_REAL const dz = ToReal(CCTK_DELTA_SPACE(2));
   CCTK_REAL const dt = ToReal(CCTK_DELTA_TIME);
+  CCTK_REAL const t = ToReal(cctk_time);
   CCTK_REAL const dxi = INV(dx);
   CCTK_REAL const dyi = INV(dy);
   CCTK_REAL const dzi = INV(dz);
@@ -79,10 +66,18 @@ static void hydro_con2prim_Body(cGH const * restrict const cctkGH, int const dir
   CCTK_REAL const p1ody2 = INV(SQR(dy));
   CCTK_REAL const p1odz2 = INV(SQR(dz));
   
+  /* Assign local copies of arrays functions */
+  
+  
+  
+  /* Calculate temporaries and arrays functions */
+  
+  /* Copy local copies back to grid functions */
+  
   /* Loop over the grid points */
   #pragma omp parallel
   LC_LOOP3 (hydro_con2prim,
-    i,j,k, min[0],min[1],min[2], max[0],max[1],max[2],
+    i,j,k, imin[0],imin[1],imin[2], imax[0],imax[1],imax[2],
     cctk_lsh[0],cctk_lsh[1],cctk_lsh[2])
   {
     ptrdiff_t const index = di*i + dj*j + dk*k;
@@ -136,5 +131,25 @@ extern "C" void hydro_con2prim(CCTK_ARGUMENTS)
   DECLARE_CCTK_ARGUMENTS;
   DECLARE_CCTK_PARAMETERS;
   
+  
+  if (verbose > 1)
+  {
+    CCTK_VInfo(CCTK_THORNSTRING,"Entering hydro_con2prim_Body");
+  }
+  
+  if (cctk_iteration % hydro_con2prim_calc_every != hydro_con2prim_calc_offset)
+  {
+    return;
+  }
+  
+  const char *groups[] = {"ML_hydro::ene_group","ML_hydro::eps_group","ML_hydro::mass_group","ML_hydro::mom_group","ML_hydro::press_group","ML_hydro::rho_group","ML_hydro::vel_group","ML_hydro::vol_group"};
+  GenericFD_AssertGroupStorage(cctkGH, "hydro_con2prim", 8, groups);
+  
+  
   GenericFD_LoopOverEverything(cctkGH, &hydro_con2prim_Body);
+  
+  if (verbose > 1)
+  {
+    CCTK_VInfo(CCTK_THORNSTRING,"Leaving hydro_con2prim_Body");
+  }
 }

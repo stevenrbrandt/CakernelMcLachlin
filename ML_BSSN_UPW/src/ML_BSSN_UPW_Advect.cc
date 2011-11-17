@@ -58,45 +58,13 @@ extern "C" void ML_BSSN_UPW_Advect_SelectBCs(CCTK_ARGUMENTS)
   return;
 }
 
-static void ML_BSSN_UPW_Advect_Body(cGH const * restrict const cctkGH, int const dir, int const face, CCTK_REAL const normal[3], CCTK_REAL const tangentA[3], CCTK_REAL const tangentB[3], int const min[3], int const max[3], int const n_subblock_gfs, CCTK_REAL * restrict const subblock_gfs[])
+static void ML_BSSN_UPW_Advect_Body(cGH const * restrict const cctkGH, int const dir, int const face, CCTK_REAL const normal[3], CCTK_REAL const tangentA[3], CCTK_REAL const tangentB[3], int const imin[3], int const imax[3], int const n_subblock_gfs, CCTK_REAL * restrict const subblock_gfs[])
 {
   DECLARE_CCTK_ARGUMENTS;
   DECLARE_CCTK_PARAMETERS;
   
   
   /* Declare finite differencing variables */
-  
-  if (verbose > 1)
-  {
-    CCTK_VInfo(CCTK_THORNSTRING,"Entering ML_BSSN_UPW_Advect_Body");
-  }
-  
-  if (cctk_iteration % ML_BSSN_UPW_Advect_calc_every != ML_BSSN_UPW_Advect_calc_offset)
-  {
-    return;
-  }
-  
-  const char *groups[] = {"ML_BSSN_UPW::ML_curv","ML_BSSN_UPW::ML_curvrhs","ML_BSSN_UPW::ML_dtlapse","ML_BSSN_UPW::ML_dtlapserhs","ML_BSSN_UPW::ML_dtshift","ML_BSSN_UPW::ML_dtshiftrhs","ML_BSSN_UPW::ML_Gamma","ML_BSSN_UPW::ML_Gammarhs","ML_BSSN_UPW::ML_lapse","ML_BSSN_UPW::ML_lapserhs","ML_BSSN_UPW::ML_log_confac","ML_BSSN_UPW::ML_log_confacrhs","ML_BSSN_UPW::ML_metric","ML_BSSN_UPW::ML_metricrhs","ML_BSSN_UPW::ML_shift","ML_BSSN_UPW::ML_shiftrhs","ML_BSSN_UPW::ML_trace_curv","ML_BSSN_UPW::ML_trace_curvrhs"};
-  GenericFD_AssertGroupStorage(cctkGH, "ML_BSSN_UPW_Advect", 18, groups);
-  
-  switch(fdOrder)
-  {
-    case 2:
-      GenericFD_EnsureStencilFits(cctkGH, "ML_BSSN_UPW_Advect", 2, 2, 2);
-      break;
-    
-    case 4:
-      GenericFD_EnsureStencilFits(cctkGH, "ML_BSSN_UPW_Advect", 3, 3, 3);
-      break;
-    
-    case 6:
-      GenericFD_EnsureStencilFits(cctkGH, "ML_BSSN_UPW_Advect", 4, 4, 4);
-      break;
-    
-    case 8:
-      GenericFD_EnsureStencilFits(cctkGH, "ML_BSSN_UPW_Advect", 5, 5, 5);
-      break;
-  }
   
   /* Include user-supplied include files */
   
@@ -111,6 +79,7 @@ static void ML_BSSN_UPW_Advect_Body(cGH const * restrict const cctkGH, int const
   CCTK_REAL_VEC const dy = ToReal(CCTK_DELTA_SPACE(1));
   CCTK_REAL_VEC const dz = ToReal(CCTK_DELTA_SPACE(2));
   CCTK_REAL_VEC const dt = ToReal(CCTK_DELTA_TIME);
+  CCTK_REAL_VEC const t = ToReal(cctk_time);
   CCTK_REAL_VEC const dxi = INV(dx);
   CCTK_REAL_VEC const dyi = INV(dy);
   CCTK_REAL_VEC const dzi = INV(dz);
@@ -248,10 +217,18 @@ static void ML_BSSN_UPW_Advect_Body(cGH const * restrict const cctkGH, int const
   CCTK_REAL const *restrict const dJ323 = use_jacobian ? jacobian_derivative_ptrs[16] : 0;
   CCTK_REAL const *restrict const dJ333 = use_jacobian ? jacobian_derivative_ptrs[17] : 0;
   
+  /* Assign local copies of arrays functions */
+  
+  
+  
+  /* Calculate temporaries and arrays functions */
+  
+  /* Copy local copies back to grid functions */
+  
   /* Loop over the grid points */
   #pragma omp parallel
   LC_LOOP3VEC (ML_BSSN_UPW_Advect,
-    i,j,k, min[0],min[1],min[2], max[0],max[1],max[2],
+    i,j,k, imin[0],imin[1],imin[2], imax[0],imax[1],imax[2],
     cctk_lsh[0],cctk_lsh[1],cctk_lsh[2],
     CCTK_REAL_VEC_SIZE)
   {
@@ -721,6 +698,12 @@ static void ML_BSSN_UPW_Advect_Body(cGH const * restrict const cctkGH, int const
     }
     
     /* Calculate temporaries and grid functions */
+    ptrdiff_t dir1 = Sign(beta1L);
+    
+    ptrdiff_t dir2 = Sign(beta2L);
+    
+    ptrdiff_t dir3 = Sign(beta3L);
+    
     CCTK_REAL_VEC JacPDupwindNth1A;
     CCTK_REAL_VEC JacPDupwindNth1alpha;
     CCTK_REAL_VEC JacPDupwindNth1At11;
@@ -1177,12 +1160,6 @@ static void ML_BSSN_UPW_Advect_Body(cGH const * restrict const cctkGH, int const
       JacPDupwindNth3Xt3 = PDupwindNth3Xt3;
     }
     
-    ptrdiff_t dir1 = Sign(beta1L);
-    
-    ptrdiff_t dir2 = Sign(beta2L);
-    
-    ptrdiff_t dir3 = Sign(beta3L);
-    
     phirhsL = 
       kmadd(beta1L,JacPDupwindNth1phi,kmadd(beta2L,JacPDupwindNth2phi,kmadd(beta3L,JacPDupwindNth3phi,phirhsL)));
     
@@ -1357,8 +1334,6 @@ static void ML_BSSN_UPW_Advect_Body(cGH const * restrict const cctkGH, int const
       vec_store_nta_partial_lo(Xt3rhs[index],Xt3rhsL,elt_count);
       break;
     }
-    
-    /* Copy local copies back to grid functions */
     vec_store_nta(alpharhs[index],alpharhsL);
     vec_store_nta(Arhs[index],ArhsL);
     vec_store_nta(At11rhs[index],At11rhsL);
@@ -1393,5 +1368,43 @@ extern "C" void ML_BSSN_UPW_Advect(CCTK_ARGUMENTS)
   DECLARE_CCTK_ARGUMENTS;
   DECLARE_CCTK_PARAMETERS;
   
+  
+  if (verbose > 1)
+  {
+    CCTK_VInfo(CCTK_THORNSTRING,"Entering ML_BSSN_UPW_Advect_Body");
+  }
+  
+  if (cctk_iteration % ML_BSSN_UPW_Advect_calc_every != ML_BSSN_UPW_Advect_calc_offset)
+  {
+    return;
+  }
+  
+  const char *groups[] = {"ML_BSSN_UPW::ML_curv","ML_BSSN_UPW::ML_curvrhs","ML_BSSN_UPW::ML_dtlapse","ML_BSSN_UPW::ML_dtlapserhs","ML_BSSN_UPW::ML_dtshift","ML_BSSN_UPW::ML_dtshiftrhs","ML_BSSN_UPW::ML_Gamma","ML_BSSN_UPW::ML_Gammarhs","ML_BSSN_UPW::ML_lapse","ML_BSSN_UPW::ML_lapserhs","ML_BSSN_UPW::ML_log_confac","ML_BSSN_UPW::ML_log_confacrhs","ML_BSSN_UPW::ML_metric","ML_BSSN_UPW::ML_metricrhs","ML_BSSN_UPW::ML_shift","ML_BSSN_UPW::ML_shiftrhs","ML_BSSN_UPW::ML_trace_curv","ML_BSSN_UPW::ML_trace_curvrhs"};
+  GenericFD_AssertGroupStorage(cctkGH, "ML_BSSN_UPW_Advect", 18, groups);
+  
+  switch(fdOrder)
+  {
+    case 2:
+      GenericFD_EnsureStencilFits(cctkGH, "ML_BSSN_UPW_Advect", 2, 2, 2);
+      break;
+    
+    case 4:
+      GenericFD_EnsureStencilFits(cctkGH, "ML_BSSN_UPW_Advect", 3, 3, 3);
+      break;
+    
+    case 6:
+      GenericFD_EnsureStencilFits(cctkGH, "ML_BSSN_UPW_Advect", 4, 4, 4);
+      break;
+    
+    case 8:
+      GenericFD_EnsureStencilFits(cctkGH, "ML_BSSN_UPW_Advect", 5, 5, 5);
+      break;
+  }
+  
   GenericFD_LoopOverInterior(cctkGH, &ML_BSSN_UPW_Advect_Body);
+  
+  if (verbose > 1)
+  {
+    CCTK_VInfo(CCTK_THORNSTRING,"Leaving ML_BSSN_UPW_Advect_Body");
+  }
 }

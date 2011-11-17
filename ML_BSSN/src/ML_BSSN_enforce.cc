@@ -22,41 +22,13 @@
 #define SQR(x) (kmul(x,x))
 #define CUB(x) (kmul(x,SQR(x)))
 
-static void ML_BSSN_enforce_Body(cGH const * restrict const cctkGH, int const dir, int const face, CCTK_REAL const normal[3], CCTK_REAL const tangentA[3], CCTK_REAL const tangentB[3], int const min[3], int const max[3], int const n_subblock_gfs, CCTK_REAL * restrict const subblock_gfs[])
+static void ML_BSSN_enforce_Body(cGH const * restrict const cctkGH, int const dir, int const face, CCTK_REAL const normal[3], CCTK_REAL const tangentA[3], CCTK_REAL const tangentB[3], int const imin[3], int const imax[3], int const n_subblock_gfs, CCTK_REAL * restrict const subblock_gfs[])
 {
   DECLARE_CCTK_ARGUMENTS;
   DECLARE_CCTK_PARAMETERS;
   
   
   /* Declare finite differencing variables */
-  
-  if (verbose > 1)
-  {
-    CCTK_VInfo(CCTK_THORNSTRING,"Entering ML_BSSN_enforce_Body");
-  }
-  
-  if (cctk_iteration % ML_BSSN_enforce_calc_every != ML_BSSN_enforce_calc_offset)
-  {
-    return;
-  }
-  
-  const char *groups[] = {"ML_BSSN::ML_curv","ML_BSSN::ML_lapse","ML_BSSN::ML_metric"};
-  GenericFD_AssertGroupStorage(cctkGH, "ML_BSSN_enforce", 3, groups);
-  
-  switch(fdOrder)
-  {
-    case 2:
-      break;
-    
-    case 4:
-      break;
-    
-    case 6:
-      break;
-    
-    case 8:
-      break;
-  }
   
   /* Include user-supplied include files */
   
@@ -71,6 +43,7 @@ static void ML_BSSN_enforce_Body(cGH const * restrict const cctkGH, int const di
   CCTK_REAL_VEC const dy = ToReal(CCTK_DELTA_SPACE(1));
   CCTK_REAL_VEC const dz = ToReal(CCTK_DELTA_SPACE(2));
   CCTK_REAL_VEC const dt = ToReal(CCTK_DELTA_TIME);
+  CCTK_REAL_VEC const t = ToReal(cctk_time);
   CCTK_REAL_VEC const dxi = INV(dx);
   CCTK_REAL_VEC const dyi = INV(dy);
   CCTK_REAL_VEC const dzi = INV(dz);
@@ -208,10 +181,18 @@ static void ML_BSSN_enforce_Body(cGH const * restrict const cctkGH, int const di
   CCTK_REAL const *restrict const dJ323 = use_jacobian ? jacobian_derivative_ptrs[16] : 0;
   CCTK_REAL const *restrict const dJ333 = use_jacobian ? jacobian_derivative_ptrs[17] : 0;
   
+  /* Assign local copies of arrays functions */
+  
+  
+  
+  /* Calculate temporaries and arrays functions */
+  
+  /* Copy local copies back to grid functions */
+  
   /* Loop over the grid points */
   #pragma omp parallel
   LC_LOOP3VEC (ML_BSSN_enforce,
-    i,j,k, min[0],min[1],min[2], max[0],max[1],max[2],
+    i,j,k, imin[0],imin[1],imin[2], imax[0],imax[1],imax[2],
     cctk_lsh[0],cctk_lsh[1],cctk_lsh[2],
     CCTK_REAL_VEC_SIZE)
   {
@@ -340,8 +321,6 @@ static void ML_BSSN_enforce_Body(cGH const * restrict const cctkGH, int const di
       vec_store_nta_partial_lo(At33[index],At33L,elt_count);
       break;
     }
-    
-    /* Copy local copies back to grid functions */
     vec_store_nta(alpha[index],alphaL);
     vec_store_nta(At11[index],At11L);
     vec_store_nta(At12[index],At12L);
@@ -358,5 +337,39 @@ extern "C" void ML_BSSN_enforce(CCTK_ARGUMENTS)
   DECLARE_CCTK_ARGUMENTS;
   DECLARE_CCTK_PARAMETERS;
   
+  
+  if (verbose > 1)
+  {
+    CCTK_VInfo(CCTK_THORNSTRING,"Entering ML_BSSN_enforce_Body");
+  }
+  
+  if (cctk_iteration % ML_BSSN_enforce_calc_every != ML_BSSN_enforce_calc_offset)
+  {
+    return;
+  }
+  
+  const char *groups[] = {"ML_BSSN::ML_curv","ML_BSSN::ML_lapse","ML_BSSN::ML_metric"};
+  GenericFD_AssertGroupStorage(cctkGH, "ML_BSSN_enforce", 3, groups);
+  
+  switch(fdOrder)
+  {
+    case 2:
+      break;
+    
+    case 4:
+      break;
+    
+    case 6:
+      break;
+    
+    case 8:
+      break;
+  }
+  
   GenericFD_LoopOverEverything(cctkGH, &ML_BSSN_enforce_Body);
+  
+  if (verbose > 1)
+  {
+    CCTK_VInfo(CCTK_THORNSTRING,"Leaving ML_BSSN_enforce_Body");
+  }
 }

@@ -37,5 +37,7 @@ extern "C" void ML_BSSN_O2_RegisterVars(CCTK_ARGUMENTS)
   ierr += MoLRegisterEvolved(CCTK_VarIndex("ML_BSSN_O2::beta2"),  CCTK_VarIndex("ML_BSSN_O2::beta2rhs"));
   ierr += MoLRegisterEvolved(CCTK_VarIndex("ML_BSSN_O2::beta3"),  CCTK_VarIndex("ML_BSSN_O2::beta3rhs"));
   ierr += MoLRegisterEvolved(CCTK_VarIndex("ML_BSSN_O2::trK"),  CCTK_VarIndex("ML_BSSN_O2::trKrhs"));
+  
+  /* Register all the evolved Array functions with MoL */
   return;
 }

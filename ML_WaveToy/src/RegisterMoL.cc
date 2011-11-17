@@ -14,5 +14,7 @@ extern "C" void ML_WaveToy_RegisterVars(CCTK_ARGUMENTS)
   /* Register all the evolved grid functions with MoL */
   ierr += MoLRegisterEvolved(CCTK_VarIndex("ML_WaveToy::rho"),  CCTK_VarIndex("ML_WaveToy::rhorhs"));
   ierr += MoLRegisterEvolved(CCTK_VarIndex("ML_WaveToy::u"),  CCTK_VarIndex("ML_WaveToy::urhs"));
+  
+  /* Register all the evolved Array functions with MoL */
   return;
 }
