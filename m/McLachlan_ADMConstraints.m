@@ -136,7 +136,7 @@ ADMConstraintsCalc =
   Where -> Interior,
   After -> "MoL_PostStep",
   Shorthands -> {detg, gu[ua,ub], G[ua,lb,lc],
-                 R[la,lb], trR, Km[la,lb], trK,
+                 R[la,lb], trR, Km[ua,lb], trK,
                  rho, S[la]},
   Equations -> 
   {

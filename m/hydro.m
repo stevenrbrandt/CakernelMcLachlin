@@ -113,8 +113,8 @@ prim2conCalc =
   {
     vol     -> h^3,
     mass    -> vol rho,
-    mom[la] -> mass vel[la],
-    ene     -> (1/2) mass vel[ua] vel[la] + mass eps
+    mom[la] -> mass Euc[la,lb] vel[ub],
+    ene     -> (1/2) mass Euc[la,lb] vel[ub] vel[ua] + mass eps
   }
 };
 
@@ -129,8 +129,8 @@ con2primCalc =
   Equations -> 
   {
     rho     -> mass / vol,
-    vel[ua] -> mom[ua] / mass,
-    eps     -> ene / mass - (1/2) vel[ua] vel[la],
+    vel[ua] -> Euc[ua,ub] mom[lb] / mass,
+    eps     -> ene / mass - (1/2) Euc[la,lc] vel[ua] vel[uc],
     
     press   -> Gamma rho eps
   }

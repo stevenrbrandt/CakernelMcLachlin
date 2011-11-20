@@ -799,7 +799,7 @@ RHSRadiativeBoundaryCalc =
     em4phi     -> IfThen [conformalMethod, phi^2, Exp[-4 phi]],
     gu[ua,ub]  -> em4phi gtu[ua,ub],
     
-    nn[la] -> normal[la],
+    nn[la] -> Euc[la,lb] normal[ub],
     nu[ua] -> gu[ua,ub] nn[lb],
     nlen2  -> nu[ua] nn[la],
     nlen   -> Sqrt[nlen2],
@@ -884,7 +884,7 @@ constraintsCalc =
                  Gt[ua,lb,lc], Gtl[la,lb,lc], Gtlu[la,lb,uc], Xtn[ua],
                  e4phi, em4phi,
                  g[la,lb], detg, gu[ua,ub], ddetg[la], G[ua,lb,lc],
-                 Rt[la,lb], Rphi[la,lb], R[la,lb], trR, Atm[la,lb],
+                 Rt[la,lb], Rphi[la,lb], R[la,lb], trR, Atm[ua,lb],
                  gK[la,lb,lc], cdphi[la], cdphi2[la,lb],
                  rho, S[la], fac1, fac2},
   Equations -> 
