@@ -285,53 +285,128 @@ static void ML_ADMConstraints_Body(cGH const * restrict const cctkGH, int const 
       + gu32*(-PDstandardNth2gzz + 2*PDstandardNth3gyz) + 
       gu33*PDstandardNth3gzz);
     
-    CCTK_REAL R11 = 0.5*(-2*(G111*G122 + G111*G133 + G211*G222 + G211*G233 
-      + G311*G322 + G311*G333 + gu32*PDstandardNth11gyz) + 
-      2*gu32*PDstandardNth12gxz + 2*gu32*PDstandardNth13gxy + 
-      gu22*(-PDstandardNth11gyy + 2*PDstandardNth12gxy - PDstandardNth22gxx) 
-      - 2*gu32*PDstandardNth23gxx + gu33*(-PDstandardNth11gzz + 
-      2*PDstandardNth13gxz - PDstandardNth33gxx) + 2*SQR(G112) + 2*SQR(G113) 
-      + 2*SQR(G212) + 2*SQR(G213) + 2*SQR(G312) + 2*SQR(G313));
+    CCTK_REAL R11 = 0.5*(gu32*(4*((-(G123*G211) + G113*G212)*gxyL + 
+      (-(G123*G311) + G113*G312)*gxzL + G112*(G113*gxxL + G213*gxyL + 
+      G313*gxzL) - G111*(G123*gxxL + G223*gxyL + G323*gxzL) + (G212*G213 - 
+      G211*G223)*gyyL + G212*G313*gyzL + (-(G223*G311) + G213*G312 - 
+      G211*G323)*gyzL + (G312*G313 - G311*G323)*gzzL) + 
+      2*(-PDstandardNth11gyz + PDstandardNth12gxz + PDstandardNth13gxy - 
+      PDstandardNth23gxx)) + gu22*(-PDstandardNth11gyy + 2*PDstandardNth12gxy 
+      - PDstandardNth22gxx + 2*(G122*(-(G211*gxyL) - G311*gxzL) + 
+      2*G112*(G212*gxyL + G312*gxzL) - G111*(G122*gxxL + G222*gxyL + 
+      G322*gxzL) + (2*G212*G312 - G211*G322)*gyzL + G222*(-(G211*gyyL) - 
+      G311*gyzL) + gxxL*SQR(G112) + gyyL*SQR(G212) + gzzL*(-(G311*G322) + 
+      SQR(G312)))) + gu33*(-PDstandardNth11gzz + 2*PDstandardNth13gxz - 
+      PDstandardNth33gxx + 2*(G133*(-(G211*gxyL) - G311*gxzL) + 
+      2*G113*(G213*gxyL + G313*gxzL) - G111*(G133*gxxL + G233*gxyL + 
+      G333*gxzL) + (2*G213*G313 - G211*G333)*gyzL + G233*(-(G211*gyyL) - 
+      G311*gyzL) + gxxL*SQR(G113) + gyyL*SQR(G213) + gzzL*(-(G311*G333) + 
+      SQR(G313)))));
     
-    CCTK_REAL R12 = 0.5*(2*(G113*G123 + G213*G223 + G313*G323) - 
-      2*(G112*G133 + G212*G233 + G312*G333 + gu21*PDstandardNth12gxy) + 
-      gu31*(PDstandardNth11gyz - PDstandardNth12gxz - PDstandardNth13gxy) + 
-      gu21*(PDstandardNth11gyy + PDstandardNth22gxx) + 
-      gu32*PDstandardNth22gxz + gu31*PDstandardNth23gxx + 
-      gu32*(-PDstandardNth12gyz + PDstandardNth13gyy - PDstandardNth23gxy) + 
-      gu33*PDstandardNth23gxz + gu33*(-PDstandardNth12gzz + 
-      PDstandardNth13gyz - PDstandardNth33gxy));
+    CCTK_REAL R12 = 0.5*(gu21*(PDstandardNth11gyy - 2*PDstandardNth12gxy + 
+      PDstandardNth22gxx) + gu31*(PDstandardNth11gyz - PDstandardNth12gxz - 
+      PDstandardNth13gxy + PDstandardNth23gxx) + gu32*(-PDstandardNth12gyz + 
+      PDstandardNth13gyy + PDstandardNth22gxz - PDstandardNth23gxy) + 
+      gu33*(-PDstandardNth12gzz + PDstandardNth13gyz + PDstandardNth23gxz - 
+      PDstandardNth33gxy) + 2*(gu31*((G123*G211 - G113*G212)*gxyL + 
+      (G123*G311 - G113*G312)*gxzL - G112*(G113*gxxL + G213*gxyL + G313*gxzL) 
+      + G111*(G123*gxxL + G223*gxyL + G323*gxzL) + (-(G212*G213) + 
+      G211*G223)*gyyL + (G223*G311 - G213*G312 - G212*G313)*gyzL + 
+      G211*G323*gyzL + (-(G312*G313) + G311*G323)*gzzL) + gu32*((-(G123*G212) 
+      + G122*G213)*gxyL + (-(G123*G312) + G122*G313)*gxzL + G113*(G122*gxxL + 
+      G222*gxyL + G322*gxzL) - G112*(G123*gxxL + G223*gxyL + G323*gxzL) + 
+      (G213*G222 - G212*G223)*gyyL + G213*G322*gyzL + (-(G223*G312) + 
+      G222*G313 - G212*G323)*gyzL + (G313*G322 - G312*G323)*gzzL) + 
+      gu33*((-(G133*G212) + G123*G213)*gxyL + (-(G133*G312) + G123*G313)*gxzL 
+      + G113*(G123*gxxL + G223*gxyL + G323*gxzL) - G112*(G133*gxxL + 
+      G233*gxyL + G333*gxzL) + (G213*G223 - G212*G233)*gyyL + G213*G323*gyzL 
+      + (-(G233*G312) + G223*G313 - G212*G333)*gyzL + (G313*G323 - 
+      G312*G333)*gzzL) + gu21*(G122*(G211*gxyL + G311*gxzL) + G111*(G122*gxxL 
+      + G222*gxyL + G322*gxzL) + G222*(G211*gyyL + G311*gyzL) - 
+      2*(G112*(G212*gxyL + G312*gxzL) + G212*G312*gyzL) + G322*(G211*gyzL + 
+      G311*gzzL) - gxxL*SQR(G112) - gyyL*SQR(G212) - gzzL*SQR(G312))));
     
-    CCTK_REAL R13 = 0.5*(2*(G112*G123 + G212*G223 + G312*G323) - 
-      2*(G113*G122 + G213*G222 + G313*G322 + gu31*PDstandardNth13gxz) + 
-      gu21*(PDstandardNth11gyz - PDstandardNth12gxz - PDstandardNth13gxy + 
-      PDstandardNth23gxx) + gu22*(PDstandardNth12gyz - PDstandardNth13gyy - 
-      PDstandardNth22gxz + PDstandardNth23gxy) + gu31*(PDstandardNth11gzz + 
-      PDstandardNth33gxx) + gu32*(PDstandardNth12gzz - PDstandardNth13gyz - 
-      PDstandardNth23gxz + PDstandardNth33gxy));
+    CCTK_REAL R13 = 0.5*(gu21*(PDstandardNth11gyz - PDstandardNth12gxz - 
+      PDstandardNth13gxy + PDstandardNth23gxx) + gu22*(PDstandardNth12gyz - 
+      PDstandardNth13gyy - PDstandardNth22gxz + PDstandardNth23gxy) + 
+      gu31*(PDstandardNth11gzz - 2*PDstandardNth13gxz + PDstandardNth33gxx) + 
+      gu32*(PDstandardNth12gzz - PDstandardNth13gyz - PDstandardNth23gxz + 
+      PDstandardNth33gxy) + 2*(gu21*((G123*G211 - G113*G212)*gxyL + 
+      (G123*G311 - G113*G312)*gxzL - G112*(G113*gxxL + G213*gxyL + G313*gxzL) 
+      + G111*(G123*gxxL + G223*gxyL + G323*gxzL) + (-(G212*G213) + 
+      G211*G223)*gyyL + (G223*G311 - G213*G312 - G212*G313)*gyzL + 
+      G211*G323*gyzL + (-(G312*G313) + G311*G323)*gzzL) + gu22*((G123*G212 - 
+      G122*G213)*gxyL + (G123*G312 - G122*G313)*gxzL - G113*(G122*gxxL + 
+      G222*gxyL + G322*gxzL) + G112*(G123*gxxL + G223*gxyL + G323*gxzL) + 
+      (-(G213*G222) + G212*G223)*gyyL + (G223*G312 - G222*G313 - 
+      G213*G322)*gyzL + G212*G323*gyzL + (-(G313*G322) + G312*G323)*gzzL) + 
+      gu32*((G133*G212 - G123*G213)*gxyL + (G133*G312 - G123*G313)*gxzL - 
+      G113*(G123*gxxL + G223*gxyL + G323*gxzL) + G112*(G133*gxxL + G233*gxyL 
+      + G333*gxzL) + (-(G213*G223) + G212*G233)*gyyL + (G233*G312 - G223*G313 
+      - G213*G323)*gyzL + G212*G333*gyzL + (-(G313*G323) + G312*G333)*gzzL) + 
+      gu31*(G133*(G211*gxyL + G311*gxzL) + G111*(G133*gxxL + G233*gxyL + 
+      G333*gxzL) + G233*(G211*gyyL + G311*gyzL) - 2*(G113*(G213*gxyL + 
+      G313*gxzL) + G213*G313*gyzL) + G333*(G211*gyzL + G311*gzzL) - 
+      gxxL*SQR(G113) - gyyL*SQR(G213) - gzzL*SQR(G313))));
     
-    CCTK_REAL R22 = 0.5*(-2*(G122*(G111 + G133) + G222*(G211 + G233) + 
-      G322*(G311 + G333) + gu31*PDstandardNth13gyy) + 
-      gu11*(-PDstandardNth11gyy + 2*PDstandardNth12gxy - PDstandardNth22gxx) 
-      + gu31*(-2*PDstandardNth22gxz + 2*(PDstandardNth12gyz + 
-      PDstandardNth23gxy)) + gu33*(-PDstandardNth22gzz + 2*PDstandardNth23gyz 
-      - PDstandardNth33gyy) + 2*(SQR(G112) + SQR(G123) + SQR(G212) + 
-      SQR(G223) + SQR(G312) + SQR(G323)));
+    CCTK_REAL R22 = 0.5*(gu31*(4*((G123*G212 - G122*G213)*gxyL + 
+      (G123*G312 - G122*G313)*gxzL - G113*(G122*gxxL + G222*gxyL + G322*gxzL) 
+      + G112*(G123*gxxL + G223*gxyL + G323*gxzL) + (-(G213*G222) + 
+      G212*G223)*gyyL + (G223*G312 - G222*G313 - G213*G322)*gyzL + 
+      G212*G323*gyzL + (-(G313*G322) + G312*G323)*gzzL) + 
+      2*(PDstandardNth12gyz - PDstandardNth13gyy - PDstandardNth22gxz + 
+      PDstandardNth23gxy)) + gu11*(-PDstandardNth11gyy + 2*PDstandardNth12gxy 
+      - PDstandardNth22gxx + 2*(G122*(-(G211*gxyL) - G311*gxzL) + 
+      2*G112*(G212*gxyL + G312*gxzL) - G111*(G122*gxxL + G222*gxyL + 
+      G322*gxzL) + (2*G212*G312 - G211*G322)*gyzL + G222*(-(G211*gyyL) - 
+      G311*gyzL) + gxxL*SQR(G112) + gyyL*SQR(G212) + gzzL*(-(G311*G322) + 
+      SQR(G312)))) + gu33*(-PDstandardNth22gzz + 2*PDstandardNth23gyz - 
+      PDstandardNth33gyy + 2*(G133*(-(G222*gxyL) - G322*gxzL) + 
+      2*G123*(G223*gxyL + G323*gxzL) - G122*(G133*gxxL + G233*gxyL + 
+      G333*gxzL) + (2*G223*G323 - G222*G333)*gyzL + G233*(-(G222*gyyL) - 
+      G322*gyzL) + gxxL*SQR(G123) + gyyL*SQR(G223) + gzzL*(-(G322*G333) + 
+      SQR(G323)))));
     
-    CCTK_REAL R23 = 0.5*(2*(G112*G113 + G212*G213 + G312*G313) + 
-      gu11*(-PDstandardNth11gyz + PDstandardNth12gxz + PDstandardNth13gxy - 
-      PDstandardNth23gxx) + gu21*(-PDstandardNth12gyz + PDstandardNth13gyy + 
-      PDstandardNth22gxz - PDstandardNth23gxy) - 2*(G111*G123 + G211*G223 + 
-      G311*G323 + gu32*PDstandardNth23gyz) + gu31*(PDstandardNth12gzz - 
-      PDstandardNth13gyz - PDstandardNth23gxz + PDstandardNth33gxy) + 
-      gu32*(PDstandardNth22gzz + PDstandardNth33gyy));
+    CCTK_REAL R23 = 0.5*(gu11*(-PDstandardNth11gyz + PDstandardNth12gxz + 
+      PDstandardNth13gxy - PDstandardNth23gxx) + gu21*(-PDstandardNth12gyz + 
+      PDstandardNth13gyy + PDstandardNth22gxz - PDstandardNth23gxy) + 
+      gu31*(PDstandardNth12gzz - PDstandardNth13gyz - PDstandardNth23gxz + 
+      PDstandardNth33gxy) + gu32*(PDstandardNth22gzz - 2*PDstandardNth23gyz + 
+      PDstandardNth33gyy) + 2*(gu11*((-(G123*G211) + G113*G212)*gxyL + 
+      (-(G123*G311) + G113*G312)*gxzL + G112*(G113*gxxL + G213*gxyL + 
+      G313*gxzL) - G111*(G123*gxxL + G223*gxyL + G323*gxzL) + (G212*G213 - 
+      G211*G223)*gyyL + G212*G313*gyzL + (-(G223*G311) + G213*G312 - 
+      G211*G323)*gyzL + (G312*G313 - G311*G323)*gzzL) + gu21*((-(G123*G212) + 
+      G122*G213)*gxyL + (-(G123*G312) + G122*G313)*gxzL + G113*(G122*gxxL + 
+      G222*gxyL + G322*gxzL) - G112*(G123*gxxL + G223*gxyL + G323*gxzL) + 
+      (G213*G222 - G212*G223)*gyyL + G213*G322*gyzL + (-(G223*G312) + 
+      G222*G313 - G212*G323)*gyzL + (G313*G322 - G312*G323)*gzzL) + 
+      gu31*((G133*G212 - G123*G213)*gxyL + (G133*G312 - G123*G313)*gxzL - 
+      G113*(G123*gxxL + G223*gxyL + G323*gxzL) + G112*(G133*gxxL + G233*gxyL 
+      + G333*gxzL) + (-(G213*G223) + G212*G233)*gyyL + (G233*G312 - G223*G313 
+      - G213*G323)*gyzL + G212*G333*gyzL + (-(G313*G323) + G312*G333)*gzzL) + 
+      gu32*(G133*(G222*gxyL + G322*gxzL) + G122*(G133*gxxL + G233*gxyL + 
+      G333*gxzL) + G233*(G222*gyyL + G322*gyzL) - 2*(G123*(G223*gxyL + 
+      G323*gxzL) + G223*G323*gyzL) + G333*(G222*gyzL + G322*gzzL) - 
+      gxxL*SQR(G123) - gyyL*SQR(G223) - gzzL*SQR(G323))));
     
-    CCTK_REAL R33 = 0.5*(gu11*(-PDstandardNth11gzz + 2*PDstandardNth13gxz 
-      - PDstandardNth33gxx) - 2*((G111 + G122)*G133 + (G211 + G222)*G233 + 
-      (G311 + G322)*G333 + gu21*(PDstandardNth12gzz + PDstandardNth33gxy)) + 
-      gu22*(-PDstandardNth22gzz + 2*PDstandardNth23gyz - PDstandardNth33gyy) 
-      + 2*(gu21*(PDstandardNth13gyz + PDstandardNth23gxz) + SQR(G113) + 
-      SQR(G123) + SQR(G213) + SQR(G223) + SQR(G313) + SQR(G323)));
+    CCTK_REAL R33 = 0.5*(gu21*(4*((-(G133*G212) + G123*G213)*gxyL + 
+      (-(G133*G312) + G123*G313)*gxzL + G113*(G123*gxxL + G223*gxyL + 
+      G323*gxzL) - G112*(G133*gxxL + G233*gxyL + G333*gxzL) + (G213*G223 - 
+      G212*G233)*gyyL + G213*G323*gyzL + (-(G233*G312) + G223*G313 - 
+      G212*G333)*gyzL + (G313*G323 - G312*G333)*gzzL) + 
+      2*(-PDstandardNth12gzz + PDstandardNth13gyz + PDstandardNth23gxz - 
+      PDstandardNth33gxy)) + gu11*(-PDstandardNth11gzz + 2*PDstandardNth13gxz 
+      - PDstandardNth33gxx + 2*(G133*(-(G211*gxyL) - G311*gxzL) + 
+      2*G113*(G213*gxyL + G313*gxzL) - G111*(G133*gxxL + G233*gxyL + 
+      G333*gxzL) + (2*G213*G313 - G211*G333)*gyzL + G233*(-(G211*gyyL) - 
+      G311*gyzL) + gxxL*SQR(G113) + gyyL*SQR(G213) + gzzL*(-(G311*G333) + 
+      SQR(G313)))) + gu22*(-PDstandardNth22gzz + 2*PDstandardNth23gyz - 
+      PDstandardNth33gyy + 2*(G133*(-(G222*gxyL) - G322*gxzL) + 
+      2*G123*(G223*gxyL + G323*gxzL) - G122*(G133*gxxL + G233*gxyL + 
+      G333*gxzL) + (2*G223*G323 - G222*G333)*gyzL + G233*(-(G222*gyyL) - 
+      G322*gyzL) + gxxL*SQR(G123) + gyyL*SQR(G223) + gzzL*(-(G322*G333) + 
+      SQR(G323)))));
     
     CCTK_REAL trR = gu11*R11 + gu22*R22 + 2*(gu21*R12 + gu31*R13 + 
       gu32*R23) + gu33*R33;
