@@ -396,10 +396,14 @@ convertToADMBaseDtLapseShiftCalc =
   Schedule -> {"IN " <> BSSN <> "_convertToADMBaseGroup"},
   ConditionalOnKeyword -> {"dt_lapse_shift_method", "correct"},
   Where -> Interior,
-  Shorthands -> {dir[ua], eta, theta},
+  Shorthands -> {dir[ua], detgt, gtu[ua,ub], eta, theta},
   Equations -> 
   {
     dir[ua] -> Sign[beta[ua]],
+    
+    detgt -> 1 (* detgtExpr *),
+    (* This leads to simpler code... *)
+    gtu[ua,ub]   -> 1/detgt detgtExpr MatrixInverse [gt[ua,ub]],
     
     eta -> etaExpr,
     theta -> thetaExpr,
@@ -414,9 +418,17 @@ convertToADMBaseDtLapseShiftCalc =
                     (+ LapseACoeff       A
                      + (1 - LapseACoeff) trK)
                   + LapseAdvectionCoeff Upwind[beta[ua], alpha, la],
-    admdtbeta[ua] -> + theta ShiftGammaCoeff
-                       (+ ShiftBCoeff        B[ua]
-                        + (1 - ShiftBCoeff) (Xt[ua] - eta BetaDriver beta[ua]))
+    admdtbeta[ua] -> IfThen[harmonicShift,
+                            - 1/2 gtu[ua,uj] phi alpha
+                              (- 2 alpha PD[phi,lj]
+                               + 2 phi PD[alpha,lj]
+                               + gtu[uk,ul] phi alpha
+                                 (PD[gt[lk,ll],lj] - 2 PD[gt[lj,lk],ll])),
+                            (* else *)
+                            + theta ShiftGammaCoeff
+                              (+ ShiftBCoeff B[ua]
+                               + (1 - ShiftBCoeff)
+                                 (Xt[ua] - eta BetaDriver beta[ua]))]
                      + ShiftAdvectionCoeff Upwind[beta[ub], beta[ua], lb]
   }
 };
@@ -427,9 +439,13 @@ convertToADMBaseDtLapseShiftBoundaryCalc =
   Schedule -> {"IN " <> BSSN <> "_convertToADMBaseGroup"},
   ConditionalOnKeyword -> {"dt_lapse_shift_method", "correct"},
   Where -> BoundaryWithGhosts,
-  Shorthands -> {eta, theta},
+  Shorthands -> {detgt, gtu[ua,ub], eta, theta},
   Equations ->
   {
+    detgt -> 1 (* detgtExpr *),
+    (* This leads to simpler code... *)
+    gtu[ua,ub]   -> 1/detgt detgtExpr MatrixInverse [gt[ua,ub]],
+    
     eta -> etaExpr,
     theta -> thetaExpr,
     
@@ -441,9 +457,13 @@ convertToADMBaseDtLapseShiftBoundaryCalc =
     admdtalpha -> - harmonicF alpha^harmonicN
                     (+ LapseACoeff       A
                      + (1 - LapseACoeff) trK),
-    admdtbeta[ua] -> + theta ShiftGammaCoeff
-                       (+ ShiftBCoeff        B[ua]
-                        + (1 - ShiftBCoeff) (Xt[ua] - eta BetaDriver beta[ua]))
+    admdtbeta[ua] -> IfThen[harmonicShift,
+                            0,
+                            (* else *)
+                            + theta ShiftGammaCoeff
+                              (+ ShiftBCoeff B[ua]
+                               + (1 - ShiftBCoeff)
+                                 (Xt[ua] - eta BetaDriver beta[ua]))]
   }
 };
 
@@ -453,9 +473,13 @@ convertToADMBaseFakeDtLapseShiftCalc =
   Schedule -> {"IN " <> BSSN <> "_convertToADMBaseGroup"},
   ConditionalOnKeyword -> {"dt_lapse_shift_method", "noLapseShiftAdvection"},
   Where -> Everywhere,
-  Shorthands -> {eta, theta},
+  Shorthands -> {detgt, gtu[ua,ub], eta, theta},
   Equations ->
   {
+    detgt -> 1 (* detgtExpr *),
+    (* This leads to simpler code... *)
+    gtu[ua,ub]   -> 1/detgt detgtExpr MatrixInverse [gt[ua,ub]],
+    
     eta -> etaExpr,
     theta -> thetaExpr,
     
@@ -469,9 +493,13 @@ convertToADMBaseFakeDtLapseShiftCalc =
     admdtalpha -> - harmonicF alpha^harmonicN
                     (+ LapseACoeff       A
                      + (1 - LapseACoeff) trK),
-    admdtbeta[ua] -> + theta ShiftGammaCoeff
-                       (+ ShiftBCoeff        B[ua]
-                        + (1 - ShiftBCoeff) (Xt[ua] - eta BetaDriver beta[ua]))
+    admdtbeta[ua] -> IfThen[harmonicShift,
+                            0,
+                            (* else *)
+                            + theta ShiftGammaCoeff
+                              (+ ShiftBCoeff B[ua]
+                               + (1 - ShiftBCoeff)
+                                 (Xt[ua] - eta BetaDriver beta[ua]))]
   }
 };
 
@@ -631,9 +659,17 @@ evolCalc =
     
     (* dot[beta[ua]] -> eta Xt[ua], *)
     (* dot[beta[ua]] -> ShiftGammaCoeff alpha^ShiftAlphaPower B[ua], *)
-    dot[beta[ua]] -> + theta ShiftGammaCoeff
-                       (+ ShiftBCoeff        B[ua]
-                        + (1 - ShiftBCoeff) (Xt[ua] - eta BetaDriver beta[ua])),
+    dot[beta[ua]] -> IfThen[harmonicShift,
+                            - 1/2 gtu[ua,uj] phi alpha
+                              (- 2 alpha PD[phi,lj]
+                               + 2 phi PD[alpha,lj]
+                               + gtu[uk,ul] phi alpha
+                                 (PD[gt[lk,ll],lj] - 2 PD[gt[lj,lk],ll])),
+                            (* else *)
+                            + theta ShiftGammaCoeff
+                              (+ ShiftBCoeff B[ua]
+                               + (1 - ShiftBCoeff)
+                                 (Xt[ua] - eta BetaDriver beta[ua]))],
 
     dot[B[ua]]    -> + ShiftBCoeff (dotXt[ua] - eta BetaDriver B[ua])
 
@@ -1142,6 +1178,13 @@ intParameters =
     Name -> fdOrder,
     Default -> derivOrder,
     AllowedValues -> {2,4,6,8}
+  },
+  {
+    Name -> harmonicShift,
+    Description -> "Whether to use the harmonic shift",
+    AllowedValues -> {{Value -> "0", Description -> "Gamma driver shift"},
+                      {Value -> "1", Description -> "Harmonic shift"}},
+    Default -> 0
   }
 };
 
