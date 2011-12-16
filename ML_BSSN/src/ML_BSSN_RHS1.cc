@@ -1338,17 +1338,35 @@ static void ML_BSSN_RHS1_Body(cGH const * restrict const cctkGH, int const dir, 
     CCTK_REAL_VEC theta = 
       kfmin(ToReal(1),kexp(knmsub(rL,INV(ToReal(SpatialShiftGammaCoeffRadius)),ToReal(1))));
     
-    CCTK_REAL_VEC beta1rhsL = 
-      kmul(theta,kmul(kadd(Xt1L,kmadd(beta1L,kmul(eta,ToReal(BetaDriver*(-1 + 
-      ShiftBCoeff))),kmul(ksub(B1L,Xt1L),ToReal(ShiftBCoeff)))),ToReal(ShiftGammaCoeff)));
+    CCTK_REAL_VEC beta1rhsL;
+    CCTK_REAL_VEC beta2rhsL;
+    CCTK_REAL_VEC beta3rhsL;
     
-    CCTK_REAL_VEC beta2rhsL = 
-      kmul(theta,kmul(kadd(Xt2L,kmadd(beta2L,kmul(eta,ToReal(BetaDriver*(-1 + 
-      ShiftBCoeff))),kmul(ksub(B2L,Xt2L),ToReal(ShiftBCoeff)))),ToReal(ShiftGammaCoeff)));
-    
-    CCTK_REAL_VEC beta3rhsL = 
-      kmul(theta,kmul(kadd(Xt3L,kmadd(beta3L,kmul(eta,ToReal(BetaDriver*(-1 + 
-      ShiftBCoeff))),kmul(ksub(B3L,Xt3L),ToReal(ShiftBCoeff)))),ToReal(ShiftGammaCoeff)));
+    if (harmonicShift)
+    {
+      beta1rhsL = 
+        kmul(alphaL,kmul(phiL,kmul(ToReal(0.5),kmadd(kmadd(gtu11,JacPDstandardNth1alpha,kmadd(gtu12,JacPDstandardNth2alpha,kmul(gtu13,JacPDstandardNth3alpha))),kmul(phiL,ToReal(-2)),kmul(alphaL,kmadd(phiL,kmadd(JacPDstandardNth1gt11,SQR(gtu11),kmul(JacPDstandardNth1gt22,kmul(SQR(gtu12),ToReal(2)))),kmadd(gtu13,kmadd(JacPDstandardNth3phi,ToReal(2),kmul(phiL,kmadd(gtu33,JacPDstandardNth3gt33,kmsub(kmadd(gtu13,JacPDstandardNth1gt33,kmadd(gtu22,JacPDstandardNth2gt23,kmul(gtu23,JacPDstandardNth2gt33))),ToReal(2),kmul(gtu22,JacPDstandardNth3gt22))))),kmadd(gtu11,kmadd(JacPDstandardNth1phi,ToReal(2),kmul(phiL,kmadd(gtu12,JacPDstandardNth2gt11,kmadd(gtu13,JacPDstandardNth3gt11,kmadd(gtu23,kmul(JacPDstandardNth1gt23,ToReal(-2)),knmsub(gtu22,JacPDstandardNth1gt22,kmadd(kmadd(gtu12,JacPDstandardNth1gt12,kmadd(gtu13,JacPDstandardNth1gt13,kmul(gtu22,JacPDstandardNth2gt12))),ToReal(2),kmadd(gtu23,kmul(JacPDstandardNth2gt13,ToReal(2)),kmadd(gtu23,kmul(JacPDstandardNth3gt12,ToReal(2)),kmul(gtu33,kmsub(JacPDstandardNth3gt13,ToReal(2),JacPDstandardNth1gt33))))))))))),kmul(gtu12,kmadd(JacPDstandardNth2phi,ToReal(2),kmul(phiL,kmadd(gtu22,JacPDstandardNth2gt22,kmadd(gtu23,kmul(JacPDstandardNth3gt22,ToReal(2)),kmadd(gtu33,kmsub(JacPDstandardNth3gt23,ToReal(2),JacPDstandardNth2gt33),kmul(gtu13,kmul(JacPDstandardNth1gt23,ToReal(4)))))))))))))))));
+      
+      beta2rhsL = 
+        kmul(alphaL,kmul(phiL,kmul(ToReal(0.5),kmadd(kmadd(gtu12,JacPDstandardNth1alpha,kmadd(gtu22,JacPDstandardNth2alpha,kmul(gtu23,JacPDstandardNth3alpha))),kmul(phiL,ToReal(-2)),kmul(alphaL,kmadd(phiL,kmadd(JacPDstandardNth2gt22,SQR(gtu22),kmul(JacPDstandardNth2gt11,kmul(SQR(gtu12),ToReal(2)))),kmadd(gtu23,kmadd(JacPDstandardNth3phi,ToReal(2),kmul(phiL,kmadd(gtu33,JacPDstandardNth3gt33,kmsub(kmadd(gtu11,JacPDstandardNth1gt13,kmadd(gtu13,JacPDstandardNth1gt33,kmul(gtu23,JacPDstandardNth2gt33))),ToReal(2),kmul(gtu11,JacPDstandardNth3gt11))))),kmadd(gtu22,kmadd(JacPDstandardNth2phi,ToReal(2),kmul(phiL,kmadd(gtu23,JacPDstandardNth3gt22,kmadd(kmadd(gtu23,JacPDstandardNth2gt23,kmul(gtu13,kadd(JacPDstandardNth1gt23,ksub(JacPDstandardNth3gt12,JacPDstandardNth2gt13)))),ToReal(2),kmadd(gtu11,kmsub(JacPDstandardNth1gt12,ToReal(2),JacPDstandardNth2gt11),kmul(gtu33,kmsub(JacPDstandardNth3gt23,ToReal(2),JacPDstandardNth2gt33))))))),kmul(gtu12,kmadd(JacPDstandardNth1phi,ToReal(2),kmul(phiL,kmadd(gtu11,JacPDstandardNth1gt11,kmadd(gtu13,kmul(JacPDstandardNth3gt11,ToReal(2)),kmadd(gtu22,kmadd(JacPDstandardNth2gt12,ToReal(2),JacPDstandardNth1gt22),kmadd(gtu33,kmsub(JacPDstandardNth3gt13,ToReal(2),JacPDstandardNth1gt33),kmul(gtu23,kmul(JacPDstandardNth2gt13,ToReal(4))))))))))))))))));
+      
+      beta3rhsL = 
+        kmul(alphaL,kmul(phiL,kmul(ToReal(0.5),kmadd(kmadd(gtu13,JacPDstandardNth1alpha,kmadd(gtu23,JacPDstandardNth2alpha,kmul(gtu33,JacPDstandardNth3alpha))),kmul(phiL,ToReal(-2)),kmul(alphaL,kmadd(phiL,kmul(kmadd(JacPDstandardNth3gt11,SQR(gtu13),kmul(JacPDstandardNth3gt22,SQR(gtu23))),ToReal(2)),kmadd(gtu23,kmadd(JacPDstandardNth2phi,ToReal(2),kmul(phiL,kmadd(gtu22,JacPDstandardNth2gt22,kmadd(gtu33,JacPDstandardNth2gt33,kmsub(kmadd(gtu11,JacPDstandardNth1gt12,kmadd(gtu12,JacPDstandardNth1gt22,kmul(gtu33,JacPDstandardNth3gt23))),ToReal(2),kmul(gtu11,JacPDstandardNth2gt11)))))),kmadd(gtu33,kmadd(JacPDstandardNth3phi,ToReal(2),kmul(phiL,kmadd(gtu33,JacPDstandardNth3gt33,knmsub(gtu22,JacPDstandardNth3gt22,kmadd(kmadd(gtu22,JacPDstandardNth2gt23,kmul(gtu12,kadd(JacPDstandardNth1gt23,ksub(JacPDstandardNth2gt13,JacPDstandardNth3gt12)))),ToReal(2),kmul(gtu11,kmsub(JacPDstandardNth1gt13,ToReal(2),JacPDstandardNth3gt11))))))),kmul(gtu13,kmadd(JacPDstandardNth1phi,ToReal(2),kmul(phiL,kmadd(gtu11,JacPDstandardNth1gt11,kmadd(gtu12,kmul(JacPDstandardNth2gt11,ToReal(2)),kmadd(gtu22,kmsub(JacPDstandardNth2gt12,ToReal(2),JacPDstandardNth1gt22),kmadd(gtu33,kmadd(JacPDstandardNth3gt13,ToReal(2),JacPDstandardNth1gt33),kmul(gtu23,kmul(JacPDstandardNth3gt12,ToReal(4))))))))))))))))));
+    }
+    else
+    {
+      beta1rhsL = 
+        kmul(theta,kmul(kadd(Xt1L,kmadd(beta1L,kmul(eta,ToReal(BetaDriver*(-1 + 
+        ShiftBCoeff))),kmul(ksub(B1L,Xt1L),ToReal(ShiftBCoeff)))),ToReal(ShiftGammaCoeff)));
+      
+      beta2rhsL = 
+        kmul(theta,kmul(kadd(Xt2L,kmadd(beta2L,kmul(eta,ToReal(BetaDriver*(-1 + 
+        ShiftBCoeff))),kmul(ksub(B2L,Xt2L),ToReal(ShiftBCoeff)))),ToReal(ShiftGammaCoeff)));
+      
+      beta3rhsL = 
+        kmul(theta,kmul(kadd(Xt3L,kmadd(beta3L,kmul(eta,ToReal(BetaDriver*(-1 + 
+        ShiftBCoeff))),kmul(ksub(B3L,Xt3L),ToReal(ShiftBCoeff)))),ToReal(ShiftGammaCoeff)));
+    }
     
     CCTK_REAL_VEC B1rhsL = 
       kmul(knmsub(B1L,kmul(eta,ToReal(BetaDriver)),dotXt1),ToReal(ShiftBCoeff));

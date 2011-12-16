@@ -149,6 +149,12 @@ CCTK_INT fdOrder "fdOrder"
   *:* :: ""
 } 8
 
+restricted:
+CCTK_INT harmonicShift "Whether to use the harmonic shift"
+{
+  *:* :: ""
+} 0
+
 private:
 KEYWORD my_initial_data "my_initial_data"
 {

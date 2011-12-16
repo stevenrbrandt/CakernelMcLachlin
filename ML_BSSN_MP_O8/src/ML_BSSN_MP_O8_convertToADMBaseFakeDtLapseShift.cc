@@ -245,17 +245,32 @@ static void ML_BSSN_MP_O8_convertToADMBaseFakeDtLapseShift_Body(cGH const * rest
     CCTK_REAL_VEC dtalpL = 
       kneg(kmul(kpow(alphaL,harmonicN),kmul(ToReal(harmonicF),kmadd(ksub(AL,trKL),ToReal(LapseACoeff),trKL))));
     
-    CCTK_REAL_VEC dtbetaxL = 
-      kmul(theta,kmul(kadd(Xt1L,kmadd(beta1L,kmul(eta,ToReal(BetaDriver*(-1 + 
-      ShiftBCoeff))),kmul(ksub(B1L,Xt1L),ToReal(ShiftBCoeff)))),ToReal(ShiftGammaCoeff)));
+    CCTK_REAL_VEC dtbetaxL;
+    CCTK_REAL_VEC dtbetayL;
+    CCTK_REAL_VEC dtbetazL;
     
-    CCTK_REAL_VEC dtbetayL = 
-      kmul(theta,kmul(kadd(Xt2L,kmadd(beta2L,kmul(eta,ToReal(BetaDriver*(-1 + 
-      ShiftBCoeff))),kmul(ksub(B2L,Xt2L),ToReal(ShiftBCoeff)))),ToReal(ShiftGammaCoeff)));
-    
-    CCTK_REAL_VEC dtbetazL = 
-      kmul(theta,kmul(kadd(Xt3L,kmadd(beta3L,kmul(eta,ToReal(BetaDriver*(-1 + 
-      ShiftBCoeff))),kmul(ksub(B3L,Xt3L),ToReal(ShiftBCoeff)))),ToReal(ShiftGammaCoeff)));
+    if (harmonicShift)
+    {
+      dtbetaxL = ToReal(0);
+      
+      dtbetayL = ToReal(0);
+      
+      dtbetazL = ToReal(0);
+    }
+    else
+    {
+      dtbetaxL = 
+        kmul(theta,kmul(kadd(Xt1L,kmadd(beta1L,kmul(eta,ToReal(BetaDriver*(-1 + 
+        ShiftBCoeff))),kmul(ksub(B1L,Xt1L),ToReal(ShiftBCoeff)))),ToReal(ShiftGammaCoeff)));
+      
+      dtbetayL = 
+        kmul(theta,kmul(kadd(Xt2L,kmadd(beta2L,kmul(eta,ToReal(BetaDriver*(-1 + 
+        ShiftBCoeff))),kmul(ksub(B2L,Xt2L),ToReal(ShiftBCoeff)))),ToReal(ShiftGammaCoeff)));
+      
+      dtbetazL = 
+        kmul(theta,kmul(kadd(Xt3L,kmadd(beta3L,kmul(eta,ToReal(BetaDriver*(-1 + 
+        ShiftBCoeff))),kmul(ksub(B3L,Xt3L),ToReal(ShiftBCoeff)))),ToReal(ShiftGammaCoeff)));
+    }
     
     /* If necessary, store only partial vectors after the first iteration */
     

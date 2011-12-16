@@ -17,5 +17,7 @@ extern "C" void ML_WaveToyFO_RegisterVars(CCTK_ARGUMENTS)
   ierr += MoLRegisterEvolved(CCTK_VarIndex("ML_WaveToyFO::v1"),  CCTK_VarIndex("ML_WaveToyFO::v1rhs"));
   ierr += MoLRegisterEvolved(CCTK_VarIndex("ML_WaveToyFO::v2"),  CCTK_VarIndex("ML_WaveToyFO::v2rhs"));
   ierr += MoLRegisterEvolved(CCTK_VarIndex("ML_WaveToyFO::v3"),  CCTK_VarIndex("ML_WaveToyFO::v3rhs"));
+  
+  /* Register all the evolved Array functions with MoL */
   return;
 }

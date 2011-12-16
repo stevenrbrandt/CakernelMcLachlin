@@ -223,6 +223,13 @@ static void ML_BSSN_UPW_convertToADMBaseDtLapseShift_Body(cGH const * restrict c
     CCTK_REAL_VEC beta1L = vec_load(beta1[index]);
     CCTK_REAL_VEC beta2L = vec_load(beta2[index]);
     CCTK_REAL_VEC beta3L = vec_load(beta3[index]);
+    CCTK_REAL_VEC gt11L = vec_load(gt11[index]);
+    CCTK_REAL_VEC gt12L = vec_load(gt12[index]);
+    CCTK_REAL_VEC gt13L = vec_load(gt13[index]);
+    CCTK_REAL_VEC gt22L = vec_load(gt22[index]);
+    CCTK_REAL_VEC gt23L = vec_load(gt23[index]);
+    CCTK_REAL_VEC gt33L = vec_load(gt33[index]);
+    CCTK_REAL_VEC phiL = vec_load(phi[index]);
     CCTK_REAL_VEC rL = vec_load(r[index]);
     CCTK_REAL_VEC trKL = vec_load(trK[index]);
     CCTK_REAL_VEC Xt1L = vec_load(Xt1[index]);
@@ -248,6 +255,9 @@ static void ML_BSSN_UPW_convertToADMBaseDtLapseShift_Body(cGH const * restrict c
     /* Include user supplied include files */
     
     /* Precompute derivatives */
+    CCTK_REAL_VEC PDstandardNth1alpha;
+    CCTK_REAL_VEC PDstandardNth2alpha;
+    CCTK_REAL_VEC PDstandardNth3alpha;
     CCTK_REAL_VEC PDupwindNth1alpha;
     CCTK_REAL_VEC PDupwindNth2alpha;
     CCTK_REAL_VEC PDupwindNth3alpha;
@@ -260,10 +270,34 @@ static void ML_BSSN_UPW_convertToADMBaseDtLapseShift_Body(cGH const * restrict c
     CCTK_REAL_VEC PDupwindNth1beta3;
     CCTK_REAL_VEC PDupwindNth2beta3;
     CCTK_REAL_VEC PDupwindNth3beta3;
+    CCTK_REAL_VEC PDstandardNth1gt11;
+    CCTK_REAL_VEC PDstandardNth2gt11;
+    CCTK_REAL_VEC PDstandardNth3gt11;
+    CCTK_REAL_VEC PDstandardNth1gt12;
+    CCTK_REAL_VEC PDstandardNth2gt12;
+    CCTK_REAL_VEC PDstandardNth3gt12;
+    CCTK_REAL_VEC PDstandardNth1gt13;
+    CCTK_REAL_VEC PDstandardNth2gt13;
+    CCTK_REAL_VEC PDstandardNth3gt13;
+    CCTK_REAL_VEC PDstandardNth1gt22;
+    CCTK_REAL_VEC PDstandardNth2gt22;
+    CCTK_REAL_VEC PDstandardNth3gt22;
+    CCTK_REAL_VEC PDstandardNth1gt23;
+    CCTK_REAL_VEC PDstandardNth2gt23;
+    CCTK_REAL_VEC PDstandardNth3gt23;
+    CCTK_REAL_VEC PDstandardNth1gt33;
+    CCTK_REAL_VEC PDstandardNth2gt33;
+    CCTK_REAL_VEC PDstandardNth3gt33;
+    CCTK_REAL_VEC PDstandardNth1phi;
+    CCTK_REAL_VEC PDstandardNth2phi;
+    CCTK_REAL_VEC PDstandardNth3phi;
     
     switch(fdOrder)
     {
       case 2:
+        PDstandardNth1alpha = PDstandardNthfdOrder21(&alpha[index]);
+        PDstandardNth2alpha = PDstandardNthfdOrder22(&alpha[index]);
+        PDstandardNth3alpha = PDstandardNthfdOrder23(&alpha[index]);
         PDupwindNth1alpha = PDupwindNthfdOrder21(&alpha[index]);
         PDupwindNth2alpha = PDupwindNthfdOrder22(&alpha[index]);
         PDupwindNth3alpha = PDupwindNthfdOrder23(&alpha[index]);
@@ -276,9 +310,33 @@ static void ML_BSSN_UPW_convertToADMBaseDtLapseShift_Body(cGH const * restrict c
         PDupwindNth1beta3 = PDupwindNthfdOrder21(&beta3[index]);
         PDupwindNth2beta3 = PDupwindNthfdOrder22(&beta3[index]);
         PDupwindNth3beta3 = PDupwindNthfdOrder23(&beta3[index]);
+        PDstandardNth1gt11 = PDstandardNthfdOrder21(&gt11[index]);
+        PDstandardNth2gt11 = PDstandardNthfdOrder22(&gt11[index]);
+        PDstandardNth3gt11 = PDstandardNthfdOrder23(&gt11[index]);
+        PDstandardNth1gt12 = PDstandardNthfdOrder21(&gt12[index]);
+        PDstandardNth2gt12 = PDstandardNthfdOrder22(&gt12[index]);
+        PDstandardNth3gt12 = PDstandardNthfdOrder23(&gt12[index]);
+        PDstandardNth1gt13 = PDstandardNthfdOrder21(&gt13[index]);
+        PDstandardNth2gt13 = PDstandardNthfdOrder22(&gt13[index]);
+        PDstandardNth3gt13 = PDstandardNthfdOrder23(&gt13[index]);
+        PDstandardNth1gt22 = PDstandardNthfdOrder21(&gt22[index]);
+        PDstandardNth2gt22 = PDstandardNthfdOrder22(&gt22[index]);
+        PDstandardNth3gt22 = PDstandardNthfdOrder23(&gt22[index]);
+        PDstandardNth1gt23 = PDstandardNthfdOrder21(&gt23[index]);
+        PDstandardNth2gt23 = PDstandardNthfdOrder22(&gt23[index]);
+        PDstandardNth3gt23 = PDstandardNthfdOrder23(&gt23[index]);
+        PDstandardNth1gt33 = PDstandardNthfdOrder21(&gt33[index]);
+        PDstandardNth2gt33 = PDstandardNthfdOrder22(&gt33[index]);
+        PDstandardNth3gt33 = PDstandardNthfdOrder23(&gt33[index]);
+        PDstandardNth1phi = PDstandardNthfdOrder21(&phi[index]);
+        PDstandardNth2phi = PDstandardNthfdOrder22(&phi[index]);
+        PDstandardNth3phi = PDstandardNthfdOrder23(&phi[index]);
         break;
       
       case 4:
+        PDstandardNth1alpha = PDstandardNthfdOrder41(&alpha[index]);
+        PDstandardNth2alpha = PDstandardNthfdOrder42(&alpha[index]);
+        PDstandardNth3alpha = PDstandardNthfdOrder43(&alpha[index]);
         PDupwindNth1alpha = PDupwindNthfdOrder41(&alpha[index]);
         PDupwindNth2alpha = PDupwindNthfdOrder42(&alpha[index]);
         PDupwindNth3alpha = PDupwindNthfdOrder43(&alpha[index]);
@@ -291,9 +349,33 @@ static void ML_BSSN_UPW_convertToADMBaseDtLapseShift_Body(cGH const * restrict c
         PDupwindNth1beta3 = PDupwindNthfdOrder41(&beta3[index]);
         PDupwindNth2beta3 = PDupwindNthfdOrder42(&beta3[index]);
         PDupwindNth3beta3 = PDupwindNthfdOrder43(&beta3[index]);
+        PDstandardNth1gt11 = PDstandardNthfdOrder41(&gt11[index]);
+        PDstandardNth2gt11 = PDstandardNthfdOrder42(&gt11[index]);
+        PDstandardNth3gt11 = PDstandardNthfdOrder43(&gt11[index]);
+        PDstandardNth1gt12 = PDstandardNthfdOrder41(&gt12[index]);
+        PDstandardNth2gt12 = PDstandardNthfdOrder42(&gt12[index]);
+        PDstandardNth3gt12 = PDstandardNthfdOrder43(&gt12[index]);
+        PDstandardNth1gt13 = PDstandardNthfdOrder41(&gt13[index]);
+        PDstandardNth2gt13 = PDstandardNthfdOrder42(&gt13[index]);
+        PDstandardNth3gt13 = PDstandardNthfdOrder43(&gt13[index]);
+        PDstandardNth1gt22 = PDstandardNthfdOrder41(&gt22[index]);
+        PDstandardNth2gt22 = PDstandardNthfdOrder42(&gt22[index]);
+        PDstandardNth3gt22 = PDstandardNthfdOrder43(&gt22[index]);
+        PDstandardNth1gt23 = PDstandardNthfdOrder41(&gt23[index]);
+        PDstandardNth2gt23 = PDstandardNthfdOrder42(&gt23[index]);
+        PDstandardNth3gt23 = PDstandardNthfdOrder43(&gt23[index]);
+        PDstandardNth1gt33 = PDstandardNthfdOrder41(&gt33[index]);
+        PDstandardNth2gt33 = PDstandardNthfdOrder42(&gt33[index]);
+        PDstandardNth3gt33 = PDstandardNthfdOrder43(&gt33[index]);
+        PDstandardNth1phi = PDstandardNthfdOrder41(&phi[index]);
+        PDstandardNth2phi = PDstandardNthfdOrder42(&phi[index]);
+        PDstandardNth3phi = PDstandardNthfdOrder43(&phi[index]);
         break;
       
       case 6:
+        PDstandardNth1alpha = PDstandardNthfdOrder61(&alpha[index]);
+        PDstandardNth2alpha = PDstandardNthfdOrder62(&alpha[index]);
+        PDstandardNth3alpha = PDstandardNthfdOrder63(&alpha[index]);
         PDupwindNth1alpha = PDupwindNthfdOrder61(&alpha[index]);
         PDupwindNth2alpha = PDupwindNthfdOrder62(&alpha[index]);
         PDupwindNth3alpha = PDupwindNthfdOrder63(&alpha[index]);
@@ -306,9 +388,33 @@ static void ML_BSSN_UPW_convertToADMBaseDtLapseShift_Body(cGH const * restrict c
         PDupwindNth1beta3 = PDupwindNthfdOrder61(&beta3[index]);
         PDupwindNth2beta3 = PDupwindNthfdOrder62(&beta3[index]);
         PDupwindNth3beta3 = PDupwindNthfdOrder63(&beta3[index]);
+        PDstandardNth1gt11 = PDstandardNthfdOrder61(&gt11[index]);
+        PDstandardNth2gt11 = PDstandardNthfdOrder62(&gt11[index]);
+        PDstandardNth3gt11 = PDstandardNthfdOrder63(&gt11[index]);
+        PDstandardNth1gt12 = PDstandardNthfdOrder61(&gt12[index]);
+        PDstandardNth2gt12 = PDstandardNthfdOrder62(&gt12[index]);
+        PDstandardNth3gt12 = PDstandardNthfdOrder63(&gt12[index]);
+        PDstandardNth1gt13 = PDstandardNthfdOrder61(&gt13[index]);
+        PDstandardNth2gt13 = PDstandardNthfdOrder62(&gt13[index]);
+        PDstandardNth3gt13 = PDstandardNthfdOrder63(&gt13[index]);
+        PDstandardNth1gt22 = PDstandardNthfdOrder61(&gt22[index]);
+        PDstandardNth2gt22 = PDstandardNthfdOrder62(&gt22[index]);
+        PDstandardNth3gt22 = PDstandardNthfdOrder63(&gt22[index]);
+        PDstandardNth1gt23 = PDstandardNthfdOrder61(&gt23[index]);
+        PDstandardNth2gt23 = PDstandardNthfdOrder62(&gt23[index]);
+        PDstandardNth3gt23 = PDstandardNthfdOrder63(&gt23[index]);
+        PDstandardNth1gt33 = PDstandardNthfdOrder61(&gt33[index]);
+        PDstandardNth2gt33 = PDstandardNthfdOrder62(&gt33[index]);
+        PDstandardNth3gt33 = PDstandardNthfdOrder63(&gt33[index]);
+        PDstandardNth1phi = PDstandardNthfdOrder61(&phi[index]);
+        PDstandardNth2phi = PDstandardNthfdOrder62(&phi[index]);
+        PDstandardNth3phi = PDstandardNthfdOrder63(&phi[index]);
         break;
       
       case 8:
+        PDstandardNth1alpha = PDstandardNthfdOrder81(&alpha[index]);
+        PDstandardNth2alpha = PDstandardNthfdOrder82(&alpha[index]);
+        PDstandardNth3alpha = PDstandardNthfdOrder83(&alpha[index]);
         PDupwindNth1alpha = PDupwindNthfdOrder81(&alpha[index]);
         PDupwindNth2alpha = PDupwindNthfdOrder82(&alpha[index]);
         PDupwindNth3alpha = PDupwindNthfdOrder83(&alpha[index]);
@@ -321,6 +427,27 @@ static void ML_BSSN_UPW_convertToADMBaseDtLapseShift_Body(cGH const * restrict c
         PDupwindNth1beta3 = PDupwindNthfdOrder81(&beta3[index]);
         PDupwindNth2beta3 = PDupwindNthfdOrder82(&beta3[index]);
         PDupwindNth3beta3 = PDupwindNthfdOrder83(&beta3[index]);
+        PDstandardNth1gt11 = PDstandardNthfdOrder81(&gt11[index]);
+        PDstandardNth2gt11 = PDstandardNthfdOrder82(&gt11[index]);
+        PDstandardNth3gt11 = PDstandardNthfdOrder83(&gt11[index]);
+        PDstandardNth1gt12 = PDstandardNthfdOrder81(&gt12[index]);
+        PDstandardNth2gt12 = PDstandardNthfdOrder82(&gt12[index]);
+        PDstandardNth3gt12 = PDstandardNthfdOrder83(&gt12[index]);
+        PDstandardNth1gt13 = PDstandardNthfdOrder81(&gt13[index]);
+        PDstandardNth2gt13 = PDstandardNthfdOrder82(&gt13[index]);
+        PDstandardNth3gt13 = PDstandardNthfdOrder83(&gt13[index]);
+        PDstandardNth1gt22 = PDstandardNthfdOrder81(&gt22[index]);
+        PDstandardNth2gt22 = PDstandardNthfdOrder82(&gt22[index]);
+        PDstandardNth3gt22 = PDstandardNthfdOrder83(&gt22[index]);
+        PDstandardNth1gt23 = PDstandardNthfdOrder81(&gt23[index]);
+        PDstandardNth2gt23 = PDstandardNthfdOrder82(&gt23[index]);
+        PDstandardNth3gt23 = PDstandardNthfdOrder83(&gt23[index]);
+        PDstandardNth1gt33 = PDstandardNthfdOrder81(&gt33[index]);
+        PDstandardNth2gt33 = PDstandardNthfdOrder82(&gt33[index]);
+        PDstandardNth3gt33 = PDstandardNthfdOrder83(&gt33[index]);
+        PDstandardNth1phi = PDstandardNthfdOrder81(&phi[index]);
+        PDstandardNth2phi = PDstandardNthfdOrder82(&phi[index]);
+        PDstandardNth3phi = PDstandardNthfdOrder83(&phi[index]);
         break;
     }
     
@@ -331,6 +458,30 @@ static void ML_BSSN_UPW_convertToADMBaseDtLapseShift_Body(cGH const * restrict c
     
     ptrdiff_t dir3 = Sign(beta3L);
     
+    CCTK_REAL_VEC JacPDstandardNth1alpha;
+    CCTK_REAL_VEC JacPDstandardNth1gt11;
+    CCTK_REAL_VEC JacPDstandardNth1gt12;
+    CCTK_REAL_VEC JacPDstandardNth1gt13;
+    CCTK_REAL_VEC JacPDstandardNth1gt22;
+    CCTK_REAL_VEC JacPDstandardNth1gt23;
+    CCTK_REAL_VEC JacPDstandardNth1gt33;
+    CCTK_REAL_VEC JacPDstandardNth1phi;
+    CCTK_REAL_VEC JacPDstandardNth2alpha;
+    CCTK_REAL_VEC JacPDstandardNth2gt11;
+    CCTK_REAL_VEC JacPDstandardNth2gt12;
+    CCTK_REAL_VEC JacPDstandardNth2gt13;
+    CCTK_REAL_VEC JacPDstandardNth2gt22;
+    CCTK_REAL_VEC JacPDstandardNth2gt23;
+    CCTK_REAL_VEC JacPDstandardNth2gt33;
+    CCTK_REAL_VEC JacPDstandardNth2phi;
+    CCTK_REAL_VEC JacPDstandardNth3alpha;
+    CCTK_REAL_VEC JacPDstandardNth3gt11;
+    CCTK_REAL_VEC JacPDstandardNth3gt12;
+    CCTK_REAL_VEC JacPDstandardNth3gt13;
+    CCTK_REAL_VEC JacPDstandardNth3gt22;
+    CCTK_REAL_VEC JacPDstandardNth3gt23;
+    CCTK_REAL_VEC JacPDstandardNth3gt33;
+    CCTK_REAL_VEC JacPDstandardNth3phi;
     CCTK_REAL_VEC JacPDupwindNth1alpha;
     CCTK_REAL_VEC JacPDupwindNth1beta1;
     CCTK_REAL_VEC JacPDupwindNth1beta2;
@@ -346,6 +497,78 @@ static void ML_BSSN_UPW_convertToADMBaseDtLapseShift_Body(cGH const * restrict c
     
     if (use_jacobian)
     {
+      JacPDstandardNth1alpha = 
+        kmadd(J11L,PDstandardNth1alpha,kmadd(J21L,PDstandardNth2alpha,kmul(J31L,PDstandardNth3alpha)));
+      
+      JacPDstandardNth1gt11 = 
+        kmadd(J11L,PDstandardNth1gt11,kmadd(J21L,PDstandardNth2gt11,kmul(J31L,PDstandardNth3gt11)));
+      
+      JacPDstandardNth1gt12 = 
+        kmadd(J11L,PDstandardNth1gt12,kmadd(J21L,PDstandardNth2gt12,kmul(J31L,PDstandardNth3gt12)));
+      
+      JacPDstandardNth1gt13 = 
+        kmadd(J11L,PDstandardNth1gt13,kmadd(J21L,PDstandardNth2gt13,kmul(J31L,PDstandardNth3gt13)));
+      
+      JacPDstandardNth1gt22 = 
+        kmadd(J11L,PDstandardNth1gt22,kmadd(J21L,PDstandardNth2gt22,kmul(J31L,PDstandardNth3gt22)));
+      
+      JacPDstandardNth1gt23 = 
+        kmadd(J11L,PDstandardNth1gt23,kmadd(J21L,PDstandardNth2gt23,kmul(J31L,PDstandardNth3gt23)));
+      
+      JacPDstandardNth1gt33 = 
+        kmadd(J11L,PDstandardNth1gt33,kmadd(J21L,PDstandardNth2gt33,kmul(J31L,PDstandardNth3gt33)));
+      
+      JacPDstandardNth1phi = 
+        kmadd(J11L,PDstandardNth1phi,kmadd(J21L,PDstandardNth2phi,kmul(J31L,PDstandardNth3phi)));
+      
+      JacPDstandardNth2alpha = 
+        kmadd(J12L,PDstandardNth1alpha,kmadd(J22L,PDstandardNth2alpha,kmul(J32L,PDstandardNth3alpha)));
+      
+      JacPDstandardNth2gt11 = 
+        kmadd(J12L,PDstandardNth1gt11,kmadd(J22L,PDstandardNth2gt11,kmul(J32L,PDstandardNth3gt11)));
+      
+      JacPDstandardNth2gt12 = 
+        kmadd(J12L,PDstandardNth1gt12,kmadd(J22L,PDstandardNth2gt12,kmul(J32L,PDstandardNth3gt12)));
+      
+      JacPDstandardNth2gt13 = 
+        kmadd(J12L,PDstandardNth1gt13,kmadd(J22L,PDstandardNth2gt13,kmul(J32L,PDstandardNth3gt13)));
+      
+      JacPDstandardNth2gt22 = 
+        kmadd(J12L,PDstandardNth1gt22,kmadd(J22L,PDstandardNth2gt22,kmul(J32L,PDstandardNth3gt22)));
+      
+      JacPDstandardNth2gt23 = 
+        kmadd(J12L,PDstandardNth1gt23,kmadd(J22L,PDstandardNth2gt23,kmul(J32L,PDstandardNth3gt23)));
+      
+      JacPDstandardNth2gt33 = 
+        kmadd(J12L,PDstandardNth1gt33,kmadd(J22L,PDstandardNth2gt33,kmul(J32L,PDstandardNth3gt33)));
+      
+      JacPDstandardNth2phi = 
+        kmadd(J12L,PDstandardNth1phi,kmadd(J22L,PDstandardNth2phi,kmul(J32L,PDstandardNth3phi)));
+      
+      JacPDstandardNth3alpha = 
+        kmadd(J13L,PDstandardNth1alpha,kmadd(J23L,PDstandardNth2alpha,kmul(J33L,PDstandardNth3alpha)));
+      
+      JacPDstandardNth3gt11 = 
+        kmadd(J13L,PDstandardNth1gt11,kmadd(J23L,PDstandardNth2gt11,kmul(J33L,PDstandardNth3gt11)));
+      
+      JacPDstandardNth3gt12 = 
+        kmadd(J13L,PDstandardNth1gt12,kmadd(J23L,PDstandardNth2gt12,kmul(J33L,PDstandardNth3gt12)));
+      
+      JacPDstandardNth3gt13 = 
+        kmadd(J13L,PDstandardNth1gt13,kmadd(J23L,PDstandardNth2gt13,kmul(J33L,PDstandardNth3gt13)));
+      
+      JacPDstandardNth3gt22 = 
+        kmadd(J13L,PDstandardNth1gt22,kmadd(J23L,PDstandardNth2gt22,kmul(J33L,PDstandardNth3gt22)));
+      
+      JacPDstandardNth3gt23 = 
+        kmadd(J13L,PDstandardNth1gt23,kmadd(J23L,PDstandardNth2gt23,kmul(J33L,PDstandardNth3gt23)));
+      
+      JacPDstandardNth3gt33 = 
+        kmadd(J13L,PDstandardNth1gt33,kmadd(J23L,PDstandardNth2gt33,kmul(J33L,PDstandardNth3gt33)));
+      
+      JacPDstandardNth3phi = 
+        kmadd(J13L,PDstandardNth1phi,kmadd(J23L,PDstandardNth2phi,kmul(J33L,PDstandardNth3phi)));
+      
       JacPDupwindNth1alpha = 
         kmadd(J11L,PDupwindNth1alpha,kmadd(J21L,PDupwindNth2alpha,kmul(J31L,PDupwindNth3alpha)));
       
@@ -384,6 +607,54 @@ static void ML_BSSN_UPW_convertToADMBaseDtLapseShift_Body(cGH const * restrict c
     }
     else
     {
+      JacPDstandardNth1alpha = PDstandardNth1alpha;
+      
+      JacPDstandardNth1gt11 = PDstandardNth1gt11;
+      
+      JacPDstandardNth1gt12 = PDstandardNth1gt12;
+      
+      JacPDstandardNth1gt13 = PDstandardNth1gt13;
+      
+      JacPDstandardNth1gt22 = PDstandardNth1gt22;
+      
+      JacPDstandardNth1gt23 = PDstandardNth1gt23;
+      
+      JacPDstandardNth1gt33 = PDstandardNth1gt33;
+      
+      JacPDstandardNth1phi = PDstandardNth1phi;
+      
+      JacPDstandardNth2alpha = PDstandardNth2alpha;
+      
+      JacPDstandardNth2gt11 = PDstandardNth2gt11;
+      
+      JacPDstandardNth2gt12 = PDstandardNth2gt12;
+      
+      JacPDstandardNth2gt13 = PDstandardNth2gt13;
+      
+      JacPDstandardNth2gt22 = PDstandardNth2gt22;
+      
+      JacPDstandardNth2gt23 = PDstandardNth2gt23;
+      
+      JacPDstandardNth2gt33 = PDstandardNth2gt33;
+      
+      JacPDstandardNth2phi = PDstandardNth2phi;
+      
+      JacPDstandardNth3alpha = PDstandardNth3alpha;
+      
+      JacPDstandardNth3gt11 = PDstandardNth3gt11;
+      
+      JacPDstandardNth3gt12 = PDstandardNth3gt12;
+      
+      JacPDstandardNth3gt13 = PDstandardNth3gt13;
+      
+      JacPDstandardNth3gt22 = PDstandardNth3gt22;
+      
+      JacPDstandardNth3gt23 = PDstandardNth3gt23;
+      
+      JacPDstandardNth3gt33 = PDstandardNth3gt33;
+      
+      JacPDstandardNth3phi = PDstandardNth3phi;
+      
       JacPDupwindNth1alpha = PDupwindNth1alpha;
       
       JacPDupwindNth1beta1 = PDupwindNth1beta1;
@@ -409,6 +680,23 @@ static void ML_BSSN_UPW_convertToADMBaseDtLapseShift_Body(cGH const * restrict c
       JacPDupwindNth3beta3 = PDupwindNth3beta3;
     }
     
+    CCTK_REAL_VEC detgt = ToReal(1);
+    
+    CCTK_REAL_VEC gtu11 = kmul(INV(detgt),kmsub(gt22L,gt33L,SQR(gt23L)));
+    
+    CCTK_REAL_VEC gtu12 = 
+      kmul(INV(detgt),kmsub(gt13L,gt23L,kmul(gt12L,gt33L)));
+    
+    CCTK_REAL_VEC gtu13 = 
+      kmul(INV(detgt),kmsub(gt12L,gt23L,kmul(gt13L,gt22L)));
+    
+    CCTK_REAL_VEC gtu22 = kmul(INV(detgt),kmsub(gt11L,gt33L,SQR(gt13L)));
+    
+    CCTK_REAL_VEC gtu23 = 
+      kmul(INV(detgt),kmsub(gt12L,gt13L,kmul(gt11L,gt23L)));
+    
+    CCTK_REAL_VEC gtu33 = kmul(INV(detgt),kmsub(gt11L,gt22L,SQR(gt12L)));
+    
     CCTK_REAL_VEC eta = 
       kfmin(ToReal(1),kmul(INV(rL),ToReal(SpatialBetaDriverRadius)));
     
@@ -419,19 +707,19 @@ static void ML_BSSN_UPW_convertToADMBaseDtLapseShift_Body(cGH const * restrict c
       kmsub(kmadd(beta1L,JacPDupwindNth1alpha,kmadd(beta2L,JacPDupwindNth2alpha,kmul(beta3L,JacPDupwindNth3alpha))),ToReal(LapseAdvectionCoeff),kmul(kpow(alphaL,harmonicN),kmul(ToReal(harmonicF),kmadd(ksub(AL,trKL),ToReal(LapseACoeff),trKL))));
     
     CCTK_REAL_VEC dtbetaxL = 
-      kmadd(kmadd(beta1L,JacPDupwindNth1beta1,kmadd(beta2L,JacPDupwindNth2beta1,kmul(beta3L,JacPDupwindNth3beta1))),ToReal(ShiftAdvectionCoeff),kmul(theta,kmul(kadd(Xt1L,kmadd(beta1L,kmul(eta,ToReal(BetaDriver*(-1 
+      kmadd(kmadd(beta1L,JacPDupwindNth1beta1,kmadd(beta2L,JacPDupwindNth2beta1,kmul(beta3L,JacPDupwindNth3beta1))),ToReal(ShiftAdvectionCoeff),IfThen(harmonicShift,kmul(alphaL,kmul(phiL,kmul(ToReal(0.5),kmadd(kmadd(gtu11,JacPDstandardNth1alpha,kmadd(gtu12,JacPDstandardNth2alpha,kmul(gtu13,JacPDstandardNth3alpha))),kmul(phiL,ToReal(-2)),kmul(alphaL,kmadd(phiL,kmadd(JacPDstandardNth1gt11,SQR(gtu11),kmul(JacPDstandardNth1gt22,kmul(SQR(gtu12),ToReal(2)))),kmadd(gtu13,kmadd(JacPDstandardNth3phi,ToReal(2),kmul(phiL,kmadd(gtu33,JacPDstandardNth3gt33,kmsub(kmadd(gtu13,JacPDstandardNth1gt33,kmadd(gtu22,JacPDstandardNth2gt23,kmul(gtu23,JacPDstandardNth2gt33))),ToReal(2),kmul(gtu22,JacPDstandardNth3gt22))))),kmadd(gtu11,kmadd(JacPDstandardNth1phi,ToReal(2),kmul(phiL,kmadd(gtu12,JacPDstandardNth2gt11,kmadd(gtu13,JacPDstandardNth3gt11,kmadd(gtu23,kmul(JacPDstandardNth1gt23,ToReal(-2)),knmsub(gtu22,JacPDstandardNth1gt22,kmadd(kmadd(gtu12,JacPDstandardNth1gt12,kmadd(gtu13,JacPDstandardNth1gt13,kmul(gtu22,JacPDstandardNth2gt12))),ToReal(2),kmadd(gtu23,kmul(JacPDstandardNth2gt13,ToReal(2)),kmadd(gtu23,kmul(JacPDstandardNth3gt12,ToReal(2)),kmul(gtu33,kmsub(JacPDstandardNth3gt13,ToReal(2),JacPDstandardNth1gt33))))))))))),kmul(gtu12,kmadd(JacPDstandardNth2phi,ToReal(2),kmul(phiL,kmadd(gtu22,JacPDstandardNth2gt22,kmadd(gtu23,kmul(JacPDstandardNth3gt22,ToReal(2)),kmadd(gtu33,kmsub(JacPDstandardNth3gt23,ToReal(2),JacPDstandardNth2gt33),kmul(gtu13,kmul(JacPDstandardNth1gt23,ToReal(4))))))))))))))))),kmul(theta,kmul(kadd(Xt1L,kmadd(beta1L,kmul(eta,ToReal(BetaDriver*(-1 
       + 
-      ShiftBCoeff))),kmul(ksub(B1L,Xt1L),ToReal(ShiftBCoeff)))),ToReal(ShiftGammaCoeff))));
+      ShiftBCoeff))),kmul(ksub(B1L,Xt1L),ToReal(ShiftBCoeff)))),ToReal(ShiftGammaCoeff)))));
     
     CCTK_REAL_VEC dtbetayL = 
-      kmadd(kmadd(beta1L,JacPDupwindNth1beta2,kmadd(beta2L,JacPDupwindNth2beta2,kmul(beta3L,JacPDupwindNth3beta2))),ToReal(ShiftAdvectionCoeff),kmul(theta,kmul(kadd(Xt2L,kmadd(beta2L,kmul(eta,ToReal(BetaDriver*(-1 
+      kmadd(kmadd(beta1L,JacPDupwindNth1beta2,kmadd(beta2L,JacPDupwindNth2beta2,kmul(beta3L,JacPDupwindNth3beta2))),ToReal(ShiftAdvectionCoeff),IfThen(harmonicShift,kmul(alphaL,kmul(phiL,kmul(ToReal(0.5),kmadd(kmadd(gtu12,JacPDstandardNth1alpha,kmadd(gtu22,JacPDstandardNth2alpha,kmul(gtu23,JacPDstandardNth3alpha))),kmul(phiL,ToReal(-2)),kmul(alphaL,kmadd(phiL,kmadd(JacPDstandardNth2gt22,SQR(gtu22),kmul(JacPDstandardNth2gt11,kmul(SQR(gtu12),ToReal(2)))),kmadd(gtu23,kmadd(JacPDstandardNth3phi,ToReal(2),kmul(phiL,kmadd(gtu33,JacPDstandardNth3gt33,kmsub(kmadd(gtu11,JacPDstandardNth1gt13,kmadd(gtu13,JacPDstandardNth1gt33,kmul(gtu23,JacPDstandardNth2gt33))),ToReal(2),kmul(gtu11,JacPDstandardNth3gt11))))),kmadd(gtu22,kmadd(JacPDstandardNth2phi,ToReal(2),kmul(phiL,kmadd(gtu23,JacPDstandardNth3gt22,kmadd(kmadd(gtu23,JacPDstandardNth2gt23,kmul(gtu13,kadd(JacPDstandardNth1gt23,ksub(JacPDstandardNth3gt12,JacPDstandardNth2gt13)))),ToReal(2),kmadd(gtu11,kmsub(JacPDstandardNth1gt12,ToReal(2),JacPDstandardNth2gt11),kmul(gtu33,kmsub(JacPDstandardNth3gt23,ToReal(2),JacPDstandardNth2gt33))))))),kmul(gtu12,kmadd(JacPDstandardNth1phi,ToReal(2),kmul(phiL,kmadd(gtu11,JacPDstandardNth1gt11,kmadd(gtu13,kmul(JacPDstandardNth3gt11,ToReal(2)),kmadd(gtu22,kmadd(JacPDstandardNth2gt12,ToReal(2),JacPDstandardNth1gt22),kmadd(gtu33,kmsub(JacPDstandardNth3gt13,ToReal(2),JacPDstandardNth1gt33),kmul(gtu23,kmul(JacPDstandardNth2gt13,ToReal(4)))))))))))))))))),kmul(theta,kmul(kadd(Xt2L,kmadd(beta2L,kmul(eta,ToReal(BetaDriver*(-1 
       + 
-      ShiftBCoeff))),kmul(ksub(B2L,Xt2L),ToReal(ShiftBCoeff)))),ToReal(ShiftGammaCoeff))));
+      ShiftBCoeff))),kmul(ksub(B2L,Xt2L),ToReal(ShiftBCoeff)))),ToReal(ShiftGammaCoeff)))));
     
     CCTK_REAL_VEC dtbetazL = 
-      kmadd(kmadd(beta1L,JacPDupwindNth1beta3,kmadd(beta2L,JacPDupwindNth2beta3,kmul(beta3L,JacPDupwindNth3beta3))),ToReal(ShiftAdvectionCoeff),kmul(theta,kmul(kadd(Xt3L,kmadd(beta3L,kmul(eta,ToReal(BetaDriver*(-1 
+      kmadd(kmadd(beta1L,JacPDupwindNth1beta3,kmadd(beta2L,JacPDupwindNth2beta3,kmul(beta3L,JacPDupwindNth3beta3))),ToReal(ShiftAdvectionCoeff),IfThen(harmonicShift,kmul(alphaL,kmul(phiL,kmul(ToReal(0.5),kmadd(kmadd(gtu13,JacPDstandardNth1alpha,kmadd(gtu23,JacPDstandardNth2alpha,kmul(gtu33,JacPDstandardNth3alpha))),kmul(phiL,ToReal(-2)),kmul(alphaL,kmadd(phiL,kmul(kmadd(JacPDstandardNth3gt11,SQR(gtu13),kmul(JacPDstandardNth3gt22,SQR(gtu23))),ToReal(2)),kmadd(gtu23,kmadd(JacPDstandardNth2phi,ToReal(2),kmul(phiL,kmadd(gtu22,JacPDstandardNth2gt22,kmadd(gtu33,JacPDstandardNth2gt33,kmsub(kmadd(gtu11,JacPDstandardNth1gt12,kmadd(gtu12,JacPDstandardNth1gt22,kmul(gtu33,JacPDstandardNth3gt23))),ToReal(2),kmul(gtu11,JacPDstandardNth2gt11)))))),kmadd(gtu33,kmadd(JacPDstandardNth3phi,ToReal(2),kmul(phiL,kmadd(gtu33,JacPDstandardNth3gt33,knmsub(gtu22,JacPDstandardNth3gt22,kmadd(kmadd(gtu22,JacPDstandardNth2gt23,kmul(gtu12,kadd(JacPDstandardNth1gt23,ksub(JacPDstandardNth2gt13,JacPDstandardNth3gt12)))),ToReal(2),kmul(gtu11,kmsub(JacPDstandardNth1gt13,ToReal(2),JacPDstandardNth3gt11))))))),kmul(gtu13,kmadd(JacPDstandardNth1phi,ToReal(2),kmul(phiL,kmadd(gtu11,JacPDstandardNth1gt11,kmadd(gtu12,kmul(JacPDstandardNth2gt11,ToReal(2)),kmadd(gtu22,kmsub(JacPDstandardNth2gt12,ToReal(2),JacPDstandardNth1gt22),kmadd(gtu33,kmadd(JacPDstandardNth3gt13,ToReal(2),JacPDstandardNth1gt33),kmul(gtu23,kmul(JacPDstandardNth3gt12,ToReal(4)))))))))))))))))),kmul(theta,kmul(kadd(Xt3L,kmadd(beta3L,kmul(eta,ToReal(BetaDriver*(-1 
       + 
-      ShiftBCoeff))),kmul(ksub(B3L,Xt3L),ToReal(ShiftBCoeff)))),ToReal(ShiftGammaCoeff))));
+      ShiftBCoeff))),kmul(ksub(B3L,Xt3L),ToReal(ShiftBCoeff)))),ToReal(ShiftGammaCoeff)))));
     
     /* If necessary, store only partial vectors after the first iteration */
     
@@ -493,8 +781,8 @@ extern "C" void ML_BSSN_UPW_convertToADMBaseDtLapseShift(CCTK_ARGUMENTS)
     return;
   }
   
-  const char *groups[] = {"ADMBase::dtlapse","ADMBase::dtshift","grid::coordinates","Grid::coordinates","ML_BSSN_UPW::ML_dtlapse","ML_BSSN_UPW::ML_dtshift","ML_BSSN_UPW::ML_Gamma","ML_BSSN_UPW::ML_lapse","ML_BSSN_UPW::ML_shift","ML_BSSN_UPW::ML_trace_curv"};
-  GenericFD_AssertGroupStorage(cctkGH, "ML_BSSN_UPW_convertToADMBaseDtLapseShift", 10, groups);
+  const char *groups[] = {"ADMBase::dtlapse","ADMBase::dtshift","grid::coordinates","Grid::coordinates","ML_BSSN_UPW::ML_dtlapse","ML_BSSN_UPW::ML_dtshift","ML_BSSN_UPW::ML_Gamma","ML_BSSN_UPW::ML_lapse","ML_BSSN_UPW::ML_log_confac","ML_BSSN_UPW::ML_metric","ML_BSSN_UPW::ML_shift","ML_BSSN_UPW::ML_trace_curv"};
+  GenericFD_AssertGroupStorage(cctkGH, "ML_BSSN_UPW_convertToADMBaseDtLapseShift", 12, groups);
   
   switch(fdOrder)
   {
