@@ -21,6 +21,8 @@ suffix =
 
 BSSN = prefix <> "BSSN" <> suffix;
 
+
+
 (******************************************************************************)
 (* Derivatives *)
 (******************************************************************************)
@@ -215,9 +217,9 @@ extraGroups =
    {"TmunuBase::stress_energy_tensor", {eTxx, eTxy, eTxz, eTyy, eTyz, eTzz}}
 };
 
-
-
 groups = Join [declaredGroups, extraGroups];
+
+
 
 (******************************************************************************)
 (* Initial data *)
@@ -368,6 +370,7 @@ initGammaCalc =
     B[ua]  -> 0
   }
 };
+
 
 
 (******************************************************************************)
@@ -1219,7 +1222,7 @@ realParameters =
   },
   {
     Name -> LapseAdvectionCoeff,
-    Description -> "Factor in front of the shift advection terms in 1+log",
+    Description -> "Factor in front of the lapse advection terms in 1+log",
     Default -> 1
   },
   {
@@ -1310,6 +1313,7 @@ CreateKrancThornTT [groups, ".", BSSN,
 
 (* derivative order: 2, 4, 6, 8, ... *)
 (* useJacobian: False or True *)
+(* split upwind derivatives: False or True *)
 (* timelevels: 2 or 3
    (keep this at 3; this is better chosen with a run-time parameter) *)
 (* matter: 0 or 1
