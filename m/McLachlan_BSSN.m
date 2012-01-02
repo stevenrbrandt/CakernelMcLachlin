@@ -178,8 +178,6 @@ thetaExpr = Min [Exp [1 - r / SpatialShiftGammaCoeffRadius], 1];
 (* Groups *)
 (******************************************************************************)
 
-SetGroupTimelevels[g_,tl_] = Join[g, {Timelevels -> tl}];
-
 evolvedGroups =
   {SetGroupName [CreateGroupFromTensor [phi      ], prefix <> "log_confac"],
    SetGroupName [CreateGroupFromTensor [gt[la,lb]], prefix <> "metric"    ],
