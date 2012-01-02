@@ -1420,7 +1420,8 @@ static void ML_BSSN_O8_RHS2_Body(cGH const * restrict const cctkGH, int const di
     
     CCTK_REAL_VEC detgt = ToReal(1);
     
-    CCTK_REAL_VEC gtu11 = kmul(INV(detgt),kmsub(gt22L,gt33L,SQR(gt23L)));
+    CCTK_REAL_VEC gtu11 = 
+      kmul(INV(detgt),kmsub(gt22L,gt33L,SQR(gt23L)));
     
     CCTK_REAL_VEC gtu12 = 
       kmul(INV(detgt),kmsub(gt13L,gt23L,kmul(gt12L,gt33L)));
@@ -1428,12 +1429,14 @@ static void ML_BSSN_O8_RHS2_Body(cGH const * restrict const cctkGH, int const di
     CCTK_REAL_VEC gtu13 = 
       kmul(INV(detgt),kmsub(gt12L,gt23L,kmul(gt13L,gt22L)));
     
-    CCTK_REAL_VEC gtu22 = kmul(INV(detgt),kmsub(gt11L,gt33L,SQR(gt13L)));
+    CCTK_REAL_VEC gtu22 = 
+      kmul(INV(detgt),kmsub(gt11L,gt33L,SQR(gt13L)));
     
     CCTK_REAL_VEC gtu23 = 
       kmul(INV(detgt),kmsub(gt12L,gt13L,kmul(gt11L,gt23L)));
     
-    CCTK_REAL_VEC gtu33 = kmul(INV(detgt),kmsub(gt11L,gt22L,SQR(gt12L)));
+    CCTK_REAL_VEC gtu33 = 
+      kmul(INV(detgt),kmsub(gt11L,gt22L,SQR(gt12L)));
     
     CCTK_REAL_VEC Gtl111 = kmul(JacPDstandardNth1gt11,ToReal(0.5));
     
@@ -1676,16 +1679,16 @@ static void ML_BSSN_O8_RHS2_Body(cGH const * restrict const cctkGH, int const di
       kmul(ToReal(-2),kadd(cdphi211,kmadd(SQR(cdphi1),kmul(kmadd(gt11L,gtu11,ToReal(-1)),ToReal(2)),kmul(gt11L,kmadd(cdphi211,gtu11,kmadd(cdphi233,gtu33,kmadd(kmadd(cdphi212,gtu12,kmadd(cdphi213,gtu13,kmadd(cdphi223,gtu23,kmul(gtu33,SQR(cdphi3))))),ToReal(2),kmadd(gtu22,kmadd(SQR(cdphi2),ToReal(2),cdphi222),kmul(kmadd(cdphi1,kmadd(cdphi2,gtu12,kmul(cdphi3,gtu13)),kmul(cdphi2,kmul(cdphi3,gtu23))),ToReal(4))))))))));
     
     CCTK_REAL_VEC Rphi12 = 
-      kmul(ToReal(-2),kadd(cdphi212,kmadd(gt12L,kmadd(cdphi211,gtu11,kmadd(kmadd(cdphi212,gtu12,kmadd(cdphi213,gtu13,kmadd(cdphi223,gtu23,kmul(gtu11,SQR(cdphi1))))),ToReal(2),kmadd(gtu22,kmadd(SQR(cdphi2),ToReal(2),cdphi222),kmadd(gtu33,kmadd(SQR(cdphi3),ToReal(2),cdphi233),kmul(cdphi2,kmul(cdphi3,kmul(gtu23,ToReal(4)))))))),kmul(cdphi1,kmadd(cdphi3,kmul(gt12L,kmul(gtu13,ToReal(4))),kmul(cdphi2,kmadd(gt12L,kmul(gtu12,ToReal(4)),ToReal(-2))))))));
+      kmul(ToReal(-2),kadd(cdphi212,kmadd(gt12L,kmadd(cdphi211,gtu11,kmadd(kmadd(cdphi212,gtu12,kmadd(cdphi213,gtu13,kmadd(cdphi223,gtu23,kmul(gtu11,SQR(cdphi1))))),ToReal(2),kmadd(gtu22,kmadd(SQR(cdphi2),ToReal(2),cdphi222),kmadd(gtu33,kmadd(SQR(cdphi3),ToReal(2),cdphi233),kmul(cdphi2,kmul(cdphi3,kmul(gtu23,ToReal(4)))))))),kmul(cdphi1,kmadd(gt12L,kmul(cdphi3,kmul(gtu13,ToReal(4))),kmul(cdphi2,kmadd(gt12L,kmul(gtu12,ToReal(4)),ToReal(-2))))))));
     
     CCTK_REAL_VEC Rphi13 = 
-      kmul(ToReal(-2),kadd(cdphi213,kmadd(gt13L,kmadd(cdphi211,gtu11,kmadd(kmadd(cdphi212,gtu12,kmadd(cdphi213,gtu13,kmadd(cdphi223,gtu23,kmul(gtu11,SQR(cdphi1))))),ToReal(2),kmadd(gtu22,kmadd(SQR(cdphi2),ToReal(2),cdphi222),kmadd(gtu33,kmadd(SQR(cdphi3),ToReal(2),cdphi233),kmul(cdphi2,kmul(cdphi3,kmul(gtu23,ToReal(4)))))))),kmul(cdphi1,kmadd(cdphi2,kmul(gt13L,kmul(gtu12,ToReal(4))),kmul(cdphi3,kmadd(gt13L,kmul(gtu13,ToReal(4)),ToReal(-2))))))));
+      kmul(ToReal(-2),kadd(cdphi213,kmadd(gt13L,kmadd(cdphi211,gtu11,kmadd(kmadd(cdphi212,gtu12,kmadd(cdphi213,gtu13,kmadd(cdphi223,gtu23,kmul(gtu11,SQR(cdphi1))))),ToReal(2),kmadd(gtu22,kmadd(SQR(cdphi2),ToReal(2),cdphi222),kmadd(gtu33,kmadd(SQR(cdphi3),ToReal(2),cdphi233),kmul(cdphi2,kmul(cdphi3,kmul(gtu23,ToReal(4)))))))),kmul(cdphi1,kmadd(gt13L,kmul(cdphi2,kmul(gtu12,ToReal(4))),kmul(cdphi3,kmadd(gt13L,kmul(gtu13,ToReal(4)),ToReal(-2))))))));
     
     CCTK_REAL_VEC Rphi22 = 
       kmul(ToReal(-2),kadd(cdphi222,kmadd(SQR(cdphi2),kmul(kmadd(gt22L,gtu22,ToReal(-1)),ToReal(2)),kmul(gt22L,kmadd(cdphi222,gtu22,kmadd(cdphi233,gtu33,kmadd(kmadd(cdphi212,gtu12,kmadd(cdphi213,gtu13,kmadd(cdphi223,gtu23,kmul(gtu33,SQR(cdphi3))))),ToReal(2),kmadd(gtu11,kmadd(SQR(cdphi1),ToReal(2),cdphi211),kmul(kmadd(cdphi1,kmul(cdphi3,gtu13),kmul(cdphi2,kmadd(cdphi1,gtu12,kmul(cdphi3,gtu23)))),ToReal(4))))))))));
     
     CCTK_REAL_VEC Rphi23 = 
-      kmul(ToReal(-2),kadd(cdphi223,kmadd(gt23L,kmadd(cdphi222,gtu22,kmadd(kmadd(cdphi212,gtu12,kmadd(cdphi213,gtu13,kmadd(cdphi223,gtu23,kmul(gtu22,SQR(cdphi2))))),ToReal(2),kmadd(gtu11,kmadd(SQR(cdphi1),ToReal(2),cdphi211),kmadd(gtu33,kmadd(SQR(cdphi3),ToReal(2),cdphi233),kmul(cdphi1,kmul(cdphi3,kmul(gtu13,ToReal(4)))))))),kmul(cdphi2,kmadd(cdphi1,kmul(gt23L,kmul(gtu12,ToReal(4))),kmul(cdphi3,kmadd(gt23L,kmul(gtu23,ToReal(4)),ToReal(-2))))))));
+      kmul(ToReal(-2),kadd(cdphi223,kmadd(gt23L,kmadd(cdphi222,gtu22,kmadd(kmadd(cdphi212,gtu12,kmadd(cdphi213,gtu13,kmadd(cdphi223,gtu23,kmul(gtu22,SQR(cdphi2))))),ToReal(2),kmadd(gtu11,kmadd(SQR(cdphi1),ToReal(2),cdphi211),kmadd(gtu33,kmadd(SQR(cdphi3),ToReal(2),cdphi233),kmul(cdphi1,kmul(cdphi3,kmul(gtu13,ToReal(4)))))))),kmul(cdphi2,kmadd(gt23L,kmul(cdphi1,kmul(gtu12,ToReal(4))),kmul(cdphi3,kmadd(gt23L,kmul(gtu23,ToReal(4)),ToReal(-2))))))));
     
     CCTK_REAL_VEC Rphi33 = 
       kmul(ToReal(-2),kadd(cdphi233,kmadd(SQR(cdphi3),kmul(kmadd(gt33L,gtu33,ToReal(-1)),ToReal(2)),kmul(gt33L,kmadd(cdphi233,gtu33,kmadd(kmadd(cdphi213,gtu13,kmul(cdphi223,gtu23)),ToReal(2),kmadd(gtu11,kmadd(SQR(cdphi1),ToReal(2),cdphi211),kmadd(gtu22,kmadd(SQR(cdphi2),ToReal(2),cdphi222),kmadd(cdphi3,kmul(kmadd(cdphi1,gtu13,kmul(cdphi2,gtu23)),ToReal(4)),kmul(gtu12,kmadd(cdphi212,ToReal(2),kmul(cdphi1,kmul(cdphi2,ToReal(4))))))))))))));
@@ -1722,17 +1725,17 @@ static void ML_BSSN_O8_RHS2_Body(cGH const * restrict const cctkGH, int const di
     
     CCTK_REAL_VEC em4phi = INV(e4phi);
     
-    CCTK_REAL_VEC g11 = kmul(e4phi,gt11L);
+    CCTK_REAL_VEC g11 = kmul(gt11L,e4phi);
     
-    CCTK_REAL_VEC g12 = kmul(e4phi,gt12L);
+    CCTK_REAL_VEC g12 = kmul(gt12L,e4phi);
     
-    CCTK_REAL_VEC g13 = kmul(e4phi,gt13L);
+    CCTK_REAL_VEC g13 = kmul(gt13L,e4phi);
     
-    CCTK_REAL_VEC g22 = kmul(e4phi,gt22L);
+    CCTK_REAL_VEC g22 = kmul(gt22L,e4phi);
     
-    CCTK_REAL_VEC g23 = kmul(e4phi,gt23L);
+    CCTK_REAL_VEC g23 = kmul(gt23L,e4phi);
     
-    CCTK_REAL_VEC g33 = kmul(e4phi,gt33L);
+    CCTK_REAL_VEC g33 = kmul(gt33L,e4phi);
     
     CCTK_REAL_VEC gu11 = kmul(em4phi,gtu11);
     
@@ -1783,22 +1786,22 @@ static void ML_BSSN_O8_RHS2_Body(cGH const * restrict const cctkGH, int const di
       kmadd(Ats11,gu11,kmadd(Ats22,gu22,kmadd(Ats33,gu33,kmul(kmadd(Ats12,gu12,kmadd(Ats13,gu13,kmul(Ats23,gu23))),ToReal(2)))));
     
     CCTK_REAL_VEC At11rhsL = 
-      kmadd(em4phi,kmadd(g11,kmul(trAts,ToReal(-0.3333333333333333333333333333333333333333)),Ats11),kmadd(At11L,kmadd(kadd(JacPDstandardNth2beta2,JacPDstandardNth3beta3),ToReal(-0.6666666666666666666666666666666666666667),kmul(JacPDstandardNth1beta1,ToReal(1.333333333333333333333333333333333333333))),kmadd(kmadd(At12L,JacPDstandardNth1beta2,kmul(At13L,JacPDstandardNth1beta3)),ToReal(2.),kmul(alphaL,kmadd(kmadd(At12L,Atm21,kmul(At13L,Atm31)),ToReal(-2.),kmadd(At11L,kmadd(Atm11,ToReal(-2.),trKL),kmul(em4phi,kmadd(eTxxL,ToReal(-25.13274122871834590770114706623602307358),kmul(g11,kmul(trS,ToReal(8.377580409572781969233715688745341024526)))))))))));
+      kmul(ToReal(0.333333333333333333333333333333),kmadd(em4phi,kmsub(Ats11,ToReal(3),kmul(g11,trAts)),kmadd(At11L,kmadd(kadd(JacPDstandardNth2beta2,JacPDstandardNth3beta3),ToReal(-2),kmul(JacPDstandardNth1beta1,ToReal(4))),kmsub(kmadd(At12L,JacPDstandardNth1beta2,kmul(At13L,JacPDstandardNth1beta3)),ToReal(6),kmul(alphaL,kmadd(kmadd(At12L,Atm21,kmul(At13L,Atm31)),ToReal(6),kmadd(At11L,kmadd(trKL,ToReal(-3),kmul(Atm11,ToReal(6))),kmul(em4phi,kmul(Pi,kmadd(g11,kmul(trS,ToReal(-8)),kmul(eTxxL,ToReal(24))))))))))));
     
     CCTK_REAL_VEC At12rhsL = 
-      kmadd(At22L,JacPDstandardNth1beta2,kmadd(At23L,JacPDstandardNth1beta3,kmadd(At11L,JacPDstandardNth2beta1,kmadd(At13L,JacPDstandardNth2beta3,kmadd(em4phi,kmadd(g12,kmul(trAts,ToReal(-0.3333333333333333333333333333333333333333)),Ats12),kmadd(At12L,kmadd(JacPDstandardNth3beta3,ToReal(-0.6666666666666666666666666666666666666667),kmul(kadd(JacPDstandardNth1beta1,JacPDstandardNth2beta2),ToReal(0.3333333333333333333333333333333333333333))),kmul(alphaL,kmadd(At12L,trKL,kmadd(kmadd(At11L,Atm12,kmadd(At12L,Atm22,kmul(At13L,Atm32))),ToReal(-2.),kmul(em4phi,kmadd(eTxyL,ToReal(-25.13274122871834590770114706623602307358),kmul(g12,kmul(trS,ToReal(8.377580409572781969233715688745341024526))))))))))))));
+      kmadd(ToReal(0.333333333333333333333333333333),kmadd(At12L,kadd(JacPDstandardNth1beta1,kmadd(JacPDstandardNth3beta3,ToReal(-2),JacPDstandardNth2beta2)),kmsub(kmadd(Ats12,em4phi,kmadd(At22L,JacPDstandardNth1beta2,kmadd(At23L,JacPDstandardNth1beta3,kmadd(At11L,JacPDstandardNth2beta1,kmul(At13L,JacPDstandardNth2beta3))))),ToReal(3),kmul(em4phi,kmul(g12,trAts)))),kmul(alphaL,kmadd(kmadd(At11L,Atm12,kmul(At13L,Atm32)),ToReal(-2),kmadd(At12L,kmadd(Atm22,ToReal(-2),trKL),kmul(em4phi,kmadd(eTxyL,kmul(Pi,ToReal(-8)),kmul(g12,kmul(trS,ToReal(8.37758040957278196923371568875)))))))));
     
     CCTK_REAL_VEC At13rhsL = 
-      kmadd(At23L,JacPDstandardNth1beta2,kmadd(At33L,JacPDstandardNth1beta3,kmadd(At11L,JacPDstandardNth3beta1,kmadd(At12L,JacPDstandardNth3beta2,kmadd(em4phi,kmadd(g13,kmul(trAts,ToReal(-0.3333333333333333333333333333333333333333)),Ats13),kmadd(At13L,kmadd(JacPDstandardNth2beta2,ToReal(-0.6666666666666666666666666666666666666667),kmul(kadd(JacPDstandardNth1beta1,JacPDstandardNth3beta3),ToReal(0.3333333333333333333333333333333333333333))),kmul(alphaL,kmadd(At13L,trKL,kmadd(kmadd(At11L,Atm13,kmadd(At12L,Atm23,kmul(At13L,Atm33))),ToReal(-2.),kmul(em4phi,kmadd(eTxzL,ToReal(-25.13274122871834590770114706623602307358),kmul(g13,kmul(trS,ToReal(8.377580409572781969233715688745341024526))))))))))))));
+      kmadd(ToReal(0.333333333333333333333333333333),kmadd(At13L,kadd(JacPDstandardNth1beta1,kmadd(JacPDstandardNth2beta2,ToReal(-2),JacPDstandardNth3beta3)),kmsub(kmadd(Ats13,em4phi,kmadd(At23L,JacPDstandardNth1beta2,kmadd(At33L,JacPDstandardNth1beta3,kmadd(At11L,JacPDstandardNth3beta1,kmul(At12L,JacPDstandardNth3beta2))))),ToReal(3),kmul(em4phi,kmul(g13,trAts)))),kmul(alphaL,kmadd(kmadd(At11L,Atm13,kmul(At12L,Atm23)),ToReal(-2),kmadd(At13L,kmadd(Atm33,ToReal(-2),trKL),kmul(em4phi,kmadd(eTxzL,kmul(Pi,ToReal(-8)),kmul(g13,kmul(trS,ToReal(8.37758040957278196923371568875)))))))));
     
     CCTK_REAL_VEC At22rhsL = 
-      kmadd(em4phi,kmadd(g22,kmul(trAts,ToReal(-0.3333333333333333333333333333333333333333)),Ats22),kmadd(At22L,kmadd(kadd(JacPDstandardNth1beta1,JacPDstandardNth3beta3),ToReal(-0.6666666666666666666666666666666666666667),kmul(JacPDstandardNth2beta2,ToReal(1.333333333333333333333333333333333333333))),kmadd(kmadd(At12L,JacPDstandardNth2beta1,kmul(At23L,JacPDstandardNth2beta3)),ToReal(2.),kmul(alphaL,kmadd(At22L,trKL,kmadd(kmadd(At12L,Atm12,kmadd(At22L,Atm22,kmul(At23L,Atm32))),ToReal(-2.),kmul(em4phi,kmadd(eTyyL,ToReal(-25.13274122871834590770114706623602307358),kmul(g22,kmul(trS,ToReal(8.377580409572781969233715688745341024526)))))))))));
+      kmul(ToReal(0.333333333333333333333333333333),kmadd(em4phi,kmsub(Ats22,ToReal(3),kmul(g22,trAts)),kmadd(At22L,kmadd(kadd(JacPDstandardNth1beta1,JacPDstandardNth3beta3),ToReal(-2),kmul(JacPDstandardNth2beta2,ToReal(4))),kmsub(kmadd(At12L,JacPDstandardNth2beta1,kmul(At23L,JacPDstandardNth2beta3)),ToReal(6),kmul(alphaL,kmadd(kmadd(At12L,Atm12,kmul(At23L,Atm32)),ToReal(6),kmadd(At22L,kmadd(trKL,ToReal(-3),kmul(Atm22,ToReal(6))),kmul(em4phi,kmul(Pi,kmadd(g22,kmul(trS,ToReal(-8)),kmul(eTyyL,ToReal(24))))))))))));
     
     CCTK_REAL_VEC At23rhsL = 
-      kmadd(At13L,JacPDstandardNth2beta1,kmadd(At33L,JacPDstandardNth2beta3,kmadd(At12L,JacPDstandardNth3beta1,kmadd(At22L,JacPDstandardNth3beta2,kmadd(em4phi,kmadd(g23,kmul(trAts,ToReal(-0.3333333333333333333333333333333333333333)),Ats23),kmadd(At23L,kmadd(JacPDstandardNth1beta1,ToReal(-0.6666666666666666666666666666666666666667),kmul(kadd(JacPDstandardNth2beta2,JacPDstandardNth3beta3),ToReal(0.3333333333333333333333333333333333333333))),kmul(alphaL,kmadd(At23L,trKL,kmadd(kmadd(At12L,Atm13,kmadd(At22L,Atm23,kmul(At23L,Atm33))),ToReal(-2.),kmul(em4phi,kmadd(eTyzL,ToReal(-25.13274122871834590770114706623602307358),kmul(g23,kmul(trS,ToReal(8.377580409572781969233715688745341024526))))))))))))));
+      kmadd(ToReal(0.333333333333333333333333333333),kmadd(At23L,kadd(JacPDstandardNth2beta2,kmadd(JacPDstandardNth1beta1,ToReal(-2),JacPDstandardNth3beta3)),kmsub(kmadd(Ats23,em4phi,kmadd(At13L,JacPDstandardNth2beta1,kmadd(At33L,JacPDstandardNth2beta3,kmadd(At12L,JacPDstandardNth3beta1,kmul(At22L,JacPDstandardNth3beta2))))),ToReal(3),kmul(em4phi,kmul(g23,trAts)))),kmul(alphaL,kmadd(kmadd(At12L,Atm13,kmul(At22L,Atm23)),ToReal(-2),kmadd(At23L,kmadd(Atm33,ToReal(-2),trKL),kmul(em4phi,kmadd(eTyzL,kmul(Pi,ToReal(-8)),kmul(g23,kmul(trS,ToReal(8.37758040957278196923371568875)))))))));
     
     CCTK_REAL_VEC At33rhsL = 
-      kmadd(em4phi,kmadd(g33,kmul(trAts,ToReal(-0.3333333333333333333333333333333333333333)),Ats33),kmadd(At33L,kmadd(kadd(JacPDstandardNth1beta1,JacPDstandardNth2beta2),ToReal(-0.6666666666666666666666666666666666666667),kmul(JacPDstandardNth3beta3,ToReal(1.333333333333333333333333333333333333333))),kmadd(kmadd(At13L,JacPDstandardNth3beta1,kmul(At23L,JacPDstandardNth3beta2)),ToReal(2.),kmul(alphaL,kmadd(At33L,trKL,kmadd(kmadd(At13L,Atm13,kmadd(At23L,Atm23,kmul(At33L,Atm33))),ToReal(-2.),kmul(em4phi,kmadd(eTzzL,ToReal(-25.13274122871834590770114706623602307358),kmul(g33,kmul(trS,ToReal(8.377580409572781969233715688745341024526)))))))))));
+      kmul(ToReal(0.333333333333333333333333333333),kmadd(em4phi,kmsub(Ats33,ToReal(3),kmul(g33,trAts)),kmadd(At33L,kmadd(kadd(JacPDstandardNth1beta1,JacPDstandardNth2beta2),ToReal(-2),kmul(JacPDstandardNth3beta3,ToReal(4))),kmsub(kmadd(At13L,JacPDstandardNth3beta1,kmul(At23L,JacPDstandardNth3beta2)),ToReal(6),kmul(alphaL,kmadd(kmadd(At13L,Atm13,kmul(At23L,Atm23)),ToReal(6),kmadd(At33L,kmadd(trKL,ToReal(-3),kmul(Atm33,ToReal(6))),kmul(em4phi,kmul(Pi,kmadd(g33,kmul(trS,ToReal(-8)),kmul(eTzzL,ToReal(24))))))))))));
     
     /* If necessary, store only partial vectors after the first iteration */
     

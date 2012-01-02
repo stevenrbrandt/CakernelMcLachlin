@@ -1161,7 +1161,7 @@ static void ML_BSSN_UPW_Advect_Body(cGH const * restrict const cctkGH, int const
     }
     
     phirhsL = 
-      kmadd(beta1L,JacPDupwindNth1phi,kmadd(beta2L,JacPDupwindNth2phi,kmadd(beta3L,JacPDupwindNth3phi,phirhsL)));
+      kadd(phirhsL,kmadd(beta1L,JacPDupwindNth1phi,kmadd(beta2L,JacPDupwindNth2phi,kmul(beta3L,JacPDupwindNth3phi))));
     
     gt11rhsL = 
       kadd(gt11rhsL,kmadd(beta1L,JacPDupwindNth1gt11,kmadd(beta2L,JacPDupwindNth2gt11,kmul(beta3L,JacPDupwindNth3gt11))));
@@ -1182,16 +1182,16 @@ static void ML_BSSN_UPW_Advect_Body(cGH const * restrict const cctkGH, int const
       kadd(gt33rhsL,kmadd(beta1L,JacPDupwindNth1gt33,kmadd(beta2L,JacPDupwindNth2gt33,kmul(beta3L,JacPDupwindNth3gt33))));
     
     Xt1rhsL = 
-      kmadd(beta1L,JacPDupwindNth1Xt1,kmadd(beta2L,JacPDupwindNth2Xt1,kmadd(beta3L,JacPDupwindNth3Xt1,Xt1rhsL)));
+      kadd(Xt1rhsL,kmadd(beta1L,JacPDupwindNth1Xt1,kmadd(beta2L,JacPDupwindNth2Xt1,kmul(beta3L,JacPDupwindNth3Xt1))));
     
     Xt2rhsL = 
-      kmadd(beta1L,JacPDupwindNth1Xt2,kmadd(beta2L,JacPDupwindNth2Xt2,kmadd(beta3L,JacPDupwindNth3Xt2,Xt2rhsL)));
+      kadd(Xt2rhsL,kmadd(beta1L,JacPDupwindNth1Xt2,kmadd(beta2L,JacPDupwindNth2Xt2,kmul(beta3L,JacPDupwindNth3Xt2))));
     
     Xt3rhsL = 
-      kmadd(beta1L,JacPDupwindNth1Xt3,kmadd(beta2L,JacPDupwindNth2Xt3,kmadd(beta3L,JacPDupwindNth3Xt3,Xt3rhsL)));
+      kadd(Xt3rhsL,kmadd(beta1L,JacPDupwindNth1Xt3,kmadd(beta2L,JacPDupwindNth2Xt3,kmul(beta3L,JacPDupwindNth3Xt3))));
     
     trKrhsL = 
-      kmadd(beta1L,JacPDupwindNth1trK,kmadd(beta2L,JacPDupwindNth2trK,kmadd(beta3L,JacPDupwindNth3trK,trKrhsL)));
+      kadd(trKrhsL,kmadd(beta1L,JacPDupwindNth1trK,kmadd(beta2L,JacPDupwindNth2trK,kmul(beta3L,JacPDupwindNth3trK))));
     
     At11rhsL = 
       kadd(At11rhsL,kmadd(beta1L,JacPDupwindNth1At11,kmadd(beta2L,JacPDupwindNth2At11,kmul(beta3L,JacPDupwindNth3At11))));
@@ -1215,7 +1215,9 @@ static void ML_BSSN_UPW_Advect_Body(cGH const * restrict const cctkGH, int const
       kmadd(kmadd(beta1L,JacPDupwindNth1alpha,kmadd(beta2L,JacPDupwindNth2alpha,kmul(beta3L,JacPDupwindNth3alpha))),ToReal(LapseAdvectionCoeff),alpharhsL);
     
     ArhsL = 
-      kmadd(kmadd(beta1L,JacPDupwindNth1A,kmadd(beta2L,JacPDupwindNth2A,kmul(beta3L,JacPDupwindNth3A))),ToReal(LapseAdvectionCoeff),ArhsL);
+      kadd(ArhsL,kmadd(kmadd(beta1L,JacPDupwindNth1trK,kmadd(beta2L,JacPDupwindNth2trK,kmul(beta3L,JacPDupwindNth3trK))),ToReal(LapseACoeff 
+      - 
+      LapseAdvectionCoeff),kmul(kmadd(beta1L,JacPDupwindNth1A,kmadd(beta2L,JacPDupwindNth2A,kmul(beta3L,JacPDupwindNth3A))),ToReal(LapseAdvectionCoeff))));
     
     beta1rhsL = 
       kmadd(kmadd(beta1L,JacPDupwindNth1beta1,kmadd(beta2L,JacPDupwindNth2beta1,kmul(beta3L,JacPDupwindNth3beta1))),ToReal(ShiftAdvectionCoeff),beta1rhsL);
@@ -1227,13 +1229,16 @@ static void ML_BSSN_UPW_Advect_Body(cGH const * restrict const cctkGH, int const
       kmadd(kmadd(beta1L,JacPDupwindNth1beta3,kmadd(beta2L,JacPDupwindNth2beta3,kmul(beta3L,JacPDupwindNth3beta3))),ToReal(ShiftAdvectionCoeff),beta3rhsL);
     
     B1rhsL = 
-      kadd(B1rhsL,kmadd(beta1L,kmadd(ksub(JacPDupwindNth1B1,JacPDupwindNth1Xt1),ToReal(ShiftAdvectionCoeff),kmul(JacPDupwindNth1Xt1,ToReal(ShiftBCoeff))),kmadd(beta2L,kmadd(ksub(JacPDupwindNth2B1,JacPDupwindNth2Xt1),ToReal(ShiftAdvectionCoeff),kmul(JacPDupwindNth2Xt1,ToReal(ShiftBCoeff))),kmul(beta3L,kmadd(ksub(JacPDupwindNth3B1,JacPDupwindNth3Xt1),ToReal(ShiftAdvectionCoeff),kmul(JacPDupwindNth3Xt1,ToReal(ShiftBCoeff)))))));
+      kadd(B1rhsL,kmadd(kmadd(beta1L,JacPDupwindNth1B1,kmadd(beta2L,JacPDupwindNth2B1,kmul(beta3L,JacPDupwindNth3B1))),ToReal(ShiftAdvectionCoeff),kmul(kmadd(beta1L,JacPDupwindNth1Xt1,kmadd(beta2L,JacPDupwindNth2Xt1,kmul(beta3L,JacPDupwindNth3Xt1))),ToReal(-ShiftAdvectionCoeff 
+      + ShiftBCoeff))));
     
     B2rhsL = 
-      kadd(B2rhsL,kmadd(beta1L,kmadd(ksub(JacPDupwindNth1B2,JacPDupwindNth1Xt2),ToReal(ShiftAdvectionCoeff),kmul(JacPDupwindNth1Xt2,ToReal(ShiftBCoeff))),kmadd(beta2L,kmadd(ksub(JacPDupwindNth2B2,JacPDupwindNth2Xt2),ToReal(ShiftAdvectionCoeff),kmul(JacPDupwindNth2Xt2,ToReal(ShiftBCoeff))),kmul(beta3L,kmadd(ksub(JacPDupwindNth3B2,JacPDupwindNth3Xt2),ToReal(ShiftAdvectionCoeff),kmul(JacPDupwindNth3Xt2,ToReal(ShiftBCoeff)))))));
+      kadd(B2rhsL,kmadd(kmadd(beta1L,JacPDupwindNth1B2,kmadd(beta2L,JacPDupwindNth2B2,kmul(beta3L,JacPDupwindNth3B2))),ToReal(ShiftAdvectionCoeff),kmul(kmadd(beta1L,JacPDupwindNth1Xt2,kmadd(beta2L,JacPDupwindNth2Xt2,kmul(beta3L,JacPDupwindNth3Xt2))),ToReal(-ShiftAdvectionCoeff 
+      + ShiftBCoeff))));
     
     B3rhsL = 
-      kadd(B3rhsL,kmadd(beta1L,kmadd(ksub(JacPDupwindNth1B3,JacPDupwindNth1Xt3),ToReal(ShiftAdvectionCoeff),kmul(JacPDupwindNth1Xt3,ToReal(ShiftBCoeff))),kmadd(beta2L,kmadd(ksub(JacPDupwindNth2B3,JacPDupwindNth2Xt3),ToReal(ShiftAdvectionCoeff),kmul(JacPDupwindNth2Xt3,ToReal(ShiftBCoeff))),kmul(beta3L,kmadd(ksub(JacPDupwindNth3B3,JacPDupwindNth3Xt3),ToReal(ShiftAdvectionCoeff),kmul(JacPDupwindNth3Xt3,ToReal(ShiftBCoeff)))))));
+      kadd(B3rhsL,kmadd(kmadd(beta1L,JacPDupwindNth1B3,kmadd(beta2L,JacPDupwindNth2B3,kmul(beta3L,JacPDupwindNth3B3))),ToReal(ShiftAdvectionCoeff),kmul(kmadd(beta1L,JacPDupwindNth1Xt3,kmadd(beta2L,JacPDupwindNth2Xt3,kmul(beta3L,JacPDupwindNth3Xt3))),ToReal(-ShiftAdvectionCoeff 
+      + ShiftBCoeff))));
     
     /* If necessary, store only partial vectors after the first iteration */
     

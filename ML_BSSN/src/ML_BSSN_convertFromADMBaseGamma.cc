@@ -746,7 +746,8 @@ static void ML_BSSN_convertFromADMBaseGamma_Body(cGH const * restrict const cctk
     
     CCTK_REAL_VEC detgt = ToReal(1);
     
-    CCTK_REAL_VEC gtu11 = kmul(INV(detgt),kmsub(gt22L,gt33L,SQR(gt23L)));
+    CCTK_REAL_VEC gtu11 = 
+      kmul(INV(detgt),kmsub(gt22L,gt33L,SQR(gt23L)));
     
     CCTK_REAL_VEC gtu12 = 
       kmul(INV(detgt),kmsub(gt13L,gt23L,kmul(gt12L,gt33L)));
@@ -754,12 +755,14 @@ static void ML_BSSN_convertFromADMBaseGamma_Body(cGH const * restrict const cctk
     CCTK_REAL_VEC gtu13 = 
       kmul(INV(detgt),kmsub(gt12L,gt23L,kmul(gt13L,gt22L)));
     
-    CCTK_REAL_VEC gtu22 = kmul(INV(detgt),kmsub(gt11L,gt33L,SQR(gt13L)));
+    CCTK_REAL_VEC gtu22 = 
+      kmul(INV(detgt),kmsub(gt11L,gt33L,SQR(gt13L)));
     
     CCTK_REAL_VEC gtu23 = 
       kmul(INV(detgt),kmsub(gt12L,gt13L,kmul(gt11L,gt23L)));
     
-    CCTK_REAL_VEC gtu33 = kmul(INV(detgt),kmsub(gt11L,gt22L,SQR(gt12L)));
+    CCTK_REAL_VEC gtu33 = 
+      kmul(INV(detgt),kmsub(gt11L,gt22L,SQR(gt12L)));
     
     CCTK_REAL_VEC Gt111 = 
       kmul(ToReal(0.5),kmadd(gtu11,JacPDstandardNth1gt11,knmsub(gtu12,JacPDstandardNth2gt11,kmsub(kmadd(gtu12,JacPDstandardNth1gt12,kmul(gtu13,JacPDstandardNth1gt13)),ToReal(2),kmul(gtu13,JacPDstandardNth3gt11)))));

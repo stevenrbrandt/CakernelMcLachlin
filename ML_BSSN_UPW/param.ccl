@@ -90,7 +90,7 @@ CCTK_REAL BetaDriver "BetaDriver"
 } 0
 
 restricted:
-CCTK_REAL LapseAdvectionCoeff "Factor in front of the shift advection terms in 1+log"
+CCTK_REAL LapseAdvectionCoeff "Factor in front of the lapse advection terms in 1+log"
 {
   "*:*" :: ""
 } 1
@@ -232,6 +232,12 @@ CCTK_INT timelevels "Number of active timelevels" STEERABLE=RECOVER
 
 restricted:
 CCTK_INT rhs_timelevels "Number of active RHS timelevels" STEERABLE=RECOVER
+{
+  0:3 :: ""
+} 1
+
+restricted:
+CCTK_INT other_timelevels "Number of active timelevels for non-evolved grid functions" STEERABLE=RECOVER
 {
   0:3 :: ""
 } 1

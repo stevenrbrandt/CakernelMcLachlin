@@ -296,25 +296,25 @@ static void ML_BSSN_convertFromADMBase_Body(cGH const * restrict const cctkGH, i
     CCTK_REAL_VEC gt33L = kmul(em4phi,g33);
     
     trKL = 
-      kmadd(gu11,kxxL,kmadd(gu22,kyyL,kmadd(gu33,kzzL,kmul(kmadd(gu12,kxyL,kmadd(gu13,kxzL,kmul(gu23,kyzL))),ToReal(2)))));
+      kmadd(kxxL,gu11,kmadd(kyyL,gu22,kmadd(kzzL,gu33,kmul(kmadd(kxyL,gu12,kmadd(kxzL,gu13,kmul(kyzL,gu23))),ToReal(2)))));
     
     CCTK_REAL_VEC At11L = 
-      kmul(em4phi,kmadd(g11,kmul(trKL,ToReal(-0.333333333333333333333333333333)),kxxL));
+      kmul(em4phi,kmadd(trKL,kmul(g11,ToReal(-0.333333333333333333333333333333)),kxxL));
     
     CCTK_REAL_VEC At12L = 
-      kmul(em4phi,kmadd(g12,kmul(trKL,ToReal(-0.333333333333333333333333333333)),kxyL));
+      kmul(em4phi,kmadd(trKL,kmul(g12,ToReal(-0.333333333333333333333333333333)),kxyL));
     
     CCTK_REAL_VEC At13L = 
-      kmul(em4phi,kmadd(g13,kmul(trKL,ToReal(-0.333333333333333333333333333333)),kxzL));
+      kmul(em4phi,kmadd(trKL,kmul(g13,ToReal(-0.333333333333333333333333333333)),kxzL));
     
     CCTK_REAL_VEC At22L = 
-      kmul(em4phi,kmadd(g22,kmul(trKL,ToReal(-0.333333333333333333333333333333)),kyyL));
+      kmul(em4phi,kmadd(trKL,kmul(g22,ToReal(-0.333333333333333333333333333333)),kyyL));
     
     CCTK_REAL_VEC At23L = 
-      kmul(em4phi,kmadd(g23,kmul(trKL,ToReal(-0.333333333333333333333333333333)),kyzL));
+      kmul(em4phi,kmadd(trKL,kmul(g23,ToReal(-0.333333333333333333333333333333)),kyzL));
     
     CCTK_REAL_VEC At33L = 
-      kmul(em4phi,kmadd(g33,kmul(trKL,ToReal(-0.333333333333333333333333333333)),kzzL));
+      kmul(em4phi,kmadd(trKL,kmul(g33,ToReal(-0.333333333333333333333333333333)),kzzL));
     
     CCTK_REAL_VEC alphaL = alpL;
     

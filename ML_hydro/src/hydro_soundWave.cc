@@ -94,11 +94,11 @@ static void hydro_soundWave_Body(cGH const * restrict const cctkGH, int const di
     /* Calculate temporaries and grid functions */
     CCTK_REAL rhoL = 1.;
     
-    CCTK_REAL vel1L = Sin(2*Pi*xL*INV(ToReal(L)))*ToReal(A);
+    CCTK_REAL vel1L = Sin(2*xL*Pi*INV(ToReal(L)))*ToReal(A);
     
-    CCTK_REAL vel2L = Sin(2*Pi*xL*INV(ToReal(L)))*ToReal(A);
+    CCTK_REAL vel2L = Sin(2*xL*Pi*INV(ToReal(L)))*ToReal(A);
     
-    CCTK_REAL vel3L = Sin(2*Pi*xL*INV(ToReal(L)))*ToReal(A);
+    CCTK_REAL vel3L = Sin(2*xL*Pi*INV(ToReal(L)))*ToReal(A);
     
     CCTK_REAL epsL = 1.;
     

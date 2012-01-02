@@ -250,17 +250,17 @@ static void ML_BSSN_MP_convertToADMBase_Body(cGH const * restrict const cctkGH, 
     CCTK_REAL_VEC e4phi = 
       IfThen(conformalMethod,INV(SQR(phiL)),kexp(kmul(phiL,ToReal(4))));
     
-    gxxL = kmul(e4phi,gt11L);
+    gxxL = kmul(gt11L,e4phi);
     
-    gxyL = kmul(e4phi,gt12L);
+    gxyL = kmul(gt12L,e4phi);
     
-    gxzL = kmul(e4phi,gt13L);
+    gxzL = kmul(gt13L,e4phi);
     
-    gyyL = kmul(e4phi,gt22L);
+    gyyL = kmul(gt22L,e4phi);
     
-    gyzL = kmul(e4phi,gt23L);
+    gyzL = kmul(gt23L,e4phi);
     
-    gzzL = kmul(e4phi,gt33L);
+    gzzL = kmul(gt33L,e4phi);
     
     CCTK_REAL_VEC kxxL = 
       kmadd(At11L,e4phi,kmul(gxxL,kmul(trKL,ToReal(0.333333333333333333333333333333))));

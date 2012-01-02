@@ -238,7 +238,8 @@ static void ML_BSSN_UPW_enforce_Body(cGH const * restrict const cctkGH, int cons
     /* Calculate temporaries and grid functions */
     CCTK_REAL_VEC detgt = ToReal(1);
     
-    CCTK_REAL_VEC gtu11 = kmul(INV(detgt),kmsub(gt22L,gt33L,SQR(gt23L)));
+    CCTK_REAL_VEC gtu11 = 
+      kmul(INV(detgt),kmsub(gt22L,gt33L,SQR(gt23L)));
     
     CCTK_REAL_VEC gtu12 = 
       kmul(INV(detgt),kmsub(gt13L,gt23L,kmul(gt12L,gt33L)));
@@ -246,12 +247,14 @@ static void ML_BSSN_UPW_enforce_Body(cGH const * restrict const cctkGH, int cons
     CCTK_REAL_VEC gtu13 = 
       kmul(INV(detgt),kmsub(gt12L,gt23L,kmul(gt13L,gt22L)));
     
-    CCTK_REAL_VEC gtu22 = kmul(INV(detgt),kmsub(gt11L,gt33L,SQR(gt13L)));
+    CCTK_REAL_VEC gtu22 = 
+      kmul(INV(detgt),kmsub(gt11L,gt33L,SQR(gt13L)));
     
     CCTK_REAL_VEC gtu23 = 
       kmul(INV(detgt),kmsub(gt12L,gt13L,kmul(gt11L,gt23L)));
     
-    CCTK_REAL_VEC gtu33 = kmul(INV(detgt),kmsub(gt11L,gt22L,SQR(gt12L)));
+    CCTK_REAL_VEC gtu33 = 
+      kmul(INV(detgt),kmsub(gt11L,gt22L,SQR(gt12L)));
     
     CCTK_REAL_VEC trAt = 
       kmadd(At11L,gtu11,kmadd(At22L,gtu22,kmadd(At33L,gtu33,kmul(kmadd(At12L,gtu12,kmadd(At13L,gtu13,kmul(At23L,gtu23))),ToReal(2)))));

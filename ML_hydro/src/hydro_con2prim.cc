@@ -110,8 +110,8 @@ static void hydro_con2prim_Body(cGH const * restrict const cctkGH, int const dir
     
     vel3L = mom3L*INV(massL);
     
-    epsL = 0.5*INV(massL)*(2*eneL - massL*(SQR(vel1L) + SQR(vel2L) + 
-      SQR(vel3L)));
+    epsL = 0.5*INV(massL)*(2*eneL - massL*(SQR(vel1L) + 
+      SQR(vel2L) + SQR(vel3L)));
     
     CCTK_REAL pressL = epsL*rhoL*ToReal(Gamma);
     

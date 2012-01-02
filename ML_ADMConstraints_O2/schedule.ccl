@@ -1,9 +1,31 @@
 # File produced by Kranc
 
 
-STORAGE: ML_Ham[3]
+if (timelevels == 1)
+{
+  STORAGE: ML_Ham[1]
+}
+if (timelevels == 2)
+{
+  STORAGE: ML_Ham[2]
+}
+if (timelevels == 3)
+{
+  STORAGE: ML_Ham[3]
+}
 
-STORAGE: ML_mom[3]
+if (timelevels == 1)
+{
+  STORAGE: ML_mom[1]
+}
+if (timelevels == 2)
+{
+  STORAGE: ML_mom[2]
+}
+if (timelevels == 3)
+{
+  STORAGE: ML_mom[3]
+}
 
 schedule ML_ADMConstraints_O2_Startup at STARTUP
 {

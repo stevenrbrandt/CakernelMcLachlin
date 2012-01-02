@@ -1161,7 +1161,7 @@ static void ML_BSSN_MP_O8_Dissipation_Body(cGH const * restrict const cctkGH, in
     CCTK_REAL_VEC epsdiss3 = ToReal(EpsDiss);
     
     phirhsL = 
-      kmadd(epsdiss1,JacPDdissipationNth1phi,kmadd(epsdiss2,JacPDdissipationNth2phi,kmadd(epsdiss3,JacPDdissipationNth3phi,phirhsL)));
+      kadd(phirhsL,kmadd(epsdiss1,JacPDdissipationNth1phi,kmadd(epsdiss2,JacPDdissipationNth2phi,kmul(epsdiss3,JacPDdissipationNth3phi))));
     
     gt11rhsL = 
       kadd(gt11rhsL,kmadd(epsdiss1,JacPDdissipationNth1gt11,kmadd(epsdiss2,JacPDdissipationNth2gt11,kmul(epsdiss3,JacPDdissipationNth3gt11))));
@@ -1182,16 +1182,16 @@ static void ML_BSSN_MP_O8_Dissipation_Body(cGH const * restrict const cctkGH, in
       kadd(gt33rhsL,kmadd(epsdiss1,JacPDdissipationNth1gt33,kmadd(epsdiss2,JacPDdissipationNth2gt33,kmul(epsdiss3,JacPDdissipationNth3gt33))));
     
     Xt1rhsL = 
-      kmadd(epsdiss1,JacPDdissipationNth1Xt1,kmadd(epsdiss2,JacPDdissipationNth2Xt1,kmadd(epsdiss3,JacPDdissipationNth3Xt1,Xt1rhsL)));
+      kadd(Xt1rhsL,kmadd(epsdiss1,JacPDdissipationNth1Xt1,kmadd(epsdiss2,JacPDdissipationNth2Xt1,kmul(epsdiss3,JacPDdissipationNth3Xt1))));
     
     Xt2rhsL = 
-      kmadd(epsdiss1,JacPDdissipationNth1Xt2,kmadd(epsdiss2,JacPDdissipationNth2Xt2,kmadd(epsdiss3,JacPDdissipationNth3Xt2,Xt2rhsL)));
+      kadd(Xt2rhsL,kmadd(epsdiss1,JacPDdissipationNth1Xt2,kmadd(epsdiss2,JacPDdissipationNth2Xt2,kmul(epsdiss3,JacPDdissipationNth3Xt2))));
     
     Xt3rhsL = 
-      kmadd(epsdiss1,JacPDdissipationNth1Xt3,kmadd(epsdiss2,JacPDdissipationNth2Xt3,kmadd(epsdiss3,JacPDdissipationNth3Xt3,Xt3rhsL)));
+      kadd(Xt3rhsL,kmadd(epsdiss1,JacPDdissipationNth1Xt3,kmadd(epsdiss2,JacPDdissipationNth2Xt3,kmul(epsdiss3,JacPDdissipationNth3Xt3))));
     
     trKrhsL = 
-      kmadd(epsdiss1,JacPDdissipationNth1trK,kmadd(epsdiss2,JacPDdissipationNth2trK,kmadd(epsdiss3,JacPDdissipationNth3trK,trKrhsL)));
+      kadd(trKrhsL,kmadd(epsdiss1,JacPDdissipationNth1trK,kmadd(epsdiss2,JacPDdissipationNth2trK,kmul(epsdiss3,JacPDdissipationNth3trK))));
     
     At11rhsL = 
       kadd(At11rhsL,kmadd(epsdiss1,JacPDdissipationNth1At11,kmadd(epsdiss2,JacPDdissipationNth2At11,kmul(epsdiss3,JacPDdissipationNth3At11))));
