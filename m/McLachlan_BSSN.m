@@ -648,10 +648,9 @@ evolCalc =
 *)
     dot[alpha] -> - harmonicF alpha^harmonicN
                     (+ LapseACoeff       A
-                     + (1 - LapseACoeff) trK),
+                     + (1 - LapseACoeff) (trK + AlphaDriver (alpha - 1))),
 
     dot[A]     -> + LapseACoeff (dottrK - AlphaDriver A),
-
     
     eta -> etaExpr,
     theta -> thetaExpr,
@@ -702,16 +701,21 @@ advectCalc =
 
     dot[At[la,lb]] -> dot[At[la,lb]] + Upwind[beta[uc], At[la,lb], lc],
 
-        dot[alpha] -> dot[alpha] + LapseAdvectionCoeff Upwind[beta[ua], alpha, la],
+        dot[alpha] -> dot[alpha]
+                      + LapseAdvectionCoeff Upwind[beta[ua], alpha, la],
 
-            dot[A] -> dot[A] + LapseAdvectionCoeff Upwind[beta[ua], A, la],
+            dot[A] -> dot[A]
+                      + LapseAdvectionCoeff Upwind[beta[ua], A, la]
+                      + (LapseACoeff - LapseAdvectionCoeff)
+                        Upwind[beta[ua], trK, la],
 
-     dot[beta[ua]] -> dot[beta[ua]] + ShiftAdvectionCoeff Upwind[beta[ub], beta[ua], lb],
+     dot[beta[ua]] -> dot[beta[ua]]
+                      + ShiftAdvectionCoeff Upwind[beta[ub], beta[ua], lb],
 
         dot[B[ua]] -> dot[B[ua]]
-                      + ShiftBCoeff Upwind[beta[uj], Xt[ua], lj] (* take care *)
                       + ShiftAdvectionCoeff Upwind[beta[ub], B[ua], lb]
-                      - ShiftAdvectionCoeff Upwind[beta[ub], Xt[ua], lb]
+                      + (ShiftBCoeff - ShiftAdvectionCoeff)
+                        Upwind[beta[ub], Xt[ua], lb]
   }
 };
 
