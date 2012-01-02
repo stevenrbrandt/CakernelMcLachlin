@@ -159,8 +159,6 @@ T11=eTxx; T12=eTxy; T22=eTyy; T13=eTxz; T23=eTyz; T33=eTzz;
 (* Expressions *)
 (******************************************************************************)
 
-pi = N[Pi,40];
-
 detgExpr  = Det [MatrixOfComponents [g [la,lb]]];
 ddetgExpr[la_] =
   Sum [D[Det[MatrixOfComponents[g[la, lb]]], X] PD[X, la],
@@ -613,7 +611,7 @@ evolCalc =
                       - Xtn[uj] PD[beta[ui],lj] 
                       + (2/3) Xtn[ui] PD[beta[uj],lj]
     (* Equation (4.28) in Baumgarte & Shapiro (Phys. Rept. 376 (2003) 41-131) *)
-                      + addMatter (- 16 pi alpha gtu[ui,uj] S[lj]),
+                      + addMatter (- 16 Pi alpha gtu[ui,uj] S[lj]),
     dot[Xt[ui]]    -> dotXt[ui],
 
     (* PRD 62, 044034 (2000), eqn. (11) *)
@@ -622,7 +620,7 @@ evolCalc =
                                 - Xtn[ua] PD[alpha,la] )
                       + alpha (Atm[ua,lb] Atm[ub,la] + (1/3) trK^2)
     (* Equation (4.21) in Baumgarte & Shapiro (Phys. Rept. 376 (2003) 41-131) *)
-                      + addMatter (4 pi alpha (rho + trS)),
+                      + addMatter (4 Pi alpha (rho + trS)),
     dot[trK]       -> dottrK,
 
     (* PRD 62, 044034 (2000), eqn. (12) *)
@@ -636,7 +634,7 @@ evolCalc =
                       + At[la,lc] PD[beta[uc],lb] + At[lb,lc] PD[beta[uc],la]
                       - (2/3) At[la,lb] PD[beta[uc],lc]
     (* Equation (4.23) in Baumgarte & Shapiro (Phys. Rept. 376 (2003) 41-131) *)
-                      + addMatter (- em4phi alpha 8 pi
+                      + addMatter (- em4phi alpha 8 Pi
                                      (T[la,lb] - (1/3) g[la,lb] trS)),
     
     (* dot[alpha] -> - harmonicF alpha^harmonicN trK, *)
@@ -1018,7 +1016,7 @@ constraintsCalc =
     
     (* H -> trR - Km[ua,lb] Km[ub,la] + trK^2, *)
     (* PRD 67, 084023 (2003), eqn. (19) *)
-    H -> trR - Atm[ua,lb] Atm[ub,la] + (2/3) trK^2 - addMatter 16 pi rho,
+    H -> trR - Atm[ua,lb] Atm[ub,la] + (2/3) trK^2 - addMatter 16 Pi rho,
     
     (* gK[la,lb,lc] -> CD[K[la,lb],lc], *)
 (*    gK[la,lb,lc] -> + 4 e4phi PD[phi,lc] At[la,lb] + e4phi CD[At[la,lb],lc]
@@ -1028,7 +1026,7 @@ constraintsCalc =
 
     M[li] -> + gtu[uj,uk] (CDt[At[li,lj],lk] + 6 At[li,lj] cdphi[lk])
              - (2/3) PD[trK,li]
-             - addMatter 8 pi S[li],
+             - addMatter 8 Pi S[li],
     (* TODO: use PRD 67, 084023 (2003), eqn. (20) *)
     
     (* det gamma-tilde *)

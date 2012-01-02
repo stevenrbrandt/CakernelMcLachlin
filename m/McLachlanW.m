@@ -107,8 +107,6 @@ ddetgtExpr[la_] =
   Sum [D[Det[MatrixOfComponents[gt[la, lb]]], X] PD[X, la],
        {X, Union[Flatten[MatrixOfComponents[gt[la, lb]]]]}];
 
-pi = N[Pi,40]; 
-
 (******************************************************************************)
 (* Groups *)
 (******************************************************************************)
@@ -481,14 +479,14 @@ evolCalcBSSNW =
                       - Xtn[uj] PD[beta[ui],lj] 
                       + (2/3) Xtn[ui] PD[beta[uj],lj]
     (* Equation (4.28) in Baumgarte & Shapiro (Phys. Rept. 376 (2003) 41-131) *)
-                      + addMatter (- 16 pi alpha gtu[ui,uj] S[lj]),
+                      + addMatter (- 16 Pi alpha gtu[ui,uj] S[lj]),
     
     (* PRD 62, 044034 (2000), eqn. (11) *)
     dot[trK]       -> - gu[ua,ub] CD[alpha,la,lb]
                       + alpha (Atm[ua,lb] Atm[ub,la] + (1/3) trK^2)
                       + ( betam[ua] PDm[trK,la] + betap[ua] PDp[trK,la] )
     (* Equation (4.21) in Baumgarte & Shapiro (Phys. Rept. 376 (2003) 41-131) *)
-                      + addMatter (4 pi alpha (rho + trS)),
+                      + addMatter (4 Pi alpha (rho + trS)),
     
     (* PRD 62, 044034 (2000), eqn. (12) *)
     (* TODO: use Hamiltonian constraint to make tracefree *)
@@ -501,7 +499,7 @@ evolCalcBSSNW =
                       + At[la,lc] PD[beta[uc],lb] + At[lb,lc] PD[beta[uc],la]
                       - (2/3) At[la,lb] PD[beta[uc],lc]
     (* Equation (4.23) in Baumgarte & Shapiro (Phys. Rept. 376 (2003) 41-131) *)
-                      + addMatter (- W2 alpha 8 pi
+                      + addMatter (- W2 alpha 8 Pi
                                      (T[la,lb] - (1/3) g[la,lb] trS)),
     
     (* dot[alpha] -> - harmonicF alpha^harmonicN trK, *)
@@ -682,7 +680,7 @@ constraintsCalcBSSNW =
     
     (* H -> trR - Km[ua,lb] Km[ub,la] + trK^2, *)
     (* PRD 67, 084023 (2003), eqn. (19) *)
-    H -> trR - Atm[ua,lb] Atm[ub,la] + (2/3) trK^2 - addMatter 16 pi rho,
+    H -> trR - Atm[ua,lb] Atm[ub,la] + (2/3) trK^2 - addMatter 16 Pi rho,
     
     (* gK[la,lb,lc] -> CD[K[la,lb],lc], *)
 (*    gK[la,lb,lc] -> + 4 e4phi PD[phi,lc] At[la,lb] + e4phi CD[At[la,lb],lc]
@@ -692,7 +690,7 @@ constraintsCalcBSSNW =
 
     M[li] -> + gtu[uj,uk] (CDt[At[li,lj],lk] + 6 At[li,lj] pdphi[lk])
              - (2/3) PD[trK,li]
-             - addMatter 8 pi S[li],
+             - addMatter 8 Pi S[li],
     (* TODO: use PRD 67, 084023 (2003), eqn. (20) *)
     
     (* det gamma-tilde *)

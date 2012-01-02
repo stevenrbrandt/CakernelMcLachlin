@@ -149,8 +149,6 @@ T11=eTxx; T12=eTxy; T22=eTyy; T13=eTxz; T23=eTyz; T33=eTzz;
 
 detgtExpr = Det [MatrixOfComponents [gt[la,lb]]];
 
-pi = N[Pi,40]; 
-
 (******************************************************************************)
 (* Groups *)
 (******************************************************************************)
@@ -257,16 +255,16 @@ ADMQuantitiesCalc =
     (* ADM quantities *)
     (* See PRD 66, 084026 (2002) *)
 
-    Madm -> 1/(16 pi)
-            (+ ephi^5 (+ 16 pi addMatter rho
+    Madm -> 1/(16 Pi)
+            (+ ephi^5 (+ 16 Pi addMatter rho
                        + Atm[ua,lb] Atm[ub,la]
                        - 2/3 trK^2)
              - gtu[ua,ub] Gt[uc,la,ld] Gtlu[lb,lc,ud]
              + (1 - ephi) trRt),
 
-    Jadm[li] -> 1/(16 pi) Eps[li,lj,uk] ephi^6
+    Jadm[li] -> 1/(16 Pi) Eps[li,lj,uk] ephi^6
                 (+ 2 Atm[uj,lk]
-                 + 16 pi x[uj] S[lk]
+                 + 16 Pi x[uj] S[lk]
                  + 4/3 x[uj] PD[trK,lk]
                  - x[uj] dgtu[ul,um,lk] At[ll,lm])
   }

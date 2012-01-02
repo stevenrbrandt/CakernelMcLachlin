@@ -82,13 +82,9 @@ ddetgExpr[la_] =
   Sum [D[Det[MatrixOfComponents[g[la, lb]]], X] PD[X, la],
        {X, Union[Flatten[MatrixOfComponents[g[la, lb]]]]}];
 
-pi = N[Pi,40]; 
-
 (******************************************************************************)
 (* Groups *)
 (******************************************************************************)
-
-SetGroupTimelevels[g_,tl_] = Join[g, {Timelevels -> tl}];
 
 evolvedGroups = {};
 evaluatedGroups =
@@ -163,9 +159,9 @@ ADMConstraintsCalc =
     (* ADM constraints *)
 
     H     -> + trR - Km[ua,lb] Km[ub,la] + trK^2
-             - addMatter 16 pi rho,
+             - addMatter 16 Pi rho,
     M[la] -> + gu[ub,uc] (CD[K[lc,la], lb] - CD[K[lc,lb], la])
-             - addMatter 8 pi S[la]
+             - addMatter 8 Pi S[la]
   }
 };
 
