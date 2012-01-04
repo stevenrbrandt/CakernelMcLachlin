@@ -705,17 +705,18 @@ advectCalc =
                       + LapseAdvectionCoeff Upwind[beta[ua], alpha, la],
 
             dot[A] -> dot[A]
-                      + LapseAdvectionCoeff Upwind[beta[ua], A, la]
-                      + (LapseACoeff - LapseAdvectionCoeff)
-                        Upwind[beta[ua], trK, la],
+                      + LapseACoeff (
+                        + LapseAdvectionCoeff       Upwind[beta[ua], A, la]
+                        + (1 - LapseAdvectionCoeff) Upwind[beta[ua], trK, la]),
 
      dot[beta[ua]] -> dot[beta[ua]]
                       + ShiftAdvectionCoeff Upwind[beta[ub], beta[ua], lb],
 
         dot[B[ua]] -> dot[B[ua]]
-                      + ShiftAdvectionCoeff Upwind[beta[ub], B[ua], lb]
-                      + (ShiftBCoeff - ShiftAdvectionCoeff)
-                        Upwind[beta[ub], Xt[ua], lb]
+                      + ShiftBCoeff (
+                        + ShiftAdvectionCoeff Upwind[beta[ub], B[ua], lb]
+                        + ((1 - ShiftAdvectionCoeff)
+                           Upwind[beta[ub], Xt[ua], lb]))
   }
 };
 
