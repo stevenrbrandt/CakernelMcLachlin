@@ -2040,9 +2040,7 @@ static void ML_BSSN_MP_Advect_Body(cGH const * restrict const cctkGH, int const 
       kmadd(kmadd(beta1L,JacPDupwindNthAnti1alpha,kmadd(beta2L,JacPDupwindNthAnti2alpha,kmadd(beta3L,JacPDupwindNthAnti3alpha,kmadd(JacPDupwindNthSymm1alpha,kfabs(beta1L),kmadd(JacPDupwindNthSymm2alpha,kfabs(beta2L),kmul(JacPDupwindNthSymm3alpha,kfabs(beta3L))))))),ToReal(LapseAdvectionCoeff),alpharhsL);
     
     ArhsL = 
-      kmadd(ToReal(LapseACoeff),kmadd(kmadd(beta1L,JacPDupwindNthAnti1trK,kmadd(beta2L,JacPDupwindNthAnti2trK,kmadd(beta3L,JacPDupwindNthAnti3trK,kmadd(JacPDupwindNthSymm1trK,kfabs(beta1L),kmadd(JacPDupwindNthSymm2trK,kfabs(beta2L),kmul(JacPDupwindNthSymm3trK,kfabs(beta3L))))))),ToReal(1 
-      - 
-      LapseAdvectionCoeff),kmul(kmadd(beta1L,JacPDupwindNthAnti1A,kmadd(beta2L,JacPDupwindNthAnti2A,kmadd(beta3L,JacPDupwindNthAnti3A,kmadd(JacPDupwindNthSymm1A,kfabs(beta1L),kmadd(JacPDupwindNthSymm2A,kfabs(beta2L),kmul(JacPDupwindNthSymm3A,kfabs(beta3L))))))),ToReal(LapseAdvectionCoeff))),ArhsL);
+      kmadd(ToReal(LapseACoeff),kmsub(kmadd(beta1L,JacPDupwindNthAnti1A,kmadd(beta2L,JacPDupwindNthAnti2A,kmadd(beta3L,JacPDupwindNthAnti3A,kmadd(JacPDupwindNthSymm1A,kfabs(beta1L),kmadd(JacPDupwindNthSymm2A,kfabs(beta2L),kmul(JacPDupwindNthSymm3A,kfabs(beta3L))))))),ToReal(LapseAdvectionCoeff),kmul(kmadd(beta1L,JacPDupwindNthAnti1trK,kmadd(beta2L,JacPDupwindNthAnti2trK,kmadd(beta3L,JacPDupwindNthAnti3trK,kmadd(JacPDupwindNthSymm1trK,kfabs(beta1L),kmadd(JacPDupwindNthSymm2trK,kfabs(beta2L),kmul(JacPDupwindNthSymm3trK,kfabs(beta3L))))))),kadd(ToReal(-1),ToReal(LapseAdvectionCoeff)))),ArhsL);
     
     beta1rhsL = 
       kmadd(kmadd(beta1L,JacPDupwindNthAnti1beta1,kmadd(beta2L,JacPDupwindNthAnti2beta1,kmadd(beta3L,JacPDupwindNthAnti3beta1,kmadd(JacPDupwindNthSymm1beta1,kfabs(beta1L),kmadd(JacPDupwindNthSymm2beta1,kfabs(beta2L),kmul(JacPDupwindNthSymm3beta1,kfabs(beta3L))))))),ToReal(ShiftAdvectionCoeff),beta1rhsL);
@@ -2054,19 +2052,13 @@ static void ML_BSSN_MP_Advect_Body(cGH const * restrict const cctkGH, int const 
       kmadd(kmadd(beta1L,JacPDupwindNthAnti1beta3,kmadd(beta2L,JacPDupwindNthAnti2beta3,kmadd(beta3L,JacPDupwindNthAnti3beta3,kmadd(JacPDupwindNthSymm1beta3,kfabs(beta1L),kmadd(JacPDupwindNthSymm2beta3,kfabs(beta2L),kmul(JacPDupwindNthSymm3beta3,kfabs(beta3L))))))),ToReal(ShiftAdvectionCoeff),beta3rhsL);
     
     B1rhsL = 
-      kmadd(kmadd(kmadd(beta1L,JacPDupwindNthAnti1Xt1,kmadd(beta2L,JacPDupwindNthAnti2Xt1,kmadd(beta3L,JacPDupwindNthAnti3Xt1,kmadd(JacPDupwindNthSymm1Xt1,kfabs(beta1L),kmadd(JacPDupwindNthSymm2Xt1,kfabs(beta2L),kmul(JacPDupwindNthSymm3Xt1,kfabs(beta3L))))))),ToReal(1 
-      - 
-      ShiftAdvectionCoeff),kmul(kmadd(beta1L,JacPDupwindNthAnti1B1,kmadd(beta2L,JacPDupwindNthAnti2B1,kmadd(beta3L,JacPDupwindNthAnti3B1,kmadd(JacPDupwindNthSymm1B1,kfabs(beta1L),kmadd(JacPDupwindNthSymm2B1,kfabs(beta2L),kmul(JacPDupwindNthSymm3B1,kfabs(beta3L))))))),ToReal(ShiftAdvectionCoeff))),ToReal(ShiftBCoeff),B1rhsL);
+      kmadd(kmsub(kmadd(beta1L,JacPDupwindNthAnti1B1,kmadd(beta2L,JacPDupwindNthAnti2B1,kmadd(beta3L,JacPDupwindNthAnti3B1,kmadd(JacPDupwindNthSymm1B1,kfabs(beta1L),kmadd(JacPDupwindNthSymm2B1,kfabs(beta2L),kmul(JacPDupwindNthSymm3B1,kfabs(beta3L))))))),ToReal(ShiftAdvectionCoeff),kmul(kmadd(beta1L,JacPDupwindNthAnti1Xt1,kmadd(beta2L,JacPDupwindNthAnti2Xt1,kmadd(beta3L,JacPDupwindNthAnti3Xt1,kmadd(JacPDupwindNthSymm1Xt1,kfabs(beta1L),kmadd(JacPDupwindNthSymm2Xt1,kfabs(beta2L),kmul(JacPDupwindNthSymm3Xt1,kfabs(beta3L))))))),kadd(ToReal(-1),ToReal(ShiftAdvectionCoeff)))),ToReal(ShiftBCoeff),B1rhsL);
     
     B2rhsL = 
-      kmadd(kmadd(kmadd(beta1L,JacPDupwindNthAnti1Xt2,kmadd(beta2L,JacPDupwindNthAnti2Xt2,kmadd(beta3L,JacPDupwindNthAnti3Xt2,kmadd(JacPDupwindNthSymm1Xt2,kfabs(beta1L),kmadd(JacPDupwindNthSymm2Xt2,kfabs(beta2L),kmul(JacPDupwindNthSymm3Xt2,kfabs(beta3L))))))),ToReal(1 
-      - 
-      ShiftAdvectionCoeff),kmul(kmadd(beta1L,JacPDupwindNthAnti1B2,kmadd(beta2L,JacPDupwindNthAnti2B2,kmadd(beta3L,JacPDupwindNthAnti3B2,kmadd(JacPDupwindNthSymm1B2,kfabs(beta1L),kmadd(JacPDupwindNthSymm2B2,kfabs(beta2L),kmul(JacPDupwindNthSymm3B2,kfabs(beta3L))))))),ToReal(ShiftAdvectionCoeff))),ToReal(ShiftBCoeff),B2rhsL);
+      kmadd(kmsub(kmadd(beta1L,JacPDupwindNthAnti1B2,kmadd(beta2L,JacPDupwindNthAnti2B2,kmadd(beta3L,JacPDupwindNthAnti3B2,kmadd(JacPDupwindNthSymm1B2,kfabs(beta1L),kmadd(JacPDupwindNthSymm2B2,kfabs(beta2L),kmul(JacPDupwindNthSymm3B2,kfabs(beta3L))))))),ToReal(ShiftAdvectionCoeff),kmul(kmadd(beta1L,JacPDupwindNthAnti1Xt2,kmadd(beta2L,JacPDupwindNthAnti2Xt2,kmadd(beta3L,JacPDupwindNthAnti3Xt2,kmadd(JacPDupwindNthSymm1Xt2,kfabs(beta1L),kmadd(JacPDupwindNthSymm2Xt2,kfabs(beta2L),kmul(JacPDupwindNthSymm3Xt2,kfabs(beta3L))))))),kadd(ToReal(-1),ToReal(ShiftAdvectionCoeff)))),ToReal(ShiftBCoeff),B2rhsL);
     
     B3rhsL = 
-      kmadd(kmadd(kmadd(beta1L,JacPDupwindNthAnti1Xt3,kmadd(beta2L,JacPDupwindNthAnti2Xt3,kmadd(beta3L,JacPDupwindNthAnti3Xt3,kmadd(JacPDupwindNthSymm1Xt3,kfabs(beta1L),kmadd(JacPDupwindNthSymm2Xt3,kfabs(beta2L),kmul(JacPDupwindNthSymm3Xt3,kfabs(beta3L))))))),ToReal(1 
-      - 
-      ShiftAdvectionCoeff),kmul(kmadd(beta1L,JacPDupwindNthAnti1B3,kmadd(beta2L,JacPDupwindNthAnti2B3,kmadd(beta3L,JacPDupwindNthAnti3B3,kmadd(JacPDupwindNthSymm1B3,kfabs(beta1L),kmadd(JacPDupwindNthSymm2B3,kfabs(beta2L),kmul(JacPDupwindNthSymm3B3,kfabs(beta3L))))))),ToReal(ShiftAdvectionCoeff))),ToReal(ShiftBCoeff),B3rhsL);
+      kmadd(kmsub(kmadd(beta1L,JacPDupwindNthAnti1B3,kmadd(beta2L,JacPDupwindNthAnti2B3,kmadd(beta3L,JacPDupwindNthAnti3B3,kmadd(JacPDupwindNthSymm1B3,kfabs(beta1L),kmadd(JacPDupwindNthSymm2B3,kfabs(beta2L),kmul(JacPDupwindNthSymm3B3,kfabs(beta3L))))))),ToReal(ShiftAdvectionCoeff),kmul(kmadd(beta1L,JacPDupwindNthAnti1Xt3,kmadd(beta2L,JacPDupwindNthAnti2Xt3,kmadd(beta3L,JacPDupwindNthAnti3Xt3,kmadd(JacPDupwindNthSymm1Xt3,kfabs(beta1L),kmadd(JacPDupwindNthSymm2Xt3,kfabs(beta2L),kmul(JacPDupwindNthSymm3Xt3,kfabs(beta3L))))))),kadd(ToReal(-1),ToReal(ShiftAdvectionCoeff)))),ToReal(ShiftBCoeff),B3rhsL);
     
     /* If necessary, store only partial vectors after the first iteration */
     

@@ -1330,8 +1330,7 @@ static void ML_BSSN_O2_RHS1_Body(cGH const * restrict const cctkGH, int const di
     CCTK_REAL_VEC trKrhsL = dottrK;
     
     CCTK_REAL_VEC alpharhsL = 
-      kneg(kmul(kpow(alphaL,harmonicN),kmul(ToReal(harmonicF),kmadd(kmadd(kadd(alphaL,ToReal(-1)),ToReal(AlphaDriver),trKL),ToReal(1 
-      - LapseACoeff),kmul(AL,ToReal(LapseACoeff))))));
+      kneg(kmul(kpow(alphaL,harmonicN),kmul(ToReal(harmonicF),kmadd(AL,ToReal(LapseACoeff),kmul(kmadd(kadd(alphaL,ToReal(-1)),ToReal(AlphaDriver),trKL),ksub(ToReal(1),ToReal(LapseACoeff)))))));
     
     CCTK_REAL_VEC ArhsL = 
       kmul(knmsub(AL,ToReal(AlphaDriver),dottrK),ToReal(LapseACoeff));
@@ -1360,19 +1359,13 @@ static void ML_BSSN_O2_RHS1_Body(cGH const * restrict const cctkGH, int const di
     else
     {
       beta1rhsL = 
-        kmul(theta,kmul(kadd(Xt1L,kmadd(beta1L,kmul(eta,ToReal(BetaDriver*(-1 
-        + 
-        ShiftBCoeff))),kmul(ksub(B1L,Xt1L),ToReal(ShiftBCoeff)))),ToReal(ShiftGammaCoeff)));
+        kmul(theta,kmul(kadd(Xt1L,kmadd(ksub(B1L,Xt1L),ToReal(ShiftBCoeff),kmul(beta1L,kmul(eta,kmul(ToReal(BetaDriver),kadd(ToReal(-1),ToReal(ShiftBCoeff))))))),ToReal(ShiftGammaCoeff)));
       
       beta2rhsL = 
-        kmul(theta,kmul(kadd(Xt2L,kmadd(beta2L,kmul(eta,ToReal(BetaDriver*(-1 
-        + 
-        ShiftBCoeff))),kmul(ksub(B2L,Xt2L),ToReal(ShiftBCoeff)))),ToReal(ShiftGammaCoeff)));
+        kmul(theta,kmul(kadd(Xt2L,kmadd(ksub(B2L,Xt2L),ToReal(ShiftBCoeff),kmul(beta2L,kmul(eta,kmul(ToReal(BetaDriver),kadd(ToReal(-1),ToReal(ShiftBCoeff))))))),ToReal(ShiftGammaCoeff)));
       
       beta3rhsL = 
-        kmul(theta,kmul(kadd(Xt3L,kmadd(beta3L,kmul(eta,ToReal(BetaDriver*(-1 
-        + 
-        ShiftBCoeff))),kmul(ksub(B3L,Xt3L),ToReal(ShiftBCoeff)))),ToReal(ShiftGammaCoeff)));
+        kmul(theta,kmul(kadd(Xt3L,kmadd(ksub(B3L,Xt3L),ToReal(ShiftBCoeff),kmul(beta3L,kmul(eta,kmul(ToReal(BetaDriver),kadd(ToReal(-1),ToReal(ShiftBCoeff))))))),ToReal(ShiftGammaCoeff)));
     }
     
     CCTK_REAL_VEC B1rhsL = 
