@@ -12,6 +12,7 @@
 #include "cctk_Parameters.h"
 #include "GenericFD.h"
 #include "Differencing.h"
+#include "cctk_Loop.h"
 #include "loopcontrol.h"
 
 /* Define macros used in calculations */
@@ -76,7 +77,7 @@ static void hydro_prim2con_Body(cGH const * restrict const cctkGH, int const dir
   
   /* Loop over the grid points */
   #pragma omp parallel
-  LC_LOOP3 (hydro_prim2con,
+  CCTK_LOOP3 (hydro_prim2con,
     i,j,k, imin[0],imin[1],imin[2], imax[0],imax[1],imax[2],
     cctk_lsh[0],cctk_lsh[1],cctk_lsh[2])
   {
@@ -119,7 +120,7 @@ static void hydro_prim2con_Body(cGH const * restrict const cctkGH, int const dir
     mom3[index] = mom3L;
     vol[index] = volL;
   }
-  LC_ENDLOOP3 (hydro_prim2con);
+  CCTK_ENDLOOP3 (hydro_prim2con);
 }
 
 extern "C" void hydro_prim2con(CCTK_ARGUMENTS)

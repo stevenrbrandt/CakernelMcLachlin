@@ -12,6 +12,7 @@
 #include "cctk_Parameters.h"
 #include "GenericFD.h"
 #include "Differencing.h"
+#include "cctk_Loop.h"
 #include "loopcontrol.h"
 
 /* Define macros used in calculations */
@@ -136,7 +137,7 @@ static void ML_ADMConstraints_MP_Body(cGH const * restrict const cctkGH, int con
   
   /* Loop over the grid points */
   #pragma omp parallel
-  LC_LOOP3 (ML_ADMConstraints_MP,
+  CCTK_LOOP3 (ML_ADMConstraints_MP,
     i,j,k, imin[0],imin[1],imin[2], imax[0],imax[1],imax[2],
     cctk_lsh[0],cctk_lsh[1],cctk_lsh[2])
   {
@@ -1304,7 +1305,7 @@ static void ML_ADMConstraints_MP_Body(cGH const * restrict const cctkGH, int con
     M2[index] = M2L;
     M3[index] = M3L;
   }
-  LC_ENDLOOP3 (ML_ADMConstraints_MP);
+  CCTK_ENDLOOP3 (ML_ADMConstraints_MP);
 }
 
 extern "C" void ML_ADMConstraints_MP(CCTK_ARGUMENTS)

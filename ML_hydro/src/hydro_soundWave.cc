@@ -12,6 +12,7 @@
 #include "cctk_Parameters.h"
 #include "GenericFD.h"
 #include "Differencing.h"
+#include "cctk_Loop.h"
 #include "loopcontrol.h"
 
 /* Define macros used in calculations */
@@ -76,7 +77,7 @@ static void hydro_soundWave_Body(cGH const * restrict const cctkGH, int const di
   
   /* Loop over the grid points */
   #pragma omp parallel
-  LC_LOOP3 (hydro_soundWave,
+  CCTK_LOOP3 (hydro_soundWave,
     i,j,k, imin[0],imin[1],imin[2], imax[0],imax[1],imax[2],
     cctk_lsh[0],cctk_lsh[1],cctk_lsh[2])
   {
@@ -109,7 +110,7 @@ static void hydro_soundWave_Body(cGH const * restrict const cctkGH, int const di
     vel2[index] = vel2L;
     vel3[index] = vel3L;
   }
-  LC_ENDLOOP3 (hydro_soundWave);
+  CCTK_ENDLOOP3 (hydro_soundWave);
 }
 
 extern "C" void hydro_soundWave(CCTK_ARGUMENTS)

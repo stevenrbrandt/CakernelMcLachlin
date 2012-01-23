@@ -12,6 +12,7 @@
 #include "cctk_Parameters.h"
 #include "GenericFD.h"
 #include "Differencing.h"
+#include "cctk_Loop.h"
 #include "loopcontrol.h"
 
 /* Define macros used in calculations */
@@ -76,7 +77,7 @@ static void WT_Gaussian_Body(cGH const * restrict const cctkGH, int const dir, i
   
   /* Loop over the grid points */
   #pragma omp parallel
-  LC_LOOP3 (WT_Gaussian,
+  CCTK_LOOP3 (WT_Gaussian,
     i,j,k, imin[0],imin[1],imin[2], imax[0],imax[1],imax[2],
     cctk_lsh[0],cctk_lsh[1],cctk_lsh[2])
   {
@@ -99,7 +100,7 @@ static void WT_Gaussian_Body(cGH const * restrict const cctkGH, int const dir, i
     rho[index] = rhoL;
     u[index] = uL;
   }
-  LC_ENDLOOP3 (WT_Gaussian);
+  CCTK_ENDLOOP3 (WT_Gaussian);
 }
 
 extern "C" void WT_Gaussian(CCTK_ARGUMENTS)

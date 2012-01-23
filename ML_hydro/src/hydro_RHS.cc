@@ -12,6 +12,7 @@
 #include "cctk_Parameters.h"
 #include "GenericFD.h"
 #include "Differencing.h"
+#include "cctk_Loop.h"
 #include "loopcontrol.h"
 
 /* Define macros used in calculations */
@@ -94,7 +95,7 @@ static void hydro_RHS_Body(cGH const * restrict const cctkGH, int const dir, int
   
   /* Loop over the grid points */
   #pragma omp parallel
-  LC_LOOP3 (hydro_RHS,
+  CCTK_LOOP3 (hydro_RHS,
     i,j,k, imin[0],imin[1],imin[2], imax[0],imax[1],imax[2],
     cctk_lsh[0],cctk_lsh[1],cctk_lsh[2])
   {
@@ -161,7 +162,7 @@ static void hydro_RHS_Body(cGH const * restrict const cctkGH, int const dir, int
     mom2rhs[index] = mom2rhsL;
     mom3rhs[index] = mom3rhsL;
   }
-  LC_ENDLOOP3 (hydro_RHS);
+  CCTK_ENDLOOP3 (hydro_RHS);
 }
 
 extern "C" void hydro_RHS(CCTK_ARGUMENTS)

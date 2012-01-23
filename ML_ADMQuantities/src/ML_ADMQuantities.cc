@@ -12,6 +12,7 @@
 #include "cctk_Parameters.h"
 #include "GenericFD.h"
 #include "Differencing.h"
+#include "cctk_Loop.h"
 #include "loopcontrol.h"
 
 /* Define macros used in calculations */
@@ -94,7 +95,7 @@ static void ML_ADMQuantities_Body(cGH const * restrict const cctkGH, int const d
   
   /* Loop over the grid points */
   #pragma omp parallel
-  LC_LOOP3 (ML_ADMQuantities,
+  CCTK_LOOP3 (ML_ADMQuantities,
     i,j,k, imin[0],imin[1],imin[2], imax[0],imax[1],imax[2],
     cctk_lsh[0],cctk_lsh[1],cctk_lsh[2])
   {
@@ -652,7 +653,7 @@ static void ML_ADMQuantities_Body(cGH const * restrict const cctkGH, int const d
     Jadm3[index] = Jadm3L;
     Madm[index] = MadmL;
   }
-  LC_ENDLOOP3 (ML_ADMQuantities);
+  CCTK_ENDLOOP3 (ML_ADMQuantities);
 }
 
 extern "C" void ML_ADMQuantities(CCTK_ARGUMENTS)
