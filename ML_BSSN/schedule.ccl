@@ -30,234 +30,90 @@ if (timelevels == 1)
 {
   STORAGE: ML_curv[1]
 }
-if (timelevels == 2)
-{
-  STORAGE: ML_curv[2]
-}
-if (timelevels == 3)
-{
-  STORAGE: ML_curv[3]
-}
 
 if (timelevels == 1)
 {
   STORAGE: ML_dtlapse[1]
-}
-if (timelevels == 2)
-{
-  STORAGE: ML_dtlapse[2]
-}
-if (timelevels == 3)
-{
-  STORAGE: ML_dtlapse[3]
 }
 
 if (timelevels == 1)
 {
   STORAGE: ML_dtshift[1]
 }
-if (timelevels == 2)
-{
-  STORAGE: ML_dtshift[2]
-}
-if (timelevels == 3)
-{
-  STORAGE: ML_dtshift[3]
-}
 
 if (timelevels == 1)
 {
   STORAGE: ML_Gamma[1]
-}
-if (timelevels == 2)
-{
-  STORAGE: ML_Gamma[2]
-}
-if (timelevels == 3)
-{
-  STORAGE: ML_Gamma[3]
 }
 
 if (timelevels == 1)
 {
   STORAGE: ML_lapse[1]
 }
-if (timelevels == 2)
-{
-  STORAGE: ML_lapse[2]
-}
-if (timelevels == 3)
-{
-  STORAGE: ML_lapse[3]
-}
 
 if (timelevels == 1)
 {
   STORAGE: ML_log_confac[1]
-}
-if (timelevels == 2)
-{
-  STORAGE: ML_log_confac[2]
-}
-if (timelevels == 3)
-{
-  STORAGE: ML_log_confac[3]
 }
 
 if (timelevels == 1)
 {
   STORAGE: ML_metric[1]
 }
-if (timelevels == 2)
-{
-  STORAGE: ML_metric[2]
-}
-if (timelevels == 3)
-{
-  STORAGE: ML_metric[3]
-}
 
 if (timelevels == 1)
 {
   STORAGE: ML_shift[1]
-}
-if (timelevels == 2)
-{
-  STORAGE: ML_shift[2]
-}
-if (timelevels == 3)
-{
-  STORAGE: ML_shift[3]
 }
 
 if (timelevels == 1)
 {
   STORAGE: ML_trace_curv[1]
 }
-if (timelevels == 2)
-{
-  STORAGE: ML_trace_curv[2]
-}
-if (timelevels == 3)
-{
-  STORAGE: ML_trace_curv[3]
-}
 
 if (rhs_timelevels == 1)
 {
   STORAGE: ML_curvrhs[1]
-}
-if (rhs_timelevels == 2)
-{
-  STORAGE: ML_curvrhs[2]
-}
-if (rhs_timelevels == 3)
-{
-  STORAGE: ML_curvrhs[3]
 }
 
 if (rhs_timelevels == 1)
 {
   STORAGE: ML_dtlapserhs[1]
 }
-if (rhs_timelevels == 2)
-{
-  STORAGE: ML_dtlapserhs[2]
-}
-if (rhs_timelevels == 3)
-{
-  STORAGE: ML_dtlapserhs[3]
-}
 
 if (rhs_timelevels == 1)
 {
   STORAGE: ML_dtshiftrhs[1]
-}
-if (rhs_timelevels == 2)
-{
-  STORAGE: ML_dtshiftrhs[2]
-}
-if (rhs_timelevels == 3)
-{
-  STORAGE: ML_dtshiftrhs[3]
 }
 
 if (rhs_timelevels == 1)
 {
   STORAGE: ML_Gammarhs[1]
 }
-if (rhs_timelevels == 2)
-{
-  STORAGE: ML_Gammarhs[2]
-}
-if (rhs_timelevels == 3)
-{
-  STORAGE: ML_Gammarhs[3]
-}
 
 if (rhs_timelevels == 1)
 {
   STORAGE: ML_lapserhs[1]
-}
-if (rhs_timelevels == 2)
-{
-  STORAGE: ML_lapserhs[2]
-}
-if (rhs_timelevels == 3)
-{
-  STORAGE: ML_lapserhs[3]
 }
 
 if (rhs_timelevels == 1)
 {
   STORAGE: ML_log_confacrhs[1]
 }
-if (rhs_timelevels == 2)
-{
-  STORAGE: ML_log_confacrhs[2]
-}
-if (rhs_timelevels == 3)
-{
-  STORAGE: ML_log_confacrhs[3]
-}
 
 if (rhs_timelevels == 1)
 {
   STORAGE: ML_metricrhs[1]
-}
-if (rhs_timelevels == 2)
-{
-  STORAGE: ML_metricrhs[2]
-}
-if (rhs_timelevels == 3)
-{
-  STORAGE: ML_metricrhs[3]
 }
 
 if (rhs_timelevels == 1)
 {
   STORAGE: ML_shiftrhs[1]
 }
-if (rhs_timelevels == 2)
-{
-  STORAGE: ML_shiftrhs[2]
-}
-if (rhs_timelevels == 3)
-{
-  STORAGE: ML_shiftrhs[3]
-}
 
 if (rhs_timelevels == 1)
 {
   STORAGE: ML_trace_curvrhs[1]
-}
-if (rhs_timelevels == 2)
-{
-  STORAGE: ML_trace_curvrhs[2]
-}
-if (rhs_timelevels == 3)
-{
-  STORAGE: ML_trace_curvrhs[3]
 }
 
 schedule ML_BSSN_Startup at STARTUP
@@ -281,48 +137,18 @@ schedule ML_BSSN_RegisterSymmetries in SymmetryRegister
 
 if (CCTK_EQUALS(my_initial_data, "Minkowski"))
 {
-  schedule ML_BSSN_Minkowski IN ADMBase_InitialData
+  schedule CAKERNEL_Launch_ML_BSSN_Minkowski at CCTK_INITIAL
   {
     LANG: C
   } "ML_BSSN_Minkowski"
 }
 
-
-if (CCTK_EQUALS(my_initial_data, "ADMBase"))
-{
-  schedule ML_BSSN_convertFromADMBase AT initial AFTER ADMBase_PostInitial
-  {
-    LANG: C
-  } "ML_BSSN_convertFromADMBase"
-}
-
-
-if (CCTK_EQUALS(my_initial_data, "ADMBase"))
-{
-  schedule ML_BSSN_InitGamma AT initial BEFORE ML_BSSN_convertFromADMBaseGamma
-  {
-    LANG: C
-  } "ML_BSSN_InitGamma"
-}
-
-
-if (CCTK_EQUALS(my_initial_data, "ADMBase"))
-{
-  schedule ML_BSSN_convertFromADMBaseGamma AT initial AFTER ML_BSSN_convertFromADMBase
-  {
-    LANG: C
-    SYNC: ML_dtlapse
-    SYNC: ML_dtshift
-    SYNC: ML_Gamma
-  } "ML_BSSN_convertFromADMBaseGamma"
-}
-
-schedule ML_BSSN_RHS1 IN ML_BSSN_evolCalcGroup
+schedule CAKERNEL_Launch_ML_BSSN_RHS1 at EVOL
 {
   LANG: C
 } "ML_BSSN_RHS1"
 
-schedule ML_BSSN_RHS2 IN ML_BSSN_evolCalcGroup
+schedule CAKERNEL_Launch_ML_BSSN_RHS2 at EVOL
 {
   LANG: C
 } "ML_BSSN_RHS2"
@@ -330,145 +156,21 @@ schedule ML_BSSN_RHS2 IN ML_BSSN_evolCalcGroup
 
 if (CCTK_EQUALS(apply_dissipation, "always"))
 {
-  schedule ML_BSSN_Dissipation IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2)
+  schedule CAKERNEL_Launch_ML_BSSN_Dissipation at EVOL AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2)
   {
     LANG: C
   } "ML_BSSN_Dissipation"
 }
 
-schedule ML_BSSN_Advect IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2)
+schedule CAKERNEL_Launch_ML_BSSN_Advect at CCTK_EVOL AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2)
 {
   LANG: C
 } "ML_BSSN_Advect"
 
-schedule ML_BSSN_InitRHS AT analysis BEFORE ML_BSSN_evolCalcGroup
-{
-  LANG: C
-} "ML_BSSN_InitRHS"
-
-
-if (CCTK_EQUALS(my_rhs_boundary_condition, "static"))
-{
-  schedule ML_BSSN_RHSStaticBoundary IN MoL_CalcRHS
-  {
-    LANG: C
-  } "ML_BSSN_RHSStaticBoundary"
-}
-
-schedule ML_BSSN_enforce IN MoL_PostStepModify
+schedule CAKERNEL_Launch_ML_BSSN_enforce IN MoL_PostStepModify
 {
   LANG: C
 } "ML_BSSN_enforce"
-
-
-if (CCTK_EQUALS(my_boundary_condition, "Minkowski"))
-{
-  schedule ML_BSSN_boundary IN MoL_PostStep
-  {
-    LANG: C
-  } "ML_BSSN_boundary"
-}
-
-schedule ML_BSSN_convertToADMBase IN ML_BSSN_convertToADMBaseGroup
-{
-  LANG: C
-} "ML_BSSN_convertToADMBase"
-
-
-if (CCTK_EQUALS(dt_lapse_shift_method, "correct"))
-{
-  schedule ML_BSSN_convertToADMBaseDtLapseShift IN ML_BSSN_convertToADMBaseGroup
-  {
-    LANG: C
-    SYNC: ADMBase::dtlapse
-    SYNC: ADMBase::dtshift
-  } "ML_BSSN_convertToADMBaseDtLapseShift"
-}
-
-
-if (CCTK_EQUALS(dt_lapse_shift_method, "correct"))
-{
-  schedule ML_BSSN_convertToADMBaseDtLapseShiftBoundary IN ML_BSSN_convertToADMBaseGroup
-  {
-    LANG: C
-  } "ML_BSSN_convertToADMBaseDtLapseShiftBoundary"
-}
-
-
-if (CCTK_EQUALS(dt_lapse_shift_method, "noLapseShiftAdvection"))
-{
-  schedule ML_BSSN_convertToADMBaseFakeDtLapseShift IN ML_BSSN_convertToADMBaseGroup
-  {
-    LANG: C
-  } "ML_BSSN_convertToADMBaseFakeDtLapseShift"
-}
-
-schedule group ML_BSSN_constraints1_group in MoL_PseudoEvolution after MoL_PostStep
-{
-  # no language specified
-} "ML_BSSN_constraints1"
-
-schedule ML_BSSN_constraints1 in ML_BSSN_constraints1_group
-{
-  LANG: C
-} "ML_BSSN_constraints1"
-
-schedule ML_BSSN_constraints1_SelectBCs in ML_BSSN_constraints1_bc_group
-{
-  LANG: C
-  OPTIONS: level
-  SYNC: ML_Ham
-} "ML_BSSN_constraints1_SelectBCs"
-
-schedule group ApplyBCs as ML_BSSN_constraints1_ApplyBCs in ML_BSSN_constraints1_bc_group after ML_BSSN_constraints1_SelectBCs
-{
-  # no language specified
-} "Apply BCs for groups set in ML_BSSN_constraints1"
-
-schedule group ML_BSSN_constraints1_bc_group in ML_BSSN_constraints1_group after ML_BSSN_constraints1
-{
-  # no language specified
-} "ML_BSSN_constraints1"
-
-schedule group ML_BSSN_constraints1_bc_group in MoL_PseudoEvolutionBoundaries after MoL_PostStep
-{
-  # no language specified
-} "ML_BSSN_constraints1"
-
-schedule group ML_BSSN_constraints2_group in MoL_PseudoEvolution after MoL_PostStep
-{
-  # no language specified
-} "ML_BSSN_constraints2"
-
-schedule ML_BSSN_constraints2 in ML_BSSN_constraints2_group
-{
-  LANG: C
-} "ML_BSSN_constraints2"
-
-schedule ML_BSSN_constraints2_SelectBCs in ML_BSSN_constraints2_bc_group
-{
-  LANG: C
-  OPTIONS: level
-  SYNC: ML_cons_detg
-  SYNC: ML_cons_Gamma
-  SYNC: ML_cons_traceA
-  SYNC: ML_mom
-} "ML_BSSN_constraints2_SelectBCs"
-
-schedule group ApplyBCs as ML_BSSN_constraints2_ApplyBCs in ML_BSSN_constraints2_bc_group after ML_BSSN_constraints2_SelectBCs
-{
-  # no language specified
-} "Apply BCs for groups set in ML_BSSN_constraints2"
-
-schedule group ML_BSSN_constraints2_bc_group in ML_BSSN_constraints2_group after ML_BSSN_constraints2
-{
-  # no language specified
-} "ML_BSSN_constraints2"
-
-schedule group ML_BSSN_constraints2_bc_group in MoL_PseudoEvolutionBoundaries after MoL_PostStep
-{
-  # no language specified
-} "ML_BSSN_constraints2"
 
 schedule ML_BSSN_SelectBoundConds in MoL_PostStep
 {
@@ -490,6 +192,11 @@ schedule ML_BSSN_CheckBoundaries at BASEGRID
   LANG: C
   OPTIONS: meta
 } "check boundaries treatment"
+
+schedule CaKernel_CopyFromDev at ANALYSIS
+{
+  LANG: C
+} "Copy variables from devices"
 
 schedule group ApplyBCs as ML_BSSN_ApplyBCs in MoL_PostStep after ML_BSSN_SelectBoundConds
 {

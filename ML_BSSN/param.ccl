@@ -1,45 +1,8 @@
 # File produced by Kranc
 
 
-shares: ADMBase
-
-
-EXTENDS CCTK_KEYWORD evolution_method "evolution_method"
-{
-  ML_BSSN :: ""
-} 
-
-
-EXTENDS CCTK_KEYWORD lapse_evolution_method "lapse_evolution_method"
-{
-  ML_BSSN :: ""
-} 
-
-
-EXTENDS CCTK_KEYWORD shift_evolution_method "shift_evolution_method"
-{
-  ML_BSSN :: ""
-} 
-
-
-EXTENDS CCTK_KEYWORD dtlapse_evolution_method "dtlapse_evolution_method"
-{
-  ML_BSSN :: ""
-} 
-
-
-EXTENDS CCTK_KEYWORD dtshift_evolution_method "dtshift_evolution_method"
-{
-  ML_BSSN :: ""
-} 
-
-
-
 shares: GenericFD
 
-USES CCTK_STRING jacobian_group
-USES CCTK_STRING jacobian_derivative_group
-USES CCTK_INT jacobian_identity_map
 
 
 shares: MethodOfLines
@@ -160,36 +123,7 @@ KEYWORD my_initial_data "my_initial_data"
 {
   "ADMBase" :: "ADMBase"
   "Minkowski" :: "Minkowski"
-} "ADMBase"
-
-restricted:
-KEYWORD my_initial_boundary_condition "my_initial_boundary_condition"
-{
-  "none" :: "none"
-} "none"
-
-restricted:
-KEYWORD my_rhs_boundary_condition "my_rhs_boundary_condition"
-{
-  "none" :: "none"
-  "static" :: "static"
-  "radiative" :: "radiative"
-} "none"
-
-private:
-KEYWORD my_boundary_condition "my_boundary_condition"
-{
-  "none" :: "none"
-  "Minkowski" :: "Minkowski"
-} "none"
-
-restricted:
-KEYWORD calculate_ADMBase_variables_at "calculate_ADMBase_variables_at"
-{
-  "MoL_PostStep" :: "MoL_PostStep"
-  "CCTK_EVOL" :: "CCTK_EVOL"
-  "CCTK_ANALYSIS" :: "CCTK_ANALYSIS"
-} "MoL_PostStep"
+} "Minkowski"
 
 restricted:
 KEYWORD UseSpatialBetaDriver "UseSpatialBetaDriver"
@@ -199,18 +133,11 @@ KEYWORD UseSpatialBetaDriver "UseSpatialBetaDriver"
 } "no"
 
 private:
-KEYWORD dt_lapse_shift_method "Treatment of ADMBase dtlapse and dtshift"
-{
-  "correct" :: "correct"
-  "noLapseShiftAdvection" :: "noLapseShiftAdvection"
-} "correct"
-
-private:
 KEYWORD apply_dissipation "Whether to apply dissipation to the RHSs"
 {
   "always" :: "always"
   "never" :: "never"
-} "always"
+} "never"
 
 restricted:
 CCTK_INT ML_BSSN_MaxNumEvolvedVars "Number of evolved variables used by this thorn" ACCUMULATOR-BASE=MethodofLines::MoL_Num_Evolved_Vars STEERABLE=RECOVER
@@ -227,41 +154,23 @@ CCTK_INT ML_BSSN_MaxNumArrayEvolvedVars "Number of Array evolved variables used 
 restricted:
 CCTK_INT timelevels "Number of active timelevels" STEERABLE=RECOVER
 {
-  0:3 :: ""
-} 3
+  0:1 :: ""
+} 1
 
 restricted:
 CCTK_INT rhs_timelevels "Number of active RHS timelevels" STEERABLE=RECOVER
 {
-  0:3 :: ""
+  0:1 :: ""
 } 1
 
 restricted:
 CCTK_INT other_timelevels "Number of active timelevels for non-evolved grid functions" STEERABLE=RECOVER
 {
-  0:3 :: ""
+  0:1 :: ""
 } 1
 
 restricted:
 CCTK_INT ML_BSSN_Minkowski_calc_every "ML_BSSN_Minkowski_calc_every" STEERABLE=ALWAYS
-{
-  *:* :: ""
-} 1
-
-restricted:
-CCTK_INT ML_BSSN_convertFromADMBase_calc_every "ML_BSSN_convertFromADMBase_calc_every" STEERABLE=ALWAYS
-{
-  *:* :: ""
-} 1
-
-restricted:
-CCTK_INT ML_BSSN_InitGamma_calc_every "ML_BSSN_InitGamma_calc_every" STEERABLE=ALWAYS
-{
-  *:* :: ""
-} 1
-
-restricted:
-CCTK_INT ML_BSSN_convertFromADMBaseGamma_calc_every "ML_BSSN_convertFromADMBaseGamma_calc_every" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 1
@@ -291,85 +200,13 @@ CCTK_INT ML_BSSN_Advect_calc_every "ML_BSSN_Advect_calc_every" STEERABLE=ALWAYS
 } 1
 
 restricted:
-CCTK_INT ML_BSSN_InitRHS_calc_every "ML_BSSN_InitRHS_calc_every" STEERABLE=ALWAYS
-{
-  *:* :: ""
-} 1
-
-restricted:
-CCTK_INT ML_BSSN_RHSStaticBoundary_calc_every "ML_BSSN_RHSStaticBoundary_calc_every" STEERABLE=ALWAYS
-{
-  *:* :: ""
-} 1
-
-restricted:
 CCTK_INT ML_BSSN_enforce_calc_every "ML_BSSN_enforce_calc_every" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 1
 
 restricted:
-CCTK_INT ML_BSSN_boundary_calc_every "ML_BSSN_boundary_calc_every" STEERABLE=ALWAYS
-{
-  *:* :: ""
-} 1
-
-restricted:
-CCTK_INT ML_BSSN_convertToADMBase_calc_every "ML_BSSN_convertToADMBase_calc_every" STEERABLE=ALWAYS
-{
-  *:* :: ""
-} 1
-
-restricted:
-CCTK_INT ML_BSSN_convertToADMBaseDtLapseShift_calc_every "ML_BSSN_convertToADMBaseDtLapseShift_calc_every" STEERABLE=ALWAYS
-{
-  *:* :: ""
-} 1
-
-restricted:
-CCTK_INT ML_BSSN_convertToADMBaseDtLapseShiftBoundary_calc_every "ML_BSSN_convertToADMBaseDtLapseShiftBoundary_calc_every" STEERABLE=ALWAYS
-{
-  *:* :: ""
-} 1
-
-restricted:
-CCTK_INT ML_BSSN_convertToADMBaseFakeDtLapseShift_calc_every "ML_BSSN_convertToADMBaseFakeDtLapseShift_calc_every" STEERABLE=ALWAYS
-{
-  *:* :: ""
-} 1
-
-restricted:
-CCTK_INT ML_BSSN_constraints1_calc_every "ML_BSSN_constraints1_calc_every" STEERABLE=ALWAYS
-{
-  *:* :: ""
-} 1
-
-restricted:
-CCTK_INT ML_BSSN_constraints2_calc_every "ML_BSSN_constraints2_calc_every" STEERABLE=ALWAYS
-{
-  *:* :: ""
-} 1
-
-restricted:
 CCTK_INT ML_BSSN_Minkowski_calc_offset "ML_BSSN_Minkowski_calc_offset" STEERABLE=ALWAYS
-{
-  *:* :: ""
-} 0
-
-restricted:
-CCTK_INT ML_BSSN_convertFromADMBase_calc_offset "ML_BSSN_convertFromADMBase_calc_offset" STEERABLE=ALWAYS
-{
-  *:* :: ""
-} 0
-
-restricted:
-CCTK_INT ML_BSSN_InitGamma_calc_offset "ML_BSSN_InitGamma_calc_offset" STEERABLE=ALWAYS
-{
-  *:* :: ""
-} 0
-
-restricted:
-CCTK_INT ML_BSSN_convertFromADMBaseGamma_calc_offset "ML_BSSN_convertFromADMBaseGamma_calc_offset" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 0
@@ -399,61 +236,7 @@ CCTK_INT ML_BSSN_Advect_calc_offset "ML_BSSN_Advect_calc_offset" STEERABLE=ALWAY
 } 0
 
 restricted:
-CCTK_INT ML_BSSN_InitRHS_calc_offset "ML_BSSN_InitRHS_calc_offset" STEERABLE=ALWAYS
-{
-  *:* :: ""
-} 0
-
-restricted:
-CCTK_INT ML_BSSN_RHSStaticBoundary_calc_offset "ML_BSSN_RHSStaticBoundary_calc_offset" STEERABLE=ALWAYS
-{
-  *:* :: ""
-} 0
-
-restricted:
 CCTK_INT ML_BSSN_enforce_calc_offset "ML_BSSN_enforce_calc_offset" STEERABLE=ALWAYS
-{
-  *:* :: ""
-} 0
-
-restricted:
-CCTK_INT ML_BSSN_boundary_calc_offset "ML_BSSN_boundary_calc_offset" STEERABLE=ALWAYS
-{
-  *:* :: ""
-} 0
-
-restricted:
-CCTK_INT ML_BSSN_convertToADMBase_calc_offset "ML_BSSN_convertToADMBase_calc_offset" STEERABLE=ALWAYS
-{
-  *:* :: ""
-} 0
-
-restricted:
-CCTK_INT ML_BSSN_convertToADMBaseDtLapseShift_calc_offset "ML_BSSN_convertToADMBaseDtLapseShift_calc_offset" STEERABLE=ALWAYS
-{
-  *:* :: ""
-} 0
-
-restricted:
-CCTK_INT ML_BSSN_convertToADMBaseDtLapseShiftBoundary_calc_offset "ML_BSSN_convertToADMBaseDtLapseShiftBoundary_calc_offset" STEERABLE=ALWAYS
-{
-  *:* :: ""
-} 0
-
-restricted:
-CCTK_INT ML_BSSN_convertToADMBaseFakeDtLapseShift_calc_offset "ML_BSSN_convertToADMBaseFakeDtLapseShift_calc_offset" STEERABLE=ALWAYS
-{
-  *:* :: ""
-} 0
-
-restricted:
-CCTK_INT ML_BSSN_constraints1_calc_offset "ML_BSSN_constraints1_calc_offset" STEERABLE=ALWAYS
-{
-  *:* :: ""
-} 0
-
-restricted:
-CCTK_INT ML_BSSN_constraints2_calc_offset "ML_BSSN_constraints2_calc_offset" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 0
