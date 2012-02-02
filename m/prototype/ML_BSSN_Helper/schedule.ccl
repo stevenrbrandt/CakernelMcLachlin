@@ -60,11 +60,11 @@ if (CCTK_EQUALS (evolution_method, "ML_BSSN")) {
   #SCHEDULE GROUP ML_BSSN_evolCalcGroup AT postinitial AFTER MoL_PostStep
   #{
   #} "Calculate BSSN RHS"
-  #SCHEDULE GROUP MoL_CalcRHS AT postinitial AFTER MoL_PostStep
+  #SCHEDULE GROUP EVOL AT postinitial AFTER MoL_PostStep
   #{
   #} "Evaluate RHS"
   
-  SCHEDULE GROUP ML_BSSN_evolCalcGroup IN MoL_CalcRHS
+  SCHEDULE GROUP ML_BSSN_evolCalcGroup AT EVOL
   {
   } "Calculate BSSN RHS"
   
