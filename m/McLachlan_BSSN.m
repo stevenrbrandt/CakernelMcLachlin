@@ -77,7 +77,7 @@ derivatives =
 
     (* TODO: make these higher order stencils *)
     PDonesided[i] -> dir[i] (-1 + shift[i]^dir[i]) / spacing[i]} /. i->j, {j,1,3}],1]
-};
+} /. fdOrder -> 4;
 
 PD     = PDstandardNth;
 PDu    = PDupwindNth;
@@ -140,6 +140,20 @@ DefineConnection [CDt, PD, Gt];
 (* Use the CartGrid3D variable names *)
 x1=x; x2=y; x3=z;
 
+(* Use the ADMBase variable names *)
+admg11=gxx; admg12=gxy; admg22=gyy; admg13=gxz; admg23=gyz; admg33=gzz;
+admK11=kxx; admK12=kxy; admK22=kyy; admK13=kxz; admK23=kyz; admK33=kzz;
+admalpha=alp;
+admdtalpha=dtalp;
+admbeta1=betax; admbeta2=betay; admbeta3=betaz;
+admdtbeta1=dtbetax; admdtbeta2=dtbetay; admdtbeta3=dtbetaz;
+
+(* Use the TmunuBase variable names *)
+T00=eTtt;
+T01=eTtx; T02=eTty; T03=eTtz;
+T11=eTxx; T12=eTxy; T22=eTyy; T13=eTxz; T23=eTyz; T33=eTzz;
+
+
 
 (******************************************************************************)
 (* Expressions *)
@@ -155,8 +169,8 @@ ddetgtExpr[la_] =
   Sum [D[Det[MatrixOfComponents[gt[la, lb]]], X] PD[X, la],
        {X, Union[Flatten[MatrixOfComponents[gt[la, lb]]]]}];
 
-etaExpr = Min [SpatialBetaDriverRadius / r, 1];
-thetaExpr = Min [Exp [1 - r / SpatialShiftGammaCoeffRadius], 1];
+etaExpr = 1;
+thetaExpr = 1;
 
 
 
@@ -187,7 +201,16 @@ declaredGroupNames = Map [First, declaredGroups];
 
 
 extraGroups =
-  {{"Grid::coordinates", {x, y, z, r}}
+  {{"Grid::coordinates", {x, y, z, r}},
+   {"ADMBase::metric",  {gxx, gxy, gxz, gyy, gyz, gzz}},
+   {"ADMBase::curv",    {kxx, kxy, kxz, kyy, kyz, kzz}},
+   {"ADMBase::lapse",   {alp}},
+   {"ADMBase::dtlapse", {dtalp}},
+   {"ADMBase::shift",   {betax, betay, betaz}},
+   {"ADMBase::dtshift", {dtbetax, dtbetay, dtbetaz}},
+   {"TmunuBase::stress_energy_scalar", {eTtt}},
+   {"TmunuBase::stress_energy_vector", {eTtx, eTty, eTtz}},
+   {"TmunuBase::stress_energy_tensor", {eTxx, eTxy, eTxz, eTyy, eTyz, eTzz}}
 };
 
 groups = Join [declaredGroups, extraGroups];
@@ -201,8 +224,9 @@ groups = Join [declaredGroups, extraGroups];
 initialCalc =
 {
   Name -> BSSN <> "_Minkowski",
-  Schedule -> {"at CCTK_INITIAL"},
+  Schedule -> {"IN ADMBase_InitialData"},
   ConditionalOnKeyword -> {"my_initial_data", "Minkowski"},
+  ExecuteOn -> Host,
   Equations -> 
   {
     phi       -> IfThen [conformalMethod, 1, 0],
@@ -242,6 +266,118 @@ Module[
   calc3
 ];
 
+
+
+(******************************************************************************)
+(* Convert from ADMBase *)
+(******************************************************************************)
+
+convertFromADMBaseCalc =
+{
+  Name -> BSSN <> "_convertFromADMBase",
+  Schedule -> {"AT initial AFTER ADMBase_PostInitial"},
+  ConditionalOnKeyword -> {"my_initial_data", "ADMBase"},
+  Shorthands -> {g[la,lb], detg, gu[ua,ub], em4phi},
+  ExecuteOn -> Host,
+  Equations -> 
+  {
+    g[la,lb]  -> admg[la,lb],
+    detg      -> detgExpr,
+    gu[ua,ub] -> 1/detg detgExpr MatrixInverse [g[ua,ub]],
+    
+    phi       -> IfThen [conformalMethod, detg^(-1/6), Log[detg]/12],
+    em4phi    -> IfThen [conformalMethod, phi^2, Exp[-4 phi]],
+    gt[la,lb] -> em4phi g[la,lb],
+    
+    trK       -> gu[ua,ub] admK[la,lb],
+    At[la,lb] -> em4phi (admK[la,lb] - (1/3) g[la,lb] trK),
+    
+    alpha     -> admalpha,
+    
+    beta[ua]  -> admbeta[ua]
+  }
+};
+
+convertFromADMBaseGammaCalc =
+{
+  Name -> BSSN <> "_convertFromADMBaseGamma",
+  Schedule -> {"AT initial AFTER " <> BSSN <> "_convertFromADMBase"},
+  ConditionalOnKeyword -> {"my_initial_data", "ADMBase"},
+  (*
+  Where -> InteriorNoSync,
+  *)
+  (* Do not synchronise right after this routine; instead, synchronise
+     after extrapolating *)
+  Where -> Interior,
+  (* Synchronise after this routine, so that the refinement boundaries
+     are set correctly before extrapolating.  (We will need to
+     synchronise again after extrapolating because extrapolation does
+     not fill ghost zones, but this is irrelevant here.)  *)
+  Shorthands -> {dir[ua],
+                 detgt, gtu[ua,ub], Gt[ua,lb,lc], theta},
+  ExecuteOn -> Host,
+  Equations -> 
+  {
+    dir[ua] -> Sign[beta[ua]],
+    
+    detgt        -> 1 (* detgtExpr *),
+    gtu[ua,ub]   -> 1/detgt detgtExpr MatrixInverse [gt[ua,ub]],
+    Gt[ua,lb,lc] -> 1/2 gtu[ua,ud]
+                    (PD[gt[lb,ld],lc] + PD[gt[lc,ld],lb] - PD[gt[lb,lc],ld]),
+    Xt[ua] -> gtu[ub,uc] Gt[ua,lb,lc],
+    
+(*
+    A -> - admdtalpha / (harmonicF alpha^harmonicN) (LapseAdvectionCoeff - 1),
+*)
+    (* If LapseACoeff=0, then A is not evolved, in the sense that it
+       does not influence the time evolution of other variables.  *)
+    A -> IfThen [LapseACoeff != 0,
+                 1 / (- harmonicF alpha^harmonicN)
+                 (+ admdtalpha
+                  - LapseAdvectionCoeff Upwind[beta[ua], alpha, la]),
+                 0],
+    
+    theta -> thetaExpr,
+    
+    (* If ShiftBCoeff=0 or theta ShiftGammaCoeff=0, then B^i is not
+       evolved, in the sense that it does not influence the time
+       evolution of other variables.  *)
+    B[ua] -> IfThen [ShiftGammaCoeff ShiftBCoeff != 0,
+                     1 / (theta ShiftGammaCoeff)
+                     (+ admdtbeta[ua]
+                      - ShiftAdvectionCoeff Upwind[beta[ub], beta[ua], lb]),
+                     0]
+  }
+};
+
+(* Initialise the Gamma variables to 0.  This is necessary with
+   multipatch because convertFromADMBaseGamma does not perform the
+   conversion in the boundary points, and the order in which symmetry
+   (interpatch) and outer boundary conditions is applied means that
+   points which are both interpatch and symmetry points are never
+   initialised. *)
+initGammaCalc =
+{
+  Name -> BSSN <> "_InitGamma",
+  Schedule -> {"AT initial BEFORE " <> BSSN <> "_convertFromADMBaseGamma"},
+  ConditionalOnKeyword -> {"my_initial_data", "ADMBase"},
+  Where -> Everywhere,
+  ExecuteOn -> Host,
+  Equations -> 
+  {
+    Xt[ua] -> 0,
+    A      -> 0,
+    B[ua]  -> 0
+  }
+};
+
+
+
+(******************************************************************************)
+(* Convert to ADMBase *)
+(******************************************************************************)
+
+
 (******************************************************************************)
 (* Evolution equations *)
 (******************************************************************************)
@@ -249,7 +385,7 @@ Module[
 evolCalc =
 {
   Name -> BSSN <> "_RHS",
-  Schedule -> {"at EVOL"},
+  Schedule -> {"IN " <> BSSN <> "_evolCalcGroup"},
   (*
   Where -> Interior,
   *)
@@ -417,7 +553,8 @@ evolCalc =
 advectCalc =
 {
   Name -> BSSN <> "_Advect",
-  Schedule -> {"at CCTK_EVOL AFTER (" <> BSSN <> "_RHS1 " <> BSSN <> "_RHS2)"},
+  Schedule -> {"IN " <> BSSN <> "_evolCalcGroup " <>
+               "AFTER (" <> BSSN <> "_RHS1 " <> BSSN <> "_RHS2)"},
   (*
   Where -> Interior,
   *)
@@ -485,7 +622,8 @@ evolCalc2 = PartialCalculation[evolCalc, "2",
 dissCalc =
 {
   Name -> BSSN <> "_Dissipation",
-  Schedule -> {"at EVOL AFTER (" <> BSSN <> "_RHS1 " <> BSSN <> "_RHS2)"},
+  Schedule -> {"IN " <> BSSN <> "_evolCalcGroup " <>
+               "AFTER (" <> BSSN <> "_RHS1 " <> BSSN <> "_RHS2)"},
   ConditionalOnKeyword -> {"apply_dissipation", "always"},
   Where -> InteriorNoSync,
   Shorthands -> {epsdiss[ua]},
@@ -502,7 +640,8 @@ dissCalcs =
 Table[
 {
   Name -> BSSN <> "_Dissipation_" <> ToString[var /. {Tensor[n_,__] -> n}],
-  Schedule -> {"at EVOL AFTER (" <> BSSN <> "_RHS1 " <> BSSN <> "_RHS2)"},
+  Schedule -> {"IN " <> BSSN <> "_evolCalcGroup " <>
+               "AFTER (" <> BSSN <> "_RHS1 " <> BSSN <> "_RHS2)"},
   ConditionalOnKeyword -> {"apply_dissipation", "always"},
   Where -> InteriorNoSync,
   Shorthands -> {epsdiss[ua]},
@@ -515,8 +654,86 @@ Table[
   {var, {phi, gt[la,lb], Xt[ui], trK, At[la,lb], alpha, A, beta[ua], B[ua]}}
 ];
 
+RHSStaticBoundaryCalc =
+{
+  Name -> BSSN <> "_RHSStaticBoundary",
+  Schedule -> {"at EVOL after  "<> BSSN <> "_evolCalcGroup"},
+  ConditionalOnKeyword -> {"my_rhs_boundary_condition", "static"},
+  Where -> Boundary,
+  Equations -> 
+  {
+    dot[phi]       -> 0,
+    dot[gt[la,lb]] -> 0,
+    dot[trK]       -> 0,
+    dot[At[la,lb]] -> 0,
+    dot[Xt[ua]]    -> 0,
+    dot[alpha]     -> 0,
+    dot[A]         -> 0,
+    dot[beta[ua]]  -> 0,
+    dot[B[ua]]     -> 0
+  }
+};
 
+(* Initialise the RHS variables in analysis in case they are going to
+   be output - the noninterior points cannot be filled, so we define
+   them to be zero *)
+initRHSCalc =
+{
+  Name -> BSSN <> "_InitRHS",
+  Schedule -> {"AT analysis BEFORE " <> BSSN <> "_evolCalcGroup"},
+  Where -> Everywhere,
+  Equations -> 
+  {
+    dot[phi]       -> 0,
+    dot[gt[la,lb]] -> 0,
+    dot[trK]       -> 0,
+    dot[At[la,lb]] -> 0,
+    dot[Xt[ua]]    -> 0,
+    dot[alpha]     -> 0,
+    dot[A]         -> 0,
+    dot[beta[ua]]  -> 0,
+    dot[B[ua]]     -> 0
+  }
+};
 
+RHSRadiativeBoundaryCalc =
+{
+  Name -> BSSN <> "_RHSRadiativeBoundary",
+  Schedule -> {"at EVOL"},
+  ConditionalOnKeyword -> {"my_rhs_boundary_condition", "radiative"},
+  Where -> Boundary,
+  Shorthands -> {dir[ua],
+                 detgt, gtu[ua,ub], em4phi, gu[ua,ub],
+                 nn[la], nu[ua], nlen, nlen2, su[ua],
+                 vg},
+  Equations -> 
+  {
+    dir[ua] -> Sign[normal[ua]],
+    
+    detgt      -> 1 (* detgtExpr *),
+    gtu[ua,ub] -> 1/detgt detgtExpr MatrixInverse [gt[ua,ub]],
+    em4phi     -> IfThen [conformalMethod, phi^2, Exp[-4 phi]],
+    gu[ua,ub]  -> em4phi gtu[ua,ub],
+    
+    nn[la] -> Euc[la,lb] normal[ub],
+    nu[ua] -> gu[ua,ub] nn[lb],
+    nlen2  -> nu[ua] nn[la],
+    nlen   -> Sqrt[nlen2],
+    su[ua] -> nu[ua] / nlen,
+    
+    vg -> Sqrt[harmonicF],
+    
+    dot[phi]       -> - vg su[uc] PDo[phi      ,lc],
+    dot[gt[la,lb]] -> -    su[uc] PDo[gt[la,lb],lc],
+    dot[trK]       -> - vg su[uc] PDo[trK      ,lc],
+    dot[At[la,lb]] -> -    su[uc] PDo[At[la,lb],lc],
+    dot[Xt[ua]]    -> -    su[uc] PDo[Xt[ua]   ,lc],
+    dot[alpha]     -> - vg su[uc] PDo[alpha    ,lc],
+    dot[A]         -> - vg su[uc] PDo[A        ,lc],
+    dot[beta[ua]]  -> -    su[uc] PDo[beta[ua] ,lc],
+    dot[B[ua]]     -> -    su[uc] PDo[B[ua]    ,lc]
+  }
+};
 
 enforceCalc =
 {
@@ -545,6 +762,29 @@ enforceCalc =
   }
 };
 
+(******************************************************************************)
+(* Boundary conditions *)
+(******************************************************************************)
+
+boundaryCalc =
+{
+  Name -> BSSN <> "_boundary",
+  Schedule -> {"IN MoL_PostStep"},
+  ConditionalOnKeyword -> {"my_boundary_condition", "Minkowski"},
+  Where -> BoundaryWithGhosts,
+  Equations -> 
+  {
+    phi       -> IfThen [conformalMethod, 1, 0],
+    gt[la,lb] -> KD[la,lb],
+    trK       -> 0,
+    At[la,lb] -> 0,
+    Xt[ua]    -> 0,
+    alpha     -> 1,
+    A         -> 0,
+    beta[ua]  -> 0,
+    B[ua]     -> 0
+  }
+};
 
 (******************************************************************************)
 (* Constraint equations *)
@@ -646,10 +886,10 @@ constraintsCalc =
     (* Matter terms *)
     
     (* rho = n^a n^b T_ab *)
-    rho -> 1/alpha^2 (T00 - 2 beta[ui] T0[li] + beta[ui] beta[uj] T[li,lj]),
+    rho -> addMatter (1/alpha^2 (T00 - 2 beta[ui] T0[li] + beta[ui] beta[uj] T[li,lj]) ),
     
     (* S_i = -p^a_i n^b T_ab, where p^a_i = delta^a_i + n^a n_i *)
-    S[li] -> -1/alpha (T0[li] - beta[uj] T[li,lj]),
+    S[li] -> addMatter (-1/alpha (T0[li] - beta[uj] T[li,lj]) ),
     
     (* Constraints *)
     
@@ -698,7 +938,9 @@ constraintsCalc2 = PartialCalculation[constraintsCalc, "2",
 (* Implementations *)
 (******************************************************************************)
 
-inheritedImplementations = {};
+inheritedImplementations =
+  Join[{"ADMBase"},
+       If [addMatter!=0, {"TmunuBase"}, {}]];
 
 (******************************************************************************)
 (* Parameters *)
@@ -708,6 +950,26 @@ inheritedKeywordParameters = {};
 
 extendedKeywordParameters =
 {
+  {
+    Name -> "ADMBase::evolution_method",
+    AllowedValues -> {BSSN}
+  },
+  {
+    Name -> "ADMBase::lapse_evolution_method",
+    AllowedValues -> {BSSN}
+  },
+  {
+    Name -> "ADMBase::shift_evolution_method",
+    AllowedValues -> {BSSN}
+  },
+  {
+    Name -> "ADMBase::dtlapse_evolution_method",
+    AllowedValues -> {BSSN}
+  },
+  {
+    Name -> "ADMBase::dtshift_evolution_method",
+    AllowedValues -> {BSSN}
+  }
 };
 
 keywordParameters =
@@ -717,7 +979,35 @@ keywordParameters =
     (* Visibility -> "restricted", *)
     (* Description -> "ddd", *)
     AllowedValues -> {"ADMBase", "Minkowski"},
-    Default -> "Minkowski"
+    Default -> "ADMBase"
+  },
+  {
+    Name -> "my_initial_boundary_condition",
+    Visibility -> "restricted",
+    (* Description -> "ddd", *)
+    AllowedValues -> {"none"},
+    Default -> "none"
+  },
+  {
+    Name -> "my_rhs_boundary_condition",
+    Visibility -> "restricted",
+    (* Description -> "ddd", *)
+    AllowedValues -> {"none", "static", "radiative"},
+    Default -> "none"
+  },
+  {
+    Name -> "my_boundary_condition",
+    (* Visibility -> "restricted", *)
+    (* Description -> "ddd", *)
+    AllowedValues -> {"none", "Minkowski"},
+    Default -> "none"
+  },
+  {
+    Name -> "calculate_ADMBase_variables_at",
+    Visibility -> "restricted",
+    (* Description -> "ddd", *)
+    AllowedValues -> {"MoL_PostStep", "CCTK_EVOL", "CCTK_ANALYSIS"},
+    Default -> "MoL_PostStep"
   },
   {
     Name -> "UseSpatialBetaDriver",
@@ -727,13 +1017,21 @@ keywordParameters =
     Default -> "no"
   },
   {
+    Name -> "dt_lapse_shift_method",
+    Description -> "Treatment of ADMBase dtlapse and dtshift",
+    AllowedValues -> {"correct",
+                      "noLapseShiftAdvection" (* omit lapse and shift advection terms (faster) *)
+                     },
+    Default -> "correct"
+  },
+  {
     Name -> "apply_dissipation",
     Description -> "Whether to apply dissipation to the RHSs",
     AllowedValues -> {"always",
                       "never" (* yes and no keyword values confuse Cactus, and Kranc
                                  doesn't support boolean parameters *)
                      },
-    Default -> "never"
+    Default -> "always"
   }
 
 };
@@ -839,31 +1137,43 @@ realParameters =
 (******************************************************************************)
 
 calculations =
+Join[
 {
   initialCalc,
+  convertFromADMBaseCalc,
+  initGammaCalc,
+  convertFromADMBaseGammaCalc,
+  (* evolCalc, *)
   evolCalc1, evolCalc2,
   dissCalc,
   advectCalc,
-  enforceCalc
-  (* constraintsCalc1, constraintsCalc2 *)
-};
+  initRHSCalc,
+  (* evol1Calc, evol2Calc, *)
+  RHSStaticBoundaryCalc,
+  (* RHSRadiativeBoundaryCalc, *)
+  enforceCalc,
+  boundaryCalc
+  (* constraintsCalc, *)
+},
+  {} (*dissCalcs*)
+];
 
 CreateKrancThornTT [groups, ".", BSSN,
   Calculations -> calculations,
   DeclaredGroups -> declaredGroupNames,
   PartialDerivatives -> derivatives,
-  EvolutionTimelevels -> 1,
+  EvolutionTimelevels -> evolutionTimelevels,
   DefaultEvolutionTimelevels -> 1,
   UseJacobian -> False,
   UseLoopControl -> False,
   UseVectors -> False,
+  UseCaKernel -> True,                    
   InheritedImplementations -> inheritedImplementations,
   InheritedKeywordParameters -> inheritedKeywordParameters,
   ExtendedKeywordParameters -> extendedKeywordParameters,
   KeywordParameters -> keywordParameters,
   IntParameters -> intParameters,
-  RealParameters -> realParameters,
-  UseCaKernel -> True
+  RealParameters -> realParameters
 ];
 
 ];
@@ -883,7 +1193,7 @@ CreateKrancThornTT [groups, ".", BSSN,
    (matter seems cheap; it should be always enabled) *)
 
 (* createCode[2, False, True , 3, 1]; *)
-createCode[4, False, True , 3, 0];
+createCode[4, False, True , 1, 0];
 (* createCode[4, False, False, 3, 1]; *)
 (* createCode[4, True , True , 3, 1]; *)
 (* createCode[8, False, True , 3, 1]; *)
