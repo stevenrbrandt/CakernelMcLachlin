@@ -2,7 +2,7 @@
 
 implements: ML_BSSN
 
-inherits:   Grid GenericFD Boundary
+inherits:   ADMBase Grid GenericFD Boundary
 
 
 
@@ -200,3 +200,14 @@ CCTK_REAL ML_trace_curvrhs type=GF timelevels=1 tags='tensortypealias="Scalar" t
 {
   trKrhs
 } "ML_trace_curvrhs"
+
+# These functions are provided by the CaKernel thorn
+
+CCTK_INT FUNCTION Device_RegisterMem(CCTK_POINTER IN cctkGH, CCTK_INT IN vi, CCTK_INT IN num_tls)
+REQUIRES FUNCTION Device_RegisterMem
+
+CCTK_INT FUNCTION Device_UnRegisterMem(CCTK_POINTER IN cctkGH, CCTK_INT IN vi)
+REQUIRES FUNCTION Device_UnRegisterMem
+
+CCTK_POINTER FUNCTION Device_GetVarI (CCTK_POINTER IN cctkGH, CCTK_INT IN vi, CCTK_INT IN num_tls)
+REQUIRES FUNCTION Device_GetVarI

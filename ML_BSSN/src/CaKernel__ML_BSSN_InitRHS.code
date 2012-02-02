@@ -14,7 +14,7 @@
 #define SQR(x) ((x) * (x))
 #define CUB(x) ((x) * (x) * (x))
 
-CAKERNEL_ML_BSSN_enforce_Begin
+CAKERNEL_ML_BSSN_InitRHS_Begin
   
   /* Include user-supplied include files */
   
@@ -63,23 +63,10 @@ CAKERNEL_ML_BSSN_enforce_Begin
   /* Calculate temporaries and arrays functions */
   
   /* Copy local copies back to grid functions */
-  CAKERNEL_ML_BSSN_enforce_Computations_Begin
+  CAKERNEL_ML_BSSN_InitRHS_Computations_Begin
     
     /* Assign local copies of grid functions */
     
-    CCTK_REAL alphaL = I3D(alpha,0,0,0);
-    CCTK_REAL At11L = I3D(At11,0,0,0);
-    CCTK_REAL At12L = I3D(At12,0,0,0);
-    CCTK_REAL At13L = I3D(At13,0,0,0);
-    CCTK_REAL At22L = I3D(At22,0,0,0);
-    CCTK_REAL At23L = I3D(At23,0,0,0);
-    CCTK_REAL At33L = I3D(At33,0,0,0);
-    CCTK_REAL gt11L = I3D(gt11,0,0,0);
-    CCTK_REAL gt12L = I3D(gt12,0,0,0);
-    CCTK_REAL gt13L = I3D(gt13,0,0,0);
-    CCTK_REAL gt22L = I3D(gt22,0,0,0);
-    CCTK_REAL gt23L = I3D(gt23,0,0,0);
-    CCTK_REAL gt33L = I3D(gt33,0,0,0);
     
     
     /* Include user supplied include files */
@@ -87,46 +74,83 @@ CAKERNEL_ML_BSSN_enforce_Begin
     /* Precompute derivatives */
     
     /* Calculate temporaries and grid functions */
-    CCTK_REAL detgt = 1;
+    CCTK_REAL phirhsL = 0;
     
-    CCTK_REAL gtu11 = INV(detgt)*(gt22L*gt33L - SQR(gt23L));
+    CCTK_REAL gt11rhsL = 0;
     
-    CCTK_REAL gtu12 = (gt13L*gt23L - gt12L*gt33L)*INV(detgt);
+    CCTK_REAL gt12rhsL = 0;
     
-    CCTK_REAL gtu13 = (-(gt13L*gt22L) + gt12L*gt23L)*INV(detgt);
+    CCTK_REAL gt13rhsL = 0;
     
-    CCTK_REAL gtu22 = INV(detgt)*(gt11L*gt33L - SQR(gt13L));
+    CCTK_REAL gt22rhsL = 0;
     
-    CCTK_REAL gtu23 = (gt12L*gt13L - gt11L*gt23L)*INV(detgt);
+    CCTK_REAL gt23rhsL = 0;
     
-    CCTK_REAL gtu33 = INV(detgt)*(gt11L*gt22L - SQR(gt12L));
+    CCTK_REAL gt33rhsL = 0;
     
-    CCTK_REAL trAt = At11L*gtu11 + At22L*gtu22 + 2*(At12L*gtu12 + 
-      At13L*gtu13 + At23L*gtu23) + At33L*gtu33;
+    CCTK_REAL trKrhsL = 0;
     
-    At11L = At11L - 0.333333333333333333333333333333*gt11L*trAt;
+    CCTK_REAL At11rhsL = 0;
     
-    At12L = At12L - 0.333333333333333333333333333333*gt12L*trAt;
+    CCTK_REAL At12rhsL = 0;
     
-    At13L = At13L - 0.333333333333333333333333333333*gt13L*trAt;
+    CCTK_REAL At13rhsL = 0;
     
-    At22L = At22L - 0.333333333333333333333333333333*gt22L*trAt;
+    CCTK_REAL At22rhsL = 0;
     
-    At23L = At23L - 0.333333333333333333333333333333*gt23L*trAt;
+    CCTK_REAL At23rhsL = 0;
     
-    At33L = At33L - 0.333333333333333333333333333333*gt33L*trAt;
+    CCTK_REAL At33rhsL = 0;
     
-    alphaL = fmax(alphaL,MinimumLapse);
+    CCTK_REAL Xt1rhsL = 0;
+    
+    CCTK_REAL Xt2rhsL = 0;
+    
+    CCTK_REAL Xt3rhsL = 0;
+    
+    CCTK_REAL alpharhsL = 0;
+    
+    CCTK_REAL ArhsL = 0;
+    
+    CCTK_REAL beta1rhsL = 0;
+    
+    CCTK_REAL beta2rhsL = 0;
+    
+    CCTK_REAL beta3rhsL = 0;
+    
+    CCTK_REAL B1rhsL = 0;
+    
+    CCTK_REAL B2rhsL = 0;
+    
+    CCTK_REAL B3rhsL = 0;
     
     /* Copy local copies back to grid functions */
-    I3D(alpha,0,0,0) = alphaL;
-    I3D(At11,0,0,0) = At11L;
-    I3D(At12,0,0,0) = At12L;
-    I3D(At13,0,0,0) = At13L;
-    I3D(At22,0,0,0) = At22L;
-    I3D(At23,0,0,0) = At23L;
-    I3D(At33,0,0,0) = At33L;
+    I3D(alpharhs,0,0,0) = alpharhsL;
+    I3D(Arhs,0,0,0) = ArhsL;
+    I3D(At11rhs,0,0,0) = At11rhsL;
+    I3D(At12rhs,0,0,0) = At12rhsL;
+    I3D(At13rhs,0,0,0) = At13rhsL;
+    I3D(At22rhs,0,0,0) = At22rhsL;
+    I3D(At23rhs,0,0,0) = At23rhsL;
+    I3D(At33rhs,0,0,0) = At33rhsL;
+    I3D(B1rhs,0,0,0) = B1rhsL;
+    I3D(B2rhs,0,0,0) = B2rhsL;
+    I3D(B3rhs,0,0,0) = B3rhsL;
+    I3D(beta1rhs,0,0,0) = beta1rhsL;
+    I3D(beta2rhs,0,0,0) = beta2rhsL;
+    I3D(beta3rhs,0,0,0) = beta3rhsL;
+    I3D(gt11rhs,0,0,0) = gt11rhsL;
+    I3D(gt12rhs,0,0,0) = gt12rhsL;
+    I3D(gt13rhs,0,0,0) = gt13rhsL;
+    I3D(gt22rhs,0,0,0) = gt22rhsL;
+    I3D(gt23rhs,0,0,0) = gt23rhsL;
+    I3D(gt33rhs,0,0,0) = gt33rhsL;
+    I3D(phirhs,0,0,0) = phirhsL;
+    I3D(trKrhs,0,0,0) = trKrhsL;
+    I3D(Xt1rhs,0,0,0) = Xt1rhsL;
+    I3D(Xt2rhs,0,0,0) = Xt2rhsL;
+    I3D(Xt3rhs,0,0,0) = Xt3rhsL;
     
-  CAKERNEL_ML_BSSN_enforce_Computations_End
+  CAKERNEL_ML_BSSN_InitRHS_Computations_End
   
-CAKERNEL_ML_BSSN_enforce_End
+CAKERNEL_ML_BSSN_InitRHS_End

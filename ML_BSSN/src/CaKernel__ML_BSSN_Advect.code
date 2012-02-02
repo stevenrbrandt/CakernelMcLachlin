@@ -37,87 +37,24 @@ CAKERNEL_ML_BSSN_Advect_Begin
   CCTK_REAL const hdzi = 0.5 * dzi;
   
   /* Initialize predefined quantities */
-  CCTK_REAL const p1o1024dx = 0.0009765625*INV(dx);
-  CCTK_REAL const p1o1024dy = 0.0009765625*INV(dy);
-  CCTK_REAL const p1o1024dz = 0.0009765625*INV(dz);
-  CCTK_REAL const p1o120dx = 0.00833333333333333333333333333333*INV(dx);
-  CCTK_REAL const p1o120dy = 0.00833333333333333333333333333333*INV(dy);
-  CCTK_REAL const p1o120dz = 0.00833333333333333333333333333333*INV(dz);
   CCTK_REAL const p1o12dx = 0.0833333333333333333333333333333*INV(dx);
   CCTK_REAL const p1o12dy = 0.0833333333333333333333333333333*INV(dy);
   CCTK_REAL const p1o12dz = 0.0833333333333333333333333333333*INV(dz);
   CCTK_REAL const p1o144dxdy = 0.00694444444444444444444444444444*INV(dx)*INV(dy);
   CCTK_REAL const p1o144dxdz = 0.00694444444444444444444444444444*INV(dx)*INV(dz);
   CCTK_REAL const p1o144dydz = 0.00694444444444444444444444444444*INV(dy)*INV(dz);
-  CCTK_REAL const p1o1680dx = 0.000595238095238095238095238095238*INV(dx);
-  CCTK_REAL const p1o1680dy = 0.000595238095238095238095238095238*INV(dy);
-  CCTK_REAL const p1o1680dz = 0.000595238095238095238095238095238*INV(dz);
-  CCTK_REAL const p1o16dx = 0.0625*INV(dx);
-  CCTK_REAL const p1o16dy = 0.0625*INV(dy);
-  CCTK_REAL const p1o16dz = 0.0625*INV(dz);
-  CCTK_REAL const p1o180dx2 = 0.00555555555555555555555555555556*INV(SQR(dx));
-  CCTK_REAL const p1o180dy2 = 0.00555555555555555555555555555556*INV(SQR(dy));
-  CCTK_REAL const p1o180dz2 = 0.00555555555555555555555555555556*INV(SQR(dz));
   CCTK_REAL const p1o24dx = 0.0416666666666666666666666666667*INV(dx);
   CCTK_REAL const p1o24dy = 0.0416666666666666666666666666667*INV(dy);
   CCTK_REAL const p1o24dz = 0.0416666666666666666666666666667*INV(dz);
-  CCTK_REAL const p1o256dx = 0.00390625*INV(dx);
-  CCTK_REAL const p1o256dy = 0.00390625*INV(dy);
-  CCTK_REAL const p1o256dz = 0.00390625*INV(dz);
-  CCTK_REAL const p1o2dx = 0.5*INV(dx);
-  CCTK_REAL const p1o2dy = 0.5*INV(dy);
-  CCTK_REAL const p1o2dz = 0.5*INV(dz);
-  CCTK_REAL const p1o3600dxdy = 0.000277777777777777777777777777778*INV(dx)*INV(dy);
-  CCTK_REAL const p1o3600dxdz = 0.000277777777777777777777777777778*INV(dx)*INV(dz);
-  CCTK_REAL const p1o3600dydz = 0.000277777777777777777777777777778*INV(dy)*INV(dz);
-  CCTK_REAL const p1o4dx = 0.25*INV(dx);
-  CCTK_REAL const p1o4dxdy = 0.25*INV(dx)*INV(dy);
-  CCTK_REAL const p1o4dxdz = 0.25*INV(dx)*INV(dz);
-  CCTK_REAL const p1o4dy = 0.25*INV(dy);
-  CCTK_REAL const p1o4dydz = 0.25*INV(dy)*INV(dz);
-  CCTK_REAL const p1o4dz = 0.25*INV(dz);
-  CCTK_REAL const p1o5040dx2 = 0.000198412698412698412698412698413*INV(SQR(dx));
-  CCTK_REAL const p1o5040dy2 = 0.000198412698412698412698412698413*INV(SQR(dy));
-  CCTK_REAL const p1o5040dz2 = 0.000198412698412698412698412698413*INV(SQR(dz));
-  CCTK_REAL const p1o560dx = 0.00178571428571428571428571428571*INV(dx);
-  CCTK_REAL const p1o560dy = 0.00178571428571428571428571428571*INV(dy);
-  CCTK_REAL const p1o560dz = 0.00178571428571428571428571428571*INV(dz);
-  CCTK_REAL const p1o60dx = 0.0166666666666666666666666666667*INV(dx);
-  CCTK_REAL const p1o60dy = 0.0166666666666666666666666666667*INV(dy);
-  CCTK_REAL const p1o60dz = 0.0166666666666666666666666666667*INV(dz);
   CCTK_REAL const p1o64dx = 0.015625*INV(dx);
   CCTK_REAL const p1o64dy = 0.015625*INV(dy);
   CCTK_REAL const p1o64dz = 0.015625*INV(dz);
-  CCTK_REAL const p1o705600dxdy = 1.41723356009070294784580498866e-6*INV(dx)*INV(dy);
-  CCTK_REAL const p1o705600dxdz = 1.41723356009070294784580498866e-6*INV(dx)*INV(dz);
-  CCTK_REAL const p1o705600dydz = 1.41723356009070294784580498866e-6*INV(dy)*INV(dz);
-  CCTK_REAL const p1o840dx = 0.00119047619047619047619047619048*INV(dx);
-  CCTK_REAL const p1o840dy = 0.00119047619047619047619047619048*INV(dy);
-  CCTK_REAL const p1o840dz = 0.00119047619047619047619047619048*INV(dz);
   CCTK_REAL const p1odx = INV(dx);
-  CCTK_REAL const p1odx2 = INV(SQR(dx));
   CCTK_REAL const p1ody = INV(dy);
-  CCTK_REAL const p1ody2 = INV(SQR(dy));
   CCTK_REAL const p1odz = INV(dz);
-  CCTK_REAL const p1odz2 = INV(SQR(dz));
-  CCTK_REAL const pm1o120dx = -0.00833333333333333333333333333333*INV(dx);
-  CCTK_REAL const pm1o120dy = -0.00833333333333333333333333333333*INV(dy);
-  CCTK_REAL const pm1o120dz = -0.00833333333333333333333333333333*INV(dz);
   CCTK_REAL const pm1o12dx2 = -0.0833333333333333333333333333333*INV(SQR(dx));
   CCTK_REAL const pm1o12dy2 = -0.0833333333333333333333333333333*INV(SQR(dy));
   CCTK_REAL const pm1o12dz2 = -0.0833333333333333333333333333333*INV(SQR(dz));
-  CCTK_REAL const pm1o2dx = -0.5*INV(dx);
-  CCTK_REAL const pm1o2dy = -0.5*INV(dy);
-  CCTK_REAL const pm1o2dz = -0.5*INV(dz);
-  CCTK_REAL const pm1o4dx = -0.25*INV(dx);
-  CCTK_REAL const pm1o4dy = -0.25*INV(dy);
-  CCTK_REAL const pm1o4dz = -0.25*INV(dz);
-  CCTK_REAL const pm1o60dx = -0.0166666666666666666666666666667*INV(dx);
-  CCTK_REAL const pm1o60dy = -0.0166666666666666666666666666667*INV(dy);
-  CCTK_REAL const pm1o60dz = -0.0166666666666666666666666666667*INV(dz);
-  CCTK_REAL const pm1o840dx = -0.00119047619047619047619047619048*INV(dx);
-  CCTK_REAL const pm1o840dy = -0.00119047619047619047619047619048*INV(dy);
-  CCTK_REAL const pm1o840dz = -0.00119047619047619047619047619048*INV(dz);
   
   /* Assign local copies of arrays functions */
   
@@ -185,771 +122,156 @@ CAKERNEL_ML_BSSN_Advect_Begin
     /* Include user supplied include files */
     
     /* Precompute derivatives */
-    CCTK_REAL PDupwindNthAnti1A;
-    CCTK_REAL PDupwindNthSymm1A;
-    CCTK_REAL PDupwindNthAnti2A;
-    CCTK_REAL PDupwindNthSymm2A;
-    CCTK_REAL PDupwindNthAnti3A;
-    CCTK_REAL PDupwindNthSymm3A;
-    CCTK_REAL PDupwindNthAnti1alpha;
-    CCTK_REAL PDupwindNthSymm1alpha;
-    CCTK_REAL PDupwindNthAnti2alpha;
-    CCTK_REAL PDupwindNthSymm2alpha;
-    CCTK_REAL PDupwindNthAnti3alpha;
-    CCTK_REAL PDupwindNthSymm3alpha;
-    CCTK_REAL PDupwindNthAnti1At11;
-    CCTK_REAL PDupwindNthSymm1At11;
-    CCTK_REAL PDupwindNthAnti2At11;
-    CCTK_REAL PDupwindNthSymm2At11;
-    CCTK_REAL PDupwindNthAnti3At11;
-    CCTK_REAL PDupwindNthSymm3At11;
-    CCTK_REAL PDupwindNthAnti1At12;
-    CCTK_REAL PDupwindNthSymm1At12;
-    CCTK_REAL PDupwindNthAnti2At12;
-    CCTK_REAL PDupwindNthSymm2At12;
-    CCTK_REAL PDupwindNthAnti3At12;
-    CCTK_REAL PDupwindNthSymm3At12;
-    CCTK_REAL PDupwindNthAnti1At13;
-    CCTK_REAL PDupwindNthSymm1At13;
-    CCTK_REAL PDupwindNthAnti2At13;
-    CCTK_REAL PDupwindNthSymm2At13;
-    CCTK_REAL PDupwindNthAnti3At13;
-    CCTK_REAL PDupwindNthSymm3At13;
-    CCTK_REAL PDupwindNthAnti1At22;
-    CCTK_REAL PDupwindNthSymm1At22;
-    CCTK_REAL PDupwindNthAnti2At22;
-    CCTK_REAL PDupwindNthSymm2At22;
-    CCTK_REAL PDupwindNthAnti3At22;
-    CCTK_REAL PDupwindNthSymm3At22;
-    CCTK_REAL PDupwindNthAnti1At23;
-    CCTK_REAL PDupwindNthSymm1At23;
-    CCTK_REAL PDupwindNthAnti2At23;
-    CCTK_REAL PDupwindNthSymm2At23;
-    CCTK_REAL PDupwindNthAnti3At23;
-    CCTK_REAL PDupwindNthSymm3At23;
-    CCTK_REAL PDupwindNthAnti1At33;
-    CCTK_REAL PDupwindNthSymm1At33;
-    CCTK_REAL PDupwindNthAnti2At33;
-    CCTK_REAL PDupwindNthSymm2At33;
-    CCTK_REAL PDupwindNthAnti3At33;
-    CCTK_REAL PDupwindNthSymm3At33;
-    CCTK_REAL PDupwindNthAnti1B1;
-    CCTK_REAL PDupwindNthSymm1B1;
-    CCTK_REAL PDupwindNthAnti2B1;
-    CCTK_REAL PDupwindNthSymm2B1;
-    CCTK_REAL PDupwindNthAnti3B1;
-    CCTK_REAL PDupwindNthSymm3B1;
-    CCTK_REAL PDupwindNthAnti1B2;
-    CCTK_REAL PDupwindNthSymm1B2;
-    CCTK_REAL PDupwindNthAnti2B2;
-    CCTK_REAL PDupwindNthSymm2B2;
-    CCTK_REAL PDupwindNthAnti3B2;
-    CCTK_REAL PDupwindNthSymm3B2;
-    CCTK_REAL PDupwindNthAnti1B3;
-    CCTK_REAL PDupwindNthSymm1B3;
-    CCTK_REAL PDupwindNthAnti2B3;
-    CCTK_REAL PDupwindNthSymm2B3;
-    CCTK_REAL PDupwindNthAnti3B3;
-    CCTK_REAL PDupwindNthSymm3B3;
-    CCTK_REAL PDupwindNthAnti1beta1;
-    CCTK_REAL PDupwindNthSymm1beta1;
-    CCTK_REAL PDupwindNthAnti2beta1;
-    CCTK_REAL PDupwindNthSymm2beta1;
-    CCTK_REAL PDupwindNthAnti3beta1;
-    CCTK_REAL PDupwindNthSymm3beta1;
-    CCTK_REAL PDupwindNthAnti1beta2;
-    CCTK_REAL PDupwindNthSymm1beta2;
-    CCTK_REAL PDupwindNthAnti2beta2;
-    CCTK_REAL PDupwindNthSymm2beta2;
-    CCTK_REAL PDupwindNthAnti3beta2;
-    CCTK_REAL PDupwindNthSymm3beta2;
-    CCTK_REAL PDupwindNthAnti1beta3;
-    CCTK_REAL PDupwindNthSymm1beta3;
-    CCTK_REAL PDupwindNthAnti2beta3;
-    CCTK_REAL PDupwindNthSymm2beta3;
-    CCTK_REAL PDupwindNthAnti3beta3;
-    CCTK_REAL PDupwindNthSymm3beta3;
-    CCTK_REAL PDupwindNthAnti1gt11;
-    CCTK_REAL PDupwindNthSymm1gt11;
-    CCTK_REAL PDupwindNthAnti2gt11;
-    CCTK_REAL PDupwindNthSymm2gt11;
-    CCTK_REAL PDupwindNthAnti3gt11;
-    CCTK_REAL PDupwindNthSymm3gt11;
-    CCTK_REAL PDupwindNthAnti1gt12;
-    CCTK_REAL PDupwindNthSymm1gt12;
-    CCTK_REAL PDupwindNthAnti2gt12;
-    CCTK_REAL PDupwindNthSymm2gt12;
-    CCTK_REAL PDupwindNthAnti3gt12;
-    CCTK_REAL PDupwindNthSymm3gt12;
-    CCTK_REAL PDupwindNthAnti1gt13;
-    CCTK_REAL PDupwindNthSymm1gt13;
-    CCTK_REAL PDupwindNthAnti2gt13;
-    CCTK_REAL PDupwindNthSymm2gt13;
-    CCTK_REAL PDupwindNthAnti3gt13;
-    CCTK_REAL PDupwindNthSymm3gt13;
-    CCTK_REAL PDupwindNthAnti1gt22;
-    CCTK_REAL PDupwindNthSymm1gt22;
-    CCTK_REAL PDupwindNthAnti2gt22;
-    CCTK_REAL PDupwindNthSymm2gt22;
-    CCTK_REAL PDupwindNthAnti3gt22;
-    CCTK_REAL PDupwindNthSymm3gt22;
-    CCTK_REAL PDupwindNthAnti1gt23;
-    CCTK_REAL PDupwindNthSymm1gt23;
-    CCTK_REAL PDupwindNthAnti2gt23;
-    CCTK_REAL PDupwindNthSymm2gt23;
-    CCTK_REAL PDupwindNthAnti3gt23;
-    CCTK_REAL PDupwindNthSymm3gt23;
-    CCTK_REAL PDupwindNthAnti1gt33;
-    CCTK_REAL PDupwindNthSymm1gt33;
-    CCTK_REAL PDupwindNthAnti2gt33;
-    CCTK_REAL PDupwindNthSymm2gt33;
-    CCTK_REAL PDupwindNthAnti3gt33;
-    CCTK_REAL PDupwindNthSymm3gt33;
-    CCTK_REAL PDupwindNthAnti1phi;
-    CCTK_REAL PDupwindNthSymm1phi;
-    CCTK_REAL PDupwindNthAnti2phi;
-    CCTK_REAL PDupwindNthSymm2phi;
-    CCTK_REAL PDupwindNthAnti3phi;
-    CCTK_REAL PDupwindNthSymm3phi;
-    CCTK_REAL PDupwindNthAnti1trK;
-    CCTK_REAL PDupwindNthSymm1trK;
-    CCTK_REAL PDupwindNthAnti2trK;
-    CCTK_REAL PDupwindNthSymm2trK;
-    CCTK_REAL PDupwindNthAnti3trK;
-    CCTK_REAL PDupwindNthSymm3trK;
-    CCTK_REAL PDupwindNthAnti1Xt1;
-    CCTK_REAL PDupwindNthSymm1Xt1;
-    CCTK_REAL PDupwindNthAnti2Xt1;
-    CCTK_REAL PDupwindNthSymm2Xt1;
-    CCTK_REAL PDupwindNthAnti3Xt1;
-    CCTK_REAL PDupwindNthSymm3Xt1;
-    CCTK_REAL PDupwindNthAnti1Xt2;
-    CCTK_REAL PDupwindNthSymm1Xt2;
-    CCTK_REAL PDupwindNthAnti2Xt2;
-    CCTK_REAL PDupwindNthSymm2Xt2;
-    CCTK_REAL PDupwindNthAnti3Xt2;
-    CCTK_REAL PDupwindNthSymm3Xt2;
-    CCTK_REAL PDupwindNthAnti1Xt3;
-    CCTK_REAL PDupwindNthSymm1Xt3;
-    CCTK_REAL PDupwindNthAnti2Xt3;
-    CCTK_REAL PDupwindNthSymm2Xt3;
-    CCTK_REAL PDupwindNthAnti3Xt3;
-    CCTK_REAL PDupwindNthSymm3Xt3;
-    
-    switch(fdOrder)
-    {
-      case 2:
-        PDupwindNthAnti1A = PDupwindNthAntifdOrder21(A);
-        PDupwindNthSymm1A = PDupwindNthSymmfdOrder21(A);
-        PDupwindNthAnti2A = PDupwindNthAntifdOrder22(A);
-        PDupwindNthSymm2A = PDupwindNthSymmfdOrder22(A);
-        PDupwindNthAnti3A = PDupwindNthAntifdOrder23(A);
-        PDupwindNthSymm3A = PDupwindNthSymmfdOrder23(A);
-        PDupwindNthAnti1alpha = PDupwindNthAntifdOrder21(alpha);
-        PDupwindNthSymm1alpha = PDupwindNthSymmfdOrder21(alpha);
-        PDupwindNthAnti2alpha = PDupwindNthAntifdOrder22(alpha);
-        PDupwindNthSymm2alpha = PDupwindNthSymmfdOrder22(alpha);
-        PDupwindNthAnti3alpha = PDupwindNthAntifdOrder23(alpha);
-        PDupwindNthSymm3alpha = PDupwindNthSymmfdOrder23(alpha);
-        PDupwindNthAnti1At11 = PDupwindNthAntifdOrder21(At11);
-        PDupwindNthSymm1At11 = PDupwindNthSymmfdOrder21(At11);
-        PDupwindNthAnti2At11 = PDupwindNthAntifdOrder22(At11);
-        PDupwindNthSymm2At11 = PDupwindNthSymmfdOrder22(At11);
-        PDupwindNthAnti3At11 = PDupwindNthAntifdOrder23(At11);
-        PDupwindNthSymm3At11 = PDupwindNthSymmfdOrder23(At11);
-        PDupwindNthAnti1At12 = PDupwindNthAntifdOrder21(At12);
-        PDupwindNthSymm1At12 = PDupwindNthSymmfdOrder21(At12);
-        PDupwindNthAnti2At12 = PDupwindNthAntifdOrder22(At12);
-        PDupwindNthSymm2At12 = PDupwindNthSymmfdOrder22(At12);
-        PDupwindNthAnti3At12 = PDupwindNthAntifdOrder23(At12);
-        PDupwindNthSymm3At12 = PDupwindNthSymmfdOrder23(At12);
-        PDupwindNthAnti1At13 = PDupwindNthAntifdOrder21(At13);
-        PDupwindNthSymm1At13 = PDupwindNthSymmfdOrder21(At13);
-        PDupwindNthAnti2At13 = PDupwindNthAntifdOrder22(At13);
-        PDupwindNthSymm2At13 = PDupwindNthSymmfdOrder22(At13);
-        PDupwindNthAnti3At13 = PDupwindNthAntifdOrder23(At13);
-        PDupwindNthSymm3At13 = PDupwindNthSymmfdOrder23(At13);
-        PDupwindNthAnti1At22 = PDupwindNthAntifdOrder21(At22);
-        PDupwindNthSymm1At22 = PDupwindNthSymmfdOrder21(At22);
-        PDupwindNthAnti2At22 = PDupwindNthAntifdOrder22(At22);
-        PDupwindNthSymm2At22 = PDupwindNthSymmfdOrder22(At22);
-        PDupwindNthAnti3At22 = PDupwindNthAntifdOrder23(At22);
-        PDupwindNthSymm3At22 = PDupwindNthSymmfdOrder23(At22);
-        PDupwindNthAnti1At23 = PDupwindNthAntifdOrder21(At23);
-        PDupwindNthSymm1At23 = PDupwindNthSymmfdOrder21(At23);
-        PDupwindNthAnti2At23 = PDupwindNthAntifdOrder22(At23);
-        PDupwindNthSymm2At23 = PDupwindNthSymmfdOrder22(At23);
-        PDupwindNthAnti3At23 = PDupwindNthAntifdOrder23(At23);
-        PDupwindNthSymm3At23 = PDupwindNthSymmfdOrder23(At23);
-        PDupwindNthAnti1At33 = PDupwindNthAntifdOrder21(At33);
-        PDupwindNthSymm1At33 = PDupwindNthSymmfdOrder21(At33);
-        PDupwindNthAnti2At33 = PDupwindNthAntifdOrder22(At33);
-        PDupwindNthSymm2At33 = PDupwindNthSymmfdOrder22(At33);
-        PDupwindNthAnti3At33 = PDupwindNthAntifdOrder23(At33);
-        PDupwindNthSymm3At33 = PDupwindNthSymmfdOrder23(At33);
-        PDupwindNthAnti1B1 = PDupwindNthAntifdOrder21(B1);
-        PDupwindNthSymm1B1 = PDupwindNthSymmfdOrder21(B1);
-        PDupwindNthAnti2B1 = PDupwindNthAntifdOrder22(B1);
-        PDupwindNthSymm2B1 = PDupwindNthSymmfdOrder22(B1);
-        PDupwindNthAnti3B1 = PDupwindNthAntifdOrder23(B1);
-        PDupwindNthSymm3B1 = PDupwindNthSymmfdOrder23(B1);
-        PDupwindNthAnti1B2 = PDupwindNthAntifdOrder21(B2);
-        PDupwindNthSymm1B2 = PDupwindNthSymmfdOrder21(B2);
-        PDupwindNthAnti2B2 = PDupwindNthAntifdOrder22(B2);
-        PDupwindNthSymm2B2 = PDupwindNthSymmfdOrder22(B2);
-        PDupwindNthAnti3B2 = PDupwindNthAntifdOrder23(B2);
-        PDupwindNthSymm3B2 = PDupwindNthSymmfdOrder23(B2);
-        PDupwindNthAnti1B3 = PDupwindNthAntifdOrder21(B3);
-        PDupwindNthSymm1B3 = PDupwindNthSymmfdOrder21(B3);
-        PDupwindNthAnti2B3 = PDupwindNthAntifdOrder22(B3);
-        PDupwindNthSymm2B3 = PDupwindNthSymmfdOrder22(B3);
-        PDupwindNthAnti3B3 = PDupwindNthAntifdOrder23(B3);
-        PDupwindNthSymm3B3 = PDupwindNthSymmfdOrder23(B3);
-        PDupwindNthAnti1beta1 = PDupwindNthAntifdOrder21(beta1);
-        PDupwindNthSymm1beta1 = PDupwindNthSymmfdOrder21(beta1);
-        PDupwindNthAnti2beta1 = PDupwindNthAntifdOrder22(beta1);
-        PDupwindNthSymm2beta1 = PDupwindNthSymmfdOrder22(beta1);
-        PDupwindNthAnti3beta1 = PDupwindNthAntifdOrder23(beta1);
-        PDupwindNthSymm3beta1 = PDupwindNthSymmfdOrder23(beta1);
-        PDupwindNthAnti1beta2 = PDupwindNthAntifdOrder21(beta2);
-        PDupwindNthSymm1beta2 = PDupwindNthSymmfdOrder21(beta2);
-        PDupwindNthAnti2beta2 = PDupwindNthAntifdOrder22(beta2);
-        PDupwindNthSymm2beta2 = PDupwindNthSymmfdOrder22(beta2);
-        PDupwindNthAnti3beta2 = PDupwindNthAntifdOrder23(beta2);
-        PDupwindNthSymm3beta2 = PDupwindNthSymmfdOrder23(beta2);
-        PDupwindNthAnti1beta3 = PDupwindNthAntifdOrder21(beta3);
-        PDupwindNthSymm1beta3 = PDupwindNthSymmfdOrder21(beta3);
-        PDupwindNthAnti2beta3 = PDupwindNthAntifdOrder22(beta3);
-        PDupwindNthSymm2beta3 = PDupwindNthSymmfdOrder22(beta3);
-        PDupwindNthAnti3beta3 = PDupwindNthAntifdOrder23(beta3);
-        PDupwindNthSymm3beta3 = PDupwindNthSymmfdOrder23(beta3);
-        PDupwindNthAnti1gt11 = PDupwindNthAntifdOrder21(gt11);
-        PDupwindNthSymm1gt11 = PDupwindNthSymmfdOrder21(gt11);
-        PDupwindNthAnti2gt11 = PDupwindNthAntifdOrder22(gt11);
-        PDupwindNthSymm2gt11 = PDupwindNthSymmfdOrder22(gt11);
-        PDupwindNthAnti3gt11 = PDupwindNthAntifdOrder23(gt11);
-        PDupwindNthSymm3gt11 = PDupwindNthSymmfdOrder23(gt11);
-        PDupwindNthAnti1gt12 = PDupwindNthAntifdOrder21(gt12);
-        PDupwindNthSymm1gt12 = PDupwindNthSymmfdOrder21(gt12);
-        PDupwindNthAnti2gt12 = PDupwindNthAntifdOrder22(gt12);
-        PDupwindNthSymm2gt12 = PDupwindNthSymmfdOrder22(gt12);
-        PDupwindNthAnti3gt12 = PDupwindNthAntifdOrder23(gt12);
-        PDupwindNthSymm3gt12 = PDupwindNthSymmfdOrder23(gt12);
-        PDupwindNthAnti1gt13 = PDupwindNthAntifdOrder21(gt13);
-        PDupwindNthSymm1gt13 = PDupwindNthSymmfdOrder21(gt13);
-        PDupwindNthAnti2gt13 = PDupwindNthAntifdOrder22(gt13);
-        PDupwindNthSymm2gt13 = PDupwindNthSymmfdOrder22(gt13);
-        PDupwindNthAnti3gt13 = PDupwindNthAntifdOrder23(gt13);
-        PDupwindNthSymm3gt13 = PDupwindNthSymmfdOrder23(gt13);
-        PDupwindNthAnti1gt22 = PDupwindNthAntifdOrder21(gt22);
-        PDupwindNthSymm1gt22 = PDupwindNthSymmfdOrder21(gt22);
-        PDupwindNthAnti2gt22 = PDupwindNthAntifdOrder22(gt22);
-        PDupwindNthSymm2gt22 = PDupwindNthSymmfdOrder22(gt22);
-        PDupwindNthAnti3gt22 = PDupwindNthAntifdOrder23(gt22);
-        PDupwindNthSymm3gt22 = PDupwindNthSymmfdOrder23(gt22);
-        PDupwindNthAnti1gt23 = PDupwindNthAntifdOrder21(gt23);
-        PDupwindNthSymm1gt23 = PDupwindNthSymmfdOrder21(gt23);
-        PDupwindNthAnti2gt23 = PDupwindNthAntifdOrder22(gt23);
-        PDupwindNthSymm2gt23 = PDupwindNthSymmfdOrder22(gt23);
-        PDupwindNthAnti3gt23 = PDupwindNthAntifdOrder23(gt23);
-        PDupwindNthSymm3gt23 = PDupwindNthSymmfdOrder23(gt23);
-        PDupwindNthAnti1gt33 = PDupwindNthAntifdOrder21(gt33);
-        PDupwindNthSymm1gt33 = PDupwindNthSymmfdOrder21(gt33);
-        PDupwindNthAnti2gt33 = PDupwindNthAntifdOrder22(gt33);
-        PDupwindNthSymm2gt33 = PDupwindNthSymmfdOrder22(gt33);
-        PDupwindNthAnti3gt33 = PDupwindNthAntifdOrder23(gt33);
-        PDupwindNthSymm3gt33 = PDupwindNthSymmfdOrder23(gt33);
-        PDupwindNthAnti1phi = PDupwindNthAntifdOrder21(phi);
-        PDupwindNthSymm1phi = PDupwindNthSymmfdOrder21(phi);
-        PDupwindNthAnti2phi = PDupwindNthAntifdOrder22(phi);
-        PDupwindNthSymm2phi = PDupwindNthSymmfdOrder22(phi);
-        PDupwindNthAnti3phi = PDupwindNthAntifdOrder23(phi);
-        PDupwindNthSymm3phi = PDupwindNthSymmfdOrder23(phi);
-        PDupwindNthAnti1trK = PDupwindNthAntifdOrder21(trK);
-        PDupwindNthSymm1trK = PDupwindNthSymmfdOrder21(trK);
-        PDupwindNthAnti2trK = PDupwindNthAntifdOrder22(trK);
-        PDupwindNthSymm2trK = PDupwindNthSymmfdOrder22(trK);
-        PDupwindNthAnti3trK = PDupwindNthAntifdOrder23(trK);
-        PDupwindNthSymm3trK = PDupwindNthSymmfdOrder23(trK);
-        PDupwindNthAnti1Xt1 = PDupwindNthAntifdOrder21(Xt1);
-        PDupwindNthSymm1Xt1 = PDupwindNthSymmfdOrder21(Xt1);
-        PDupwindNthAnti2Xt1 = PDupwindNthAntifdOrder22(Xt1);
-        PDupwindNthSymm2Xt1 = PDupwindNthSymmfdOrder22(Xt1);
-        PDupwindNthAnti3Xt1 = PDupwindNthAntifdOrder23(Xt1);
-        PDupwindNthSymm3Xt1 = PDupwindNthSymmfdOrder23(Xt1);
-        PDupwindNthAnti1Xt2 = PDupwindNthAntifdOrder21(Xt2);
-        PDupwindNthSymm1Xt2 = PDupwindNthSymmfdOrder21(Xt2);
-        PDupwindNthAnti2Xt2 = PDupwindNthAntifdOrder22(Xt2);
-        PDupwindNthSymm2Xt2 = PDupwindNthSymmfdOrder22(Xt2);
-        PDupwindNthAnti3Xt2 = PDupwindNthAntifdOrder23(Xt2);
-        PDupwindNthSymm3Xt2 = PDupwindNthSymmfdOrder23(Xt2);
-        PDupwindNthAnti1Xt3 = PDupwindNthAntifdOrder21(Xt3);
-        PDupwindNthSymm1Xt3 = PDupwindNthSymmfdOrder21(Xt3);
-        PDupwindNthAnti2Xt3 = PDupwindNthAntifdOrder22(Xt3);
-        PDupwindNthSymm2Xt3 = PDupwindNthSymmfdOrder22(Xt3);
-        PDupwindNthAnti3Xt3 = PDupwindNthAntifdOrder23(Xt3);
-        PDupwindNthSymm3Xt3 = PDupwindNthSymmfdOrder23(Xt3);
-        break;
-      
-      case 4:
-        PDupwindNthAnti1A = PDupwindNthAntifdOrder41(A);
-        PDupwindNthSymm1A = PDupwindNthSymmfdOrder41(A);
-        PDupwindNthAnti2A = PDupwindNthAntifdOrder42(A);
-        PDupwindNthSymm2A = PDupwindNthSymmfdOrder42(A);
-        PDupwindNthAnti3A = PDupwindNthAntifdOrder43(A);
-        PDupwindNthSymm3A = PDupwindNthSymmfdOrder43(A);
-        PDupwindNthAnti1alpha = PDupwindNthAntifdOrder41(alpha);
-        PDupwindNthSymm1alpha = PDupwindNthSymmfdOrder41(alpha);
-        PDupwindNthAnti2alpha = PDupwindNthAntifdOrder42(alpha);
-        PDupwindNthSymm2alpha = PDupwindNthSymmfdOrder42(alpha);
-        PDupwindNthAnti3alpha = PDupwindNthAntifdOrder43(alpha);
-        PDupwindNthSymm3alpha = PDupwindNthSymmfdOrder43(alpha);
-        PDupwindNthAnti1At11 = PDupwindNthAntifdOrder41(At11);
-        PDupwindNthSymm1At11 = PDupwindNthSymmfdOrder41(At11);
-        PDupwindNthAnti2At11 = PDupwindNthAntifdOrder42(At11);
-        PDupwindNthSymm2At11 = PDupwindNthSymmfdOrder42(At11);
-        PDupwindNthAnti3At11 = PDupwindNthAntifdOrder43(At11);
-        PDupwindNthSymm3At11 = PDupwindNthSymmfdOrder43(At11);
-        PDupwindNthAnti1At12 = PDupwindNthAntifdOrder41(At12);
-        PDupwindNthSymm1At12 = PDupwindNthSymmfdOrder41(At12);
-        PDupwindNthAnti2At12 = PDupwindNthAntifdOrder42(At12);
-        PDupwindNthSymm2At12 = PDupwindNthSymmfdOrder42(At12);
-        PDupwindNthAnti3At12 = PDupwindNthAntifdOrder43(At12);
-        PDupwindNthSymm3At12 = PDupwindNthSymmfdOrder43(At12);
-        PDupwindNthAnti1At13 = PDupwindNthAntifdOrder41(At13);
-        PDupwindNthSymm1At13 = PDupwindNthSymmfdOrder41(At13);
-        PDupwindNthAnti2At13 = PDupwindNthAntifdOrder42(At13);
-        PDupwindNthSymm2At13 = PDupwindNthSymmfdOrder42(At13);
-        PDupwindNthAnti3At13 = PDupwindNthAntifdOrder43(At13);
-        PDupwindNthSymm3At13 = PDupwindNthSymmfdOrder43(At13);
-        PDupwindNthAnti1At22 = PDupwindNthAntifdOrder41(At22);
-        PDupwindNthSymm1At22 = PDupwindNthSymmfdOrder41(At22);
-        PDupwindNthAnti2At22 = PDupwindNthAntifdOrder42(At22);
-        PDupwindNthSymm2At22 = PDupwindNthSymmfdOrder42(At22);
-        PDupwindNthAnti3At22 = PDupwindNthAntifdOrder43(At22);
-        PDupwindNthSymm3At22 = PDupwindNthSymmfdOrder43(At22);
-        PDupwindNthAnti1At23 = PDupwindNthAntifdOrder41(At23);
-        PDupwindNthSymm1At23 = PDupwindNthSymmfdOrder41(At23);
-        PDupwindNthAnti2At23 = PDupwindNthAntifdOrder42(At23);
-        PDupwindNthSymm2At23 = PDupwindNthSymmfdOrder42(At23);
-        PDupwindNthAnti3At23 = PDupwindNthAntifdOrder43(At23);
-        PDupwindNthSymm3At23 = PDupwindNthSymmfdOrder43(At23);
-        PDupwindNthAnti1At33 = PDupwindNthAntifdOrder41(At33);
-        PDupwindNthSymm1At33 = PDupwindNthSymmfdOrder41(At33);
-        PDupwindNthAnti2At33 = PDupwindNthAntifdOrder42(At33);
-        PDupwindNthSymm2At33 = PDupwindNthSymmfdOrder42(At33);
-        PDupwindNthAnti3At33 = PDupwindNthAntifdOrder43(At33);
-        PDupwindNthSymm3At33 = PDupwindNthSymmfdOrder43(At33);
-        PDupwindNthAnti1B1 = PDupwindNthAntifdOrder41(B1);
-        PDupwindNthSymm1B1 = PDupwindNthSymmfdOrder41(B1);
-        PDupwindNthAnti2B1 = PDupwindNthAntifdOrder42(B1);
-        PDupwindNthSymm2B1 = PDupwindNthSymmfdOrder42(B1);
-        PDupwindNthAnti3B1 = PDupwindNthAntifdOrder43(B1);
-        PDupwindNthSymm3B1 = PDupwindNthSymmfdOrder43(B1);
-        PDupwindNthAnti1B2 = PDupwindNthAntifdOrder41(B2);
-        PDupwindNthSymm1B2 = PDupwindNthSymmfdOrder41(B2);
-        PDupwindNthAnti2B2 = PDupwindNthAntifdOrder42(B2);
-        PDupwindNthSymm2B2 = PDupwindNthSymmfdOrder42(B2);
-        PDupwindNthAnti3B2 = PDupwindNthAntifdOrder43(B2);
-        PDupwindNthSymm3B2 = PDupwindNthSymmfdOrder43(B2);
-        PDupwindNthAnti1B3 = PDupwindNthAntifdOrder41(B3);
-        PDupwindNthSymm1B3 = PDupwindNthSymmfdOrder41(B3);
-        PDupwindNthAnti2B3 = PDupwindNthAntifdOrder42(B3);
-        PDupwindNthSymm2B3 = PDupwindNthSymmfdOrder42(B3);
-        PDupwindNthAnti3B3 = PDupwindNthAntifdOrder43(B3);
-        PDupwindNthSymm3B3 = PDupwindNthSymmfdOrder43(B3);
-        PDupwindNthAnti1beta1 = PDupwindNthAntifdOrder41(beta1);
-        PDupwindNthSymm1beta1 = PDupwindNthSymmfdOrder41(beta1);
-        PDupwindNthAnti2beta1 = PDupwindNthAntifdOrder42(beta1);
-        PDupwindNthSymm2beta1 = PDupwindNthSymmfdOrder42(beta1);
-        PDupwindNthAnti3beta1 = PDupwindNthAntifdOrder43(beta1);
-        PDupwindNthSymm3beta1 = PDupwindNthSymmfdOrder43(beta1);
-        PDupwindNthAnti1beta2 = PDupwindNthAntifdOrder41(beta2);
-        PDupwindNthSymm1beta2 = PDupwindNthSymmfdOrder41(beta2);
-        PDupwindNthAnti2beta2 = PDupwindNthAntifdOrder42(beta2);
-        PDupwindNthSymm2beta2 = PDupwindNthSymmfdOrder42(beta2);
-        PDupwindNthAnti3beta2 = PDupwindNthAntifdOrder43(beta2);
-        PDupwindNthSymm3beta2 = PDupwindNthSymmfdOrder43(beta2);
-        PDupwindNthAnti1beta3 = PDupwindNthAntifdOrder41(beta3);
-        PDupwindNthSymm1beta3 = PDupwindNthSymmfdOrder41(beta3);
-        PDupwindNthAnti2beta3 = PDupwindNthAntifdOrder42(beta3);
-        PDupwindNthSymm2beta3 = PDupwindNthSymmfdOrder42(beta3);
-        PDupwindNthAnti3beta3 = PDupwindNthAntifdOrder43(beta3);
-        PDupwindNthSymm3beta3 = PDupwindNthSymmfdOrder43(beta3);
-        PDupwindNthAnti1gt11 = PDupwindNthAntifdOrder41(gt11);
-        PDupwindNthSymm1gt11 = PDupwindNthSymmfdOrder41(gt11);
-        PDupwindNthAnti2gt11 = PDupwindNthAntifdOrder42(gt11);
-        PDupwindNthSymm2gt11 = PDupwindNthSymmfdOrder42(gt11);
-        PDupwindNthAnti3gt11 = PDupwindNthAntifdOrder43(gt11);
-        PDupwindNthSymm3gt11 = PDupwindNthSymmfdOrder43(gt11);
-        PDupwindNthAnti1gt12 = PDupwindNthAntifdOrder41(gt12);
-        PDupwindNthSymm1gt12 = PDupwindNthSymmfdOrder41(gt12);
-        PDupwindNthAnti2gt12 = PDupwindNthAntifdOrder42(gt12);
-        PDupwindNthSymm2gt12 = PDupwindNthSymmfdOrder42(gt12);
-        PDupwindNthAnti3gt12 = PDupwindNthAntifdOrder43(gt12);
-        PDupwindNthSymm3gt12 = PDupwindNthSymmfdOrder43(gt12);
-        PDupwindNthAnti1gt13 = PDupwindNthAntifdOrder41(gt13);
-        PDupwindNthSymm1gt13 = PDupwindNthSymmfdOrder41(gt13);
-        PDupwindNthAnti2gt13 = PDupwindNthAntifdOrder42(gt13);
-        PDupwindNthSymm2gt13 = PDupwindNthSymmfdOrder42(gt13);
-        PDupwindNthAnti3gt13 = PDupwindNthAntifdOrder43(gt13);
-        PDupwindNthSymm3gt13 = PDupwindNthSymmfdOrder43(gt13);
-        PDupwindNthAnti1gt22 = PDupwindNthAntifdOrder41(gt22);
-        PDupwindNthSymm1gt22 = PDupwindNthSymmfdOrder41(gt22);
-        PDupwindNthAnti2gt22 = PDupwindNthAntifdOrder42(gt22);
-        PDupwindNthSymm2gt22 = PDupwindNthSymmfdOrder42(gt22);
-        PDupwindNthAnti3gt22 = PDupwindNthAntifdOrder43(gt22);
-        PDupwindNthSymm3gt22 = PDupwindNthSymmfdOrder43(gt22);
-        PDupwindNthAnti1gt23 = PDupwindNthAntifdOrder41(gt23);
-        PDupwindNthSymm1gt23 = PDupwindNthSymmfdOrder41(gt23);
-        PDupwindNthAnti2gt23 = PDupwindNthAntifdOrder42(gt23);
-        PDupwindNthSymm2gt23 = PDupwindNthSymmfdOrder42(gt23);
-        PDupwindNthAnti3gt23 = PDupwindNthAntifdOrder43(gt23);
-        PDupwindNthSymm3gt23 = PDupwindNthSymmfdOrder43(gt23);
-        PDupwindNthAnti1gt33 = PDupwindNthAntifdOrder41(gt33);
-        PDupwindNthSymm1gt33 = PDupwindNthSymmfdOrder41(gt33);
-        PDupwindNthAnti2gt33 = PDupwindNthAntifdOrder42(gt33);
-        PDupwindNthSymm2gt33 = PDupwindNthSymmfdOrder42(gt33);
-        PDupwindNthAnti3gt33 = PDupwindNthAntifdOrder43(gt33);
-        PDupwindNthSymm3gt33 = PDupwindNthSymmfdOrder43(gt33);
-        PDupwindNthAnti1phi = PDupwindNthAntifdOrder41(phi);
-        PDupwindNthSymm1phi = PDupwindNthSymmfdOrder41(phi);
-        PDupwindNthAnti2phi = PDupwindNthAntifdOrder42(phi);
-        PDupwindNthSymm2phi = PDupwindNthSymmfdOrder42(phi);
-        PDupwindNthAnti3phi = PDupwindNthAntifdOrder43(phi);
-        PDupwindNthSymm3phi = PDupwindNthSymmfdOrder43(phi);
-        PDupwindNthAnti1trK = PDupwindNthAntifdOrder41(trK);
-        PDupwindNthSymm1trK = PDupwindNthSymmfdOrder41(trK);
-        PDupwindNthAnti2trK = PDupwindNthAntifdOrder42(trK);
-        PDupwindNthSymm2trK = PDupwindNthSymmfdOrder42(trK);
-        PDupwindNthAnti3trK = PDupwindNthAntifdOrder43(trK);
-        PDupwindNthSymm3trK = PDupwindNthSymmfdOrder43(trK);
-        PDupwindNthAnti1Xt1 = PDupwindNthAntifdOrder41(Xt1);
-        PDupwindNthSymm1Xt1 = PDupwindNthSymmfdOrder41(Xt1);
-        PDupwindNthAnti2Xt1 = PDupwindNthAntifdOrder42(Xt1);
-        PDupwindNthSymm2Xt1 = PDupwindNthSymmfdOrder42(Xt1);
-        PDupwindNthAnti3Xt1 = PDupwindNthAntifdOrder43(Xt1);
-        PDupwindNthSymm3Xt1 = PDupwindNthSymmfdOrder43(Xt1);
-        PDupwindNthAnti1Xt2 = PDupwindNthAntifdOrder41(Xt2);
-        PDupwindNthSymm1Xt2 = PDupwindNthSymmfdOrder41(Xt2);
-        PDupwindNthAnti2Xt2 = PDupwindNthAntifdOrder42(Xt2);
-        PDupwindNthSymm2Xt2 = PDupwindNthSymmfdOrder42(Xt2);
-        PDupwindNthAnti3Xt2 = PDupwindNthAntifdOrder43(Xt2);
-        PDupwindNthSymm3Xt2 = PDupwindNthSymmfdOrder43(Xt2);
-        PDupwindNthAnti1Xt3 = PDupwindNthAntifdOrder41(Xt3);
-        PDupwindNthSymm1Xt3 = PDupwindNthSymmfdOrder41(Xt3);
-        PDupwindNthAnti2Xt3 = PDupwindNthAntifdOrder42(Xt3);
-        PDupwindNthSymm2Xt3 = PDupwindNthSymmfdOrder42(Xt3);
-        PDupwindNthAnti3Xt3 = PDupwindNthAntifdOrder43(Xt3);
-        PDupwindNthSymm3Xt3 = PDupwindNthSymmfdOrder43(Xt3);
-        break;
-      
-      case 6:
-        PDupwindNthAnti1A = PDupwindNthAntifdOrder61(A);
-        PDupwindNthSymm1A = PDupwindNthSymmfdOrder61(A);
-        PDupwindNthAnti2A = PDupwindNthAntifdOrder62(A);
-        PDupwindNthSymm2A = PDupwindNthSymmfdOrder62(A);
-        PDupwindNthAnti3A = PDupwindNthAntifdOrder63(A);
-        PDupwindNthSymm3A = PDupwindNthSymmfdOrder63(A);
-        PDupwindNthAnti1alpha = PDupwindNthAntifdOrder61(alpha);
-        PDupwindNthSymm1alpha = PDupwindNthSymmfdOrder61(alpha);
-        PDupwindNthAnti2alpha = PDupwindNthAntifdOrder62(alpha);
-        PDupwindNthSymm2alpha = PDupwindNthSymmfdOrder62(alpha);
-        PDupwindNthAnti3alpha = PDupwindNthAntifdOrder63(alpha);
-        PDupwindNthSymm3alpha = PDupwindNthSymmfdOrder63(alpha);
-        PDupwindNthAnti1At11 = PDupwindNthAntifdOrder61(At11);
-        PDupwindNthSymm1At11 = PDupwindNthSymmfdOrder61(At11);
-        PDupwindNthAnti2At11 = PDupwindNthAntifdOrder62(At11);
-        PDupwindNthSymm2At11 = PDupwindNthSymmfdOrder62(At11);
-        PDupwindNthAnti3At11 = PDupwindNthAntifdOrder63(At11);
-        PDupwindNthSymm3At11 = PDupwindNthSymmfdOrder63(At11);
-        PDupwindNthAnti1At12 = PDupwindNthAntifdOrder61(At12);
-        PDupwindNthSymm1At12 = PDupwindNthSymmfdOrder61(At12);
-        PDupwindNthAnti2At12 = PDupwindNthAntifdOrder62(At12);
-        PDupwindNthSymm2At12 = PDupwindNthSymmfdOrder62(At12);
-        PDupwindNthAnti3At12 = PDupwindNthAntifdOrder63(At12);
-        PDupwindNthSymm3At12 = PDupwindNthSymmfdOrder63(At12);
-        PDupwindNthAnti1At13 = PDupwindNthAntifdOrder61(At13);
-        PDupwindNthSymm1At13 = PDupwindNthSymmfdOrder61(At13);
-        PDupwindNthAnti2At13 = PDupwindNthAntifdOrder62(At13);
-        PDupwindNthSymm2At13 = PDupwindNthSymmfdOrder62(At13);
-        PDupwindNthAnti3At13 = PDupwindNthAntifdOrder63(At13);
-        PDupwindNthSymm3At13 = PDupwindNthSymmfdOrder63(At13);
-        PDupwindNthAnti1At22 = PDupwindNthAntifdOrder61(At22);
-        PDupwindNthSymm1At22 = PDupwindNthSymmfdOrder61(At22);
-        PDupwindNthAnti2At22 = PDupwindNthAntifdOrder62(At22);
-        PDupwindNthSymm2At22 = PDupwindNthSymmfdOrder62(At22);
-        PDupwindNthAnti3At22 = PDupwindNthAntifdOrder63(At22);
-        PDupwindNthSymm3At22 = PDupwindNthSymmfdOrder63(At22);
-        PDupwindNthAnti1At23 = PDupwindNthAntifdOrder61(At23);
-        PDupwindNthSymm1At23 = PDupwindNthSymmfdOrder61(At23);
-        PDupwindNthAnti2At23 = PDupwindNthAntifdOrder62(At23);
-        PDupwindNthSymm2At23 = PDupwindNthSymmfdOrder62(At23);
-        PDupwindNthAnti3At23 = PDupwindNthAntifdOrder63(At23);
-        PDupwindNthSymm3At23 = PDupwindNthSymmfdOrder63(At23);
-        PDupwindNthAnti1At33 = PDupwindNthAntifdOrder61(At33);
-        PDupwindNthSymm1At33 = PDupwindNthSymmfdOrder61(At33);
-        PDupwindNthAnti2At33 = PDupwindNthAntifdOrder62(At33);
-        PDupwindNthSymm2At33 = PDupwindNthSymmfdOrder62(At33);
-        PDupwindNthAnti3At33 = PDupwindNthAntifdOrder63(At33);
-        PDupwindNthSymm3At33 = PDupwindNthSymmfdOrder63(At33);
-        PDupwindNthAnti1B1 = PDupwindNthAntifdOrder61(B1);
-        PDupwindNthSymm1B1 = PDupwindNthSymmfdOrder61(B1);
-        PDupwindNthAnti2B1 = PDupwindNthAntifdOrder62(B1);
-        PDupwindNthSymm2B1 = PDupwindNthSymmfdOrder62(B1);
-        PDupwindNthAnti3B1 = PDupwindNthAntifdOrder63(B1);
-        PDupwindNthSymm3B1 = PDupwindNthSymmfdOrder63(B1);
-        PDupwindNthAnti1B2 = PDupwindNthAntifdOrder61(B2);
-        PDupwindNthSymm1B2 = PDupwindNthSymmfdOrder61(B2);
-        PDupwindNthAnti2B2 = PDupwindNthAntifdOrder62(B2);
-        PDupwindNthSymm2B2 = PDupwindNthSymmfdOrder62(B2);
-        PDupwindNthAnti3B2 = PDupwindNthAntifdOrder63(B2);
-        PDupwindNthSymm3B2 = PDupwindNthSymmfdOrder63(B2);
-        PDupwindNthAnti1B3 = PDupwindNthAntifdOrder61(B3);
-        PDupwindNthSymm1B3 = PDupwindNthSymmfdOrder61(B3);
-        PDupwindNthAnti2B3 = PDupwindNthAntifdOrder62(B3);
-        PDupwindNthSymm2B3 = PDupwindNthSymmfdOrder62(B3);
-        PDupwindNthAnti3B3 = PDupwindNthAntifdOrder63(B3);
-        PDupwindNthSymm3B3 = PDupwindNthSymmfdOrder63(B3);
-        PDupwindNthAnti1beta1 = PDupwindNthAntifdOrder61(beta1);
-        PDupwindNthSymm1beta1 = PDupwindNthSymmfdOrder61(beta1);
-        PDupwindNthAnti2beta1 = PDupwindNthAntifdOrder62(beta1);
-        PDupwindNthSymm2beta1 = PDupwindNthSymmfdOrder62(beta1);
-        PDupwindNthAnti3beta1 = PDupwindNthAntifdOrder63(beta1);
-        PDupwindNthSymm3beta1 = PDupwindNthSymmfdOrder63(beta1);
-        PDupwindNthAnti1beta2 = PDupwindNthAntifdOrder61(beta2);
-        PDupwindNthSymm1beta2 = PDupwindNthSymmfdOrder61(beta2);
-        PDupwindNthAnti2beta2 = PDupwindNthAntifdOrder62(beta2);
-        PDupwindNthSymm2beta2 = PDupwindNthSymmfdOrder62(beta2);
-        PDupwindNthAnti3beta2 = PDupwindNthAntifdOrder63(beta2);
-        PDupwindNthSymm3beta2 = PDupwindNthSymmfdOrder63(beta2);
-        PDupwindNthAnti1beta3 = PDupwindNthAntifdOrder61(beta3);
-        PDupwindNthSymm1beta3 = PDupwindNthSymmfdOrder61(beta3);
-        PDupwindNthAnti2beta3 = PDupwindNthAntifdOrder62(beta3);
-        PDupwindNthSymm2beta3 = PDupwindNthSymmfdOrder62(beta3);
-        PDupwindNthAnti3beta3 = PDupwindNthAntifdOrder63(beta3);
-        PDupwindNthSymm3beta3 = PDupwindNthSymmfdOrder63(beta3);
-        PDupwindNthAnti1gt11 = PDupwindNthAntifdOrder61(gt11);
-        PDupwindNthSymm1gt11 = PDupwindNthSymmfdOrder61(gt11);
-        PDupwindNthAnti2gt11 = PDupwindNthAntifdOrder62(gt11);
-        PDupwindNthSymm2gt11 = PDupwindNthSymmfdOrder62(gt11);
-        PDupwindNthAnti3gt11 = PDupwindNthAntifdOrder63(gt11);
-        PDupwindNthSymm3gt11 = PDupwindNthSymmfdOrder63(gt11);
-        PDupwindNthAnti1gt12 = PDupwindNthAntifdOrder61(gt12);
-        PDupwindNthSymm1gt12 = PDupwindNthSymmfdOrder61(gt12);
-        PDupwindNthAnti2gt12 = PDupwindNthAntifdOrder62(gt12);
-        PDupwindNthSymm2gt12 = PDupwindNthSymmfdOrder62(gt12);
-        PDupwindNthAnti3gt12 = PDupwindNthAntifdOrder63(gt12);
-        PDupwindNthSymm3gt12 = PDupwindNthSymmfdOrder63(gt12);
-        PDupwindNthAnti1gt13 = PDupwindNthAntifdOrder61(gt13);
-        PDupwindNthSymm1gt13 = PDupwindNthSymmfdOrder61(gt13);
-        PDupwindNthAnti2gt13 = PDupwindNthAntifdOrder62(gt13);
-        PDupwindNthSymm2gt13 = PDupwindNthSymmfdOrder62(gt13);
-        PDupwindNthAnti3gt13 = PDupwindNthAntifdOrder63(gt13);
-        PDupwindNthSymm3gt13 = PDupwindNthSymmfdOrder63(gt13);
-        PDupwindNthAnti1gt22 = PDupwindNthAntifdOrder61(gt22);
-        PDupwindNthSymm1gt22 = PDupwindNthSymmfdOrder61(gt22);
-        PDupwindNthAnti2gt22 = PDupwindNthAntifdOrder62(gt22);
-        PDupwindNthSymm2gt22 = PDupwindNthSymmfdOrder62(gt22);
-        PDupwindNthAnti3gt22 = PDupwindNthAntifdOrder63(gt22);
-        PDupwindNthSymm3gt22 = PDupwindNthSymmfdOrder63(gt22);
-        PDupwindNthAnti1gt23 = PDupwindNthAntifdOrder61(gt23);
-        PDupwindNthSymm1gt23 = PDupwindNthSymmfdOrder61(gt23);
-        PDupwindNthAnti2gt23 = PDupwindNthAntifdOrder62(gt23);
-        PDupwindNthSymm2gt23 = PDupwindNthSymmfdOrder62(gt23);
-        PDupwindNthAnti3gt23 = PDupwindNthAntifdOrder63(gt23);
-        PDupwindNthSymm3gt23 = PDupwindNthSymmfdOrder63(gt23);
-        PDupwindNthAnti1gt33 = PDupwindNthAntifdOrder61(gt33);
-        PDupwindNthSymm1gt33 = PDupwindNthSymmfdOrder61(gt33);
-        PDupwindNthAnti2gt33 = PDupwindNthAntifdOrder62(gt33);
-        PDupwindNthSymm2gt33 = PDupwindNthSymmfdOrder62(gt33);
-        PDupwindNthAnti3gt33 = PDupwindNthAntifdOrder63(gt33);
-        PDupwindNthSymm3gt33 = PDupwindNthSymmfdOrder63(gt33);
-        PDupwindNthAnti1phi = PDupwindNthAntifdOrder61(phi);
-        PDupwindNthSymm1phi = PDupwindNthSymmfdOrder61(phi);
-        PDupwindNthAnti2phi = PDupwindNthAntifdOrder62(phi);
-        PDupwindNthSymm2phi = PDupwindNthSymmfdOrder62(phi);
-        PDupwindNthAnti3phi = PDupwindNthAntifdOrder63(phi);
-        PDupwindNthSymm3phi = PDupwindNthSymmfdOrder63(phi);
-        PDupwindNthAnti1trK = PDupwindNthAntifdOrder61(trK);
-        PDupwindNthSymm1trK = PDupwindNthSymmfdOrder61(trK);
-        PDupwindNthAnti2trK = PDupwindNthAntifdOrder62(trK);
-        PDupwindNthSymm2trK = PDupwindNthSymmfdOrder62(trK);
-        PDupwindNthAnti3trK = PDupwindNthAntifdOrder63(trK);
-        PDupwindNthSymm3trK = PDupwindNthSymmfdOrder63(trK);
-        PDupwindNthAnti1Xt1 = PDupwindNthAntifdOrder61(Xt1);
-        PDupwindNthSymm1Xt1 = PDupwindNthSymmfdOrder61(Xt1);
-        PDupwindNthAnti2Xt1 = PDupwindNthAntifdOrder62(Xt1);
-        PDupwindNthSymm2Xt1 = PDupwindNthSymmfdOrder62(Xt1);
-        PDupwindNthAnti3Xt1 = PDupwindNthAntifdOrder63(Xt1);
-        PDupwindNthSymm3Xt1 = PDupwindNthSymmfdOrder63(Xt1);
-        PDupwindNthAnti1Xt2 = PDupwindNthAntifdOrder61(Xt2);
-        PDupwindNthSymm1Xt2 = PDupwindNthSymmfdOrder61(Xt2);
-        PDupwindNthAnti2Xt2 = PDupwindNthAntifdOrder62(Xt2);
-        PDupwindNthSymm2Xt2 = PDupwindNthSymmfdOrder62(Xt2);
-        PDupwindNthAnti3Xt2 = PDupwindNthAntifdOrder63(Xt2);
-        PDupwindNthSymm3Xt2 = PDupwindNthSymmfdOrder63(Xt2);
-        PDupwindNthAnti1Xt3 = PDupwindNthAntifdOrder61(Xt3);
-        PDupwindNthSymm1Xt3 = PDupwindNthSymmfdOrder61(Xt3);
-        PDupwindNthAnti2Xt3 = PDupwindNthAntifdOrder62(Xt3);
-        PDupwindNthSymm2Xt3 = PDupwindNthSymmfdOrder62(Xt3);
-        PDupwindNthAnti3Xt3 = PDupwindNthAntifdOrder63(Xt3);
-        PDupwindNthSymm3Xt3 = PDupwindNthSymmfdOrder63(Xt3);
-        break;
-      
-      case 8:
-        PDupwindNthAnti1A = PDupwindNthAntifdOrder81(A);
-        PDupwindNthSymm1A = PDupwindNthSymmfdOrder81(A);
-        PDupwindNthAnti2A = PDupwindNthAntifdOrder82(A);
-        PDupwindNthSymm2A = PDupwindNthSymmfdOrder82(A);
-        PDupwindNthAnti3A = PDupwindNthAntifdOrder83(A);
-        PDupwindNthSymm3A = PDupwindNthSymmfdOrder83(A);
-        PDupwindNthAnti1alpha = PDupwindNthAntifdOrder81(alpha);
-        PDupwindNthSymm1alpha = PDupwindNthSymmfdOrder81(alpha);
-        PDupwindNthAnti2alpha = PDupwindNthAntifdOrder82(alpha);
-        PDupwindNthSymm2alpha = PDupwindNthSymmfdOrder82(alpha);
-        PDupwindNthAnti3alpha = PDupwindNthAntifdOrder83(alpha);
-        PDupwindNthSymm3alpha = PDupwindNthSymmfdOrder83(alpha);
-        PDupwindNthAnti1At11 = PDupwindNthAntifdOrder81(At11);
-        PDupwindNthSymm1At11 = PDupwindNthSymmfdOrder81(At11);
-        PDupwindNthAnti2At11 = PDupwindNthAntifdOrder82(At11);
-        PDupwindNthSymm2At11 = PDupwindNthSymmfdOrder82(At11);
-        PDupwindNthAnti3At11 = PDupwindNthAntifdOrder83(At11);
-        PDupwindNthSymm3At11 = PDupwindNthSymmfdOrder83(At11);
-        PDupwindNthAnti1At12 = PDupwindNthAntifdOrder81(At12);
-        PDupwindNthSymm1At12 = PDupwindNthSymmfdOrder81(At12);
-        PDupwindNthAnti2At12 = PDupwindNthAntifdOrder82(At12);
-        PDupwindNthSymm2At12 = PDupwindNthSymmfdOrder82(At12);
-        PDupwindNthAnti3At12 = PDupwindNthAntifdOrder83(At12);
-        PDupwindNthSymm3At12 = PDupwindNthSymmfdOrder83(At12);
-        PDupwindNthAnti1At13 = PDupwindNthAntifdOrder81(At13);
-        PDupwindNthSymm1At13 = PDupwindNthSymmfdOrder81(At13);
-        PDupwindNthAnti2At13 = PDupwindNthAntifdOrder82(At13);
-        PDupwindNthSymm2At13 = PDupwindNthSymmfdOrder82(At13);
-        PDupwindNthAnti3At13 = PDupwindNthAntifdOrder83(At13);
-        PDupwindNthSymm3At13 = PDupwindNthSymmfdOrder83(At13);
-        PDupwindNthAnti1At22 = PDupwindNthAntifdOrder81(At22);
-        PDupwindNthSymm1At22 = PDupwindNthSymmfdOrder81(At22);
-        PDupwindNthAnti2At22 = PDupwindNthAntifdOrder82(At22);
-        PDupwindNthSymm2At22 = PDupwindNthSymmfdOrder82(At22);
-        PDupwindNthAnti3At22 = PDupwindNthAntifdOrder83(At22);
-        PDupwindNthSymm3At22 = PDupwindNthSymmfdOrder83(At22);
-        PDupwindNthAnti1At23 = PDupwindNthAntifdOrder81(At23);
-        PDupwindNthSymm1At23 = PDupwindNthSymmfdOrder81(At23);
-        PDupwindNthAnti2At23 = PDupwindNthAntifdOrder82(At23);
-        PDupwindNthSymm2At23 = PDupwindNthSymmfdOrder82(At23);
-        PDupwindNthAnti3At23 = PDupwindNthAntifdOrder83(At23);
-        PDupwindNthSymm3At23 = PDupwindNthSymmfdOrder83(At23);
-        PDupwindNthAnti1At33 = PDupwindNthAntifdOrder81(At33);
-        PDupwindNthSymm1At33 = PDupwindNthSymmfdOrder81(At33);
-        PDupwindNthAnti2At33 = PDupwindNthAntifdOrder82(At33);
-        PDupwindNthSymm2At33 = PDupwindNthSymmfdOrder82(At33);
-        PDupwindNthAnti3At33 = PDupwindNthAntifdOrder83(At33);
-        PDupwindNthSymm3At33 = PDupwindNthSymmfdOrder83(At33);
-        PDupwindNthAnti1B1 = PDupwindNthAntifdOrder81(B1);
-        PDupwindNthSymm1B1 = PDupwindNthSymmfdOrder81(B1);
-        PDupwindNthAnti2B1 = PDupwindNthAntifdOrder82(B1);
-        PDupwindNthSymm2B1 = PDupwindNthSymmfdOrder82(B1);
-        PDupwindNthAnti3B1 = PDupwindNthAntifdOrder83(B1);
-        PDupwindNthSymm3B1 = PDupwindNthSymmfdOrder83(B1);
-        PDupwindNthAnti1B2 = PDupwindNthAntifdOrder81(B2);
-        PDupwindNthSymm1B2 = PDupwindNthSymmfdOrder81(B2);
-        PDupwindNthAnti2B2 = PDupwindNthAntifdOrder82(B2);
-        PDupwindNthSymm2B2 = PDupwindNthSymmfdOrder82(B2);
-        PDupwindNthAnti3B2 = PDupwindNthAntifdOrder83(B2);
-        PDupwindNthSymm3B2 = PDupwindNthSymmfdOrder83(B2);
-        PDupwindNthAnti1B3 = PDupwindNthAntifdOrder81(B3);
-        PDupwindNthSymm1B3 = PDupwindNthSymmfdOrder81(B3);
-        PDupwindNthAnti2B3 = PDupwindNthAntifdOrder82(B3);
-        PDupwindNthSymm2B3 = PDupwindNthSymmfdOrder82(B3);
-        PDupwindNthAnti3B3 = PDupwindNthAntifdOrder83(B3);
-        PDupwindNthSymm3B3 = PDupwindNthSymmfdOrder83(B3);
-        PDupwindNthAnti1beta1 = PDupwindNthAntifdOrder81(beta1);
-        PDupwindNthSymm1beta1 = PDupwindNthSymmfdOrder81(beta1);
-        PDupwindNthAnti2beta1 = PDupwindNthAntifdOrder82(beta1);
-        PDupwindNthSymm2beta1 = PDupwindNthSymmfdOrder82(beta1);
-        PDupwindNthAnti3beta1 = PDupwindNthAntifdOrder83(beta1);
-        PDupwindNthSymm3beta1 = PDupwindNthSymmfdOrder83(beta1);
-        PDupwindNthAnti1beta2 = PDupwindNthAntifdOrder81(beta2);
-        PDupwindNthSymm1beta2 = PDupwindNthSymmfdOrder81(beta2);
-        PDupwindNthAnti2beta2 = PDupwindNthAntifdOrder82(beta2);
-        PDupwindNthSymm2beta2 = PDupwindNthSymmfdOrder82(beta2);
-        PDupwindNthAnti3beta2 = PDupwindNthAntifdOrder83(beta2);
-        PDupwindNthSymm3beta2 = PDupwindNthSymmfdOrder83(beta2);
-        PDupwindNthAnti1beta3 = PDupwindNthAntifdOrder81(beta3);
-        PDupwindNthSymm1beta3 = PDupwindNthSymmfdOrder81(beta3);
-        PDupwindNthAnti2beta3 = PDupwindNthAntifdOrder82(beta3);
-        PDupwindNthSymm2beta3 = PDupwindNthSymmfdOrder82(beta3);
-        PDupwindNthAnti3beta3 = PDupwindNthAntifdOrder83(beta3);
-        PDupwindNthSymm3beta3 = PDupwindNthSymmfdOrder83(beta3);
-        PDupwindNthAnti1gt11 = PDupwindNthAntifdOrder81(gt11);
-        PDupwindNthSymm1gt11 = PDupwindNthSymmfdOrder81(gt11);
-        PDupwindNthAnti2gt11 = PDupwindNthAntifdOrder82(gt11);
-        PDupwindNthSymm2gt11 = PDupwindNthSymmfdOrder82(gt11);
-        PDupwindNthAnti3gt11 = PDupwindNthAntifdOrder83(gt11);
-        PDupwindNthSymm3gt11 = PDupwindNthSymmfdOrder83(gt11);
-        PDupwindNthAnti1gt12 = PDupwindNthAntifdOrder81(gt12);
-        PDupwindNthSymm1gt12 = PDupwindNthSymmfdOrder81(gt12);
-        PDupwindNthAnti2gt12 = PDupwindNthAntifdOrder82(gt12);
-        PDupwindNthSymm2gt12 = PDupwindNthSymmfdOrder82(gt12);
-        PDupwindNthAnti3gt12 = PDupwindNthAntifdOrder83(gt12);
-        PDupwindNthSymm3gt12 = PDupwindNthSymmfdOrder83(gt12);
-        PDupwindNthAnti1gt13 = PDupwindNthAntifdOrder81(gt13);
-        PDupwindNthSymm1gt13 = PDupwindNthSymmfdOrder81(gt13);
-        PDupwindNthAnti2gt13 = PDupwindNthAntifdOrder82(gt13);
-        PDupwindNthSymm2gt13 = PDupwindNthSymmfdOrder82(gt13);
-        PDupwindNthAnti3gt13 = PDupwindNthAntifdOrder83(gt13);
-        PDupwindNthSymm3gt13 = PDupwindNthSymmfdOrder83(gt13);
-        PDupwindNthAnti1gt22 = PDupwindNthAntifdOrder81(gt22);
-        PDupwindNthSymm1gt22 = PDupwindNthSymmfdOrder81(gt22);
-        PDupwindNthAnti2gt22 = PDupwindNthAntifdOrder82(gt22);
-        PDupwindNthSymm2gt22 = PDupwindNthSymmfdOrder82(gt22);
-        PDupwindNthAnti3gt22 = PDupwindNthAntifdOrder83(gt22);
-        PDupwindNthSymm3gt22 = PDupwindNthSymmfdOrder83(gt22);
-        PDupwindNthAnti1gt23 = PDupwindNthAntifdOrder81(gt23);
-        PDupwindNthSymm1gt23 = PDupwindNthSymmfdOrder81(gt23);
-        PDupwindNthAnti2gt23 = PDupwindNthAntifdOrder82(gt23);
-        PDupwindNthSymm2gt23 = PDupwindNthSymmfdOrder82(gt23);
-        PDupwindNthAnti3gt23 = PDupwindNthAntifdOrder83(gt23);
-        PDupwindNthSymm3gt23 = PDupwindNthSymmfdOrder83(gt23);
-        PDupwindNthAnti1gt33 = PDupwindNthAntifdOrder81(gt33);
-        PDupwindNthSymm1gt33 = PDupwindNthSymmfdOrder81(gt33);
-        PDupwindNthAnti2gt33 = PDupwindNthAntifdOrder82(gt33);
-        PDupwindNthSymm2gt33 = PDupwindNthSymmfdOrder82(gt33);
-        PDupwindNthAnti3gt33 = PDupwindNthAntifdOrder83(gt33);
-        PDupwindNthSymm3gt33 = PDupwindNthSymmfdOrder83(gt33);
-        PDupwindNthAnti1phi = PDupwindNthAntifdOrder81(phi);
-        PDupwindNthSymm1phi = PDupwindNthSymmfdOrder81(phi);
-        PDupwindNthAnti2phi = PDupwindNthAntifdOrder82(phi);
-        PDupwindNthSymm2phi = PDupwindNthSymmfdOrder82(phi);
-        PDupwindNthAnti3phi = PDupwindNthAntifdOrder83(phi);
-        PDupwindNthSymm3phi = PDupwindNthSymmfdOrder83(phi);
-        PDupwindNthAnti1trK = PDupwindNthAntifdOrder81(trK);
-        PDupwindNthSymm1trK = PDupwindNthSymmfdOrder81(trK);
-        PDupwindNthAnti2trK = PDupwindNthAntifdOrder82(trK);
-        PDupwindNthSymm2trK = PDupwindNthSymmfdOrder82(trK);
-        PDupwindNthAnti3trK = PDupwindNthAntifdOrder83(trK);
-        PDupwindNthSymm3trK = PDupwindNthSymmfdOrder83(trK);
-        PDupwindNthAnti1Xt1 = PDupwindNthAntifdOrder81(Xt1);
-        PDupwindNthSymm1Xt1 = PDupwindNthSymmfdOrder81(Xt1);
-        PDupwindNthAnti2Xt1 = PDupwindNthAntifdOrder82(Xt1);
-        PDupwindNthSymm2Xt1 = PDupwindNthSymmfdOrder82(Xt1);
-        PDupwindNthAnti3Xt1 = PDupwindNthAntifdOrder83(Xt1);
-        PDupwindNthSymm3Xt1 = PDupwindNthSymmfdOrder83(Xt1);
-        PDupwindNthAnti1Xt2 = PDupwindNthAntifdOrder81(Xt2);
-        PDupwindNthSymm1Xt2 = PDupwindNthSymmfdOrder81(Xt2);
-        PDupwindNthAnti2Xt2 = PDupwindNthAntifdOrder82(Xt2);
-        PDupwindNthSymm2Xt2 = PDupwindNthSymmfdOrder82(Xt2);
-        PDupwindNthAnti3Xt2 = PDupwindNthAntifdOrder83(Xt2);
-        PDupwindNthSymm3Xt2 = PDupwindNthSymmfdOrder83(Xt2);
-        PDupwindNthAnti1Xt3 = PDupwindNthAntifdOrder81(Xt3);
-        PDupwindNthSymm1Xt3 = PDupwindNthSymmfdOrder81(Xt3);
-        PDupwindNthAnti2Xt3 = PDupwindNthAntifdOrder82(Xt3);
-        PDupwindNthSymm2Xt3 = PDupwindNthSymmfdOrder82(Xt3);
-        PDupwindNthAnti3Xt3 = PDupwindNthAntifdOrder83(Xt3);
-        PDupwindNthSymm3Xt3 = PDupwindNthSymmfdOrder83(Xt3);
-        break;
-    }
+    CCTK_REAL const PDupwindNthAnti1A = PDupwindNthAnti1(A);
+    CCTK_REAL const PDupwindNthSymm1A = PDupwindNthSymm1(A);
+    CCTK_REAL const PDupwindNthAnti2A = PDupwindNthAnti2(A);
+    CCTK_REAL const PDupwindNthSymm2A = PDupwindNthSymm2(A);
+    CCTK_REAL const PDupwindNthAnti3A = PDupwindNthAnti3(A);
+    CCTK_REAL const PDupwindNthSymm3A = PDupwindNthSymm3(A);
+    CCTK_REAL const PDupwindNthAnti1alpha = PDupwindNthAnti1(alpha);
+    CCTK_REAL const PDupwindNthSymm1alpha = PDupwindNthSymm1(alpha);
+    CCTK_REAL const PDupwindNthAnti2alpha = PDupwindNthAnti2(alpha);
+    CCTK_REAL const PDupwindNthSymm2alpha = PDupwindNthSymm2(alpha);
+    CCTK_REAL const PDupwindNthAnti3alpha = PDupwindNthAnti3(alpha);
+    CCTK_REAL const PDupwindNthSymm3alpha = PDupwindNthSymm3(alpha);
+    CCTK_REAL const PDupwindNthAnti1At11 = PDupwindNthAnti1(At11);
+    CCTK_REAL const PDupwindNthSymm1At11 = PDupwindNthSymm1(At11);
+    CCTK_REAL const PDupwindNthAnti2At11 = PDupwindNthAnti2(At11);
+    CCTK_REAL const PDupwindNthSymm2At11 = PDupwindNthSymm2(At11);
+    CCTK_REAL const PDupwindNthAnti3At11 = PDupwindNthAnti3(At11);
+    CCTK_REAL const PDupwindNthSymm3At11 = PDupwindNthSymm3(At11);
+    CCTK_REAL const PDupwindNthAnti1At12 = PDupwindNthAnti1(At12);
+    CCTK_REAL const PDupwindNthSymm1At12 = PDupwindNthSymm1(At12);
+    CCTK_REAL const PDupwindNthAnti2At12 = PDupwindNthAnti2(At12);
+    CCTK_REAL const PDupwindNthSymm2At12 = PDupwindNthSymm2(At12);
+    CCTK_REAL const PDupwindNthAnti3At12 = PDupwindNthAnti3(At12);
+    CCTK_REAL const PDupwindNthSymm3At12 = PDupwindNthSymm3(At12);
+    CCTK_REAL const PDupwindNthAnti1At13 = PDupwindNthAnti1(At13);
+    CCTK_REAL const PDupwindNthSymm1At13 = PDupwindNthSymm1(At13);
+    CCTK_REAL const PDupwindNthAnti2At13 = PDupwindNthAnti2(At13);
+    CCTK_REAL const PDupwindNthSymm2At13 = PDupwindNthSymm2(At13);
+    CCTK_REAL const PDupwindNthAnti3At13 = PDupwindNthAnti3(At13);
+    CCTK_REAL const PDupwindNthSymm3At13 = PDupwindNthSymm3(At13);
+    CCTK_REAL const PDupwindNthAnti1At22 = PDupwindNthAnti1(At22);
+    CCTK_REAL const PDupwindNthSymm1At22 = PDupwindNthSymm1(At22);
+    CCTK_REAL const PDupwindNthAnti2At22 = PDupwindNthAnti2(At22);
+    CCTK_REAL const PDupwindNthSymm2At22 = PDupwindNthSymm2(At22);
+    CCTK_REAL const PDupwindNthAnti3At22 = PDupwindNthAnti3(At22);
+    CCTK_REAL const PDupwindNthSymm3At22 = PDupwindNthSymm3(At22);
+    CCTK_REAL const PDupwindNthAnti1At23 = PDupwindNthAnti1(At23);
+    CCTK_REAL const PDupwindNthSymm1At23 = PDupwindNthSymm1(At23);
+    CCTK_REAL const PDupwindNthAnti2At23 = PDupwindNthAnti2(At23);
+    CCTK_REAL const PDupwindNthSymm2At23 = PDupwindNthSymm2(At23);
+    CCTK_REAL const PDupwindNthAnti3At23 = PDupwindNthAnti3(At23);
+    CCTK_REAL const PDupwindNthSymm3At23 = PDupwindNthSymm3(At23);
+    CCTK_REAL const PDupwindNthAnti1At33 = PDupwindNthAnti1(At33);
+    CCTK_REAL const PDupwindNthSymm1At33 = PDupwindNthSymm1(At33);
+    CCTK_REAL const PDupwindNthAnti2At33 = PDupwindNthAnti2(At33);
+    CCTK_REAL const PDupwindNthSymm2At33 = PDupwindNthSymm2(At33);
+    CCTK_REAL const PDupwindNthAnti3At33 = PDupwindNthAnti3(At33);
+    CCTK_REAL const PDupwindNthSymm3At33 = PDupwindNthSymm3(At33);
+    CCTK_REAL const PDupwindNthAnti1B1 = PDupwindNthAnti1(B1);
+    CCTK_REAL const PDupwindNthSymm1B1 = PDupwindNthSymm1(B1);
+    CCTK_REAL const PDupwindNthAnti2B1 = PDupwindNthAnti2(B1);
+    CCTK_REAL const PDupwindNthSymm2B1 = PDupwindNthSymm2(B1);
+    CCTK_REAL const PDupwindNthAnti3B1 = PDupwindNthAnti3(B1);
+    CCTK_REAL const PDupwindNthSymm3B1 = PDupwindNthSymm3(B1);
+    CCTK_REAL const PDupwindNthAnti1B2 = PDupwindNthAnti1(B2);
+    CCTK_REAL const PDupwindNthSymm1B2 = PDupwindNthSymm1(B2);
+    CCTK_REAL const PDupwindNthAnti2B2 = PDupwindNthAnti2(B2);
+    CCTK_REAL const PDupwindNthSymm2B2 = PDupwindNthSymm2(B2);
+    CCTK_REAL const PDupwindNthAnti3B2 = PDupwindNthAnti3(B2);
+    CCTK_REAL const PDupwindNthSymm3B2 = PDupwindNthSymm3(B2);
+    CCTK_REAL const PDupwindNthAnti1B3 = PDupwindNthAnti1(B3);
+    CCTK_REAL const PDupwindNthSymm1B3 = PDupwindNthSymm1(B3);
+    CCTK_REAL const PDupwindNthAnti2B3 = PDupwindNthAnti2(B3);
+    CCTK_REAL const PDupwindNthSymm2B3 = PDupwindNthSymm2(B3);
+    CCTK_REAL const PDupwindNthAnti3B3 = PDupwindNthAnti3(B3);
+    CCTK_REAL const PDupwindNthSymm3B3 = PDupwindNthSymm3(B3);
+    CCTK_REAL const PDupwindNthAnti1beta1 = PDupwindNthAnti1(beta1);
+    CCTK_REAL const PDupwindNthSymm1beta1 = PDupwindNthSymm1(beta1);
+    CCTK_REAL const PDupwindNthAnti2beta1 = PDupwindNthAnti2(beta1);
+    CCTK_REAL const PDupwindNthSymm2beta1 = PDupwindNthSymm2(beta1);
+    CCTK_REAL const PDupwindNthAnti3beta1 = PDupwindNthAnti3(beta1);
+    CCTK_REAL const PDupwindNthSymm3beta1 = PDupwindNthSymm3(beta1);
+    CCTK_REAL const PDupwindNthAnti1beta2 = PDupwindNthAnti1(beta2);
+    CCTK_REAL const PDupwindNthSymm1beta2 = PDupwindNthSymm1(beta2);
+    CCTK_REAL const PDupwindNthAnti2beta2 = PDupwindNthAnti2(beta2);
+    CCTK_REAL const PDupwindNthSymm2beta2 = PDupwindNthSymm2(beta2);
+    CCTK_REAL const PDupwindNthAnti3beta2 = PDupwindNthAnti3(beta2);
+    CCTK_REAL const PDupwindNthSymm3beta2 = PDupwindNthSymm3(beta2);
+    CCTK_REAL const PDupwindNthAnti1beta3 = PDupwindNthAnti1(beta3);
+    CCTK_REAL const PDupwindNthSymm1beta3 = PDupwindNthSymm1(beta3);
+    CCTK_REAL const PDupwindNthAnti2beta3 = PDupwindNthAnti2(beta3);
+    CCTK_REAL const PDupwindNthSymm2beta3 = PDupwindNthSymm2(beta3);
+    CCTK_REAL const PDupwindNthAnti3beta3 = PDupwindNthAnti3(beta3);
+    CCTK_REAL const PDupwindNthSymm3beta3 = PDupwindNthSymm3(beta3);
+    CCTK_REAL const PDupwindNthAnti1gt11 = PDupwindNthAnti1(gt11);
+    CCTK_REAL const PDupwindNthSymm1gt11 = PDupwindNthSymm1(gt11);
+    CCTK_REAL const PDupwindNthAnti2gt11 = PDupwindNthAnti2(gt11);
+    CCTK_REAL const PDupwindNthSymm2gt11 = PDupwindNthSymm2(gt11);
+    CCTK_REAL const PDupwindNthAnti3gt11 = PDupwindNthAnti3(gt11);
+    CCTK_REAL const PDupwindNthSymm3gt11 = PDupwindNthSymm3(gt11);
+    CCTK_REAL const PDupwindNthAnti1gt12 = PDupwindNthAnti1(gt12);
+    CCTK_REAL const PDupwindNthSymm1gt12 = PDupwindNthSymm1(gt12);
+    CCTK_REAL const PDupwindNthAnti2gt12 = PDupwindNthAnti2(gt12);
+    CCTK_REAL const PDupwindNthSymm2gt12 = PDupwindNthSymm2(gt12);
+    CCTK_REAL const PDupwindNthAnti3gt12 = PDupwindNthAnti3(gt12);
+    CCTK_REAL const PDupwindNthSymm3gt12 = PDupwindNthSymm3(gt12);
+    CCTK_REAL const PDupwindNthAnti1gt13 = PDupwindNthAnti1(gt13);
+    CCTK_REAL const PDupwindNthSymm1gt13 = PDupwindNthSymm1(gt13);
+    CCTK_REAL const PDupwindNthAnti2gt13 = PDupwindNthAnti2(gt13);
+    CCTK_REAL const PDupwindNthSymm2gt13 = PDupwindNthSymm2(gt13);
+    CCTK_REAL const PDupwindNthAnti3gt13 = PDupwindNthAnti3(gt13);
+    CCTK_REAL const PDupwindNthSymm3gt13 = PDupwindNthSymm3(gt13);
+    CCTK_REAL const PDupwindNthAnti1gt22 = PDupwindNthAnti1(gt22);
+    CCTK_REAL const PDupwindNthSymm1gt22 = PDupwindNthSymm1(gt22);
+    CCTK_REAL const PDupwindNthAnti2gt22 = PDupwindNthAnti2(gt22);
+    CCTK_REAL const PDupwindNthSymm2gt22 = PDupwindNthSymm2(gt22);
+    CCTK_REAL const PDupwindNthAnti3gt22 = PDupwindNthAnti3(gt22);
+    CCTK_REAL const PDupwindNthSymm3gt22 = PDupwindNthSymm3(gt22);
+    CCTK_REAL const PDupwindNthAnti1gt23 = PDupwindNthAnti1(gt23);
+    CCTK_REAL const PDupwindNthSymm1gt23 = PDupwindNthSymm1(gt23);
+    CCTK_REAL const PDupwindNthAnti2gt23 = PDupwindNthAnti2(gt23);
+    CCTK_REAL const PDupwindNthSymm2gt23 = PDupwindNthSymm2(gt23);
+    CCTK_REAL const PDupwindNthAnti3gt23 = PDupwindNthAnti3(gt23);
+    CCTK_REAL const PDupwindNthSymm3gt23 = PDupwindNthSymm3(gt23);
+    CCTK_REAL const PDupwindNthAnti1gt33 = PDupwindNthAnti1(gt33);
+    CCTK_REAL const PDupwindNthSymm1gt33 = PDupwindNthSymm1(gt33);
+    CCTK_REAL const PDupwindNthAnti2gt33 = PDupwindNthAnti2(gt33);
+    CCTK_REAL const PDupwindNthSymm2gt33 = PDupwindNthSymm2(gt33);
+    CCTK_REAL const PDupwindNthAnti3gt33 = PDupwindNthAnti3(gt33);
+    CCTK_REAL const PDupwindNthSymm3gt33 = PDupwindNthSymm3(gt33);
+    CCTK_REAL const PDupwindNthAnti1phi = PDupwindNthAnti1(phi);
+    CCTK_REAL const PDupwindNthSymm1phi = PDupwindNthSymm1(phi);
+    CCTK_REAL const PDupwindNthAnti2phi = PDupwindNthAnti2(phi);
+    CCTK_REAL const PDupwindNthSymm2phi = PDupwindNthSymm2(phi);
+    CCTK_REAL const PDupwindNthAnti3phi = PDupwindNthAnti3(phi);
+    CCTK_REAL const PDupwindNthSymm3phi = PDupwindNthSymm3(phi);
+    CCTK_REAL const PDupwindNthAnti1trK = PDupwindNthAnti1(trK);
+    CCTK_REAL const PDupwindNthSymm1trK = PDupwindNthSymm1(trK);
+    CCTK_REAL const PDupwindNthAnti2trK = PDupwindNthAnti2(trK);
+    CCTK_REAL const PDupwindNthSymm2trK = PDupwindNthSymm2(trK);
+    CCTK_REAL const PDupwindNthAnti3trK = PDupwindNthAnti3(trK);
+    CCTK_REAL const PDupwindNthSymm3trK = PDupwindNthSymm3(trK);
+    CCTK_REAL const PDupwindNthAnti1Xt1 = PDupwindNthAnti1(Xt1);
+    CCTK_REAL const PDupwindNthSymm1Xt1 = PDupwindNthSymm1(Xt1);
+    CCTK_REAL const PDupwindNthAnti2Xt1 = PDupwindNthAnti2(Xt1);
+    CCTK_REAL const PDupwindNthSymm2Xt1 = PDupwindNthSymm2(Xt1);
+    CCTK_REAL const PDupwindNthAnti3Xt1 = PDupwindNthAnti3(Xt1);
+    CCTK_REAL const PDupwindNthSymm3Xt1 = PDupwindNthSymm3(Xt1);
+    CCTK_REAL const PDupwindNthAnti1Xt2 = PDupwindNthAnti1(Xt2);
+    CCTK_REAL const PDupwindNthSymm1Xt2 = PDupwindNthSymm1(Xt2);
+    CCTK_REAL const PDupwindNthAnti2Xt2 = PDupwindNthAnti2(Xt2);
+    CCTK_REAL const PDupwindNthSymm2Xt2 = PDupwindNthSymm2(Xt2);
+    CCTK_REAL const PDupwindNthAnti3Xt2 = PDupwindNthAnti3(Xt2);
+    CCTK_REAL const PDupwindNthSymm3Xt2 = PDupwindNthSymm3(Xt2);
+    CCTK_REAL const PDupwindNthAnti1Xt3 = PDupwindNthAnti1(Xt3);
+    CCTK_REAL const PDupwindNthSymm1Xt3 = PDupwindNthSymm1(Xt3);
+    CCTK_REAL const PDupwindNthAnti2Xt3 = PDupwindNthAnti2(Xt3);
+    CCTK_REAL const PDupwindNthSymm2Xt3 = PDupwindNthSymm2(Xt3);
+    CCTK_REAL const PDupwindNthAnti3Xt3 = PDupwindNthAnti3(Xt3);
+    CCTK_REAL const PDupwindNthSymm3Xt3 = PDupwindNthSymm3(Xt3);
     
     /* Calculate temporaries and grid functions */
     ptrdiff_t dir1 = Sign(beta1L);
@@ -1043,65 +365,73 @@ CAKERNEL_ML_BSSN_Advect_Begin
       PDupwindNthSymm1At33*Abs(beta1L) + PDupwindNthSymm2At33*Abs(beta2L) 
       + PDupwindNthSymm3At33*Abs(beta3L);
     
-    alpharhsL = alpharhsL + (beta1L*PDupwindNthAnti1alpha + 
+    alpharhsL = alpharhsL + 
+      LapseAdvectionCoeff*(beta1L*PDupwindNthAnti1alpha + 
       beta2L*PDupwindNthAnti2alpha + beta3L*PDupwindNthAnti3alpha + 
       PDupwindNthSymm1alpha*Abs(beta1L) + 
       PDupwindNthSymm2alpha*Abs(beta2L) + 
-      PDupwindNthSymm3alpha*Abs(beta3L))*ToReal(LapseAdvectionCoeff);
+      PDupwindNthSymm3alpha*Abs(beta3L));
     
-    ArhsL = ArhsL + ToReal(LapseACoeff)*(-((beta1L*PDupwindNthAnti1trK 
-      + beta2L*PDupwindNthAnti2trK + beta3L*PDupwindNthAnti3trK + 
+    ArhsL = ArhsL + 
+      LapseACoeff*(LapseAdvectionCoeff*(beta1L*PDupwindNthAnti1A + 
+      beta2L*PDupwindNthAnti2A + beta3L*PDupwindNthAnti3A + 
+      PDupwindNthSymm1A*Abs(beta1L) + PDupwindNthSymm2A*Abs(beta2L) + 
+      PDupwindNthSymm3A*Abs(beta3L)) - (-1 + 
+      LapseAdvectionCoeff)*(beta1L*PDupwindNthAnti1trK + 
+      beta2L*PDupwindNthAnti2trK + beta3L*PDupwindNthAnti3trK + 
       PDupwindNthSymm1trK*Abs(beta1L) + PDupwindNthSymm2trK*Abs(beta2L) + 
-      PDupwindNthSymm3trK*Abs(beta3L))*(-1 + ToReal(LapseAdvectionCoeff))) 
-      + (beta1L*PDupwindNthAnti1A + beta2L*PDupwindNthAnti2A + 
-      beta3L*PDupwindNthAnti3A + PDupwindNthSymm1A*Abs(beta1L) + 
-      PDupwindNthSymm2A*Abs(beta2L) + 
-      PDupwindNthSymm3A*Abs(beta3L))*ToReal(LapseAdvectionCoeff));
+      PDupwindNthSymm3trK*Abs(beta3L)));
     
-    beta1rhsL = beta1rhsL + (beta1L*PDupwindNthAnti1beta1 + 
+    beta1rhsL = beta1rhsL + 
+      ShiftAdvectionCoeff*(beta1L*PDupwindNthAnti1beta1 + 
       beta2L*PDupwindNthAnti2beta1 + beta3L*PDupwindNthAnti3beta1 + 
       PDupwindNthSymm1beta1*Abs(beta1L) + 
       PDupwindNthSymm2beta1*Abs(beta2L) + 
-      PDupwindNthSymm3beta1*Abs(beta3L))*ToReal(ShiftAdvectionCoeff);
+      PDupwindNthSymm3beta1*Abs(beta3L));
     
-    beta2rhsL = beta2rhsL + (beta1L*PDupwindNthAnti1beta2 + 
+    beta2rhsL = beta2rhsL + 
+      ShiftAdvectionCoeff*(beta1L*PDupwindNthAnti1beta2 + 
       beta2L*PDupwindNthAnti2beta2 + beta3L*PDupwindNthAnti3beta2 + 
       PDupwindNthSymm1beta2*Abs(beta1L) + 
       PDupwindNthSymm2beta2*Abs(beta2L) + 
-      PDupwindNthSymm3beta2*Abs(beta3L))*ToReal(ShiftAdvectionCoeff);
+      PDupwindNthSymm3beta2*Abs(beta3L));
     
-    beta3rhsL = beta3rhsL + (beta1L*PDupwindNthAnti1beta3 + 
+    beta3rhsL = beta3rhsL + 
+      ShiftAdvectionCoeff*(beta1L*PDupwindNthAnti1beta3 + 
       beta2L*PDupwindNthAnti2beta3 + beta3L*PDupwindNthAnti3beta3 + 
       PDupwindNthSymm1beta3*Abs(beta1L) + 
       PDupwindNthSymm2beta3*Abs(beta2L) + 
-      PDupwindNthSymm3beta3*Abs(beta3L))*ToReal(ShiftAdvectionCoeff);
+      PDupwindNthSymm3beta3*Abs(beta3L));
     
-    B1rhsL = B1rhsL + (-((beta1L*PDupwindNthAnti1Xt1 + 
+    B1rhsL = B1rhsL + 
+      ShiftBCoeff*(ShiftAdvectionCoeff*(beta1L*PDupwindNthAnti1B1 + 
+      beta2L*PDupwindNthAnti2B1 + beta3L*PDupwindNthAnti3B1 + 
+      PDupwindNthSymm1B1*Abs(beta1L) + PDupwindNthSymm2B1*Abs(beta2L) + 
+      PDupwindNthSymm3B1*Abs(beta3L)) - (-1 + 
+      ShiftAdvectionCoeff)*(beta1L*PDupwindNthAnti1Xt1 + 
       beta2L*PDupwindNthAnti2Xt1 + beta3L*PDupwindNthAnti3Xt1 + 
       PDupwindNthSymm1Xt1*Abs(beta1L) + PDupwindNthSymm2Xt1*Abs(beta2L) + 
-      PDupwindNthSymm3Xt1*Abs(beta3L))*(-1 + ToReal(ShiftAdvectionCoeff))) 
-      + (beta1L*PDupwindNthAnti1B1 + beta2L*PDupwindNthAnti2B1 + 
-      beta3L*PDupwindNthAnti3B1 + PDupwindNthSymm1B1*Abs(beta1L) + 
-      PDupwindNthSymm2B1*Abs(beta2L) + 
-      PDupwindNthSymm3B1*Abs(beta3L))*ToReal(ShiftAdvectionCoeff))*ToReal(ShiftBCoeff);
+      PDupwindNthSymm3Xt1*Abs(beta3L)));
     
-    B2rhsL = B2rhsL + (-((beta1L*PDupwindNthAnti1Xt2 + 
+    B2rhsL = B2rhsL + 
+      ShiftBCoeff*(ShiftAdvectionCoeff*(beta1L*PDupwindNthAnti1B2 + 
+      beta2L*PDupwindNthAnti2B2 + beta3L*PDupwindNthAnti3B2 + 
+      PDupwindNthSymm1B2*Abs(beta1L) + PDupwindNthSymm2B2*Abs(beta2L) + 
+      PDupwindNthSymm3B2*Abs(beta3L)) - (-1 + 
+      ShiftAdvectionCoeff)*(beta1L*PDupwindNthAnti1Xt2 + 
       beta2L*PDupwindNthAnti2Xt2 + beta3L*PDupwindNthAnti3Xt2 + 
       PDupwindNthSymm1Xt2*Abs(beta1L) + PDupwindNthSymm2Xt2*Abs(beta2L) + 
-      PDupwindNthSymm3Xt2*Abs(beta3L))*(-1 + ToReal(ShiftAdvectionCoeff))) 
-      + (beta1L*PDupwindNthAnti1B2 + beta2L*PDupwindNthAnti2B2 + 
-      beta3L*PDupwindNthAnti3B2 + PDupwindNthSymm1B2*Abs(beta1L) + 
-      PDupwindNthSymm2B2*Abs(beta2L) + 
-      PDupwindNthSymm3B2*Abs(beta3L))*ToReal(ShiftAdvectionCoeff))*ToReal(ShiftBCoeff);
+      PDupwindNthSymm3Xt2*Abs(beta3L)));
     
-    B3rhsL = B3rhsL + (-((beta1L*PDupwindNthAnti1Xt3 + 
+    B3rhsL = B3rhsL + 
+      ShiftBCoeff*(ShiftAdvectionCoeff*(beta1L*PDupwindNthAnti1B3 + 
+      beta2L*PDupwindNthAnti2B3 + beta3L*PDupwindNthAnti3B3 + 
+      PDupwindNthSymm1B3*Abs(beta1L) + PDupwindNthSymm2B3*Abs(beta2L) + 
+      PDupwindNthSymm3B3*Abs(beta3L)) - (-1 + 
+      ShiftAdvectionCoeff)*(beta1L*PDupwindNthAnti1Xt3 + 
       beta2L*PDupwindNthAnti2Xt3 + beta3L*PDupwindNthAnti3Xt3 + 
       PDupwindNthSymm1Xt3*Abs(beta1L) + PDupwindNthSymm2Xt3*Abs(beta2L) + 
-      PDupwindNthSymm3Xt3*Abs(beta3L))*(-1 + ToReal(ShiftAdvectionCoeff))) 
-      + (beta1L*PDupwindNthAnti1B3 + beta2L*PDupwindNthAnti2B3 + 
-      beta3L*PDupwindNthAnti3B3 + PDupwindNthSymm1B3*Abs(beta1L) + 
-      PDupwindNthSymm2B3*Abs(beta2L) + 
-      PDupwindNthSymm3B3*Abs(beta3L))*ToReal(ShiftAdvectionCoeff))*ToReal(ShiftBCoeff);
+      PDupwindNthSymm3Xt3*Abs(beta3L)));
     
     /* Copy local copies back to grid functions */
     I3D(alpharhs,0,0,0) = alpharhsL;
