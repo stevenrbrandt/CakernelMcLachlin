@@ -616,40 +616,6 @@ evolCalc2 = PartialCalculation[evolCalc, "2",
     dot[At[la,lb]]
   }];
 
-dissCalc =
-{
-  Name -> BSSN <> "_Dissipation",
-  Schedule -> {"IN " <> BSSN <> "_evolCalcGroup " <>
-               "AFTER (" <> BSSN <> "_RHS1 " <> BSSN <> "_RHS2)"},
-  ConditionalOnKeyword -> {"apply_dissipation", "always"},
-  Where -> InteriorNoSync,
-  Shorthands -> {epsdiss[ua]},
-  Equations ->
-  {
-    epsdiss[ua] -> EpsDiss,
-    Sequence@@Table[
-      dot[var]       -> dot[var] + epsdiss[ux] PDdiss[var,lx],
-      {var, {phi, gt[la,lb], Xt[ui], trK, At[la,lb], alpha, A, beta[ua], B[ua]}}]
-  }
-};
-
-dissCalcs =
-Table[
-{
-  Name -> BSSN <> "_Dissipation_" <> ToString[var /. {Tensor[n_,__] -> n}],
-  Schedule -> {"IN " <> BSSN <> "_evolCalcGroup " <>
-               "AFTER (" <> BSSN <> "_RHS1 " <> BSSN <> "_RHS2)"},
-  ConditionalOnKeyword -> {"apply_dissipation", "always"},
-  Where -> InteriorNoSync,
-  Shorthands -> {epsdiss[ua]},
-  Equations ->
-  {
-    epsdiss[ua] -> EpsDiss,
-    dot[var]    -> dot[var] + epsdiss[ux] PDdiss[var,lx]
-  }
-},
-  {var, {phi, gt[la,lb], Xt[ui], trK, At[la,lb], alpha, A, beta[ua], B[ua]}}
-];
 
 RHSStaticBoundaryCalc =
 {
@@ -1142,7 +1108,6 @@ Join[
   convertFromADMBaseGammaCalc,
   (* evolCalc, *)
   evolCalc1, evolCalc2,
-  dissCalc,
   advectCalc,
   initRHSCalc,
   (* evol1Calc, evol2Calc, *)
