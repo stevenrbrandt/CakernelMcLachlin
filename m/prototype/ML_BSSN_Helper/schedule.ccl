@@ -68,7 +68,7 @@ if (CCTK_EQUALS (evolution_method, "ML_BSSN")) {
   {
   } "Calculate BSSN RHS"
   
-  SCHEDULE GROUP ML_BSSN_evolCalcGroup AT analysis
+  SCHEDULE GROUP ML_BSSN_evolCalcGroup AT analysis before Accelerator_CopyBack
   {
     TRIGGERS: ML_BSSN::ML_log_confacrhs
     TRIGGERS: ML_BSSN::ML_metricrhs
