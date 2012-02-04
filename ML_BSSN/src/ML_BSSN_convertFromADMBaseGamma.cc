@@ -73,24 +73,30 @@ static void ML_BSSN_convertFromADMBaseGamma_Body(cGH const * restrict const cctk
   CCTK_REAL const hdzi = 0.5 * dzi;
   
   /* Initialize predefined quantities */
-  CCTK_REAL const p1o12dx = 0.0833333333333333333333333333333*INV(dx);
-  CCTK_REAL const p1o12dy = 0.0833333333333333333333333333333*INV(dy);
-  CCTK_REAL const p1o12dz = 0.0833333333333333333333333333333*INV(dz);
-  CCTK_REAL const p1o144dxdy = 0.00694444444444444444444444444444*INV(dx)*INV(dy);
-  CCTK_REAL const p1o144dxdz = 0.00694444444444444444444444444444*INV(dx)*INV(dz);
-  CCTK_REAL const p1o144dydz = 0.00694444444444444444444444444444*INV(dy)*INV(dz);
-  CCTK_REAL const p1o24dx = 0.0416666666666666666666666666667*INV(dx);
-  CCTK_REAL const p1o24dy = 0.0416666666666666666666666666667*INV(dy);
-  CCTK_REAL const p1o24dz = 0.0416666666666666666666666666667*INV(dz);
-  CCTK_REAL const p1o64dx = 0.015625*INV(dx);
-  CCTK_REAL const p1o64dy = 0.015625*INV(dy);
-  CCTK_REAL const p1o64dz = 0.015625*INV(dz);
+  CCTK_REAL const p1o16dx = 0.0625*INV(dx);
+  CCTK_REAL const p1o16dy = 0.0625*INV(dy);
+  CCTK_REAL const p1o16dz = 0.0625*INV(dz);
+  CCTK_REAL const p1o2dx = 0.5*INV(dx);
+  CCTK_REAL const p1o2dy = 0.5*INV(dy);
+  CCTK_REAL const p1o2dz = 0.5*INV(dz);
+  CCTK_REAL const p1o4dx = 0.25*INV(dx);
+  CCTK_REAL const p1o4dxdy = 0.25*INV(dx)*INV(dy);
+  CCTK_REAL const p1o4dxdz = 0.25*INV(dx)*INV(dz);
+  CCTK_REAL const p1o4dy = 0.25*INV(dy);
+  CCTK_REAL const p1o4dydz = 0.25*INV(dy)*INV(dz);
+  CCTK_REAL const p1o4dz = 0.25*INV(dz);
   CCTK_REAL const p1odx = INV(dx);
+  CCTK_REAL const p1odx2 = INV(SQR(dx));
   CCTK_REAL const p1ody = INV(dy);
+  CCTK_REAL const p1ody2 = INV(SQR(dy));
   CCTK_REAL const p1odz = INV(dz);
-  CCTK_REAL const pm1o12dx2 = -0.0833333333333333333333333333333*INV(SQR(dx));
-  CCTK_REAL const pm1o12dy2 = -0.0833333333333333333333333333333*INV(SQR(dy));
-  CCTK_REAL const pm1o12dz2 = -0.0833333333333333333333333333333*INV(SQR(dz));
+  CCTK_REAL const p1odz2 = INV(SQR(dz));
+  CCTK_REAL const pm1o2dx = -0.5*INV(dx);
+  CCTK_REAL const pm1o2dy = -0.5*INV(dy);
+  CCTK_REAL const pm1o2dz = -0.5*INV(dz);
+  CCTK_REAL const pm1o4dx = -0.25*INV(dx);
+  CCTK_REAL const pm1o4dy = -0.25*INV(dy);
+  CCTK_REAL const pm1o4dz = -0.25*INV(dz);
   
   /* Assign local copies of arrays functions */
   
@@ -129,30 +135,18 @@ static void ML_BSSN_convertFromADMBaseGamma_Body(cGH const * restrict const cctk
     /* Include user supplied include files */
     
     /* Precompute derivatives */
-    CCTK_REAL const PDupwindNthAnti1alpha = PDupwindNthAnti1(&alpha[index]);
-    CCTK_REAL const PDupwindNthSymm1alpha = PDupwindNthSymm1(&alpha[index]);
-    CCTK_REAL const PDupwindNthAnti2alpha = PDupwindNthAnti2(&alpha[index]);
-    CCTK_REAL const PDupwindNthSymm2alpha = PDupwindNthSymm2(&alpha[index]);
-    CCTK_REAL const PDupwindNthAnti3alpha = PDupwindNthAnti3(&alpha[index]);
-    CCTK_REAL const PDupwindNthSymm3alpha = PDupwindNthSymm3(&alpha[index]);
-    CCTK_REAL const PDupwindNthAnti1beta1 = PDupwindNthAnti1(&beta1[index]);
-    CCTK_REAL const PDupwindNthSymm1beta1 = PDupwindNthSymm1(&beta1[index]);
-    CCTK_REAL const PDupwindNthAnti2beta1 = PDupwindNthAnti2(&beta1[index]);
-    CCTK_REAL const PDupwindNthSymm2beta1 = PDupwindNthSymm2(&beta1[index]);
-    CCTK_REAL const PDupwindNthAnti3beta1 = PDupwindNthAnti3(&beta1[index]);
-    CCTK_REAL const PDupwindNthSymm3beta1 = PDupwindNthSymm3(&beta1[index]);
-    CCTK_REAL const PDupwindNthAnti1beta2 = PDupwindNthAnti1(&beta2[index]);
-    CCTK_REAL const PDupwindNthSymm1beta2 = PDupwindNthSymm1(&beta2[index]);
-    CCTK_REAL const PDupwindNthAnti2beta2 = PDupwindNthAnti2(&beta2[index]);
-    CCTK_REAL const PDupwindNthSymm2beta2 = PDupwindNthSymm2(&beta2[index]);
-    CCTK_REAL const PDupwindNthAnti3beta2 = PDupwindNthAnti3(&beta2[index]);
-    CCTK_REAL const PDupwindNthSymm3beta2 = PDupwindNthSymm3(&beta2[index]);
-    CCTK_REAL const PDupwindNthAnti1beta3 = PDupwindNthAnti1(&beta3[index]);
-    CCTK_REAL const PDupwindNthSymm1beta3 = PDupwindNthSymm1(&beta3[index]);
-    CCTK_REAL const PDupwindNthAnti2beta3 = PDupwindNthAnti2(&beta3[index]);
-    CCTK_REAL const PDupwindNthSymm2beta3 = PDupwindNthSymm2(&beta3[index]);
-    CCTK_REAL const PDupwindNthAnti3beta3 = PDupwindNthAnti3(&beta3[index]);
-    CCTK_REAL const PDupwindNthSymm3beta3 = PDupwindNthSymm3(&beta3[index]);
+    CCTK_REAL const PDstandardNth1alpha = PDstandardNth1(&alpha[index]);
+    CCTK_REAL const PDstandardNth2alpha = PDstandardNth2(&alpha[index]);
+    CCTK_REAL const PDstandardNth3alpha = PDstandardNth3(&alpha[index]);
+    CCTK_REAL const PDstandardNth1beta1 = PDstandardNth1(&beta1[index]);
+    CCTK_REAL const PDstandardNth2beta1 = PDstandardNth2(&beta1[index]);
+    CCTK_REAL const PDstandardNth3beta1 = PDstandardNth3(&beta1[index]);
+    CCTK_REAL const PDstandardNth1beta2 = PDstandardNth1(&beta2[index]);
+    CCTK_REAL const PDstandardNth2beta2 = PDstandardNth2(&beta2[index]);
+    CCTK_REAL const PDstandardNth3beta2 = PDstandardNth3(&beta2[index]);
+    CCTK_REAL const PDstandardNth1beta3 = PDstandardNth1(&beta3[index]);
+    CCTK_REAL const PDstandardNth2beta3 = PDstandardNth2(&beta3[index]);
+    CCTK_REAL const PDstandardNth3beta3 = PDstandardNth3(&beta3[index]);
     CCTK_REAL const PDstandardNth1gt11 = PDstandardNth1(&gt11[index]);
     CCTK_REAL const PDstandardNth2gt11 = PDstandardNth2(&gt11[index]);
     CCTK_REAL const PDstandardNth3gt11 = PDstandardNth3(&gt11[index]);
@@ -274,13 +268,11 @@ static void ML_BSSN_convertFromADMBaseGamma_Body(cGH const * restrict const cctk
     CCTK_REAL Xt3L = Gt311*gtu11 + Gt322*gtu22 + 2*(Gt312*gtu12 + 
       Gt313*gtu13 + Gt323*gtu23) + Gt333*gtu33;
     
-    CCTK_REAL AL = IfThen(LapseACoeff != 0,-((dtalpL - 
-      LapseAdvectionCoeff*(beta1L*PDupwindNthAnti1alpha + 
-      beta2L*PDupwindNthAnti2alpha + beta3L*PDupwindNthAnti3alpha + 
-      PDupwindNthSymm1alpha*Abs(beta1L) + 
-      PDupwindNthSymm2alpha*Abs(beta2L) + 
-      PDupwindNthSymm3alpha*Abs(beta3L)))*INV(harmonicF)*pow(alphaL,(CCTK_REAL) 
-      -harmonicN)),0);
+    CCTK_REAL AL = IfThen(LapseACoeff != 0,(-dtalpL + 
+      LapseAdvectionCoeff*(beta1L*PDstandardNth1alpha + 
+      beta2L*PDstandardNth2alpha + 
+      beta3L*PDstandardNth3alpha))*INV(harmonicF)*pow(alphaL,(CCTK_REAL) 
+      -harmonicN),0);
     
     CCTK_REAL theta = 1;
     
@@ -290,26 +282,17 @@ static void ML_BSSN_convertFromADMBaseGamma_Body(cGH const * restrict const cctk
     
     if (ShiftBCoeff*ShiftGammaCoeff != 0)
     {
-      B1L = (dtbetaxL - 
-        ShiftAdvectionCoeff*(beta1L*PDupwindNthAnti1beta1 + 
-        beta2L*PDupwindNthAnti2beta1 + beta3L*PDupwindNthAnti3beta1 + 
-        PDupwindNthSymm1beta1*Abs(beta1L) + 
-        PDupwindNthSymm2beta1*Abs(beta2L) + 
-        PDupwindNthSymm3beta1*Abs(beta3L)))*INV(ShiftGammaCoeff)*INV(theta);
+      B1L = -((-dtbetaxL + (beta1L*PDstandardNth1beta1 + 
+        beta2L*PDstandardNth2beta1 + 
+        beta3L*PDstandardNth3beta1)*ShiftAdvectionCoeff)*INV(ShiftGammaCoeff)*INV(theta));
       
-      B2L = (dtbetayL - 
-        ShiftAdvectionCoeff*(beta1L*PDupwindNthAnti1beta2 + 
-        beta2L*PDupwindNthAnti2beta2 + beta3L*PDupwindNthAnti3beta2 + 
-        PDupwindNthSymm1beta2*Abs(beta1L) + 
-        PDupwindNthSymm2beta2*Abs(beta2L) + 
-        PDupwindNthSymm3beta2*Abs(beta3L)))*INV(ShiftGammaCoeff)*INV(theta);
+      B2L = -((-dtbetayL + (beta1L*PDstandardNth1beta2 + 
+        beta2L*PDstandardNth2beta2 + 
+        beta3L*PDstandardNth3beta2)*ShiftAdvectionCoeff)*INV(ShiftGammaCoeff)*INV(theta));
       
-      B3L = (dtbetazL - 
-        ShiftAdvectionCoeff*(beta1L*PDupwindNthAnti1beta3 + 
-        beta2L*PDupwindNthAnti2beta3 + beta3L*PDupwindNthAnti3beta3 + 
-        PDupwindNthSymm1beta3*Abs(beta1L) + 
-        PDupwindNthSymm2beta3*Abs(beta2L) + 
-        PDupwindNthSymm3beta3*Abs(beta3L)))*INV(ShiftGammaCoeff)*INV(theta);
+      B3L = -((-dtbetazL + (beta1L*PDstandardNth1beta3 + 
+        beta2L*PDstandardNth2beta3 + 
+        beta3L*PDstandardNth3beta3)*ShiftAdvectionCoeff)*INV(ShiftGammaCoeff)*INV(theta));
     }
     else
     {
@@ -351,7 +334,7 @@ extern "C" void ML_BSSN_convertFromADMBaseGamma(CCTK_ARGUMENTS)
   const char *groups[] = {"ADMBase::dtlapse","ADMBase::dtshift","ML_BSSN::ML_dtlapse","ML_BSSN::ML_dtshift","ML_BSSN::ML_Gamma","ML_BSSN::ML_lapse","ML_BSSN::ML_metric","ML_BSSN::ML_shift"};
   GenericFD_AssertGroupStorage(cctkGH, "ML_BSSN_convertFromADMBaseGamma", 8, groups);
   
-  GenericFD_EnsureStencilFits(cctkGH, "ML_BSSN_convertFromADMBaseGamma", 3, 3, 3);
+  GenericFD_EnsureStencilFits(cctkGH, "ML_BSSN_convertFromADMBaseGamma", 1, 1, 1);
   
   GenericFD_LoopOverInterior(cctkGH, &ML_BSSN_convertFromADMBaseGamma_Body);
   

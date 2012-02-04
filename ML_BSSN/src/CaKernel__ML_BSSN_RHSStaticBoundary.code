@@ -14,7 +14,7 @@
 #define SQR(x) ((x) * (x))
 #define CUB(x) ((x) * (x) * (x))
 
-CAKERNEL_ML_BSSN_InitRHS_Begin
+CAKERNEL_ML_BSSN_RHSStaticBoundary_Begin
   
   /* Include user-supplied include files */
   
@@ -69,94 +69,91 @@ CAKERNEL_ML_BSSN_InitRHS_Begin
   /* Calculate temporaries and arrays functions */
   
   /* Copy local copies back to grid functions */
-  CAKERNEL_ML_BSSN_InitRHS_Computations_Begin
-    
-    /* Assign local copies of grid functions */
-    
-    
-    
-    /* Include user supplied include files */
-    
-    /* Precompute derivatives */
-    
-    /* Calculate temporaries and grid functions */
-    CCTK_REAL phirhsL = 0;
-    
-    CCTK_REAL gt11rhsL = 0;
-    
-    CCTK_REAL gt12rhsL = 0;
-    
-    CCTK_REAL gt13rhsL = 0;
-    
-    CCTK_REAL gt22rhsL = 0;
-    
-    CCTK_REAL gt23rhsL = 0;
-    
-    CCTK_REAL gt33rhsL = 0;
-    
-    CCTK_REAL trKrhsL = 0;
-    
-    CCTK_REAL At11rhsL = 0;
-    
-    CCTK_REAL At12rhsL = 0;
-    
-    CCTK_REAL At13rhsL = 0;
-    
-    CCTK_REAL At22rhsL = 0;
-    
-    CCTK_REAL At23rhsL = 0;
-    
-    CCTK_REAL At33rhsL = 0;
-    
-    CCTK_REAL Xt1rhsL = 0;
-    
-    CCTK_REAL Xt2rhsL = 0;
-    
-    CCTK_REAL Xt3rhsL = 0;
-    
-    CCTK_REAL alpharhsL = 0;
-    
-    CCTK_REAL ArhsL = 0;
-    
-    CCTK_REAL beta1rhsL = 0;
-    
-    CCTK_REAL beta2rhsL = 0;
-    
-    CCTK_REAL beta3rhsL = 0;
-    
-    CCTK_REAL B1rhsL = 0;
-    
-    CCTK_REAL B2rhsL = 0;
-    
-    CCTK_REAL B3rhsL = 0;
-    
-    /* Copy local copies back to grid functions */
-    I3D(alpharhs,0,0,0) = alpharhsL;
-    I3D(Arhs,0,0,0) = ArhsL;
-    I3D(At11rhs,0,0,0) = At11rhsL;
-    I3D(At12rhs,0,0,0) = At12rhsL;
-    I3D(At13rhs,0,0,0) = At13rhsL;
-    I3D(At22rhs,0,0,0) = At22rhsL;
-    I3D(At23rhs,0,0,0) = At23rhsL;
-    I3D(At33rhs,0,0,0) = At33rhsL;
-    I3D(B1rhs,0,0,0) = B1rhsL;
-    I3D(B2rhs,0,0,0) = B2rhsL;
-    I3D(B3rhs,0,0,0) = B3rhsL;
-    I3D(beta1rhs,0,0,0) = beta1rhsL;
-    I3D(beta2rhs,0,0,0) = beta2rhsL;
-    I3D(beta3rhs,0,0,0) = beta3rhsL;
-    I3D(gt11rhs,0,0,0) = gt11rhsL;
-    I3D(gt12rhs,0,0,0) = gt12rhsL;
-    I3D(gt13rhs,0,0,0) = gt13rhsL;
-    I3D(gt22rhs,0,0,0) = gt22rhsL;
-    I3D(gt23rhs,0,0,0) = gt23rhsL;
-    I3D(gt33rhs,0,0,0) = gt33rhsL;
-    I3D(phirhs,0,0,0) = phirhsL;
-    I3D(trKrhs,0,0,0) = trKrhsL;
-    I3D(Xt1rhs,0,0,0) = Xt1rhsL;
-    I3D(Xt2rhs,0,0,0) = Xt2rhsL;
-    I3D(Xt3rhs,0,0,0) = Xt3rhsL;
-    
-  CAKERNEL_ML_BSSN_InitRHS_Computations_End
   
-CAKERNEL_ML_BSSN_InitRHS_End
+  /* Assign local copies of grid functions */
+  
+  
+  
+  /* Include user supplied include files */
+  
+  /* Precompute derivatives */
+  
+  /* Calculate temporaries and grid functions */
+  CCTK_REAL phirhsL = 0.2;
+  
+  CCTK_REAL gt11rhsL = 0;
+  
+  CCTK_REAL gt12rhsL = 0;
+  
+  CCTK_REAL gt13rhsL = 0;
+  
+  CCTK_REAL gt22rhsL = 0;
+  
+  CCTK_REAL gt23rhsL = 0;
+  
+  CCTK_REAL gt33rhsL = 0;
+  
+  CCTK_REAL trKrhsL = 0;
+  
+  CCTK_REAL At11rhsL = 0;
+  
+  CCTK_REAL At12rhsL = 0;
+  
+  CCTK_REAL At13rhsL = 0;
+  
+  CCTK_REAL At22rhsL = 0;
+  
+  CCTK_REAL At23rhsL = 0;
+  
+  CCTK_REAL At33rhsL = 0;
+  
+  CCTK_REAL Xt1rhsL = 0;
+  
+  CCTK_REAL Xt2rhsL = 0;
+  
+  CCTK_REAL Xt3rhsL = 0;
+  
+  CCTK_REAL alpharhsL = 0;
+  
+  CCTK_REAL ArhsL = 0;
+  
+  CCTK_REAL beta1rhsL = 0;
+  
+  CCTK_REAL beta2rhsL = 0;
+  
+  CCTK_REAL beta3rhsL = 0;
+  
+  CCTK_REAL B1rhsL = 0;
+  
+  CCTK_REAL B2rhsL = 0;
+  
+  CCTK_REAL B3rhsL = 0;
+  
+  /* Copy local copies back to grid functions */
+  I3D(alpharhs,0,0,0) = alpharhsL;
+  I3D(Arhs,0,0,0) = ArhsL;
+  I3D(At11rhs,0,0,0) = At11rhsL;
+  I3D(At12rhs,0,0,0) = At12rhsL;
+  I3D(At13rhs,0,0,0) = At13rhsL;
+  I3D(At22rhs,0,0,0) = At22rhsL;
+  I3D(At23rhs,0,0,0) = At23rhsL;
+  I3D(At33rhs,0,0,0) = At33rhsL;
+  I3D(B1rhs,0,0,0) = B1rhsL;
+  I3D(B2rhs,0,0,0) = B2rhsL;
+  I3D(B3rhs,0,0,0) = B3rhsL;
+  I3D(beta1rhs,0,0,0) = beta1rhsL;
+  I3D(beta2rhs,0,0,0) = beta2rhsL;
+  I3D(beta3rhs,0,0,0) = beta3rhsL;
+  I3D(gt11rhs,0,0,0) = gt11rhsL;
+  I3D(gt12rhs,0,0,0) = gt12rhsL;
+  I3D(gt13rhs,0,0,0) = gt13rhsL;
+  I3D(gt22rhs,0,0,0) = gt22rhsL;
+  I3D(gt23rhs,0,0,0) = gt23rhsL;
+  I3D(gt33rhs,0,0,0) = gt33rhsL;
+  I3D(phirhs,0,0,0) = phirhsL;
+  I3D(trKrhs,0,0,0) = trKrhsL;
+  I3D(Xt1rhs,0,0,0) = Xt1rhsL;
+  I3D(Xt2rhs,0,0,0) = Xt2rhsL;
+  I3D(Xt3rhs,0,0,0) = Xt3rhsL;
+  
+CAKERNEL_ML_BSSN_RHSStaticBoundary_End

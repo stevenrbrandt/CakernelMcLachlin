@@ -236,43 +236,6 @@ schedule CAKERNEL_Launch_ML_BSSN_RHS2 IN ML_BSSN_evolCalcGroup
   WRITES:   ML_BSSN::ML_curvrhs
 } "ML_BSSN_RHS2"
 
-
-if (CCTK_EQUALS(apply_dissipation, "always"))
-{
-  schedule CAKERNEL_Launch_ML_BSSN_Dissipation IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2)
-  {
-    LANG: C
-    TAGS: Device=1
-    READS:    ML_BSSN::ML_curv
-    READS:    ML_BSSN::ML_curvrhs
-    READS:    ML_BSSN::ML_dtlapse
-    READS:    ML_BSSN::ML_dtlapserhs
-    READS:    ML_BSSN::ML_dtshift
-    READS:    ML_BSSN::ML_dtshiftrhs
-    READS:    ML_BSSN::ML_Gamma
-    READS:    ML_BSSN::ML_Gammarhs
-    READS:    ML_BSSN::ML_lapse
-    READS:    ML_BSSN::ML_lapserhs
-    READS:    ML_BSSN::ML_log_confac
-    READS:    ML_BSSN::ML_log_confacrhs
-    READS:    ML_BSSN::ML_metric
-    READS:    ML_BSSN::ML_metricrhs
-    READS:    ML_BSSN::ML_shift
-    READS:    ML_BSSN::ML_shiftrhs
-    READS:    ML_BSSN::ML_trace_curv
-    READS:    ML_BSSN::ML_trace_curvrhs
-    WRITES:   ML_BSSN::ML_curvrhs
-    WRITES:   ML_BSSN::ML_dtlapserhs
-    WRITES:   ML_BSSN::ML_dtshiftrhs
-    WRITES:   ML_BSSN::ML_Gammarhs
-    WRITES:   ML_BSSN::ML_lapserhs
-    WRITES:   ML_BSSN::ML_log_confacrhs
-    WRITES:   ML_BSSN::ML_metricrhs
-    WRITES:   ML_BSSN::ML_shiftrhs
-    WRITES:   ML_BSSN::ML_trace_curvrhs
-  } "ML_BSSN_Dissipation"
-}
-
 schedule CAKERNEL_Launch_ML_BSSN_Advect IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2)
 {
   LANG: C
@@ -320,6 +283,34 @@ schedule CAKERNEL_Launch_ML_BSSN_InitRHS AT analysis BEFORE ML_BSSN_evolCalcGrou
   WRITES:   ML_BSSN::ML_shiftrhs
   WRITES:   ML_BSSN::ML_trace_curvrhs
 } "ML_BSSN_InitRHS"
+
+
+if (CCTK_EQUALS(my_rhs_boundary_condition, "static"))
+{
+  schedule CAKERNEL_Launch_ML_BSSN_RHSStaticBoundary IN ML_BSSN_evolCalcGroup
+  {
+    LANG: C
+    SYNC: ML_curvrhs
+    SYNC: ML_dtlapserhs
+    SYNC: ML_dtshiftrhs
+    SYNC: ML_Gammarhs
+    SYNC: ML_lapserhs
+    SYNC: ML_log_confacrhs
+    SYNC: ML_metricrhs
+    SYNC: ML_shiftrhs
+    SYNC: ML_trace_curvrhs
+    TAGS: Device=1
+    WRITES:   ML_BSSN::ML_curvrhs
+    WRITES:   ML_BSSN::ML_dtlapserhs
+    WRITES:   ML_BSSN::ML_dtshiftrhs
+    WRITES:   ML_BSSN::ML_Gammarhs
+    WRITES:   ML_BSSN::ML_lapserhs
+    WRITES:   ML_BSSN::ML_log_confacrhs
+    WRITES:   ML_BSSN::ML_metricrhs
+    WRITES:   ML_BSSN::ML_shiftrhs
+    WRITES:   ML_BSSN::ML_trace_curvrhs
+  } "ML_BSSN_RHSStaticBoundary"
+}
 
 schedule CAKERNEL_Launch_ML_BSSN_enforce IN MoL_PostStepModify
 {
