@@ -77,7 +77,7 @@ derivatives =
 
     (* TODO: make these higher order stencils *)
     PDonesided[i] -> dir[i] (-1 + shift[i]^dir[i]) / spacing[i]} /. i->j, {j,1,3}],1]
-} /. fdOrder -> 4;
+} /. fdOrder -> 2;
 
 PD     = PDstandardNth;
 PDu    = PDupwindNth;
