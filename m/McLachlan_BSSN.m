@@ -1149,10 +1149,10 @@ Join[
   advectCalc,
   initRHSCalc,
   (* evol1Calc, evol2Calc, *)
-  RHSStaticBoundaryCalc,
+  (* RHSStaticBoundaryCalc, *)
   (* RHSRadiativeBoundaryCalc, *)
-  enforceCalc,
-  boundaryCalc
+  enforceCalc
+  (* boundaryCalc *)
   (* constraintsCalc, *)
 },
   {} (*dissCalcs*)
