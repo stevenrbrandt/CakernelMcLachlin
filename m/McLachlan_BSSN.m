@@ -620,7 +620,7 @@ evolCalc2 = PartialCalculation[evolCalc, "2",
 RHSStaticBoundaryCalc =
 {
   Name -> BSSN <> "_RHSStaticBoundary",
-  Schedule -> {"at EVOL after  "<> BSSN <> "_evolCalcGroup"},
+  Schedule -> {"IN " <> BSSN <> "_evolCalcGroup"},
   ConditionalOnKeyword -> {"my_rhs_boundary_condition", "static"},
   Where -> Boundary,
   Equations -> 
@@ -1111,7 +1111,7 @@ Join[
   advectCalc,
   initRHSCalc,
   (* evol1Calc, evol2Calc, *)
-  (* RHSStaticBoundaryCalc, *)
+  RHSStaticBoundaryCalc,
   (* RHSRadiativeBoundaryCalc, *)
   enforceCalc
   (* boundaryCalc *)
