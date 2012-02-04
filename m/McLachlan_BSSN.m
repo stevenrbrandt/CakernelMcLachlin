@@ -1159,7 +1159,7 @@ Join[
 ];
 
 CreateKrancThornTT [groups, ".", BSSN,
-  Calculations -> calculations,
+  Calculations -> calculations (*/. conformalMethod -> 1*),
   DeclaredGroups -> declaredGroupNames,
   PartialDerivatives -> derivatives,
   EvolutionTimelevels -> evolutionTimelevels,
