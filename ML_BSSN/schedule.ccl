@@ -202,7 +202,7 @@ if (CCTK_EQUALS(my_initial_data, "ADMBase"))
 schedule CAKERNEL_Launch_ML_BSSN_RHS1 IN ML_BSSN_evolCalcGroup
 {
   LANG: C
-  # TAGS: Device=1
+  TAGS: Device=1
   READS:    ML_BSSN::ML_curv
   READS:    ML_BSSN::ML_dtlapse
   READS:    ML_BSSN::ML_dtshift
@@ -225,7 +225,7 @@ schedule CAKERNEL_Launch_ML_BSSN_RHS1 IN ML_BSSN_evolCalcGroup
 schedule CAKERNEL_Launch_ML_BSSN_RHS2 IN ML_BSSN_evolCalcGroup
 {
   LANG: C
-  # TAGS: Device=1
+  TAGS: Device=1
   READS:    ML_BSSN::ML_curv
   READS:    ML_BSSN::ML_Gamma
   READS:    ML_BSSN::ML_lapse
@@ -242,7 +242,7 @@ if (CCTK_EQUALS(apply_dissipation, "always"))
   schedule CAKERNEL_Launch_ML_BSSN_Dissipation IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2)
   {
     LANG: C
-    # TAGS: Device=1
+    TAGS: Device=1
     READS:    ML_BSSN::ML_curv
     READS:    ML_BSSN::ML_curvrhs
     READS:    ML_BSSN::ML_dtlapse
@@ -276,7 +276,7 @@ if (CCTK_EQUALS(apply_dissipation, "always"))
 schedule CAKERNEL_Launch_ML_BSSN_Advect IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2)
 {
   LANG: C
-  # TAGS: Device=1
+  TAGS: Device=1
   READS:    ML_BSSN::ML_curv
   READS:    ML_BSSN::ML_curvrhs
   READS:    ML_BSSN::ML_dtlapse
@@ -309,7 +309,7 @@ schedule CAKERNEL_Launch_ML_BSSN_Advect IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_
 schedule CAKERNEL_Launch_ML_BSSN_InitRHS AT analysis BEFORE ML_BSSN_evolCalcGroup
 {
   LANG: C
-  # TAGS: Device=1
+  TAGS: Device=1
   WRITES:   ML_BSSN::ML_curvrhs
   WRITES:   ML_BSSN::ML_dtlapserhs
   WRITES:   ML_BSSN::ML_dtshiftrhs
@@ -321,63 +321,16 @@ schedule CAKERNEL_Launch_ML_BSSN_InitRHS AT analysis BEFORE ML_BSSN_evolCalcGrou
   WRITES:   ML_BSSN::ML_trace_curvrhs
 } "ML_BSSN_InitRHS"
 
-
-if (CCTK_EQUALS(my_rhs_boundary_condition, "static"))
-{
-  schedule CAKERNEL_Launch_ML_BSSN_RHSStaticBoundary at EVOL after  ML_BSSN_evolCalcGroup
-  {
-    LANG: C
-    SYNC: ML_curvrhs
-    SYNC: ML_dtlapserhs
-    SYNC: ML_dtshiftrhs
-    SYNC: ML_Gammarhs
-    SYNC: ML_lapserhs
-    SYNC: ML_log_confacrhs
-    SYNC: ML_metricrhs
-    SYNC: ML_shiftrhs
-    SYNC: ML_trace_curvrhs
-    # TAGS: Device=1
-    WRITES:   ML_BSSN::ML_curvrhs
-    WRITES:   ML_BSSN::ML_dtlapserhs
-    WRITES:   ML_BSSN::ML_dtshiftrhs
-    WRITES:   ML_BSSN::ML_Gammarhs
-    WRITES:   ML_BSSN::ML_lapserhs
-    WRITES:   ML_BSSN::ML_log_confacrhs
-    WRITES:   ML_BSSN::ML_metricrhs
-    WRITES:   ML_BSSN::ML_shiftrhs
-    WRITES:   ML_BSSN::ML_trace_curvrhs
-  } "ML_BSSN_RHSStaticBoundary"
-}
-
 schedule CAKERNEL_Launch_ML_BSSN_enforce IN MoL_PostStepModify
 {
   LANG: C
-  # TAGS: Device=1
+  TAGS: Device=1
   READS:    ML_BSSN::ML_curv
   READS:    ML_BSSN::ML_lapse
   READS:    ML_BSSN::ML_metric
   WRITES:   ML_BSSN::ML_curv
   WRITES:   ML_BSSN::ML_lapse
 } "ML_BSSN_enforce"
-
-
-if (CCTK_EQUALS(my_boundary_condition, "Minkowski"))
-{
-  schedule CAKERNEL_Launch_ML_BSSN_boundary IN MoL_PostStep
-  {
-    LANG: C
-    # TAGS: Device=1
-    WRITES:   ML_BSSN::ML_curv
-    WRITES:   ML_BSSN::ML_dtlapse
-    WRITES:   ML_BSSN::ML_dtshift
-    WRITES:   ML_BSSN::ML_Gamma
-    WRITES:   ML_BSSN::ML_lapse
-    WRITES:   ML_BSSN::ML_log_confac
-    WRITES:   ML_BSSN::ML_metric
-    WRITES:   ML_BSSN::ML_shift
-    WRITES:   ML_BSSN::ML_trace_curv
-  } "ML_BSSN_boundary"
-}
 
 schedule ML_BSSN_SelectBoundConds in MoL_PostStep
 {
@@ -404,25 +357,3 @@ schedule group ApplyBCs as ML_BSSN_ApplyBCs in MoL_PostStep after ML_BSSN_Select
 {
   # no language specified
 } "Apply boundary conditions controlled by thorn Boundary"
-
-
-############################################################
-#CAKERNEL AUTO GENERATED PART. DO NOT EDIT BELOW THIS POINT#
-############################################################
-
-schedule CaKernel_InitDevice in CCTK_BASEGRID
-      {
-        LANG: C
-      } "Initialize CUDA Device"
-schedule group CaKernel_InitFunctions in CCTK_BASEGRID after CaKernel_AllocDevMem
-      {
-      } "Group to initialize all the kernels"
-schedule CaKernel_AllocDevMem in CCTK_BASEGRID after CaKernel_InitDevice
-      {
-          LANG: C
-      }"Allocate memory for variables on devices"
-schedule CaKernel_FreeDevMem in CCTK_SHUTDOWN
-      {
-          LANG: C
-      }"Deallocate memory for variables on devices"
-
