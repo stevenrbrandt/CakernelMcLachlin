@@ -86,11 +86,8 @@ PDus   = PDupwindNthSymm;
 (* PDo    = PDonesided; *)
 PDdiss = PDdissipationNth;
 
-If [splitUpwindDerivs,
-    Upwind[dir_, var_, idx_] := dir PDua[var,idx] + Abs[dir] PDus[var,idx],
-    Upwind[dir_, var_, idx_] := dir PDu[var,idx]];
-
-
+ (* Disable upwinding to maintain a stencil size of 1 *)
+Upwind[dir_, var_, idx_] := dir PDstandardNth[var,idx];
 
 (******************************************************************************)
 (* Tensors *)
