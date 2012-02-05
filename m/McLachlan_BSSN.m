@@ -191,7 +191,9 @@ evaluatedGroups =
    SetGroupName [CreateGroupFromTensor [M[la]  ], prefix <> "mom"],
    SetGroupName [CreateGroupFromTensor [cS     ], prefix <> "cons_detg"],
    SetGroupName [CreateGroupFromTensor [cXt[ua]], prefix <> "cons_Gamma"],
-   SetGroupName [CreateGroupFromTensor [cA     ], prefix <> "cons_traceA"]};
+   SetGroupName [CreateGroupFromTensor [cA     ], prefix <> "cons_traceA"],
+   {"coords", {xCopy, yCopy, zCopy, rCopy}}
+};
 
 declaredGroups = Join [evolvedGroups, evaluatedGroups];
 declaredGroupNames = Map [First, declaredGroups];
@@ -292,7 +294,12 @@ convertFromADMBaseCalc =
     
     alpha     -> admalpha,
     
-    beta[ua]  -> admbeta[ua]
+    beta[ua]  -> admbeta[ua],
+
+    xCopy -> x,
+    yCopy -> y,
+    zCopy -> z,
+    rCopy -> r
   }
 };
 
