@@ -108,7 +108,7 @@ Map [DefineTensor,
       Rt, Rphi, gK,
       T00, T0, T, rho, S,
       x, y, z, r,
-      epsdiss}];
+      epsdiss, rn}];
 
 (* NOTE: It seems as if Lie[.,.] did not take these tensor weights
    into account.  Presumably, CD[.,.] and CDt[.,.] don't do this either.  *)
@@ -670,39 +670,32 @@ initRHSCalc =
 RHSRadiativeBoundaryCalc =
 {
   Name -> BSSN <> "_RHSRadiativeBoundary",
-  Schedule -> {"at EVOL"},
+  Schedule -> {"IN " <> BSSN <> "_evolCalcGroup"},
   ConditionalOnKeyword -> {"my_rhs_boundary_condition", "radiative"},
   Where -> Boundary,
   Shorthands -> {dir[ua],
                  detgt, gtu[ua,ub], em4phi, gu[ua,ub],
                  nn[la], nu[ua], nlen, nlen2, su[ua],
-                 vg},
+                 vg,phi0,rn[ua],phi0},
   Equations -> 
   {
-    dir[ua] -> Sign[normal[ua]],
+    dir[ua] -> -Sign[normal[ua]],
     
-    detgt      -> 1 (* detgtExpr *),
-    gtu[ua,ub] -> 1/detgt detgtExpr MatrixInverse [gt[ua,ub]],
-    em4phi     -> IfThen [conformalMethod, phi^2, Exp[-4 phi]],
-    gu[ua,ub]  -> em4phi gtu[ua,ub],
+    rn1 -> -xCopy/rCopy, 
+    rn2 -> -yCopy/rCopy,
+    rn3 -> -zCopy/rCopy,
+
+    phi0 -> IfThen[conformalMethod, 1, 0],
     
-    nn[la] -> Euc[la,lb] normal[ub],
-    nu[ua] -> gu[ua,ub] nn[lb],
-    nlen2  -> nu[ua] nn[la],
-    nlen   -> Sqrt[nlen2],
-    su[ua] -> nu[ua] / nlen,
-    
-    vg -> Sqrt[harmonicF],
-    
-    dot[phi]       -> - vg su[uc] PDo[phi      ,lc],
-    dot[gt[la,lb]] -> -    su[uc] PDo[gt[la,lb],lc],
-    dot[trK]       -> - vg su[uc] PDo[trK      ,lc],
-    dot[At[la,lb]] -> -    su[uc] PDo[At[la,lb],lc],
-    dot[Xt[ua]]    -> -    su[uc] PDo[Xt[ua]   ,lc],
-    dot[alpha]     -> - vg su[uc] PDo[alpha    ,lc],
-    dot[A]         -> - vg su[uc] PDo[A        ,lc],
-    dot[beta[ua]]  -> -    su[uc] PDo[beta[ua] ,lc],
-    dot[B[ua]]     -> -    su[uc] PDo[B[ua]    ,lc]
+    dot[phi]       -> -(phi-phi0)/rCopy + rn[uc] PDo[phi,lc],
+    dot[gt[la,lb]] -> -(gt[la,lb]-Euc[la,lb])/rCopy + rn[uc] PDo[gt[la,lb],lc],
+    dot[trK]       -> -trK/rCopy + rn[uc] PDo[trK,lc],
+    dot[At[la,lb]] -> -At[la,lb]/rCopy + rn[uc] PDo[At[la,lb],lc],
+    dot[Xt[ua]]    -> 0,
+    dot[alpha]     -> -(alpha-1)/rCopy + rn[uc] PDo[alpha,lc],
+    dot[A]         -> -A/rCopy + rn[uc] PDo[A,lc],
+    dot[beta[ua]]  -> -beta[ua]/rCopy +rn[uc] PDo[beta[ua],lc],
+    dot[B[ua]]     -> -B[ua]/rCopy + rn[uc] PDo[B[ua],lc]
   }
 };
 
@@ -1120,7 +1113,7 @@ Join[
   initRHSCalc,
   (* evol1Calc, evol2Calc, *)
   RHSStaticBoundaryCalc,
-  (* RHSRadiativeBoundaryCalc, *)
+  RHSRadiativeBoundaryCalc,
   enforceCalc
   (* boundaryCalc *)
   (* constraintsCalc, *)
