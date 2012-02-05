@@ -76,14 +76,15 @@ derivatives =
          +3 shift[i]^(+5)) / (1680 spacing[i])],
 
     (* TODO: make these higher order stencils *)
-    PDonesided[i] -> dir[i] (-1 + shift[i]^dir[i]) / spacing[i]} /. i->j, {j,1,3}],1]
+    PDonesided[i] -> (1-IntAbs[dir[i]]) * StandardCenteredDifferenceOperator[1,2/2,i]
+    + dir[i] (-1 + shift[i]^dir[i]) / spacing[i]} /. i->j, {j,1,3}],1]
 } /. fdOrder -> 2;
 
 PD     = PDstandardNth;
 PDu    = PDupwindNth;
 PDua   = PDupwindNthAnti;
 PDus   = PDupwindNthSymm;
-(* PDo    = PDonesided; *)
+PDo    = PDonesided; (* first order accurate *)
 PDdiss = PDdissipationNth;
 
  (* Disable upwinding to maintain a stencil size of 1 *)
