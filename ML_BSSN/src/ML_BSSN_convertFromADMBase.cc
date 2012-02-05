@@ -67,11 +67,8 @@ static void ML_BSSN_convertFromADMBase_Body(cGH const * restrict const cctkGH, i
   CCTK_REAL const p1o4dy = 0.25*INV(dy);
   CCTK_REAL const p1o4dydz = 0.25*INV(dy)*INV(dz);
   CCTK_REAL const p1o4dz = 0.25*INV(dz);
-  CCTK_REAL const p1odx = INV(dx);
   CCTK_REAL const p1odx2 = INV(SQR(dx));
-  CCTK_REAL const p1ody = INV(dy);
   CCTK_REAL const p1ody2 = INV(SQR(dy));
-  CCTK_REAL const p1odz = INV(dz);
   CCTK_REAL const p1odz2 = INV(SQR(dz));
   CCTK_REAL const pm1o2dx = -0.5*INV(dx);
   CCTK_REAL const pm1o2dy = -0.5*INV(dy);
@@ -115,7 +112,11 @@ static void ML_BSSN_convertFromADMBase_Body(cGH const * restrict const cctkGH, i
     CCTK_REAL kyzL = kyz[index];
     CCTK_REAL kzzL = kzz[index];
     CCTK_REAL phiL = phi[index];
+    CCTK_REAL rL = r[index];
     CCTK_REAL trKL = trK[index];
+    CCTK_REAL xL = x[index];
+    CCTK_REAL yL = y[index];
+    CCTK_REAL zL = z[index];
     
     
     /* Include user supplied include files */
@@ -206,6 +207,14 @@ static void ML_BSSN_convertFromADMBase_Body(cGH const * restrict const cctkGH, i
     
     CCTK_REAL beta3L = betazL;
     
+    CCTK_REAL xCopyL = xL;
+    
+    CCTK_REAL yCopyL = yL;
+    
+    CCTK_REAL zCopyL = zL;
+    
+    CCTK_REAL rCopyL = rL;
+    
     /* Copy local copies back to grid functions */
     alpha[index] = alphaL;
     At11[index] = At11L;
@@ -224,7 +233,11 @@ static void ML_BSSN_convertFromADMBase_Body(cGH const * restrict const cctkGH, i
     gt23[index] = gt23L;
     gt33[index] = gt33L;
     phi[index] = phiL;
+    rCopy[index] = rCopyL;
     trK[index] = trKL;
+    xCopy[index] = xCopyL;
+    yCopy[index] = yCopyL;
+    zCopy[index] = zCopyL;
   }
   CCTK_ENDLOOP3 (ML_BSSN_convertFromADMBase);
 }
@@ -245,8 +258,8 @@ extern "C" void ML_BSSN_convertFromADMBase(CCTK_ARGUMENTS)
     return;
   }
   
-  const char *groups[] = {"ADMBase::curv","ADMBase::lapse","ADMBase::metric","ADMBase::shift","ML_BSSN::ML_curv","ML_BSSN::ML_lapse","ML_BSSN::ML_log_confac","ML_BSSN::ML_metric","ML_BSSN::ML_shift","ML_BSSN::ML_trace_curv"};
-  GenericFD_AssertGroupStorage(cctkGH, "ML_BSSN_convertFromADMBase", 10, groups);
+  const char *groups[] = {"ADMBase::curv","ADMBase::lapse","ADMBase::metric","ADMBase::shift","ML_BSSN::coords","grid::coordinates","Grid::coordinates","ML_BSSN::ML_curv","ML_BSSN::ML_lapse","ML_BSSN::ML_log_confac","ML_BSSN::ML_metric","ML_BSSN::ML_shift","ML_BSSN::ML_trace_curv"};
+  GenericFD_AssertGroupStorage(cctkGH, "ML_BSSN_convertFromADMBase", 13, groups);
   
   
   GenericFD_LoopOverEverything(cctkGH, &ML_BSSN_convertFromADMBase_Body);

@@ -215,14 +215,14 @@ static CCTK_REAL PDupwindNthSymm1_impl(CCTK_REAL const* restrict const u, CCTK_R
 #endif
 
 #ifndef KRANC_DIFF_FUNCTIONS
-#  define PDonesided1(u) ((-KRANC_GFOFFSET3D(u,0,0,0) + KRANC_GFOFFSET3D(u,dir1,0,0))*p1odx*dir1)
+#  define PDonesided1(u) (p1o2dx*(-KRANC_GFOFFSET3D(u,-1,0,0) + KRANC_GFOFFSET3D(u,1,0,0) + (-2*KRANC_GFOFFSET3D(u,0,0,0) + 2*KRANC_GFOFFSET3D(u,dir1,0,0))*dir1 + (KRANC_GFOFFSET3D(u,-1,0,0) - KRANC_GFOFFSET3D(u,1,0,0))*IntAbs(dir1)))
 #else
-#  define PDonesided1(u) (PDonesided1_impl(u,p1odx,cdj,cdk,dir1,dir2,dir3))
-static CCTK_REAL PDonesided1_impl(CCTK_REAL const* restrict const u, CCTK_REAL const p1odx, ptrdiff_t const cdj, ptrdiff_t const cdk, ptrdiff_t const dir1, ptrdiff_t const dir2, ptrdiff_t const dir3) CCTK_ATTRIBUTE_NOINLINE CCTK_ATTRIBUTE_UNUSED;
-static CCTK_REAL PDonesided1_impl(CCTK_REAL const* restrict const u, CCTK_REAL const p1odx, ptrdiff_t const cdj, ptrdiff_t const cdk, ptrdiff_t const dir1, ptrdiff_t const dir2, ptrdiff_t const dir3)
+#  define PDonesided1(u) (PDonesided1_impl(u,p1o2dx,cdj,cdk,dir1,dir2,dir3))
+static CCTK_REAL PDonesided1_impl(CCTK_REAL const* restrict const u, CCTK_REAL const p1o2dx, ptrdiff_t const cdj, ptrdiff_t const cdk, ptrdiff_t const dir1, ptrdiff_t const dir2, ptrdiff_t const dir3) CCTK_ATTRIBUTE_NOINLINE CCTK_ATTRIBUTE_UNUSED;
+static CCTK_REAL PDonesided1_impl(CCTK_REAL const* restrict const u, CCTK_REAL const p1o2dx, ptrdiff_t const cdj, ptrdiff_t const cdk, ptrdiff_t const dir1, ptrdiff_t const dir2, ptrdiff_t const dir3)
 {
   ptrdiff_t const cdi=sizeof(CCTK_REAL);
-  return (-KRANC_GFOFFSET3D(u,0,0,0) + KRANC_GFOFFSET3D(u,dir1,0,0))*p1odx*dir1;
+  return p1o2dx*(-KRANC_GFOFFSET3D(u,-1,0,0) + KRANC_GFOFFSET3D(u,1,0,0) + (-2*KRANC_GFOFFSET3D(u,0,0,0) + 2*KRANC_GFOFFSET3D(u,dir1,0,0))*dir1 + (KRANC_GFOFFSET3D(u,-1,0,0) - KRANC_GFOFFSET3D(u,1,0,0))*IntAbs(dir1));
 }
 #endif
 
@@ -263,14 +263,14 @@ static CCTK_REAL PDupwindNthSymm2_impl(CCTK_REAL const* restrict const u, CCTK_R
 #endif
 
 #ifndef KRANC_DIFF_FUNCTIONS
-#  define PDonesided2(u) ((-KRANC_GFOFFSET3D(u,0,0,0) + KRANC_GFOFFSET3D(u,0,dir2,0))*p1ody*dir2)
+#  define PDonesided2(u) (p1o2dy*(-KRANC_GFOFFSET3D(u,0,-1,0) + KRANC_GFOFFSET3D(u,0,1,0) + (-2*KRANC_GFOFFSET3D(u,0,0,0) + 2*KRANC_GFOFFSET3D(u,0,dir2,0))*dir2 + (KRANC_GFOFFSET3D(u,0,-1,0) - KRANC_GFOFFSET3D(u,0,1,0))*IntAbs(dir2)))
 #else
-#  define PDonesided2(u) (PDonesided2_impl(u,p1ody,cdj,cdk,dir1,dir2,dir3))
-static CCTK_REAL PDonesided2_impl(CCTK_REAL const* restrict const u, CCTK_REAL const p1ody, ptrdiff_t const cdj, ptrdiff_t const cdk, ptrdiff_t const dir1, ptrdiff_t const dir2, ptrdiff_t const dir3) CCTK_ATTRIBUTE_NOINLINE CCTK_ATTRIBUTE_UNUSED;
-static CCTK_REAL PDonesided2_impl(CCTK_REAL const* restrict const u, CCTK_REAL const p1ody, ptrdiff_t const cdj, ptrdiff_t const cdk, ptrdiff_t const dir1, ptrdiff_t const dir2, ptrdiff_t const dir3)
+#  define PDonesided2(u) (PDonesided2_impl(u,p1o2dy,cdj,cdk,dir1,dir2,dir3))
+static CCTK_REAL PDonesided2_impl(CCTK_REAL const* restrict const u, CCTK_REAL const p1o2dy, ptrdiff_t const cdj, ptrdiff_t const cdk, ptrdiff_t const dir1, ptrdiff_t const dir2, ptrdiff_t const dir3) CCTK_ATTRIBUTE_NOINLINE CCTK_ATTRIBUTE_UNUSED;
+static CCTK_REAL PDonesided2_impl(CCTK_REAL const* restrict const u, CCTK_REAL const p1o2dy, ptrdiff_t const cdj, ptrdiff_t const cdk, ptrdiff_t const dir1, ptrdiff_t const dir2, ptrdiff_t const dir3)
 {
   ptrdiff_t const cdi=sizeof(CCTK_REAL);
-  return (-KRANC_GFOFFSET3D(u,0,0,0) + KRANC_GFOFFSET3D(u,0,dir2,0))*p1ody*dir2;
+  return p1o2dy*(-KRANC_GFOFFSET3D(u,0,-1,0) + KRANC_GFOFFSET3D(u,0,1,0) + (-2*KRANC_GFOFFSET3D(u,0,0,0) + 2*KRANC_GFOFFSET3D(u,0,dir2,0))*dir2 + (KRANC_GFOFFSET3D(u,0,-1,0) - KRANC_GFOFFSET3D(u,0,1,0))*IntAbs(dir2));
 }
 #endif
 
@@ -311,14 +311,14 @@ static CCTK_REAL PDupwindNthSymm3_impl(CCTK_REAL const* restrict const u, CCTK_R
 #endif
 
 #ifndef KRANC_DIFF_FUNCTIONS
-#  define PDonesided3(u) ((-KRANC_GFOFFSET3D(u,0,0,0) + KRANC_GFOFFSET3D(u,0,0,dir3))*p1odz*dir3)
+#  define PDonesided3(u) (p1o2dz*(-KRANC_GFOFFSET3D(u,0,0,-1) + KRANC_GFOFFSET3D(u,0,0,1) + (-2*KRANC_GFOFFSET3D(u,0,0,0) + 2*KRANC_GFOFFSET3D(u,0,0,dir3))*dir3 + (KRANC_GFOFFSET3D(u,0,0,-1) - KRANC_GFOFFSET3D(u,0,0,1))*IntAbs(dir3)))
 #else
-#  define PDonesided3(u) (PDonesided3_impl(u,p1odz,cdj,cdk,dir1,dir2,dir3))
-static CCTK_REAL PDonesided3_impl(CCTK_REAL const* restrict const u, CCTK_REAL const p1odz, ptrdiff_t const cdj, ptrdiff_t const cdk, ptrdiff_t const dir1, ptrdiff_t const dir2, ptrdiff_t const dir3) CCTK_ATTRIBUTE_NOINLINE CCTK_ATTRIBUTE_UNUSED;
-static CCTK_REAL PDonesided3_impl(CCTK_REAL const* restrict const u, CCTK_REAL const p1odz, ptrdiff_t const cdj, ptrdiff_t const cdk, ptrdiff_t const dir1, ptrdiff_t const dir2, ptrdiff_t const dir3)
+#  define PDonesided3(u) (PDonesided3_impl(u,p1o2dz,cdj,cdk,dir1,dir2,dir3))
+static CCTK_REAL PDonesided3_impl(CCTK_REAL const* restrict const u, CCTK_REAL const p1o2dz, ptrdiff_t const cdj, ptrdiff_t const cdk, ptrdiff_t const dir1, ptrdiff_t const dir2, ptrdiff_t const dir3) CCTK_ATTRIBUTE_NOINLINE CCTK_ATTRIBUTE_UNUSED;
+static CCTK_REAL PDonesided3_impl(CCTK_REAL const* restrict const u, CCTK_REAL const p1o2dz, ptrdiff_t const cdj, ptrdiff_t const cdk, ptrdiff_t const dir1, ptrdiff_t const dir2, ptrdiff_t const dir3)
 {
   ptrdiff_t const cdi=sizeof(CCTK_REAL);
-  return (-KRANC_GFOFFSET3D(u,0,0,0) + KRANC_GFOFFSET3D(u,0,0,dir3))*p1odz*dir3;
+  return p1o2dz*(-KRANC_GFOFFSET3D(u,0,0,-1) + KRANC_GFOFFSET3D(u,0,0,1) + (-2*KRANC_GFOFFSET3D(u,0,0,0) + 2*KRANC_GFOFFSET3D(u,0,0,dir3))*dir3 + (KRANC_GFOFFSET3D(u,0,0,-1) - KRANC_GFOFFSET3D(u,0,0,1))*IntAbs(dir3));
 }
 #endif
 

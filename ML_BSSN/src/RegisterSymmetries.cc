@@ -144,6 +144,26 @@ extern "C" void ML_BSSN_RegisterSymmetries(CCTK_ARGUMENTS)
   sym[0] = 1;
   sym[1] = 1;
   sym[2] = 1;
+  SetCartSymVN(cctkGH, sym, "ML_BSSN::xCopy");
+  
+  sym[0] = 1;
+  sym[1] = 1;
+  sym[2] = 1;
+  SetCartSymVN(cctkGH, sym, "ML_BSSN::yCopy");
+  
+  sym[0] = 1;
+  sym[1] = 1;
+  sym[2] = 1;
+  SetCartSymVN(cctkGH, sym, "ML_BSSN::zCopy");
+  
+  sym[0] = 1;
+  sym[1] = 1;
+  sym[2] = 1;
+  SetCartSymVN(cctkGH, sym, "ML_BSSN::rCopy");
+  
+  sym[0] = 1;
+  sym[1] = 1;
+  sym[2] = 1;
   SetCartSymVN(cctkGH, sym, "ML_BSSN::cS");
   
   sym[0] = -1;
