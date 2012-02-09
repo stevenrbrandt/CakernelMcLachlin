@@ -416,43 +416,6 @@ if (CCTK_EQUALS(my_rhs_boundary_condition, "static"))
   } "ML_BSSN_RHSStaticBoundary"
 }
 
-
-if (CCTK_EQUALS(my_rhs_boundary_condition, "radiative"))
-{
-  schedule CAKERNEL_Launch_ML_BSSN_RHSRadiativeBoundary IN ML_BSSN_evolCalcGroup
-  {
-    LANG: C
-    SYNC: ML_curvrhs
-    SYNC: ML_dtlapserhs
-    SYNC: ML_dtshiftrhs
-    SYNC: ML_Gammarhs
-    SYNC: ML_lapserhs
-    SYNC: ML_log_confacrhs
-    SYNC: ML_metricrhs
-    SYNC: ML_shiftrhs
-    SYNC: ML_trace_curvrhs
-    TAGS: Device=1
-    READS:    ML_BSSN::coords
-    READS:    ML_BSSN::ML_curv
-    READS:    ML_BSSN::ML_dtlapse
-    READS:    ML_BSSN::ML_dtshift
-    READS:    ML_BSSN::ML_lapse
-    READS:    ML_BSSN::ML_log_confac
-    READS:    ML_BSSN::ML_metric
-    READS:    ML_BSSN::ML_shift
-    READS:    ML_BSSN::ML_trace_curv
-    WRITES:   ML_BSSN::ML_curvrhs
-    WRITES:   ML_BSSN::ML_dtlapserhs
-    WRITES:   ML_BSSN::ML_dtshiftrhs
-    WRITES:   ML_BSSN::ML_Gammarhs
-    WRITES:   ML_BSSN::ML_lapserhs
-    WRITES:   ML_BSSN::ML_log_confacrhs
-    WRITES:   ML_BSSN::ML_metricrhs
-    WRITES:   ML_BSSN::ML_shiftrhs
-    WRITES:   ML_BSSN::ML_trace_curvrhs
-  } "ML_BSSN_RHSRadiativeBoundary"
-}
-
 schedule CAKERNEL_Launch_ML_BSSN_enforce IN MoL_PostStepModify
 {
   LANG: C
