@@ -67,8 +67,11 @@ static void ML_BSSN_InitGamma_Body(cGH const * restrict const cctkGH, int const 
   CCTK_REAL const p1o4dy = 0.25*INV(dy);
   CCTK_REAL const p1o4dydz = 0.25*INV(dy)*INV(dz);
   CCTK_REAL const p1o4dz = 0.25*INV(dz);
+  CCTK_REAL const p1odx = INV(dx);
   CCTK_REAL const p1odx2 = INV(SQR(dx));
+  CCTK_REAL const p1ody = INV(dy);
   CCTK_REAL const p1ody2 = INV(SQR(dy));
+  CCTK_REAL const p1odz = INV(dz);
   CCTK_REAL const p1odz2 = INV(SQR(dz));
   CCTK_REAL const pm1o2dx = -0.5*INV(dx);
   CCTK_REAL const pm1o2dy = -0.5*INV(dy);
