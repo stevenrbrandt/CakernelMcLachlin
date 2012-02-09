@@ -769,6 +769,22 @@ dissCalc =
   }
 };
 
+copyCalc =
+{
+  Name -> BSSN <> "_copy_to_device",
+  Schedule -> {"at INITIAL after "<> BSSN <> "_convertFromADMBaseGamma"},
+  Where -> Everywhere,
+  Shorthands -> {},
+  Equations ->
+  {
+    Sequence@@Table[
+      var -> var,
+      {var, {phi, gt[la,lb], Xt[ui], trK, At[la,lb], alpha, A, beta[ua], B[ua]}}]
+  }
+};
+
+
+
 dissCalcs =
 Table[
 {
@@ -1266,6 +1282,7 @@ calculations =
 Join[
 {
   initialCalc,
+  copyCalc,
   convertFromADMBaseCalc,
   initGammaCalc,
   convertFromADMBaseGammaCalc,
