@@ -795,7 +795,7 @@ RHSStaticBoundaryCalc =
   Where -> Boundary,
   Equations -> 
   {
-    dot[phi]       -> 0.2,
+    dot[phi]       -> 0,
     dot[gt[la,lb]] -> 0,
     dot[trK]       -> 0,
     dot[At[la,lb]] -> 0,
