@@ -1293,7 +1293,7 @@ CreateKrancThornTT [groups, ".", BSSN,
   DeclaredGroups -> declaredGroupNames,
   PartialDerivatives -> derivatives,
   EvolutionTimelevels -> evolutionTimelevels,
-  DefaultEvolutionTimelevels -> 1,
+  DefaultEvolutionTimelevels -> 2,
   UseJacobian -> False,
   UseLoopControl -> False,
   UseVectors -> False,
@@ -1323,7 +1323,7 @@ CreateKrancThornTT [groups, ".", BSSN,
    (matter seems cheap; it should be always enabled) *)
 
 (* createCode[2, False, True , 3, 1]; *)
-createCode[4, False, True , 1, 0];
+createCode[4, False, True , 2, 0];
 (* createCode[4, False, False, 3, 1]; *)
 (* createCode[4, True , True , 3, 1]; *)
 (* createCode[8, False, True , 3, 1]; *)
