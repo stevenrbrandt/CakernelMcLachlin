@@ -44,10 +44,10 @@ CAKERNEL_ML_BSSN_RHS1_Begin
   CCTK_REAL const p1o2dy = 0.5*INV(dy);
   CCTK_REAL const p1o2dz = 0.5*INV(dz);
   CCTK_REAL const p1o4dx = 0.25*INV(dx);
-  CCTK_REAL const p1o4dxdy = 0.25*INV(dx)*INV(dy);
-  CCTK_REAL const p1o4dxdz = 0.25*INV(dx)*INV(dz);
+  CCTK_REAL const p1o4dxdy = 0.25*INV(dx*dy);
+  CCTK_REAL const p1o4dxdz = 0.25*INV(dx*dz);
   CCTK_REAL const p1o4dy = 0.25*INV(dy);
-  CCTK_REAL const p1o4dydz = 0.25*INV(dy)*INV(dz);
+  CCTK_REAL const p1o4dydz = 0.25*INV(dy*dz);
   CCTK_REAL const p1o4dz = 0.25*INV(dz);
   CCTK_REAL const p1odx = INV(dx);
   CCTK_REAL const p1odx2 = INV(SQR(dx));
@@ -430,11 +430,13 @@ CAKERNEL_ML_BSSN_RHS1_Begin
     
     CCTK_REAL trKrhsL = dottrK;
     
-    CCTK_REAL alpharhsL = -(harmonicF*((trKL + (-1 + 
-      alphaL)*AlphaDriver)*(1 - LapseACoeff) + 
-      AL*LapseACoeff)*pow(alphaL,(CCTK_REAL) harmonicN));
+    CCTK_REAL alpharhsL = 
+      -(pow(alphaL,ToReal(harmonicN))*ToReal(harmonicF)*((trKL + (-1 + 
+      alphaL)*ToReal(AlphaDriver))*(1 - ToReal(LapseACoeff)) + 
+      AL*ToReal(LapseACoeff)));
     
-    CCTK_REAL ArhsL = (-(AL*AlphaDriver) + dottrK)*LapseACoeff;
+    CCTK_REAL ArhsL = (dottrK - 
+      AL*ToReal(AlphaDriver))*ToReal(LapseACoeff);
     
     CCTK_REAL eta = 1;
     
@@ -499,21 +501,27 @@ CAKERNEL_ML_BSSN_RHS1_Begin
     }
     else
     {
-      beta1rhsL = (Xt1L + beta1L*BetaDriver*eta*(-1 + ShiftBCoeff) + 
-        (B1L - Xt1L)*ShiftBCoeff)*ShiftGammaCoeff*theta;
+      beta1rhsL = theta*(Xt1L + beta1L*eta*ToReal(BetaDriver)*(-1 + 
+        ToReal(ShiftBCoeff)) + (B1L - 
+        Xt1L)*ToReal(ShiftBCoeff))*ToReal(ShiftGammaCoeff);
       
-      beta2rhsL = (Xt2L + beta2L*BetaDriver*eta*(-1 + ShiftBCoeff) + 
-        (B2L - Xt2L)*ShiftBCoeff)*ShiftGammaCoeff*theta;
+      beta2rhsL = theta*(Xt2L + beta2L*eta*ToReal(BetaDriver)*(-1 + 
+        ToReal(ShiftBCoeff)) + (B2L - 
+        Xt2L)*ToReal(ShiftBCoeff))*ToReal(ShiftGammaCoeff);
       
-      beta3rhsL = (Xt3L + beta3L*BetaDriver*eta*(-1 + ShiftBCoeff) + 
-        (B3L - Xt3L)*ShiftBCoeff)*ShiftGammaCoeff*theta;
+      beta3rhsL = theta*(Xt3L + beta3L*eta*ToReal(BetaDriver)*(-1 + 
+        ToReal(ShiftBCoeff)) + (B3L - 
+        Xt3L)*ToReal(ShiftBCoeff))*ToReal(ShiftGammaCoeff);
     }
     
-    CCTK_REAL B1rhsL = (dotXt1 - B1L*BetaDriver*eta)*ShiftBCoeff;
+    CCTK_REAL B1rhsL = (dotXt1 - 
+      B1L*eta*ToReal(BetaDriver))*ToReal(ShiftBCoeff);
     
-    CCTK_REAL B2rhsL = (dotXt2 - B2L*BetaDriver*eta)*ShiftBCoeff;
+    CCTK_REAL B2rhsL = (dotXt2 - 
+      B2L*eta*ToReal(BetaDriver))*ToReal(ShiftBCoeff);
     
-    CCTK_REAL B3rhsL = (dotXt3 - B3L*BetaDriver*eta)*ShiftBCoeff;
+    CCTK_REAL B3rhsL = (dotXt3 - 
+      B3L*eta*ToReal(BetaDriver))*ToReal(ShiftBCoeff);
     
     /* Copy local copies back to grid functions */
     I3D(alpharhs,0,0,0) = alpharhsL;

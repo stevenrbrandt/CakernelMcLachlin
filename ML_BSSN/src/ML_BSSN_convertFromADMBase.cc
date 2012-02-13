@@ -62,10 +62,10 @@ static void ML_BSSN_convertFromADMBase_Body(cGH const * restrict const cctkGH, i
   CCTK_REAL const p1o2dy = 0.5*INV(dy);
   CCTK_REAL const p1o2dz = 0.5*INV(dz);
   CCTK_REAL const p1o4dx = 0.25*INV(dx);
-  CCTK_REAL const p1o4dxdy = 0.25*INV(dx)*INV(dy);
-  CCTK_REAL const p1o4dxdz = 0.25*INV(dx)*INV(dz);
+  CCTK_REAL const p1o4dxdy = 0.25*INV(dx*dy);
+  CCTK_REAL const p1o4dxdz = 0.25*INV(dx*dz);
   CCTK_REAL const p1o4dy = 0.25*INV(dy);
-  CCTK_REAL const p1o4dydz = 0.25*INV(dy)*INV(dz);
+  CCTK_REAL const p1o4dydz = 0.25*INV(dy*dz);
   CCTK_REAL const p1o4dz = 0.25*INV(dz);
   CCTK_REAL const p1odx = INV(dx);
   CCTK_REAL const p1odx2 = INV(SQR(dx));
@@ -90,7 +90,7 @@ static void ML_BSSN_convertFromADMBase_Body(cGH const * restrict const cctkGH, i
   
   /* Loop over the grid points */
   #pragma omp parallel
-  CCTK_LOOP3 (ML_BSSN_convertFromADMBase,
+  CCTK_LOOP3(ML_BSSN_convertFromADMBase,
     i,j,k, imin[0],imin[1],imin[2], imax[0],imax[1],imax[2],
     cctk_lsh[0],cctk_lsh[1],cctk_lsh[2])
   {
@@ -158,13 +158,13 @@ static void ML_BSSN_convertFromADMBase_Body(cGH const * restrict const cctkGH, i
     
     if (conformalMethod)
     {
-      phiL = pow(detg,(CCTK_REAL) -0.166666666666666666666666666667);
+      phiL = pow(detg,-0.166666666666666666666666666667);
       
       em4phi = SQR(phiL);
     }
     else
     {
-      phiL = 0.0833333333333333333333333333333*Log(detg);
+      phiL = 0.0833333333333333333333333333333*log(detg);
       
       em4phi = exp(-4*phiL);
     }
@@ -242,7 +242,7 @@ static void ML_BSSN_convertFromADMBase_Body(cGH const * restrict const cctkGH, i
     yCopy[index] = yCopyL;
     zCopy[index] = zCopyL;
   }
-  CCTK_ENDLOOP3 (ML_BSSN_convertFromADMBase);
+  CCTK_ENDLOOP3(ML_BSSN_convertFromADMBase);
 }
 
 extern "C" void ML_BSSN_convertFromADMBase(CCTK_ARGUMENTS)

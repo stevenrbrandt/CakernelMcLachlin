@@ -62,10 +62,10 @@ static void ML_BSSN_Minkowski_Body(cGH const * restrict const cctkGH, int const 
   CCTK_REAL const p1o2dy = 0.5*INV(dy);
   CCTK_REAL const p1o2dz = 0.5*INV(dz);
   CCTK_REAL const p1o4dx = 0.25*INV(dx);
-  CCTK_REAL const p1o4dxdy = 0.25*INV(dx)*INV(dy);
-  CCTK_REAL const p1o4dxdz = 0.25*INV(dx)*INV(dz);
+  CCTK_REAL const p1o4dxdy = 0.25*INV(dx*dy);
+  CCTK_REAL const p1o4dxdz = 0.25*INV(dx*dz);
   CCTK_REAL const p1o4dy = 0.25*INV(dy);
-  CCTK_REAL const p1o4dydz = 0.25*INV(dy)*INV(dz);
+  CCTK_REAL const p1o4dydz = 0.25*INV(dy*dz);
   CCTK_REAL const p1o4dz = 0.25*INV(dz);
   CCTK_REAL const p1odx = INV(dx);
   CCTK_REAL const p1odx2 = INV(SQR(dx));
@@ -90,7 +90,7 @@ static void ML_BSSN_Minkowski_Body(cGH const * restrict const cctkGH, int const 
   
   /* Loop over the grid points */
   #pragma omp parallel
-  CCTK_LOOP3 (ML_BSSN_Minkowski,
+  CCTK_LOOP3(ML_BSSN_Minkowski,
     i,j,k, imin[0],imin[1],imin[2], imax[0],imax[1],imax[2],
     cctk_lsh[0],cctk_lsh[1],cctk_lsh[2])
   {
@@ -182,7 +182,7 @@ static void ML_BSSN_Minkowski_Body(cGH const * restrict const cctkGH, int const 
     Xt2[index] = Xt2L;
     Xt3[index] = Xt3L;
   }
-  CCTK_ENDLOOP3 (ML_BSSN_Minkowski);
+  CCTK_ENDLOOP3(ML_BSSN_Minkowski);
 }
 
 extern "C" void ML_BSSN_Minkowski(CCTK_ARGUMENTS)

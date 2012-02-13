@@ -44,10 +44,10 @@ CAKERNEL_ML_BSSN_Advect_Begin
   CCTK_REAL const p1o2dy = 0.5*INV(dy);
   CCTK_REAL const p1o2dz = 0.5*INV(dz);
   CCTK_REAL const p1o4dx = 0.25*INV(dx);
-  CCTK_REAL const p1o4dxdy = 0.25*INV(dx)*INV(dy);
-  CCTK_REAL const p1o4dxdz = 0.25*INV(dx)*INV(dz);
+  CCTK_REAL const p1o4dxdy = 0.25*INV(dx*dy);
+  CCTK_REAL const p1o4dxdz = 0.25*INV(dx*dz);
   CCTK_REAL const p1o4dy = 0.25*INV(dy);
-  CCTK_REAL const p1o4dydz = 0.25*INV(dy)*INV(dz);
+  CCTK_REAL const p1o4dydz = 0.25*INV(dy*dz);
   CCTK_REAL const p1o4dz = 0.25*INV(dz);
   CCTK_REAL const p1odx = INV(dx);
   CCTK_REAL const p1odx2 = INV(SQR(dx));
@@ -262,47 +262,49 @@ CAKERNEL_ML_BSSN_Advect_Begin
     At33rhsL = At33rhsL + beta1L*PDstandardNth1At33 + 
       beta2L*PDstandardNth2At33 + beta3L*PDstandardNth3At33;
     
-    alpharhsL = alpharhsL + 
-      LapseAdvectionCoeff*(beta1L*PDstandardNth1alpha + 
-      beta2L*PDstandardNth2alpha + beta3L*PDstandardNth3alpha);
+    alpharhsL = alpharhsL + (beta1L*PDstandardNth1alpha + 
+      beta2L*PDstandardNth2alpha + 
+      beta3L*PDstandardNth3alpha)*ToReal(LapseAdvectionCoeff);
     
-    ArhsL = ArhsL + 
-      LapseACoeff*(beta1L*(LapseAdvectionCoeff*PDstandardNth1A - (-1 + 
-      LapseAdvectionCoeff)*PDstandardNth1trK) + 
-      beta2L*(LapseAdvectionCoeff*PDstandardNth2A - (-1 + 
-      LapseAdvectionCoeff)*PDstandardNth2trK) + 
-      beta3L*(LapseAdvectionCoeff*PDstandardNth3A - (-1 + 
-      LapseAdvectionCoeff)*PDstandardNth3trK));
+    ArhsL = ArhsL + ToReal(LapseACoeff)*((-(beta1L*PDstandardNth1trK) 
+      - beta2L*PDstandardNth2trK - beta3L*PDstandardNth3trK)*(-1 + 
+      ToReal(LapseAdvectionCoeff)) + 
+      beta1L*PDstandardNth1A*ToReal(LapseAdvectionCoeff) + 
+      beta2L*PDstandardNth2A*ToReal(LapseAdvectionCoeff) + 
+      beta3L*PDstandardNth3A*ToReal(LapseAdvectionCoeff));
     
     beta1rhsL = beta1rhsL + (beta1L*PDstandardNth1beta1 + 
       beta2L*PDstandardNth2beta1 + 
-      beta3L*PDstandardNth3beta1)*ShiftAdvectionCoeff;
+      beta3L*PDstandardNth3beta1)*ToReal(ShiftAdvectionCoeff);
     
     beta2rhsL = beta2rhsL + (beta1L*PDstandardNth1beta2 + 
       beta2L*PDstandardNth2beta2 + 
-      beta3L*PDstandardNth3beta2)*ShiftAdvectionCoeff;
+      beta3L*PDstandardNth3beta2)*ToReal(ShiftAdvectionCoeff);
     
     beta3rhsL = beta3rhsL + (beta1L*PDstandardNth1beta3 + 
       beta2L*PDstandardNth2beta3 + 
-      beta3L*PDstandardNth3beta3)*ShiftAdvectionCoeff;
+      beta3L*PDstandardNth3beta3)*ToReal(ShiftAdvectionCoeff);
     
     B1rhsL = B1rhsL + ((-(beta1L*PDstandardNth1Xt1) - 
       beta2L*PDstandardNth2Xt1 - beta3L*PDstandardNth3Xt1)*(-1 + 
-      ShiftAdvectionCoeff) + beta1L*PDstandardNth1B1*ShiftAdvectionCoeff + 
-      beta2L*PDstandardNth2B1*ShiftAdvectionCoeff + 
-      beta3L*PDstandardNth3B1*ShiftAdvectionCoeff)*ShiftBCoeff;
+      ToReal(ShiftAdvectionCoeff)) + 
+      beta1L*PDstandardNth1B1*ToReal(ShiftAdvectionCoeff) + 
+      beta2L*PDstandardNth2B1*ToReal(ShiftAdvectionCoeff) + 
+      beta3L*PDstandardNth3B1*ToReal(ShiftAdvectionCoeff))*ToReal(ShiftBCoeff);
     
     B2rhsL = B2rhsL + ((-(beta1L*PDstandardNth1Xt2) - 
       beta2L*PDstandardNth2Xt2 - beta3L*PDstandardNth3Xt2)*(-1 + 
-      ShiftAdvectionCoeff) + beta1L*PDstandardNth1B2*ShiftAdvectionCoeff + 
-      beta2L*PDstandardNth2B2*ShiftAdvectionCoeff + 
-      beta3L*PDstandardNth3B2*ShiftAdvectionCoeff)*ShiftBCoeff;
+      ToReal(ShiftAdvectionCoeff)) + 
+      beta1L*PDstandardNth1B2*ToReal(ShiftAdvectionCoeff) + 
+      beta2L*PDstandardNth2B2*ToReal(ShiftAdvectionCoeff) + 
+      beta3L*PDstandardNth3B2*ToReal(ShiftAdvectionCoeff))*ToReal(ShiftBCoeff);
     
     B3rhsL = B3rhsL + ((-(beta1L*PDstandardNth1Xt3) - 
       beta2L*PDstandardNth2Xt3 - beta3L*PDstandardNth3Xt3)*(-1 + 
-      ShiftAdvectionCoeff) + beta1L*PDstandardNth1B3*ShiftAdvectionCoeff + 
-      beta2L*PDstandardNth2B3*ShiftAdvectionCoeff + 
-      beta3L*PDstandardNth3B3*ShiftAdvectionCoeff)*ShiftBCoeff;
+      ToReal(ShiftAdvectionCoeff)) + 
+      beta1L*PDstandardNth1B3*ToReal(ShiftAdvectionCoeff) + 
+      beta2L*PDstandardNth2B3*ToReal(ShiftAdvectionCoeff) + 
+      beta3L*PDstandardNth3B3*ToReal(ShiftAdvectionCoeff))*ToReal(ShiftBCoeff);
     
     /* Copy local copies back to grid functions */
     I3D(alpharhs,0,0,0) = alpharhsL;

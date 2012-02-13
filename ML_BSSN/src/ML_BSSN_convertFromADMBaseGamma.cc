@@ -80,10 +80,10 @@ static void ML_BSSN_convertFromADMBaseGamma_Body(cGH const * restrict const cctk
   CCTK_REAL const p1o2dy = 0.5*INV(dy);
   CCTK_REAL const p1o2dz = 0.5*INV(dz);
   CCTK_REAL const p1o4dx = 0.25*INV(dx);
-  CCTK_REAL const p1o4dxdy = 0.25*INV(dx)*INV(dy);
-  CCTK_REAL const p1o4dxdz = 0.25*INV(dx)*INV(dz);
+  CCTK_REAL const p1o4dxdy = 0.25*INV(dx*dy);
+  CCTK_REAL const p1o4dxdz = 0.25*INV(dx*dz);
   CCTK_REAL const p1o4dy = 0.25*INV(dy);
-  CCTK_REAL const p1o4dydz = 0.25*INV(dy)*INV(dz);
+  CCTK_REAL const p1o4dydz = 0.25*INV(dy*dz);
   CCTK_REAL const p1o4dz = 0.25*INV(dz);
   CCTK_REAL const p1odx = INV(dx);
   CCTK_REAL const p1odx2 = INV(SQR(dx));
@@ -108,7 +108,7 @@ static void ML_BSSN_convertFromADMBaseGamma_Body(cGH const * restrict const cctk
   
   /* Loop over the grid points */
   #pragma omp parallel
-  CCTK_LOOP3 (ML_BSSN_convertFromADMBaseGamma,
+  CCTK_LOOP3(ML_BSSN_convertFromADMBaseGamma,
     i,j,k, imin[0],imin[1],imin[2], imax[0],imax[1],imax[2],
     cctk_lsh[0],cctk_lsh[1],cctk_lsh[2])
   {
@@ -268,11 +268,10 @@ static void ML_BSSN_convertFromADMBaseGamma_Body(cGH const * restrict const cctk
     CCTK_REAL Xt3L = Gt311*gtu11 + Gt322*gtu22 + 2*(Gt312*gtu12 + 
       Gt313*gtu13 + Gt323*gtu23) + Gt333*gtu33;
     
-    CCTK_REAL AL = IfThen(LapseACoeff != 0,(-dtalpL + 
-      LapseAdvectionCoeff*(beta1L*PDstandardNth1alpha + 
-      beta2L*PDstandardNth2alpha + 
-      beta3L*PDstandardNth3alpha))*INV(harmonicF)*pow(alphaL,(CCTK_REAL) 
-      -harmonicN),0);
+    CCTK_REAL AL = IfThen(LapseACoeff != 
+      0,INV(ToReal(harmonicF))*pow(alphaL,-ToReal(harmonicN))*(-dtalpL + 
+      (beta1L*PDstandardNth1alpha + beta2L*PDstandardNth2alpha + 
+      beta3L*PDstandardNth3alpha)*ToReal(LapseAdvectionCoeff)),0);
     
     CCTK_REAL theta = 1;
     
@@ -282,17 +281,17 @@ static void ML_BSSN_convertFromADMBaseGamma_Body(cGH const * restrict const cctk
     
     if (ShiftBCoeff*ShiftGammaCoeff != 0)
     {
-      B1L = -((-dtbetaxL + (beta1L*PDstandardNth1beta1 + 
-        beta2L*PDstandardNth2beta1 + 
-        beta3L*PDstandardNth3beta1)*ShiftAdvectionCoeff)*INV(ShiftGammaCoeff)*INV(theta));
+      B1L = -(INV(theta*ToReal(ShiftGammaCoeff))*(-dtbetaxL + 
+        (beta1L*PDstandardNth1beta1 + beta2L*PDstandardNth2beta1 + 
+        beta3L*PDstandardNth3beta1)*ToReal(ShiftAdvectionCoeff)));
       
-      B2L = -((-dtbetayL + (beta1L*PDstandardNth1beta2 + 
-        beta2L*PDstandardNth2beta2 + 
-        beta3L*PDstandardNth3beta2)*ShiftAdvectionCoeff)*INV(ShiftGammaCoeff)*INV(theta));
+      B2L = -(INV(theta*ToReal(ShiftGammaCoeff))*(-dtbetayL + 
+        (beta1L*PDstandardNth1beta2 + beta2L*PDstandardNth2beta2 + 
+        beta3L*PDstandardNth3beta2)*ToReal(ShiftAdvectionCoeff)));
       
-      B3L = -((-dtbetazL + (beta1L*PDstandardNth1beta3 + 
-        beta2L*PDstandardNth2beta3 + 
-        beta3L*PDstandardNth3beta3)*ShiftAdvectionCoeff)*INV(ShiftGammaCoeff)*INV(theta));
+      B3L = -(INV(theta*ToReal(ShiftGammaCoeff))*(-dtbetazL + 
+        (beta1L*PDstandardNth1beta3 + beta2L*PDstandardNth2beta3 + 
+        beta3L*PDstandardNth3beta3)*ToReal(ShiftAdvectionCoeff)));
     }
     else
     {
@@ -312,7 +311,7 @@ static void ML_BSSN_convertFromADMBaseGamma_Body(cGH const * restrict const cctk
     Xt2[index] = Xt2L;
     Xt3[index] = Xt3L;
   }
-  CCTK_ENDLOOP3 (ML_BSSN_convertFromADMBaseGamma);
+  CCTK_ENDLOOP3(ML_BSSN_convertFromADMBaseGamma);
 }
 
 extern "C" void ML_BSSN_convertFromADMBaseGamma(CCTK_ARGUMENTS)
