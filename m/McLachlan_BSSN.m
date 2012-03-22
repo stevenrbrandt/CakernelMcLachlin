@@ -6,7 +6,8 @@ SetSourceLanguage["C"];
 (* Options *)
 (******************************************************************************)
 
-createCode[derivOrder_, useJacobian_, splitUpwindDerivs_, evolutionTimelevels_, addMatter_] :=
+createCode[derivOrder_, useJacobian_, splitUpwindDerivs_, evolutionTimelevels_, addMatter_,
+           device_] :=
 Module[{},
 
 prefix = "ML_";
@@ -15,6 +16,7 @@ suffix =
   <> If [useJacobian, "_MP", ""]
   <> If [derivOrder!=4, "_O" <> ToString[derivOrder], ""]
   <> If [splitUpwindDerivs, "", "_UPW"]
+  <> If [!device, "_Host", ""]
   (* <> If [evolutionTimelevels!=3, "_TL" <> ToString[evolutionTimelevels], ""] *)
   (* <> If [addMatter==1, "_M", ""] *)
   ;
@@ -1285,7 +1287,6 @@ calculations =
 Join[
 {
   initialCalc,
-  copyCalc,
   convertFromADMBaseCalc,
   initGammaCalc,
   convertFromADMBaseGammaCalc,
@@ -1305,7 +1306,10 @@ Join[
   convertToADMBaseFakeDtLapseShiftCalc,*)
   (* constraintsCalc, *)
 },
-  {} (*dissCalcs*)
+  {}, (*dissCalcs*)
+
+  If[device,{copyCalc},{}]
+
 ];
 
 CreateKrancThornTT [groups, ".", BSSN,
@@ -1315,9 +1319,9 @@ CreateKrancThornTT [groups, ".", BSSN,
   EvolutionTimelevels -> evolutionTimelevels,
   DefaultEvolutionTimelevels -> 2,
   UseJacobian -> False,
-  UseLoopControl -> False,
-  UseVectors -> False,
-  UseCaKernel -> True,                    
+  UseLoopControl -> !device,
+  UseVectors -> !device,
+  UseCaKernel -> device,
   TileSize -> {16,16,16},
   InheritedImplementations -> inheritedImplementations,
   InheritedKeywordParameters -> inheritedKeywordParameters,
@@ -1344,7 +1348,8 @@ CreateKrancThornTT [groups, ".", BSSN,
    (matter seems cheap; it should be always enabled) *)
 
 (* createCode[2, False, True , 3, 1]; *)
-createCode[4, False, True , 2, 0];
+createCode[4, False, True , 2, 0, True];
+createCode[4, False, True , 2, 0, False];
 (* createCode[4, False, False, 3, 1]; *)
 (* createCode[4, True , True , 3, 1]; *)
 (* createCode[8, False, True , 3, 1]; *)
