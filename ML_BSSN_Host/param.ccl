@@ -6,31 +6,31 @@ shares: ADMBase
 
 EXTENDS CCTK_KEYWORD evolution_method "evolution_method"
 {
-  ML_BSSN :: ""
+  ML_BSSN_Host :: ""
 } 
 
 
 EXTENDS CCTK_KEYWORD lapse_evolution_method "lapse_evolution_method"
 {
-  ML_BSSN :: ""
+  ML_BSSN_Host :: ""
 } 
 
 
 EXTENDS CCTK_KEYWORD shift_evolution_method "shift_evolution_method"
 {
-  ML_BSSN :: ""
+  ML_BSSN_Host :: ""
 } 
 
 
 EXTENDS CCTK_KEYWORD dtlapse_evolution_method "dtlapse_evolution_method"
 {
-  ML_BSSN :: ""
+  ML_BSSN_Host :: ""
 } 
 
 
 EXTENDS CCTK_KEYWORD dtshift_evolution_method "dtshift_evolution_method"
 {
-  ML_BSSN :: ""
+  ML_BSSN_Host :: ""
 } 
 
 
@@ -210,13 +210,13 @@ KEYWORD apply_dissipation "Whether to apply dissipation to the RHSs"
 } "always"
 
 restricted:
-CCTK_INT ML_BSSN_MaxNumEvolvedVars "Number of evolved variables used by this thorn" ACCUMULATOR-BASE=MethodofLines::MoL_Num_Evolved_Vars STEERABLE=RECOVER
+CCTK_INT ML_BSSN_Host_MaxNumEvolvedVars "Number of evolved variables used by this thorn" ACCUMULATOR-BASE=MethodofLines::MoL_Num_Evolved_Vars STEERABLE=RECOVER
 {
   25:25 :: "Number of evolved variables used by this thorn"
 } 25
 
 restricted:
-CCTK_INT ML_BSSN_MaxNumArrayEvolvedVars "Number of Array evolved variables used by this thorn" ACCUMULATOR-BASE=MethodofLines::MoL_Num_ArrayEvolved_Vars STEERABLE=RECOVER
+CCTK_INT ML_BSSN_Host_MaxNumArrayEvolvedVars "Number of Array evolved variables used by this thorn" ACCUMULATOR-BASE=MethodofLines::MoL_Num_ArrayEvolved_Vars STEERABLE=RECOVER
 {
   0:0 :: "Number of Array evolved variables used by this thorn"
 } 0
@@ -240,133 +240,121 @@ CCTK_INT other_timelevels "Number of active timelevels for non-evolved grid func
 } 1
 
 restricted:
-CCTK_INT ML_BSSN_Minkowski_calc_every "ML_BSSN_Minkowski_calc_every" STEERABLE=ALWAYS
+CCTK_INT ML_BSSN_Host_Minkowski_calc_every "ML_BSSN_Host_Minkowski_calc_every" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 1
 
 restricted:
-CCTK_INT ML_BSSN_convertFromADMBase_calc_every "ML_BSSN_convertFromADMBase_calc_every" STEERABLE=ALWAYS
+CCTK_INT ML_BSSN_Host_convertFromADMBase_calc_every "ML_BSSN_Host_convertFromADMBase_calc_every" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 1
 
 restricted:
-CCTK_INT ML_BSSN_InitGamma_calc_every "ML_BSSN_InitGamma_calc_every" STEERABLE=ALWAYS
+CCTK_INT ML_BSSN_Host_InitGamma_calc_every "ML_BSSN_Host_InitGamma_calc_every" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 1
 
 restricted:
-CCTK_INT ML_BSSN_convertFromADMBaseGamma_calc_every "ML_BSSN_convertFromADMBaseGamma_calc_every" STEERABLE=ALWAYS
+CCTK_INT ML_BSSN_Host_convertFromADMBaseGamma_calc_every "ML_BSSN_Host_convertFromADMBaseGamma_calc_every" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 1
 
 restricted:
-CCTK_INT ML_BSSN_RHS1_calc_every "ML_BSSN_RHS1_calc_every" STEERABLE=ALWAYS
+CCTK_INT ML_BSSN_Host_RHS1_calc_every "ML_BSSN_Host_RHS1_calc_every" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 1
 
 restricted:
-CCTK_INT ML_BSSN_RHS2_calc_every "ML_BSSN_RHS2_calc_every" STEERABLE=ALWAYS
+CCTK_INT ML_BSSN_Host_RHS2_calc_every "ML_BSSN_Host_RHS2_calc_every" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 1
 
 restricted:
-CCTK_INT ML_BSSN_Advect_calc_every "ML_BSSN_Advect_calc_every" STEERABLE=ALWAYS
+CCTK_INT ML_BSSN_Host_Advect_calc_every "ML_BSSN_Host_Advect_calc_every" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 1
 
 restricted:
-CCTK_INT ML_BSSN_InitRHS_calc_every "ML_BSSN_InitRHS_calc_every" STEERABLE=ALWAYS
+CCTK_INT ML_BSSN_Host_InitRHS_calc_every "ML_BSSN_Host_InitRHS_calc_every" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 1
 
 restricted:
-CCTK_INT ML_BSSN_RHSStaticBoundary_calc_every "ML_BSSN_RHSStaticBoundary_calc_every" STEERABLE=ALWAYS
+CCTK_INT ML_BSSN_Host_RHSStaticBoundary_calc_every "ML_BSSN_Host_RHSStaticBoundary_calc_every" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 1
 
 restricted:
-CCTK_INT ML_BSSN_enforce_calc_every "ML_BSSN_enforce_calc_every" STEERABLE=ALWAYS
+CCTK_INT ML_BSSN_Host_enforce_calc_every "ML_BSSN_Host_enforce_calc_every" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 1
 
 restricted:
-CCTK_INT ML_BSSN_copy_to_device_calc_every "ML_BSSN_copy_to_device_calc_every" STEERABLE=ALWAYS
-{
-  *:* :: ""
-} 1
-
-restricted:
-CCTK_INT ML_BSSN_Minkowski_calc_offset "ML_BSSN_Minkowski_calc_offset" STEERABLE=ALWAYS
+CCTK_INT ML_BSSN_Host_Minkowski_calc_offset "ML_BSSN_Host_Minkowski_calc_offset" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 0
 
 restricted:
-CCTK_INT ML_BSSN_convertFromADMBase_calc_offset "ML_BSSN_convertFromADMBase_calc_offset" STEERABLE=ALWAYS
+CCTK_INT ML_BSSN_Host_convertFromADMBase_calc_offset "ML_BSSN_Host_convertFromADMBase_calc_offset" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 0
 
 restricted:
-CCTK_INT ML_BSSN_InitGamma_calc_offset "ML_BSSN_InitGamma_calc_offset" STEERABLE=ALWAYS
+CCTK_INT ML_BSSN_Host_InitGamma_calc_offset "ML_BSSN_Host_InitGamma_calc_offset" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 0
 
 restricted:
-CCTK_INT ML_BSSN_convertFromADMBaseGamma_calc_offset "ML_BSSN_convertFromADMBaseGamma_calc_offset" STEERABLE=ALWAYS
+CCTK_INT ML_BSSN_Host_convertFromADMBaseGamma_calc_offset "ML_BSSN_Host_convertFromADMBaseGamma_calc_offset" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 0
 
 restricted:
-CCTK_INT ML_BSSN_RHS1_calc_offset "ML_BSSN_RHS1_calc_offset" STEERABLE=ALWAYS
+CCTK_INT ML_BSSN_Host_RHS1_calc_offset "ML_BSSN_Host_RHS1_calc_offset" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 0
 
 restricted:
-CCTK_INT ML_BSSN_RHS2_calc_offset "ML_BSSN_RHS2_calc_offset" STEERABLE=ALWAYS
+CCTK_INT ML_BSSN_Host_RHS2_calc_offset "ML_BSSN_Host_RHS2_calc_offset" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 0
 
 restricted:
-CCTK_INT ML_BSSN_Advect_calc_offset "ML_BSSN_Advect_calc_offset" STEERABLE=ALWAYS
+CCTK_INT ML_BSSN_Host_Advect_calc_offset "ML_BSSN_Host_Advect_calc_offset" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 0
 
 restricted:
-CCTK_INT ML_BSSN_InitRHS_calc_offset "ML_BSSN_InitRHS_calc_offset" STEERABLE=ALWAYS
+CCTK_INT ML_BSSN_Host_InitRHS_calc_offset "ML_BSSN_Host_InitRHS_calc_offset" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 0
 
 restricted:
-CCTK_INT ML_BSSN_RHSStaticBoundary_calc_offset "ML_BSSN_RHSStaticBoundary_calc_offset" STEERABLE=ALWAYS
+CCTK_INT ML_BSSN_Host_RHSStaticBoundary_calc_offset "ML_BSSN_Host_RHSStaticBoundary_calc_offset" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 0
 
 restricted:
-CCTK_INT ML_BSSN_enforce_calc_offset "ML_BSSN_enforce_calc_offset" STEERABLE=ALWAYS
-{
-  *:* :: ""
-} 0
-
-restricted:
-CCTK_INT ML_BSSN_copy_to_device_calc_offset "ML_BSSN_copy_to_device_calc_offset" STEERABLE=ALWAYS
+CCTK_INT ML_BSSN_Host_enforce_calc_offset "ML_BSSN_Host_enforce_calc_offset" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 0
