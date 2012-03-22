@@ -78,7 +78,7 @@ derivatives =
     (* TODO: make these higher order stencils *)
     PDonesided[i] -> (*(1-IntAbs[dir[i]]) * StandardCenteredDifferenceOperator[1,2/2,i]
     +*) dir[i] (-1 + shift[i]^dir[i]) / spacing[i]} /. i->j, {j,1,3}],1]
-} /. fdOrder -> 2;
+} /. fdOrder -> 8;
 
 PD     = PDstandardNth;
 PDu    = PDupwindNth;
@@ -87,8 +87,11 @@ PDus   = PDupwindNthSymm;
 PDo    = PDonesided; (* first order accurate *)
 PDdiss = PDdissipationNth;
 
- (* Disable upwinding to maintain a stencil size of 1 *)
-Upwind[dir_, var_, idx_] := dir PDstandardNth[var,idx];
+If [splitUpwindDerivs,
+    Upwind[dir_, var_, idx_] := dir PDua[var,idx] + Abs[dir] PDus[var,idx],
+    Upwind[dir_, var_, idx_] := dir PDu[var,idx]];
+
+
 
 (******************************************************************************)
 (* Tensors *)
@@ -1198,8 +1201,8 @@ intParameters =
   },
   {
     Name -> fdOrder,
-    Default -> derivOrder,
-    AllowedValues -> {2,4,6,8}
+    Default -> 2,
+    AllowedValues -> {8}
   },
   {
     Name -> harmonicShift,
