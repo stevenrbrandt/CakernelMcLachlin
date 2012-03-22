@@ -17,7 +17,7 @@ output=$(basename $script .m).out
 rm -f $output
 
 # Run Kranc to regenerate the code
-../../../repos/KrancCaKernel/Bin/kranc $script | tee $error
+../../../repos/Kranc/Bin/kranc $script | tee $error
 [ $PIPESTATUS -eq 0 ] || exit $PIPESTATUS
 
 mv $error $output
