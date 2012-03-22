@@ -151,7 +151,7 @@ CCTK_CUDA_KERNEL ML_BSSN_copy_to_device TYPE=gpu_cuda/3dblock TILE="8,8,8" SHARE
   "Xt3"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS1 TYPE=gpu_cuda/3dblock TILE="8,8,8" SHARECODE=yes STENCIL="1,1,1,1,1,1"
+CCTK_CUDA_KERNEL ML_BSSN_RHS1 TYPE=gpu_cuda/3dblock TILE="8,8,8" SHARECODE=yes STENCIL="4,4,4,4,4,4"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in
   {
@@ -472,7 +472,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS1 TYPE=gpu_cuda/3dblock TILE="8,8,8" SHARECODE=yes S
   "ShiftGammaCoeff"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS2 TYPE=gpu_cuda/3dblock TILE="8,8,8" SHARECODE=yes STENCIL="1,1,1,1,1,1"
+CCTK_CUDA_KERNEL ML_BSSN_RHS2 TYPE=gpu_cuda/3dblock TILE="8,8,8" SHARECODE=yes STENCIL="4,4,4,4,4,4"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in
   {
@@ -643,7 +643,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS2 TYPE=gpu_cuda/3dblock TILE="8,8,8" SHARECODE=yes S
   "conformalMethod"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_Advect TYPE=gpu_cuda/3dblock TILE="8,8,8" SHARECODE=yes STENCIL="1,1,1,1,1,1"
+CCTK_CUDA_KERNEL ML_BSSN_Advect TYPE=gpu_cuda/3dblock TILE="8,8,8" SHARECODE=yes STENCIL="5,5,5,5,5,5"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in
   {
@@ -1123,7 +1123,7 @@ CCTK_CUDA_KERNEL ML_BSSN_InitRHS TYPE=gpu_cuda/3dblock TILE="8,8,8" SHARECODE=ye
   "Xt3rhs"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHSStaticBoundary TYPE=gpu_cuda/boundary TILE="8,8,8" SHARECODE=yes
+CCTK_CUDA_KERNEL ML_BSSN_RHSStaticBoundary TYPE=gpu_cuda/boundary_s TILE="8,8,8" SHARECODE=yes
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {

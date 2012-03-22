@@ -55,30 +55,30 @@ static void ML_BSSN_InitGamma_Body(cGH const * restrict const cctkGH, int const 
   CCTK_REAL const hdzi = 0.5 * dzi;
   
   /* Initialize predefined quantities */
-  CCTK_REAL const p1o16dx = 0.0625*INV(dx);
-  CCTK_REAL const p1o16dy = 0.0625*INV(dy);
-  CCTK_REAL const p1o16dz = 0.0625*INV(dz);
-  CCTK_REAL const p1o2dx = 0.5*INV(dx);
-  CCTK_REAL const p1o2dy = 0.5*INV(dy);
-  CCTK_REAL const p1o2dz = 0.5*INV(dz);
-  CCTK_REAL const p1o4dx = 0.25*INV(dx);
-  CCTK_REAL const p1o4dxdy = 0.25*INV(dx*dy);
-  CCTK_REAL const p1o4dxdz = 0.25*INV(dx*dz);
-  CCTK_REAL const p1o4dy = 0.25*INV(dy);
-  CCTK_REAL const p1o4dydz = 0.25*INV(dy*dz);
-  CCTK_REAL const p1o4dz = 0.25*INV(dz);
+  CCTK_REAL const p1o1024dx = 0.0009765625*INV(dx);
+  CCTK_REAL const p1o1024dy = 0.0009765625*INV(dy);
+  CCTK_REAL const p1o1024dz = 0.0009765625*INV(dz);
+  CCTK_REAL const p1o1680dx = 0.000595238095238095238095238095238*INV(dx);
+  CCTK_REAL const p1o1680dy = 0.000595238095238095238095238095238*INV(dy);
+  CCTK_REAL const p1o1680dz = 0.000595238095238095238095238095238*INV(dz);
+  CCTK_REAL const p1o5040dx2 = 0.000198412698412698412698412698413*INV(SQR(dx));
+  CCTK_REAL const p1o5040dy2 = 0.000198412698412698412698412698413*INV(SQR(dy));
+  CCTK_REAL const p1o5040dz2 = 0.000198412698412698412698412698413*INV(SQR(dz));
+  CCTK_REAL const p1o560dx = 0.00178571428571428571428571428571*INV(dx);
+  CCTK_REAL const p1o560dy = 0.00178571428571428571428571428571*INV(dy);
+  CCTK_REAL const p1o560dz = 0.00178571428571428571428571428571*INV(dz);
+  CCTK_REAL const p1o705600dxdy = 1.41723356009070294784580498866e-6*INV(dx*dy);
+  CCTK_REAL const p1o705600dxdz = 1.41723356009070294784580498866e-6*INV(dx*dz);
+  CCTK_REAL const p1o705600dydz = 1.41723356009070294784580498866e-6*INV(dy*dz);
+  CCTK_REAL const p1o840dx = 0.00119047619047619047619047619048*INV(dx);
+  CCTK_REAL const p1o840dy = 0.00119047619047619047619047619048*INV(dy);
+  CCTK_REAL const p1o840dz = 0.00119047619047619047619047619048*INV(dz);
   CCTK_REAL const p1odx = INV(dx);
-  CCTK_REAL const p1odx2 = INV(SQR(dx));
   CCTK_REAL const p1ody = INV(dy);
-  CCTK_REAL const p1ody2 = INV(SQR(dy));
   CCTK_REAL const p1odz = INV(dz);
-  CCTK_REAL const p1odz2 = INV(SQR(dz));
-  CCTK_REAL const pm1o2dx = -0.5*INV(dx);
-  CCTK_REAL const pm1o2dy = -0.5*INV(dy);
-  CCTK_REAL const pm1o2dz = -0.5*INV(dz);
-  CCTK_REAL const pm1o4dx = -0.25*INV(dx);
-  CCTK_REAL const pm1o4dy = -0.25*INV(dy);
-  CCTK_REAL const pm1o4dz = -0.25*INV(dz);
+  CCTK_REAL const pm1o840dx = -0.00119047619047619047619047619048*INV(dx);
+  CCTK_REAL const pm1o840dy = -0.00119047619047619047619047619048*INV(dy);
+  CCTK_REAL const pm1o840dz = -0.00119047619047619047619047619048*INV(dz);
   
   /* Assign local copies of arrays functions */
   
@@ -147,11 +147,14 @@ extern "C" void ML_BSSN_InitGamma(CCTK_ARGUMENTS)
     return;
   }
   
-  const char *groups[] = {"ML_BSSN::ML_dtlapse","ML_BSSN::ML_dtshift","ML_BSSN::ML_Gamma"};
+  const char *const groups[] = {
+    "ML_BSSN::ML_dtlapse",
+    "ML_BSSN::ML_dtshift",
+    "ML_BSSN::ML_Gamma"};
   GenericFD_AssertGroupStorage(cctkGH, "ML_BSSN_InitGamma", 3, groups);
   
   
-  GenericFD_LoopOverEverything(cctkGH, &ML_BSSN_InitGamma_Body);
+  GenericFD_LoopOverEverything(cctkGH, ML_BSSN_InitGamma_Body);
   
   if (verbose > 1)
   {

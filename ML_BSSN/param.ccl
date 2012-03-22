@@ -144,7 +144,7 @@ restricted:
 CCTK_INT fdOrder "fdOrder"
 {
   *:* :: ""
-} 4
+} 2
 
 restricted:
 CCTK_INT harmonicShift "Whether to use the harmonic shift"

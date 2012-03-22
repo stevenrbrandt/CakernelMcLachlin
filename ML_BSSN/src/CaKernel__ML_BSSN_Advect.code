@@ -37,30 +37,30 @@ CAKERNEL_ML_BSSN_Advect_Begin
   CCTK_REAL const hdzi = 0.5 * dzi;
   
   /* Initialize predefined quantities */
-  CCTK_REAL const p1o16dx = 0.0625*INV(dx);
-  CCTK_REAL const p1o16dy = 0.0625*INV(dy);
-  CCTK_REAL const p1o16dz = 0.0625*INV(dz);
-  CCTK_REAL const p1o2dx = 0.5*INV(dx);
-  CCTK_REAL const p1o2dy = 0.5*INV(dy);
-  CCTK_REAL const p1o2dz = 0.5*INV(dz);
-  CCTK_REAL const p1o4dx = 0.25*INV(dx);
-  CCTK_REAL const p1o4dxdy = 0.25*INV(dx*dy);
-  CCTK_REAL const p1o4dxdz = 0.25*INV(dx*dz);
-  CCTK_REAL const p1o4dy = 0.25*INV(dy);
-  CCTK_REAL const p1o4dydz = 0.25*INV(dy*dz);
-  CCTK_REAL const p1o4dz = 0.25*INV(dz);
+  CCTK_REAL const p1o1024dx = 0.0009765625*INV(dx);
+  CCTK_REAL const p1o1024dy = 0.0009765625*INV(dy);
+  CCTK_REAL const p1o1024dz = 0.0009765625*INV(dz);
+  CCTK_REAL const p1o1680dx = 0.000595238095238095238095238095238*INV(dx);
+  CCTK_REAL const p1o1680dy = 0.000595238095238095238095238095238*INV(dy);
+  CCTK_REAL const p1o1680dz = 0.000595238095238095238095238095238*INV(dz);
+  CCTK_REAL const p1o5040dx2 = 0.000198412698412698412698412698413*INV(SQR(dx));
+  CCTK_REAL const p1o5040dy2 = 0.000198412698412698412698412698413*INV(SQR(dy));
+  CCTK_REAL const p1o5040dz2 = 0.000198412698412698412698412698413*INV(SQR(dz));
+  CCTK_REAL const p1o560dx = 0.00178571428571428571428571428571*INV(dx);
+  CCTK_REAL const p1o560dy = 0.00178571428571428571428571428571*INV(dy);
+  CCTK_REAL const p1o560dz = 0.00178571428571428571428571428571*INV(dz);
+  CCTK_REAL const p1o705600dxdy = 1.41723356009070294784580498866e-6*INV(dx*dy);
+  CCTK_REAL const p1o705600dxdz = 1.41723356009070294784580498866e-6*INV(dx*dz);
+  CCTK_REAL const p1o705600dydz = 1.41723356009070294784580498866e-6*INV(dy*dz);
+  CCTK_REAL const p1o840dx = 0.00119047619047619047619047619048*INV(dx);
+  CCTK_REAL const p1o840dy = 0.00119047619047619047619047619048*INV(dy);
+  CCTK_REAL const p1o840dz = 0.00119047619047619047619047619048*INV(dz);
   CCTK_REAL const p1odx = INV(dx);
-  CCTK_REAL const p1odx2 = INV(SQR(dx));
   CCTK_REAL const p1ody = INV(dy);
-  CCTK_REAL const p1ody2 = INV(SQR(dy));
   CCTK_REAL const p1odz = INV(dz);
-  CCTK_REAL const p1odz2 = INV(SQR(dz));
-  CCTK_REAL const pm1o2dx = -0.5*INV(dx);
-  CCTK_REAL const pm1o2dy = -0.5*INV(dy);
-  CCTK_REAL const pm1o2dz = -0.5*INV(dz);
-  CCTK_REAL const pm1o4dx = -0.25*INV(dx);
-  CCTK_REAL const pm1o4dy = -0.25*INV(dy);
-  CCTK_REAL const pm1o4dz = -0.25*INV(dz);
+  CCTK_REAL const pm1o840dx = -0.00119047619047619047619047619048*INV(dx);
+  CCTK_REAL const pm1o840dy = -0.00119047619047619047619047619048*INV(dy);
+  CCTK_REAL const pm1o840dz = -0.00119047619047619047619047619048*INV(dz);
   
   /* Assign local copies of arrays functions */
   
@@ -128,81 +128,156 @@ CAKERNEL_ML_BSSN_Advect_Begin
     /* Include user supplied include files */
     
     /* Precompute derivatives */
-    CCTK_REAL const PDstandardNth1A = PDstandardNth1(A);
-    CCTK_REAL const PDstandardNth2A = PDstandardNth2(A);
-    CCTK_REAL const PDstandardNth3A = PDstandardNth3(A);
-    CCTK_REAL const PDstandardNth1alpha = PDstandardNth1(alpha);
-    CCTK_REAL const PDstandardNth2alpha = PDstandardNth2(alpha);
-    CCTK_REAL const PDstandardNth3alpha = PDstandardNth3(alpha);
-    CCTK_REAL const PDstandardNth1At11 = PDstandardNth1(At11);
-    CCTK_REAL const PDstandardNth2At11 = PDstandardNth2(At11);
-    CCTK_REAL const PDstandardNth3At11 = PDstandardNth3(At11);
-    CCTK_REAL const PDstandardNth1At12 = PDstandardNth1(At12);
-    CCTK_REAL const PDstandardNth2At12 = PDstandardNth2(At12);
-    CCTK_REAL const PDstandardNth3At12 = PDstandardNth3(At12);
-    CCTK_REAL const PDstandardNth1At13 = PDstandardNth1(At13);
-    CCTK_REAL const PDstandardNth2At13 = PDstandardNth2(At13);
-    CCTK_REAL const PDstandardNth3At13 = PDstandardNth3(At13);
-    CCTK_REAL const PDstandardNth1At22 = PDstandardNth1(At22);
-    CCTK_REAL const PDstandardNth2At22 = PDstandardNth2(At22);
-    CCTK_REAL const PDstandardNth3At22 = PDstandardNth3(At22);
-    CCTK_REAL const PDstandardNth1At23 = PDstandardNth1(At23);
-    CCTK_REAL const PDstandardNth2At23 = PDstandardNth2(At23);
-    CCTK_REAL const PDstandardNth3At23 = PDstandardNth3(At23);
-    CCTK_REAL const PDstandardNth1At33 = PDstandardNth1(At33);
-    CCTK_REAL const PDstandardNth2At33 = PDstandardNth2(At33);
-    CCTK_REAL const PDstandardNth3At33 = PDstandardNth3(At33);
-    CCTK_REAL const PDstandardNth1B1 = PDstandardNth1(B1);
-    CCTK_REAL const PDstandardNth2B1 = PDstandardNth2(B1);
-    CCTK_REAL const PDstandardNth3B1 = PDstandardNth3(B1);
-    CCTK_REAL const PDstandardNth1B2 = PDstandardNth1(B2);
-    CCTK_REAL const PDstandardNth2B2 = PDstandardNth2(B2);
-    CCTK_REAL const PDstandardNth3B2 = PDstandardNth3(B2);
-    CCTK_REAL const PDstandardNth1B3 = PDstandardNth1(B3);
-    CCTK_REAL const PDstandardNth2B3 = PDstandardNth2(B3);
-    CCTK_REAL const PDstandardNth3B3 = PDstandardNth3(B3);
-    CCTK_REAL const PDstandardNth1beta1 = PDstandardNth1(beta1);
-    CCTK_REAL const PDstandardNth2beta1 = PDstandardNth2(beta1);
-    CCTK_REAL const PDstandardNth3beta1 = PDstandardNth3(beta1);
-    CCTK_REAL const PDstandardNth1beta2 = PDstandardNth1(beta2);
-    CCTK_REAL const PDstandardNth2beta2 = PDstandardNth2(beta2);
-    CCTK_REAL const PDstandardNth3beta2 = PDstandardNth3(beta2);
-    CCTK_REAL const PDstandardNth1beta3 = PDstandardNth1(beta3);
-    CCTK_REAL const PDstandardNth2beta3 = PDstandardNth2(beta3);
-    CCTK_REAL const PDstandardNth3beta3 = PDstandardNth3(beta3);
-    CCTK_REAL const PDstandardNth1gt11 = PDstandardNth1(gt11);
-    CCTK_REAL const PDstandardNth2gt11 = PDstandardNth2(gt11);
-    CCTK_REAL const PDstandardNth3gt11 = PDstandardNth3(gt11);
-    CCTK_REAL const PDstandardNth1gt12 = PDstandardNth1(gt12);
-    CCTK_REAL const PDstandardNth2gt12 = PDstandardNth2(gt12);
-    CCTK_REAL const PDstandardNth3gt12 = PDstandardNth3(gt12);
-    CCTK_REAL const PDstandardNth1gt13 = PDstandardNth1(gt13);
-    CCTK_REAL const PDstandardNth2gt13 = PDstandardNth2(gt13);
-    CCTK_REAL const PDstandardNth3gt13 = PDstandardNth3(gt13);
-    CCTK_REAL const PDstandardNth1gt22 = PDstandardNth1(gt22);
-    CCTK_REAL const PDstandardNth2gt22 = PDstandardNth2(gt22);
-    CCTK_REAL const PDstandardNth3gt22 = PDstandardNth3(gt22);
-    CCTK_REAL const PDstandardNth1gt23 = PDstandardNth1(gt23);
-    CCTK_REAL const PDstandardNth2gt23 = PDstandardNth2(gt23);
-    CCTK_REAL const PDstandardNth3gt23 = PDstandardNth3(gt23);
-    CCTK_REAL const PDstandardNth1gt33 = PDstandardNth1(gt33);
-    CCTK_REAL const PDstandardNth2gt33 = PDstandardNth2(gt33);
-    CCTK_REAL const PDstandardNth3gt33 = PDstandardNth3(gt33);
-    CCTK_REAL const PDstandardNth1phi = PDstandardNth1(phi);
-    CCTK_REAL const PDstandardNth2phi = PDstandardNth2(phi);
-    CCTK_REAL const PDstandardNth3phi = PDstandardNth3(phi);
-    CCTK_REAL const PDstandardNth1trK = PDstandardNth1(trK);
-    CCTK_REAL const PDstandardNth2trK = PDstandardNth2(trK);
-    CCTK_REAL const PDstandardNth3trK = PDstandardNth3(trK);
-    CCTK_REAL const PDstandardNth1Xt1 = PDstandardNth1(Xt1);
-    CCTK_REAL const PDstandardNth2Xt1 = PDstandardNth2(Xt1);
-    CCTK_REAL const PDstandardNth3Xt1 = PDstandardNth3(Xt1);
-    CCTK_REAL const PDstandardNth1Xt2 = PDstandardNth1(Xt2);
-    CCTK_REAL const PDstandardNth2Xt2 = PDstandardNth2(Xt2);
-    CCTK_REAL const PDstandardNth3Xt2 = PDstandardNth3(Xt2);
-    CCTK_REAL const PDstandardNth1Xt3 = PDstandardNth1(Xt3);
-    CCTK_REAL const PDstandardNth2Xt3 = PDstandardNth2(Xt3);
-    CCTK_REAL const PDstandardNth3Xt3 = PDstandardNth3(Xt3);
+    CCTK_REAL const PDupwindNthAnti1A = PDupwindNthAnti1(A);
+    CCTK_REAL const PDupwindNthSymm1A = PDupwindNthSymm1(A);
+    CCTK_REAL const PDupwindNthAnti2A = PDupwindNthAnti2(A);
+    CCTK_REAL const PDupwindNthSymm2A = PDupwindNthSymm2(A);
+    CCTK_REAL const PDupwindNthAnti3A = PDupwindNthAnti3(A);
+    CCTK_REAL const PDupwindNthSymm3A = PDupwindNthSymm3(A);
+    CCTK_REAL const PDupwindNthAnti1alpha = PDupwindNthAnti1(alpha);
+    CCTK_REAL const PDupwindNthSymm1alpha = PDupwindNthSymm1(alpha);
+    CCTK_REAL const PDupwindNthAnti2alpha = PDupwindNthAnti2(alpha);
+    CCTK_REAL const PDupwindNthSymm2alpha = PDupwindNthSymm2(alpha);
+    CCTK_REAL const PDupwindNthAnti3alpha = PDupwindNthAnti3(alpha);
+    CCTK_REAL const PDupwindNthSymm3alpha = PDupwindNthSymm3(alpha);
+    CCTK_REAL const PDupwindNthAnti1At11 = PDupwindNthAnti1(At11);
+    CCTK_REAL const PDupwindNthSymm1At11 = PDupwindNthSymm1(At11);
+    CCTK_REAL const PDupwindNthAnti2At11 = PDupwindNthAnti2(At11);
+    CCTK_REAL const PDupwindNthSymm2At11 = PDupwindNthSymm2(At11);
+    CCTK_REAL const PDupwindNthAnti3At11 = PDupwindNthAnti3(At11);
+    CCTK_REAL const PDupwindNthSymm3At11 = PDupwindNthSymm3(At11);
+    CCTK_REAL const PDupwindNthAnti1At12 = PDupwindNthAnti1(At12);
+    CCTK_REAL const PDupwindNthSymm1At12 = PDupwindNthSymm1(At12);
+    CCTK_REAL const PDupwindNthAnti2At12 = PDupwindNthAnti2(At12);
+    CCTK_REAL const PDupwindNthSymm2At12 = PDupwindNthSymm2(At12);
+    CCTK_REAL const PDupwindNthAnti3At12 = PDupwindNthAnti3(At12);
+    CCTK_REAL const PDupwindNthSymm3At12 = PDupwindNthSymm3(At12);
+    CCTK_REAL const PDupwindNthAnti1At13 = PDupwindNthAnti1(At13);
+    CCTK_REAL const PDupwindNthSymm1At13 = PDupwindNthSymm1(At13);
+    CCTK_REAL const PDupwindNthAnti2At13 = PDupwindNthAnti2(At13);
+    CCTK_REAL const PDupwindNthSymm2At13 = PDupwindNthSymm2(At13);
+    CCTK_REAL const PDupwindNthAnti3At13 = PDupwindNthAnti3(At13);
+    CCTK_REAL const PDupwindNthSymm3At13 = PDupwindNthSymm3(At13);
+    CCTK_REAL const PDupwindNthAnti1At22 = PDupwindNthAnti1(At22);
+    CCTK_REAL const PDupwindNthSymm1At22 = PDupwindNthSymm1(At22);
+    CCTK_REAL const PDupwindNthAnti2At22 = PDupwindNthAnti2(At22);
+    CCTK_REAL const PDupwindNthSymm2At22 = PDupwindNthSymm2(At22);
+    CCTK_REAL const PDupwindNthAnti3At22 = PDupwindNthAnti3(At22);
+    CCTK_REAL const PDupwindNthSymm3At22 = PDupwindNthSymm3(At22);
+    CCTK_REAL const PDupwindNthAnti1At23 = PDupwindNthAnti1(At23);
+    CCTK_REAL const PDupwindNthSymm1At23 = PDupwindNthSymm1(At23);
+    CCTK_REAL const PDupwindNthAnti2At23 = PDupwindNthAnti2(At23);
+    CCTK_REAL const PDupwindNthSymm2At23 = PDupwindNthSymm2(At23);
+    CCTK_REAL const PDupwindNthAnti3At23 = PDupwindNthAnti3(At23);
+    CCTK_REAL const PDupwindNthSymm3At23 = PDupwindNthSymm3(At23);
+    CCTK_REAL const PDupwindNthAnti1At33 = PDupwindNthAnti1(At33);
+    CCTK_REAL const PDupwindNthSymm1At33 = PDupwindNthSymm1(At33);
+    CCTK_REAL const PDupwindNthAnti2At33 = PDupwindNthAnti2(At33);
+    CCTK_REAL const PDupwindNthSymm2At33 = PDupwindNthSymm2(At33);
+    CCTK_REAL const PDupwindNthAnti3At33 = PDupwindNthAnti3(At33);
+    CCTK_REAL const PDupwindNthSymm3At33 = PDupwindNthSymm3(At33);
+    CCTK_REAL const PDupwindNthAnti1B1 = PDupwindNthAnti1(B1);
+    CCTK_REAL const PDupwindNthSymm1B1 = PDupwindNthSymm1(B1);
+    CCTK_REAL const PDupwindNthAnti2B1 = PDupwindNthAnti2(B1);
+    CCTK_REAL const PDupwindNthSymm2B1 = PDupwindNthSymm2(B1);
+    CCTK_REAL const PDupwindNthAnti3B1 = PDupwindNthAnti3(B1);
+    CCTK_REAL const PDupwindNthSymm3B1 = PDupwindNthSymm3(B1);
+    CCTK_REAL const PDupwindNthAnti1B2 = PDupwindNthAnti1(B2);
+    CCTK_REAL const PDupwindNthSymm1B2 = PDupwindNthSymm1(B2);
+    CCTK_REAL const PDupwindNthAnti2B2 = PDupwindNthAnti2(B2);
+    CCTK_REAL const PDupwindNthSymm2B2 = PDupwindNthSymm2(B2);
+    CCTK_REAL const PDupwindNthAnti3B2 = PDupwindNthAnti3(B2);
+    CCTK_REAL const PDupwindNthSymm3B2 = PDupwindNthSymm3(B2);
+    CCTK_REAL const PDupwindNthAnti1B3 = PDupwindNthAnti1(B3);
+    CCTK_REAL const PDupwindNthSymm1B3 = PDupwindNthSymm1(B3);
+    CCTK_REAL const PDupwindNthAnti2B3 = PDupwindNthAnti2(B3);
+    CCTK_REAL const PDupwindNthSymm2B3 = PDupwindNthSymm2(B3);
+    CCTK_REAL const PDupwindNthAnti3B3 = PDupwindNthAnti3(B3);
+    CCTK_REAL const PDupwindNthSymm3B3 = PDupwindNthSymm3(B3);
+    CCTK_REAL const PDupwindNthAnti1beta1 = PDupwindNthAnti1(beta1);
+    CCTK_REAL const PDupwindNthSymm1beta1 = PDupwindNthSymm1(beta1);
+    CCTK_REAL const PDupwindNthAnti2beta1 = PDupwindNthAnti2(beta1);
+    CCTK_REAL const PDupwindNthSymm2beta1 = PDupwindNthSymm2(beta1);
+    CCTK_REAL const PDupwindNthAnti3beta1 = PDupwindNthAnti3(beta1);
+    CCTK_REAL const PDupwindNthSymm3beta1 = PDupwindNthSymm3(beta1);
+    CCTK_REAL const PDupwindNthAnti1beta2 = PDupwindNthAnti1(beta2);
+    CCTK_REAL const PDupwindNthSymm1beta2 = PDupwindNthSymm1(beta2);
+    CCTK_REAL const PDupwindNthAnti2beta2 = PDupwindNthAnti2(beta2);
+    CCTK_REAL const PDupwindNthSymm2beta2 = PDupwindNthSymm2(beta2);
+    CCTK_REAL const PDupwindNthAnti3beta2 = PDupwindNthAnti3(beta2);
+    CCTK_REAL const PDupwindNthSymm3beta2 = PDupwindNthSymm3(beta2);
+    CCTK_REAL const PDupwindNthAnti1beta3 = PDupwindNthAnti1(beta3);
+    CCTK_REAL const PDupwindNthSymm1beta3 = PDupwindNthSymm1(beta3);
+    CCTK_REAL const PDupwindNthAnti2beta3 = PDupwindNthAnti2(beta3);
+    CCTK_REAL const PDupwindNthSymm2beta3 = PDupwindNthSymm2(beta3);
+    CCTK_REAL const PDupwindNthAnti3beta3 = PDupwindNthAnti3(beta3);
+    CCTK_REAL const PDupwindNthSymm3beta3 = PDupwindNthSymm3(beta3);
+    CCTK_REAL const PDupwindNthAnti1gt11 = PDupwindNthAnti1(gt11);
+    CCTK_REAL const PDupwindNthSymm1gt11 = PDupwindNthSymm1(gt11);
+    CCTK_REAL const PDupwindNthAnti2gt11 = PDupwindNthAnti2(gt11);
+    CCTK_REAL const PDupwindNthSymm2gt11 = PDupwindNthSymm2(gt11);
+    CCTK_REAL const PDupwindNthAnti3gt11 = PDupwindNthAnti3(gt11);
+    CCTK_REAL const PDupwindNthSymm3gt11 = PDupwindNthSymm3(gt11);
+    CCTK_REAL const PDupwindNthAnti1gt12 = PDupwindNthAnti1(gt12);
+    CCTK_REAL const PDupwindNthSymm1gt12 = PDupwindNthSymm1(gt12);
+    CCTK_REAL const PDupwindNthAnti2gt12 = PDupwindNthAnti2(gt12);
+    CCTK_REAL const PDupwindNthSymm2gt12 = PDupwindNthSymm2(gt12);
+    CCTK_REAL const PDupwindNthAnti3gt12 = PDupwindNthAnti3(gt12);
+    CCTK_REAL const PDupwindNthSymm3gt12 = PDupwindNthSymm3(gt12);
+    CCTK_REAL const PDupwindNthAnti1gt13 = PDupwindNthAnti1(gt13);
+    CCTK_REAL const PDupwindNthSymm1gt13 = PDupwindNthSymm1(gt13);
+    CCTK_REAL const PDupwindNthAnti2gt13 = PDupwindNthAnti2(gt13);
+    CCTK_REAL const PDupwindNthSymm2gt13 = PDupwindNthSymm2(gt13);
+    CCTK_REAL const PDupwindNthAnti3gt13 = PDupwindNthAnti3(gt13);
+    CCTK_REAL const PDupwindNthSymm3gt13 = PDupwindNthSymm3(gt13);
+    CCTK_REAL const PDupwindNthAnti1gt22 = PDupwindNthAnti1(gt22);
+    CCTK_REAL const PDupwindNthSymm1gt22 = PDupwindNthSymm1(gt22);
+    CCTK_REAL const PDupwindNthAnti2gt22 = PDupwindNthAnti2(gt22);
+    CCTK_REAL const PDupwindNthSymm2gt22 = PDupwindNthSymm2(gt22);
+    CCTK_REAL const PDupwindNthAnti3gt22 = PDupwindNthAnti3(gt22);
+    CCTK_REAL const PDupwindNthSymm3gt22 = PDupwindNthSymm3(gt22);
+    CCTK_REAL const PDupwindNthAnti1gt23 = PDupwindNthAnti1(gt23);
+    CCTK_REAL const PDupwindNthSymm1gt23 = PDupwindNthSymm1(gt23);
+    CCTK_REAL const PDupwindNthAnti2gt23 = PDupwindNthAnti2(gt23);
+    CCTK_REAL const PDupwindNthSymm2gt23 = PDupwindNthSymm2(gt23);
+    CCTK_REAL const PDupwindNthAnti3gt23 = PDupwindNthAnti3(gt23);
+    CCTK_REAL const PDupwindNthSymm3gt23 = PDupwindNthSymm3(gt23);
+    CCTK_REAL const PDupwindNthAnti1gt33 = PDupwindNthAnti1(gt33);
+    CCTK_REAL const PDupwindNthSymm1gt33 = PDupwindNthSymm1(gt33);
+    CCTK_REAL const PDupwindNthAnti2gt33 = PDupwindNthAnti2(gt33);
+    CCTK_REAL const PDupwindNthSymm2gt33 = PDupwindNthSymm2(gt33);
+    CCTK_REAL const PDupwindNthAnti3gt33 = PDupwindNthAnti3(gt33);
+    CCTK_REAL const PDupwindNthSymm3gt33 = PDupwindNthSymm3(gt33);
+    CCTK_REAL const PDupwindNthAnti1phi = PDupwindNthAnti1(phi);
+    CCTK_REAL const PDupwindNthSymm1phi = PDupwindNthSymm1(phi);
+    CCTK_REAL const PDupwindNthAnti2phi = PDupwindNthAnti2(phi);
+    CCTK_REAL const PDupwindNthSymm2phi = PDupwindNthSymm2(phi);
+    CCTK_REAL const PDupwindNthAnti3phi = PDupwindNthAnti3(phi);
+    CCTK_REAL const PDupwindNthSymm3phi = PDupwindNthSymm3(phi);
+    CCTK_REAL const PDupwindNthAnti1trK = PDupwindNthAnti1(trK);
+    CCTK_REAL const PDupwindNthSymm1trK = PDupwindNthSymm1(trK);
+    CCTK_REAL const PDupwindNthAnti2trK = PDupwindNthAnti2(trK);
+    CCTK_REAL const PDupwindNthSymm2trK = PDupwindNthSymm2(trK);
+    CCTK_REAL const PDupwindNthAnti3trK = PDupwindNthAnti3(trK);
+    CCTK_REAL const PDupwindNthSymm3trK = PDupwindNthSymm3(trK);
+    CCTK_REAL const PDupwindNthAnti1Xt1 = PDupwindNthAnti1(Xt1);
+    CCTK_REAL const PDupwindNthSymm1Xt1 = PDupwindNthSymm1(Xt1);
+    CCTK_REAL const PDupwindNthAnti2Xt1 = PDupwindNthAnti2(Xt1);
+    CCTK_REAL const PDupwindNthSymm2Xt1 = PDupwindNthSymm2(Xt1);
+    CCTK_REAL const PDupwindNthAnti3Xt1 = PDupwindNthAnti3(Xt1);
+    CCTK_REAL const PDupwindNthSymm3Xt1 = PDupwindNthSymm3(Xt1);
+    CCTK_REAL const PDupwindNthAnti1Xt2 = PDupwindNthAnti1(Xt2);
+    CCTK_REAL const PDupwindNthSymm1Xt2 = PDupwindNthSymm1(Xt2);
+    CCTK_REAL const PDupwindNthAnti2Xt2 = PDupwindNthAnti2(Xt2);
+    CCTK_REAL const PDupwindNthSymm2Xt2 = PDupwindNthSymm2(Xt2);
+    CCTK_REAL const PDupwindNthAnti3Xt2 = PDupwindNthAnti3(Xt2);
+    CCTK_REAL const PDupwindNthSymm3Xt2 = PDupwindNthSymm3(Xt2);
+    CCTK_REAL const PDupwindNthAnti1Xt3 = PDupwindNthAnti1(Xt3);
+    CCTK_REAL const PDupwindNthSymm1Xt3 = PDupwindNthSymm1(Xt3);
+    CCTK_REAL const PDupwindNthAnti2Xt3 = PDupwindNthAnti2(Xt3);
+    CCTK_REAL const PDupwindNthSymm2Xt3 = PDupwindNthSymm2(Xt3);
+    CCTK_REAL const PDupwindNthAnti3Xt3 = PDupwindNthAnti3(Xt3);
+    CCTK_REAL const PDupwindNthSymm3Xt3 = PDupwindNthSymm3(Xt3);
     
     /* Calculate temporaries and grid functions */
     ptrdiff_t dir1 = Sign(beta1L);
@@ -211,100 +286,162 @@ CAKERNEL_ML_BSSN_Advect_Begin
     
     ptrdiff_t dir3 = Sign(beta3L);
     
-    phirhsL = phirhsL + beta1L*PDstandardNth1phi + 
-      beta2L*PDstandardNth2phi + beta3L*PDstandardNth3phi;
+    phirhsL = phirhsL + beta1L*PDupwindNthAnti1phi + 
+      beta2L*PDupwindNthAnti2phi + beta3L*PDupwindNthAnti3phi + 
+      PDupwindNthSymm1phi*fabs(beta1L) + PDupwindNthSymm2phi*fabs(beta2L) 
+      + PDupwindNthSymm3phi*fabs(beta3L);
     
-    gt11rhsL = gt11rhsL + beta1L*PDstandardNth1gt11 + 
-      beta2L*PDstandardNth2gt11 + beta3L*PDstandardNth3gt11;
+    gt11rhsL = gt11rhsL + beta1L*PDupwindNthAnti1gt11 + 
+      beta2L*PDupwindNthAnti2gt11 + beta3L*PDupwindNthAnti3gt11 + 
+      PDupwindNthSymm1gt11*fabs(beta1L) + 
+      PDupwindNthSymm2gt11*fabs(beta2L) + 
+      PDupwindNthSymm3gt11*fabs(beta3L);
     
-    gt12rhsL = gt12rhsL + beta1L*PDstandardNth1gt12 + 
-      beta2L*PDstandardNth2gt12 + beta3L*PDstandardNth3gt12;
+    gt12rhsL = gt12rhsL + beta1L*PDupwindNthAnti1gt12 + 
+      beta2L*PDupwindNthAnti2gt12 + beta3L*PDupwindNthAnti3gt12 + 
+      PDupwindNthSymm1gt12*fabs(beta1L) + 
+      PDupwindNthSymm2gt12*fabs(beta2L) + 
+      PDupwindNthSymm3gt12*fabs(beta3L);
     
-    gt13rhsL = gt13rhsL + beta1L*PDstandardNth1gt13 + 
-      beta2L*PDstandardNth2gt13 + beta3L*PDstandardNth3gt13;
+    gt13rhsL = gt13rhsL + beta1L*PDupwindNthAnti1gt13 + 
+      beta2L*PDupwindNthAnti2gt13 + beta3L*PDupwindNthAnti3gt13 + 
+      PDupwindNthSymm1gt13*fabs(beta1L) + 
+      PDupwindNthSymm2gt13*fabs(beta2L) + 
+      PDupwindNthSymm3gt13*fabs(beta3L);
     
-    gt22rhsL = gt22rhsL + beta1L*PDstandardNth1gt22 + 
-      beta2L*PDstandardNth2gt22 + beta3L*PDstandardNth3gt22;
+    gt22rhsL = gt22rhsL + beta1L*PDupwindNthAnti1gt22 + 
+      beta2L*PDupwindNthAnti2gt22 + beta3L*PDupwindNthAnti3gt22 + 
+      PDupwindNthSymm1gt22*fabs(beta1L) + 
+      PDupwindNthSymm2gt22*fabs(beta2L) + 
+      PDupwindNthSymm3gt22*fabs(beta3L);
     
-    gt23rhsL = gt23rhsL + beta1L*PDstandardNth1gt23 + 
-      beta2L*PDstandardNth2gt23 + beta3L*PDstandardNth3gt23;
+    gt23rhsL = gt23rhsL + beta1L*PDupwindNthAnti1gt23 + 
+      beta2L*PDupwindNthAnti2gt23 + beta3L*PDupwindNthAnti3gt23 + 
+      PDupwindNthSymm1gt23*fabs(beta1L) + 
+      PDupwindNthSymm2gt23*fabs(beta2L) + 
+      PDupwindNthSymm3gt23*fabs(beta3L);
     
-    gt33rhsL = gt33rhsL + beta1L*PDstandardNth1gt33 + 
-      beta2L*PDstandardNth2gt33 + beta3L*PDstandardNth3gt33;
+    gt33rhsL = gt33rhsL + beta1L*PDupwindNthAnti1gt33 + 
+      beta2L*PDupwindNthAnti2gt33 + beta3L*PDupwindNthAnti3gt33 + 
+      PDupwindNthSymm1gt33*fabs(beta1L) + 
+      PDupwindNthSymm2gt33*fabs(beta2L) + 
+      PDupwindNthSymm3gt33*fabs(beta3L);
     
-    Xt1rhsL = Xt1rhsL + beta1L*PDstandardNth1Xt1 + 
-      beta2L*PDstandardNth2Xt1 + beta3L*PDstandardNth3Xt1;
+    Xt1rhsL = Xt1rhsL + beta1L*PDupwindNthAnti1Xt1 + 
+      beta2L*PDupwindNthAnti2Xt1 + beta3L*PDupwindNthAnti3Xt1 + 
+      PDupwindNthSymm1Xt1*fabs(beta1L) + PDupwindNthSymm2Xt1*fabs(beta2L) 
+      + PDupwindNthSymm3Xt1*fabs(beta3L);
     
-    Xt2rhsL = Xt2rhsL + beta1L*PDstandardNth1Xt2 + 
-      beta2L*PDstandardNth2Xt2 + beta3L*PDstandardNth3Xt2;
+    Xt2rhsL = Xt2rhsL + beta1L*PDupwindNthAnti1Xt2 + 
+      beta2L*PDupwindNthAnti2Xt2 + beta3L*PDupwindNthAnti3Xt2 + 
+      PDupwindNthSymm1Xt2*fabs(beta1L) + PDupwindNthSymm2Xt2*fabs(beta2L) 
+      + PDupwindNthSymm3Xt2*fabs(beta3L);
     
-    Xt3rhsL = Xt3rhsL + beta1L*PDstandardNth1Xt3 + 
-      beta2L*PDstandardNth2Xt3 + beta3L*PDstandardNth3Xt3;
+    Xt3rhsL = Xt3rhsL + beta1L*PDupwindNthAnti1Xt3 + 
+      beta2L*PDupwindNthAnti2Xt3 + beta3L*PDupwindNthAnti3Xt3 + 
+      PDupwindNthSymm1Xt3*fabs(beta1L) + PDupwindNthSymm2Xt3*fabs(beta2L) 
+      + PDupwindNthSymm3Xt3*fabs(beta3L);
     
-    trKrhsL = trKrhsL + beta1L*PDstandardNth1trK + 
-      beta2L*PDstandardNth2trK + beta3L*PDstandardNth3trK;
+    trKrhsL = trKrhsL + beta1L*PDupwindNthAnti1trK + 
+      beta2L*PDupwindNthAnti2trK + beta3L*PDupwindNthAnti3trK + 
+      PDupwindNthSymm1trK*fabs(beta1L) + PDupwindNthSymm2trK*fabs(beta2L) 
+      + PDupwindNthSymm3trK*fabs(beta3L);
     
-    At11rhsL = At11rhsL + beta1L*PDstandardNth1At11 + 
-      beta2L*PDstandardNth2At11 + beta3L*PDstandardNth3At11;
+    At11rhsL = At11rhsL + beta1L*PDupwindNthAnti1At11 + 
+      beta2L*PDupwindNthAnti2At11 + beta3L*PDupwindNthAnti3At11 + 
+      PDupwindNthSymm1At11*fabs(beta1L) + 
+      PDupwindNthSymm2At11*fabs(beta2L) + 
+      PDupwindNthSymm3At11*fabs(beta3L);
     
-    At12rhsL = At12rhsL + beta1L*PDstandardNth1At12 + 
-      beta2L*PDstandardNth2At12 + beta3L*PDstandardNth3At12;
+    At12rhsL = At12rhsL + beta1L*PDupwindNthAnti1At12 + 
+      beta2L*PDupwindNthAnti2At12 + beta3L*PDupwindNthAnti3At12 + 
+      PDupwindNthSymm1At12*fabs(beta1L) + 
+      PDupwindNthSymm2At12*fabs(beta2L) + 
+      PDupwindNthSymm3At12*fabs(beta3L);
     
-    At13rhsL = At13rhsL + beta1L*PDstandardNth1At13 + 
-      beta2L*PDstandardNth2At13 + beta3L*PDstandardNth3At13;
+    At13rhsL = At13rhsL + beta1L*PDupwindNthAnti1At13 + 
+      beta2L*PDupwindNthAnti2At13 + beta3L*PDupwindNthAnti3At13 + 
+      PDupwindNthSymm1At13*fabs(beta1L) + 
+      PDupwindNthSymm2At13*fabs(beta2L) + 
+      PDupwindNthSymm3At13*fabs(beta3L);
     
-    At22rhsL = At22rhsL + beta1L*PDstandardNth1At22 + 
-      beta2L*PDstandardNth2At22 + beta3L*PDstandardNth3At22;
+    At22rhsL = At22rhsL + beta1L*PDupwindNthAnti1At22 + 
+      beta2L*PDupwindNthAnti2At22 + beta3L*PDupwindNthAnti3At22 + 
+      PDupwindNthSymm1At22*fabs(beta1L) + 
+      PDupwindNthSymm2At22*fabs(beta2L) + 
+      PDupwindNthSymm3At22*fabs(beta3L);
     
-    At23rhsL = At23rhsL + beta1L*PDstandardNth1At23 + 
-      beta2L*PDstandardNth2At23 + beta3L*PDstandardNth3At23;
+    At23rhsL = At23rhsL + beta1L*PDupwindNthAnti1At23 + 
+      beta2L*PDupwindNthAnti2At23 + beta3L*PDupwindNthAnti3At23 + 
+      PDupwindNthSymm1At23*fabs(beta1L) + 
+      PDupwindNthSymm2At23*fabs(beta2L) + 
+      PDupwindNthSymm3At23*fabs(beta3L);
     
-    At33rhsL = At33rhsL + beta1L*PDstandardNth1At33 + 
-      beta2L*PDstandardNth2At33 + beta3L*PDstandardNth3At33;
+    At33rhsL = At33rhsL + beta1L*PDupwindNthAnti1At33 + 
+      beta2L*PDupwindNthAnti2At33 + beta3L*PDupwindNthAnti3At33 + 
+      PDupwindNthSymm1At33*fabs(beta1L) + 
+      PDupwindNthSymm2At33*fabs(beta2L) + 
+      PDupwindNthSymm3At33*fabs(beta3L);
     
-    alpharhsL = alpharhsL + (beta1L*PDstandardNth1alpha + 
-      beta2L*PDstandardNth2alpha + 
-      beta3L*PDstandardNth3alpha)*ToReal(LapseAdvectionCoeff);
+    alpharhsL = alpharhsL + (beta1L*PDupwindNthAnti1alpha + 
+      beta2L*PDupwindNthAnti2alpha + beta3L*PDupwindNthAnti3alpha + 
+      PDupwindNthSymm1alpha*fabs(beta1L) + 
+      PDupwindNthSymm2alpha*fabs(beta2L) + 
+      PDupwindNthSymm3alpha*fabs(beta3L))*ToReal(LapseAdvectionCoeff);
     
-    ArhsL = ArhsL + ToReal(LapseACoeff)*((-(beta1L*PDstandardNth1trK) 
-      - beta2L*PDstandardNth2trK - beta3L*PDstandardNth3trK)*(-1 + 
-      ToReal(LapseAdvectionCoeff)) + 
-      beta1L*PDstandardNth1A*ToReal(LapseAdvectionCoeff) + 
-      beta2L*PDstandardNth2A*ToReal(LapseAdvectionCoeff) + 
-      beta3L*PDstandardNth3A*ToReal(LapseAdvectionCoeff));
+    ArhsL = ArhsL + ToReal(LapseACoeff)*(-((beta1L*PDupwindNthAnti1trK 
+      + beta2L*PDupwindNthAnti2trK + beta3L*PDupwindNthAnti3trK + 
+      PDupwindNthSymm1trK*fabs(beta1L) + PDupwindNthSymm2trK*fabs(beta2L) 
+      + PDupwindNthSymm3trK*fabs(beta3L))*(-1 + 
+      ToReal(LapseAdvectionCoeff))) + (beta1L*PDupwindNthAnti1A + 
+      beta2L*PDupwindNthAnti2A + beta3L*PDupwindNthAnti3A + 
+      PDupwindNthSymm1A*fabs(beta1L) + PDupwindNthSymm2A*fabs(beta2L) + 
+      PDupwindNthSymm3A*fabs(beta3L))*ToReal(LapseAdvectionCoeff));
     
-    beta1rhsL = beta1rhsL + (beta1L*PDstandardNth1beta1 + 
-      beta2L*PDstandardNth2beta1 + 
-      beta3L*PDstandardNth3beta1)*ToReal(ShiftAdvectionCoeff);
+    beta1rhsL = beta1rhsL + (beta1L*PDupwindNthAnti1beta1 + 
+      beta2L*PDupwindNthAnti2beta1 + beta3L*PDupwindNthAnti3beta1 + 
+      PDupwindNthSymm1beta1*fabs(beta1L) + 
+      PDupwindNthSymm2beta1*fabs(beta2L) + 
+      PDupwindNthSymm3beta1*fabs(beta3L))*ToReal(ShiftAdvectionCoeff);
     
-    beta2rhsL = beta2rhsL + (beta1L*PDstandardNth1beta2 + 
-      beta2L*PDstandardNth2beta2 + 
-      beta3L*PDstandardNth3beta2)*ToReal(ShiftAdvectionCoeff);
+    beta2rhsL = beta2rhsL + (beta1L*PDupwindNthAnti1beta2 + 
+      beta2L*PDupwindNthAnti2beta2 + beta3L*PDupwindNthAnti3beta2 + 
+      PDupwindNthSymm1beta2*fabs(beta1L) + 
+      PDupwindNthSymm2beta2*fabs(beta2L) + 
+      PDupwindNthSymm3beta2*fabs(beta3L))*ToReal(ShiftAdvectionCoeff);
     
-    beta3rhsL = beta3rhsL + (beta1L*PDstandardNth1beta3 + 
-      beta2L*PDstandardNth2beta3 + 
-      beta3L*PDstandardNth3beta3)*ToReal(ShiftAdvectionCoeff);
+    beta3rhsL = beta3rhsL + (beta1L*PDupwindNthAnti1beta3 + 
+      beta2L*PDupwindNthAnti2beta3 + beta3L*PDupwindNthAnti3beta3 + 
+      PDupwindNthSymm1beta3*fabs(beta1L) + 
+      PDupwindNthSymm2beta3*fabs(beta2L) + 
+      PDupwindNthSymm3beta3*fabs(beta3L))*ToReal(ShiftAdvectionCoeff);
     
-    B1rhsL = B1rhsL + ((-(beta1L*PDstandardNth1Xt1) - 
-      beta2L*PDstandardNth2Xt1 - beta3L*PDstandardNth3Xt1)*(-1 + 
-      ToReal(ShiftAdvectionCoeff)) + 
-      beta1L*PDstandardNth1B1*ToReal(ShiftAdvectionCoeff) + 
-      beta2L*PDstandardNth2B1*ToReal(ShiftAdvectionCoeff) + 
-      beta3L*PDstandardNth3B1*ToReal(ShiftAdvectionCoeff))*ToReal(ShiftBCoeff);
+    B1rhsL = B1rhsL + (-((beta1L*PDupwindNthAnti1Xt1 + 
+      beta2L*PDupwindNthAnti2Xt1 + beta3L*PDupwindNthAnti3Xt1 + 
+      PDupwindNthSymm1Xt1*fabs(beta1L) + PDupwindNthSymm2Xt1*fabs(beta2L) 
+      + PDupwindNthSymm3Xt1*fabs(beta3L))*(-1 + 
+      ToReal(ShiftAdvectionCoeff))) + (beta1L*PDupwindNthAnti1B1 + 
+      beta2L*PDupwindNthAnti2B1 + beta3L*PDupwindNthAnti3B1 + 
+      PDupwindNthSymm1B1*fabs(beta1L) + PDupwindNthSymm2B1*fabs(beta2L) + 
+      PDupwindNthSymm3B1*fabs(beta3L))*ToReal(ShiftAdvectionCoeff))*ToReal(ShiftBCoeff);
     
-    B2rhsL = B2rhsL + ((-(beta1L*PDstandardNth1Xt2) - 
-      beta2L*PDstandardNth2Xt2 - beta3L*PDstandardNth3Xt2)*(-1 + 
-      ToReal(ShiftAdvectionCoeff)) + 
-      beta1L*PDstandardNth1B2*ToReal(ShiftAdvectionCoeff) + 
-      beta2L*PDstandardNth2B2*ToReal(ShiftAdvectionCoeff) + 
-      beta3L*PDstandardNth3B2*ToReal(ShiftAdvectionCoeff))*ToReal(ShiftBCoeff);
+    B2rhsL = B2rhsL + (-((beta1L*PDupwindNthAnti1Xt2 + 
+      beta2L*PDupwindNthAnti2Xt2 + beta3L*PDupwindNthAnti3Xt2 + 
+      PDupwindNthSymm1Xt2*fabs(beta1L) + PDupwindNthSymm2Xt2*fabs(beta2L) 
+      + PDupwindNthSymm3Xt2*fabs(beta3L))*(-1 + 
+      ToReal(ShiftAdvectionCoeff))) + (beta1L*PDupwindNthAnti1B2 + 
+      beta2L*PDupwindNthAnti2B2 + beta3L*PDupwindNthAnti3B2 + 
+      PDupwindNthSymm1B2*fabs(beta1L) + PDupwindNthSymm2B2*fabs(beta2L) + 
+      PDupwindNthSymm3B2*fabs(beta3L))*ToReal(ShiftAdvectionCoeff))*ToReal(ShiftBCoeff);
     
-    B3rhsL = B3rhsL + ((-(beta1L*PDstandardNth1Xt3) - 
-      beta2L*PDstandardNth2Xt3 - beta3L*PDstandardNth3Xt3)*(-1 + 
-      ToReal(ShiftAdvectionCoeff)) + 
-      beta1L*PDstandardNth1B3*ToReal(ShiftAdvectionCoeff) + 
-      beta2L*PDstandardNth2B3*ToReal(ShiftAdvectionCoeff) + 
-      beta3L*PDstandardNth3B3*ToReal(ShiftAdvectionCoeff))*ToReal(ShiftBCoeff);
+    B3rhsL = B3rhsL + (-((beta1L*PDupwindNthAnti1Xt3 + 
+      beta2L*PDupwindNthAnti2Xt3 + beta3L*PDupwindNthAnti3Xt3 + 
+      PDupwindNthSymm1Xt3*fabs(beta1L) + PDupwindNthSymm2Xt3*fabs(beta2L) 
+      + PDupwindNthSymm3Xt3*fabs(beta3L))*(-1 + 
+      ToReal(ShiftAdvectionCoeff))) + (beta1L*PDupwindNthAnti1B3 + 
+      beta2L*PDupwindNthAnti2B3 + beta3L*PDupwindNthAnti3B3 + 
+      PDupwindNthSymm1B3*fabs(beta1L) + PDupwindNthSymm2B3*fabs(beta2L) + 
+      PDupwindNthSymm3B3*fabs(beta3L))*ToReal(ShiftAdvectionCoeff))*ToReal(ShiftBCoeff);
     
     /* Copy local copies back to grid functions */
     I3D(alpharhs,0,0,0) = alpharhsL;
