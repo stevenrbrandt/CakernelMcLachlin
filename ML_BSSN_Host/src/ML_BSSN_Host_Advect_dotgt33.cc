@@ -23,19 +23,19 @@
 #define SQR(x) (kmul(x,x))
 #define CUB(x) (kmul(x,SQR(x)))
 
-extern "C" void ML_BSSN_Host_Advect_A_SelectBCs(CCTK_ARGUMENTS)
+extern "C" void ML_BSSN_Host_Advect_dotgt33_SelectBCs(CCTK_ARGUMENTS)
 {
   DECLARE_CCTK_ARGUMENTS;
   DECLARE_CCTK_PARAMETERS;
   
   CCTK_INT ierr = 0;
-  ierr = Boundary_SelectGroupForBC(cctkGH, CCTK_ALL_FACES, GenericFD_GetBoundaryWidth(cctkGH), -1 /* no table */, "ML_BSSN_Host::ML_dtlapserhs","flat");
+  ierr = Boundary_SelectGroupForBC(cctkGH, CCTK_ALL_FACES, GenericFD_GetBoundaryWidth(cctkGH), -1 /* no table */, "ML_BSSN_Host::ML_metricrhs","flat");
   if (ierr < 0)
-    CCTK_WARN(1, "Failed to register flat BC for ML_BSSN_Host::ML_dtlapserhs.");
+    CCTK_WARN(1, "Failed to register flat BC for ML_BSSN_Host::ML_metricrhs.");
   return;
 }
 
-static void ML_BSSN_Host_Advect_A_Body(cGH const * restrict const cctkGH, int const dir, int const face, CCTK_REAL const normal[3], CCTK_REAL const tangentA[3], CCTK_REAL const tangentB[3], int const imin[3], int const imax[3], int const n_subblock_gfs, CCTK_REAL * restrict const subblock_gfs[])
+static void ML_BSSN_Host_Advect_dotgt33_Body(cGH const * restrict const cctkGH, int const dir, int const face, CCTK_REAL const normal[3], CCTK_REAL const tangentA[3], CCTK_REAL const tangentB[3], int const imin[3], int const imax[3], int const n_subblock_gfs, CCTK_REAL * restrict const subblock_gfs[])
 {
   DECLARE_CCTK_ARGUMENTS;
   DECLARE_CCTK_PARAMETERS;
@@ -100,7 +100,7 @@ static void ML_BSSN_Host_Advect_A_Body(cGH const * restrict const cctkGH, int co
   
   /* Loop over the grid points */
   #pragma omp parallel
-  LC_LOOP3VEC(ML_BSSN_Host_Advect_A,
+  LC_LOOP3VEC(ML_BSSN_Host_Advect_dotgt33,
     i,j,k, imin[0],imin[1],imin[2], imax[0],imax[1],imax[2],
     cctk_lsh[0],cctk_lsh[1],cctk_lsh[2],
     CCTK_REAL_VEC_SIZE)
@@ -109,29 +109,22 @@ static void ML_BSSN_Host_Advect_A_Body(cGH const * restrict const cctkGH, int co
     
     /* Assign local copies of grid functions */
     
-    CCTK_REAL_VEC AL = vec_load(A[index]);
-    CCTK_REAL_VEC ArhsL = vec_load(Arhs[index]);
     CCTK_REAL_VEC beta1L = vec_load(beta1[index]);
     CCTK_REAL_VEC beta2L = vec_load(beta2[index]);
     CCTK_REAL_VEC beta3L = vec_load(beta3[index]);
-    CCTK_REAL_VEC trKL = vec_load(trK[index]);
+    CCTK_REAL_VEC gt33L = vec_load(gt33[index]);
+    CCTK_REAL_VEC gt33rhsL = vec_load(gt33rhs[index]);
     
     
     /* Include user supplied include files */
     
     /* Precompute derivatives */
-    CCTK_REAL_VEC const PDupwindNthAnti1A = PDupwindNthAnti1(&A[index]);
-    CCTK_REAL_VEC const PDupwindNthSymm1A = PDupwindNthSymm1(&A[index]);
-    CCTK_REAL_VEC const PDupwindNthAnti2A = PDupwindNthAnti2(&A[index]);
-    CCTK_REAL_VEC const PDupwindNthSymm2A = PDupwindNthSymm2(&A[index]);
-    CCTK_REAL_VEC const PDupwindNthAnti3A = PDupwindNthAnti3(&A[index]);
-    CCTK_REAL_VEC const PDupwindNthSymm3A = PDupwindNthSymm3(&A[index]);
-    CCTK_REAL_VEC const PDupwindNthAnti1trK = PDupwindNthAnti1(&trK[index]);
-    CCTK_REAL_VEC const PDupwindNthSymm1trK = PDupwindNthSymm1(&trK[index]);
-    CCTK_REAL_VEC const PDupwindNthAnti2trK = PDupwindNthAnti2(&trK[index]);
-    CCTK_REAL_VEC const PDupwindNthSymm2trK = PDupwindNthSymm2(&trK[index]);
-    CCTK_REAL_VEC const PDupwindNthAnti3trK = PDupwindNthAnti3(&trK[index]);
-    CCTK_REAL_VEC const PDupwindNthSymm3trK = PDupwindNthSymm3(&trK[index]);
+    CCTK_REAL_VEC const PDupwindNthAnti1gt33 = PDupwindNthAnti1(&gt33[index]);
+    CCTK_REAL_VEC const PDupwindNthSymm1gt33 = PDupwindNthSymm1(&gt33[index]);
+    CCTK_REAL_VEC const PDupwindNthAnti2gt33 = PDupwindNthAnti2(&gt33[index]);
+    CCTK_REAL_VEC const PDupwindNthSymm2gt33 = PDupwindNthSymm2(&gt33[index]);
+    CCTK_REAL_VEC const PDupwindNthAnti3gt33 = PDupwindNthAnti3(&gt33[index]);
+    CCTK_REAL_VEC const PDupwindNthSymm3gt33 = PDupwindNthSymm3(&gt33[index]);
     
     /* Calculate temporaries and grid functions */
     ptrdiff_t dir1 = Sign(beta1L);
@@ -140,17 +133,17 @@ static void ML_BSSN_Host_Advect_A_Body(cGH const * restrict const cctkGH, int co
     
     ptrdiff_t dir3 = Sign(beta3L);
     
-    ArhsL = 
-      kmadd(ToReal(LapseACoeff),kmsub(kmadd(beta1L,PDupwindNthAnti1A,kmadd(beta2L,PDupwindNthAnti2A,kmadd(beta3L,PDupwindNthAnti3A,kmadd(PDupwindNthSymm1A,kfabs(beta1L),kmadd(PDupwindNthSymm2A,kfabs(beta2L),kmul(PDupwindNthSymm3A,kfabs(beta3L))))))),ToReal(LapseAdvectionCoeff),kmul(kmadd(beta1L,PDupwindNthAnti1trK,kmadd(beta2L,PDupwindNthAnti2trK,kmadd(beta3L,PDupwindNthAnti3trK,kmadd(PDupwindNthSymm1trK,kfabs(beta1L),kmadd(PDupwindNthSymm2trK,kfabs(beta2L),kmul(PDupwindNthSymm3trK,kfabs(beta3L))))))),kadd(ToReal(-1),ToReal(LapseAdvectionCoeff)))),ArhsL);
+    gt33rhsL = 
+      kadd(gt33rhsL,kmadd(beta1L,PDupwindNthAnti1gt33,kmadd(beta2L,PDupwindNthAnti2gt33,kmadd(beta3L,PDupwindNthAnti3gt33,kmadd(PDupwindNthSymm1gt33,kfabs(beta1L),kmadd(PDupwindNthSymm2gt33,kfabs(beta2L),kmul(PDupwindNthSymm3gt33,kfabs(beta3L))))))));
     
     /* Copy local copies back to grid functions */
     vec_store_partial_prepare(i,lc_imin,lc_imax);
-    vec_store_nta_partial(Arhs[index],ArhsL);
+    vec_store_nta_partial(gt33rhs[index],gt33rhsL);
   }
-  LC_ENDLOOP3VEC(ML_BSSN_Host_Advect_A);
+  LC_ENDLOOP3VEC(ML_BSSN_Host_Advect_dotgt33);
 }
 
-extern "C" void ML_BSSN_Host_Advect_A(CCTK_ARGUMENTS)
+extern "C" void ML_BSSN_Host_Advect_dotgt33(CCTK_ARGUMENTS)
 {
   DECLARE_CCTK_ARGUMENTS;
   DECLARE_CCTK_PARAMETERS;
@@ -158,27 +151,26 @@ extern "C" void ML_BSSN_Host_Advect_A(CCTK_ARGUMENTS)
   
   if (verbose > 1)
   {
-    CCTK_VInfo(CCTK_THORNSTRING,"Entering ML_BSSN_Host_Advect_A_Body");
+    CCTK_VInfo(CCTK_THORNSTRING,"Entering ML_BSSN_Host_Advect_dotgt33_Body");
   }
   
-  if (cctk_iteration % ML_BSSN_Host_Advect_A_calc_every != ML_BSSN_Host_Advect_A_calc_offset)
+  if (cctk_iteration % ML_BSSN_Host_Advect_dotgt33_calc_every != ML_BSSN_Host_Advect_dotgt33_calc_offset)
   {
     return;
   }
   
   const char *const groups[] = {
-    "ML_BSSN_Host::ML_dtlapse",
-    "ML_BSSN_Host::ML_dtlapserhs",
-    "ML_BSSN_Host::ML_shift",
-    "ML_BSSN_Host::ML_trace_curv"};
-  GenericFD_AssertGroupStorage(cctkGH, "ML_BSSN_Host_Advect_A", 4, groups);
+    "ML_BSSN_Host::ML_metric",
+    "ML_BSSN_Host::ML_metricrhs",
+    "ML_BSSN_Host::ML_shift"};
+  GenericFD_AssertGroupStorage(cctkGH, "ML_BSSN_Host_Advect_dotgt33", 3, groups);
   
-  GenericFD_EnsureStencilFits(cctkGH, "ML_BSSN_Host_Advect_A", 5, 5, 5);
+  GenericFD_EnsureStencilFits(cctkGH, "ML_BSSN_Host_Advect_dotgt33", 5, 5, 5);
   
-  GenericFD_LoopOverInterior(cctkGH, ML_BSSN_Host_Advect_A_Body);
+  GenericFD_LoopOverInterior(cctkGH, ML_BSSN_Host_Advect_dotgt33_Body);
   
   if (verbose > 1)
   {
-    CCTK_VInfo(CCTK_THORNSTRING,"Leaving ML_BSSN_Host_Advect_A_Body");
+    CCTK_VInfo(CCTK_THORNSTRING,"Leaving ML_BSSN_Host_Advect_dotgt33_Body");
   }
 }

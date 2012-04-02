@@ -14,7 +14,7 @@
 #define SQR(x) ((x) * (x))
 #define CUB(x) ((x) * (x) * (x))
 
-CAKERNEL_ML_BSSN_Advect_Atlalb_Begin
+CAKERNEL_ML_BSSN_Advect_dotAt11_Begin
   
   /* Include user-supplied include files */
   
@@ -69,22 +69,12 @@ CAKERNEL_ML_BSSN_Advect_Atlalb_Begin
   /* Calculate temporaries and arrays functions */
   
   /* Copy local copies back to grid functions */
-  CAKERNEL_ML_BSSN_Advect_Atlalb_Computations_Begin
+  CAKERNEL_ML_BSSN_Advect_dotAt11_Computations_Begin
     
     /* Assign local copies of grid functions */
     
     CCTK_REAL At11L = I3D(At11,0,0,0);
     CCTK_REAL At11rhsL = I3D(At11rhs,0,0,0);
-    CCTK_REAL At12L = I3D(At12,0,0,0);
-    CCTK_REAL At12rhsL = I3D(At12rhs,0,0,0);
-    CCTK_REAL At13L = I3D(At13,0,0,0);
-    CCTK_REAL At13rhsL = I3D(At13rhs,0,0,0);
-    CCTK_REAL At22L = I3D(At22,0,0,0);
-    CCTK_REAL At22rhsL = I3D(At22rhs,0,0,0);
-    CCTK_REAL At23L = I3D(At23,0,0,0);
-    CCTK_REAL At23rhsL = I3D(At23rhs,0,0,0);
-    CCTK_REAL At33L = I3D(At33,0,0,0);
-    CCTK_REAL At33rhsL = I3D(At33rhs,0,0,0);
     CCTK_REAL beta1L = I3D(beta1,0,0,0);
     CCTK_REAL beta2L = I3D(beta2,0,0,0);
     CCTK_REAL beta3L = I3D(beta3,0,0,0);
@@ -99,36 +89,6 @@ CAKERNEL_ML_BSSN_Advect_Atlalb_Begin
     CCTK_REAL const PDupwindNthSymm2At11 = PDupwindNthSymm2(At11);
     CCTK_REAL const PDupwindNthAnti3At11 = PDupwindNthAnti3(At11);
     CCTK_REAL const PDupwindNthSymm3At11 = PDupwindNthSymm3(At11);
-    CCTK_REAL const PDupwindNthAnti1At12 = PDupwindNthAnti1(At12);
-    CCTK_REAL const PDupwindNthSymm1At12 = PDupwindNthSymm1(At12);
-    CCTK_REAL const PDupwindNthAnti2At12 = PDupwindNthAnti2(At12);
-    CCTK_REAL const PDupwindNthSymm2At12 = PDupwindNthSymm2(At12);
-    CCTK_REAL const PDupwindNthAnti3At12 = PDupwindNthAnti3(At12);
-    CCTK_REAL const PDupwindNthSymm3At12 = PDupwindNthSymm3(At12);
-    CCTK_REAL const PDupwindNthAnti1At13 = PDupwindNthAnti1(At13);
-    CCTK_REAL const PDupwindNthSymm1At13 = PDupwindNthSymm1(At13);
-    CCTK_REAL const PDupwindNthAnti2At13 = PDupwindNthAnti2(At13);
-    CCTK_REAL const PDupwindNthSymm2At13 = PDupwindNthSymm2(At13);
-    CCTK_REAL const PDupwindNthAnti3At13 = PDupwindNthAnti3(At13);
-    CCTK_REAL const PDupwindNthSymm3At13 = PDupwindNthSymm3(At13);
-    CCTK_REAL const PDupwindNthAnti1At22 = PDupwindNthAnti1(At22);
-    CCTK_REAL const PDupwindNthSymm1At22 = PDupwindNthSymm1(At22);
-    CCTK_REAL const PDupwindNthAnti2At22 = PDupwindNthAnti2(At22);
-    CCTK_REAL const PDupwindNthSymm2At22 = PDupwindNthSymm2(At22);
-    CCTK_REAL const PDupwindNthAnti3At22 = PDupwindNthAnti3(At22);
-    CCTK_REAL const PDupwindNthSymm3At22 = PDupwindNthSymm3(At22);
-    CCTK_REAL const PDupwindNthAnti1At23 = PDupwindNthAnti1(At23);
-    CCTK_REAL const PDupwindNthSymm1At23 = PDupwindNthSymm1(At23);
-    CCTK_REAL const PDupwindNthAnti2At23 = PDupwindNthAnti2(At23);
-    CCTK_REAL const PDupwindNthSymm2At23 = PDupwindNthSymm2(At23);
-    CCTK_REAL const PDupwindNthAnti3At23 = PDupwindNthAnti3(At23);
-    CCTK_REAL const PDupwindNthSymm3At23 = PDupwindNthSymm3(At23);
-    CCTK_REAL const PDupwindNthAnti1At33 = PDupwindNthAnti1(At33);
-    CCTK_REAL const PDupwindNthSymm1At33 = PDupwindNthSymm1(At33);
-    CCTK_REAL const PDupwindNthAnti2At33 = PDupwindNthAnti2(At33);
-    CCTK_REAL const PDupwindNthSymm2At33 = PDupwindNthSymm2(At33);
-    CCTK_REAL const PDupwindNthAnti3At33 = PDupwindNthAnti3(At33);
-    CCTK_REAL const PDupwindNthSymm3At33 = PDupwindNthSymm3(At33);
     
     /* Calculate temporaries and grid functions */
     ptrdiff_t dir1 = Sign(beta1L);
@@ -143,44 +103,9 @@ CAKERNEL_ML_BSSN_Advect_Atlalb_Begin
       PDupwindNthSymm2At11*fabs(beta2L) + 
       PDupwindNthSymm3At11*fabs(beta3L);
     
-    At12rhsL = At12rhsL + beta1L*PDupwindNthAnti1At12 + 
-      beta2L*PDupwindNthAnti2At12 + beta3L*PDupwindNthAnti3At12 + 
-      PDupwindNthSymm1At12*fabs(beta1L) + 
-      PDupwindNthSymm2At12*fabs(beta2L) + 
-      PDupwindNthSymm3At12*fabs(beta3L);
-    
-    At13rhsL = At13rhsL + beta1L*PDupwindNthAnti1At13 + 
-      beta2L*PDupwindNthAnti2At13 + beta3L*PDupwindNthAnti3At13 + 
-      PDupwindNthSymm1At13*fabs(beta1L) + 
-      PDupwindNthSymm2At13*fabs(beta2L) + 
-      PDupwindNthSymm3At13*fabs(beta3L);
-    
-    At22rhsL = At22rhsL + beta1L*PDupwindNthAnti1At22 + 
-      beta2L*PDupwindNthAnti2At22 + beta3L*PDupwindNthAnti3At22 + 
-      PDupwindNthSymm1At22*fabs(beta1L) + 
-      PDupwindNthSymm2At22*fabs(beta2L) + 
-      PDupwindNthSymm3At22*fabs(beta3L);
-    
-    At23rhsL = At23rhsL + beta1L*PDupwindNthAnti1At23 + 
-      beta2L*PDupwindNthAnti2At23 + beta3L*PDupwindNthAnti3At23 + 
-      PDupwindNthSymm1At23*fabs(beta1L) + 
-      PDupwindNthSymm2At23*fabs(beta2L) + 
-      PDupwindNthSymm3At23*fabs(beta3L);
-    
-    At33rhsL = At33rhsL + beta1L*PDupwindNthAnti1At33 + 
-      beta2L*PDupwindNthAnti2At33 + beta3L*PDupwindNthAnti3At33 + 
-      PDupwindNthSymm1At33*fabs(beta1L) + 
-      PDupwindNthSymm2At33*fabs(beta2L) + 
-      PDupwindNthSymm3At33*fabs(beta3L);
-    
     /* Copy local copies back to grid functions */
     I3D(At11rhs,0,0,0) = At11rhsL;
-    I3D(At12rhs,0,0,0) = At12rhsL;
-    I3D(At13rhs,0,0,0) = At13rhsL;
-    I3D(At22rhs,0,0,0) = At22rhsL;
-    I3D(At23rhs,0,0,0) = At23rhsL;
-    I3D(At33rhs,0,0,0) = At33rhsL;
     
-  CAKERNEL_ML_BSSN_Advect_Atlalb_Computations_End
+  CAKERNEL_ML_BSSN_Advect_dotAt11_Computations_End
   
-CAKERNEL_ML_BSSN_Advect_Atlalb_End
+CAKERNEL_ML_BSSN_Advect_dotAt11_End

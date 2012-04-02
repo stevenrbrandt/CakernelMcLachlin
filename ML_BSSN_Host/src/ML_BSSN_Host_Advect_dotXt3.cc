@@ -23,7 +23,7 @@
 #define SQR(x) (kmul(x,x))
 #define CUB(x) (kmul(x,SQR(x)))
 
-extern "C" void ML_BSSN_Host_Advect_Xtui_SelectBCs(CCTK_ARGUMENTS)
+extern "C" void ML_BSSN_Host_Advect_dotXt3_SelectBCs(CCTK_ARGUMENTS)
 {
   DECLARE_CCTK_ARGUMENTS;
   DECLARE_CCTK_PARAMETERS;
@@ -35,7 +35,7 @@ extern "C" void ML_BSSN_Host_Advect_Xtui_SelectBCs(CCTK_ARGUMENTS)
   return;
 }
 
-static void ML_BSSN_Host_Advect_Xtui_Body(cGH const * restrict const cctkGH, int const dir, int const face, CCTK_REAL const normal[3], CCTK_REAL const tangentA[3], CCTK_REAL const tangentB[3], int const imin[3], int const imax[3], int const n_subblock_gfs, CCTK_REAL * restrict const subblock_gfs[])
+static void ML_BSSN_Host_Advect_dotXt3_Body(cGH const * restrict const cctkGH, int const dir, int const face, CCTK_REAL const normal[3], CCTK_REAL const tangentA[3], CCTK_REAL const tangentB[3], int const imin[3], int const imax[3], int const n_subblock_gfs, CCTK_REAL * restrict const subblock_gfs[])
 {
   DECLARE_CCTK_ARGUMENTS;
   DECLARE_CCTK_PARAMETERS;
@@ -100,7 +100,7 @@ static void ML_BSSN_Host_Advect_Xtui_Body(cGH const * restrict const cctkGH, int
   
   /* Loop over the grid points */
   #pragma omp parallel
-  LC_LOOP3VEC(ML_BSSN_Host_Advect_Xtui,
+  LC_LOOP3VEC(ML_BSSN_Host_Advect_dotXt3,
     i,j,k, imin[0],imin[1],imin[2], imax[0],imax[1],imax[2],
     cctk_lsh[0],cctk_lsh[1],cctk_lsh[2],
     CCTK_REAL_VEC_SIZE)
@@ -112,10 +112,6 @@ static void ML_BSSN_Host_Advect_Xtui_Body(cGH const * restrict const cctkGH, int
     CCTK_REAL_VEC beta1L = vec_load(beta1[index]);
     CCTK_REAL_VEC beta2L = vec_load(beta2[index]);
     CCTK_REAL_VEC beta3L = vec_load(beta3[index]);
-    CCTK_REAL_VEC Xt1L = vec_load(Xt1[index]);
-    CCTK_REAL_VEC Xt1rhsL = vec_load(Xt1rhs[index]);
-    CCTK_REAL_VEC Xt2L = vec_load(Xt2[index]);
-    CCTK_REAL_VEC Xt2rhsL = vec_load(Xt2rhs[index]);
     CCTK_REAL_VEC Xt3L = vec_load(Xt3[index]);
     CCTK_REAL_VEC Xt3rhsL = vec_load(Xt3rhs[index]);
     
@@ -123,18 +119,6 @@ static void ML_BSSN_Host_Advect_Xtui_Body(cGH const * restrict const cctkGH, int
     /* Include user supplied include files */
     
     /* Precompute derivatives */
-    CCTK_REAL_VEC const PDupwindNthAnti1Xt1 = PDupwindNthAnti1(&Xt1[index]);
-    CCTK_REAL_VEC const PDupwindNthSymm1Xt1 = PDupwindNthSymm1(&Xt1[index]);
-    CCTK_REAL_VEC const PDupwindNthAnti2Xt1 = PDupwindNthAnti2(&Xt1[index]);
-    CCTK_REAL_VEC const PDupwindNthSymm2Xt1 = PDupwindNthSymm2(&Xt1[index]);
-    CCTK_REAL_VEC const PDupwindNthAnti3Xt1 = PDupwindNthAnti3(&Xt1[index]);
-    CCTK_REAL_VEC const PDupwindNthSymm3Xt1 = PDupwindNthSymm3(&Xt1[index]);
-    CCTK_REAL_VEC const PDupwindNthAnti1Xt2 = PDupwindNthAnti1(&Xt2[index]);
-    CCTK_REAL_VEC const PDupwindNthSymm1Xt2 = PDupwindNthSymm1(&Xt2[index]);
-    CCTK_REAL_VEC const PDupwindNthAnti2Xt2 = PDupwindNthAnti2(&Xt2[index]);
-    CCTK_REAL_VEC const PDupwindNthSymm2Xt2 = PDupwindNthSymm2(&Xt2[index]);
-    CCTK_REAL_VEC const PDupwindNthAnti3Xt2 = PDupwindNthAnti3(&Xt2[index]);
-    CCTK_REAL_VEC const PDupwindNthSymm3Xt2 = PDupwindNthSymm3(&Xt2[index]);
     CCTK_REAL_VEC const PDupwindNthAnti1Xt3 = PDupwindNthAnti1(&Xt3[index]);
     CCTK_REAL_VEC const PDupwindNthSymm1Xt3 = PDupwindNthSymm1(&Xt3[index]);
     CCTK_REAL_VEC const PDupwindNthAnti2Xt3 = PDupwindNthAnti2(&Xt3[index]);
@@ -149,25 +133,17 @@ static void ML_BSSN_Host_Advect_Xtui_Body(cGH const * restrict const cctkGH, int
     
     ptrdiff_t dir3 = Sign(beta3L);
     
-    Xt1rhsL = 
-      kadd(Xt1rhsL,kmadd(beta1L,PDupwindNthAnti1Xt1,kmadd(beta2L,PDupwindNthAnti2Xt1,kmadd(beta3L,PDupwindNthAnti3Xt1,kmadd(PDupwindNthSymm1Xt1,kfabs(beta1L),kmadd(PDupwindNthSymm2Xt1,kfabs(beta2L),kmul(PDupwindNthSymm3Xt1,kfabs(beta3L))))))));
-    
-    Xt2rhsL = 
-      kadd(Xt2rhsL,kmadd(beta1L,PDupwindNthAnti1Xt2,kmadd(beta2L,PDupwindNthAnti2Xt2,kmadd(beta3L,PDupwindNthAnti3Xt2,kmadd(PDupwindNthSymm1Xt2,kfabs(beta1L),kmadd(PDupwindNthSymm2Xt2,kfabs(beta2L),kmul(PDupwindNthSymm3Xt2,kfabs(beta3L))))))));
-    
     Xt3rhsL = 
       kadd(Xt3rhsL,kmadd(beta1L,PDupwindNthAnti1Xt3,kmadd(beta2L,PDupwindNthAnti2Xt3,kmadd(beta3L,PDupwindNthAnti3Xt3,kmadd(PDupwindNthSymm1Xt3,kfabs(beta1L),kmadd(PDupwindNthSymm2Xt3,kfabs(beta2L),kmul(PDupwindNthSymm3Xt3,kfabs(beta3L))))))));
     
     /* Copy local copies back to grid functions */
     vec_store_partial_prepare(i,lc_imin,lc_imax);
-    vec_store_nta_partial(Xt1rhs[index],Xt1rhsL);
-    vec_store_nta_partial(Xt2rhs[index],Xt2rhsL);
     vec_store_nta_partial(Xt3rhs[index],Xt3rhsL);
   }
-  LC_ENDLOOP3VEC(ML_BSSN_Host_Advect_Xtui);
+  LC_ENDLOOP3VEC(ML_BSSN_Host_Advect_dotXt3);
 }
 
-extern "C" void ML_BSSN_Host_Advect_Xtui(CCTK_ARGUMENTS)
+extern "C" void ML_BSSN_Host_Advect_dotXt3(CCTK_ARGUMENTS)
 {
   DECLARE_CCTK_ARGUMENTS;
   DECLARE_CCTK_PARAMETERS;
@@ -175,10 +151,10 @@ extern "C" void ML_BSSN_Host_Advect_Xtui(CCTK_ARGUMENTS)
   
   if (verbose > 1)
   {
-    CCTK_VInfo(CCTK_THORNSTRING,"Entering ML_BSSN_Host_Advect_Xtui_Body");
+    CCTK_VInfo(CCTK_THORNSTRING,"Entering ML_BSSN_Host_Advect_dotXt3_Body");
   }
   
-  if (cctk_iteration % ML_BSSN_Host_Advect_Xtui_calc_every != ML_BSSN_Host_Advect_Xtui_calc_offset)
+  if (cctk_iteration % ML_BSSN_Host_Advect_dotXt3_calc_every != ML_BSSN_Host_Advect_dotXt3_calc_offset)
   {
     return;
   }
@@ -187,14 +163,14 @@ extern "C" void ML_BSSN_Host_Advect_Xtui(CCTK_ARGUMENTS)
     "ML_BSSN_Host::ML_Gamma",
     "ML_BSSN_Host::ML_Gammarhs",
     "ML_BSSN_Host::ML_shift"};
-  GenericFD_AssertGroupStorage(cctkGH, "ML_BSSN_Host_Advect_Xtui", 3, groups);
+  GenericFD_AssertGroupStorage(cctkGH, "ML_BSSN_Host_Advect_dotXt3", 3, groups);
   
-  GenericFD_EnsureStencilFits(cctkGH, "ML_BSSN_Host_Advect_Xtui", 5, 5, 5);
+  GenericFD_EnsureStencilFits(cctkGH, "ML_BSSN_Host_Advect_dotXt3", 5, 5, 5);
   
-  GenericFD_LoopOverInterior(cctkGH, ML_BSSN_Host_Advect_Xtui_Body);
+  GenericFD_LoopOverInterior(cctkGH, ML_BSSN_Host_Advect_dotXt3_Body);
   
   if (verbose > 1)
   {
-    CCTK_VInfo(CCTK_THORNSTRING,"Leaving ML_BSSN_Host_Advect_Xtui_Body");
+    CCTK_VInfo(CCTK_THORNSTRING,"Leaving ML_BSSN_Host_Advect_dotXt3_Body");
   }
 }
