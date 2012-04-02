@@ -757,6 +757,15 @@ evolCalc2 = PartialCalculation[evolCalc, "2",
     dot[At[la,lb]]
   }];
 
+allEvolvedVars = {dot[trK], dot[phi], dot[gt[la,lb]], dot[Xt[ui]], dot[alpha], dot[A], dot[beta[ua]], dot[B[ua]],
+                  dot[At[la,lb]]};
+
+advectCalcs = Table[PartialCalculation[advectCalc, 
+                                       "_"<>StringReplace[ToString[var[[1]]],{"["->"","]"->"",","->""}],
+                                       {ConditionalOnKeyword -> {"advect_calculation", "split"}},
+                                       {var}],
+                    {var, allEvolvedVars}];
+
 dissCalc =
 {
   Name -> BSSN <> "_Dissipation",
@@ -1293,7 +1302,8 @@ Join[
   (* evolCalc, *)
   evolCalc1, evolCalc2,
   (* dissCalc, *)
-  advectCalc,
+  (* advectCalc, *)
+  Sequence@@advectCalcs,
   initRHSCalc,
   (* evol1Calc, evol2Calc, *)
   RHSStaticBoundaryCalc,
