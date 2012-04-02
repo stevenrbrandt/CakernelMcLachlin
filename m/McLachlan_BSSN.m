@@ -701,6 +701,8 @@ advectCalc =
      radiative boundary conditions.  *)
   Where -> InteriorNoSync,
   Shorthands -> {dir[ua]},
+  SplitBy -> {dot[trK], dot[phi], dot[gt[la,lb]], dot[Xt[ui]], dot[alpha], dot[A], dot[beta[ua]], dot[B[ua]],
+              dot[At[la,lb]]},
   Equations ->
   {
            dir[ua] -> Sign[beta[ua]],
@@ -757,14 +759,14 @@ evolCalc2 = PartialCalculation[evolCalc, "2",
     dot[At[la,lb]]
   }];
 
-allEvolvedVars = {dot[trK], dot[phi], dot[gt[la,lb]], dot[Xt[ui]], dot[alpha], dot[A], dot[beta[ua]], dot[B[ua]],
-                  dot[At[la,lb]]};
+(* allEvolvedVars = {dot[trK], dot[phi], dot[gt[la,lb]], dot[Xt[ui]], dot[alpha], dot[A], dot[beta[ua]], dot[B[ua]], *)
+(*                   dot[At[la,lb]]}; *)
 
-advectCalcs = Table[PartialCalculation[advectCalc, 
-                                       "_"<>StringReplace[ToString[var[[1]]],{"["->"","]"->"",","->""}],
-                                       {ConditionalOnKeyword -> {"advect_calculation", "split"}},
-                                       {var}],
-                    {var, allEvolvedVars}];
+(* advectCalcs = Table[PartialCalculation[advectCalc,  *)
+(*                                        "_"<>StringReplace[ToString[var[[1]]],{"["->"","]"->"",","->""}], *)
+(*                                        {}, *)
+(*                                        {var}]~Join~{CachedVariables -> {var[[1]]}}, *)
+(*                     {var, allEvolvedVars}]; *)
 
 dissCalc =
 {
@@ -1302,8 +1304,8 @@ Join[
   (* evolCalc, *)
   evolCalc1, evolCalc2,
   (* dissCalc, *)
-  (* advectCalc, *)
-  Sequence@@advectCalcs,
+  advectCalc,
+  (* Sequence@@advectCalcs, *)
   initRHSCalc,
   (* evol1Calc, evol2Calc, *)
   RHSStaticBoundaryCalc,
