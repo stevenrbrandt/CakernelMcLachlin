@@ -316,38 +316,96 @@ schedule CAKERNEL_Launch_ML_BSSN_RHS2 IN ML_BSSN_evolCalcGroup
   WRITES:   ML_BSSN::ML_curvrhs
 } "ML_BSSN_RHS2"
 
-schedule CAKERNEL_Launch_ML_BSSN_Advect IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2)
+schedule CAKERNEL_Launch_ML_BSSN_Advect_trK IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2)
+{
+  LANG: C
+  TAGS: Device=1
+  READS:    ML_BSSN::ML_shift
+  READS:    ML_BSSN::ML_trace_curv
+  READS:    ML_BSSN::ML_trace_curvrhs
+  WRITES:   ML_BSSN::ML_trace_curvrhs
+} "ML_BSSN_Advect_trK"
+
+schedule CAKERNEL_Launch_ML_BSSN_Advect_phi IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2)
+{
+  LANG: C
+  TAGS: Device=1
+  READS:    ML_BSSN::ML_log_confac
+  READS:    ML_BSSN::ML_log_confacrhs
+  READS:    ML_BSSN::ML_shift
+  WRITES:   ML_BSSN::ML_log_confacrhs
+} "ML_BSSN_Advect_phi"
+
+schedule CAKERNEL_Launch_ML_BSSN_Advect_gtlalb IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2)
+{
+  LANG: C
+  TAGS: Device=1
+  READS:    ML_BSSN::ML_metric
+  READS:    ML_BSSN::ML_metricrhs
+  READS:    ML_BSSN::ML_shift
+  WRITES:   ML_BSSN::ML_metricrhs
+} "ML_BSSN_Advect_gtlalb"
+
+schedule CAKERNEL_Launch_ML_BSSN_Advect_Xtui IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2)
+{
+  LANG: C
+  TAGS: Device=1
+  READS:    ML_BSSN::ML_Gamma
+  READS:    ML_BSSN::ML_Gammarhs
+  READS:    ML_BSSN::ML_shift
+  WRITES:   ML_BSSN::ML_Gammarhs
+} "ML_BSSN_Advect_Xtui"
+
+schedule CAKERNEL_Launch_ML_BSSN_Advect_alpha IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2)
+{
+  LANG: C
+  TAGS: Device=1
+  READS:    ML_BSSN::ML_lapse
+  READS:    ML_BSSN::ML_lapserhs
+  READS:    ML_BSSN::ML_shift
+  WRITES:   ML_BSSN::ML_lapserhs
+} "ML_BSSN_Advect_alpha"
+
+schedule CAKERNEL_Launch_ML_BSSN_Advect_A IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2)
+{
+  LANG: C
+  TAGS: Device=1
+  READS:    ML_BSSN::ML_dtlapse
+  READS:    ML_BSSN::ML_dtlapserhs
+  READS:    ML_BSSN::ML_shift
+  READS:    ML_BSSN::ML_trace_curv
+  WRITES:   ML_BSSN::ML_dtlapserhs
+} "ML_BSSN_Advect_A"
+
+schedule CAKERNEL_Launch_ML_BSSN_Advect_betaua IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2)
+{
+  LANG: C
+  TAGS: Device=1
+  READS:    ML_BSSN::ML_shift
+  READS:    ML_BSSN::ML_shiftrhs
+  WRITES:   ML_BSSN::ML_shiftrhs
+} "ML_BSSN_Advect_betaua"
+
+schedule CAKERNEL_Launch_ML_BSSN_Advect_Bua IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2)
+{
+  LANG: C
+  TAGS: Device=1
+  READS:    ML_BSSN::ML_dtshift
+  READS:    ML_BSSN::ML_dtshiftrhs
+  READS:    ML_BSSN::ML_Gamma
+  READS:    ML_BSSN::ML_shift
+  WRITES:   ML_BSSN::ML_dtshiftrhs
+} "ML_BSSN_Advect_Bua"
+
+schedule CAKERNEL_Launch_ML_BSSN_Advect_Atlalb IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2)
 {
   LANG: C
   TAGS: Device=1
   READS:    ML_BSSN::ML_curv
   READS:    ML_BSSN::ML_curvrhs
-  READS:    ML_BSSN::ML_dtlapse
-  READS:    ML_BSSN::ML_dtlapserhs
-  READS:    ML_BSSN::ML_dtshift
-  READS:    ML_BSSN::ML_dtshiftrhs
-  READS:    ML_BSSN::ML_Gamma
-  READS:    ML_BSSN::ML_Gammarhs
-  READS:    ML_BSSN::ML_lapse
-  READS:    ML_BSSN::ML_lapserhs
-  READS:    ML_BSSN::ML_log_confac
-  READS:    ML_BSSN::ML_log_confacrhs
-  READS:    ML_BSSN::ML_metric
-  READS:    ML_BSSN::ML_metricrhs
   READS:    ML_BSSN::ML_shift
-  READS:    ML_BSSN::ML_shiftrhs
-  READS:    ML_BSSN::ML_trace_curv
-  READS:    ML_BSSN::ML_trace_curvrhs
   WRITES:   ML_BSSN::ML_curvrhs
-  WRITES:   ML_BSSN::ML_dtlapserhs
-  WRITES:   ML_BSSN::ML_dtshiftrhs
-  WRITES:   ML_BSSN::ML_Gammarhs
-  WRITES:   ML_BSSN::ML_lapserhs
-  WRITES:   ML_BSSN::ML_log_confacrhs
-  WRITES:   ML_BSSN::ML_metricrhs
-  WRITES:   ML_BSSN::ML_shiftrhs
-  WRITES:   ML_BSSN::ML_trace_curvrhs
-} "ML_BSSN_Advect"
+} "ML_BSSN_Advect_Atlalb"
 
 schedule CAKERNEL_Launch_ML_BSSN_InitRHS AT analysis BEFORE ML_BSSN_evolCalcGroup
 {
