@@ -164,6 +164,171 @@ extern "C" void ML_BSSN_Host_RegisterSymmetries(CCTK_ARGUMENTS)
   sym[0] = 1;
   sym[1] = 1;
   sym[2] = 1;
+  SetCartSymVN(cctkGH, sym, "ML_BSSN_Host::DPDstandardNthalpha12");
+  
+  sym[0] = 1;
+  sym[1] = 1;
+  sym[2] = 1;
+  SetCartSymVN(cctkGH, sym, "ML_BSSN_Host::DPDstandardNthalpha13");
+  
+  sym[0] = 1;
+  sym[1] = 1;
+  sym[2] = 1;
+  SetCartSymVN(cctkGH, sym, "ML_BSSN_Host::DPDstandardNthalpha23");
+  
+  sym[0] = 1;
+  sym[1] = 1;
+  sym[2] = 1;
+  SetCartSymVN(cctkGH, sym, "ML_BSSN_Host::DPDstandardNthbeta112");
+  
+  sym[0] = 1;
+  sym[1] = 1;
+  sym[2] = 1;
+  SetCartSymVN(cctkGH, sym, "ML_BSSN_Host::DPDstandardNthbeta113");
+  
+  sym[0] = 1;
+  sym[1] = 1;
+  sym[2] = 1;
+  SetCartSymVN(cctkGH, sym, "ML_BSSN_Host::DPDstandardNthbeta123");
+  
+  sym[0] = 1;
+  sym[1] = 1;
+  sym[2] = 1;
+  SetCartSymVN(cctkGH, sym, "ML_BSSN_Host::DPDstandardNthbeta212");
+  
+  sym[0] = 1;
+  sym[1] = 1;
+  sym[2] = 1;
+  SetCartSymVN(cctkGH, sym, "ML_BSSN_Host::DPDstandardNthbeta213");
+  
+  sym[0] = 1;
+  sym[1] = 1;
+  sym[2] = 1;
+  SetCartSymVN(cctkGH, sym, "ML_BSSN_Host::DPDstandardNthbeta223");
+  
+  sym[0] = 1;
+  sym[1] = 1;
+  sym[2] = 1;
+  SetCartSymVN(cctkGH, sym, "ML_BSSN_Host::DPDstandardNthbeta312");
+  
+  sym[0] = 1;
+  sym[1] = 1;
+  sym[2] = 1;
+  SetCartSymVN(cctkGH, sym, "ML_BSSN_Host::DPDstandardNthbeta313");
+  
+  sym[0] = 1;
+  sym[1] = 1;
+  sym[2] = 1;
+  SetCartSymVN(cctkGH, sym, "ML_BSSN_Host::DPDstandardNthbeta323");
+  
+  sym[0] = 1;
+  sym[1] = 1;
+  sym[2] = 1;
+  SetCartSymVN(cctkGH, sym, "ML_BSSN_Host::DPDstandardNthgt1112");
+  
+  sym[0] = 1;
+  sym[1] = 1;
+  sym[2] = 1;
+  SetCartSymVN(cctkGH, sym, "ML_BSSN_Host::DPDstandardNthgt1113");
+  
+  sym[0] = 1;
+  sym[1] = 1;
+  sym[2] = 1;
+  SetCartSymVN(cctkGH, sym, "ML_BSSN_Host::DPDstandardNthgt1123");
+  
+  sym[0] = 1;
+  sym[1] = 1;
+  sym[2] = 1;
+  SetCartSymVN(cctkGH, sym, "ML_BSSN_Host::DPDstandardNthgt1212");
+  
+  sym[0] = 1;
+  sym[1] = 1;
+  sym[2] = 1;
+  SetCartSymVN(cctkGH, sym, "ML_BSSN_Host::DPDstandardNthgt1213");
+  
+  sym[0] = 1;
+  sym[1] = 1;
+  sym[2] = 1;
+  SetCartSymVN(cctkGH, sym, "ML_BSSN_Host::DPDstandardNthgt1223");
+  
+  sym[0] = 1;
+  sym[1] = 1;
+  sym[2] = 1;
+  SetCartSymVN(cctkGH, sym, "ML_BSSN_Host::DPDstandardNthgt1312");
+  
+  sym[0] = 1;
+  sym[1] = 1;
+  sym[2] = 1;
+  SetCartSymVN(cctkGH, sym, "ML_BSSN_Host::DPDstandardNthgt1313");
+  
+  sym[0] = 1;
+  sym[1] = 1;
+  sym[2] = 1;
+  SetCartSymVN(cctkGH, sym, "ML_BSSN_Host::DPDstandardNthgt1323");
+  
+  sym[0] = 1;
+  sym[1] = 1;
+  sym[2] = 1;
+  SetCartSymVN(cctkGH, sym, "ML_BSSN_Host::DPDstandardNthgt2212");
+  
+  sym[0] = 1;
+  sym[1] = 1;
+  sym[2] = 1;
+  SetCartSymVN(cctkGH, sym, "ML_BSSN_Host::DPDstandardNthgt2213");
+  
+  sym[0] = 1;
+  sym[1] = 1;
+  sym[2] = 1;
+  SetCartSymVN(cctkGH, sym, "ML_BSSN_Host::DPDstandardNthgt2223");
+  
+  sym[0] = 1;
+  sym[1] = 1;
+  sym[2] = 1;
+  SetCartSymVN(cctkGH, sym, "ML_BSSN_Host::DPDstandardNthgt2312");
+  
+  sym[0] = 1;
+  sym[1] = 1;
+  sym[2] = 1;
+  SetCartSymVN(cctkGH, sym, "ML_BSSN_Host::DPDstandardNthgt2313");
+  
+  sym[0] = 1;
+  sym[1] = 1;
+  sym[2] = 1;
+  SetCartSymVN(cctkGH, sym, "ML_BSSN_Host::DPDstandardNthgt2323");
+  
+  sym[0] = 1;
+  sym[1] = 1;
+  sym[2] = 1;
+  SetCartSymVN(cctkGH, sym, "ML_BSSN_Host::DPDstandardNthgt3312");
+  
+  sym[0] = 1;
+  sym[1] = 1;
+  sym[2] = 1;
+  SetCartSymVN(cctkGH, sym, "ML_BSSN_Host::DPDstandardNthgt3313");
+  
+  sym[0] = 1;
+  sym[1] = 1;
+  sym[2] = 1;
+  SetCartSymVN(cctkGH, sym, "ML_BSSN_Host::DPDstandardNthgt3323");
+  
+  sym[0] = 1;
+  sym[1] = 1;
+  sym[2] = 1;
+  SetCartSymVN(cctkGH, sym, "ML_BSSN_Host::DPDstandardNthphi12");
+  
+  sym[0] = 1;
+  sym[1] = 1;
+  sym[2] = 1;
+  SetCartSymVN(cctkGH, sym, "ML_BSSN_Host::DPDstandardNthphi13");
+  
+  sym[0] = 1;
+  sym[1] = 1;
+  sym[2] = 1;
+  SetCartSymVN(cctkGH, sym, "ML_BSSN_Host::DPDstandardNthphi23");
+  
+  sym[0] = 1;
+  sym[1] = 1;
+  sym[2] = 1;
   SetCartSymVN(cctkGH, sym, "ML_BSSN_Host::cS");
   
   sym[0] = -1;

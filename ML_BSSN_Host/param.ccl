@@ -264,6 +264,204 @@ CCTK_INT ML_BSSN_Host_convertFromADMBaseGamma_calc_every "ML_BSSN_Host_convertFr
 } 1
 
 restricted:
+CCTK_INT ML_BSSN_Host_RHS_DPDstandardNthalpha12_calc_every "ML_BSSN_Host_RHS_DPDstandardNthalpha12_calc_every" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 1
+
+restricted:
+CCTK_INT ML_BSSN_Host_RHS_DPDstandardNthbeta112_calc_every "ML_BSSN_Host_RHS_DPDstandardNthbeta112_calc_every" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 1
+
+restricted:
+CCTK_INT ML_BSSN_Host_RHS_DPDstandardNthbeta212_calc_every "ML_BSSN_Host_RHS_DPDstandardNthbeta212_calc_every" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 1
+
+restricted:
+CCTK_INT ML_BSSN_Host_RHS_DPDstandardNthbeta312_calc_every "ML_BSSN_Host_RHS_DPDstandardNthbeta312_calc_every" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 1
+
+restricted:
+CCTK_INT ML_BSSN_Host_RHS_DPDstandardNthgt1112_calc_every "ML_BSSN_Host_RHS_DPDstandardNthgt1112_calc_every" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 1
+
+restricted:
+CCTK_INT ML_BSSN_Host_RHS_DPDstandardNthgt1212_calc_every "ML_BSSN_Host_RHS_DPDstandardNthgt1212_calc_every" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 1
+
+restricted:
+CCTK_INT ML_BSSN_Host_RHS_DPDstandardNthgt1312_calc_every "ML_BSSN_Host_RHS_DPDstandardNthgt1312_calc_every" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 1
+
+restricted:
+CCTK_INT ML_BSSN_Host_RHS_DPDstandardNthgt2212_calc_every "ML_BSSN_Host_RHS_DPDstandardNthgt2212_calc_every" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 1
+
+restricted:
+CCTK_INT ML_BSSN_Host_RHS_DPDstandardNthgt2312_calc_every "ML_BSSN_Host_RHS_DPDstandardNthgt2312_calc_every" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 1
+
+restricted:
+CCTK_INT ML_BSSN_Host_RHS_DPDstandardNthgt3312_calc_every "ML_BSSN_Host_RHS_DPDstandardNthgt3312_calc_every" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 1
+
+restricted:
+CCTK_INT ML_BSSN_Host_RHS_DPDstandardNthphi12_calc_every "ML_BSSN_Host_RHS_DPDstandardNthphi12_calc_every" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 1
+
+restricted:
+CCTK_INT ML_BSSN_Host_RHS_DPDstandardNthalpha13_calc_every "ML_BSSN_Host_RHS_DPDstandardNthalpha13_calc_every" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 1
+
+restricted:
+CCTK_INT ML_BSSN_Host_RHS_DPDstandardNthbeta113_calc_every "ML_BSSN_Host_RHS_DPDstandardNthbeta113_calc_every" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 1
+
+restricted:
+CCTK_INT ML_BSSN_Host_RHS_DPDstandardNthbeta213_calc_every "ML_BSSN_Host_RHS_DPDstandardNthbeta213_calc_every" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 1
+
+restricted:
+CCTK_INT ML_BSSN_Host_RHS_DPDstandardNthbeta313_calc_every "ML_BSSN_Host_RHS_DPDstandardNthbeta313_calc_every" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 1
+
+restricted:
+CCTK_INT ML_BSSN_Host_RHS_DPDstandardNthgt1113_calc_every "ML_BSSN_Host_RHS_DPDstandardNthgt1113_calc_every" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 1
+
+restricted:
+CCTK_INT ML_BSSN_Host_RHS_DPDstandardNthgt1213_calc_every "ML_BSSN_Host_RHS_DPDstandardNthgt1213_calc_every" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 1
+
+restricted:
+CCTK_INT ML_BSSN_Host_RHS_DPDstandardNthgt1313_calc_every "ML_BSSN_Host_RHS_DPDstandardNthgt1313_calc_every" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 1
+
+restricted:
+CCTK_INT ML_BSSN_Host_RHS_DPDstandardNthgt2213_calc_every "ML_BSSN_Host_RHS_DPDstandardNthgt2213_calc_every" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 1
+
+restricted:
+CCTK_INT ML_BSSN_Host_RHS_DPDstandardNthgt2313_calc_every "ML_BSSN_Host_RHS_DPDstandardNthgt2313_calc_every" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 1
+
+restricted:
+CCTK_INT ML_BSSN_Host_RHS_DPDstandardNthgt3313_calc_every "ML_BSSN_Host_RHS_DPDstandardNthgt3313_calc_every" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 1
+
+restricted:
+CCTK_INT ML_BSSN_Host_RHS_DPDstandardNthphi13_calc_every "ML_BSSN_Host_RHS_DPDstandardNthphi13_calc_every" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 1
+
+restricted:
+CCTK_INT ML_BSSN_Host_RHS_DPDstandardNthalpha23_calc_every "ML_BSSN_Host_RHS_DPDstandardNthalpha23_calc_every" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 1
+
+restricted:
+CCTK_INT ML_BSSN_Host_RHS_DPDstandardNthbeta123_calc_every "ML_BSSN_Host_RHS_DPDstandardNthbeta123_calc_every" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 1
+
+restricted:
+CCTK_INT ML_BSSN_Host_RHS_DPDstandardNthbeta223_calc_every "ML_BSSN_Host_RHS_DPDstandardNthbeta223_calc_every" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 1
+
+restricted:
+CCTK_INT ML_BSSN_Host_RHS_DPDstandardNthbeta323_calc_every "ML_BSSN_Host_RHS_DPDstandardNthbeta323_calc_every" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 1
+
+restricted:
+CCTK_INT ML_BSSN_Host_RHS_DPDstandardNthgt1123_calc_every "ML_BSSN_Host_RHS_DPDstandardNthgt1123_calc_every" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 1
+
+restricted:
+CCTK_INT ML_BSSN_Host_RHS_DPDstandardNthgt1223_calc_every "ML_BSSN_Host_RHS_DPDstandardNthgt1223_calc_every" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 1
+
+restricted:
+CCTK_INT ML_BSSN_Host_RHS_DPDstandardNthgt1323_calc_every "ML_BSSN_Host_RHS_DPDstandardNthgt1323_calc_every" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 1
+
+restricted:
+CCTK_INT ML_BSSN_Host_RHS_DPDstandardNthgt2223_calc_every "ML_BSSN_Host_RHS_DPDstandardNthgt2223_calc_every" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 1
+
+restricted:
+CCTK_INT ML_BSSN_Host_RHS_DPDstandardNthgt2323_calc_every "ML_BSSN_Host_RHS_DPDstandardNthgt2323_calc_every" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 1
+
+restricted:
+CCTK_INT ML_BSSN_Host_RHS_DPDstandardNthgt3323_calc_every "ML_BSSN_Host_RHS_DPDstandardNthgt3323_calc_every" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 1
+
+restricted:
+CCTK_INT ML_BSSN_Host_RHS_DPDstandardNthphi23_calc_every "ML_BSSN_Host_RHS_DPDstandardNthphi23_calc_every" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 1
+
+restricted:
 CCTK_INT ML_BSSN_Host_RHS1_calc_every "ML_BSSN_Host_RHS1_calc_every" STEERABLE=ALWAYS
 {
   *:* :: ""
@@ -276,151 +474,151 @@ CCTK_INT ML_BSSN_Host_RHS2_calc_every "ML_BSSN_Host_RHS2_calc_every" STEERABLE=A
 } 1
 
 restricted:
-CCTK_INT ML_BSSN_Host_Advect_dottrK_calc_every "ML_BSSN_Host_Advect_dottrK_calc_every" STEERABLE=ALWAYS
+CCTK_INT ML_BSSN_Host_Advect_trKrhs_calc_every "ML_BSSN_Host_Advect_trKrhs_calc_every" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 1
 
 restricted:
-CCTK_INT ML_BSSN_Host_Advect_dotphi_calc_every "ML_BSSN_Host_Advect_dotphi_calc_every" STEERABLE=ALWAYS
+CCTK_INT ML_BSSN_Host_Advect_phirhs_calc_every "ML_BSSN_Host_Advect_phirhs_calc_every" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 1
 
 restricted:
-CCTK_INT ML_BSSN_Host_Advect_dotgt11_calc_every "ML_BSSN_Host_Advect_dotgt11_calc_every" STEERABLE=ALWAYS
+CCTK_INT ML_BSSN_Host_Advect_gt11rhs_calc_every "ML_BSSN_Host_Advect_gt11rhs_calc_every" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 1
 
 restricted:
-CCTK_INT ML_BSSN_Host_Advect_dotgt12_calc_every "ML_BSSN_Host_Advect_dotgt12_calc_every" STEERABLE=ALWAYS
+CCTK_INT ML_BSSN_Host_Advect_gt12rhs_calc_every "ML_BSSN_Host_Advect_gt12rhs_calc_every" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 1
 
 restricted:
-CCTK_INT ML_BSSN_Host_Advect_dotgt13_calc_every "ML_BSSN_Host_Advect_dotgt13_calc_every" STEERABLE=ALWAYS
+CCTK_INT ML_BSSN_Host_Advect_gt13rhs_calc_every "ML_BSSN_Host_Advect_gt13rhs_calc_every" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 1
 
 restricted:
-CCTK_INT ML_BSSN_Host_Advect_dotgt22_calc_every "ML_BSSN_Host_Advect_dotgt22_calc_every" STEERABLE=ALWAYS
+CCTK_INT ML_BSSN_Host_Advect_gt22rhs_calc_every "ML_BSSN_Host_Advect_gt22rhs_calc_every" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 1
 
 restricted:
-CCTK_INT ML_BSSN_Host_Advect_dotgt23_calc_every "ML_BSSN_Host_Advect_dotgt23_calc_every" STEERABLE=ALWAYS
+CCTK_INT ML_BSSN_Host_Advect_gt23rhs_calc_every "ML_BSSN_Host_Advect_gt23rhs_calc_every" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 1
 
 restricted:
-CCTK_INT ML_BSSN_Host_Advect_dotgt33_calc_every "ML_BSSN_Host_Advect_dotgt33_calc_every" STEERABLE=ALWAYS
+CCTK_INT ML_BSSN_Host_Advect_gt33rhs_calc_every "ML_BSSN_Host_Advect_gt33rhs_calc_every" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 1
 
 restricted:
-CCTK_INT ML_BSSN_Host_Advect_dotXt1_calc_every "ML_BSSN_Host_Advect_dotXt1_calc_every" STEERABLE=ALWAYS
+CCTK_INT ML_BSSN_Host_Advect_Xt1rhs_calc_every "ML_BSSN_Host_Advect_Xt1rhs_calc_every" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 1
 
 restricted:
-CCTK_INT ML_BSSN_Host_Advect_dotXt2_calc_every "ML_BSSN_Host_Advect_dotXt2_calc_every" STEERABLE=ALWAYS
+CCTK_INT ML_BSSN_Host_Advect_Xt2rhs_calc_every "ML_BSSN_Host_Advect_Xt2rhs_calc_every" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 1
 
 restricted:
-CCTK_INT ML_BSSN_Host_Advect_dotXt3_calc_every "ML_BSSN_Host_Advect_dotXt3_calc_every" STEERABLE=ALWAYS
+CCTK_INT ML_BSSN_Host_Advect_Xt3rhs_calc_every "ML_BSSN_Host_Advect_Xt3rhs_calc_every" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 1
 
 restricted:
-CCTK_INT ML_BSSN_Host_Advect_dotalpha_calc_every "ML_BSSN_Host_Advect_dotalpha_calc_every" STEERABLE=ALWAYS
+CCTK_INT ML_BSSN_Host_Advect_alpharhs_calc_every "ML_BSSN_Host_Advect_alpharhs_calc_every" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 1
 
 restricted:
-CCTK_INT ML_BSSN_Host_Advect_dotA_calc_every "ML_BSSN_Host_Advect_dotA_calc_every" STEERABLE=ALWAYS
+CCTK_INT ML_BSSN_Host_Advect_Arhs_calc_every "ML_BSSN_Host_Advect_Arhs_calc_every" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 1
 
 restricted:
-CCTK_INT ML_BSSN_Host_Advect_dotbeta1_calc_every "ML_BSSN_Host_Advect_dotbeta1_calc_every" STEERABLE=ALWAYS
+CCTK_INT ML_BSSN_Host_Advect_beta1rhs_calc_every "ML_BSSN_Host_Advect_beta1rhs_calc_every" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 1
 
 restricted:
-CCTK_INT ML_BSSN_Host_Advect_dotbeta2_calc_every "ML_BSSN_Host_Advect_dotbeta2_calc_every" STEERABLE=ALWAYS
+CCTK_INT ML_BSSN_Host_Advect_beta2rhs_calc_every "ML_BSSN_Host_Advect_beta2rhs_calc_every" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 1
 
 restricted:
-CCTK_INT ML_BSSN_Host_Advect_dotbeta3_calc_every "ML_BSSN_Host_Advect_dotbeta3_calc_every" STEERABLE=ALWAYS
+CCTK_INT ML_BSSN_Host_Advect_beta3rhs_calc_every "ML_BSSN_Host_Advect_beta3rhs_calc_every" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 1
 
 restricted:
-CCTK_INT ML_BSSN_Host_Advect_dotB1_calc_every "ML_BSSN_Host_Advect_dotB1_calc_every" STEERABLE=ALWAYS
+CCTK_INT ML_BSSN_Host_Advect_B1rhs_calc_every "ML_BSSN_Host_Advect_B1rhs_calc_every" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 1
 
 restricted:
-CCTK_INT ML_BSSN_Host_Advect_dotB2_calc_every "ML_BSSN_Host_Advect_dotB2_calc_every" STEERABLE=ALWAYS
+CCTK_INT ML_BSSN_Host_Advect_B2rhs_calc_every "ML_BSSN_Host_Advect_B2rhs_calc_every" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 1
 
 restricted:
-CCTK_INT ML_BSSN_Host_Advect_dotB3_calc_every "ML_BSSN_Host_Advect_dotB3_calc_every" STEERABLE=ALWAYS
+CCTK_INT ML_BSSN_Host_Advect_B3rhs_calc_every "ML_BSSN_Host_Advect_B3rhs_calc_every" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 1
 
 restricted:
-CCTK_INT ML_BSSN_Host_Advect_dotAt11_calc_every "ML_BSSN_Host_Advect_dotAt11_calc_every" STEERABLE=ALWAYS
+CCTK_INT ML_BSSN_Host_Advect_At11rhs_calc_every "ML_BSSN_Host_Advect_At11rhs_calc_every" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 1
 
 restricted:
-CCTK_INT ML_BSSN_Host_Advect_dotAt12_calc_every "ML_BSSN_Host_Advect_dotAt12_calc_every" STEERABLE=ALWAYS
+CCTK_INT ML_BSSN_Host_Advect_At12rhs_calc_every "ML_BSSN_Host_Advect_At12rhs_calc_every" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 1
 
 restricted:
-CCTK_INT ML_BSSN_Host_Advect_dotAt13_calc_every "ML_BSSN_Host_Advect_dotAt13_calc_every" STEERABLE=ALWAYS
+CCTK_INT ML_BSSN_Host_Advect_At13rhs_calc_every "ML_BSSN_Host_Advect_At13rhs_calc_every" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 1
 
 restricted:
-CCTK_INT ML_BSSN_Host_Advect_dotAt22_calc_every "ML_BSSN_Host_Advect_dotAt22_calc_every" STEERABLE=ALWAYS
+CCTK_INT ML_BSSN_Host_Advect_At22rhs_calc_every "ML_BSSN_Host_Advect_At22rhs_calc_every" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 1
 
 restricted:
-CCTK_INT ML_BSSN_Host_Advect_dotAt23_calc_every "ML_BSSN_Host_Advect_dotAt23_calc_every" STEERABLE=ALWAYS
+CCTK_INT ML_BSSN_Host_Advect_At23rhs_calc_every "ML_BSSN_Host_Advect_At23rhs_calc_every" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 1
 
 restricted:
-CCTK_INT ML_BSSN_Host_Advect_dotAt33_calc_every "ML_BSSN_Host_Advect_dotAt33_calc_every" STEERABLE=ALWAYS
+CCTK_INT ML_BSSN_Host_Advect_At33rhs_calc_every "ML_BSSN_Host_Advect_At33rhs_calc_every" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 1
@@ -468,6 +666,204 @@ CCTK_INT ML_BSSN_Host_convertFromADMBaseGamma_calc_offset "ML_BSSN_Host_convertF
 } 0
 
 restricted:
+CCTK_INT ML_BSSN_Host_RHS_DPDstandardNthalpha12_calc_offset "ML_BSSN_Host_RHS_DPDstandardNthalpha12_calc_offset" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 0
+
+restricted:
+CCTK_INT ML_BSSN_Host_RHS_DPDstandardNthbeta112_calc_offset "ML_BSSN_Host_RHS_DPDstandardNthbeta112_calc_offset" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 0
+
+restricted:
+CCTK_INT ML_BSSN_Host_RHS_DPDstandardNthbeta212_calc_offset "ML_BSSN_Host_RHS_DPDstandardNthbeta212_calc_offset" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 0
+
+restricted:
+CCTK_INT ML_BSSN_Host_RHS_DPDstandardNthbeta312_calc_offset "ML_BSSN_Host_RHS_DPDstandardNthbeta312_calc_offset" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 0
+
+restricted:
+CCTK_INT ML_BSSN_Host_RHS_DPDstandardNthgt1112_calc_offset "ML_BSSN_Host_RHS_DPDstandardNthgt1112_calc_offset" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 0
+
+restricted:
+CCTK_INT ML_BSSN_Host_RHS_DPDstandardNthgt1212_calc_offset "ML_BSSN_Host_RHS_DPDstandardNthgt1212_calc_offset" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 0
+
+restricted:
+CCTK_INT ML_BSSN_Host_RHS_DPDstandardNthgt1312_calc_offset "ML_BSSN_Host_RHS_DPDstandardNthgt1312_calc_offset" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 0
+
+restricted:
+CCTK_INT ML_BSSN_Host_RHS_DPDstandardNthgt2212_calc_offset "ML_BSSN_Host_RHS_DPDstandardNthgt2212_calc_offset" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 0
+
+restricted:
+CCTK_INT ML_BSSN_Host_RHS_DPDstandardNthgt2312_calc_offset "ML_BSSN_Host_RHS_DPDstandardNthgt2312_calc_offset" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 0
+
+restricted:
+CCTK_INT ML_BSSN_Host_RHS_DPDstandardNthgt3312_calc_offset "ML_BSSN_Host_RHS_DPDstandardNthgt3312_calc_offset" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 0
+
+restricted:
+CCTK_INT ML_BSSN_Host_RHS_DPDstandardNthphi12_calc_offset "ML_BSSN_Host_RHS_DPDstandardNthphi12_calc_offset" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 0
+
+restricted:
+CCTK_INT ML_BSSN_Host_RHS_DPDstandardNthalpha13_calc_offset "ML_BSSN_Host_RHS_DPDstandardNthalpha13_calc_offset" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 0
+
+restricted:
+CCTK_INT ML_BSSN_Host_RHS_DPDstandardNthbeta113_calc_offset "ML_BSSN_Host_RHS_DPDstandardNthbeta113_calc_offset" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 0
+
+restricted:
+CCTK_INT ML_BSSN_Host_RHS_DPDstandardNthbeta213_calc_offset "ML_BSSN_Host_RHS_DPDstandardNthbeta213_calc_offset" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 0
+
+restricted:
+CCTK_INT ML_BSSN_Host_RHS_DPDstandardNthbeta313_calc_offset "ML_BSSN_Host_RHS_DPDstandardNthbeta313_calc_offset" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 0
+
+restricted:
+CCTK_INT ML_BSSN_Host_RHS_DPDstandardNthgt1113_calc_offset "ML_BSSN_Host_RHS_DPDstandardNthgt1113_calc_offset" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 0
+
+restricted:
+CCTK_INT ML_BSSN_Host_RHS_DPDstandardNthgt1213_calc_offset "ML_BSSN_Host_RHS_DPDstandardNthgt1213_calc_offset" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 0
+
+restricted:
+CCTK_INT ML_BSSN_Host_RHS_DPDstandardNthgt1313_calc_offset "ML_BSSN_Host_RHS_DPDstandardNthgt1313_calc_offset" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 0
+
+restricted:
+CCTK_INT ML_BSSN_Host_RHS_DPDstandardNthgt2213_calc_offset "ML_BSSN_Host_RHS_DPDstandardNthgt2213_calc_offset" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 0
+
+restricted:
+CCTK_INT ML_BSSN_Host_RHS_DPDstandardNthgt2313_calc_offset "ML_BSSN_Host_RHS_DPDstandardNthgt2313_calc_offset" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 0
+
+restricted:
+CCTK_INT ML_BSSN_Host_RHS_DPDstandardNthgt3313_calc_offset "ML_BSSN_Host_RHS_DPDstandardNthgt3313_calc_offset" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 0
+
+restricted:
+CCTK_INT ML_BSSN_Host_RHS_DPDstandardNthphi13_calc_offset "ML_BSSN_Host_RHS_DPDstandardNthphi13_calc_offset" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 0
+
+restricted:
+CCTK_INT ML_BSSN_Host_RHS_DPDstandardNthalpha23_calc_offset "ML_BSSN_Host_RHS_DPDstandardNthalpha23_calc_offset" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 0
+
+restricted:
+CCTK_INT ML_BSSN_Host_RHS_DPDstandardNthbeta123_calc_offset "ML_BSSN_Host_RHS_DPDstandardNthbeta123_calc_offset" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 0
+
+restricted:
+CCTK_INT ML_BSSN_Host_RHS_DPDstandardNthbeta223_calc_offset "ML_BSSN_Host_RHS_DPDstandardNthbeta223_calc_offset" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 0
+
+restricted:
+CCTK_INT ML_BSSN_Host_RHS_DPDstandardNthbeta323_calc_offset "ML_BSSN_Host_RHS_DPDstandardNthbeta323_calc_offset" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 0
+
+restricted:
+CCTK_INT ML_BSSN_Host_RHS_DPDstandardNthgt1123_calc_offset "ML_BSSN_Host_RHS_DPDstandardNthgt1123_calc_offset" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 0
+
+restricted:
+CCTK_INT ML_BSSN_Host_RHS_DPDstandardNthgt1223_calc_offset "ML_BSSN_Host_RHS_DPDstandardNthgt1223_calc_offset" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 0
+
+restricted:
+CCTK_INT ML_BSSN_Host_RHS_DPDstandardNthgt1323_calc_offset "ML_BSSN_Host_RHS_DPDstandardNthgt1323_calc_offset" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 0
+
+restricted:
+CCTK_INT ML_BSSN_Host_RHS_DPDstandardNthgt2223_calc_offset "ML_BSSN_Host_RHS_DPDstandardNthgt2223_calc_offset" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 0
+
+restricted:
+CCTK_INT ML_BSSN_Host_RHS_DPDstandardNthgt2323_calc_offset "ML_BSSN_Host_RHS_DPDstandardNthgt2323_calc_offset" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 0
+
+restricted:
+CCTK_INT ML_BSSN_Host_RHS_DPDstandardNthgt3323_calc_offset "ML_BSSN_Host_RHS_DPDstandardNthgt3323_calc_offset" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 0
+
+restricted:
+CCTK_INT ML_BSSN_Host_RHS_DPDstandardNthphi23_calc_offset "ML_BSSN_Host_RHS_DPDstandardNthphi23_calc_offset" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 0
+
+restricted:
 CCTK_INT ML_BSSN_Host_RHS1_calc_offset "ML_BSSN_Host_RHS1_calc_offset" STEERABLE=ALWAYS
 {
   *:* :: ""
@@ -480,151 +876,151 @@ CCTK_INT ML_BSSN_Host_RHS2_calc_offset "ML_BSSN_Host_RHS2_calc_offset" STEERABLE
 } 0
 
 restricted:
-CCTK_INT ML_BSSN_Host_Advect_dottrK_calc_offset "ML_BSSN_Host_Advect_dottrK_calc_offset" STEERABLE=ALWAYS
+CCTK_INT ML_BSSN_Host_Advect_trKrhs_calc_offset "ML_BSSN_Host_Advect_trKrhs_calc_offset" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 0
 
 restricted:
-CCTK_INT ML_BSSN_Host_Advect_dotphi_calc_offset "ML_BSSN_Host_Advect_dotphi_calc_offset" STEERABLE=ALWAYS
+CCTK_INT ML_BSSN_Host_Advect_phirhs_calc_offset "ML_BSSN_Host_Advect_phirhs_calc_offset" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 0
 
 restricted:
-CCTK_INT ML_BSSN_Host_Advect_dotgt11_calc_offset "ML_BSSN_Host_Advect_dotgt11_calc_offset" STEERABLE=ALWAYS
+CCTK_INT ML_BSSN_Host_Advect_gt11rhs_calc_offset "ML_BSSN_Host_Advect_gt11rhs_calc_offset" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 0
 
 restricted:
-CCTK_INT ML_BSSN_Host_Advect_dotgt12_calc_offset "ML_BSSN_Host_Advect_dotgt12_calc_offset" STEERABLE=ALWAYS
+CCTK_INT ML_BSSN_Host_Advect_gt12rhs_calc_offset "ML_BSSN_Host_Advect_gt12rhs_calc_offset" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 0
 
 restricted:
-CCTK_INT ML_BSSN_Host_Advect_dotgt13_calc_offset "ML_BSSN_Host_Advect_dotgt13_calc_offset" STEERABLE=ALWAYS
+CCTK_INT ML_BSSN_Host_Advect_gt13rhs_calc_offset "ML_BSSN_Host_Advect_gt13rhs_calc_offset" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 0
 
 restricted:
-CCTK_INT ML_BSSN_Host_Advect_dotgt22_calc_offset "ML_BSSN_Host_Advect_dotgt22_calc_offset" STEERABLE=ALWAYS
+CCTK_INT ML_BSSN_Host_Advect_gt22rhs_calc_offset "ML_BSSN_Host_Advect_gt22rhs_calc_offset" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 0
 
 restricted:
-CCTK_INT ML_BSSN_Host_Advect_dotgt23_calc_offset "ML_BSSN_Host_Advect_dotgt23_calc_offset" STEERABLE=ALWAYS
+CCTK_INT ML_BSSN_Host_Advect_gt23rhs_calc_offset "ML_BSSN_Host_Advect_gt23rhs_calc_offset" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 0
 
 restricted:
-CCTK_INT ML_BSSN_Host_Advect_dotgt33_calc_offset "ML_BSSN_Host_Advect_dotgt33_calc_offset" STEERABLE=ALWAYS
+CCTK_INT ML_BSSN_Host_Advect_gt33rhs_calc_offset "ML_BSSN_Host_Advect_gt33rhs_calc_offset" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 0
 
 restricted:
-CCTK_INT ML_BSSN_Host_Advect_dotXt1_calc_offset "ML_BSSN_Host_Advect_dotXt1_calc_offset" STEERABLE=ALWAYS
+CCTK_INT ML_BSSN_Host_Advect_Xt1rhs_calc_offset "ML_BSSN_Host_Advect_Xt1rhs_calc_offset" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 0
 
 restricted:
-CCTK_INT ML_BSSN_Host_Advect_dotXt2_calc_offset "ML_BSSN_Host_Advect_dotXt2_calc_offset" STEERABLE=ALWAYS
+CCTK_INT ML_BSSN_Host_Advect_Xt2rhs_calc_offset "ML_BSSN_Host_Advect_Xt2rhs_calc_offset" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 0
 
 restricted:
-CCTK_INT ML_BSSN_Host_Advect_dotXt3_calc_offset "ML_BSSN_Host_Advect_dotXt3_calc_offset" STEERABLE=ALWAYS
+CCTK_INT ML_BSSN_Host_Advect_Xt3rhs_calc_offset "ML_BSSN_Host_Advect_Xt3rhs_calc_offset" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 0
 
 restricted:
-CCTK_INT ML_BSSN_Host_Advect_dotalpha_calc_offset "ML_BSSN_Host_Advect_dotalpha_calc_offset" STEERABLE=ALWAYS
+CCTK_INT ML_BSSN_Host_Advect_alpharhs_calc_offset "ML_BSSN_Host_Advect_alpharhs_calc_offset" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 0
 
 restricted:
-CCTK_INT ML_BSSN_Host_Advect_dotA_calc_offset "ML_BSSN_Host_Advect_dotA_calc_offset" STEERABLE=ALWAYS
+CCTK_INT ML_BSSN_Host_Advect_Arhs_calc_offset "ML_BSSN_Host_Advect_Arhs_calc_offset" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 0
 
 restricted:
-CCTK_INT ML_BSSN_Host_Advect_dotbeta1_calc_offset "ML_BSSN_Host_Advect_dotbeta1_calc_offset" STEERABLE=ALWAYS
+CCTK_INT ML_BSSN_Host_Advect_beta1rhs_calc_offset "ML_BSSN_Host_Advect_beta1rhs_calc_offset" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 0
 
 restricted:
-CCTK_INT ML_BSSN_Host_Advect_dotbeta2_calc_offset "ML_BSSN_Host_Advect_dotbeta2_calc_offset" STEERABLE=ALWAYS
+CCTK_INT ML_BSSN_Host_Advect_beta2rhs_calc_offset "ML_BSSN_Host_Advect_beta2rhs_calc_offset" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 0
 
 restricted:
-CCTK_INT ML_BSSN_Host_Advect_dotbeta3_calc_offset "ML_BSSN_Host_Advect_dotbeta3_calc_offset" STEERABLE=ALWAYS
+CCTK_INT ML_BSSN_Host_Advect_beta3rhs_calc_offset "ML_BSSN_Host_Advect_beta3rhs_calc_offset" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 0
 
 restricted:
-CCTK_INT ML_BSSN_Host_Advect_dotB1_calc_offset "ML_BSSN_Host_Advect_dotB1_calc_offset" STEERABLE=ALWAYS
+CCTK_INT ML_BSSN_Host_Advect_B1rhs_calc_offset "ML_BSSN_Host_Advect_B1rhs_calc_offset" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 0
 
 restricted:
-CCTK_INT ML_BSSN_Host_Advect_dotB2_calc_offset "ML_BSSN_Host_Advect_dotB2_calc_offset" STEERABLE=ALWAYS
+CCTK_INT ML_BSSN_Host_Advect_B2rhs_calc_offset "ML_BSSN_Host_Advect_B2rhs_calc_offset" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 0
 
 restricted:
-CCTK_INT ML_BSSN_Host_Advect_dotB3_calc_offset "ML_BSSN_Host_Advect_dotB3_calc_offset" STEERABLE=ALWAYS
+CCTK_INT ML_BSSN_Host_Advect_B3rhs_calc_offset "ML_BSSN_Host_Advect_B3rhs_calc_offset" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 0
 
 restricted:
-CCTK_INT ML_BSSN_Host_Advect_dotAt11_calc_offset "ML_BSSN_Host_Advect_dotAt11_calc_offset" STEERABLE=ALWAYS
+CCTK_INT ML_BSSN_Host_Advect_At11rhs_calc_offset "ML_BSSN_Host_Advect_At11rhs_calc_offset" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 0
 
 restricted:
-CCTK_INT ML_BSSN_Host_Advect_dotAt12_calc_offset "ML_BSSN_Host_Advect_dotAt12_calc_offset" STEERABLE=ALWAYS
+CCTK_INT ML_BSSN_Host_Advect_At12rhs_calc_offset "ML_BSSN_Host_Advect_At12rhs_calc_offset" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 0
 
 restricted:
-CCTK_INT ML_BSSN_Host_Advect_dotAt13_calc_offset "ML_BSSN_Host_Advect_dotAt13_calc_offset" STEERABLE=ALWAYS
+CCTK_INT ML_BSSN_Host_Advect_At13rhs_calc_offset "ML_BSSN_Host_Advect_At13rhs_calc_offset" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 0
 
 restricted:
-CCTK_INT ML_BSSN_Host_Advect_dotAt22_calc_offset "ML_BSSN_Host_Advect_dotAt22_calc_offset" STEERABLE=ALWAYS
+CCTK_INT ML_BSSN_Host_Advect_At22rhs_calc_offset "ML_BSSN_Host_Advect_At22rhs_calc_offset" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 0
 
 restricted:
-CCTK_INT ML_BSSN_Host_Advect_dotAt23_calc_offset "ML_BSSN_Host_Advect_dotAt23_calc_offset" STEERABLE=ALWAYS
+CCTK_INT ML_BSSN_Host_Advect_At23rhs_calc_offset "ML_BSSN_Host_Advect_At23rhs_calc_offset" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 0
 
 restricted:
-CCTK_INT ML_BSSN_Host_Advect_dotAt33_calc_offset "ML_BSSN_Host_Advect_dotAt33_calc_offset" STEERABLE=ALWAYS
+CCTK_INT ML_BSSN_Host_Advect_At33rhs_calc_offset "ML_BSSN_Host_Advect_At33rhs_calc_offset" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 0

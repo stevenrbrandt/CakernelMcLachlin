@@ -38,6 +38,204 @@ CCTK_REAL coords type=GF timelevels=1 tags=''
 } "coords"
 
 public:
+CCTK_REAL DPDstandardNthalpha12_group type=GF timelevels=1 tags=''
+{
+  DPDstandardNthalpha12
+} "DPDstandardNthalpha12_group"
+
+public:
+CCTK_REAL DPDstandardNthalpha13_group type=GF timelevels=1 tags=''
+{
+  DPDstandardNthalpha13
+} "DPDstandardNthalpha13_group"
+
+public:
+CCTK_REAL DPDstandardNthalpha23_group type=GF timelevels=1 tags=''
+{
+  DPDstandardNthalpha23
+} "DPDstandardNthalpha23_group"
+
+public:
+CCTK_REAL DPDstandardNthbeta112_group type=GF timelevels=1 tags=''
+{
+  DPDstandardNthbeta112
+} "DPDstandardNthbeta112_group"
+
+public:
+CCTK_REAL DPDstandardNthbeta113_group type=GF timelevels=1 tags=''
+{
+  DPDstandardNthbeta113
+} "DPDstandardNthbeta113_group"
+
+public:
+CCTK_REAL DPDstandardNthbeta123_group type=GF timelevels=1 tags=''
+{
+  DPDstandardNthbeta123
+} "DPDstandardNthbeta123_group"
+
+public:
+CCTK_REAL DPDstandardNthbeta212_group type=GF timelevels=1 tags=''
+{
+  DPDstandardNthbeta212
+} "DPDstandardNthbeta212_group"
+
+public:
+CCTK_REAL DPDstandardNthbeta213_group type=GF timelevels=1 tags=''
+{
+  DPDstandardNthbeta213
+} "DPDstandardNthbeta213_group"
+
+public:
+CCTK_REAL DPDstandardNthbeta223_group type=GF timelevels=1 tags=''
+{
+  DPDstandardNthbeta223
+} "DPDstandardNthbeta223_group"
+
+public:
+CCTK_REAL DPDstandardNthbeta312_group type=GF timelevels=1 tags=''
+{
+  DPDstandardNthbeta312
+} "DPDstandardNthbeta312_group"
+
+public:
+CCTK_REAL DPDstandardNthbeta313_group type=GF timelevels=1 tags=''
+{
+  DPDstandardNthbeta313
+} "DPDstandardNthbeta313_group"
+
+public:
+CCTK_REAL DPDstandardNthbeta323_group type=GF timelevels=1 tags=''
+{
+  DPDstandardNthbeta323
+} "DPDstandardNthbeta323_group"
+
+public:
+CCTK_REAL DPDstandardNthgt1112_group type=GF timelevels=1 tags=''
+{
+  DPDstandardNthgt1112
+} "DPDstandardNthgt1112_group"
+
+public:
+CCTK_REAL DPDstandardNthgt1113_group type=GF timelevels=1 tags=''
+{
+  DPDstandardNthgt1113
+} "DPDstandardNthgt1113_group"
+
+public:
+CCTK_REAL DPDstandardNthgt1123_group type=GF timelevels=1 tags=''
+{
+  DPDstandardNthgt1123
+} "DPDstandardNthgt1123_group"
+
+public:
+CCTK_REAL DPDstandardNthgt1212_group type=GF timelevels=1 tags=''
+{
+  DPDstandardNthgt1212
+} "DPDstandardNthgt1212_group"
+
+public:
+CCTK_REAL DPDstandardNthgt1213_group type=GF timelevels=1 tags=''
+{
+  DPDstandardNthgt1213
+} "DPDstandardNthgt1213_group"
+
+public:
+CCTK_REAL DPDstandardNthgt1223_group type=GF timelevels=1 tags=''
+{
+  DPDstandardNthgt1223
+} "DPDstandardNthgt1223_group"
+
+public:
+CCTK_REAL DPDstandardNthgt1312_group type=GF timelevels=1 tags=''
+{
+  DPDstandardNthgt1312
+} "DPDstandardNthgt1312_group"
+
+public:
+CCTK_REAL DPDstandardNthgt1313_group type=GF timelevels=1 tags=''
+{
+  DPDstandardNthgt1313
+} "DPDstandardNthgt1313_group"
+
+public:
+CCTK_REAL DPDstandardNthgt1323_group type=GF timelevels=1 tags=''
+{
+  DPDstandardNthgt1323
+} "DPDstandardNthgt1323_group"
+
+public:
+CCTK_REAL DPDstandardNthgt2212_group type=GF timelevels=1 tags=''
+{
+  DPDstandardNthgt2212
+} "DPDstandardNthgt2212_group"
+
+public:
+CCTK_REAL DPDstandardNthgt2213_group type=GF timelevels=1 tags=''
+{
+  DPDstandardNthgt2213
+} "DPDstandardNthgt2213_group"
+
+public:
+CCTK_REAL DPDstandardNthgt2223_group type=GF timelevels=1 tags=''
+{
+  DPDstandardNthgt2223
+} "DPDstandardNthgt2223_group"
+
+public:
+CCTK_REAL DPDstandardNthgt2312_group type=GF timelevels=1 tags=''
+{
+  DPDstandardNthgt2312
+} "DPDstandardNthgt2312_group"
+
+public:
+CCTK_REAL DPDstandardNthgt2313_group type=GF timelevels=1 tags=''
+{
+  DPDstandardNthgt2313
+} "DPDstandardNthgt2313_group"
+
+public:
+CCTK_REAL DPDstandardNthgt2323_group type=GF timelevels=1 tags=''
+{
+  DPDstandardNthgt2323
+} "DPDstandardNthgt2323_group"
+
+public:
+CCTK_REAL DPDstandardNthgt3312_group type=GF timelevels=1 tags=''
+{
+  DPDstandardNthgt3312
+} "DPDstandardNthgt3312_group"
+
+public:
+CCTK_REAL DPDstandardNthgt3313_group type=GF timelevels=1 tags=''
+{
+  DPDstandardNthgt3313
+} "DPDstandardNthgt3313_group"
+
+public:
+CCTK_REAL DPDstandardNthgt3323_group type=GF timelevels=1 tags=''
+{
+  DPDstandardNthgt3323
+} "DPDstandardNthgt3323_group"
+
+public:
+CCTK_REAL DPDstandardNthphi12_group type=GF timelevels=1 tags=''
+{
+  DPDstandardNthphi12
+} "DPDstandardNthphi12_group"
+
+public:
+CCTK_REAL DPDstandardNthphi13_group type=GF timelevels=1 tags=''
+{
+  DPDstandardNthphi13
+} "DPDstandardNthphi13_group"
+
+public:
+CCTK_REAL DPDstandardNthphi23_group type=GF timelevels=1 tags=''
+{
+  DPDstandardNthphi23
+} "DPDstandardNthphi23_group"
+
+public:
 CCTK_REAL ML_cons_detg type=GF timelevels=1 tags='tensortypealias="Scalar" tensorweight=2'
 {
   cS

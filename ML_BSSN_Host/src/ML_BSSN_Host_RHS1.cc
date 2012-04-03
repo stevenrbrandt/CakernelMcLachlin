@@ -144,6 +144,18 @@ static void ML_BSSN_Host_RHS1_Body(cGH const * restrict const cctkGH, int const 
     CCTK_REAL_VEC beta1L = vec_load(beta1[index]);
     CCTK_REAL_VEC beta2L = vec_load(beta2[index]);
     CCTK_REAL_VEC beta3L = vec_load(beta3[index]);
+    CCTK_REAL_VEC DPDstandardNthalpha12L = vec_load(DPDstandardNthalpha12[index]);
+    CCTK_REAL_VEC DPDstandardNthalpha13L = vec_load(DPDstandardNthalpha13[index]);
+    CCTK_REAL_VEC DPDstandardNthalpha23L = vec_load(DPDstandardNthalpha23[index]);
+    CCTK_REAL_VEC DPDstandardNthbeta112L = vec_load(DPDstandardNthbeta112[index]);
+    CCTK_REAL_VEC DPDstandardNthbeta113L = vec_load(DPDstandardNthbeta113[index]);
+    CCTK_REAL_VEC DPDstandardNthbeta123L = vec_load(DPDstandardNthbeta123[index]);
+    CCTK_REAL_VEC DPDstandardNthbeta212L = vec_load(DPDstandardNthbeta212[index]);
+    CCTK_REAL_VEC DPDstandardNthbeta213L = vec_load(DPDstandardNthbeta213[index]);
+    CCTK_REAL_VEC DPDstandardNthbeta223L = vec_load(DPDstandardNthbeta223[index]);
+    CCTK_REAL_VEC DPDstandardNthbeta312L = vec_load(DPDstandardNthbeta312[index]);
+    CCTK_REAL_VEC DPDstandardNthbeta313L = vec_load(DPDstandardNthbeta313[index]);
+    CCTK_REAL_VEC DPDstandardNthbeta323L = vec_load(DPDstandardNthbeta323[index]);
     CCTK_REAL_VEC gt11L = vec_load(gt11[index]);
     CCTK_REAL_VEC gt12L = vec_load(gt12[index]);
     CCTK_REAL_VEC gt13L = vec_load(gt13[index]);
@@ -166,36 +178,24 @@ static void ML_BSSN_Host_RHS1_Body(cGH const * restrict const cctkGH, int const 
     CCTK_REAL_VEC const PDstandardNth11alpha = PDstandardNth11(&alpha[index]);
     CCTK_REAL_VEC const PDstandardNth22alpha = PDstandardNth22(&alpha[index]);
     CCTK_REAL_VEC const PDstandardNth33alpha = PDstandardNth33(&alpha[index]);
-    CCTK_REAL_VEC const PDstandardNth12alpha = PDstandardNth12(&alpha[index]);
-    CCTK_REAL_VEC const PDstandardNth13alpha = PDstandardNth13(&alpha[index]);
-    CCTK_REAL_VEC const PDstandardNth23alpha = PDstandardNth23(&alpha[index]);
     CCTK_REAL_VEC const PDstandardNth1beta1 = PDstandardNth1(&beta1[index]);
     CCTK_REAL_VEC const PDstandardNth2beta1 = PDstandardNth2(&beta1[index]);
     CCTK_REAL_VEC const PDstandardNth3beta1 = PDstandardNth3(&beta1[index]);
     CCTK_REAL_VEC const PDstandardNth11beta1 = PDstandardNth11(&beta1[index]);
     CCTK_REAL_VEC const PDstandardNth22beta1 = PDstandardNth22(&beta1[index]);
     CCTK_REAL_VEC const PDstandardNth33beta1 = PDstandardNth33(&beta1[index]);
-    CCTK_REAL_VEC const PDstandardNth12beta1 = PDstandardNth12(&beta1[index]);
-    CCTK_REAL_VEC const PDstandardNth13beta1 = PDstandardNth13(&beta1[index]);
-    CCTK_REAL_VEC const PDstandardNth23beta1 = PDstandardNth23(&beta1[index]);
     CCTK_REAL_VEC const PDstandardNth1beta2 = PDstandardNth1(&beta2[index]);
     CCTK_REAL_VEC const PDstandardNth2beta2 = PDstandardNth2(&beta2[index]);
     CCTK_REAL_VEC const PDstandardNth3beta2 = PDstandardNth3(&beta2[index]);
     CCTK_REAL_VEC const PDstandardNth11beta2 = PDstandardNth11(&beta2[index]);
     CCTK_REAL_VEC const PDstandardNth22beta2 = PDstandardNth22(&beta2[index]);
     CCTK_REAL_VEC const PDstandardNth33beta2 = PDstandardNth33(&beta2[index]);
-    CCTK_REAL_VEC const PDstandardNth12beta2 = PDstandardNth12(&beta2[index]);
-    CCTK_REAL_VEC const PDstandardNth13beta2 = PDstandardNth13(&beta2[index]);
-    CCTK_REAL_VEC const PDstandardNth23beta2 = PDstandardNth23(&beta2[index]);
     CCTK_REAL_VEC const PDstandardNth1beta3 = PDstandardNth1(&beta3[index]);
     CCTK_REAL_VEC const PDstandardNth2beta3 = PDstandardNth2(&beta3[index]);
     CCTK_REAL_VEC const PDstandardNth3beta3 = PDstandardNth3(&beta3[index]);
     CCTK_REAL_VEC const PDstandardNth11beta3 = PDstandardNth11(&beta3[index]);
     CCTK_REAL_VEC const PDstandardNth22beta3 = PDstandardNth22(&beta3[index]);
     CCTK_REAL_VEC const PDstandardNth33beta3 = PDstandardNth33(&beta3[index]);
-    CCTK_REAL_VEC const PDstandardNth12beta3 = PDstandardNth12(&beta3[index]);
-    CCTK_REAL_VEC const PDstandardNth13beta3 = PDstandardNth13(&beta3[index]);
-    CCTK_REAL_VEC const PDstandardNth23beta3 = PDstandardNth23(&beta3[index]);
     CCTK_REAL_VEC const PDstandardNth1gt11 = PDstandardNth1(&gt11[index]);
     CCTK_REAL_VEC const PDstandardNth2gt11 = PDstandardNth2(&gt11[index]);
     CCTK_REAL_VEC const PDstandardNth3gt11 = PDstandardNth3(&gt11[index]);
@@ -437,13 +437,13 @@ static void ML_BSSN_Host_RHS1_Body(cGH const * restrict const cctkGH, int const 
       kmul(ToReal(-0.666666666666666666666666666667),kmadd(kmadd(gt13L,PDstandardNth3beta1,kmul(gt23L,PDstandardNth3beta2)),ToReal(-3),kmadd(gt33L,kadd(PDstandardNth1beta1,kmadd(PDstandardNth3beta3,ToReal(-2),PDstandardNth2beta2)),kmul(alphaL,kmul(At33L,ToReal(3))))));
     
     CCTK_REAL_VEC dotXt1 = 
-      kmul(ToReal(0.333333333333333333333333333333),kmadd(gtu12,kadd(PDstandardNth22beta2,PDstandardNth23beta3),kmadd(gtu13,kadd(PDstandardNth23beta2,PDstandardNth33beta3),kmadd(kmadd(Atu11,PDstandardNth1alpha,kmadd(Atu12,PDstandardNth2alpha,kmul(Atu13,PDstandardNth3alpha))),ToReal(-6),kmadd(kmadd(PDstandardNth2beta1,Xtn2,kmul(PDstandardNth3beta1,Xtn3)),ToReal(-3),kmadd(Xtn1,kmsub(kadd(PDstandardNth2beta2,PDstandardNth3beta3),ToReal(2),PDstandardNth1beta1),kmadd(kmadd(gtu22,PDstandardNth22beta1,kmul(gtu33,PDstandardNth33beta1)),ToReal(3),kmadd(gtu11,kadd(PDstandardNth12beta2,kmadd(PDstandardNth11beta1,ToReal(4),PDstandardNth13beta3)),kmadd(gtu23,kmul(PDstandardNth23beta1,ToReal(6)),kmadd(kmadd(gtu12,PDstandardNth12beta1,kmul(gtu13,PDstandardNth13beta1)),ToReal(7),kmul(alphaL,kmadd(kmadd(gtu11,PDstandardNth1trK,kmadd(gtu12,PDstandardNth2trK,kmul(gtu13,PDstandardNth3trK))),ToReal(-4),kmadd(kmadd(Atu11,Gt111,kmadd(Atu22,Gt122,kmul(Atu33,Gt133))),ToReal(6),kmadd(kmadd(Atu12,Gt112,kmadd(Atu13,Gt113,kmul(Atu23,Gt123))),ToReal(12),kmul(kmadd(Atu11,cdphi1,kmadd(Atu12,cdphi2,kmul(Atu13,cdphi3))),ToReal(36))))))))))))))));
+      kmul(ToReal(0.333333333333333333333333333333),kmadd(kmadd(Atu11,PDstandardNth1alpha,kmadd(Atu12,PDstandardNth2alpha,kmul(Atu13,PDstandardNth3alpha))),ToReal(-6),kmadd(kmadd(PDstandardNth2beta1,Xtn2,kmul(PDstandardNth3beta1,Xtn3)),ToReal(-3),kmadd(Xtn1,kmsub(kadd(PDstandardNth2beta2,PDstandardNth3beta3),ToReal(2),PDstandardNth1beta1),kmadd(kmadd(gtu22,PDstandardNth22beta1,kmul(gtu33,PDstandardNth33beta1)),ToReal(3),kmadd(gtu11,kadd(DPDstandardNthbeta212L,kmadd(PDstandardNth11beta1,ToReal(4),DPDstandardNthbeta313L)),kmadd(DPDstandardNthbeta123L,kmul(gtu23,ToReal(6)),kmadd(gtu12,kadd(DPDstandardNthbeta323L,kmadd(DPDstandardNthbeta112L,ToReal(7),PDstandardNth22beta2)),kmadd(gtu13,kadd(DPDstandardNthbeta223L,kmadd(DPDstandardNthbeta113L,ToReal(7),PDstandardNth33beta3)),kmul(alphaL,kmadd(kmadd(gtu11,PDstandardNth1trK,kmadd(gtu12,PDstandardNth2trK,kmul(gtu13,PDstandardNth3trK))),ToReal(-4),kmadd(kmadd(Atu11,Gt111,kmadd(Atu22,Gt122,kmul(Atu33,Gt133))),ToReal(6),kmadd(kmadd(Atu12,Gt112,kmadd(Atu13,Gt113,kmul(Atu23,Gt123))),ToReal(12),kmul(kmadd(Atu11,cdphi1,kmadd(Atu12,cdphi2,kmul(Atu13,cdphi3))),ToReal(36)))))))))))))));
     
     CCTK_REAL_VEC dotXt2 = 
-      kmul(ToReal(0.333333333333333333333333333333),kmadd(kmadd(Atu12,PDstandardNth1alpha,kmadd(Atu22,PDstandardNth2alpha,kmul(Atu23,PDstandardNth3alpha))),ToReal(-6),kmadd(kmadd(PDstandardNth1beta2,Xtn1,kmul(PDstandardNth3beta2,Xtn3)),ToReal(-3),kmadd(Xtn2,kmsub(kadd(PDstandardNth1beta1,PDstandardNth3beta3),ToReal(2),PDstandardNth2beta2),kmadd(kmadd(gtu11,PDstandardNth11beta2,kmul(gtu33,PDstandardNth33beta2)),ToReal(3),kmadd(gtu22,kadd(PDstandardNth12beta1,kmadd(PDstandardNth22beta2,ToReal(4),PDstandardNth23beta3)),kmadd(gtu13,kmul(PDstandardNth13beta2,ToReal(6)),kmadd(gtu12,kadd(PDstandardNth11beta1,kmadd(PDstandardNth12beta2,ToReal(7),PDstandardNth13beta3)),kmadd(gtu23,kadd(PDstandardNth13beta1,kmadd(PDstandardNth23beta2,ToReal(7),PDstandardNth33beta3)),kmul(alphaL,kmadd(kmadd(gtu12,PDstandardNth1trK,kmadd(gtu22,PDstandardNth2trK,kmul(gtu23,PDstandardNth3trK))),ToReal(-4),kmadd(kmadd(Atu11,Gt211,kmadd(Atu22,Gt222,kmul(Atu33,Gt233))),ToReal(6),kmadd(kmadd(Atu12,Gt212,kmadd(Atu13,Gt213,kmul(Atu23,Gt223))),ToReal(12),kmul(kmadd(Atu12,cdphi1,kmadd(Atu22,cdphi2,kmul(Atu23,cdphi3))),ToReal(36)))))))))))))));
+      kmul(ToReal(0.333333333333333333333333333333),kmadd(kmadd(Atu12,PDstandardNth1alpha,kmadd(Atu22,PDstandardNth2alpha,kmul(Atu23,PDstandardNth3alpha))),ToReal(-6),kmadd(kmadd(PDstandardNth1beta2,Xtn1,kmul(PDstandardNth3beta2,Xtn3)),ToReal(-3),kmadd(Xtn2,kmsub(kadd(PDstandardNth1beta1,PDstandardNth3beta3),ToReal(2),PDstandardNth2beta2),kmadd(kmadd(gtu11,PDstandardNth11beta2,kmul(gtu33,PDstandardNth33beta2)),ToReal(3),kmadd(gtu22,kadd(DPDstandardNthbeta112L,kmadd(PDstandardNth22beta2,ToReal(4),DPDstandardNthbeta323L)),kmadd(DPDstandardNthbeta213L,kmul(gtu13,ToReal(6)),kmadd(gtu12,kadd(DPDstandardNthbeta313L,kmadd(DPDstandardNthbeta212L,ToReal(7),PDstandardNth11beta1)),kmadd(gtu23,kadd(DPDstandardNthbeta113L,kmadd(DPDstandardNthbeta223L,ToReal(7),PDstandardNth33beta3)),kmul(alphaL,kmadd(kmadd(gtu12,PDstandardNth1trK,kmadd(gtu22,PDstandardNth2trK,kmul(gtu23,PDstandardNth3trK))),ToReal(-4),kmadd(kmadd(Atu11,Gt211,kmadd(Atu22,Gt222,kmul(Atu33,Gt233))),ToReal(6),kmadd(kmadd(Atu12,Gt212,kmadd(Atu13,Gt213,kmul(Atu23,Gt223))),ToReal(12),kmul(kmadd(Atu12,cdphi1,kmadd(Atu22,cdphi2,kmul(Atu23,cdphi3))),ToReal(36)))))))))))))));
     
     CCTK_REAL_VEC dotXt3 = 
-      kmul(ToReal(0.333333333333333333333333333333),kmadd(kmadd(Atu13,PDstandardNth1alpha,kmadd(Atu23,PDstandardNth2alpha,kmul(Atu33,PDstandardNth3alpha))),ToReal(-6),kmadd(kmadd(PDstandardNth1beta3,Xtn1,kmul(PDstandardNth2beta3,Xtn2)),ToReal(-3),kmadd(Xtn3,kmsub(kadd(PDstandardNth1beta1,PDstandardNth2beta2),ToReal(2),PDstandardNth3beta3),kmadd(kmadd(gtu11,PDstandardNth11beta3,kmul(gtu22,PDstandardNth22beta3)),ToReal(3),kmadd(gtu33,kadd(PDstandardNth13beta1,kmadd(PDstandardNth33beta3,ToReal(4),PDstandardNth23beta2)),kmadd(gtu12,kmul(PDstandardNth12beta3,ToReal(6)),kmadd(gtu13,kadd(PDstandardNth11beta1,kmadd(PDstandardNth13beta3,ToReal(7),PDstandardNth12beta2)),kmadd(gtu23,kadd(PDstandardNth12beta1,kmadd(PDstandardNth23beta3,ToReal(7),PDstandardNth22beta2)),kmul(alphaL,kmadd(kmadd(gtu13,PDstandardNth1trK,kmadd(gtu23,PDstandardNth2trK,kmul(gtu33,PDstandardNth3trK))),ToReal(-4),kmadd(kmadd(Atu11,Gt311,kmadd(Atu22,Gt322,kmul(Atu33,Gt333))),ToReal(6),kmadd(kmadd(Atu12,Gt312,kmadd(Atu13,Gt313,kmul(Atu23,Gt323))),ToReal(12),kmul(kmadd(Atu13,cdphi1,kmadd(Atu23,cdphi2,kmul(Atu33,cdphi3))),ToReal(36)))))))))))))));
+      kmul(ToReal(0.333333333333333333333333333333),kmadd(kmadd(Atu13,PDstandardNth1alpha,kmadd(Atu23,PDstandardNth2alpha,kmul(Atu33,PDstandardNth3alpha))),ToReal(-6),kmadd(kmadd(PDstandardNth1beta3,Xtn1,kmul(PDstandardNth2beta3,Xtn2)),ToReal(-3),kmadd(Xtn3,kmsub(kadd(PDstandardNth1beta1,PDstandardNth2beta2),ToReal(2),PDstandardNth3beta3),kmadd(kmadd(gtu11,PDstandardNth11beta3,kmul(gtu22,PDstandardNth22beta3)),ToReal(3),kmadd(gtu33,kadd(DPDstandardNthbeta113L,kmadd(PDstandardNth33beta3,ToReal(4),DPDstandardNthbeta223L)),kmadd(DPDstandardNthbeta312L,kmul(gtu12,ToReal(6)),kmadd(gtu13,kadd(DPDstandardNthbeta212L,kmadd(DPDstandardNthbeta313L,ToReal(7),PDstandardNth11beta1)),kmadd(gtu23,kadd(DPDstandardNthbeta112L,kmadd(DPDstandardNthbeta323L,ToReal(7),PDstandardNth22beta2)),kmul(alphaL,kmadd(kmadd(gtu13,PDstandardNth1trK,kmadd(gtu23,PDstandardNth2trK,kmul(gtu33,PDstandardNth3trK))),ToReal(-4),kmadd(kmadd(Atu11,Gt311,kmadd(Atu22,Gt322,kmul(Atu33,Gt333))),ToReal(6),kmadd(kmadd(Atu12,Gt312,kmadd(Atu13,Gt313,kmul(Atu23,Gt323))),ToReal(12),kmul(kmadd(Atu13,cdphi1,kmadd(Atu23,cdphi2,kmul(Atu33,cdphi3))),ToReal(36)))))))))))))));
     
     CCTK_REAL_VEC Xt1rhsL = dotXt1;
     
@@ -452,7 +452,7 @@ static void ML_BSSN_Host_RHS1_Body(cGH const * restrict const cctkGH, int const 
     CCTK_REAL_VEC Xt3rhsL = dotXt3;
     
     CCTK_REAL_VEC dottrK = 
-      kmsub(alphaL,kadd(SQR(Atm11),kadd(SQR(Atm22),kadd(SQR(Atm33),kmadd(SQR(trKL),ToReal(0.333333333333333333333333333333),kmul(kmadd(Atm12,Atm21,kmadd(Atm13,Atm31,kmul(Atm23,Atm32))),ToReal(2)))))),kmul(em4phi,kmadd(gtu11,PDstandardNth11alpha,kmadd(gtu22,PDstandardNth22alpha,knmsub(PDstandardNth3alpha,Xtn3,kmadd(kmadd(gtu12,PDstandardNth12alpha,kmadd(gtu13,kmadd(cdphi1,PDstandardNth3alpha,PDstandardNth13alpha),kmul(gtu23,kmadd(cdphi2,PDstandardNth3alpha,PDstandardNth23alpha)))),ToReal(2),kmadd(PDstandardNth1alpha,kmsub(kmadd(cdphi1,gtu11,kmadd(cdphi2,gtu12,kmul(cdphi3,gtu13))),ToReal(2),Xtn1),kmadd(PDstandardNth2alpha,kmsub(kmadd(cdphi1,gtu12,kmadd(cdphi2,gtu22,kmul(cdphi3,gtu23))),ToReal(2),Xtn2),kmul(gtu33,kmadd(cdphi3,kmul(PDstandardNth3alpha,ToReal(2)),PDstandardNth33alpha))))))))));
+      kmsub(alphaL,kadd(SQR(Atm11),kadd(SQR(Atm22),kadd(SQR(Atm33),kmadd(SQR(trKL),ToReal(0.333333333333333333333333333333),kmul(kmadd(Atm12,Atm21,kmadd(Atm13,Atm31,kmul(Atm23,Atm32))),ToReal(2)))))),kmul(em4phi,kmadd(gtu11,PDstandardNth11alpha,kmadd(gtu22,PDstandardNth22alpha,knmsub(PDstandardNth3alpha,Xtn3,kmadd(kmadd(DPDstandardNthalpha12L,gtu12,kmadd(gtu13,kmadd(cdphi1,PDstandardNth3alpha,DPDstandardNthalpha13L),kmul(gtu23,kmadd(cdphi2,PDstandardNth3alpha,DPDstandardNthalpha23L)))),ToReal(2),kmadd(PDstandardNth1alpha,kmsub(kmadd(cdphi1,gtu11,kmadd(cdphi2,gtu12,kmul(cdphi3,gtu13))),ToReal(2),Xtn1),kmadd(PDstandardNth2alpha,kmsub(kmadd(cdphi1,gtu12,kmadd(cdphi2,gtu22,kmul(cdphi3,gtu23))),ToReal(2),Xtn2),kmul(gtu33,kmadd(cdphi3,kmul(PDstandardNth3alpha,ToReal(2)),PDstandardNth33alpha))))))))));
     
     CCTK_REAL_VEC trKrhsL = dottrK;
     
@@ -544,6 +544,18 @@ extern "C" void ML_BSSN_Host_RHS1(CCTK_ARGUMENTS)
   }
   
   const char *const groups[] = {
+    "ML_BSSN_Host::DPDstandardNthalpha12_group",
+    "ML_BSSN_Host::DPDstandardNthalpha13_group",
+    "ML_BSSN_Host::DPDstandardNthalpha23_group",
+    "ML_BSSN_Host::DPDstandardNthbeta112_group",
+    "ML_BSSN_Host::DPDstandardNthbeta113_group",
+    "ML_BSSN_Host::DPDstandardNthbeta123_group",
+    "ML_BSSN_Host::DPDstandardNthbeta212_group",
+    "ML_BSSN_Host::DPDstandardNthbeta213_group",
+    "ML_BSSN_Host::DPDstandardNthbeta223_group",
+    "ML_BSSN_Host::DPDstandardNthbeta312_group",
+    "ML_BSSN_Host::DPDstandardNthbeta313_group",
+    "ML_BSSN_Host::DPDstandardNthbeta323_group",
     "ML_BSSN_Host::ML_curv",
     "ML_BSSN_Host::ML_dtlapse",
     "ML_BSSN_Host::ML_dtlapserhs",
@@ -561,7 +573,7 @@ extern "C" void ML_BSSN_Host_RHS1(CCTK_ARGUMENTS)
     "ML_BSSN_Host::ML_shiftrhs",
     "ML_BSSN_Host::ML_trace_curv",
     "ML_BSSN_Host::ML_trace_curvrhs"};
-  GenericFD_AssertGroupStorage(cctkGH, "ML_BSSN_Host_RHS1", 17, groups);
+  GenericFD_AssertGroupStorage(cctkGH, "ML_BSSN_Host_RHS1", 29, groups);
   
   GenericFD_EnsureStencilFits(cctkGH, "ML_BSSN_Host_RHS1", 4, 4, 4);
   
