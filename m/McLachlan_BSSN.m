@@ -246,33 +246,6 @@ initialCalc =
   }
 };
 
-
-
-(******************************************************************************)
-(* Split a calculation *)
-(******************************************************************************)
-
-PartialCalculation[calc_, suffix_, updates_, evolVars_] :=
-Module[
-  {name, calc1, replaces, calc2, vars, patterns, eqs, calc3},
-  (* Add suffix to name *)
-  name     = lookup[calc, Name] <> suffix;
-  calc1    = mapReplace[calc, Name, name];
-  (* Replace some entries in the calculation *)
-  (* replaces = Map[Function[rule, mapReplace[#, rule[[1]], rule[[2]]]&], updates]; *)
-  replaces = updates //. (lhs_ -> rhs_) -> (mapReplace[#, lhs, rhs]&);
-  calc2 = Apply[Composition, replaces][calc1];
-  (* Remove unnecessary equations *)
-  vars     = Join[evolVars, lookup[calc2, Shorthands]];
-  patterns = Replace[vars, {    Tensor[n_,__]  ->     Tensor[n,__] ,
-                            dot[Tensor[n_,__]] -> dot[Tensor[n,__]]}, 1];
-  eqs      = FilterRules[lookup[calc, Equations], patterns];
-  calc3    = mapReplace[calc2, Equations, eqs];
-  calc3
-];
-
-
-
 (******************************************************************************)
 (* Convert from ADMBase *)
 (******************************************************************************)
@@ -539,6 +512,8 @@ evolCalc =
                  e4phi, em4phi, cdphi[la], cdphi2[la,lb], g[la,lb], detg,
                  gu[ua,ub], Ats[la,lb], trAts, eta, theta,
                  rho, S[la], trS, fac1, fac2, dottrK, dotXt[ua], epsdiss[ua]},
+  SplitBy -> {{dot[trK], dot[phi], dot[gt[la,lb]], dot[Xt[ui]], dot[alpha], dot[A], dot[beta[ua]], dot[B[ua]]},
+              {dot[At[la,lb]]}},
   Equations -> 
   {
     dir[ua] -> Sign[beta[ua]],
@@ -736,38 +711,6 @@ advectCalc =
   }
 };
 
-evolCalc1 = PartialCalculation[evolCalc, "1",
-  {
-    ConditionalOnKeyword -> {"RHS_calculation", "split"}
-  },
-  {
-    dot[trK],
-    dot[phi],
-    dot[gt[la,lb]],
-    dot[Xt[ui]],
-    dot[alpha],
-    dot[A],
-    dot[beta[ua]],
-    dot[B[ua]]
-  }];
-
-evolCalc2 = PartialCalculation[evolCalc, "2",
-  {
-    ConditionalOnKeyword -> {"RHS_calculation", "split"}
-  },
-  {
-    dot[At[la,lb]]
-  }];
-
-(* allEvolvedVars = {dot[trK], dot[phi], dot[gt[la,lb]], dot[Xt[ui]], dot[alpha], dot[A], dot[beta[ua]], dot[B[ua]], *)
-(*                   dot[At[la,lb]]}; *)
-
-(* advectCalcs = Table[PartialCalculation[advectCalc,  *)
-(*                                        "_"<>StringReplace[ToString[var[[1]]],{"["->"","]"->"",","->""}], *)
-(*                                        {}, *)
-(*                                        {var}]~Join~{CachedVariables -> {var[[1]]}}, *)
-(*                     {var, allEvolvedVars}]; *)
-
 dissCalc =
 {
   Name -> BSSN <> "_Dissipation",
@@ -961,6 +904,7 @@ constraintsCalc =
                  Rt[la,lb], Rphi[la,lb], R[la,lb], trR, Atm[ua,lb],
                  gK[la,lb,lc], cdphi[la], cdphi2[la,lb],
                  rho, S[la], fac1, fac2},
+  SplitBy -> {{H},{M[li],cS,cXt[ua],cA}},
   Equations -> 
   {
     detgt        -> 1 (* detgtExpr *),
@@ -1076,21 +1020,6 @@ constraintsCalc =
     cA -> gtu[ua,ub] At[la,lb]
   }
 };
-
-constraintsCalc1 = PartialCalculation[constraintsCalc, "1",
-  {},
-  {
-    H
-  }];
-
-constraintsCalc2 = PartialCalculation[constraintsCalc, "2",
-  {},
-  {
-    M[li],
-    cS,
-    cXt[ua],
-    cA
-  }];
 
 (******************************************************************************)
 (* Implementations *)
@@ -1301,13 +1230,10 @@ Join[
   convertFromADMBaseCalc,
   initGammaCalc,
   convertFromADMBaseGammaCalc,
-  (* evolCalc, *)
-  evolCalc1, evolCalc2,
+  evolCalc,
   (* dissCalc, *)
   advectCalc,
-  (* Sequence@@advectCalcs, *)
   initRHSCalc,
-  (* evol1Calc, evol2Calc, *)
   RHSStaticBoundaryCalc,
   (* RHSRadiativeBoundaryCalc, *)
   enforceCalc
