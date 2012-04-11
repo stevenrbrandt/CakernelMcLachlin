@@ -1,4 +1,4 @@
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthalpha_1 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,0,0"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthalpha_1 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,0,0"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in
   {
@@ -13,7 +13,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthalpha_1 TYPE=gpu_cuda/3dblock TILE="3
   "DPDstandardNthalpha1"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthbeta1_1 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,0,0"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthbeta1_1 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,0,0"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in
   {
@@ -28,7 +28,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthbeta1_1 TYPE=gpu_cuda/3dblock TILE="3
   "DPDstandardNthbeta11"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthbeta2_1 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,0,0"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthbeta2_1 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,0,0"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in
   {
@@ -43,7 +43,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthbeta2_1 TYPE=gpu_cuda/3dblock TILE="3
   "DPDstandardNthbeta21"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthbeta3_1 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,0,0"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthbeta3_1 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,0,0"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in
   {
@@ -58,7 +58,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthbeta3_1 TYPE=gpu_cuda/3dblock TILE="3
   "DPDstandardNthbeta31"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt11_1 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,0,0"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt11_1 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,0,0"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
@@ -73,7 +73,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt11_1 TYPE=gpu_cuda/3dblock TILE="32
   "gt11"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt12_1 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,0,0"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt12_1 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,0,0"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
@@ -88,7 +88,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt12_1 TYPE=gpu_cuda/3dblock TILE="32
   "gt12"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt13_1 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,0,0"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt13_1 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,0,0"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
@@ -103,7 +103,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt13_1 TYPE=gpu_cuda/3dblock TILE="32
   "gt13"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt22_1 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,0,0"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt22_1 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,0,0"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
@@ -118,7 +118,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt22_1 TYPE=gpu_cuda/3dblock TILE="32
   "gt22"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt23_1 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,0,0"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt23_1 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,0,0"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
@@ -133,7 +133,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt23_1 TYPE=gpu_cuda/3dblock TILE="32
   "gt23"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt33_1 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,0,0"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt33_1 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,0,0"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
@@ -148,7 +148,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt33_1 TYPE=gpu_cuda/3dblock TILE="32
   "gt33"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthphi_1 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,0,0"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthphi_1 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,0,0"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
@@ -163,7 +163,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthphi_1 TYPE=gpu_cuda/3dblock TILE="32,
   "phi"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthtrK_1 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,0,0"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthtrK_1 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,0,0"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
@@ -178,7 +178,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthtrK_1 TYPE=gpu_cuda/3dblock TILE="32,
   "trK"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthXt1_1 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,0,0"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthXt1_1 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,0,0"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
@@ -193,7 +193,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthXt1_1 TYPE=gpu_cuda/3dblock TILE="32,
   "Xt1"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthXt2_1 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,0,0"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthXt2_1 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,0,0"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
@@ -208,7 +208,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthXt2_1 TYPE=gpu_cuda/3dblock TILE="32,
   "Xt2"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthXt3_1 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,0,0"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthXt3_1 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,0,0"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
@@ -223,7 +223,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthXt3_1 TYPE=gpu_cuda/3dblock TILE="32,
   "Xt3"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthalpha_2 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,0,0"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthalpha_2 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,0,0"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in
   {
@@ -238,7 +238,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthalpha_2 TYPE=gpu_cuda/3dblock TILE="3
   "DPDstandardNthalpha2"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthbeta1_2 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,0,0"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthbeta1_2 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,0,0"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in
   {
@@ -253,7 +253,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthbeta1_2 TYPE=gpu_cuda/3dblock TILE="3
   "DPDstandardNthbeta12"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthbeta2_2 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,0,0"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthbeta2_2 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,0,0"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in
   {
@@ -268,7 +268,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthbeta2_2 TYPE=gpu_cuda/3dblock TILE="3
   "DPDstandardNthbeta22"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthbeta3_2 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,0,0"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthbeta3_2 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,0,0"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in
   {
@@ -283,7 +283,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthbeta3_2 TYPE=gpu_cuda/3dblock TILE="3
   "DPDstandardNthbeta32"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt11_2 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,0,0"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt11_2 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,0,0"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
@@ -298,7 +298,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt11_2 TYPE=gpu_cuda/3dblock TILE="32
   "gt11"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt12_2 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,0,0"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt12_2 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,0,0"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
@@ -313,7 +313,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt12_2 TYPE=gpu_cuda/3dblock TILE="32
   "gt12"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt13_2 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,0,0"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt13_2 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,0,0"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
@@ -328,7 +328,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt13_2 TYPE=gpu_cuda/3dblock TILE="32
   "gt13"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt22_2 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,0,0"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt22_2 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,0,0"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
@@ -343,7 +343,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt22_2 TYPE=gpu_cuda/3dblock TILE="32
   "gt22"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt23_2 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,0,0"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt23_2 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,0,0"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
@@ -358,7 +358,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt23_2 TYPE=gpu_cuda/3dblock TILE="32
   "gt23"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt33_2 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,0,0"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt33_2 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,0,0"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
@@ -373,7 +373,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt33_2 TYPE=gpu_cuda/3dblock TILE="32
   "gt33"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthphi_2 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,0,0"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthphi_2 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,0,0"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
@@ -388,7 +388,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthphi_2 TYPE=gpu_cuda/3dblock TILE="32,
   "phi"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthtrK_2 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,0,0"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthtrK_2 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,0,0"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
@@ -403,7 +403,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthtrK_2 TYPE=gpu_cuda/3dblock TILE="32,
   "trK"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthXt1_2 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,0,0"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthXt1_2 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,0,0"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
@@ -418,7 +418,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthXt1_2 TYPE=gpu_cuda/3dblock TILE="32,
   "Xt1"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthXt2_2 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,0,0"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthXt2_2 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,0,0"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
@@ -433,7 +433,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthXt2_2 TYPE=gpu_cuda/3dblock TILE="32,
   "Xt2"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthXt3_2 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,0,0"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthXt3_2 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,0,0"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
@@ -448,7 +448,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthXt3_2 TYPE=gpu_cuda/3dblock TILE="32,
   "Xt3"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthalpha_3 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="0,0,0,0,4,4"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthalpha_3 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,0,0,4,4"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in
   {
@@ -463,7 +463,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthalpha_3 TYPE=gpu_cuda/3dblock TILE="3
   "DPDstandardNthalpha3"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthbeta1_3 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="0,0,0,0,4,4"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthbeta1_3 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,0,0,4,4"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in
   {
@@ -478,7 +478,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthbeta1_3 TYPE=gpu_cuda/3dblock TILE="3
   "DPDstandardNthbeta13"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthbeta2_3 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="0,0,0,0,4,4"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthbeta2_3 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,0,0,4,4"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in
   {
@@ -493,7 +493,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthbeta2_3 TYPE=gpu_cuda/3dblock TILE="3
   "DPDstandardNthbeta23"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthbeta3_3 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="0,0,0,0,4,4"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthbeta3_3 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,0,0,4,4"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in
   {
@@ -508,7 +508,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthbeta3_3 TYPE=gpu_cuda/3dblock TILE="3
   "DPDstandardNthbeta33"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt11_3 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="0,0,0,0,4,4"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt11_3 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,0,0,4,4"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
@@ -523,7 +523,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt11_3 TYPE=gpu_cuda/3dblock TILE="32
   "gt11"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt12_3 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="0,0,0,0,4,4"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt12_3 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,0,0,4,4"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
@@ -538,7 +538,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt12_3 TYPE=gpu_cuda/3dblock TILE="32
   "gt12"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt13_3 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="0,0,0,0,4,4"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt13_3 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,0,0,4,4"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
@@ -553,7 +553,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt13_3 TYPE=gpu_cuda/3dblock TILE="32
   "gt13"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt22_3 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="0,0,0,0,4,4"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt22_3 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,0,0,4,4"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
@@ -568,7 +568,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt22_3 TYPE=gpu_cuda/3dblock TILE="32
   "gt22"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt23_3 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="0,0,0,0,4,4"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt23_3 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,0,0,4,4"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
@@ -583,7 +583,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt23_3 TYPE=gpu_cuda/3dblock TILE="32
   "gt23"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt33_3 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="0,0,0,0,4,4"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt33_3 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,0,0,4,4"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
@@ -598,7 +598,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt33_3 TYPE=gpu_cuda/3dblock TILE="32
   "gt33"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthphi_3 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="0,0,0,0,4,4"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthphi_3 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,0,0,4,4"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
@@ -613,7 +613,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthphi_3 TYPE=gpu_cuda/3dblock TILE="32,
   "phi"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthtrK_3 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="0,0,0,0,4,4"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthtrK_3 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,0,0,4,4"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
@@ -628,7 +628,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthtrK_3 TYPE=gpu_cuda/3dblock TILE="32,
   "trK"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthXt1_3 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="0,0,0,0,4,4"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthXt1_3 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,0,0,4,4"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
@@ -643,7 +643,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthXt1_3 TYPE=gpu_cuda/3dblock TILE="32,
   "Xt1"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthXt2_3 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="0,0,0,0,4,4"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthXt2_3 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,0,0,4,4"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
@@ -658,7 +658,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthXt2_3 TYPE=gpu_cuda/3dblock TILE="32,
   "Xt2"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthXt3_3 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="0,0,0,0,4,4"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthXt3_3 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,0,0,4,4"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
@@ -673,7 +673,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthXt3_3 TYPE=gpu_cuda/3dblock TILE="32,
   "Xt3"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthalpha_11 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,0,0"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthalpha_11 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,0,0"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in
   {
@@ -688,7 +688,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthalpha_11 TYPE=gpu_cuda/3dblock TILE="
   "DPDstandardNthalpha11"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthbeta1_11 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,0,0"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthbeta1_11 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,0,0"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in
   {
@@ -703,7 +703,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthbeta1_11 TYPE=gpu_cuda/3dblock TILE="
   "DPDstandardNthbeta111"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthbeta2_11 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,0,0"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthbeta2_11 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,0,0"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in
   {
@@ -718,7 +718,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthbeta2_11 TYPE=gpu_cuda/3dblock TILE="
   "DPDstandardNthbeta211"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthbeta3_11 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,0,0"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthbeta3_11 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,0,0"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in
   {
@@ -733,7 +733,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthbeta3_11 TYPE=gpu_cuda/3dblock TILE="
   "DPDstandardNthbeta311"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt11_11 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,0,0"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt11_11 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,0,0"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
@@ -748,7 +748,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt11_11 TYPE=gpu_cuda/3dblock TILE="3
   "gt11"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt12_11 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,0,0"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt12_11 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,0,0"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
@@ -763,7 +763,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt12_11 TYPE=gpu_cuda/3dblock TILE="3
   "gt12"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt13_11 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,0,0"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt13_11 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,0,0"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
@@ -778,7 +778,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt13_11 TYPE=gpu_cuda/3dblock TILE="3
   "gt13"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt22_11 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,0,0"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt22_11 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,0,0"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
@@ -793,7 +793,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt22_11 TYPE=gpu_cuda/3dblock TILE="3
   "gt22"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt23_11 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,0,0"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt23_11 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,0,0"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
@@ -808,7 +808,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt23_11 TYPE=gpu_cuda/3dblock TILE="3
   "gt23"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt33_11 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,0,0"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt33_11 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,0,0"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
@@ -823,7 +823,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt33_11 TYPE=gpu_cuda/3dblock TILE="3
   "gt33"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthphi_11 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,0,0"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthphi_11 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,0,0"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
@@ -838,7 +838,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthphi_11 TYPE=gpu_cuda/3dblock TILE="32
   "phi"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthalpha_22 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,0,0"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthalpha_22 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,0,0"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in
   {
@@ -853,7 +853,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthalpha_22 TYPE=gpu_cuda/3dblock TILE="
   "DPDstandardNthalpha22"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthbeta1_22 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,0,0"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthbeta1_22 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,0,0"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in
   {
@@ -868,7 +868,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthbeta1_22 TYPE=gpu_cuda/3dblock TILE="
   "DPDstandardNthbeta122"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthbeta2_22 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,0,0"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthbeta2_22 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,0,0"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in
   {
@@ -883,7 +883,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthbeta2_22 TYPE=gpu_cuda/3dblock TILE="
   "DPDstandardNthbeta222"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthbeta3_22 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,0,0"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthbeta3_22 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,0,0"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in
   {
@@ -898,7 +898,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthbeta3_22 TYPE=gpu_cuda/3dblock TILE="
   "DPDstandardNthbeta322"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt11_22 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,0,0"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt11_22 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,0,0"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
@@ -913,7 +913,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt11_22 TYPE=gpu_cuda/3dblock TILE="3
   "gt11"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt12_22 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,0,0"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt12_22 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,0,0"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
@@ -928,7 +928,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt12_22 TYPE=gpu_cuda/3dblock TILE="3
   "gt12"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt13_22 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,0,0"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt13_22 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,0,0"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
@@ -943,7 +943,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt13_22 TYPE=gpu_cuda/3dblock TILE="3
   "gt13"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt22_22 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,0,0"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt22_22 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,0,0"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
@@ -958,7 +958,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt22_22 TYPE=gpu_cuda/3dblock TILE="3
   "gt22"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt23_22 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,0,0"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt23_22 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,0,0"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
@@ -973,7 +973,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt23_22 TYPE=gpu_cuda/3dblock TILE="3
   "gt23"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt33_22 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,0,0"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt33_22 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,0,0"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
@@ -988,7 +988,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt33_22 TYPE=gpu_cuda/3dblock TILE="3
   "gt33"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthphi_22 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,0,0"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthphi_22 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,0,0"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
@@ -1003,7 +1003,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthphi_22 TYPE=gpu_cuda/3dblock TILE="32
   "phi"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthalpha_33 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="0,0,0,0,4,4"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthalpha_33 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,0,0,4,4"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in
   {
@@ -1018,7 +1018,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthalpha_33 TYPE=gpu_cuda/3dblock TILE="
   "DPDstandardNthalpha33"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthbeta1_33 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="0,0,0,0,4,4"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthbeta1_33 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,0,0,4,4"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in
   {
@@ -1033,7 +1033,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthbeta1_33 TYPE=gpu_cuda/3dblock TILE="
   "DPDstandardNthbeta133"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthbeta2_33 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="0,0,0,0,4,4"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthbeta2_33 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,0,0,4,4"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in
   {
@@ -1048,7 +1048,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthbeta2_33 TYPE=gpu_cuda/3dblock TILE="
   "DPDstandardNthbeta233"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthbeta3_33 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="0,0,0,0,4,4"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthbeta3_33 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,0,0,4,4"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in
   {
@@ -1063,7 +1063,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthbeta3_33 TYPE=gpu_cuda/3dblock TILE="
   "DPDstandardNthbeta333"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt11_33 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="0,0,0,0,4,4"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt11_33 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,0,0,4,4"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
@@ -1078,7 +1078,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt11_33 TYPE=gpu_cuda/3dblock TILE="3
   "gt11"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt12_33 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="0,0,0,0,4,4"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt12_33 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,0,0,4,4"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
@@ -1093,7 +1093,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt12_33 TYPE=gpu_cuda/3dblock TILE="3
   "gt12"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt13_33 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="0,0,0,0,4,4"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt13_33 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,0,0,4,4"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
@@ -1108,7 +1108,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt13_33 TYPE=gpu_cuda/3dblock TILE="3
   "gt13"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt22_33 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="0,0,0,0,4,4"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt22_33 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,0,0,4,4"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
@@ -1123,7 +1123,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt22_33 TYPE=gpu_cuda/3dblock TILE="3
   "gt22"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt23_33 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="0,0,0,0,4,4"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt23_33 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,0,0,4,4"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
@@ -1138,7 +1138,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt23_33 TYPE=gpu_cuda/3dblock TILE="3
   "gt23"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt33_33 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="0,0,0,0,4,4"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt33_33 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,0,0,4,4"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
@@ -1153,7 +1153,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt33_33 TYPE=gpu_cuda/3dblock TILE="3
   "gt33"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthphi_33 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="0,0,0,0,4,4"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthphi_33 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,0,0,4,4"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
@@ -1168,7 +1168,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthphi_33 TYPE=gpu_cuda/3dblock TILE="32
   "phi"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthalpha_12 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="4,4,4,4,0,0"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthalpha_12 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="4,4,4,4,0,0"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in
   {
@@ -1183,7 +1183,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthalpha_12 TYPE=gpu_cuda/3dblock TILE="
   "DPDstandardNthalpha12"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthbeta1_12 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="4,4,4,4,0,0"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthbeta1_12 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="4,4,4,4,0,0"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in
   {
@@ -1198,7 +1198,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthbeta1_12 TYPE=gpu_cuda/3dblock TILE="
   "DPDstandardNthbeta112"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthbeta2_12 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="4,4,4,4,0,0"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthbeta2_12 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="4,4,4,4,0,0"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in
   {
@@ -1213,7 +1213,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthbeta2_12 TYPE=gpu_cuda/3dblock TILE="
   "DPDstandardNthbeta212"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthbeta3_12 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="4,4,4,4,0,0"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthbeta3_12 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="4,4,4,4,0,0"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in
   {
@@ -1228,7 +1228,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthbeta3_12 TYPE=gpu_cuda/3dblock TILE="
   "DPDstandardNthbeta312"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt11_12 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="4,4,4,4,0,0"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt11_12 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="4,4,4,4,0,0"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
@@ -1243,7 +1243,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt11_12 TYPE=gpu_cuda/3dblock TILE="3
   "gt11"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt12_12 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="4,4,4,4,0,0"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt12_12 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="4,4,4,4,0,0"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
@@ -1258,7 +1258,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt12_12 TYPE=gpu_cuda/3dblock TILE="3
   "gt12"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt13_12 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="4,4,4,4,0,0"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt13_12 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="4,4,4,4,0,0"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
@@ -1273,7 +1273,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt13_12 TYPE=gpu_cuda/3dblock TILE="3
   "gt13"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt22_12 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="4,4,4,4,0,0"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt22_12 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="4,4,4,4,0,0"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
@@ -1288,7 +1288,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt22_12 TYPE=gpu_cuda/3dblock TILE="3
   "gt22"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt23_12 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="4,4,4,4,0,0"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt23_12 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="4,4,4,4,0,0"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
@@ -1303,7 +1303,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt23_12 TYPE=gpu_cuda/3dblock TILE="3
   "gt23"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt33_12 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="4,4,4,4,0,0"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt33_12 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="4,4,4,4,0,0"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
@@ -1318,7 +1318,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt33_12 TYPE=gpu_cuda/3dblock TILE="3
   "gt33"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthphi_12 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="4,4,4,4,0,0"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthphi_12 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="4,4,4,4,0,0"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
@@ -1333,7 +1333,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthphi_12 TYPE=gpu_cuda/3dblock TILE="32
   "phi"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthalpha_13 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,4,4"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthalpha_13 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,4,4"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in
   {
@@ -1348,7 +1348,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthalpha_13 TYPE=gpu_cuda/3dblock TILE="
   "DPDstandardNthalpha13"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthbeta1_13 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,4,4"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthbeta1_13 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,4,4"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in
   {
@@ -1363,7 +1363,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthbeta1_13 TYPE=gpu_cuda/3dblock TILE="
   "DPDstandardNthbeta113"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthbeta2_13 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,4,4"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthbeta2_13 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,4,4"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in
   {
@@ -1378,7 +1378,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthbeta2_13 TYPE=gpu_cuda/3dblock TILE="
   "DPDstandardNthbeta213"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthbeta3_13 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,4,4"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthbeta3_13 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,4,4"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in
   {
@@ -1393,7 +1393,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthbeta3_13 TYPE=gpu_cuda/3dblock TILE="
   "DPDstandardNthbeta313"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt11_13 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,4,4"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt11_13 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,4,4"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
@@ -1408,7 +1408,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt11_13 TYPE=gpu_cuda/3dblock TILE="3
   "gt11"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt12_13 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,4,4"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt12_13 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,4,4"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
@@ -1423,7 +1423,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt12_13 TYPE=gpu_cuda/3dblock TILE="3
   "gt12"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt13_13 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,4,4"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt13_13 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,4,4"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
@@ -1438,7 +1438,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt13_13 TYPE=gpu_cuda/3dblock TILE="3
   "gt13"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt22_13 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,4,4"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt22_13 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,4,4"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
@@ -1453,7 +1453,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt22_13 TYPE=gpu_cuda/3dblock TILE="3
   "gt22"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt23_13 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,4,4"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt23_13 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,4,4"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
@@ -1468,7 +1468,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt23_13 TYPE=gpu_cuda/3dblock TILE="3
   "gt23"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt33_13 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,4,4"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt33_13 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,4,4"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
@@ -1483,7 +1483,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt33_13 TYPE=gpu_cuda/3dblock TILE="3
   "gt33"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthphi_13 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,4,4"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthphi_13 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,4,4"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
@@ -1498,7 +1498,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthphi_13 TYPE=gpu_cuda/3dblock TILE="32
   "phi"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthalpha_23 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,4,4"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthalpha_23 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,4,4"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in
   {
@@ -1513,7 +1513,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthalpha_23 TYPE=gpu_cuda/3dblock TILE="
   "DPDstandardNthalpha23"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthbeta1_23 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,4,4"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthbeta1_23 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,4,4"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in
   {
@@ -1528,7 +1528,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthbeta1_23 TYPE=gpu_cuda/3dblock TILE="
   "DPDstandardNthbeta123"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthbeta2_23 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,4,4"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthbeta2_23 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,4,4"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in
   {
@@ -1543,7 +1543,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthbeta2_23 TYPE=gpu_cuda/3dblock TILE="
   "DPDstandardNthbeta223"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthbeta3_23 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,4,4"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthbeta3_23 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,4,4"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in
   {
@@ -1558,7 +1558,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthbeta3_23 TYPE=gpu_cuda/3dblock TILE="
   "DPDstandardNthbeta323"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt11_23 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,4,4"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt11_23 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,4,4"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
@@ -1573,7 +1573,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt11_23 TYPE=gpu_cuda/3dblock TILE="3
   "gt11"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt12_23 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,4,4"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt12_23 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,4,4"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
@@ -1588,7 +1588,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt12_23 TYPE=gpu_cuda/3dblock TILE="3
   "gt12"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt13_23 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,4,4"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt13_23 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,4,4"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
@@ -1603,7 +1603,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt13_23 TYPE=gpu_cuda/3dblock TILE="3
   "gt13"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt22_23 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,4,4"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt22_23 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,4,4"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
@@ -1618,7 +1618,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt22_23 TYPE=gpu_cuda/3dblock TILE="3
   "gt22"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt23_23 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,4,4"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt23_23 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,4,4"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
@@ -1633,7 +1633,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt23_23 TYPE=gpu_cuda/3dblock TILE="3
   "gt23"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt33_23 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,4,4"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt33_23 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,4,4"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
@@ -1648,7 +1648,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthgt33_23 TYPE=gpu_cuda/3dblock TILE="3
   "gt33"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthphi_23 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,4,4"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthphi_23 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,4,4"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
@@ -1663,7 +1663,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_DPDstandardNthphi_23 TYPE=gpu_cuda/3dblock TILE="32
   "phi"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS1 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="0,0,0,0,0,0"
+CCTK_CUDA_KERNEL ML_BSSN_RHS1 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,0,0,0,0"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in
   {
@@ -2650,7 +2650,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS1 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=ye
   "ShiftGammaCoeff"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHS2 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="0,0,0,0,0,0"
+CCTK_CUDA_KERNEL ML_BSSN_RHS2 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,0,0,0,0"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in
   {
@@ -3469,7 +3469,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS2 TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=ye
   "conformalMethod"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_Advect_trKrhs TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="5,5,5,5,5,5"
+CCTK_CUDA_KERNEL ML_BSSN_Advect_trKrhs TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="5,5,5,5,5,5"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in
   {
@@ -3502,7 +3502,7 @@ CCTK_CUDA_KERNEL ML_BSSN_Advect_trKrhs TYPE=gpu_cuda/3dblock TILE="32,16,40" SHA
   "trKrhs"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_Advect_phirhs TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="5,5,5,5,5,5"
+CCTK_CUDA_KERNEL ML_BSSN_Advect_phirhs TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="5,5,5,5,5,5"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in
   {
@@ -3535,7 +3535,7 @@ CCTK_CUDA_KERNEL ML_BSSN_Advect_phirhs TYPE=gpu_cuda/3dblock TILE="32,16,40" SHA
   "phirhs"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_Advect_gt11rhs TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="5,5,5,5,5,5"
+CCTK_CUDA_KERNEL ML_BSSN_Advect_gt11rhs TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="5,5,5,5,5,5"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in
   {
@@ -3568,7 +3568,7 @@ CCTK_CUDA_KERNEL ML_BSSN_Advect_gt11rhs TYPE=gpu_cuda/3dblock TILE="32,16,40" SH
   "gt11rhs"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_Advect_gt12rhs TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="5,5,5,5,5,5"
+CCTK_CUDA_KERNEL ML_BSSN_Advect_gt12rhs TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="5,5,5,5,5,5"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in
   {
@@ -3601,7 +3601,7 @@ CCTK_CUDA_KERNEL ML_BSSN_Advect_gt12rhs TYPE=gpu_cuda/3dblock TILE="32,16,40" SH
   "gt12rhs"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_Advect_gt13rhs TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="5,5,5,5,5,5"
+CCTK_CUDA_KERNEL ML_BSSN_Advect_gt13rhs TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="5,5,5,5,5,5"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in
   {
@@ -3634,7 +3634,7 @@ CCTK_CUDA_KERNEL ML_BSSN_Advect_gt13rhs TYPE=gpu_cuda/3dblock TILE="32,16,40" SH
   "gt13rhs"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_Advect_gt22rhs TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="5,5,5,5,5,5"
+CCTK_CUDA_KERNEL ML_BSSN_Advect_gt22rhs TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="5,5,5,5,5,5"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in
   {
@@ -3667,7 +3667,7 @@ CCTK_CUDA_KERNEL ML_BSSN_Advect_gt22rhs TYPE=gpu_cuda/3dblock TILE="32,16,40" SH
   "gt22rhs"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_Advect_gt23rhs TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="5,5,5,5,5,5"
+CCTK_CUDA_KERNEL ML_BSSN_Advect_gt23rhs TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="5,5,5,5,5,5"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in
   {
@@ -3700,7 +3700,7 @@ CCTK_CUDA_KERNEL ML_BSSN_Advect_gt23rhs TYPE=gpu_cuda/3dblock TILE="32,16,40" SH
   "gt23rhs"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_Advect_gt33rhs TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="5,5,5,5,5,5"
+CCTK_CUDA_KERNEL ML_BSSN_Advect_gt33rhs TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="5,5,5,5,5,5"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in
   {
@@ -3733,7 +3733,7 @@ CCTK_CUDA_KERNEL ML_BSSN_Advect_gt33rhs TYPE=gpu_cuda/3dblock TILE="32,16,40" SH
   "gt33rhs"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_Advect_Xt1rhs TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="5,5,5,5,5,5"
+CCTK_CUDA_KERNEL ML_BSSN_Advect_Xt1rhs TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="5,5,5,5,5,5"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in
   {
@@ -3766,7 +3766,7 @@ CCTK_CUDA_KERNEL ML_BSSN_Advect_Xt1rhs TYPE=gpu_cuda/3dblock TILE="32,16,40" SHA
   "Xt1rhs"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_Advect_Xt2rhs TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="5,5,5,5,5,5"
+CCTK_CUDA_KERNEL ML_BSSN_Advect_Xt2rhs TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="5,5,5,5,5,5"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in
   {
@@ -3799,7 +3799,7 @@ CCTK_CUDA_KERNEL ML_BSSN_Advect_Xt2rhs TYPE=gpu_cuda/3dblock TILE="32,16,40" SHA
   "Xt2rhs"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_Advect_Xt3rhs TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="5,5,5,5,5,5"
+CCTK_CUDA_KERNEL ML_BSSN_Advect_Xt3rhs TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="5,5,5,5,5,5"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in
   {
@@ -3832,7 +3832,7 @@ CCTK_CUDA_KERNEL ML_BSSN_Advect_Xt3rhs TYPE=gpu_cuda/3dblock TILE="32,16,40" SHA
   "Xt3rhs"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_Advect_alpharhs TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="5,5,5,5,5,5"
+CCTK_CUDA_KERNEL ML_BSSN_Advect_alpharhs TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="5,5,5,5,5,5"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in
   {
@@ -3871,7 +3871,7 @@ CCTK_CUDA_KERNEL ML_BSSN_Advect_alpharhs TYPE=gpu_cuda/3dblock TILE="32,16,40" S
   "LapseAdvectionCoeff"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_Advect_Arhs TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="5,5,5,5,5,5"
+CCTK_CUDA_KERNEL ML_BSSN_Advect_Arhs TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="5,5,5,5,5,5"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in
   {
@@ -3922,7 +3922,7 @@ CCTK_CUDA_KERNEL ML_BSSN_Advect_Arhs TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARE
   "LapseAdvectionCoeff"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_Advect_beta1rhs TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="5,5,5,5,5,5"
+CCTK_CUDA_KERNEL ML_BSSN_Advect_beta1rhs TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="5,5,5,5,5,5"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in
   {
@@ -3955,7 +3955,7 @@ CCTK_CUDA_KERNEL ML_BSSN_Advect_beta1rhs TYPE=gpu_cuda/3dblock TILE="32,16,40" S
   "ShiftAdvectionCoeff"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_Advect_beta2rhs TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="5,5,5,5,5,5"
+CCTK_CUDA_KERNEL ML_BSSN_Advect_beta2rhs TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="5,5,5,5,5,5"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in
   {
@@ -3988,7 +3988,7 @@ CCTK_CUDA_KERNEL ML_BSSN_Advect_beta2rhs TYPE=gpu_cuda/3dblock TILE="32,16,40" S
   "ShiftAdvectionCoeff"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_Advect_beta3rhs TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="5,5,5,5,5,5"
+CCTK_CUDA_KERNEL ML_BSSN_Advect_beta3rhs TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="5,5,5,5,5,5"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in
   {
@@ -4021,7 +4021,7 @@ CCTK_CUDA_KERNEL ML_BSSN_Advect_beta3rhs TYPE=gpu_cuda/3dblock TILE="32,16,40" S
   "ShiftAdvectionCoeff"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_Advect_B1rhs TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="5,5,5,5,5,5"
+CCTK_CUDA_KERNEL ML_BSSN_Advect_B1rhs TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="5,5,5,5,5,5"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in
   {
@@ -4072,7 +4072,7 @@ CCTK_CUDA_KERNEL ML_BSSN_Advect_B1rhs TYPE=gpu_cuda/3dblock TILE="32,16,40" SHAR
   "ShiftBCoeff"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_Advect_B2rhs TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="5,5,5,5,5,5"
+CCTK_CUDA_KERNEL ML_BSSN_Advect_B2rhs TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="5,5,5,5,5,5"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in
   {
@@ -4123,7 +4123,7 @@ CCTK_CUDA_KERNEL ML_BSSN_Advect_B2rhs TYPE=gpu_cuda/3dblock TILE="32,16,40" SHAR
   "ShiftBCoeff"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_Advect_B3rhs TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="5,5,5,5,5,5"
+CCTK_CUDA_KERNEL ML_BSSN_Advect_B3rhs TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="5,5,5,5,5,5"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in
   {
@@ -4174,7 +4174,7 @@ CCTK_CUDA_KERNEL ML_BSSN_Advect_B3rhs TYPE=gpu_cuda/3dblock TILE="32,16,40" SHAR
   "ShiftBCoeff"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_Advect_At11rhs TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="5,5,5,5,5,5"
+CCTK_CUDA_KERNEL ML_BSSN_Advect_At11rhs TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="5,5,5,5,5,5"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in
   {
@@ -4207,7 +4207,7 @@ CCTK_CUDA_KERNEL ML_BSSN_Advect_At11rhs TYPE=gpu_cuda/3dblock TILE="32,16,40" SH
   "beta3"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_Advect_At12rhs TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="5,5,5,5,5,5"
+CCTK_CUDA_KERNEL ML_BSSN_Advect_At12rhs TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="5,5,5,5,5,5"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in
   {
@@ -4240,7 +4240,7 @@ CCTK_CUDA_KERNEL ML_BSSN_Advect_At12rhs TYPE=gpu_cuda/3dblock TILE="32,16,40" SH
   "beta3"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_Advect_At13rhs TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="5,5,5,5,5,5"
+CCTK_CUDA_KERNEL ML_BSSN_Advect_At13rhs TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="5,5,5,5,5,5"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in
   {
@@ -4273,7 +4273,7 @@ CCTK_CUDA_KERNEL ML_BSSN_Advect_At13rhs TYPE=gpu_cuda/3dblock TILE="32,16,40" SH
   "beta3"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_Advect_At22rhs TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="5,5,5,5,5,5"
+CCTK_CUDA_KERNEL ML_BSSN_Advect_At22rhs TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="5,5,5,5,5,5"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in
   {
@@ -4306,7 +4306,7 @@ CCTK_CUDA_KERNEL ML_BSSN_Advect_At22rhs TYPE=gpu_cuda/3dblock TILE="32,16,40" SH
   "beta3"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_Advect_At23rhs TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="5,5,5,5,5,5"
+CCTK_CUDA_KERNEL ML_BSSN_Advect_At23rhs TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="5,5,5,5,5,5"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in
   {
@@ -4339,7 +4339,7 @@ CCTK_CUDA_KERNEL ML_BSSN_Advect_At23rhs TYPE=gpu_cuda/3dblock TILE="32,16,40" SH
   "beta3"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_Advect_At33rhs TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="5,5,5,5,5,5"
+CCTK_CUDA_KERNEL ML_BSSN_Advect_At33rhs TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="5,5,5,5,5,5"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in
   {
@@ -4372,7 +4372,7 @@ CCTK_CUDA_KERNEL ML_BSSN_Advect_At33rhs TYPE=gpu_cuda/3dblock TILE="32,16,40" SH
   "beta3"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_InitRHS TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="0,0,0,0,0,0"
+CCTK_CUDA_KERNEL ML_BSSN_InitRHS TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,0,0,0,0"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
@@ -4525,7 +4525,7 @@ CCTK_CUDA_KERNEL ML_BSSN_InitRHS TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE
   "Xt3rhs"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_RHSStaticBoundary TYPE=gpu_cuda/boundary_s TILE="32,16,40" SHARECODE=yes
+CCTK_CUDA_KERNEL ML_BSSN_RHSStaticBoundary TYPE=gpu_cuda_dc/boundary_s TILE="32,16,40" SHARECODE=yes
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
@@ -4678,7 +4678,7 @@ CCTK_CUDA_KERNEL ML_BSSN_RHSStaticBoundary TYPE=gpu_cuda/boundary_s TILE="32,16,
   "Xt3rhs"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_enforce TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="0,0,0,0,0,0"
+CCTK_CUDA_KERNEL ML_BSSN_enforce TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,0,0,0,0"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=inout
   {
@@ -4765,7 +4765,7 @@ CCTK_CUDA_KERNEL ML_BSSN_enforce TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE
   "MinimumLapse"
 }
 
-CCTK_CUDA_KERNEL ML_BSSN_copy_to_device TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="0,0,0,0,0,0"
+CCTK_CUDA_KERNEL ML_BSSN_copy_to_device TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,0,0,0,0"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=inout
   {
