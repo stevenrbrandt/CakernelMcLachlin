@@ -1,10 +1,28 @@
-CCTK_CUDA_KERNEL ML_BSSN_RHS_Dalpha_1_Dalpha_11 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,0,0"
+CCTK_CUDA_KERNEL ML_BSSN_RHS_Dalpha_1_etc TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="4,4,4,4,4,4"
 {
-  CCTK_CUDA_KERNEL_VARIABLE  cached=yes intent=in
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in
   {
     alpha
   }
   "alpha"
+  
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in
+  {
+    beta1
+  }
+  "beta1"
+  
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in
+  {
+    beta2
+  }
+  "beta2"
+  
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in
+  {
+    beta3
+  }
+  "beta3"
   
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
@@ -17,285 +35,6 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_Dalpha_1_Dalpha_11 TYPE=gpu_cuda_dc/3dblock2 TILE="
     DPDstandardNthalpha11
   }
   "DPDstandardNthalpha11"
-}
-
-CCTK_CUDA_KERNEL ML_BSSN_RHS_Dbeta1_1_Dbeta1_11 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,0,0"
-{
-  CCTK_CUDA_KERNEL_VARIABLE  cached=yes intent=in
-  {
-    beta1
-  }
-  "beta1"
-  
-  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
-  {
-    DPDstandardNthbeta11
-  }
-  "DPDstandardNthbeta11"
-  
-  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
-  {
-    DPDstandardNthbeta111
-  }
-  "DPDstandardNthbeta111"
-}
-
-CCTK_CUDA_KERNEL ML_BSSN_RHS_Dbeta2_1_Dbeta2_11 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,0,0"
-{
-  CCTK_CUDA_KERNEL_VARIABLE  cached=yes intent=in
-  {
-    beta2
-  }
-  "beta2"
-  
-  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
-  {
-    DPDstandardNthbeta21
-  }
-  "DPDstandardNthbeta21"
-  
-  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
-  {
-    DPDstandardNthbeta211
-  }
-  "DPDstandardNthbeta211"
-}
-
-CCTK_CUDA_KERNEL ML_BSSN_RHS_Dbeta3_1_Dbeta3_11 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,0,0"
-{
-  CCTK_CUDA_KERNEL_VARIABLE  cached=yes intent=in
-  {
-    beta3
-  }
-  "beta3"
-  
-  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
-  {
-    DPDstandardNthbeta31
-  }
-  "DPDstandardNthbeta31"
-  
-  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
-  {
-    DPDstandardNthbeta311
-  }
-  "DPDstandardNthbeta311"
-}
-
-CCTK_CUDA_KERNEL ML_BSSN_RHS_Dgt11_1_Dgt11_11 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,0,0"
-{
-  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
-  {
-    DPDstandardNthgt111
-  }
-  "DPDstandardNthgt111"
-  
-  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
-  {
-    DPDstandardNthgt1111
-  }
-  "DPDstandardNthgt1111"
-  
-  CCTK_CUDA_KERNEL_VARIABLE  cached=yes intent=in
-  {
-    gt11
-  }
-  "gt11"
-}
-
-CCTK_CUDA_KERNEL ML_BSSN_RHS_Dgt12_1_Dgt12_11 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,0,0"
-{
-  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
-  {
-    DPDstandardNthgt121
-  }
-  "DPDstandardNthgt121"
-  
-  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
-  {
-    DPDstandardNthgt1211
-  }
-  "DPDstandardNthgt1211"
-  
-  CCTK_CUDA_KERNEL_VARIABLE  cached=yes intent=in
-  {
-    gt12
-  }
-  "gt12"
-}
-
-CCTK_CUDA_KERNEL ML_BSSN_RHS_Dgt13_1_Dgt13_11 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,0,0"
-{
-  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
-  {
-    DPDstandardNthgt131
-  }
-  "DPDstandardNthgt131"
-  
-  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
-  {
-    DPDstandardNthgt1311
-  }
-  "DPDstandardNthgt1311"
-  
-  CCTK_CUDA_KERNEL_VARIABLE  cached=yes intent=in
-  {
-    gt13
-  }
-  "gt13"
-}
-
-CCTK_CUDA_KERNEL ML_BSSN_RHS_Dgt22_1_Dgt22_11 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,0,0"
-{
-  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
-  {
-    DPDstandardNthgt221
-  }
-  "DPDstandardNthgt221"
-  
-  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
-  {
-    DPDstandardNthgt2211
-  }
-  "DPDstandardNthgt2211"
-  
-  CCTK_CUDA_KERNEL_VARIABLE  cached=yes intent=in
-  {
-    gt22
-  }
-  "gt22"
-}
-
-CCTK_CUDA_KERNEL ML_BSSN_RHS_Dgt23_1_Dgt23_11 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,0,0"
-{
-  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
-  {
-    DPDstandardNthgt231
-  }
-  "DPDstandardNthgt231"
-  
-  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
-  {
-    DPDstandardNthgt2311
-  }
-  "DPDstandardNthgt2311"
-  
-  CCTK_CUDA_KERNEL_VARIABLE  cached=yes intent=in
-  {
-    gt23
-  }
-  "gt23"
-}
-
-CCTK_CUDA_KERNEL ML_BSSN_RHS_Dgt33_1_Dgt33_11 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,0,0"
-{
-  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
-  {
-    DPDstandardNthgt331
-  }
-  "DPDstandardNthgt331"
-  
-  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
-  {
-    DPDstandardNthgt3311
-  }
-  "DPDstandardNthgt3311"
-  
-  CCTK_CUDA_KERNEL_VARIABLE  cached=yes intent=in
-  {
-    gt33
-  }
-  "gt33"
-}
-
-CCTK_CUDA_KERNEL ML_BSSN_RHS_Dphi_1_Dphi_11 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,0,0"
-{
-  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
-  {
-    DPDstandardNthphi1
-  }
-  "DPDstandardNthphi1"
-  
-  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
-  {
-    DPDstandardNthphi11
-  }
-  "DPDstandardNthphi11"
-  
-  CCTK_CUDA_KERNEL_VARIABLE  cached=yes intent=in
-  {
-    phi
-  }
-  "phi"
-}
-
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DtrK_1 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,0,0"
-{
-  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
-  {
-    DPDstandardNthtrK1
-  }
-  "DPDstandardNthtrK1"
-  
-  CCTK_CUDA_KERNEL_VARIABLE  cached=yes intent=in
-  {
-    trK
-  }
-  "trK"
-}
-
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DXt1_1 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,0,0"
-{
-  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
-  {
-    DPDstandardNthXt11
-  }
-  "DPDstandardNthXt11"
-  
-  CCTK_CUDA_KERNEL_VARIABLE  cached=yes intent=in
-  {
-    Xt1
-  }
-  "Xt1"
-}
-
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DXt2_1 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,0,0"
-{
-  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
-  {
-    DPDstandardNthXt21
-  }
-  "DPDstandardNthXt21"
-  
-  CCTK_CUDA_KERNEL_VARIABLE  cached=yes intent=in
-  {
-    Xt2
-  }
-  "Xt2"
-}
-
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DXt3_1 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,0,0"
-{
-  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
-  {
-    DPDstandardNthXt31
-  }
-  "DPDstandardNthXt31"
-  
-  CCTK_CUDA_KERNEL_VARIABLE  cached=yes intent=in
-  {
-    Xt3
-  }
-  "Xt3"
-}
-
-CCTK_CUDA_KERNEL ML_BSSN_RHS_Dalpha_2_Dalpha_22 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,0,0"
-{
-  CCTK_CUDA_KERNEL_VARIABLE  cached=yes intent=in
-  {
-    alpha
-  }
-  "alpha"
   
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
@@ -308,285 +47,6 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_Dalpha_2_Dalpha_22 TYPE=gpu_cuda_dc/3dblock2 TILE="
     DPDstandardNthalpha22
   }
   "DPDstandardNthalpha22"
-}
-
-CCTK_CUDA_KERNEL ML_BSSN_RHS_Dbeta1_2_Dbeta1_22 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,0,0"
-{
-  CCTK_CUDA_KERNEL_VARIABLE  cached=yes intent=in
-  {
-    beta1
-  }
-  "beta1"
-  
-  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
-  {
-    DPDstandardNthbeta12
-  }
-  "DPDstandardNthbeta12"
-  
-  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
-  {
-    DPDstandardNthbeta122
-  }
-  "DPDstandardNthbeta122"
-}
-
-CCTK_CUDA_KERNEL ML_BSSN_RHS_Dbeta2_2_Dbeta2_22 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,0,0"
-{
-  CCTK_CUDA_KERNEL_VARIABLE  cached=yes intent=in
-  {
-    beta2
-  }
-  "beta2"
-  
-  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
-  {
-    DPDstandardNthbeta22
-  }
-  "DPDstandardNthbeta22"
-  
-  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
-  {
-    DPDstandardNthbeta222
-  }
-  "DPDstandardNthbeta222"
-}
-
-CCTK_CUDA_KERNEL ML_BSSN_RHS_Dbeta3_2_Dbeta3_22 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,0,0"
-{
-  CCTK_CUDA_KERNEL_VARIABLE  cached=yes intent=in
-  {
-    beta3
-  }
-  "beta3"
-  
-  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
-  {
-    DPDstandardNthbeta32
-  }
-  "DPDstandardNthbeta32"
-  
-  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
-  {
-    DPDstandardNthbeta322
-  }
-  "DPDstandardNthbeta322"
-}
-
-CCTK_CUDA_KERNEL ML_BSSN_RHS_Dgt11_2_Dgt11_22 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,0,0"
-{
-  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
-  {
-    DPDstandardNthgt112
-  }
-  "DPDstandardNthgt112"
-  
-  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
-  {
-    DPDstandardNthgt1122
-  }
-  "DPDstandardNthgt1122"
-  
-  CCTK_CUDA_KERNEL_VARIABLE  cached=yes intent=in
-  {
-    gt11
-  }
-  "gt11"
-}
-
-CCTK_CUDA_KERNEL ML_BSSN_RHS_Dgt12_2_Dgt12_22 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,0,0"
-{
-  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
-  {
-    DPDstandardNthgt122
-  }
-  "DPDstandardNthgt122"
-  
-  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
-  {
-    DPDstandardNthgt1222
-  }
-  "DPDstandardNthgt1222"
-  
-  CCTK_CUDA_KERNEL_VARIABLE  cached=yes intent=in
-  {
-    gt12
-  }
-  "gt12"
-}
-
-CCTK_CUDA_KERNEL ML_BSSN_RHS_Dgt13_2_Dgt13_22 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,0,0"
-{
-  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
-  {
-    DPDstandardNthgt132
-  }
-  "DPDstandardNthgt132"
-  
-  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
-  {
-    DPDstandardNthgt1322
-  }
-  "DPDstandardNthgt1322"
-  
-  CCTK_CUDA_KERNEL_VARIABLE  cached=yes intent=in
-  {
-    gt13
-  }
-  "gt13"
-}
-
-CCTK_CUDA_KERNEL ML_BSSN_RHS_Dgt22_2_Dgt22_22 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,0,0"
-{
-  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
-  {
-    DPDstandardNthgt222
-  }
-  "DPDstandardNthgt222"
-  
-  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
-  {
-    DPDstandardNthgt2222
-  }
-  "DPDstandardNthgt2222"
-  
-  CCTK_CUDA_KERNEL_VARIABLE  cached=yes intent=in
-  {
-    gt22
-  }
-  "gt22"
-}
-
-CCTK_CUDA_KERNEL ML_BSSN_RHS_Dgt23_2_Dgt23_22 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,0,0"
-{
-  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
-  {
-    DPDstandardNthgt232
-  }
-  "DPDstandardNthgt232"
-  
-  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
-  {
-    DPDstandardNthgt2322
-  }
-  "DPDstandardNthgt2322"
-  
-  CCTK_CUDA_KERNEL_VARIABLE  cached=yes intent=in
-  {
-    gt23
-  }
-  "gt23"
-}
-
-CCTK_CUDA_KERNEL ML_BSSN_RHS_Dgt33_2_Dgt33_22 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,0,0"
-{
-  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
-  {
-    DPDstandardNthgt332
-  }
-  "DPDstandardNthgt332"
-  
-  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
-  {
-    DPDstandardNthgt3322
-  }
-  "DPDstandardNthgt3322"
-  
-  CCTK_CUDA_KERNEL_VARIABLE  cached=yes intent=in
-  {
-    gt33
-  }
-  "gt33"
-}
-
-CCTK_CUDA_KERNEL ML_BSSN_RHS_Dphi_2_Dphi_22 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,0,0"
-{
-  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
-  {
-    DPDstandardNthphi2
-  }
-  "DPDstandardNthphi2"
-  
-  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
-  {
-    DPDstandardNthphi22
-  }
-  "DPDstandardNthphi22"
-  
-  CCTK_CUDA_KERNEL_VARIABLE  cached=yes intent=in
-  {
-    phi
-  }
-  "phi"
-}
-
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DtrK_2 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,0,0"
-{
-  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
-  {
-    DPDstandardNthtrK2
-  }
-  "DPDstandardNthtrK2"
-  
-  CCTK_CUDA_KERNEL_VARIABLE  cached=yes intent=in
-  {
-    trK
-  }
-  "trK"
-}
-
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DXt1_2 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,0,0"
-{
-  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
-  {
-    DPDstandardNthXt12
-  }
-  "DPDstandardNthXt12"
-  
-  CCTK_CUDA_KERNEL_VARIABLE  cached=yes intent=in
-  {
-    Xt1
-  }
-  "Xt1"
-}
-
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DXt2_2 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,0,0"
-{
-  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
-  {
-    DPDstandardNthXt22
-  }
-  "DPDstandardNthXt22"
-  
-  CCTK_CUDA_KERNEL_VARIABLE  cached=yes intent=in
-  {
-    Xt2
-  }
-  "Xt2"
-}
-
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DXt3_2 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,0,0"
-{
-  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
-  {
-    DPDstandardNthXt32
-  }
-  "DPDstandardNthXt32"
-  
-  CCTK_CUDA_KERNEL_VARIABLE  cached=yes intent=in
-  {
-    Xt3
-  }
-  "Xt3"
-}
-
-CCTK_CUDA_KERNEL ML_BSSN_RHS_Dalpha_3_Dalpha_33 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,0,0,4,4"
-{
-  CCTK_CUDA_KERNEL_VARIABLE  cached=yes intent=in
-  {
-    alpha
-  }
-  "alpha"
   
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
@@ -599,15 +59,30 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_Dalpha_3_Dalpha_33 TYPE=gpu_cuda_dc/3dblock2 TILE="
     DPDstandardNthalpha33
   }
   "DPDstandardNthalpha33"
-}
-
-CCTK_CUDA_KERNEL ML_BSSN_RHS_Dbeta1_3_Dbeta1_33 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,0,0,4,4"
-{
-  CCTK_CUDA_KERNEL_VARIABLE  cached=yes intent=in
+  
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
-    beta1
+    DPDstandardNthbeta11
   }
-  "beta1"
+  "DPDstandardNthbeta11"
+  
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
+  {
+    DPDstandardNthbeta111
+  }
+  "DPDstandardNthbeta111"
+  
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
+  {
+    DPDstandardNthbeta12
+  }
+  "DPDstandardNthbeta12"
+  
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
+  {
+    DPDstandardNthbeta122
+  }
+  "DPDstandardNthbeta122"
   
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
@@ -620,15 +95,30 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_Dbeta1_3_Dbeta1_33 TYPE=gpu_cuda_dc/3dblock2 TILE="
     DPDstandardNthbeta133
   }
   "DPDstandardNthbeta133"
-}
-
-CCTK_CUDA_KERNEL ML_BSSN_RHS_Dbeta2_3_Dbeta2_33 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,0,0,4,4"
-{
-  CCTK_CUDA_KERNEL_VARIABLE  cached=yes intent=in
+  
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
-    beta2
+    DPDstandardNthbeta21
   }
-  "beta2"
+  "DPDstandardNthbeta21"
+  
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
+  {
+    DPDstandardNthbeta211
+  }
+  "DPDstandardNthbeta211"
+  
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
+  {
+    DPDstandardNthbeta22
+  }
+  "DPDstandardNthbeta22"
+  
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
+  {
+    DPDstandardNthbeta222
+  }
+  "DPDstandardNthbeta222"
   
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
@@ -641,15 +131,30 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_Dbeta2_3_Dbeta2_33 TYPE=gpu_cuda_dc/3dblock2 TILE="
     DPDstandardNthbeta233
   }
   "DPDstandardNthbeta233"
-}
-
-CCTK_CUDA_KERNEL ML_BSSN_RHS_Dbeta3_3_Dbeta3_33 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,0,0,4,4"
-{
-  CCTK_CUDA_KERNEL_VARIABLE  cached=yes intent=in
+  
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
-    beta3
+    DPDstandardNthbeta31
   }
-  "beta3"
+  "DPDstandardNthbeta31"
+  
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
+  {
+    DPDstandardNthbeta311
+  }
+  "DPDstandardNthbeta311"
+  
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
+  {
+    DPDstandardNthbeta32
+  }
+  "DPDstandardNthbeta32"
+  
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
+  {
+    DPDstandardNthbeta322
+  }
+  "DPDstandardNthbeta322"
   
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
@@ -662,10 +167,31 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_Dbeta3_3_Dbeta3_33 TYPE=gpu_cuda_dc/3dblock2 TILE="
     DPDstandardNthbeta333
   }
   "DPDstandardNthbeta333"
-}
-
-CCTK_CUDA_KERNEL ML_BSSN_RHS_Dgt11_3_Dgt11_33 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,0,0,4,4"
-{
+  
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
+  {
+    DPDstandardNthgt111
+  }
+  "DPDstandardNthgt111"
+  
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
+  {
+    DPDstandardNthgt1111
+  }
+  "DPDstandardNthgt1111"
+  
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
+  {
+    DPDstandardNthgt112
+  }
+  "DPDstandardNthgt112"
+  
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
+  {
+    DPDstandardNthgt1122
+  }
+  "DPDstandardNthgt1122"
+  
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
     DPDstandardNthgt113
@@ -678,15 +204,30 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_Dgt11_3_Dgt11_33 TYPE=gpu_cuda_dc/3dblock2 TILE="32
   }
   "DPDstandardNthgt1133"
   
-  CCTK_CUDA_KERNEL_VARIABLE  cached=yes intent=in
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
-    gt11
+    DPDstandardNthgt121
   }
-  "gt11"
-}
-
-CCTK_CUDA_KERNEL ML_BSSN_RHS_Dgt12_3_Dgt12_33 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,0,0,4,4"
-{
+  "DPDstandardNthgt121"
+  
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
+  {
+    DPDstandardNthgt1211
+  }
+  "DPDstandardNthgt1211"
+  
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
+  {
+    DPDstandardNthgt122
+  }
+  "DPDstandardNthgt122"
+  
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
+  {
+    DPDstandardNthgt1222
+  }
+  "DPDstandardNthgt1222"
+  
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
     DPDstandardNthgt123
@@ -699,15 +240,30 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_Dgt12_3_Dgt12_33 TYPE=gpu_cuda_dc/3dblock2 TILE="32
   }
   "DPDstandardNthgt1233"
   
-  CCTK_CUDA_KERNEL_VARIABLE  cached=yes intent=in
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
-    gt12
+    DPDstandardNthgt131
   }
-  "gt12"
-}
-
-CCTK_CUDA_KERNEL ML_BSSN_RHS_Dgt13_3_Dgt13_33 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,0,0,4,4"
-{
+  "DPDstandardNthgt131"
+  
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
+  {
+    DPDstandardNthgt1311
+  }
+  "DPDstandardNthgt1311"
+  
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
+  {
+    DPDstandardNthgt132
+  }
+  "DPDstandardNthgt132"
+  
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
+  {
+    DPDstandardNthgt1322
+  }
+  "DPDstandardNthgt1322"
+  
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
     DPDstandardNthgt133
@@ -720,15 +276,30 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_Dgt13_3_Dgt13_33 TYPE=gpu_cuda_dc/3dblock2 TILE="32
   }
   "DPDstandardNthgt1333"
   
-  CCTK_CUDA_KERNEL_VARIABLE  cached=yes intent=in
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
-    gt13
+    DPDstandardNthgt221
   }
-  "gt13"
-}
-
-CCTK_CUDA_KERNEL ML_BSSN_RHS_Dgt22_3_Dgt22_33 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,0,0,4,4"
-{
+  "DPDstandardNthgt221"
+  
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
+  {
+    DPDstandardNthgt2211
+  }
+  "DPDstandardNthgt2211"
+  
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
+  {
+    DPDstandardNthgt222
+  }
+  "DPDstandardNthgt222"
+  
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
+  {
+    DPDstandardNthgt2222
+  }
+  "DPDstandardNthgt2222"
+  
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
     DPDstandardNthgt223
@@ -741,15 +312,30 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_Dgt22_3_Dgt22_33 TYPE=gpu_cuda_dc/3dblock2 TILE="32
   }
   "DPDstandardNthgt2233"
   
-  CCTK_CUDA_KERNEL_VARIABLE  cached=yes intent=in
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
-    gt22
+    DPDstandardNthgt231
   }
-  "gt22"
-}
-
-CCTK_CUDA_KERNEL ML_BSSN_RHS_Dgt23_3_Dgt23_33 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,0,0,4,4"
-{
+  "DPDstandardNthgt231"
+  
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
+  {
+    DPDstandardNthgt2311
+  }
+  "DPDstandardNthgt2311"
+  
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
+  {
+    DPDstandardNthgt232
+  }
+  "DPDstandardNthgt232"
+  
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
+  {
+    DPDstandardNthgt2322
+  }
+  "DPDstandardNthgt2322"
+  
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
     DPDstandardNthgt233
@@ -762,15 +348,30 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_Dgt23_3_Dgt23_33 TYPE=gpu_cuda_dc/3dblock2 TILE="32
   }
   "DPDstandardNthgt2333"
   
-  CCTK_CUDA_KERNEL_VARIABLE  cached=yes intent=in
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
-    gt23
+    DPDstandardNthgt331
   }
-  "gt23"
-}
-
-CCTK_CUDA_KERNEL ML_BSSN_RHS_Dgt33_3_Dgt33_33 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,0,0,4,4"
-{
+  "DPDstandardNthgt331"
+  
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
+  {
+    DPDstandardNthgt3311
+  }
+  "DPDstandardNthgt3311"
+  
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
+  {
+    DPDstandardNthgt332
+  }
+  "DPDstandardNthgt332"
+  
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
+  {
+    DPDstandardNthgt3322
+  }
+  "DPDstandardNthgt3322"
+  
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
     DPDstandardNthgt333
@@ -783,15 +384,30 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_Dgt33_3_Dgt33_33 TYPE=gpu_cuda_dc/3dblock2 TILE="32
   }
   "DPDstandardNthgt3333"
   
-  CCTK_CUDA_KERNEL_VARIABLE  cached=yes intent=in
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
-    gt33
+    DPDstandardNthphi1
   }
-  "gt33"
-}
-
-CCTK_CUDA_KERNEL ML_BSSN_RHS_Dphi_3_Dphi_33 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,0,0,4,4"
-{
+  "DPDstandardNthphi1"
+  
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
+  {
+    DPDstandardNthphi11
+  }
+  "DPDstandardNthphi11"
+  
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
+  {
+    DPDstandardNthphi2
+  }
+  "DPDstandardNthphi2"
+  
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
+  {
+    DPDstandardNthphi22
+  }
+  "DPDstandardNthphi22"
+  
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
     DPDstandardNthphi3
@@ -804,67 +420,139 @@ CCTK_CUDA_KERNEL ML_BSSN_RHS_Dphi_3_Dphi_33 TYPE=gpu_cuda_dc/3dblock2 TILE="32,1
   }
   "DPDstandardNthphi33"
   
-  CCTK_CUDA_KERNEL_VARIABLE  cached=yes intent=in
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
-    phi
+    DPDstandardNthtrK1
   }
-  "phi"
-}
-
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DtrK_3 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,0,0,4,4"
-{
+  "DPDstandardNthtrK1"
+  
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
+  {
+    DPDstandardNthtrK2
+  }
+  "DPDstandardNthtrK2"
+  
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
     DPDstandardNthtrK3
   }
   "DPDstandardNthtrK3"
   
-  CCTK_CUDA_KERNEL_VARIABLE  cached=yes intent=in
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
-    trK
+    DPDstandardNthXt11
   }
-  "trK"
-}
-
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DXt1_3 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,0,0,4,4"
-{
+  "DPDstandardNthXt11"
+  
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
+  {
+    DPDstandardNthXt12
+  }
+  "DPDstandardNthXt12"
+  
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
     DPDstandardNthXt13
   }
   "DPDstandardNthXt13"
   
-  CCTK_CUDA_KERNEL_VARIABLE  cached=yes intent=in
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
-    Xt1
+    DPDstandardNthXt21
   }
-  "Xt1"
-}
-
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DXt2_3 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,0,0,4,4"
-{
+  "DPDstandardNthXt21"
+  
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
+  {
+    DPDstandardNthXt22
+  }
+  "DPDstandardNthXt22"
+  
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
     DPDstandardNthXt23
   }
   "DPDstandardNthXt23"
   
-  CCTK_CUDA_KERNEL_VARIABLE  cached=yes intent=in
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
-    Xt2
+    DPDstandardNthXt31
   }
-  "Xt2"
-}
-
-CCTK_CUDA_KERNEL ML_BSSN_RHS_DXt3_3 TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,0,0,4,4"
-{
+  "DPDstandardNthXt31"
+  
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
+  {
+    DPDstandardNthXt32
+  }
+  "DPDstandardNthXt32"
+  
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out
   {
     DPDstandardNthXt33
   }
   "DPDstandardNthXt33"
   
-  CCTK_CUDA_KERNEL_VARIABLE  cached=yes intent=in
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in
+  {
+    gt11
+  }
+  "gt11"
+  
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in
+  {
+    gt12
+  }
+  "gt12"
+  
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in
+  {
+    gt13
+  }
+  "gt13"
+  
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in
+  {
+    gt22
+  }
+  "gt22"
+  
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in
+  {
+    gt23
+  }
+  "gt23"
+  
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in
+  {
+    gt33
+  }
+  "gt33"
+  
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in
+  {
+    phi
+  }
+  "phi"
+  
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in
+  {
+    trK
+  }
+  "trK"
+  
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in
+  {
+    Xt1
+  }
+  "Xt1"
+  
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in
+  {
+    Xt2
+  }
+  "Xt2"
+  
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in
   {
     Xt3
   }

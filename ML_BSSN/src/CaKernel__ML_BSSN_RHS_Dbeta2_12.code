@@ -61,31 +61,10 @@ CAKERNEL_ML_BSSN_RHS_Dbeta2_12_Begin
   CCTK_REAL const pm1o840dx = -0.00119047619047619047619047619048*INV(dx);
   CCTK_REAL const pm1o840dy = -0.00119047619047619047619047619048*INV(dy);
   CCTK_REAL const pm1o840dz = -0.00119047619047619047619047619048*INV(dz);
-  
-  /* Assign local copies of arrays functions */
-  
-  
-  
-  /* Calculate temporaries and arrays functions */
-  
-  /* Copy local copies back to grid functions */
   CAKERNEL_ML_BSSN_RHS_Dbeta2_12_Computations_Begin
     
-    /* Assign local copies of grid functions */
-    
-    CCTK_REAL beta2L = I3D(beta2,0,0,0);
-    
-    
-    /* Include user supplied include files */
-    
-    /* Precompute derivatives */
-    CCTK_REAL const PDstandardNth12beta2 = PDstandardNth12(beta2);
-    
     /* Calculate temporaries and grid functions */
-    CCTK_REAL DPDstandardNthbeta212L = PDstandardNth12beta2;
-    
-    /* Copy local copies back to grid functions */
-    I3D(DPDstandardNthbeta212,0,0,0) = DPDstandardNthbeta212L;
+    I3D(DPDstandardNthbeta212,0,0,0) = PDstandardNth12(beta2);
     
   CAKERNEL_ML_BSSN_RHS_Dbeta2_12_Computations_End
   
