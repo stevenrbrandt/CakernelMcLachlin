@@ -7,6 +7,10 @@ TEST ML_BSSN_Host_sgw3d_2proc
 {
   NPROCS 2
 }
+TEST ML_BSSN_Host_sgw3d_4proc
+{
+  NPROCS 4
+}
 TEST ML_BSSN_sgw3d
 {
   NPROCS 1
@@ -14,4 +18,8 @@ TEST ML_BSSN_sgw3d
 TEST ML_BSSN_sgw3d_2proc
 {
   NPROCS 2
+}
+TEST ML_BSSN_sgw3d_4proc
+{
+  NPROCS 4
 }
