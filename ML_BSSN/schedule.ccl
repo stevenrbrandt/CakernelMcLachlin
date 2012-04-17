@@ -834,7 +834,7 @@ if (CCTK_EQUALS(my_initial_data, "ADMBase"))
   } "ML_BSSN_convertFromADMBaseGamma"
 }
 
-schedule CAKERNEL_Launch_ML_BSSN_RHS_Dalpha_1_etc IN ML_BSSN_evolCalcGroup before ML_BSSN_RHS
+schedule CAKERNEL_Launch_ML_BSSN_RHS_Dalpha_1_etc IN ML_BSSN_evolCalcGroup IF Accelerator::device_process before ML_BSSN_RHS
 {
   LANG: C
   TAGS: Device=1
@@ -924,7 +924,7 @@ schedule CAKERNEL_Launch_ML_BSSN_RHS_Dalpha_1_etc IN ML_BSSN_evolCalcGroup befor
   WRITES:   ML_BSSN::DPDstandardNthXt33_group
 } "ML_BSSN_RHS_Dalpha_1_etc"
 
-schedule CAKERNEL_Launch_ML_BSSN_RHS_Dalpha_12 IN ML_BSSN_evolCalcGroup before ML_BSSN_RHS
+schedule CAKERNEL_Launch_ML_BSSN_RHS_Dalpha_12 IN ML_BSSN_evolCalcGroup IF Accelerator::device_process before ML_BSSN_RHS
 {
   LANG: C
   TAGS: Device=1
@@ -932,7 +932,7 @@ schedule CAKERNEL_Launch_ML_BSSN_RHS_Dalpha_12 IN ML_BSSN_evolCalcGroup before M
   WRITES:   ML_BSSN::DPDstandardNthalpha12_group
 } "ML_BSSN_RHS_Dalpha_12"
 
-schedule CAKERNEL_Launch_ML_BSSN_RHS_Dbeta1_12 IN ML_BSSN_evolCalcGroup before ML_BSSN_RHS
+schedule CAKERNEL_Launch_ML_BSSN_RHS_Dbeta1_12 IN ML_BSSN_evolCalcGroup IF Accelerator::device_process before ML_BSSN_RHS
 {
   LANG: C
   TAGS: Device=1
@@ -940,7 +940,7 @@ schedule CAKERNEL_Launch_ML_BSSN_RHS_Dbeta1_12 IN ML_BSSN_evolCalcGroup before M
   WRITES:   ML_BSSN::DPDstandardNthbeta112_group
 } "ML_BSSN_RHS_Dbeta1_12"
 
-schedule CAKERNEL_Launch_ML_BSSN_RHS_Dbeta2_12 IN ML_BSSN_evolCalcGroup before ML_BSSN_RHS
+schedule CAKERNEL_Launch_ML_BSSN_RHS_Dbeta2_12 IN ML_BSSN_evolCalcGroup IF Accelerator::device_process before ML_BSSN_RHS
 {
   LANG: C
   TAGS: Device=1
@@ -948,7 +948,7 @@ schedule CAKERNEL_Launch_ML_BSSN_RHS_Dbeta2_12 IN ML_BSSN_evolCalcGroup before M
   WRITES:   ML_BSSN::DPDstandardNthbeta212_group
 } "ML_BSSN_RHS_Dbeta2_12"
 
-schedule CAKERNEL_Launch_ML_BSSN_RHS_Dbeta3_12 IN ML_BSSN_evolCalcGroup before ML_BSSN_RHS
+schedule CAKERNEL_Launch_ML_BSSN_RHS_Dbeta3_12 IN ML_BSSN_evolCalcGroup IF Accelerator::device_process before ML_BSSN_RHS
 {
   LANG: C
   TAGS: Device=1
@@ -956,7 +956,7 @@ schedule CAKERNEL_Launch_ML_BSSN_RHS_Dbeta3_12 IN ML_BSSN_evolCalcGroup before M
   WRITES:   ML_BSSN::DPDstandardNthbeta312_group
 } "ML_BSSN_RHS_Dbeta3_12"
 
-schedule CAKERNEL_Launch_ML_BSSN_RHS_Dgt11_12 IN ML_BSSN_evolCalcGroup before ML_BSSN_RHS
+schedule CAKERNEL_Launch_ML_BSSN_RHS_Dgt11_12 IN ML_BSSN_evolCalcGroup IF Accelerator::device_process before ML_BSSN_RHS
 {
   LANG: C
   TAGS: Device=1
@@ -964,7 +964,7 @@ schedule CAKERNEL_Launch_ML_BSSN_RHS_Dgt11_12 IN ML_BSSN_evolCalcGroup before ML
   WRITES:   ML_BSSN::DPDstandardNthgt1112_group
 } "ML_BSSN_RHS_Dgt11_12"
 
-schedule CAKERNEL_Launch_ML_BSSN_RHS_Dgt12_12 IN ML_BSSN_evolCalcGroup before ML_BSSN_RHS
+schedule CAKERNEL_Launch_ML_BSSN_RHS_Dgt12_12 IN ML_BSSN_evolCalcGroup IF Accelerator::device_process before ML_BSSN_RHS
 {
   LANG: C
   TAGS: Device=1
@@ -972,7 +972,7 @@ schedule CAKERNEL_Launch_ML_BSSN_RHS_Dgt12_12 IN ML_BSSN_evolCalcGroup before ML
   WRITES:   ML_BSSN::DPDstandardNthgt1212_group
 } "ML_BSSN_RHS_Dgt12_12"
 
-schedule CAKERNEL_Launch_ML_BSSN_RHS_Dgt13_12 IN ML_BSSN_evolCalcGroup before ML_BSSN_RHS
+schedule CAKERNEL_Launch_ML_BSSN_RHS_Dgt13_12 IN ML_BSSN_evolCalcGroup IF Accelerator::device_process before ML_BSSN_RHS
 {
   LANG: C
   TAGS: Device=1
@@ -980,7 +980,7 @@ schedule CAKERNEL_Launch_ML_BSSN_RHS_Dgt13_12 IN ML_BSSN_evolCalcGroup before ML
   WRITES:   ML_BSSN::DPDstandardNthgt1312_group
 } "ML_BSSN_RHS_Dgt13_12"
 
-schedule CAKERNEL_Launch_ML_BSSN_RHS_Dgt22_12 IN ML_BSSN_evolCalcGroup before ML_BSSN_RHS
+schedule CAKERNEL_Launch_ML_BSSN_RHS_Dgt22_12 IN ML_BSSN_evolCalcGroup IF Accelerator::device_process before ML_BSSN_RHS
 {
   LANG: C
   TAGS: Device=1
@@ -988,7 +988,7 @@ schedule CAKERNEL_Launch_ML_BSSN_RHS_Dgt22_12 IN ML_BSSN_evolCalcGroup before ML
   WRITES:   ML_BSSN::DPDstandardNthgt2212_group
 } "ML_BSSN_RHS_Dgt22_12"
 
-schedule CAKERNEL_Launch_ML_BSSN_RHS_Dgt23_12 IN ML_BSSN_evolCalcGroup before ML_BSSN_RHS
+schedule CAKERNEL_Launch_ML_BSSN_RHS_Dgt23_12 IN ML_BSSN_evolCalcGroup IF Accelerator::device_process before ML_BSSN_RHS
 {
   LANG: C
   TAGS: Device=1
@@ -996,7 +996,7 @@ schedule CAKERNEL_Launch_ML_BSSN_RHS_Dgt23_12 IN ML_BSSN_evolCalcGroup before ML
   WRITES:   ML_BSSN::DPDstandardNthgt2312_group
 } "ML_BSSN_RHS_Dgt23_12"
 
-schedule CAKERNEL_Launch_ML_BSSN_RHS_Dgt33_12 IN ML_BSSN_evolCalcGroup before ML_BSSN_RHS
+schedule CAKERNEL_Launch_ML_BSSN_RHS_Dgt33_12 IN ML_BSSN_evolCalcGroup IF Accelerator::device_process before ML_BSSN_RHS
 {
   LANG: C
   TAGS: Device=1
@@ -1004,7 +1004,7 @@ schedule CAKERNEL_Launch_ML_BSSN_RHS_Dgt33_12 IN ML_BSSN_evolCalcGroup before ML
   WRITES:   ML_BSSN::DPDstandardNthgt3312_group
 } "ML_BSSN_RHS_Dgt33_12"
 
-schedule CAKERNEL_Launch_ML_BSSN_RHS_Dphi_12 IN ML_BSSN_evolCalcGroup before ML_BSSN_RHS
+schedule CAKERNEL_Launch_ML_BSSN_RHS_Dphi_12 IN ML_BSSN_evolCalcGroup IF Accelerator::device_process before ML_BSSN_RHS
 {
   LANG: C
   TAGS: Device=1
@@ -1012,7 +1012,7 @@ schedule CAKERNEL_Launch_ML_BSSN_RHS_Dphi_12 IN ML_BSSN_evolCalcGroup before ML_
   WRITES:   ML_BSSN::DPDstandardNthphi12_group
 } "ML_BSSN_RHS_Dphi_12"
 
-schedule CAKERNEL_Launch_ML_BSSN_RHS_Dalpha_13 IN ML_BSSN_evolCalcGroup before ML_BSSN_RHS
+schedule CAKERNEL_Launch_ML_BSSN_RHS_Dalpha_13 IN ML_BSSN_evolCalcGroup IF Accelerator::device_process before ML_BSSN_RHS
 {
   LANG: C
   TAGS: Device=1
@@ -1020,7 +1020,7 @@ schedule CAKERNEL_Launch_ML_BSSN_RHS_Dalpha_13 IN ML_BSSN_evolCalcGroup before M
   WRITES:   ML_BSSN::DPDstandardNthalpha13_group
 } "ML_BSSN_RHS_Dalpha_13"
 
-schedule CAKERNEL_Launch_ML_BSSN_RHS_Dbeta1_13 IN ML_BSSN_evolCalcGroup before ML_BSSN_RHS
+schedule CAKERNEL_Launch_ML_BSSN_RHS_Dbeta1_13 IN ML_BSSN_evolCalcGroup IF Accelerator::device_process before ML_BSSN_RHS
 {
   LANG: C
   TAGS: Device=1
@@ -1028,7 +1028,7 @@ schedule CAKERNEL_Launch_ML_BSSN_RHS_Dbeta1_13 IN ML_BSSN_evolCalcGroup before M
   WRITES:   ML_BSSN::DPDstandardNthbeta113_group
 } "ML_BSSN_RHS_Dbeta1_13"
 
-schedule CAKERNEL_Launch_ML_BSSN_RHS_Dbeta2_13 IN ML_BSSN_evolCalcGroup before ML_BSSN_RHS
+schedule CAKERNEL_Launch_ML_BSSN_RHS_Dbeta2_13 IN ML_BSSN_evolCalcGroup IF Accelerator::device_process before ML_BSSN_RHS
 {
   LANG: C
   TAGS: Device=1
@@ -1036,7 +1036,7 @@ schedule CAKERNEL_Launch_ML_BSSN_RHS_Dbeta2_13 IN ML_BSSN_evolCalcGroup before M
   WRITES:   ML_BSSN::DPDstandardNthbeta213_group
 } "ML_BSSN_RHS_Dbeta2_13"
 
-schedule CAKERNEL_Launch_ML_BSSN_RHS_Dbeta3_13 IN ML_BSSN_evolCalcGroup before ML_BSSN_RHS
+schedule CAKERNEL_Launch_ML_BSSN_RHS_Dbeta3_13 IN ML_BSSN_evolCalcGroup IF Accelerator::device_process before ML_BSSN_RHS
 {
   LANG: C
   TAGS: Device=1
@@ -1044,7 +1044,7 @@ schedule CAKERNEL_Launch_ML_BSSN_RHS_Dbeta3_13 IN ML_BSSN_evolCalcGroup before M
   WRITES:   ML_BSSN::DPDstandardNthbeta313_group
 } "ML_BSSN_RHS_Dbeta3_13"
 
-schedule CAKERNEL_Launch_ML_BSSN_RHS_Dgt11_13 IN ML_BSSN_evolCalcGroup before ML_BSSN_RHS
+schedule CAKERNEL_Launch_ML_BSSN_RHS_Dgt11_13 IN ML_BSSN_evolCalcGroup IF Accelerator::device_process before ML_BSSN_RHS
 {
   LANG: C
   TAGS: Device=1
@@ -1052,7 +1052,7 @@ schedule CAKERNEL_Launch_ML_BSSN_RHS_Dgt11_13 IN ML_BSSN_evolCalcGroup before ML
   WRITES:   ML_BSSN::DPDstandardNthgt1113_group
 } "ML_BSSN_RHS_Dgt11_13"
 
-schedule CAKERNEL_Launch_ML_BSSN_RHS_Dgt12_13 IN ML_BSSN_evolCalcGroup before ML_BSSN_RHS
+schedule CAKERNEL_Launch_ML_BSSN_RHS_Dgt12_13 IN ML_BSSN_evolCalcGroup IF Accelerator::device_process before ML_BSSN_RHS
 {
   LANG: C
   TAGS: Device=1
@@ -1060,7 +1060,7 @@ schedule CAKERNEL_Launch_ML_BSSN_RHS_Dgt12_13 IN ML_BSSN_evolCalcGroup before ML
   WRITES:   ML_BSSN::DPDstandardNthgt1213_group
 } "ML_BSSN_RHS_Dgt12_13"
 
-schedule CAKERNEL_Launch_ML_BSSN_RHS_Dgt13_13 IN ML_BSSN_evolCalcGroup before ML_BSSN_RHS
+schedule CAKERNEL_Launch_ML_BSSN_RHS_Dgt13_13 IN ML_BSSN_evolCalcGroup IF Accelerator::device_process before ML_BSSN_RHS
 {
   LANG: C
   TAGS: Device=1
@@ -1068,7 +1068,7 @@ schedule CAKERNEL_Launch_ML_BSSN_RHS_Dgt13_13 IN ML_BSSN_evolCalcGroup before ML
   WRITES:   ML_BSSN::DPDstandardNthgt1313_group
 } "ML_BSSN_RHS_Dgt13_13"
 
-schedule CAKERNEL_Launch_ML_BSSN_RHS_Dgt22_13 IN ML_BSSN_evolCalcGroup before ML_BSSN_RHS
+schedule CAKERNEL_Launch_ML_BSSN_RHS_Dgt22_13 IN ML_BSSN_evolCalcGroup IF Accelerator::device_process before ML_BSSN_RHS
 {
   LANG: C
   TAGS: Device=1
@@ -1076,7 +1076,7 @@ schedule CAKERNEL_Launch_ML_BSSN_RHS_Dgt22_13 IN ML_BSSN_evolCalcGroup before ML
   WRITES:   ML_BSSN::DPDstandardNthgt2213_group
 } "ML_BSSN_RHS_Dgt22_13"
 
-schedule CAKERNEL_Launch_ML_BSSN_RHS_Dgt23_13 IN ML_BSSN_evolCalcGroup before ML_BSSN_RHS
+schedule CAKERNEL_Launch_ML_BSSN_RHS_Dgt23_13 IN ML_BSSN_evolCalcGroup IF Accelerator::device_process before ML_BSSN_RHS
 {
   LANG: C
   TAGS: Device=1
@@ -1084,7 +1084,7 @@ schedule CAKERNEL_Launch_ML_BSSN_RHS_Dgt23_13 IN ML_BSSN_evolCalcGroup before ML
   WRITES:   ML_BSSN::DPDstandardNthgt2313_group
 } "ML_BSSN_RHS_Dgt23_13"
 
-schedule CAKERNEL_Launch_ML_BSSN_RHS_Dgt33_13 IN ML_BSSN_evolCalcGroup before ML_BSSN_RHS
+schedule CAKERNEL_Launch_ML_BSSN_RHS_Dgt33_13 IN ML_BSSN_evolCalcGroup IF Accelerator::device_process before ML_BSSN_RHS
 {
   LANG: C
   TAGS: Device=1
@@ -1092,7 +1092,7 @@ schedule CAKERNEL_Launch_ML_BSSN_RHS_Dgt33_13 IN ML_BSSN_evolCalcGroup before ML
   WRITES:   ML_BSSN::DPDstandardNthgt3313_group
 } "ML_BSSN_RHS_Dgt33_13"
 
-schedule CAKERNEL_Launch_ML_BSSN_RHS_Dphi_13 IN ML_BSSN_evolCalcGroup before ML_BSSN_RHS
+schedule CAKERNEL_Launch_ML_BSSN_RHS_Dphi_13 IN ML_BSSN_evolCalcGroup IF Accelerator::device_process before ML_BSSN_RHS
 {
   LANG: C
   TAGS: Device=1
@@ -1100,7 +1100,7 @@ schedule CAKERNEL_Launch_ML_BSSN_RHS_Dphi_13 IN ML_BSSN_evolCalcGroup before ML_
   WRITES:   ML_BSSN::DPDstandardNthphi13_group
 } "ML_BSSN_RHS_Dphi_13"
 
-schedule CAKERNEL_Launch_ML_BSSN_RHS_Dalpha_23 IN ML_BSSN_evolCalcGroup before ML_BSSN_RHS
+schedule CAKERNEL_Launch_ML_BSSN_RHS_Dalpha_23 IN ML_BSSN_evolCalcGroup IF Accelerator::device_process before ML_BSSN_RHS
 {
   LANG: C
   TAGS: Device=1
@@ -1108,7 +1108,7 @@ schedule CAKERNEL_Launch_ML_BSSN_RHS_Dalpha_23 IN ML_BSSN_evolCalcGroup before M
   WRITES:   ML_BSSN::DPDstandardNthalpha23_group
 } "ML_BSSN_RHS_Dalpha_23"
 
-schedule CAKERNEL_Launch_ML_BSSN_RHS_Dbeta1_23 IN ML_BSSN_evolCalcGroup before ML_BSSN_RHS
+schedule CAKERNEL_Launch_ML_BSSN_RHS_Dbeta1_23 IN ML_BSSN_evolCalcGroup IF Accelerator::device_process before ML_BSSN_RHS
 {
   LANG: C
   TAGS: Device=1
@@ -1116,7 +1116,7 @@ schedule CAKERNEL_Launch_ML_BSSN_RHS_Dbeta1_23 IN ML_BSSN_evolCalcGroup before M
   WRITES:   ML_BSSN::DPDstandardNthbeta123_group
 } "ML_BSSN_RHS_Dbeta1_23"
 
-schedule CAKERNEL_Launch_ML_BSSN_RHS_Dbeta2_23 IN ML_BSSN_evolCalcGroup before ML_BSSN_RHS
+schedule CAKERNEL_Launch_ML_BSSN_RHS_Dbeta2_23 IN ML_BSSN_evolCalcGroup IF Accelerator::device_process before ML_BSSN_RHS
 {
   LANG: C
   TAGS: Device=1
@@ -1124,7 +1124,7 @@ schedule CAKERNEL_Launch_ML_BSSN_RHS_Dbeta2_23 IN ML_BSSN_evolCalcGroup before M
   WRITES:   ML_BSSN::DPDstandardNthbeta223_group
 } "ML_BSSN_RHS_Dbeta2_23"
 
-schedule CAKERNEL_Launch_ML_BSSN_RHS_Dbeta3_23 IN ML_BSSN_evolCalcGroup before ML_BSSN_RHS
+schedule CAKERNEL_Launch_ML_BSSN_RHS_Dbeta3_23 IN ML_BSSN_evolCalcGroup IF Accelerator::device_process before ML_BSSN_RHS
 {
   LANG: C
   TAGS: Device=1
@@ -1132,7 +1132,7 @@ schedule CAKERNEL_Launch_ML_BSSN_RHS_Dbeta3_23 IN ML_BSSN_evolCalcGroup before M
   WRITES:   ML_BSSN::DPDstandardNthbeta323_group
 } "ML_BSSN_RHS_Dbeta3_23"
 
-schedule CAKERNEL_Launch_ML_BSSN_RHS_Dgt11_23 IN ML_BSSN_evolCalcGroup before ML_BSSN_RHS
+schedule CAKERNEL_Launch_ML_BSSN_RHS_Dgt11_23 IN ML_BSSN_evolCalcGroup IF Accelerator::device_process before ML_BSSN_RHS
 {
   LANG: C
   TAGS: Device=1
@@ -1140,7 +1140,7 @@ schedule CAKERNEL_Launch_ML_BSSN_RHS_Dgt11_23 IN ML_BSSN_evolCalcGroup before ML
   WRITES:   ML_BSSN::DPDstandardNthgt1123_group
 } "ML_BSSN_RHS_Dgt11_23"
 
-schedule CAKERNEL_Launch_ML_BSSN_RHS_Dgt12_23 IN ML_BSSN_evolCalcGroup before ML_BSSN_RHS
+schedule CAKERNEL_Launch_ML_BSSN_RHS_Dgt12_23 IN ML_BSSN_evolCalcGroup IF Accelerator::device_process before ML_BSSN_RHS
 {
   LANG: C
   TAGS: Device=1
@@ -1148,7 +1148,7 @@ schedule CAKERNEL_Launch_ML_BSSN_RHS_Dgt12_23 IN ML_BSSN_evolCalcGroup before ML
   WRITES:   ML_BSSN::DPDstandardNthgt1223_group
 } "ML_BSSN_RHS_Dgt12_23"
 
-schedule CAKERNEL_Launch_ML_BSSN_RHS_Dgt13_23 IN ML_BSSN_evolCalcGroup before ML_BSSN_RHS
+schedule CAKERNEL_Launch_ML_BSSN_RHS_Dgt13_23 IN ML_BSSN_evolCalcGroup IF Accelerator::device_process before ML_BSSN_RHS
 {
   LANG: C
   TAGS: Device=1
@@ -1156,7 +1156,7 @@ schedule CAKERNEL_Launch_ML_BSSN_RHS_Dgt13_23 IN ML_BSSN_evolCalcGroup before ML
   WRITES:   ML_BSSN::DPDstandardNthgt1323_group
 } "ML_BSSN_RHS_Dgt13_23"
 
-schedule CAKERNEL_Launch_ML_BSSN_RHS_Dgt22_23 IN ML_BSSN_evolCalcGroup before ML_BSSN_RHS
+schedule CAKERNEL_Launch_ML_BSSN_RHS_Dgt22_23 IN ML_BSSN_evolCalcGroup IF Accelerator::device_process before ML_BSSN_RHS
 {
   LANG: C
   TAGS: Device=1
@@ -1164,7 +1164,7 @@ schedule CAKERNEL_Launch_ML_BSSN_RHS_Dgt22_23 IN ML_BSSN_evolCalcGroup before ML
   WRITES:   ML_BSSN::DPDstandardNthgt2223_group
 } "ML_BSSN_RHS_Dgt22_23"
 
-schedule CAKERNEL_Launch_ML_BSSN_RHS_Dgt23_23 IN ML_BSSN_evolCalcGroup before ML_BSSN_RHS
+schedule CAKERNEL_Launch_ML_BSSN_RHS_Dgt23_23 IN ML_BSSN_evolCalcGroup IF Accelerator::device_process before ML_BSSN_RHS
 {
   LANG: C
   TAGS: Device=1
@@ -1172,7 +1172,7 @@ schedule CAKERNEL_Launch_ML_BSSN_RHS_Dgt23_23 IN ML_BSSN_evolCalcGroup before ML
   WRITES:   ML_BSSN::DPDstandardNthgt2323_group
 } "ML_BSSN_RHS_Dgt23_23"
 
-schedule CAKERNEL_Launch_ML_BSSN_RHS_Dgt33_23 IN ML_BSSN_evolCalcGroup before ML_BSSN_RHS
+schedule CAKERNEL_Launch_ML_BSSN_RHS_Dgt33_23 IN ML_BSSN_evolCalcGroup IF Accelerator::device_process before ML_BSSN_RHS
 {
   LANG: C
   TAGS: Device=1
@@ -1180,7 +1180,7 @@ schedule CAKERNEL_Launch_ML_BSSN_RHS_Dgt33_23 IN ML_BSSN_evolCalcGroup before ML
   WRITES:   ML_BSSN::DPDstandardNthgt3323_group
 } "ML_BSSN_RHS_Dgt33_23"
 
-schedule CAKERNEL_Launch_ML_BSSN_RHS_Dphi_23 IN ML_BSSN_evolCalcGroup before ML_BSSN_RHS
+schedule CAKERNEL_Launch_ML_BSSN_RHS_Dphi_23 IN ML_BSSN_evolCalcGroup IF Accelerator::device_process before ML_BSSN_RHS
 {
   LANG: C
   TAGS: Device=1
@@ -1188,7 +1188,7 @@ schedule CAKERNEL_Launch_ML_BSSN_RHS_Dphi_23 IN ML_BSSN_evolCalcGroup before ML_
   WRITES:   ML_BSSN::DPDstandardNthphi23_group
 } "ML_BSSN_RHS_Dphi_23"
 
-schedule CAKERNEL_Launch_ML_BSSN_RHS1 IN ML_BSSN_evolCalcGroup
+schedule CAKERNEL_Launch_ML_BSSN_RHS1 IN ML_BSSN_evolCalcGroup IF Accelerator::device_process
 {
   LANG: C
   TAGS: Device=1
@@ -1322,7 +1322,7 @@ schedule CAKERNEL_Launch_ML_BSSN_RHS1 IN ML_BSSN_evolCalcGroup
   WRITES:   ML_BSSN::ML_trace_curvrhs
 } "ML_BSSN_RHS1"
 
-schedule CAKERNEL_Launch_ML_BSSN_RHS2 IN ML_BSSN_evolCalcGroup
+schedule CAKERNEL_Launch_ML_BSSN_RHS2 IN ML_BSSN_evolCalcGroup IF Accelerator::device_process
 {
   LANG: C
   TAGS: Device=1
@@ -1446,7 +1446,583 @@ schedule CAKERNEL_Launch_ML_BSSN_RHS2 IN ML_BSSN_evolCalcGroup
   WRITES:   ML_BSSN::ML_curvrhs
 } "ML_BSSN_RHS2"
 
-schedule CAKERNEL_Launch_ML_BSSN_Advect_trKrhs IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2)
+schedule ML_BSSN_RHS_Dalpha_1_etc IN ML_BSSN_evolCalcGroup IF Accelerator::host_process before ML_BSSN_RHS
+{
+  LANG: C
+  READS:    ML_BSSN::ML_Gamma
+  READS:    ML_BSSN::ML_lapse
+  READS:    ML_BSSN::ML_log_confac
+  READS:    ML_BSSN::ML_metric
+  READS:    ML_BSSN::ML_shift
+  READS:    ML_BSSN::ML_trace_curv
+  WRITES:   ML_BSSN::DPDstandardNthalpha11_group
+  WRITES:   ML_BSSN::DPDstandardNthalpha1_group
+  WRITES:   ML_BSSN::DPDstandardNthalpha22_group
+  WRITES:   ML_BSSN::DPDstandardNthalpha2_group
+  WRITES:   ML_BSSN::DPDstandardNthalpha33_group
+  WRITES:   ML_BSSN::DPDstandardNthalpha3_group
+  WRITES:   ML_BSSN::DPDstandardNthbeta111_group
+  WRITES:   ML_BSSN::DPDstandardNthbeta11_group
+  WRITES:   ML_BSSN::DPDstandardNthbeta122_group
+  WRITES:   ML_BSSN::DPDstandardNthbeta12_group
+  WRITES:   ML_BSSN::DPDstandardNthbeta133_group
+  WRITES:   ML_BSSN::DPDstandardNthbeta13_group
+  WRITES:   ML_BSSN::DPDstandardNthbeta211_group
+  WRITES:   ML_BSSN::DPDstandardNthbeta21_group
+  WRITES:   ML_BSSN::DPDstandardNthbeta222_group
+  WRITES:   ML_BSSN::DPDstandardNthbeta22_group
+  WRITES:   ML_BSSN::DPDstandardNthbeta233_group
+  WRITES:   ML_BSSN::DPDstandardNthbeta23_group
+  WRITES:   ML_BSSN::DPDstandardNthbeta311_group
+  WRITES:   ML_BSSN::DPDstandardNthbeta31_group
+  WRITES:   ML_BSSN::DPDstandardNthbeta322_group
+  WRITES:   ML_BSSN::DPDstandardNthbeta32_group
+  WRITES:   ML_BSSN::DPDstandardNthbeta333_group
+  WRITES:   ML_BSSN::DPDstandardNthbeta33_group
+  WRITES:   ML_BSSN::DPDstandardNthgt1111_group
+  WRITES:   ML_BSSN::DPDstandardNthgt111_group
+  WRITES:   ML_BSSN::DPDstandardNthgt1122_group
+  WRITES:   ML_BSSN::DPDstandardNthgt112_group
+  WRITES:   ML_BSSN::DPDstandardNthgt1133_group
+  WRITES:   ML_BSSN::DPDstandardNthgt113_group
+  WRITES:   ML_BSSN::DPDstandardNthgt1211_group
+  WRITES:   ML_BSSN::DPDstandardNthgt121_group
+  WRITES:   ML_BSSN::DPDstandardNthgt1222_group
+  WRITES:   ML_BSSN::DPDstandardNthgt122_group
+  WRITES:   ML_BSSN::DPDstandardNthgt1233_group
+  WRITES:   ML_BSSN::DPDstandardNthgt123_group
+  WRITES:   ML_BSSN::DPDstandardNthgt1311_group
+  WRITES:   ML_BSSN::DPDstandardNthgt131_group
+  WRITES:   ML_BSSN::DPDstandardNthgt1322_group
+  WRITES:   ML_BSSN::DPDstandardNthgt132_group
+  WRITES:   ML_BSSN::DPDstandardNthgt1333_group
+  WRITES:   ML_BSSN::DPDstandardNthgt133_group
+  WRITES:   ML_BSSN::DPDstandardNthgt2211_group
+  WRITES:   ML_BSSN::DPDstandardNthgt221_group
+  WRITES:   ML_BSSN::DPDstandardNthgt2222_group
+  WRITES:   ML_BSSN::DPDstandardNthgt222_group
+  WRITES:   ML_BSSN::DPDstandardNthgt2233_group
+  WRITES:   ML_BSSN::DPDstandardNthgt223_group
+  WRITES:   ML_BSSN::DPDstandardNthgt2311_group
+  WRITES:   ML_BSSN::DPDstandardNthgt231_group
+  WRITES:   ML_BSSN::DPDstandardNthgt2322_group
+  WRITES:   ML_BSSN::DPDstandardNthgt232_group
+  WRITES:   ML_BSSN::DPDstandardNthgt2333_group
+  WRITES:   ML_BSSN::DPDstandardNthgt233_group
+  WRITES:   ML_BSSN::DPDstandardNthgt3311_group
+  WRITES:   ML_BSSN::DPDstandardNthgt331_group
+  WRITES:   ML_BSSN::DPDstandardNthgt3322_group
+  WRITES:   ML_BSSN::DPDstandardNthgt332_group
+  WRITES:   ML_BSSN::DPDstandardNthgt3333_group
+  WRITES:   ML_BSSN::DPDstandardNthgt333_group
+  WRITES:   ML_BSSN::DPDstandardNthphi11_group
+  WRITES:   ML_BSSN::DPDstandardNthphi1_group
+  WRITES:   ML_BSSN::DPDstandardNthphi22_group
+  WRITES:   ML_BSSN::DPDstandardNthphi2_group
+  WRITES:   ML_BSSN::DPDstandardNthphi33_group
+  WRITES:   ML_BSSN::DPDstandardNthphi3_group
+  WRITES:   ML_BSSN::DPDstandardNthtrK1_group
+  WRITES:   ML_BSSN::DPDstandardNthtrK2_group
+  WRITES:   ML_BSSN::DPDstandardNthtrK3_group
+  WRITES:   ML_BSSN::DPDstandardNthXt11_group
+  WRITES:   ML_BSSN::DPDstandardNthXt12_group
+  WRITES:   ML_BSSN::DPDstandardNthXt13_group
+  WRITES:   ML_BSSN::DPDstandardNthXt21_group
+  WRITES:   ML_BSSN::DPDstandardNthXt22_group
+  WRITES:   ML_BSSN::DPDstandardNthXt23_group
+  WRITES:   ML_BSSN::DPDstandardNthXt31_group
+  WRITES:   ML_BSSN::DPDstandardNthXt32_group
+  WRITES:   ML_BSSN::DPDstandardNthXt33_group
+} "ML_BSSN_RHS_Dalpha_1_etc"
+
+schedule ML_BSSN_RHS_Dalpha_12 IN ML_BSSN_evolCalcGroup IF Accelerator::host_process before ML_BSSN_RHS
+{
+  LANG: C
+  READS:    ML_BSSN::ML_lapse
+  WRITES:   ML_BSSN::DPDstandardNthalpha12_group
+} "ML_BSSN_RHS_Dalpha_12"
+
+schedule ML_BSSN_RHS_Dbeta1_12 IN ML_BSSN_evolCalcGroup IF Accelerator::host_process before ML_BSSN_RHS
+{
+  LANG: C
+  READS:    ML_BSSN::ML_shift
+  WRITES:   ML_BSSN::DPDstandardNthbeta112_group
+} "ML_BSSN_RHS_Dbeta1_12"
+
+schedule ML_BSSN_RHS_Dbeta2_12 IN ML_BSSN_evolCalcGroup IF Accelerator::host_process before ML_BSSN_RHS
+{
+  LANG: C
+  READS:    ML_BSSN::ML_shift
+  WRITES:   ML_BSSN::DPDstandardNthbeta212_group
+} "ML_BSSN_RHS_Dbeta2_12"
+
+schedule ML_BSSN_RHS_Dbeta3_12 IN ML_BSSN_evolCalcGroup IF Accelerator::host_process before ML_BSSN_RHS
+{
+  LANG: C
+  READS:    ML_BSSN::ML_shift
+  WRITES:   ML_BSSN::DPDstandardNthbeta312_group
+} "ML_BSSN_RHS_Dbeta3_12"
+
+schedule ML_BSSN_RHS_Dgt11_12 IN ML_BSSN_evolCalcGroup IF Accelerator::host_process before ML_BSSN_RHS
+{
+  LANG: C
+  READS:    ML_BSSN::ML_metric
+  WRITES:   ML_BSSN::DPDstandardNthgt1112_group
+} "ML_BSSN_RHS_Dgt11_12"
+
+schedule ML_BSSN_RHS_Dgt12_12 IN ML_BSSN_evolCalcGroup IF Accelerator::host_process before ML_BSSN_RHS
+{
+  LANG: C
+  READS:    ML_BSSN::ML_metric
+  WRITES:   ML_BSSN::DPDstandardNthgt1212_group
+} "ML_BSSN_RHS_Dgt12_12"
+
+schedule ML_BSSN_RHS_Dgt13_12 IN ML_BSSN_evolCalcGroup IF Accelerator::host_process before ML_BSSN_RHS
+{
+  LANG: C
+  READS:    ML_BSSN::ML_metric
+  WRITES:   ML_BSSN::DPDstandardNthgt1312_group
+} "ML_BSSN_RHS_Dgt13_12"
+
+schedule ML_BSSN_RHS_Dgt22_12 IN ML_BSSN_evolCalcGroup IF Accelerator::host_process before ML_BSSN_RHS
+{
+  LANG: C
+  READS:    ML_BSSN::ML_metric
+  WRITES:   ML_BSSN::DPDstandardNthgt2212_group
+} "ML_BSSN_RHS_Dgt22_12"
+
+schedule ML_BSSN_RHS_Dgt23_12 IN ML_BSSN_evolCalcGroup IF Accelerator::host_process before ML_BSSN_RHS
+{
+  LANG: C
+  READS:    ML_BSSN::ML_metric
+  WRITES:   ML_BSSN::DPDstandardNthgt2312_group
+} "ML_BSSN_RHS_Dgt23_12"
+
+schedule ML_BSSN_RHS_Dgt33_12 IN ML_BSSN_evolCalcGroup IF Accelerator::host_process before ML_BSSN_RHS
+{
+  LANG: C
+  READS:    ML_BSSN::ML_metric
+  WRITES:   ML_BSSN::DPDstandardNthgt3312_group
+} "ML_BSSN_RHS_Dgt33_12"
+
+schedule ML_BSSN_RHS_Dphi_12 IN ML_BSSN_evolCalcGroup IF Accelerator::host_process before ML_BSSN_RHS
+{
+  LANG: C
+  READS:    ML_BSSN::ML_log_confac
+  WRITES:   ML_BSSN::DPDstandardNthphi12_group
+} "ML_BSSN_RHS_Dphi_12"
+
+schedule ML_BSSN_RHS_Dalpha_13 IN ML_BSSN_evolCalcGroup IF Accelerator::host_process before ML_BSSN_RHS
+{
+  LANG: C
+  READS:    ML_BSSN::ML_lapse
+  WRITES:   ML_BSSN::DPDstandardNthalpha13_group
+} "ML_BSSN_RHS_Dalpha_13"
+
+schedule ML_BSSN_RHS_Dbeta1_13 IN ML_BSSN_evolCalcGroup IF Accelerator::host_process before ML_BSSN_RHS
+{
+  LANG: C
+  READS:    ML_BSSN::ML_shift
+  WRITES:   ML_BSSN::DPDstandardNthbeta113_group
+} "ML_BSSN_RHS_Dbeta1_13"
+
+schedule ML_BSSN_RHS_Dbeta2_13 IN ML_BSSN_evolCalcGroup IF Accelerator::host_process before ML_BSSN_RHS
+{
+  LANG: C
+  READS:    ML_BSSN::ML_shift
+  WRITES:   ML_BSSN::DPDstandardNthbeta213_group
+} "ML_BSSN_RHS_Dbeta2_13"
+
+schedule ML_BSSN_RHS_Dbeta3_13 IN ML_BSSN_evolCalcGroup IF Accelerator::host_process before ML_BSSN_RHS
+{
+  LANG: C
+  READS:    ML_BSSN::ML_shift
+  WRITES:   ML_BSSN::DPDstandardNthbeta313_group
+} "ML_BSSN_RHS_Dbeta3_13"
+
+schedule ML_BSSN_RHS_Dgt11_13 IN ML_BSSN_evolCalcGroup IF Accelerator::host_process before ML_BSSN_RHS
+{
+  LANG: C
+  READS:    ML_BSSN::ML_metric
+  WRITES:   ML_BSSN::DPDstandardNthgt1113_group
+} "ML_BSSN_RHS_Dgt11_13"
+
+schedule ML_BSSN_RHS_Dgt12_13 IN ML_BSSN_evolCalcGroup IF Accelerator::host_process before ML_BSSN_RHS
+{
+  LANG: C
+  READS:    ML_BSSN::ML_metric
+  WRITES:   ML_BSSN::DPDstandardNthgt1213_group
+} "ML_BSSN_RHS_Dgt12_13"
+
+schedule ML_BSSN_RHS_Dgt13_13 IN ML_BSSN_evolCalcGroup IF Accelerator::host_process before ML_BSSN_RHS
+{
+  LANG: C
+  READS:    ML_BSSN::ML_metric
+  WRITES:   ML_BSSN::DPDstandardNthgt1313_group
+} "ML_BSSN_RHS_Dgt13_13"
+
+schedule ML_BSSN_RHS_Dgt22_13 IN ML_BSSN_evolCalcGroup IF Accelerator::host_process before ML_BSSN_RHS
+{
+  LANG: C
+  READS:    ML_BSSN::ML_metric
+  WRITES:   ML_BSSN::DPDstandardNthgt2213_group
+} "ML_BSSN_RHS_Dgt22_13"
+
+schedule ML_BSSN_RHS_Dgt23_13 IN ML_BSSN_evolCalcGroup IF Accelerator::host_process before ML_BSSN_RHS
+{
+  LANG: C
+  READS:    ML_BSSN::ML_metric
+  WRITES:   ML_BSSN::DPDstandardNthgt2313_group
+} "ML_BSSN_RHS_Dgt23_13"
+
+schedule ML_BSSN_RHS_Dgt33_13 IN ML_BSSN_evolCalcGroup IF Accelerator::host_process before ML_BSSN_RHS
+{
+  LANG: C
+  READS:    ML_BSSN::ML_metric
+  WRITES:   ML_BSSN::DPDstandardNthgt3313_group
+} "ML_BSSN_RHS_Dgt33_13"
+
+schedule ML_BSSN_RHS_Dphi_13 IN ML_BSSN_evolCalcGroup IF Accelerator::host_process before ML_BSSN_RHS
+{
+  LANG: C
+  READS:    ML_BSSN::ML_log_confac
+  WRITES:   ML_BSSN::DPDstandardNthphi13_group
+} "ML_BSSN_RHS_Dphi_13"
+
+schedule ML_BSSN_RHS_Dalpha_23 IN ML_BSSN_evolCalcGroup IF Accelerator::host_process before ML_BSSN_RHS
+{
+  LANG: C
+  READS:    ML_BSSN::ML_lapse
+  WRITES:   ML_BSSN::DPDstandardNthalpha23_group
+} "ML_BSSN_RHS_Dalpha_23"
+
+schedule ML_BSSN_RHS_Dbeta1_23 IN ML_BSSN_evolCalcGroup IF Accelerator::host_process before ML_BSSN_RHS
+{
+  LANG: C
+  READS:    ML_BSSN::ML_shift
+  WRITES:   ML_BSSN::DPDstandardNthbeta123_group
+} "ML_BSSN_RHS_Dbeta1_23"
+
+schedule ML_BSSN_RHS_Dbeta2_23 IN ML_BSSN_evolCalcGroup IF Accelerator::host_process before ML_BSSN_RHS
+{
+  LANG: C
+  READS:    ML_BSSN::ML_shift
+  WRITES:   ML_BSSN::DPDstandardNthbeta223_group
+} "ML_BSSN_RHS_Dbeta2_23"
+
+schedule ML_BSSN_RHS_Dbeta3_23 IN ML_BSSN_evolCalcGroup IF Accelerator::host_process before ML_BSSN_RHS
+{
+  LANG: C
+  READS:    ML_BSSN::ML_shift
+  WRITES:   ML_BSSN::DPDstandardNthbeta323_group
+} "ML_BSSN_RHS_Dbeta3_23"
+
+schedule ML_BSSN_RHS_Dgt11_23 IN ML_BSSN_evolCalcGroup IF Accelerator::host_process before ML_BSSN_RHS
+{
+  LANG: C
+  READS:    ML_BSSN::ML_metric
+  WRITES:   ML_BSSN::DPDstandardNthgt1123_group
+} "ML_BSSN_RHS_Dgt11_23"
+
+schedule ML_BSSN_RHS_Dgt12_23 IN ML_BSSN_evolCalcGroup IF Accelerator::host_process before ML_BSSN_RHS
+{
+  LANG: C
+  READS:    ML_BSSN::ML_metric
+  WRITES:   ML_BSSN::DPDstandardNthgt1223_group
+} "ML_BSSN_RHS_Dgt12_23"
+
+schedule ML_BSSN_RHS_Dgt13_23 IN ML_BSSN_evolCalcGroup IF Accelerator::host_process before ML_BSSN_RHS
+{
+  LANG: C
+  READS:    ML_BSSN::ML_metric
+  WRITES:   ML_BSSN::DPDstandardNthgt1323_group
+} "ML_BSSN_RHS_Dgt13_23"
+
+schedule ML_BSSN_RHS_Dgt22_23 IN ML_BSSN_evolCalcGroup IF Accelerator::host_process before ML_BSSN_RHS
+{
+  LANG: C
+  READS:    ML_BSSN::ML_metric
+  WRITES:   ML_BSSN::DPDstandardNthgt2223_group
+} "ML_BSSN_RHS_Dgt22_23"
+
+schedule ML_BSSN_RHS_Dgt23_23 IN ML_BSSN_evolCalcGroup IF Accelerator::host_process before ML_BSSN_RHS
+{
+  LANG: C
+  READS:    ML_BSSN::ML_metric
+  WRITES:   ML_BSSN::DPDstandardNthgt2323_group
+} "ML_BSSN_RHS_Dgt23_23"
+
+schedule ML_BSSN_RHS_Dgt33_23 IN ML_BSSN_evolCalcGroup IF Accelerator::host_process before ML_BSSN_RHS
+{
+  LANG: C
+  READS:    ML_BSSN::ML_metric
+  WRITES:   ML_BSSN::DPDstandardNthgt3323_group
+} "ML_BSSN_RHS_Dgt33_23"
+
+schedule ML_BSSN_RHS_Dphi_23 IN ML_BSSN_evolCalcGroup IF Accelerator::host_process before ML_BSSN_RHS
+{
+  LANG: C
+  READS:    ML_BSSN::ML_log_confac
+  WRITES:   ML_BSSN::DPDstandardNthphi23_group
+} "ML_BSSN_RHS_Dphi_23"
+
+schedule ML_BSSN_RHS1 IN ML_BSSN_evolCalcGroup IF Accelerator::host_process
+{
+  LANG: C
+  READS:    ML_BSSN::DPDstandardNthalpha11_group
+  READS:    ML_BSSN::DPDstandardNthalpha12_group
+  READS:    ML_BSSN::DPDstandardNthalpha13_group
+  READS:    ML_BSSN::DPDstandardNthalpha1_group
+  READS:    ML_BSSN::DPDstandardNthalpha22_group
+  READS:    ML_BSSN::DPDstandardNthalpha23_group
+  READS:    ML_BSSN::DPDstandardNthalpha2_group
+  READS:    ML_BSSN::DPDstandardNthalpha33_group
+  READS:    ML_BSSN::DPDstandardNthalpha3_group
+  READS:    ML_BSSN::DPDstandardNthbeta111_group
+  READS:    ML_BSSN::DPDstandardNthbeta112_group
+  READS:    ML_BSSN::DPDstandardNthbeta113_group
+  READS:    ML_BSSN::DPDstandardNthbeta11_group
+  READS:    ML_BSSN::DPDstandardNthbeta122_group
+  READS:    ML_BSSN::DPDstandardNthbeta123_group
+  READS:    ML_BSSN::DPDstandardNthbeta12_group
+  READS:    ML_BSSN::DPDstandardNthbeta133_group
+  READS:    ML_BSSN::DPDstandardNthbeta13_group
+  READS:    ML_BSSN::DPDstandardNthbeta211_group
+  READS:    ML_BSSN::DPDstandardNthbeta212_group
+  READS:    ML_BSSN::DPDstandardNthbeta213_group
+  READS:    ML_BSSN::DPDstandardNthbeta21_group
+  READS:    ML_BSSN::DPDstandardNthbeta222_group
+  READS:    ML_BSSN::DPDstandardNthbeta223_group
+  READS:    ML_BSSN::DPDstandardNthbeta22_group
+  READS:    ML_BSSN::DPDstandardNthbeta233_group
+  READS:    ML_BSSN::DPDstandardNthbeta23_group
+  READS:    ML_BSSN::DPDstandardNthbeta311_group
+  READS:    ML_BSSN::DPDstandardNthbeta312_group
+  READS:    ML_BSSN::DPDstandardNthbeta313_group
+  READS:    ML_BSSN::DPDstandardNthbeta31_group
+  READS:    ML_BSSN::DPDstandardNthbeta322_group
+  READS:    ML_BSSN::DPDstandardNthbeta323_group
+  READS:    ML_BSSN::DPDstandardNthbeta32_group
+  READS:    ML_BSSN::DPDstandardNthbeta333_group
+  READS:    ML_BSSN::DPDstandardNthbeta33_group
+  READS:    ML_BSSN::DPDstandardNthgt1111_group
+  READS:    ML_BSSN::DPDstandardNthgt1112_group
+  READS:    ML_BSSN::DPDstandardNthgt1113_group
+  READS:    ML_BSSN::DPDstandardNthgt111_group
+  READS:    ML_BSSN::DPDstandardNthgt1122_group
+  READS:    ML_BSSN::DPDstandardNthgt1123_group
+  READS:    ML_BSSN::DPDstandardNthgt112_group
+  READS:    ML_BSSN::DPDstandardNthgt1133_group
+  READS:    ML_BSSN::DPDstandardNthgt113_group
+  READS:    ML_BSSN::DPDstandardNthgt1211_group
+  READS:    ML_BSSN::DPDstandardNthgt1212_group
+  READS:    ML_BSSN::DPDstandardNthgt1213_group
+  READS:    ML_BSSN::DPDstandardNthgt121_group
+  READS:    ML_BSSN::DPDstandardNthgt1222_group
+  READS:    ML_BSSN::DPDstandardNthgt1223_group
+  READS:    ML_BSSN::DPDstandardNthgt122_group
+  READS:    ML_BSSN::DPDstandardNthgt1233_group
+  READS:    ML_BSSN::DPDstandardNthgt123_group
+  READS:    ML_BSSN::DPDstandardNthgt1311_group
+  READS:    ML_BSSN::DPDstandardNthgt1312_group
+  READS:    ML_BSSN::DPDstandardNthgt1313_group
+  READS:    ML_BSSN::DPDstandardNthgt131_group
+  READS:    ML_BSSN::DPDstandardNthgt1322_group
+  READS:    ML_BSSN::DPDstandardNthgt1323_group
+  READS:    ML_BSSN::DPDstandardNthgt132_group
+  READS:    ML_BSSN::DPDstandardNthgt1333_group
+  READS:    ML_BSSN::DPDstandardNthgt133_group
+  READS:    ML_BSSN::DPDstandardNthgt2211_group
+  READS:    ML_BSSN::DPDstandardNthgt2212_group
+  READS:    ML_BSSN::DPDstandardNthgt2213_group
+  READS:    ML_BSSN::DPDstandardNthgt221_group
+  READS:    ML_BSSN::DPDstandardNthgt2222_group
+  READS:    ML_BSSN::DPDstandardNthgt2223_group
+  READS:    ML_BSSN::DPDstandardNthgt222_group
+  READS:    ML_BSSN::DPDstandardNthgt2233_group
+  READS:    ML_BSSN::DPDstandardNthgt223_group
+  READS:    ML_BSSN::DPDstandardNthgt2311_group
+  READS:    ML_BSSN::DPDstandardNthgt2312_group
+  READS:    ML_BSSN::DPDstandardNthgt2313_group
+  READS:    ML_BSSN::DPDstandardNthgt231_group
+  READS:    ML_BSSN::DPDstandardNthgt2322_group
+  READS:    ML_BSSN::DPDstandardNthgt2323_group
+  READS:    ML_BSSN::DPDstandardNthgt232_group
+  READS:    ML_BSSN::DPDstandardNthgt2333_group
+  READS:    ML_BSSN::DPDstandardNthgt233_group
+  READS:    ML_BSSN::DPDstandardNthgt3311_group
+  READS:    ML_BSSN::DPDstandardNthgt3312_group
+  READS:    ML_BSSN::DPDstandardNthgt3313_group
+  READS:    ML_BSSN::DPDstandardNthgt331_group
+  READS:    ML_BSSN::DPDstandardNthgt3322_group
+  READS:    ML_BSSN::DPDstandardNthgt3323_group
+  READS:    ML_BSSN::DPDstandardNthgt332_group
+  READS:    ML_BSSN::DPDstandardNthgt3333_group
+  READS:    ML_BSSN::DPDstandardNthgt333_group
+  READS:    ML_BSSN::DPDstandardNthphi11_group
+  READS:    ML_BSSN::DPDstandardNthphi12_group
+  READS:    ML_BSSN::DPDstandardNthphi13_group
+  READS:    ML_BSSN::DPDstandardNthphi1_group
+  READS:    ML_BSSN::DPDstandardNthphi22_group
+  READS:    ML_BSSN::DPDstandardNthphi23_group
+  READS:    ML_BSSN::DPDstandardNthphi2_group
+  READS:    ML_BSSN::DPDstandardNthphi33_group
+  READS:    ML_BSSN::DPDstandardNthphi3_group
+  READS:    ML_BSSN::DPDstandardNthtrK1_group
+  READS:    ML_BSSN::DPDstandardNthtrK2_group
+  READS:    ML_BSSN::DPDstandardNthtrK3_group
+  READS:    ML_BSSN::DPDstandardNthXt11_group
+  READS:    ML_BSSN::DPDstandardNthXt12_group
+  READS:    ML_BSSN::DPDstandardNthXt13_group
+  READS:    ML_BSSN::DPDstandardNthXt21_group
+  READS:    ML_BSSN::DPDstandardNthXt22_group
+  READS:    ML_BSSN::DPDstandardNthXt23_group
+  READS:    ML_BSSN::DPDstandardNthXt31_group
+  READS:    ML_BSSN::DPDstandardNthXt32_group
+  READS:    ML_BSSN::DPDstandardNthXt33_group
+  READS:    ML_BSSN::ML_curv
+  READS:    ML_BSSN::ML_dtlapse
+  READS:    ML_BSSN::ML_dtshift
+  READS:    ML_BSSN::ML_Gamma
+  READS:    ML_BSSN::ML_lapse
+  READS:    ML_BSSN::ML_log_confac
+  READS:    ML_BSSN::ML_metric
+  READS:    ML_BSSN::ML_shift
+  READS:    ML_BSSN::ML_trace_curv
+  WRITES:   ML_BSSN::ML_dtlapserhs
+  WRITES:   ML_BSSN::ML_dtshiftrhs
+  WRITES:   ML_BSSN::ML_Gammarhs
+  WRITES:   ML_BSSN::ML_lapserhs
+  WRITES:   ML_BSSN::ML_log_confacrhs
+  WRITES:   ML_BSSN::ML_metricrhs
+  WRITES:   ML_BSSN::ML_shiftrhs
+  WRITES:   ML_BSSN::ML_trace_curvrhs
+} "ML_BSSN_RHS1"
+
+schedule ML_BSSN_RHS2 IN ML_BSSN_evolCalcGroup IF Accelerator::host_process
+{
+  LANG: C
+  READS:    ML_BSSN::DPDstandardNthalpha11_group
+  READS:    ML_BSSN::DPDstandardNthalpha12_group
+  READS:    ML_BSSN::DPDstandardNthalpha13_group
+  READS:    ML_BSSN::DPDstandardNthalpha1_group
+  READS:    ML_BSSN::DPDstandardNthalpha22_group
+  READS:    ML_BSSN::DPDstandardNthalpha23_group
+  READS:    ML_BSSN::DPDstandardNthalpha2_group
+  READS:    ML_BSSN::DPDstandardNthalpha33_group
+  READS:    ML_BSSN::DPDstandardNthalpha3_group
+  READS:    ML_BSSN::DPDstandardNthbeta111_group
+  READS:    ML_BSSN::DPDstandardNthbeta112_group
+  READS:    ML_BSSN::DPDstandardNthbeta113_group
+  READS:    ML_BSSN::DPDstandardNthbeta11_group
+  READS:    ML_BSSN::DPDstandardNthbeta122_group
+  READS:    ML_BSSN::DPDstandardNthbeta123_group
+  READS:    ML_BSSN::DPDstandardNthbeta12_group
+  READS:    ML_BSSN::DPDstandardNthbeta133_group
+  READS:    ML_BSSN::DPDstandardNthbeta13_group
+  READS:    ML_BSSN::DPDstandardNthbeta211_group
+  READS:    ML_BSSN::DPDstandardNthbeta212_group
+  READS:    ML_BSSN::DPDstandardNthbeta213_group
+  READS:    ML_BSSN::DPDstandardNthbeta21_group
+  READS:    ML_BSSN::DPDstandardNthbeta222_group
+  READS:    ML_BSSN::DPDstandardNthbeta223_group
+  READS:    ML_BSSN::DPDstandardNthbeta22_group
+  READS:    ML_BSSN::DPDstandardNthbeta233_group
+  READS:    ML_BSSN::DPDstandardNthbeta23_group
+  READS:    ML_BSSN::DPDstandardNthbeta311_group
+  READS:    ML_BSSN::DPDstandardNthbeta312_group
+  READS:    ML_BSSN::DPDstandardNthbeta313_group
+  READS:    ML_BSSN::DPDstandardNthbeta31_group
+  READS:    ML_BSSN::DPDstandardNthbeta322_group
+  READS:    ML_BSSN::DPDstandardNthbeta323_group
+  READS:    ML_BSSN::DPDstandardNthbeta32_group
+  READS:    ML_BSSN::DPDstandardNthbeta333_group
+  READS:    ML_BSSN::DPDstandardNthbeta33_group
+  READS:    ML_BSSN::DPDstandardNthgt1111_group
+  READS:    ML_BSSN::DPDstandardNthgt1112_group
+  READS:    ML_BSSN::DPDstandardNthgt1113_group
+  READS:    ML_BSSN::DPDstandardNthgt111_group
+  READS:    ML_BSSN::DPDstandardNthgt1122_group
+  READS:    ML_BSSN::DPDstandardNthgt1123_group
+  READS:    ML_BSSN::DPDstandardNthgt112_group
+  READS:    ML_BSSN::DPDstandardNthgt1133_group
+  READS:    ML_BSSN::DPDstandardNthgt113_group
+  READS:    ML_BSSN::DPDstandardNthgt1211_group
+  READS:    ML_BSSN::DPDstandardNthgt1212_group
+  READS:    ML_BSSN::DPDstandardNthgt1213_group
+  READS:    ML_BSSN::DPDstandardNthgt121_group
+  READS:    ML_BSSN::DPDstandardNthgt1222_group
+  READS:    ML_BSSN::DPDstandardNthgt1223_group
+  READS:    ML_BSSN::DPDstandardNthgt122_group
+  READS:    ML_BSSN::DPDstandardNthgt1233_group
+  READS:    ML_BSSN::DPDstandardNthgt123_group
+  READS:    ML_BSSN::DPDstandardNthgt1311_group
+  READS:    ML_BSSN::DPDstandardNthgt1312_group
+  READS:    ML_BSSN::DPDstandardNthgt1313_group
+  READS:    ML_BSSN::DPDstandardNthgt131_group
+  READS:    ML_BSSN::DPDstandardNthgt1322_group
+  READS:    ML_BSSN::DPDstandardNthgt1323_group
+  READS:    ML_BSSN::DPDstandardNthgt132_group
+  READS:    ML_BSSN::DPDstandardNthgt1333_group
+  READS:    ML_BSSN::DPDstandardNthgt133_group
+  READS:    ML_BSSN::DPDstandardNthgt2211_group
+  READS:    ML_BSSN::DPDstandardNthgt2212_group
+  READS:    ML_BSSN::DPDstandardNthgt2213_group
+  READS:    ML_BSSN::DPDstandardNthgt221_group
+  READS:    ML_BSSN::DPDstandardNthgt2222_group
+  READS:    ML_BSSN::DPDstandardNthgt2223_group
+  READS:    ML_BSSN::DPDstandardNthgt222_group
+  READS:    ML_BSSN::DPDstandardNthgt2233_group
+  READS:    ML_BSSN::DPDstandardNthgt223_group
+  READS:    ML_BSSN::DPDstandardNthgt2311_group
+  READS:    ML_BSSN::DPDstandardNthgt2312_group
+  READS:    ML_BSSN::DPDstandardNthgt2313_group
+  READS:    ML_BSSN::DPDstandardNthgt231_group
+  READS:    ML_BSSN::DPDstandardNthgt2322_group
+  READS:    ML_BSSN::DPDstandardNthgt2323_group
+  READS:    ML_BSSN::DPDstandardNthgt232_group
+  READS:    ML_BSSN::DPDstandardNthgt2333_group
+  READS:    ML_BSSN::DPDstandardNthgt233_group
+  READS:    ML_BSSN::DPDstandardNthgt3311_group
+  READS:    ML_BSSN::DPDstandardNthgt3312_group
+  READS:    ML_BSSN::DPDstandardNthgt3313_group
+  READS:    ML_BSSN::DPDstandardNthgt331_group
+  READS:    ML_BSSN::DPDstandardNthgt3322_group
+  READS:    ML_BSSN::DPDstandardNthgt3323_group
+  READS:    ML_BSSN::DPDstandardNthgt332_group
+  READS:    ML_BSSN::DPDstandardNthgt3333_group
+  READS:    ML_BSSN::DPDstandardNthgt333_group
+  READS:    ML_BSSN::DPDstandardNthphi11_group
+  READS:    ML_BSSN::DPDstandardNthphi12_group
+  READS:    ML_BSSN::DPDstandardNthphi13_group
+  READS:    ML_BSSN::DPDstandardNthphi1_group
+  READS:    ML_BSSN::DPDstandardNthphi22_group
+  READS:    ML_BSSN::DPDstandardNthphi23_group
+  READS:    ML_BSSN::DPDstandardNthphi2_group
+  READS:    ML_BSSN::DPDstandardNthphi33_group
+  READS:    ML_BSSN::DPDstandardNthphi3_group
+  READS:    ML_BSSN::DPDstandardNthtrK1_group
+  READS:    ML_BSSN::DPDstandardNthtrK2_group
+  READS:    ML_BSSN::DPDstandardNthtrK3_group
+  READS:    ML_BSSN::DPDstandardNthXt11_group
+  READS:    ML_BSSN::DPDstandardNthXt12_group
+  READS:    ML_BSSN::DPDstandardNthXt13_group
+  READS:    ML_BSSN::DPDstandardNthXt21_group
+  READS:    ML_BSSN::DPDstandardNthXt22_group
+  READS:    ML_BSSN::DPDstandardNthXt23_group
+  READS:    ML_BSSN::DPDstandardNthXt31_group
+  READS:    ML_BSSN::DPDstandardNthXt32_group
+  READS:    ML_BSSN::DPDstandardNthXt33_group
+  READS:    ML_BSSN::ML_curv
+  READS:    ML_BSSN::ML_lapse
+  READS:    ML_BSSN::ML_log_confac
+  READS:    ML_BSSN::ML_metric
+  READS:    ML_BSSN::ML_shift
+  READS:    ML_BSSN::ML_trace_curv
+  WRITES:   ML_BSSN::ML_curvrhs
+} "ML_BSSN_RHS2"
+
+schedule CAKERNEL_Launch_ML_BSSN_Advect_trKrhs IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2) IF Accelerator::device_process
 {
   LANG: C
   TAGS: Device=1
@@ -1456,7 +2032,7 @@ schedule CAKERNEL_Launch_ML_BSSN_Advect_trKrhs IN ML_BSSN_evolCalcGroup AFTER (M
   WRITES:   ML_BSSN::ML_trace_curvrhs
 } "ML_BSSN_Advect_trKrhs"
 
-schedule CAKERNEL_Launch_ML_BSSN_Advect_phirhs IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2)
+schedule CAKERNEL_Launch_ML_BSSN_Advect_phirhs IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2) IF Accelerator::device_process
 {
   LANG: C
   TAGS: Device=1
@@ -1466,7 +2042,7 @@ schedule CAKERNEL_Launch_ML_BSSN_Advect_phirhs IN ML_BSSN_evolCalcGroup AFTER (M
   WRITES:   ML_BSSN::ML_log_confacrhs
 } "ML_BSSN_Advect_phirhs"
 
-schedule CAKERNEL_Launch_ML_BSSN_Advect_gt11rhs IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2)
+schedule CAKERNEL_Launch_ML_BSSN_Advect_gt11rhs IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2) IF Accelerator::device_process
 {
   LANG: C
   TAGS: Device=1
@@ -1476,7 +2052,7 @@ schedule CAKERNEL_Launch_ML_BSSN_Advect_gt11rhs IN ML_BSSN_evolCalcGroup AFTER (
   WRITES:   ML_BSSN::ML_metricrhs
 } "ML_BSSN_Advect_gt11rhs"
 
-schedule CAKERNEL_Launch_ML_BSSN_Advect_gt12rhs IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2)
+schedule CAKERNEL_Launch_ML_BSSN_Advect_gt12rhs IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2) IF Accelerator::device_process
 {
   LANG: C
   TAGS: Device=1
@@ -1486,7 +2062,7 @@ schedule CAKERNEL_Launch_ML_BSSN_Advect_gt12rhs IN ML_BSSN_evolCalcGroup AFTER (
   WRITES:   ML_BSSN::ML_metricrhs
 } "ML_BSSN_Advect_gt12rhs"
 
-schedule CAKERNEL_Launch_ML_BSSN_Advect_gt13rhs IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2)
+schedule CAKERNEL_Launch_ML_BSSN_Advect_gt13rhs IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2) IF Accelerator::device_process
 {
   LANG: C
   TAGS: Device=1
@@ -1496,7 +2072,7 @@ schedule CAKERNEL_Launch_ML_BSSN_Advect_gt13rhs IN ML_BSSN_evolCalcGroup AFTER (
   WRITES:   ML_BSSN::ML_metricrhs
 } "ML_BSSN_Advect_gt13rhs"
 
-schedule CAKERNEL_Launch_ML_BSSN_Advect_gt22rhs IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2)
+schedule CAKERNEL_Launch_ML_BSSN_Advect_gt22rhs IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2) IF Accelerator::device_process
 {
   LANG: C
   TAGS: Device=1
@@ -1506,7 +2082,7 @@ schedule CAKERNEL_Launch_ML_BSSN_Advect_gt22rhs IN ML_BSSN_evolCalcGroup AFTER (
   WRITES:   ML_BSSN::ML_metricrhs
 } "ML_BSSN_Advect_gt22rhs"
 
-schedule CAKERNEL_Launch_ML_BSSN_Advect_gt23rhs IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2)
+schedule CAKERNEL_Launch_ML_BSSN_Advect_gt23rhs IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2) IF Accelerator::device_process
 {
   LANG: C
   TAGS: Device=1
@@ -1516,7 +2092,7 @@ schedule CAKERNEL_Launch_ML_BSSN_Advect_gt23rhs IN ML_BSSN_evolCalcGroup AFTER (
   WRITES:   ML_BSSN::ML_metricrhs
 } "ML_BSSN_Advect_gt23rhs"
 
-schedule CAKERNEL_Launch_ML_BSSN_Advect_gt33rhs IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2)
+schedule CAKERNEL_Launch_ML_BSSN_Advect_gt33rhs IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2) IF Accelerator::device_process
 {
   LANG: C
   TAGS: Device=1
@@ -1526,7 +2102,7 @@ schedule CAKERNEL_Launch_ML_BSSN_Advect_gt33rhs IN ML_BSSN_evolCalcGroup AFTER (
   WRITES:   ML_BSSN::ML_metricrhs
 } "ML_BSSN_Advect_gt33rhs"
 
-schedule CAKERNEL_Launch_ML_BSSN_Advect_Xt1rhs IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2)
+schedule CAKERNEL_Launch_ML_BSSN_Advect_Xt1rhs IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2) IF Accelerator::device_process
 {
   LANG: C
   TAGS: Device=1
@@ -1536,7 +2112,7 @@ schedule CAKERNEL_Launch_ML_BSSN_Advect_Xt1rhs IN ML_BSSN_evolCalcGroup AFTER (M
   WRITES:   ML_BSSN::ML_Gammarhs
 } "ML_BSSN_Advect_Xt1rhs"
 
-schedule CAKERNEL_Launch_ML_BSSN_Advect_Xt2rhs IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2)
+schedule CAKERNEL_Launch_ML_BSSN_Advect_Xt2rhs IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2) IF Accelerator::device_process
 {
   LANG: C
   TAGS: Device=1
@@ -1546,7 +2122,7 @@ schedule CAKERNEL_Launch_ML_BSSN_Advect_Xt2rhs IN ML_BSSN_evolCalcGroup AFTER (M
   WRITES:   ML_BSSN::ML_Gammarhs
 } "ML_BSSN_Advect_Xt2rhs"
 
-schedule CAKERNEL_Launch_ML_BSSN_Advect_Xt3rhs IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2)
+schedule CAKERNEL_Launch_ML_BSSN_Advect_Xt3rhs IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2) IF Accelerator::device_process
 {
   LANG: C
   TAGS: Device=1
@@ -1556,7 +2132,7 @@ schedule CAKERNEL_Launch_ML_BSSN_Advect_Xt3rhs IN ML_BSSN_evolCalcGroup AFTER (M
   WRITES:   ML_BSSN::ML_Gammarhs
 } "ML_BSSN_Advect_Xt3rhs"
 
-schedule CAKERNEL_Launch_ML_BSSN_Advect_alpharhs IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2)
+schedule CAKERNEL_Launch_ML_BSSN_Advect_alpharhs IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2) IF Accelerator::device_process
 {
   LANG: C
   TAGS: Device=1
@@ -1566,7 +2142,7 @@ schedule CAKERNEL_Launch_ML_BSSN_Advect_alpharhs IN ML_BSSN_evolCalcGroup AFTER 
   WRITES:   ML_BSSN::ML_lapserhs
 } "ML_BSSN_Advect_alpharhs"
 
-schedule CAKERNEL_Launch_ML_BSSN_Advect_Arhs IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2)
+schedule CAKERNEL_Launch_ML_BSSN_Advect_Arhs IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2) IF Accelerator::device_process
 {
   LANG: C
   TAGS: Device=1
@@ -1577,7 +2153,7 @@ schedule CAKERNEL_Launch_ML_BSSN_Advect_Arhs IN ML_BSSN_evolCalcGroup AFTER (ML_
   WRITES:   ML_BSSN::ML_dtlapserhs
 } "ML_BSSN_Advect_Arhs"
 
-schedule CAKERNEL_Launch_ML_BSSN_Advect_beta1rhs IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2)
+schedule CAKERNEL_Launch_ML_BSSN_Advect_beta1rhs IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2) IF Accelerator::device_process
 {
   LANG: C
   TAGS: Device=1
@@ -1586,7 +2162,7 @@ schedule CAKERNEL_Launch_ML_BSSN_Advect_beta1rhs IN ML_BSSN_evolCalcGroup AFTER 
   WRITES:   ML_BSSN::ML_shiftrhs
 } "ML_BSSN_Advect_beta1rhs"
 
-schedule CAKERNEL_Launch_ML_BSSN_Advect_beta2rhs IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2)
+schedule CAKERNEL_Launch_ML_BSSN_Advect_beta2rhs IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2) IF Accelerator::device_process
 {
   LANG: C
   TAGS: Device=1
@@ -1595,7 +2171,7 @@ schedule CAKERNEL_Launch_ML_BSSN_Advect_beta2rhs IN ML_BSSN_evolCalcGroup AFTER 
   WRITES:   ML_BSSN::ML_shiftrhs
 } "ML_BSSN_Advect_beta2rhs"
 
-schedule CAKERNEL_Launch_ML_BSSN_Advect_beta3rhs IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2)
+schedule CAKERNEL_Launch_ML_BSSN_Advect_beta3rhs IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2) IF Accelerator::device_process
 {
   LANG: C
   TAGS: Device=1
@@ -1604,7 +2180,7 @@ schedule CAKERNEL_Launch_ML_BSSN_Advect_beta3rhs IN ML_BSSN_evolCalcGroup AFTER 
   WRITES:   ML_BSSN::ML_shiftrhs
 } "ML_BSSN_Advect_beta3rhs"
 
-schedule CAKERNEL_Launch_ML_BSSN_Advect_B1rhs IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2)
+schedule CAKERNEL_Launch_ML_BSSN_Advect_B1rhs IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2) IF Accelerator::device_process
 {
   LANG: C
   TAGS: Device=1
@@ -1615,7 +2191,7 @@ schedule CAKERNEL_Launch_ML_BSSN_Advect_B1rhs IN ML_BSSN_evolCalcGroup AFTER (ML
   WRITES:   ML_BSSN::ML_dtshiftrhs
 } "ML_BSSN_Advect_B1rhs"
 
-schedule CAKERNEL_Launch_ML_BSSN_Advect_B2rhs IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2)
+schedule CAKERNEL_Launch_ML_BSSN_Advect_B2rhs IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2) IF Accelerator::device_process
 {
   LANG: C
   TAGS: Device=1
@@ -1626,7 +2202,7 @@ schedule CAKERNEL_Launch_ML_BSSN_Advect_B2rhs IN ML_BSSN_evolCalcGroup AFTER (ML
   WRITES:   ML_BSSN::ML_dtshiftrhs
 } "ML_BSSN_Advect_B2rhs"
 
-schedule CAKERNEL_Launch_ML_BSSN_Advect_B3rhs IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2)
+schedule CAKERNEL_Launch_ML_BSSN_Advect_B3rhs IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2) IF Accelerator::device_process
 {
   LANG: C
   TAGS: Device=1
@@ -1637,7 +2213,7 @@ schedule CAKERNEL_Launch_ML_BSSN_Advect_B3rhs IN ML_BSSN_evolCalcGroup AFTER (ML
   WRITES:   ML_BSSN::ML_dtshiftrhs
 } "ML_BSSN_Advect_B3rhs"
 
-schedule CAKERNEL_Launch_ML_BSSN_Advect_At11rhs IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2)
+schedule CAKERNEL_Launch_ML_BSSN_Advect_At11rhs IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2) IF Accelerator::device_process
 {
   LANG: C
   TAGS: Device=1
@@ -1647,7 +2223,7 @@ schedule CAKERNEL_Launch_ML_BSSN_Advect_At11rhs IN ML_BSSN_evolCalcGroup AFTER (
   WRITES:   ML_BSSN::ML_curvrhs
 } "ML_BSSN_Advect_At11rhs"
 
-schedule CAKERNEL_Launch_ML_BSSN_Advect_At12rhs IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2)
+schedule CAKERNEL_Launch_ML_BSSN_Advect_At12rhs IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2) IF Accelerator::device_process
 {
   LANG: C
   TAGS: Device=1
@@ -1657,7 +2233,7 @@ schedule CAKERNEL_Launch_ML_BSSN_Advect_At12rhs IN ML_BSSN_evolCalcGroup AFTER (
   WRITES:   ML_BSSN::ML_curvrhs
 } "ML_BSSN_Advect_At12rhs"
 
-schedule CAKERNEL_Launch_ML_BSSN_Advect_At13rhs IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2)
+schedule CAKERNEL_Launch_ML_BSSN_Advect_At13rhs IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2) IF Accelerator::device_process
 {
   LANG: C
   TAGS: Device=1
@@ -1667,7 +2243,7 @@ schedule CAKERNEL_Launch_ML_BSSN_Advect_At13rhs IN ML_BSSN_evolCalcGroup AFTER (
   WRITES:   ML_BSSN::ML_curvrhs
 } "ML_BSSN_Advect_At13rhs"
 
-schedule CAKERNEL_Launch_ML_BSSN_Advect_At22rhs IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2)
+schedule CAKERNEL_Launch_ML_BSSN_Advect_At22rhs IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2) IF Accelerator::device_process
 {
   LANG: C
   TAGS: Device=1
@@ -1677,7 +2253,7 @@ schedule CAKERNEL_Launch_ML_BSSN_Advect_At22rhs IN ML_BSSN_evolCalcGroup AFTER (
   WRITES:   ML_BSSN::ML_curvrhs
 } "ML_BSSN_Advect_At22rhs"
 
-schedule CAKERNEL_Launch_ML_BSSN_Advect_At23rhs IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2)
+schedule CAKERNEL_Launch_ML_BSSN_Advect_At23rhs IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2) IF Accelerator::device_process
 {
   LANG: C
   TAGS: Device=1
@@ -1687,7 +2263,7 @@ schedule CAKERNEL_Launch_ML_BSSN_Advect_At23rhs IN ML_BSSN_evolCalcGroup AFTER (
   WRITES:   ML_BSSN::ML_curvrhs
 } "ML_BSSN_Advect_At23rhs"
 
-schedule CAKERNEL_Launch_ML_BSSN_Advect_At33rhs IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2)
+schedule CAKERNEL_Launch_ML_BSSN_Advect_At33rhs IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2) IF Accelerator::device_process
 {
   LANG: C
   TAGS: Device=1
@@ -1697,7 +2273,233 @@ schedule CAKERNEL_Launch_ML_BSSN_Advect_At33rhs IN ML_BSSN_evolCalcGroup AFTER (
   WRITES:   ML_BSSN::ML_curvrhs
 } "ML_BSSN_Advect_At33rhs"
 
-schedule CAKERNEL_Launch_ML_BSSN_InitRHS AT analysis BEFORE ML_BSSN_evolCalcGroup
+schedule ML_BSSN_Advect_trKrhs IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2) IF Accelerator::host_process
+{
+  LANG: C
+  READS:    ML_BSSN::ML_shift
+  READS:    ML_BSSN::ML_trace_curv
+  READS:    ML_BSSN::ML_trace_curvrhs
+  WRITES:   ML_BSSN::ML_trace_curvrhs
+} "ML_BSSN_Advect_trKrhs"
+
+schedule ML_BSSN_Advect_phirhs IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2) IF Accelerator::host_process
+{
+  LANG: C
+  READS:    ML_BSSN::ML_log_confac
+  READS:    ML_BSSN::ML_log_confacrhs
+  READS:    ML_BSSN::ML_shift
+  WRITES:   ML_BSSN::ML_log_confacrhs
+} "ML_BSSN_Advect_phirhs"
+
+schedule ML_BSSN_Advect_gt11rhs IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2) IF Accelerator::host_process
+{
+  LANG: C
+  READS:    ML_BSSN::ML_metric
+  READS:    ML_BSSN::ML_metricrhs
+  READS:    ML_BSSN::ML_shift
+  WRITES:   ML_BSSN::ML_metricrhs
+} "ML_BSSN_Advect_gt11rhs"
+
+schedule ML_BSSN_Advect_gt12rhs IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2) IF Accelerator::host_process
+{
+  LANG: C
+  READS:    ML_BSSN::ML_metric
+  READS:    ML_BSSN::ML_metricrhs
+  READS:    ML_BSSN::ML_shift
+  WRITES:   ML_BSSN::ML_metricrhs
+} "ML_BSSN_Advect_gt12rhs"
+
+schedule ML_BSSN_Advect_gt13rhs IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2) IF Accelerator::host_process
+{
+  LANG: C
+  READS:    ML_BSSN::ML_metric
+  READS:    ML_BSSN::ML_metricrhs
+  READS:    ML_BSSN::ML_shift
+  WRITES:   ML_BSSN::ML_metricrhs
+} "ML_BSSN_Advect_gt13rhs"
+
+schedule ML_BSSN_Advect_gt22rhs IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2) IF Accelerator::host_process
+{
+  LANG: C
+  READS:    ML_BSSN::ML_metric
+  READS:    ML_BSSN::ML_metricrhs
+  READS:    ML_BSSN::ML_shift
+  WRITES:   ML_BSSN::ML_metricrhs
+} "ML_BSSN_Advect_gt22rhs"
+
+schedule ML_BSSN_Advect_gt23rhs IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2) IF Accelerator::host_process
+{
+  LANG: C
+  READS:    ML_BSSN::ML_metric
+  READS:    ML_BSSN::ML_metricrhs
+  READS:    ML_BSSN::ML_shift
+  WRITES:   ML_BSSN::ML_metricrhs
+} "ML_BSSN_Advect_gt23rhs"
+
+schedule ML_BSSN_Advect_gt33rhs IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2) IF Accelerator::host_process
+{
+  LANG: C
+  READS:    ML_BSSN::ML_metric
+  READS:    ML_BSSN::ML_metricrhs
+  READS:    ML_BSSN::ML_shift
+  WRITES:   ML_BSSN::ML_metricrhs
+} "ML_BSSN_Advect_gt33rhs"
+
+schedule ML_BSSN_Advect_Xt1rhs IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2) IF Accelerator::host_process
+{
+  LANG: C
+  READS:    ML_BSSN::ML_Gamma
+  READS:    ML_BSSN::ML_Gammarhs
+  READS:    ML_BSSN::ML_shift
+  WRITES:   ML_BSSN::ML_Gammarhs
+} "ML_BSSN_Advect_Xt1rhs"
+
+schedule ML_BSSN_Advect_Xt2rhs IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2) IF Accelerator::host_process
+{
+  LANG: C
+  READS:    ML_BSSN::ML_Gamma
+  READS:    ML_BSSN::ML_Gammarhs
+  READS:    ML_BSSN::ML_shift
+  WRITES:   ML_BSSN::ML_Gammarhs
+} "ML_BSSN_Advect_Xt2rhs"
+
+schedule ML_BSSN_Advect_Xt3rhs IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2) IF Accelerator::host_process
+{
+  LANG: C
+  READS:    ML_BSSN::ML_Gamma
+  READS:    ML_BSSN::ML_Gammarhs
+  READS:    ML_BSSN::ML_shift
+  WRITES:   ML_BSSN::ML_Gammarhs
+} "ML_BSSN_Advect_Xt3rhs"
+
+schedule ML_BSSN_Advect_alpharhs IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2) IF Accelerator::host_process
+{
+  LANG: C
+  READS:    ML_BSSN::ML_lapse
+  READS:    ML_BSSN::ML_lapserhs
+  READS:    ML_BSSN::ML_shift
+  WRITES:   ML_BSSN::ML_lapserhs
+} "ML_BSSN_Advect_alpharhs"
+
+schedule ML_BSSN_Advect_Arhs IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2) IF Accelerator::host_process
+{
+  LANG: C
+  READS:    ML_BSSN::ML_dtlapse
+  READS:    ML_BSSN::ML_dtlapserhs
+  READS:    ML_BSSN::ML_shift
+  READS:    ML_BSSN::ML_trace_curv
+  WRITES:   ML_BSSN::ML_dtlapserhs
+} "ML_BSSN_Advect_Arhs"
+
+schedule ML_BSSN_Advect_beta1rhs IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2) IF Accelerator::host_process
+{
+  LANG: C
+  READS:    ML_BSSN::ML_shift
+  READS:    ML_BSSN::ML_shiftrhs
+  WRITES:   ML_BSSN::ML_shiftrhs
+} "ML_BSSN_Advect_beta1rhs"
+
+schedule ML_BSSN_Advect_beta2rhs IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2) IF Accelerator::host_process
+{
+  LANG: C
+  READS:    ML_BSSN::ML_shift
+  READS:    ML_BSSN::ML_shiftrhs
+  WRITES:   ML_BSSN::ML_shiftrhs
+} "ML_BSSN_Advect_beta2rhs"
+
+schedule ML_BSSN_Advect_beta3rhs IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2) IF Accelerator::host_process
+{
+  LANG: C
+  READS:    ML_BSSN::ML_shift
+  READS:    ML_BSSN::ML_shiftrhs
+  WRITES:   ML_BSSN::ML_shiftrhs
+} "ML_BSSN_Advect_beta3rhs"
+
+schedule ML_BSSN_Advect_B1rhs IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2) IF Accelerator::host_process
+{
+  LANG: C
+  READS:    ML_BSSN::ML_dtshift
+  READS:    ML_BSSN::ML_dtshiftrhs
+  READS:    ML_BSSN::ML_Gamma
+  READS:    ML_BSSN::ML_shift
+  WRITES:   ML_BSSN::ML_dtshiftrhs
+} "ML_BSSN_Advect_B1rhs"
+
+schedule ML_BSSN_Advect_B2rhs IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2) IF Accelerator::host_process
+{
+  LANG: C
+  READS:    ML_BSSN::ML_dtshift
+  READS:    ML_BSSN::ML_dtshiftrhs
+  READS:    ML_BSSN::ML_Gamma
+  READS:    ML_BSSN::ML_shift
+  WRITES:   ML_BSSN::ML_dtshiftrhs
+} "ML_BSSN_Advect_B2rhs"
+
+schedule ML_BSSN_Advect_B3rhs IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2) IF Accelerator::host_process
+{
+  LANG: C
+  READS:    ML_BSSN::ML_dtshift
+  READS:    ML_BSSN::ML_dtshiftrhs
+  READS:    ML_BSSN::ML_Gamma
+  READS:    ML_BSSN::ML_shift
+  WRITES:   ML_BSSN::ML_dtshiftrhs
+} "ML_BSSN_Advect_B3rhs"
+
+schedule ML_BSSN_Advect_At11rhs IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2) IF Accelerator::host_process
+{
+  LANG: C
+  READS:    ML_BSSN::ML_curv
+  READS:    ML_BSSN::ML_curvrhs
+  READS:    ML_BSSN::ML_shift
+  WRITES:   ML_BSSN::ML_curvrhs
+} "ML_BSSN_Advect_At11rhs"
+
+schedule ML_BSSN_Advect_At12rhs IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2) IF Accelerator::host_process
+{
+  LANG: C
+  READS:    ML_BSSN::ML_curv
+  READS:    ML_BSSN::ML_curvrhs
+  READS:    ML_BSSN::ML_shift
+  WRITES:   ML_BSSN::ML_curvrhs
+} "ML_BSSN_Advect_At12rhs"
+
+schedule ML_BSSN_Advect_At13rhs IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2) IF Accelerator::host_process
+{
+  LANG: C
+  READS:    ML_BSSN::ML_curv
+  READS:    ML_BSSN::ML_curvrhs
+  READS:    ML_BSSN::ML_shift
+  WRITES:   ML_BSSN::ML_curvrhs
+} "ML_BSSN_Advect_At13rhs"
+
+schedule ML_BSSN_Advect_At22rhs IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2) IF Accelerator::host_process
+{
+  LANG: C
+  READS:    ML_BSSN::ML_curv
+  READS:    ML_BSSN::ML_curvrhs
+  READS:    ML_BSSN::ML_shift
+  WRITES:   ML_BSSN::ML_curvrhs
+} "ML_BSSN_Advect_At22rhs"
+
+schedule ML_BSSN_Advect_At23rhs IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2) IF Accelerator::host_process
+{
+  LANG: C
+  READS:    ML_BSSN::ML_curv
+  READS:    ML_BSSN::ML_curvrhs
+  READS:    ML_BSSN::ML_shift
+  WRITES:   ML_BSSN::ML_curvrhs
+} "ML_BSSN_Advect_At23rhs"
+
+schedule ML_BSSN_Advect_At33rhs IN ML_BSSN_evolCalcGroup AFTER (ML_BSSN_RHS1 ML_BSSN_RHS2) IF Accelerator::host_process
+{
+  LANG: C
+  READS:    ML_BSSN::ML_curv
+  READS:    ML_BSSN::ML_curvrhs
+  READS:    ML_BSSN::ML_shift
+  WRITES:   ML_BSSN::ML_curvrhs
+} "ML_BSSN_Advect_At33rhs"
+
+schedule CAKERNEL_Launch_ML_BSSN_InitRHS AT analysis BEFORE ML_BSSN_evolCalcGroup IF Accelerator::device_process
 {
   LANG: C
   TAGS: Device=1
@@ -1712,10 +2514,24 @@ schedule CAKERNEL_Launch_ML_BSSN_InitRHS AT analysis BEFORE ML_BSSN_evolCalcGrou
   WRITES:   ML_BSSN::ML_trace_curvrhs
 } "ML_BSSN_InitRHS"
 
+schedule ML_BSSN_InitRHS AT analysis BEFORE ML_BSSN_evolCalcGroup IF Accelerator::host_process
+{
+  LANG: C
+  WRITES:   ML_BSSN::ML_curvrhs
+  WRITES:   ML_BSSN::ML_dtlapserhs
+  WRITES:   ML_BSSN::ML_dtshiftrhs
+  WRITES:   ML_BSSN::ML_Gammarhs
+  WRITES:   ML_BSSN::ML_lapserhs
+  WRITES:   ML_BSSN::ML_log_confacrhs
+  WRITES:   ML_BSSN::ML_metricrhs
+  WRITES:   ML_BSSN::ML_shiftrhs
+  WRITES:   ML_BSSN::ML_trace_curvrhs
+} "ML_BSSN_InitRHS"
+
 
 if (CCTK_EQUALS(my_rhs_boundary_condition, "static"))
 {
-  schedule CAKERNEL_Launch_ML_BSSN_RHSStaticBoundary IN ML_BSSN_evolCalcGroup
+  schedule CAKERNEL_Launch_ML_BSSN_RHSStaticBoundary IN ML_BSSN_evolCalcGroup IF Accelerator::device_process
   {
     LANG: C
     SYNC: ML_curvrhs
@@ -1740,7 +2556,34 @@ if (CCTK_EQUALS(my_rhs_boundary_condition, "static"))
   } "ML_BSSN_RHSStaticBoundary"
 }
 
-schedule CAKERNEL_Launch_ML_BSSN_enforce IN MoL_PostStepModify
+
+if (CCTK_EQUALS(my_rhs_boundary_condition, "static"))
+{
+  schedule ML_BSSN_RHSStaticBoundary IN ML_BSSN_evolCalcGroup IF Accelerator::host_process
+  {
+    LANG: C
+    SYNC: ML_curvrhs
+    SYNC: ML_dtlapserhs
+    SYNC: ML_dtshiftrhs
+    SYNC: ML_Gammarhs
+    SYNC: ML_lapserhs
+    SYNC: ML_log_confacrhs
+    SYNC: ML_metricrhs
+    SYNC: ML_shiftrhs
+    SYNC: ML_trace_curvrhs
+    WRITES:   ML_BSSN::ML_curvrhs
+    WRITES:   ML_BSSN::ML_dtlapserhs
+    WRITES:   ML_BSSN::ML_dtshiftrhs
+    WRITES:   ML_BSSN::ML_Gammarhs
+    WRITES:   ML_BSSN::ML_lapserhs
+    WRITES:   ML_BSSN::ML_log_confacrhs
+    WRITES:   ML_BSSN::ML_metricrhs
+    WRITES:   ML_BSSN::ML_shiftrhs
+    WRITES:   ML_BSSN::ML_trace_curvrhs
+  } "ML_BSSN_RHSStaticBoundary"
+}
+
+schedule CAKERNEL_Launch_ML_BSSN_enforce IN MoL_PostStepModify IF Accelerator::device_process
 {
   LANG: C
   TAGS: Device=1
@@ -1751,10 +2594,43 @@ schedule CAKERNEL_Launch_ML_BSSN_enforce IN MoL_PostStepModify
   WRITES:   ML_BSSN::ML_lapse
 } "ML_BSSN_enforce"
 
-schedule CAKERNEL_Launch_ML_BSSN_copy_to_device at INITIAL after ML_BSSN_convertFromADMBaseGamma
+schedule ML_BSSN_enforce IN MoL_PostStepModify IF Accelerator::host_process
+{
+  LANG: C
+  READS:    ML_BSSN::ML_curv
+  READS:    ML_BSSN::ML_lapse
+  READS:    ML_BSSN::ML_metric
+  WRITES:   ML_BSSN::ML_curv
+  WRITES:   ML_BSSN::ML_lapse
+} "ML_BSSN_enforce"
+
+schedule CAKERNEL_Launch_ML_BSSN_copy_to_device at INITIAL after ML_BSSN_convertFromADMBaseGamma IF Accelerator::device_process
 {
   LANG: C
   TAGS: Device=1
+  READS:    ML_BSSN::ML_curv
+  READS:    ML_BSSN::ML_dtlapse
+  READS:    ML_BSSN::ML_dtshift
+  READS:    ML_BSSN::ML_Gamma
+  READS:    ML_BSSN::ML_lapse
+  READS:    ML_BSSN::ML_log_confac
+  READS:    ML_BSSN::ML_metric
+  READS:    ML_BSSN::ML_shift
+  READS:    ML_BSSN::ML_trace_curv
+  WRITES:   ML_BSSN::ML_curv
+  WRITES:   ML_BSSN::ML_dtlapse
+  WRITES:   ML_BSSN::ML_dtshift
+  WRITES:   ML_BSSN::ML_Gamma
+  WRITES:   ML_BSSN::ML_lapse
+  WRITES:   ML_BSSN::ML_log_confac
+  WRITES:   ML_BSSN::ML_metric
+  WRITES:   ML_BSSN::ML_shift
+  WRITES:   ML_BSSN::ML_trace_curv
+} "ML_BSSN_copy_to_device"
+
+schedule ML_BSSN_copy_to_device at INITIAL after ML_BSSN_convertFromADMBaseGamma IF Accelerator::host_process
+{
+  LANG: C
   READS:    ML_BSSN::ML_curv
   READS:    ML_BSSN::ML_dtlapse
   READS:    ML_BSSN::ML_dtshift

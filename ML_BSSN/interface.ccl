@@ -2,7 +2,7 @@
 
 implements: ML_BSSN
 
-inherits:   ADMBase Grid GenericFD Boundary
+inherits:   ADMBase Grid GenericFD Boundary Accelerator
 
 
 
