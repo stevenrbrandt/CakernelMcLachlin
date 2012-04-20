@@ -1,5 +1,5 @@
 
-ActiveThorns = "CoordBase SymBase Boundary NanChecker CartGrid3d Time MoL CarpetIOBasic CarpetIOScalar IOUtil Carpet CarpetLib CarpetReduce CarpetSlab CarpetIOASCII ADMBase StaticConformal SpaceMask Exact GenericFD CoordGauge ADMCoupling LoopControl ML_BSSN ML_BSSN_Helper GenericFD TMuNuBase SphericalSurface ADMMacros TimerReport NewRad CaKernel Accelerator"
+ActiveThorns = "CoordBase SymBase Boundary NanChecker CartGrid3d Time MoL CarpetIOBasic CarpetIOScalar IOUtil Carpet CarpetLib CarpetReduce CarpetSlab CarpetIOASCII ADMBase StaticConformal SpaceMask Exact GenericFD CoordGauge ADMCoupling LoopControl ML_BSSN ML_BSSN_Helper GenericFD TMuNuBase SphericalSurface ADMMacros TimerReport NewRad CaKernel Accelerator CaCUDALib"
 
 ADMBase::evolution_method         = "ML_BSSN"
 ADMBase::lapse_evolution_method   = "ML_BSSN"
