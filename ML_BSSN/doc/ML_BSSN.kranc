@@ -2,148 +2,272 @@
 begin thorn ML_BSSN
 
 begin calculation ML_BSSN_Minkowski
-  phi = ((conformalMethod) ? (1) : (0))
-  gt_a_b = delta_a_b
-  trK = 0
-  At_a_b = 0
-  Xt^a = 0
-  alpha = 1
-  A = 0
+  phi    = ((conformalMethod) ? (1) :
+           (0))
+  gt_ab  = deltaab
+  trK    = 0
+  At_ab  = 0
+  Xt^a   = 0
+  alpha  = 1
+  A      = 0
   beta^a = 0
-  B^a = 0
+  B^a    = 0
 end calculation
 
 begin calculation ML_BSSN_convertFromADMBase
-  g_a_b = admg_a_b
-  detg = ((-1)*((g13)**(2))*(g22))+((2)*(g12)*(g13)*(g23))+((-1)*(g11)*((g23)**(2)))+((-1)*((g12)**(2))*(g33))+((g11)*(g22)*(g33))
-  gu^a^b = ((detg)**(-1))*(((-1)*((g13)**(2))*(g22))+((2)*(g12)*(g13)*(g23))+((-1)*(g11)*((g23)**(2)))+((-1)*((g12)**(2))*(g33))+((g11)*(g22)*(g33)))*(@{MatrixInverse[Tensor[g, TensorIndex["a", "u"], TensorIndex["b", "u"]]]})
-  phi = ((conformalMethod) ? ((detg)**(-1/6)) : ((1/12)*(@{Log[detg]})))
-  em4phi = ((conformalMethod) ? ((phi)**(2)) : ((E)**((-4)*(phi))))
-  gt_a_b = (em4phi)*(g_a_b)
-  trK = (admK_a_b)*(gu^a^b)
-  At_a_b = (em4phi)*((admK_a_b)+((-1/3)*(trK)*(g_a_b)))
-  alpha = alp
+  g_ab   = admg_ab
+  detg   = ((-1) * ((g13)**(2)) * (g22)) + ((2) * (g12) * (g13) * (g23)) + ((-1)
+           * (g11) * ((g23)**(2))) + ((-1) * ((g12)**(2)) * (g33)) + ((g11) *
+           (g22) *
+           (g33))
+  gu^ab  = ((detg)**(-1)) * (((-1) * ((g13)**(2)) * (g22)) + ((2) * (g12) *
+           (g13) * (g23)) + ((-1) * (g11) * ((g23)**(2))) + ((-1) * ((g12)**(2))
+           * (g33)) + ((g11) * (g22) * (g33))) *
+           (inverse(g)ab)
+  phi    = ((conformalMethod) ? ((detg)**(-1/6)) : ((1/12) *
+           (log(detg))))
+  em4phi = ((conformalMethod) ? ((phi)**(2)) : ((E)**((-4) *
+           (phi))))
+  gt_ab  = (em4phi) *
+           (g_ab)
+  trK    = (admK_ab) *
+           (gu^ab)
+  At_ab  = (em4phi) * ((admK_ab) + ((-1/3) * (trK) *
+           (g_ab)))
+  alpha  = alp
   beta^a = admbeta^a
-  xCopy = x
-  yCopy = y
-  zCopy = z
-  rCopy = r
+  xCopy  = x
+  yCopy  = y
+  zCopy  = z
+  rCopy  = r
 end calculation
 
 begin calculation ML_BSSN_InitGamma
   Xt^a = 0
-  A = 0
-  B^a = 0
+  A    = 0
+  B^a  = 0
 end calculation
 
 begin calculation ML_BSSN_convertFromADMBaseGamma
-  dir^a = @{Sign[Tensor[beta, TensorIndex["a", "u"]]]}
-  detgt = 1
-  gtu^a^b = ((detgt)**(-1))*(((-1)*((gt13)**(2))*(gt22))+((2)*(gt12)*(gt13)*(gt23))+((-1)*(gt11)*((gt23)**(2)))+((-1)*((gt12)**(2))*(gt33))+((gt11)*(gt22)*(gt33)))*(@{MatrixInverse[Tensor[gt, TensorIndex["a", "u"], TensorIndex["b", "u"]]]})
-  Gt^a_b_c = (1/2)*(((-1)*(@{PDstandardNth[Tensor[gt, TensorIndex["b", "l"], TensorIndex["c", "l"]], TensorIndex["d", "l"]]}))+(@{PDstandardNth[Tensor[gt, TensorIndex["b", "l"], TensorIndex["d", "l"]], TensorIndex["c", "l"]]})+(@{PDstandardNth[Tensor[gt, TensorIndex["c", "l"], TensorIndex["d", "l"]], TensorIndex["b", "l"]]}))*(gtu^a^d)
-  Xt^a = (gtu^b^c)*(Gt^a_b_c)
-  A = ((@{Unequal[LapseACoeff, 0]}) ? ((-1)*((alpha)**((-1)*(harmonicN)))*((harmonicF)**(-1))*((dtalp)+((-1)*(LapseAdvectionCoeff)*(((@{Abs[Tensor[beta, TensorIndex["a", "u"]]]})*(@{PDupwindNthSymm[alpha, TensorIndex["a", "l"]]}))+((@{PDupwindNthAnti[alpha, TensorIndex["a", "l"]]})*(beta^a)))))) : (0))
-  theta = 1
-  B^a = ((@{Unequal[Times[ShiftBCoeff, ShiftGammaCoeff], 0]}) ? (((ShiftGammaCoeff)**(-1))*((theta)**(-1))*((admdtbeta^a)+((-1)*(ShiftAdvectionCoeff)*(((@{Abs[Tensor[beta, TensorIndex["b", "u"]]]})*(@{PDupwindNthSymm[Tensor[beta, TensorIndex["a", "u"]], TensorIndex["b", "l"]]}))+((@{PDupwindNthAnti[Tensor[beta, TensorIndex["a", "u"]], TensorIndex["b", "l"]]})*(beta^b)))))) : (0))
+  dir^a   = sign(beta^a)
+  detgt   = 1
+  gtu^ab  = ((detgt)**(-1)) * (((-1) * ((gt13)**(2)) * (gt22)) + ((2) * (gt12) *
+            (gt13) * (gt23)) + ((-1) * (gt11) * ((gt23)**(2))) + ((-1) *
+            ((gt12)**(2)) * (gt33)) + ((gt11) * (gt22) * (gt33))) *
+            (inverse(gt)ab)
+  Gt^a_bc = (1/2) * (((-1) * (PDstandardNth_d (gt_bc))) + (PDstandardNth_c
+            (gt_bd)) + (PDstandardNth_b (gt_cd))) *
+            (gtu^ad)
+  Xt^a    = (gtu^bc) *
+            (Gt^a_bc)
+  A       = (((LapseACoeff)!=(0)) ? ((-1) * ((alpha)**((-1) * (harmonicN))) *
+            ((harmonicF)**(-1)) * ((dtalp) + ((-1) * (LapseAdvectionCoeff) *
+            (((abs(beta^a)) * (PDupwindNthSymm_a (alpha))) + ((PDupwindNthAnti_a
+            (alpha)) * (beta^a)))))) :
+            (0))
+  theta   = 1
+  B^a     = ((((ShiftBCoeff) * (ShiftGammaCoeff))!=(0)) ?
+            (((ShiftGammaCoeff)**(-1)) * ((theta)**(-1)) * ((admdtbeta^a) +
+            ((-1) * (ShiftAdvectionCoeff) * (((abs(beta^b)) * (PDupwindNthSymm_b
+            (beta^a))) + ((PDupwindNthAnti_b (beta^a)) * (beta^b)))))) :
+            (0))
 end calculation
 
 begin calculation ML_BSSN_RHS
-  dir^a = @{Sign[Tensor[beta, TensorIndex["a", "u"]]]}
-  detgt = 1
-  gtu^a^b = ((detgt)**(-1))*(((-1)*((gt13)**(2))*(gt22))+((2)*(gt12)*(gt13)*(gt23))+((-1)*(gt11)*((gt23)**(2)))+((-1)*((gt12)**(2))*(gt33))+((gt11)*(gt22)*(gt33)))*(@{MatrixInverse[Tensor[gt, TensorIndex["a", "u"], TensorIndex["b", "u"]]]})
-  Gtl_a_b_c = (1/2)*((@{PDstandardNth[Tensor[gt, TensorIndex["b", "l"], TensorIndex["a", "l"]], TensorIndex["c", "l"]]})+((-1)*(@{PDstandardNth[Tensor[gt, TensorIndex["b", "l"], TensorIndex["c", "l"]], TensorIndex["a", "l"]]}))+(@{PDstandardNth[Tensor[gt, TensorIndex["c", "l"], TensorIndex["a", "l"]], TensorIndex["b", "l"]]}))
-  Gtlu_a_b^c = (gtu^c^d)*(Gtl_a_b_d)
-  Gt^a_b_c = (gtu^a^d)*(Gtl_d_b_c)
-  Xtn^i = (gtu^j^k)*(Gt^i_j_k)
-  Rt_i_j = ((1/2)*(@{PDstandardNth[Tensor[Xt, TensorIndex["k", "u"]], TensorIndex["j", "l"]]})*(gt_k_i))+((1/2)*(@{PDstandardNth[Tensor[Xt, TensorIndex["k", "u"]], TensorIndex["i", "l"]]})*(gt_k_j))+((-1/2)*(@{PDstandardNth[Tensor[gt, TensorIndex["i", "l"], TensorIndex["j", "l"]], TensorIndex["l", "l"], TensorIndex["m", "l"]]})*(gtu^l^m))+((1/2)*(Xtn^k)*(Gtl_i_j_k))+((1/2)*(Xtn^k)*(Gtl_j_i_k))+((Gt^k_j_l)*(Gtlu_i_k^l))+((Gt^k_i_l)*(Gtlu_j_k^l))+((Gt^k_i_l)*(Gtlu_k_j^l))
-  fac1 = ((conformalMethod) ? ((-1/2)*((phi)**(-1))) : (1))
-  cdphi_a = (fac1)*(@{CDt[phi, TensorIndex["a", "l"]]})
-  fac2 = ((conformalMethod) ? ((1/2)*((phi)**(-2))) : (0))
-  cdphi2_a_b = ((fac2)*(@{CDt[phi, TensorIndex["a", "l"]]})*(@{CDt[phi, TensorIndex["b", "l"]]}))+((fac1)*(@{CDt[phi, TensorIndex["a", "l"], TensorIndex["b", "l"]]}))
-  Rphi_i_j = ((4)*(cdphi_i)*(cdphi_j))+((-2)*(cdphi2_j_i))+((-4)*(cdphi_l)*(cdphi_n)*(gt_i_j)*(gtu^l^n))+((-2)*(cdphi2_l_n)*(gt_i_j)*(gtu^l^n))
-  Atm^a_b = (At_c_b)*(gtu^a^c)
-  Atu^a^b = (Atm^a_c)*(gtu^b^c)
-  e4phi = ((conformalMethod) ? ((phi)**(-2)) : ((E)**((4)*(phi))))
-  em4phi = (e4phi)**(-1)
-  g_a_b = (e4phi)*(gt_a_b)
-  detg = ((-1)*((g13)**(2))*(g22))+((2)*(g12)*(g13)*(g23))+((-1)*(g11)*((g23)**(2)))+((-1)*((g12)**(2))*(g33))+((g11)*(g22)*(g33))
-  gu^a^b = (em4phi)*(gtu^a^b)
-  R_a_b = (Rphi_a_b)+(Rt_a_b)
-  rho = 0
-  S_i = 0
-  trS = 0
-  D_t phi = ((alpha)*(trK)*(((conformalMethod) ? ((1/3)*(phi)) : (-1/6))))+((((conformalMethod) ? ((-1/3)*(phi)) : (1/6)))*(@{PDstandardNth[Tensor[beta, TensorIndex["a", "u"]], TensorIndex["a", "l"]]}))
-  D_t gt_a_b = ((-2)*(alpha)*(At_a_b))+((-2/3)*(@{PDstandardNth[Tensor[beta, TensorIndex["c", "u"]], TensorIndex["c", "l"]]})*(gt_a_b))+((@{PDstandardNth[Tensor[beta, TensorIndex["c", "u"]], TensorIndex["b", "l"]]})*(gt_a_c))+((@{PDstandardNth[Tensor[beta, TensorIndex["c", "u"]], TensorIndex["a", "l"]]})*(gt_b_c))
-  dotXt^i = ((2/3)*(@{PDstandardNth[Tensor[beta, TensorIndex["j", "u"]], TensorIndex["j", "l"]]})*(Xtn^i))+((-1)*(@{PDstandardNth[Tensor[beta, TensorIndex["i", "u"]], TensorIndex["j", "l"]]})*(Xtn^j))+((-2)*(@{PDstandardNth[alpha, TensorIndex["j", "l"]]})*(Atu^i^j))+((1/3)*(@{PDstandardNth[Tensor[beta, TensorIndex["l", "u"]], TensorIndex["j", "l"], TensorIndex["l", "l"]]})*(gtu^i^j))+((@{PDstandardNth[Tensor[beta, TensorIndex["i", "u"]], TensorIndex["j", "l"], TensorIndex["l", "l"]]})*(gtu^j^l))+((2)*(alpha)*(((6)*(cdphi_j)*(Atu^i^j))+((-2/3)*(@{PDstandardNth[trK, TensorIndex["j", "l"]]})*(gtu^i^j))+((Atu^k^j)*(Gt^i_j_k))))
-  D_t Xt^i = dotXt^i
-  dottrK = ((alpha)*(((1/3)*((trK)**(2)))+((Atm^a_b)*(Atm^b_a))))+((-1)*(em4phi)*(((-1)*(@{PDstandardNth[alpha, TensorIndex["a", "l"]]})*(Xtn^a))+(((@{PDstandardNth[alpha, TensorIndex["a", "l"], TensorIndex["b", "l"]]})+((2)*(@{PDstandardNth[alpha, TensorIndex["b", "l"]]})*(cdphi_a)))*(gtu^a^b))))
-  D_t trK = dottrK
-  Ats_a_b = ((-1)*(@{CDt[alpha, TensorIndex["a", "l"], TensorIndex["b", "l"]]}))+((2)*(((@{PDstandardNth[alpha, TensorIndex["b", "l"]]})*(cdphi_a))+((@{PDstandardNth[alpha, TensorIndex["a", "l"]]})*(cdphi_b))))+((alpha)*(R_a_b))
-  trAts = (Ats_a_b)*(gu^a^b)
-  D_t At_a_b = ((-2/3)*(@{PDstandardNth[Tensor[beta, TensorIndex["c", "u"]], TensorIndex["c", "l"]]})*(At_a_b))+((@{PDstandardNth[Tensor[beta, TensorIndex["c", "u"]], TensorIndex["b", "l"]]})*(At_a_c))+((@{PDstandardNth[Tensor[beta, TensorIndex["c", "u"]], TensorIndex["a", "l"]]})*(At_b_c))+((alpha)*(((trK)*(At_a_b))+((-2)*(At_a_c)*(Atm^c_b))))+((em4phi)*((Ats_a_b)+((-1/3)*(trAts)*(g_a_b))))
-  D_t alpha = (-1)*((alpha)**(harmonicN))*(harmonicF)*(((A)*(LapseACoeff))+(((1)+((-1)*(LapseACoeff)))*((((-1)+(alpha))*(AlphaDriver))+(trK))))
-  D_t A = (((-1)*(A)*(AlphaDriver))+(dottrK))*(LapseACoeff)
-  eta = 1
-  theta = 1
-  D_t beta^a = ((harmonicShift) ? ((-1/2)*(alpha)*(phi)*(gtu^a^j)*(((2)*(phi)*(@{PDstandardNth[alpha, TensorIndex["j", "l"]]}))+((-2)*(alpha)*(@{PDstandardNth[phi, TensorIndex["j", "l"]]}))+((alpha)*(phi)*(((-2)*(@{PDstandardNth[Tensor[gt, TensorIndex["j", "l"], TensorIndex["k", "l"]], TensorIndex["l", "l"]]}))+(@{PDstandardNth[Tensor[gt, TensorIndex["k", "l"], TensorIndex["l", "l"]], TensorIndex["j", "l"]]}))*(gtu^k^l)))) : ((ShiftGammaCoeff)*(theta)*(((ShiftBCoeff)*(B^a))+(((1)+((-1)*(ShiftBCoeff)))*(((-1)*(BetaDriver)*(eta)*(beta^a))+(Xt^a))))))
-  D_t B^a = (ShiftBCoeff)*(((-1)*(BetaDriver)*(eta)*(B^a))+(dotXt^a))
+  dir^a        = sign(beta^a)
+  detgt        = 1
+  gtu^ab       = ((detgt)**(-1)) * (((-1) * ((gt13)**(2)) * (gt22)) + ((2) *
+                 (gt12) * (gt13) * (gt23)) + ((-1) * (gt11) * ((gt23)**(2))) +
+                 ((-1) * ((gt12)**(2)) * (gt33)) + ((gt11) * (gt22) * (gt33))) *
+                 (inverse(gt)ab)
+  Gtl_abc      = (1/2) * ((PDstandardNth_c (gt_ba)) + ((-1) * (PDstandardNth_a
+                 (gt_bc))) + (PDstandardNth_b
+                 (gt_ca)))
+  Gtlu_ab^c    = (gtu^cd) *
+                 (Gtl_abd)
+  Gt^a_bc      = (gtu^ad) *
+                 (Gtl_dbc)
+  Xtn^i        = (gtu^jk) *
+                 (Gt^i_jk)
+  Rt_ij        = ((1/2) * (PDstandardNth_j (Xt^k)) * (gt_ki)) + ((1/2) *
+                 (PDstandardNth_i (Xt^k)) * (gt_kj)) + ((-1/2) *
+                 (PDstandardNth_lm (gt_ij)) * (gtu^lm)) + ((1/2) * (Xtn^k) *
+                 (Gtl_ijk)) + ((1/2) * (Xtn^k) * (Gtl_jik)) + ((Gt^k_jl) *
+                 (Gtlu_ik^l)) + ((Gt^k_il) * (Gtlu_jk^l)) + ((Gt^k_il) *
+                 (Gtlu_kj^l))
+  fac1         = ((conformalMethod) ? ((-1/2) * ((phi)**(-1))) :
+                 (1))
+  cdphi_a      = (fac1) * (@{CDt[phi, TensorIndex["a",
+                 "l"]]})
+  fac2         = ((conformalMethod) ? ((1/2) * ((phi)**(-2))) :
+                 (0))
+  cdphi2_ab    = ((fac2) * (@{CDt[phi, TensorIndex["a", "l"]]}) * (@{CDt[phi,
+                 TensorIndex["b", "l"]]})) + ((fac1) * (@{CDt[phi,
+                 TensorIndex["a", "l"], TensorIndex["b",
+                 "l"]]}))
+  Rphi_ij      = ((4) * (cdphi_i) * (cdphi_j)) + ((-2) * (cdphi2_ji)) + ((-4) *
+                 (cdphi_l) * (cdphi_n) * (gt_ij) * (gtu^ln)) + ((-2) *
+                 (cdphi2_ln) * (gt_ij) *
+                 (gtu^ln))
+  Atm^a_b      = (At_cb) *
+                 (gtu^ac)
+  Atu^ab       = (Atm^a_c) *
+                 (gtu^bc)
+  e4phi        = ((conformalMethod) ? ((phi)**(-2)) : ((E)**((4) *
+                 (phi))))
+  em4phi       = (e4phi)**(-1)
+  g_ab         = (e4phi) *
+                 (gt_ab)
+  detg         = ((-1) * ((g13)**(2)) * (g22)) + ((2) * (g12) * (g13) * (g23)) +
+                 ((-1) * (g11) * ((g23)**(2))) + ((-1) * ((g12)**(2)) * (g33)) +
+                 ((g11) * (g22) *
+                 (g33))
+  gu^ab        = (em4phi) *
+                 (gtu^ab)
+  R_ab         = (Rphi_ab) +
+                 (Rt_ab)
+  rho          = 0
+  S_i          = 0
+  trS          = 0
+  D_t (phi)    = ((alpha) * (trK) * (((conformalMethod) ? ((1/3) * (phi)) :
+                 (-1/6)))) + ((((conformalMethod) ? ((-1/3) * (phi)) : (1/6))) *
+                 (PDstandardNth_a
+                 (beta^a)))
+  D_t (gt_ab)  = ((-2) * (alpha) * (At_ab)) + ((-2/3) * (PDstandardNth_c
+                 (beta^c)) * (gt_ab)) + ((PDstandardNth_b (beta^c)) * (gt_ac)) +
+                 ((PDstandardNth_a (beta^c)) *
+                 (gt_bc))
+  dotXt^i      = ((2/3) * (PDstandardNth_j (beta^j)) * (Xtn^i)) + ((-1) *
+                 (PDstandardNth_j (beta^i)) * (Xtn^j)) + ((-2) *
+                 (PDstandardNth_j (alpha)) * (Atu^ij)) + ((1/3) *
+                 (PDstandardNth_jl (beta^l)) * (gtu^ij)) + ((PDstandardNth_jl
+                 (beta^i)) * (gtu^jl)) + ((2) * (alpha) * (((6) * (cdphi_j) *
+                 (Atu^ij)) + ((-2/3) * (PDstandardNth_j (trK)) * (gtu^ij)) +
+                 ((Atu^kj) *
+                 (Gt^i_jk))))
+  D_t (Xt^i)   = dotXt^i
+  dottrK       = ((alpha) * (((1/3) * ((trK)**(2))) + ((Atm^a_b) * (Atm^b_a))))
+                 + ((-1) * (em4phi) * (((-1) * (PDstandardNth_a (alpha)) *
+                 (Xtn^a)) + (((PDstandardNth_ab (alpha)) + ((2) *
+                 (PDstandardNth_b (alpha)) * (cdphi_a))) *
+                 (gtu^ab))))
+  D_t (trK)    = dottrK
+  Ats_ab       = ((-1) * (@{CDt[alpha, TensorIndex["a", "l"], TensorIndex["b",
+                 "l"]]})) + ((2) * (((PDstandardNth_b (alpha)) * (cdphi_a)) +
+                 ((PDstandardNth_a (alpha)) * (cdphi_b)))) + ((alpha) *
+                 (R_ab))
+  trAts        = (Ats_ab) *
+                 (gu^ab)
+  D_t (At_ab)  = ((-2/3) * (PDstandardNth_c (beta^c)) * (At_ab)) +
+                 ((PDstandardNth_b (beta^c)) * (At_ac)) + ((PDstandardNth_a
+                 (beta^c)) * (At_bc)) + ((alpha) * (((trK) * (At_ab)) + ((-2) *
+                 (At_ac) * (Atm^c_b)))) + ((em4phi) * ((Ats_ab) + ((-1/3) *
+                 (trAts) *
+                 (g_ab))))
+  D_t (alpha)  = (-1) * ((alpha)**(harmonicN)) * (harmonicF) * (((A) *
+                 (LapseACoeff)) + (((1) + ((-1) * (LapseACoeff))) * ((((-1) +
+                 (alpha)) * (AlphaDriver)) +
+                 (trK))))
+  D_t (A)      = (((-1) * (A) * (AlphaDriver)) + (dottrK)) *
+                 (LapseACoeff)
+  eta          = 1
+  theta        = 1
+  D_t (beta^a) = ((harmonicShift) ? ((-1/2) * (alpha) * (phi) * (gtu^aj) * (((2)
+                 * (phi) * (PDstandardNth_j (alpha))) + ((-2) * (alpha) *
+                 (PDstandardNth_j (phi))) + ((alpha) * (phi) * (((-2) *
+                 (PDstandardNth_l (gt_jk))) + (PDstandardNth_j (gt_kl))) *
+                 (gtu^kl)))) : ((ShiftGammaCoeff) * (theta) * (((ShiftBCoeff) *
+                 (B^a)) + (((1) + ((-1) * (ShiftBCoeff))) * (((-1) *
+                 (BetaDriver) * (eta) * (beta^a)) +
+                 (Xt^a))))))
+  D_t (B^a)    = (ShiftBCoeff) * (((-1) * (BetaDriver) * (eta) * (B^a)) +
+                 (dotXt^a))
 end calculation
 
 begin calculation ML_BSSN_Advect
-  dir^a = @{Sign[Tensor[beta, TensorIndex["a", "u"]]]}
-  D_t phi = (@{dot[phi]})+((@{Abs[Tensor[beta, TensorIndex["a", "u"]]]})*(@{PDupwindNthSymm[phi, TensorIndex["a", "l"]]}))+((@{PDupwindNthAnti[phi, TensorIndex["a", "l"]]})*(beta^a))
-  D_t gt_a_b = (@{dot[Tensor[gt, TensorIndex["a", "l"], TensorIndex["b", "l"]]]})+((@{Abs[Tensor[beta, TensorIndex["c", "u"]]]})*(@{PDupwindNthSymm[Tensor[gt, TensorIndex["a", "l"], TensorIndex["b", "l"]], TensorIndex["c", "l"]]}))+((@{PDupwindNthAnti[Tensor[gt, TensorIndex["a", "l"], TensorIndex["b", "l"]], TensorIndex["c", "l"]]})*(beta^c))
-  D_t Xt^i = (@{dot[Tensor[Xt, TensorIndex["i", "u"]]]})+((@{Abs[Tensor[beta, TensorIndex["j", "u"]]]})*(@{PDupwindNthSymm[Tensor[Xt, TensorIndex["i", "u"]], TensorIndex["j", "l"]]}))+((@{PDupwindNthAnti[Tensor[Xt, TensorIndex["i", "u"]], TensorIndex["j", "l"]]})*(beta^j))
-  D_t trK = (@{dot[trK]})+((@{Abs[Tensor[beta, TensorIndex["a", "u"]]]})*(@{PDupwindNthSymm[trK, TensorIndex["a", "l"]]}))+((@{PDupwindNthAnti[trK, TensorIndex["a", "l"]]})*(beta^a))
-  D_t At_a_b = (@{dot[Tensor[At, TensorIndex["a", "l"], TensorIndex["b", "l"]]]})+((@{Abs[Tensor[beta, TensorIndex["c", "u"]]]})*(@{PDupwindNthSymm[Tensor[At, TensorIndex["a", "l"], TensorIndex["b", "l"]], TensorIndex["c", "l"]]}))+((@{PDupwindNthAnti[Tensor[At, TensorIndex["a", "l"], TensorIndex["b", "l"]], TensorIndex["c", "l"]]})*(beta^c))
-  D_t alpha = (@{dot[alpha]})+((LapseAdvectionCoeff)*(((@{Abs[Tensor[beta, TensorIndex["a", "u"]]]})*(@{PDupwindNthSymm[alpha, TensorIndex["a", "l"]]}))+((@{PDupwindNthAnti[alpha, TensorIndex["a", "l"]]})*(beta^a))))
-  D_t A = (@{dot[A]})+((LapseACoeff)*(((LapseAdvectionCoeff)*(((@{Abs[Tensor[beta, TensorIndex["a", "u"]]]})*(@{PDupwindNthSymm[A, TensorIndex["a", "l"]]}))+((@{PDupwindNthAnti[A, TensorIndex["a", "l"]]})*(beta^a))))+(((1)+((-1)*(LapseAdvectionCoeff)))*(((@{Abs[Tensor[beta, TensorIndex["a", "u"]]]})*(@{PDupwindNthSymm[trK, TensorIndex["a", "l"]]}))+((@{PDupwindNthAnti[trK, TensorIndex["a", "l"]]})*(beta^a))))))
-  D_t beta^a = (@{dot[Tensor[beta, TensorIndex["a", "u"]]]})+((ShiftAdvectionCoeff)*(((@{Abs[Tensor[beta, TensorIndex["b", "u"]]]})*(@{PDupwindNthSymm[Tensor[beta, TensorIndex["a", "u"]], TensorIndex["b", "l"]]}))+((@{PDupwindNthAnti[Tensor[beta, TensorIndex["a", "u"]], TensorIndex["b", "l"]]})*(beta^b))))
-  D_t B^a = (@{dot[Tensor[B, TensorIndex["a", "u"]]]})+((ShiftBCoeff)*(((ShiftAdvectionCoeff)*(((@{Abs[Tensor[beta, TensorIndex["b", "u"]]]})*(@{PDupwindNthSymm[Tensor[B, TensorIndex["a", "u"]], TensorIndex["b", "l"]]}))+((@{PDupwindNthAnti[Tensor[B, TensorIndex["a", "u"]], TensorIndex["b", "l"]]})*(beta^b))))+(((1)+((-1)*(ShiftAdvectionCoeff)))*(((@{Abs[Tensor[beta, TensorIndex["b", "u"]]]})*(@{PDupwindNthSymm[Tensor[Xt, TensorIndex["a", "u"]], TensorIndex["b", "l"]]}))+((@{PDupwindNthAnti[Tensor[Xt, TensorIndex["a", "u"]], TensorIndex["b", "l"]]})*(beta^b))))))
+  dir^a        = sign(beta^a)
+  D_t (phi)    = (D_t (phi)) + ((abs(beta^a)) * (PDupwindNthSymm_a (phi))) +
+                 ((PDupwindNthAnti_a (phi)) *
+                 (beta^a))
+  D_t (gt_ab)  = (D_t (gt_ab)) + ((abs(beta^c)) * (PDupwindNthSymm_c (gt_ab))) +
+                 ((PDupwindNthAnti_c (gt_ab)) *
+                 (beta^c))
+  D_t (Xt^i)   = (D_t (Xt^i)) + ((abs(beta^j)) * (PDupwindNthSymm_j (Xt^i))) +
+                 ((PDupwindNthAnti_j (Xt^i)) *
+                 (beta^j))
+  D_t (trK)    = (D_t (trK)) + ((abs(beta^a)) * (PDupwindNthSymm_a (trK))) +
+                 ((PDupwindNthAnti_a (trK)) *
+                 (beta^a))
+  D_t (At_ab)  = (D_t (At_ab)) + ((abs(beta^c)) * (PDupwindNthSymm_c (At_ab))) +
+                 ((PDupwindNthAnti_c (At_ab)) *
+                 (beta^c))
+  D_t (alpha)  = (D_t (alpha)) + ((LapseAdvectionCoeff) * (((abs(beta^a)) *
+                 (PDupwindNthSymm_a (alpha))) + ((PDupwindNthAnti_a (alpha)) *
+                 (beta^a))))
+  D_t (A)      = (D_t (A)) + ((LapseACoeff) * (((LapseAdvectionCoeff) *
+                 (((abs(beta^a)) * (PDupwindNthSymm_a (A))) +
+                 ((PDupwindNthAnti_a (A)) * (beta^a)))) + (((1) + ((-1) *
+                 (LapseAdvectionCoeff))) * (((abs(beta^a)) * (PDupwindNthSymm_a
+                 (trK))) + ((PDupwindNthAnti_a (trK)) *
+                 (beta^a))))))
+  D_t (beta^a) = (D_t (beta^a)) + ((ShiftAdvectionCoeff) * (((abs(beta^b)) *
+                 (PDupwindNthSymm_b (beta^a))) + ((PDupwindNthAnti_b (beta^a)) *
+                 (beta^b))))
+  D_t (B^a)    = (D_t (B^a)) + ((ShiftBCoeff) * (((ShiftAdvectionCoeff) *
+                 (((abs(beta^b)) * (PDupwindNthSymm_b (B^a))) +
+                 ((PDupwindNthAnti_b (B^a)) * (beta^b)))) + (((1) + ((-1) *
+                 (ShiftAdvectionCoeff))) * (((abs(beta^b)) * (PDupwindNthSymm_b
+                 (Xt^a))) + ((PDupwindNthAnti_b (Xt^a)) *
+                 (beta^b))))))
 end calculation
 
 begin calculation ML_BSSN_InitRHS
-  D_t phi = 0
-  D_t gt_a_b = 0
-  D_t trK = 0
-  D_t At_a_b = 0
-  D_t Xt^a = 0
-  D_t alpha = 0
-  D_t A = 0
-  D_t beta^a = 0
-  D_t B^a = 0
+  D_t (phi)    = 0
+  D_t (gt_ab)  = 0
+  D_t (trK)    = 0
+  D_t (At_ab)  = 0
+  D_t (Xt^a)   = 0
+  D_t (alpha)  = 0
+  D_t (A)      = 0
+  D_t (beta^a) = 0
+  D_t (B^a)    = 0
 end calculation
 
 begin calculation ML_BSSN_RHSStaticBoundary
-  D_t phi = 0
-  D_t gt_a_b = 0
-  D_t trK = 0
-  D_t At_a_b = 0
-  D_t Xt^a = 0
-  D_t alpha = 0
-  D_t A = 0
-  D_t beta^a = 0
-  D_t B^a = 0
+  D_t (phi)    = 0
+  D_t (gt_ab)  = 0
+  D_t (trK)    = 0
+  D_t (At_ab)  = 0
+  D_t (Xt^a)   = 0
+  D_t (alpha)  = 0
+  D_t (A)      = 0
+  D_t (beta^a) = 0
+  D_t (B^a)    = 0
 end calculation
 
 begin calculation ML_BSSN_enforce
-  detgt = 1
-  gtu^a^b = ((detgt)**(-1))*(((-1)*((gt13)**(2))*(gt22))+((2)*(gt12)*(gt13)*(gt23))+((-1)*(gt11)*((gt23)**(2)))+((-1)*((gt12)**(2))*(gt33))+((gt11)*(gt22)*(gt33)))*(@{MatrixInverse[Tensor[gt, TensorIndex["a", "u"], TensorIndex["b", "u"]]]})
-  trAt = (At_a_b)*(gtu^a^b)
-  At_a_b = (At_a_b)+((-1/3)*(trAt)*(gt_a_b))
-  alpha = @{Max[alpha, MinimumLapse]}
+  detgt  = 1
+  gtu^ab = ((detgt)**(-1)) * (((-1) * ((gt13)**(2)) * (gt22)) + ((2) * (gt12) *
+           (gt13) * (gt23)) + ((-1) * (gt11) * ((gt23)**(2))) + ((-1) *
+           ((gt12)**(2)) * (gt33)) + ((gt11) * (gt22) * (gt33))) *
+           (inverse(gt)ab)
+  trAt   = (At_ab) *
+           (gtu^ab)
+  At_ab  = (At_ab) + ((-1/3) * (trAt) *
+           (gt_ab))
+  alpha  = max(alpha,MinimumLapse)
 end calculation
 
 begin calculation ML_BSSN_copy_to_device
-  phi = phi
-  gt_a_b = gt_a_b
-  Xt^i = Xt^i
-  trK = trK
-  At_a_b = At_a_b
-  alpha = alpha
-  A = A
+  phi    = phi
+  gt_ab  = gt_ab
+  Xt^i   = Xt^i
+  trK    = trK
+  At_ab  = At_ab
+  alpha  = alpha
+  A      = A
   beta^a = beta^a
-  B^a = B^a
+  B^a    = B^a
 end calculation
 
 
