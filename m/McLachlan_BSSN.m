@@ -668,7 +668,7 @@ advectCalc =
 {
   Name -> BSSN <> "_Advect",
   Schedule -> {"IN " <> BSSN <> "_evolCalcGroup " <>
-               "AFTER (" <> BSSN <> "_RHS1 " <> BSSN <> "_RHS2)"},
+               "AFTER " <> BSSN <> "_RHS"},
   (*
   Where -> Interior,
   *)
