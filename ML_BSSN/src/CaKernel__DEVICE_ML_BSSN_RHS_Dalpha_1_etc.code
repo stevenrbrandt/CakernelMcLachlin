@@ -1,0 +1,148 @@
+#undef KRANC_DIFF_FUNCTIONS
+#define KRANC_C
+#include "Differencing.h"
+#include "GenericFD.h"
+
+#undef KRANC_GFOFFSET3D
+#define KRANC_GFOFFSET3D(u,i,j,k) I3D(u,i,j,k)
+
+
+/* Define macros used in calculations */
+#define INITVALUE (42)
+#define QAD(x) (SQR(SQR(x)))
+#define INV(x) ((1.0) / (x))
+#define SQR(x) ((x) * (x))
+#define CUB(x) ((x) * (x) * (x))
+
+CAKERNEL_DEVICE_ML_BSSN_RHS_Dalpha_1_etc_Begin
+  
+  /* Include user-supplied include files */
+  
+  /* Initialise finite differencing variables */
+  CCTK_REAL const dx = params.cagh_dx;
+  CCTK_REAL const dy = params.cagh_dy;
+  CCTK_REAL const dz = params.cagh_dz;
+  CCTK_REAL const dt = params.cagh_dt;
+  CCTK_REAL const t = params.cagh_time;
+  CCTK_REAL const dxi = INV(dx);
+  CCTK_REAL const dyi = INV(dy);
+  CCTK_REAL const dzi = INV(dz);
+  CCTK_REAL const khalf = 0.5;
+  CCTK_REAL const kthird = 1/3.0;
+  CCTK_REAL const ktwothird = 2.0/3.0;
+  CCTK_REAL const kfourthird = 4.0/3.0;
+  CCTK_REAL const keightthird = 8.0/3.0;
+  CCTK_REAL const hdxi = 0.5 * dxi;
+  CCTK_REAL const hdyi = 0.5 * dyi;
+  CCTK_REAL const hdzi = 0.5 * dzi;
+  
+  /* Initialize predefined quantities */
+  CCTK_REAL const p1o1024dx = 0.0009765625*INV(dx);
+  CCTK_REAL const p1o1024dy = 0.0009765625*INV(dy);
+  CCTK_REAL const p1o1024dz = 0.0009765625*INV(dz);
+  CCTK_REAL const p1o1680dx = 0.000595238095238095238095238095238*INV(dx);
+  CCTK_REAL const p1o1680dy = 0.000595238095238095238095238095238*INV(dy);
+  CCTK_REAL const p1o1680dz = 0.000595238095238095238095238095238*INV(dz);
+  CCTK_REAL const p1o5040dx2 = 0.000198412698412698412698412698413*INV(SQR(dx));
+  CCTK_REAL const p1o5040dy2 = 0.000198412698412698412698412698413*INV(SQR(dy));
+  CCTK_REAL const p1o5040dz2 = 0.000198412698412698412698412698413*INV(SQR(dz));
+  CCTK_REAL const p1o560dx = 0.00178571428571428571428571428571*INV(dx);
+  CCTK_REAL const p1o560dy = 0.00178571428571428571428571428571*INV(dy);
+  CCTK_REAL const p1o560dz = 0.00178571428571428571428571428571*INV(dz);
+  CCTK_REAL const p1o705600dxdy = 1.41723356009070294784580498866e-6*INV(dx*dy);
+  CCTK_REAL const p1o705600dxdz = 1.41723356009070294784580498866e-6*INV(dx*dz);
+  CCTK_REAL const p1o705600dydz = 1.41723356009070294784580498866e-6*INV(dy*dz);
+  CCTK_REAL const p1o840dx = 0.00119047619047619047619047619048*INV(dx);
+  CCTK_REAL const p1o840dy = 0.00119047619047619047619047619048*INV(dy);
+  CCTK_REAL const p1o840dz = 0.00119047619047619047619047619048*INV(dz);
+  CCTK_REAL const p1odx = INV(dx);
+  CCTK_REAL const p1ody = INV(dy);
+  CCTK_REAL const p1odz = INV(dz);
+  CCTK_REAL const pm1o840dx = -0.00119047619047619047619047619048*INV(dx);
+  CCTK_REAL const pm1o840dy = -0.00119047619047619047619047619048*INV(dy);
+  CCTK_REAL const pm1o840dz = -0.00119047619047619047619047619048*INV(dz);
+  CAKERNEL_DEVICE_ML_BSSN_RHS_Dalpha_1_etc_Computations_Begin
+    
+    /* Calculate temporaries and grid functions */
+    I3D(DPDstandardNthalpha1,0,0,0) = PDstandardNth1(alpha);
+    I3D(DPDstandardNthalpha11,0,0,0) = PDstandardNth11(alpha);
+    I3D(DPDstandardNthalpha2,0,0,0) = PDstandardNth2(alpha);
+    I3D(DPDstandardNthalpha22,0,0,0) = PDstandardNth22(alpha);
+    I3D(DPDstandardNthalpha3,0,0,0) = PDstandardNth3(alpha);
+    I3D(DPDstandardNthalpha33,0,0,0) = PDstandardNth33(alpha);
+    I3D(DPDstandardNthbeta11,0,0,0) = PDstandardNth1(beta1);
+    I3D(DPDstandardNthbeta111,0,0,0) = PDstandardNth11(beta1);
+    I3D(DPDstandardNthbeta12,0,0,0) = PDstandardNth2(beta1);
+    I3D(DPDstandardNthbeta122,0,0,0) = PDstandardNth22(beta1);
+    I3D(DPDstandardNthbeta13,0,0,0) = PDstandardNth3(beta1);
+    I3D(DPDstandardNthbeta133,0,0,0) = PDstandardNth33(beta1);
+    I3D(DPDstandardNthbeta21,0,0,0) = PDstandardNth1(beta2);
+    I3D(DPDstandardNthbeta211,0,0,0) = PDstandardNth11(beta2);
+    I3D(DPDstandardNthbeta22,0,0,0) = PDstandardNth2(beta2);
+    I3D(DPDstandardNthbeta222,0,0,0) = PDstandardNth22(beta2);
+    I3D(DPDstandardNthbeta23,0,0,0) = PDstandardNth3(beta2);
+    I3D(DPDstandardNthbeta233,0,0,0) = PDstandardNth33(beta2);
+    I3D(DPDstandardNthbeta31,0,0,0) = PDstandardNth1(beta3);
+    I3D(DPDstandardNthbeta311,0,0,0) = PDstandardNth11(beta3);
+    I3D(DPDstandardNthbeta32,0,0,0) = PDstandardNth2(beta3);
+    I3D(DPDstandardNthbeta322,0,0,0) = PDstandardNth22(beta3);
+    I3D(DPDstandardNthbeta33,0,0,0) = PDstandardNth3(beta3);
+    I3D(DPDstandardNthbeta333,0,0,0) = PDstandardNth33(beta3);
+    I3D(DPDstandardNthgt111,0,0,0) = PDstandardNth1(gt11);
+    I3D(DPDstandardNthgt1111,0,0,0) = PDstandardNth11(gt11);
+    I3D(DPDstandardNthgt112,0,0,0) = PDstandardNth2(gt11);
+    I3D(DPDstandardNthgt1122,0,0,0) = PDstandardNth22(gt11);
+    I3D(DPDstandardNthgt113,0,0,0) = PDstandardNth3(gt11);
+    I3D(DPDstandardNthgt1133,0,0,0) = PDstandardNth33(gt11);
+    I3D(DPDstandardNthgt121,0,0,0) = PDstandardNth1(gt12);
+    I3D(DPDstandardNthgt1211,0,0,0) = PDstandardNth11(gt12);
+    I3D(DPDstandardNthgt122,0,0,0) = PDstandardNth2(gt12);
+    I3D(DPDstandardNthgt1222,0,0,0) = PDstandardNth22(gt12);
+    I3D(DPDstandardNthgt123,0,0,0) = PDstandardNth3(gt12);
+    I3D(DPDstandardNthgt1233,0,0,0) = PDstandardNth33(gt12);
+    I3D(DPDstandardNthgt131,0,0,0) = PDstandardNth1(gt13);
+    I3D(DPDstandardNthgt1311,0,0,0) = PDstandardNth11(gt13);
+    I3D(DPDstandardNthgt132,0,0,0) = PDstandardNth2(gt13);
+    I3D(DPDstandardNthgt1322,0,0,0) = PDstandardNth22(gt13);
+    I3D(DPDstandardNthgt133,0,0,0) = PDstandardNth3(gt13);
+    I3D(DPDstandardNthgt1333,0,0,0) = PDstandardNth33(gt13);
+    I3D(DPDstandardNthgt221,0,0,0) = PDstandardNth1(gt22);
+    I3D(DPDstandardNthgt2211,0,0,0) = PDstandardNth11(gt22);
+    I3D(DPDstandardNthgt222,0,0,0) = PDstandardNth2(gt22);
+    I3D(DPDstandardNthgt2222,0,0,0) = PDstandardNth22(gt22);
+    I3D(DPDstandardNthgt223,0,0,0) = PDstandardNth3(gt22);
+    I3D(DPDstandardNthgt2233,0,0,0) = PDstandardNth33(gt22);
+    I3D(DPDstandardNthgt231,0,0,0) = PDstandardNth1(gt23);
+    I3D(DPDstandardNthgt2311,0,0,0) = PDstandardNth11(gt23);
+    I3D(DPDstandardNthgt232,0,0,0) = PDstandardNth2(gt23);
+    I3D(DPDstandardNthgt2322,0,0,0) = PDstandardNth22(gt23);
+    I3D(DPDstandardNthgt233,0,0,0) = PDstandardNth3(gt23);
+    I3D(DPDstandardNthgt2333,0,0,0) = PDstandardNth33(gt23);
+    I3D(DPDstandardNthgt331,0,0,0) = PDstandardNth1(gt33);
+    I3D(DPDstandardNthgt3311,0,0,0) = PDstandardNth11(gt33);
+    I3D(DPDstandardNthgt332,0,0,0) = PDstandardNth2(gt33);
+    I3D(DPDstandardNthgt3322,0,0,0) = PDstandardNth22(gt33);
+    I3D(DPDstandardNthgt333,0,0,0) = PDstandardNth3(gt33);
+    I3D(DPDstandardNthgt3333,0,0,0) = PDstandardNth33(gt33);
+    I3D(DPDstandardNthphi1,0,0,0) = PDstandardNth1(phi);
+    I3D(DPDstandardNthphi11,0,0,0) = PDstandardNth11(phi);
+    I3D(DPDstandardNthphi2,0,0,0) = PDstandardNth2(phi);
+    I3D(DPDstandardNthphi22,0,0,0) = PDstandardNth22(phi);
+    I3D(DPDstandardNthphi3,0,0,0) = PDstandardNth3(phi);
+    I3D(DPDstandardNthphi33,0,0,0) = PDstandardNth33(phi);
+    I3D(DPDstandardNthtrK1,0,0,0) = PDstandardNth1(trK);
+    I3D(DPDstandardNthtrK2,0,0,0) = PDstandardNth2(trK);
+    I3D(DPDstandardNthtrK3,0,0,0) = PDstandardNth3(trK);
+    I3D(DPDstandardNthXt11,0,0,0) = PDstandardNth1(Xt1);
+    I3D(DPDstandardNthXt12,0,0,0) = PDstandardNth2(Xt1);
+    I3D(DPDstandardNthXt13,0,0,0) = PDstandardNth3(Xt1);
+    I3D(DPDstandardNthXt21,0,0,0) = PDstandardNth1(Xt2);
+    I3D(DPDstandardNthXt22,0,0,0) = PDstandardNth2(Xt2);
+    I3D(DPDstandardNthXt23,0,0,0) = PDstandardNth3(Xt2);
+    I3D(DPDstandardNthXt31,0,0,0) = PDstandardNth1(Xt3);
+    I3D(DPDstandardNthXt32,0,0,0) = PDstandardNth2(Xt3);
+    I3D(DPDstandardNthXt33,0,0,0) = PDstandardNth3(Xt3);
+    
+  CAKERNEL_DEVICE_ML_BSSN_RHS_Dalpha_1_etc_Computations_End
+  
+CAKERNEL_DEVICE_ML_BSSN_RHS_Dalpha_1_etc_End
