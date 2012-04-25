@@ -768,7 +768,7 @@ RHSStaticBoundaryCalc =
   Name -> BSSN <> "_RHSStaticBoundary",
   Schedule -> {"IN " <> BSSN <> "_evolCalcGroup"},
   ConditionalOnKeyword -> {"my_rhs_boundary_condition", "static"},
-  Where -> Boundary,
+  Where -> BoundaryWithGhosts,
   Equations -> 
   {
     dot[phi]       -> 0,
