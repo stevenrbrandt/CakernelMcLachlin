@@ -1289,8 +1289,8 @@ CreateKrancThornTT [groups, ".", BSSN,
    (matter seems cheap; it should be always enabled) *)
 
 (* createCode[2, False, True , 3, 1]; *)
-createCode[4, False, True , 2, 0, True];
-createCode[4, False, True , 2, 0, False];
+createCode[4, False, True , 2, 0, True]; (* device *)
+createCode[4, False, True , 2, 0, False]; (* host *)
 (* createCode[4, False, False, 3, 1]; *)
 (* createCode[4, True , True , 3, 1]; *)
 (* createCode[8, False, True , 3, 1]; *)
