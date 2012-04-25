@@ -14,7 +14,7 @@
 #define SQR(x) ((x) * (x))
 #define CUB(x) ((x) * (x) * (x))
 
-CAKERNEL_DEVICE_ML_BSSN_RHS_Dbeta1_23_Begin
+CAKERNEL_DEVICE_ML_BSSN_RHS_Dalpha_2_etc_Begin
   
   /* Include user-supplied include files */
   
@@ -61,11 +61,36 @@ CAKERNEL_DEVICE_ML_BSSN_RHS_Dbeta1_23_Begin
   CCTK_REAL const pm1o840dx = -0.00119047619047619047619047619048*INV(dx);
   CCTK_REAL const pm1o840dy = -0.00119047619047619047619047619048*INV(dy);
   CCTK_REAL const pm1o840dz = -0.00119047619047619047619047619048*INV(dz);
-  CAKERNEL_DEVICE_ML_BSSN_RHS_Dbeta1_23_Computations_Begin
+  CAKERNEL_DEVICE_ML_BSSN_RHS_Dalpha_2_etc_Computations_Begin
     
     /* Calculate temporaries and grid functions */
-    I3D(DPDstandardNthbeta123,0,0,0) = PDstandardNth23(beta1);
+    I3D(DPDstandardNthalpha2,0,0,0) = PDstandardNth2(alpha);
+    I3D(DPDstandardNthalpha22,0,0,0) = PDstandardNth22(alpha);
+    I3D(DPDstandardNthbeta12,0,0,0) = PDstandardNth2(beta1);
+    I3D(DPDstandardNthbeta122,0,0,0) = PDstandardNth22(beta1);
+    I3D(DPDstandardNthbeta22,0,0,0) = PDstandardNth2(beta2);
+    I3D(DPDstandardNthbeta222,0,0,0) = PDstandardNth22(beta2);
+    I3D(DPDstandardNthbeta32,0,0,0) = PDstandardNth2(beta3);
+    I3D(DPDstandardNthbeta322,0,0,0) = PDstandardNth22(beta3);
+    I3D(DPDstandardNthgt112,0,0,0) = PDstandardNth2(gt11);
+    I3D(DPDstandardNthgt1122,0,0,0) = PDstandardNth22(gt11);
+    I3D(DPDstandardNthgt122,0,0,0) = PDstandardNth2(gt12);
+    I3D(DPDstandardNthgt1222,0,0,0) = PDstandardNth22(gt12);
+    I3D(DPDstandardNthgt132,0,0,0) = PDstandardNth2(gt13);
+    I3D(DPDstandardNthgt1322,0,0,0) = PDstandardNth22(gt13);
+    I3D(DPDstandardNthgt222,0,0,0) = PDstandardNth2(gt22);
+    I3D(DPDstandardNthgt2222,0,0,0) = PDstandardNth22(gt22);
+    I3D(DPDstandardNthgt232,0,0,0) = PDstandardNth2(gt23);
+    I3D(DPDstandardNthgt2322,0,0,0) = PDstandardNth22(gt23);
+    I3D(DPDstandardNthgt332,0,0,0) = PDstandardNth2(gt33);
+    I3D(DPDstandardNthgt3322,0,0,0) = PDstandardNth22(gt33);
+    I3D(DPDstandardNthphi2,0,0,0) = PDstandardNth2(phi);
+    I3D(DPDstandardNthphi22,0,0,0) = PDstandardNth22(phi);
+    I3D(DPDstandardNthtrK2,0,0,0) = PDstandardNth2(trK);
+    I3D(DPDstandardNthXt12,0,0,0) = PDstandardNth2(Xt1);
+    I3D(DPDstandardNthXt22,0,0,0) = PDstandardNth2(Xt2);
+    I3D(DPDstandardNthXt32,0,0,0) = PDstandardNth2(Xt3);
     
-  CAKERNEL_DEVICE_ML_BSSN_RHS_Dbeta1_23_Computations_End
+  CAKERNEL_DEVICE_ML_BSSN_RHS_Dalpha_2_etc_Computations_End
   
-CAKERNEL_DEVICE_ML_BSSN_RHS_Dbeta1_23_End
+CAKERNEL_DEVICE_ML_BSSN_RHS_Dalpha_2_etc_End

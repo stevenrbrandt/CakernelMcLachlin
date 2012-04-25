@@ -270,6 +270,18 @@ CCTK_INT HOST_ML_BSSN_RHS_Dalpha_1_etc_calc_every "HOST_ML_BSSN_RHS_Dalpha_1_etc
 } 1
 
 restricted:
+CCTK_INT HOST_ML_BSSN_RHS_Dalpha_2_etc_calc_every "HOST_ML_BSSN_RHS_Dalpha_2_etc_calc_every" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 1
+
+restricted:
+CCTK_INT HOST_ML_BSSN_RHS_Dalpha_3_etc_calc_every "HOST_ML_BSSN_RHS_Dalpha_3_etc_calc_every" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 1
+
+restricted:
 CCTK_INT HOST_ML_BSSN_RHS_Dalpha_12_calc_every "HOST_ML_BSSN_RHS_Dalpha_12_calc_every" STEERABLE=ALWAYS
 {
   *:* :: ""
@@ -486,199 +498,25 @@ CCTK_INT DEVICE_ML_BSSN_RHS_Dalpha_1_etc_calc_every "DEVICE_ML_BSSN_RHS_Dalpha_1
 } 1
 
 restricted:
-CCTK_INT DEVICE_ML_BSSN_RHS_Dalpha_12_calc_every "DEVICE_ML_BSSN_RHS_Dalpha_12_calc_every" STEERABLE=ALWAYS
+CCTK_INT DEVICE_ML_BSSN_RHS_Dalpha_2_etc_calc_every "DEVICE_ML_BSSN_RHS_Dalpha_2_etc_calc_every" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 1
 
 restricted:
-CCTK_INT DEVICE_ML_BSSN_RHS_Dbeta1_12_calc_every "DEVICE_ML_BSSN_RHS_Dbeta1_12_calc_every" STEERABLE=ALWAYS
+CCTK_INT DEVICE_ML_BSSN_RHS_Dalpha_3_etc_calc_every "DEVICE_ML_BSSN_RHS_Dalpha_3_etc_calc_every" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 1
 
 restricted:
-CCTK_INT DEVICE_ML_BSSN_RHS_Dbeta2_12_calc_every "DEVICE_ML_BSSN_RHS_Dbeta2_12_calc_every" STEERABLE=ALWAYS
+CCTK_INT DEVICE_ML_BSSN_RHS_Dalpha2_1_etc_calc_every "DEVICE_ML_BSSN_RHS_Dalpha2_1_etc_calc_every" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 1
 
 restricted:
-CCTK_INT DEVICE_ML_BSSN_RHS_Dbeta3_12_calc_every "DEVICE_ML_BSSN_RHS_Dbeta3_12_calc_every" STEERABLE=ALWAYS
-{
-  *:* :: ""
-} 1
-
-restricted:
-CCTK_INT DEVICE_ML_BSSN_RHS_Dgt11_12_calc_every "DEVICE_ML_BSSN_RHS_Dgt11_12_calc_every" STEERABLE=ALWAYS
-{
-  *:* :: ""
-} 1
-
-restricted:
-CCTK_INT DEVICE_ML_BSSN_RHS_Dgt12_12_calc_every "DEVICE_ML_BSSN_RHS_Dgt12_12_calc_every" STEERABLE=ALWAYS
-{
-  *:* :: ""
-} 1
-
-restricted:
-CCTK_INT DEVICE_ML_BSSN_RHS_Dgt13_12_calc_every "DEVICE_ML_BSSN_RHS_Dgt13_12_calc_every" STEERABLE=ALWAYS
-{
-  *:* :: ""
-} 1
-
-restricted:
-CCTK_INT DEVICE_ML_BSSN_RHS_Dgt22_12_calc_every "DEVICE_ML_BSSN_RHS_Dgt22_12_calc_every" STEERABLE=ALWAYS
-{
-  *:* :: ""
-} 1
-
-restricted:
-CCTK_INT DEVICE_ML_BSSN_RHS_Dgt23_12_calc_every "DEVICE_ML_BSSN_RHS_Dgt23_12_calc_every" STEERABLE=ALWAYS
-{
-  *:* :: ""
-} 1
-
-restricted:
-CCTK_INT DEVICE_ML_BSSN_RHS_Dgt33_12_calc_every "DEVICE_ML_BSSN_RHS_Dgt33_12_calc_every" STEERABLE=ALWAYS
-{
-  *:* :: ""
-} 1
-
-restricted:
-CCTK_INT DEVICE_ML_BSSN_RHS_Dphi_12_calc_every "DEVICE_ML_BSSN_RHS_Dphi_12_calc_every" STEERABLE=ALWAYS
-{
-  *:* :: ""
-} 1
-
-restricted:
-CCTK_INT DEVICE_ML_BSSN_RHS_Dalpha_13_calc_every "DEVICE_ML_BSSN_RHS_Dalpha_13_calc_every" STEERABLE=ALWAYS
-{
-  *:* :: ""
-} 1
-
-restricted:
-CCTK_INT DEVICE_ML_BSSN_RHS_Dbeta1_13_calc_every "DEVICE_ML_BSSN_RHS_Dbeta1_13_calc_every" STEERABLE=ALWAYS
-{
-  *:* :: ""
-} 1
-
-restricted:
-CCTK_INT DEVICE_ML_BSSN_RHS_Dbeta2_13_calc_every "DEVICE_ML_BSSN_RHS_Dbeta2_13_calc_every" STEERABLE=ALWAYS
-{
-  *:* :: ""
-} 1
-
-restricted:
-CCTK_INT DEVICE_ML_BSSN_RHS_Dbeta3_13_calc_every "DEVICE_ML_BSSN_RHS_Dbeta3_13_calc_every" STEERABLE=ALWAYS
-{
-  *:* :: ""
-} 1
-
-restricted:
-CCTK_INT DEVICE_ML_BSSN_RHS_Dgt11_13_calc_every "DEVICE_ML_BSSN_RHS_Dgt11_13_calc_every" STEERABLE=ALWAYS
-{
-  *:* :: ""
-} 1
-
-restricted:
-CCTK_INT DEVICE_ML_BSSN_RHS_Dgt12_13_calc_every "DEVICE_ML_BSSN_RHS_Dgt12_13_calc_every" STEERABLE=ALWAYS
-{
-  *:* :: ""
-} 1
-
-restricted:
-CCTK_INT DEVICE_ML_BSSN_RHS_Dgt13_13_calc_every "DEVICE_ML_BSSN_RHS_Dgt13_13_calc_every" STEERABLE=ALWAYS
-{
-  *:* :: ""
-} 1
-
-restricted:
-CCTK_INT DEVICE_ML_BSSN_RHS_Dgt22_13_calc_every "DEVICE_ML_BSSN_RHS_Dgt22_13_calc_every" STEERABLE=ALWAYS
-{
-  *:* :: ""
-} 1
-
-restricted:
-CCTK_INT DEVICE_ML_BSSN_RHS_Dgt23_13_calc_every "DEVICE_ML_BSSN_RHS_Dgt23_13_calc_every" STEERABLE=ALWAYS
-{
-  *:* :: ""
-} 1
-
-restricted:
-CCTK_INT DEVICE_ML_BSSN_RHS_Dgt33_13_calc_every "DEVICE_ML_BSSN_RHS_Dgt33_13_calc_every" STEERABLE=ALWAYS
-{
-  *:* :: ""
-} 1
-
-restricted:
-CCTK_INT DEVICE_ML_BSSN_RHS_Dphi_13_calc_every "DEVICE_ML_BSSN_RHS_Dphi_13_calc_every" STEERABLE=ALWAYS
-{
-  *:* :: ""
-} 1
-
-restricted:
-CCTK_INT DEVICE_ML_BSSN_RHS_Dalpha_23_calc_every "DEVICE_ML_BSSN_RHS_Dalpha_23_calc_every" STEERABLE=ALWAYS
-{
-  *:* :: ""
-} 1
-
-restricted:
-CCTK_INT DEVICE_ML_BSSN_RHS_Dbeta1_23_calc_every "DEVICE_ML_BSSN_RHS_Dbeta1_23_calc_every" STEERABLE=ALWAYS
-{
-  *:* :: ""
-} 1
-
-restricted:
-CCTK_INT DEVICE_ML_BSSN_RHS_Dbeta2_23_calc_every "DEVICE_ML_BSSN_RHS_Dbeta2_23_calc_every" STEERABLE=ALWAYS
-{
-  *:* :: ""
-} 1
-
-restricted:
-CCTK_INT DEVICE_ML_BSSN_RHS_Dbeta3_23_calc_every "DEVICE_ML_BSSN_RHS_Dbeta3_23_calc_every" STEERABLE=ALWAYS
-{
-  *:* :: ""
-} 1
-
-restricted:
-CCTK_INT DEVICE_ML_BSSN_RHS_Dgt11_23_calc_every "DEVICE_ML_BSSN_RHS_Dgt11_23_calc_every" STEERABLE=ALWAYS
-{
-  *:* :: ""
-} 1
-
-restricted:
-CCTK_INT DEVICE_ML_BSSN_RHS_Dgt12_23_calc_every "DEVICE_ML_BSSN_RHS_Dgt12_23_calc_every" STEERABLE=ALWAYS
-{
-  *:* :: ""
-} 1
-
-restricted:
-CCTK_INT DEVICE_ML_BSSN_RHS_Dgt13_23_calc_every "DEVICE_ML_BSSN_RHS_Dgt13_23_calc_every" STEERABLE=ALWAYS
-{
-  *:* :: ""
-} 1
-
-restricted:
-CCTK_INT DEVICE_ML_BSSN_RHS_Dgt22_23_calc_every "DEVICE_ML_BSSN_RHS_Dgt22_23_calc_every" STEERABLE=ALWAYS
-{
-  *:* :: ""
-} 1
-
-restricted:
-CCTK_INT DEVICE_ML_BSSN_RHS_Dgt23_23_calc_every "DEVICE_ML_BSSN_RHS_Dgt23_23_calc_every" STEERABLE=ALWAYS
-{
-  *:* :: ""
-} 1
-
-restricted:
-CCTK_INT DEVICE_ML_BSSN_RHS_Dgt33_23_calc_every "DEVICE_ML_BSSN_RHS_Dgt33_23_calc_every" STEERABLE=ALWAYS
-{
-  *:* :: ""
-} 1
-
-restricted:
-CCTK_INT DEVICE_ML_BSSN_RHS_Dphi_23_calc_every "DEVICE_ML_BSSN_RHS_Dphi_23_calc_every" STEERABLE=ALWAYS
+CCTK_INT DEVICE_ML_BSSN_RHS_Dalpha3_2_etc_calc_every "DEVICE_ML_BSSN_RHS_Dalpha3_2_etc_calc_every" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 1
@@ -1074,6 +912,18 @@ CCTK_INT HOST_ML_BSSN_RHS_Dalpha_1_etc_calc_offset "HOST_ML_BSSN_RHS_Dalpha_1_et
 } 0
 
 restricted:
+CCTK_INT HOST_ML_BSSN_RHS_Dalpha_2_etc_calc_offset "HOST_ML_BSSN_RHS_Dalpha_2_etc_calc_offset" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 0
+
+restricted:
+CCTK_INT HOST_ML_BSSN_RHS_Dalpha_3_etc_calc_offset "HOST_ML_BSSN_RHS_Dalpha_3_etc_calc_offset" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 0
+
+restricted:
 CCTK_INT HOST_ML_BSSN_RHS_Dalpha_12_calc_offset "HOST_ML_BSSN_RHS_Dalpha_12_calc_offset" STEERABLE=ALWAYS
 {
   *:* :: ""
@@ -1290,199 +1140,25 @@ CCTK_INT DEVICE_ML_BSSN_RHS_Dalpha_1_etc_calc_offset "DEVICE_ML_BSSN_RHS_Dalpha_
 } 0
 
 restricted:
-CCTK_INT DEVICE_ML_BSSN_RHS_Dalpha_12_calc_offset "DEVICE_ML_BSSN_RHS_Dalpha_12_calc_offset" STEERABLE=ALWAYS
+CCTK_INT DEVICE_ML_BSSN_RHS_Dalpha_2_etc_calc_offset "DEVICE_ML_BSSN_RHS_Dalpha_2_etc_calc_offset" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 0
 
 restricted:
-CCTK_INT DEVICE_ML_BSSN_RHS_Dbeta1_12_calc_offset "DEVICE_ML_BSSN_RHS_Dbeta1_12_calc_offset" STEERABLE=ALWAYS
+CCTK_INT DEVICE_ML_BSSN_RHS_Dalpha_3_etc_calc_offset "DEVICE_ML_BSSN_RHS_Dalpha_3_etc_calc_offset" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 0
 
 restricted:
-CCTK_INT DEVICE_ML_BSSN_RHS_Dbeta2_12_calc_offset "DEVICE_ML_BSSN_RHS_Dbeta2_12_calc_offset" STEERABLE=ALWAYS
+CCTK_INT DEVICE_ML_BSSN_RHS_Dalpha2_1_etc_calc_offset "DEVICE_ML_BSSN_RHS_Dalpha2_1_etc_calc_offset" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 0
 
 restricted:
-CCTK_INT DEVICE_ML_BSSN_RHS_Dbeta3_12_calc_offset "DEVICE_ML_BSSN_RHS_Dbeta3_12_calc_offset" STEERABLE=ALWAYS
-{
-  *:* :: ""
-} 0
-
-restricted:
-CCTK_INT DEVICE_ML_BSSN_RHS_Dgt11_12_calc_offset "DEVICE_ML_BSSN_RHS_Dgt11_12_calc_offset" STEERABLE=ALWAYS
-{
-  *:* :: ""
-} 0
-
-restricted:
-CCTK_INT DEVICE_ML_BSSN_RHS_Dgt12_12_calc_offset "DEVICE_ML_BSSN_RHS_Dgt12_12_calc_offset" STEERABLE=ALWAYS
-{
-  *:* :: ""
-} 0
-
-restricted:
-CCTK_INT DEVICE_ML_BSSN_RHS_Dgt13_12_calc_offset "DEVICE_ML_BSSN_RHS_Dgt13_12_calc_offset" STEERABLE=ALWAYS
-{
-  *:* :: ""
-} 0
-
-restricted:
-CCTK_INT DEVICE_ML_BSSN_RHS_Dgt22_12_calc_offset "DEVICE_ML_BSSN_RHS_Dgt22_12_calc_offset" STEERABLE=ALWAYS
-{
-  *:* :: ""
-} 0
-
-restricted:
-CCTK_INT DEVICE_ML_BSSN_RHS_Dgt23_12_calc_offset "DEVICE_ML_BSSN_RHS_Dgt23_12_calc_offset" STEERABLE=ALWAYS
-{
-  *:* :: ""
-} 0
-
-restricted:
-CCTK_INT DEVICE_ML_BSSN_RHS_Dgt33_12_calc_offset "DEVICE_ML_BSSN_RHS_Dgt33_12_calc_offset" STEERABLE=ALWAYS
-{
-  *:* :: ""
-} 0
-
-restricted:
-CCTK_INT DEVICE_ML_BSSN_RHS_Dphi_12_calc_offset "DEVICE_ML_BSSN_RHS_Dphi_12_calc_offset" STEERABLE=ALWAYS
-{
-  *:* :: ""
-} 0
-
-restricted:
-CCTK_INT DEVICE_ML_BSSN_RHS_Dalpha_13_calc_offset "DEVICE_ML_BSSN_RHS_Dalpha_13_calc_offset" STEERABLE=ALWAYS
-{
-  *:* :: ""
-} 0
-
-restricted:
-CCTK_INT DEVICE_ML_BSSN_RHS_Dbeta1_13_calc_offset "DEVICE_ML_BSSN_RHS_Dbeta1_13_calc_offset" STEERABLE=ALWAYS
-{
-  *:* :: ""
-} 0
-
-restricted:
-CCTK_INT DEVICE_ML_BSSN_RHS_Dbeta2_13_calc_offset "DEVICE_ML_BSSN_RHS_Dbeta2_13_calc_offset" STEERABLE=ALWAYS
-{
-  *:* :: ""
-} 0
-
-restricted:
-CCTK_INT DEVICE_ML_BSSN_RHS_Dbeta3_13_calc_offset "DEVICE_ML_BSSN_RHS_Dbeta3_13_calc_offset" STEERABLE=ALWAYS
-{
-  *:* :: ""
-} 0
-
-restricted:
-CCTK_INT DEVICE_ML_BSSN_RHS_Dgt11_13_calc_offset "DEVICE_ML_BSSN_RHS_Dgt11_13_calc_offset" STEERABLE=ALWAYS
-{
-  *:* :: ""
-} 0
-
-restricted:
-CCTK_INT DEVICE_ML_BSSN_RHS_Dgt12_13_calc_offset "DEVICE_ML_BSSN_RHS_Dgt12_13_calc_offset" STEERABLE=ALWAYS
-{
-  *:* :: ""
-} 0
-
-restricted:
-CCTK_INT DEVICE_ML_BSSN_RHS_Dgt13_13_calc_offset "DEVICE_ML_BSSN_RHS_Dgt13_13_calc_offset" STEERABLE=ALWAYS
-{
-  *:* :: ""
-} 0
-
-restricted:
-CCTK_INT DEVICE_ML_BSSN_RHS_Dgt22_13_calc_offset "DEVICE_ML_BSSN_RHS_Dgt22_13_calc_offset" STEERABLE=ALWAYS
-{
-  *:* :: ""
-} 0
-
-restricted:
-CCTK_INT DEVICE_ML_BSSN_RHS_Dgt23_13_calc_offset "DEVICE_ML_BSSN_RHS_Dgt23_13_calc_offset" STEERABLE=ALWAYS
-{
-  *:* :: ""
-} 0
-
-restricted:
-CCTK_INT DEVICE_ML_BSSN_RHS_Dgt33_13_calc_offset "DEVICE_ML_BSSN_RHS_Dgt33_13_calc_offset" STEERABLE=ALWAYS
-{
-  *:* :: ""
-} 0
-
-restricted:
-CCTK_INT DEVICE_ML_BSSN_RHS_Dphi_13_calc_offset "DEVICE_ML_BSSN_RHS_Dphi_13_calc_offset" STEERABLE=ALWAYS
-{
-  *:* :: ""
-} 0
-
-restricted:
-CCTK_INT DEVICE_ML_BSSN_RHS_Dalpha_23_calc_offset "DEVICE_ML_BSSN_RHS_Dalpha_23_calc_offset" STEERABLE=ALWAYS
-{
-  *:* :: ""
-} 0
-
-restricted:
-CCTK_INT DEVICE_ML_BSSN_RHS_Dbeta1_23_calc_offset "DEVICE_ML_BSSN_RHS_Dbeta1_23_calc_offset" STEERABLE=ALWAYS
-{
-  *:* :: ""
-} 0
-
-restricted:
-CCTK_INT DEVICE_ML_BSSN_RHS_Dbeta2_23_calc_offset "DEVICE_ML_BSSN_RHS_Dbeta2_23_calc_offset" STEERABLE=ALWAYS
-{
-  *:* :: ""
-} 0
-
-restricted:
-CCTK_INT DEVICE_ML_BSSN_RHS_Dbeta3_23_calc_offset "DEVICE_ML_BSSN_RHS_Dbeta3_23_calc_offset" STEERABLE=ALWAYS
-{
-  *:* :: ""
-} 0
-
-restricted:
-CCTK_INT DEVICE_ML_BSSN_RHS_Dgt11_23_calc_offset "DEVICE_ML_BSSN_RHS_Dgt11_23_calc_offset" STEERABLE=ALWAYS
-{
-  *:* :: ""
-} 0
-
-restricted:
-CCTK_INT DEVICE_ML_BSSN_RHS_Dgt12_23_calc_offset "DEVICE_ML_BSSN_RHS_Dgt12_23_calc_offset" STEERABLE=ALWAYS
-{
-  *:* :: ""
-} 0
-
-restricted:
-CCTK_INT DEVICE_ML_BSSN_RHS_Dgt13_23_calc_offset "DEVICE_ML_BSSN_RHS_Dgt13_23_calc_offset" STEERABLE=ALWAYS
-{
-  *:* :: ""
-} 0
-
-restricted:
-CCTK_INT DEVICE_ML_BSSN_RHS_Dgt22_23_calc_offset "DEVICE_ML_BSSN_RHS_Dgt22_23_calc_offset" STEERABLE=ALWAYS
-{
-  *:* :: ""
-} 0
-
-restricted:
-CCTK_INT DEVICE_ML_BSSN_RHS_Dgt23_23_calc_offset "DEVICE_ML_BSSN_RHS_Dgt23_23_calc_offset" STEERABLE=ALWAYS
-{
-  *:* :: ""
-} 0
-
-restricted:
-CCTK_INT DEVICE_ML_BSSN_RHS_Dgt33_23_calc_offset "DEVICE_ML_BSSN_RHS_Dgt33_23_calc_offset" STEERABLE=ALWAYS
-{
-  *:* :: ""
-} 0
-
-restricted:
-CCTK_INT DEVICE_ML_BSSN_RHS_Dphi_23_calc_offset "DEVICE_ML_BSSN_RHS_Dphi_23_calc_offset" STEERABLE=ALWAYS
+CCTK_INT DEVICE_ML_BSSN_RHS_Dalpha3_2_etc_calc_offset "DEVICE_ML_BSSN_RHS_Dalpha3_2_etc_calc_offset" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 0

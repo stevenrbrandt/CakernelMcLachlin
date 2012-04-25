@@ -184,6 +184,11 @@ extern "C" void ML_BSSN_RegisterSymmetries(CCTK_ARGUMENTS)
   sym[0] = 1;
   sym[1] = 1;
   sym[2] = 1;
+  SetCartSymVN(cctkGH, sym, "ML_BSSN::DPDstandardNthalpha21");
+  
+  sym[0] = 1;
+  sym[1] = 1;
+  sym[2] = 1;
   SetCartSymVN(cctkGH, sym, "ML_BSSN::DPDstandardNthalpha22");
   
   sym[0] = 1;
@@ -195,6 +200,16 @@ extern "C" void ML_BSSN_RegisterSymmetries(CCTK_ARGUMENTS)
   sym[1] = 1;
   sym[2] = 1;
   SetCartSymVN(cctkGH, sym, "ML_BSSN::DPDstandardNthalpha2");
+  
+  sym[0] = 1;
+  sym[1] = 1;
+  sym[2] = 1;
+  SetCartSymVN(cctkGH, sym, "ML_BSSN::DPDstandardNthalpha31");
+  
+  sym[0] = 1;
+  sym[1] = 1;
+  sym[2] = 1;
+  SetCartSymVN(cctkGH, sym, "ML_BSSN::DPDstandardNthalpha32");
   
   sym[0] = 1;
   sym[1] = 1;
@@ -229,6 +244,11 @@ extern "C" void ML_BSSN_RegisterSymmetries(CCTK_ARGUMENTS)
   sym[0] = 1;
   sym[1] = 1;
   sym[2] = 1;
+  SetCartSymVN(cctkGH, sym, "ML_BSSN::DPDstandardNthbeta121");
+  
+  sym[0] = 1;
+  sym[1] = 1;
+  sym[2] = 1;
   SetCartSymVN(cctkGH, sym, "ML_BSSN::DPDstandardNthbeta122");
   
   sym[0] = 1;
@@ -240,6 +260,16 @@ extern "C" void ML_BSSN_RegisterSymmetries(CCTK_ARGUMENTS)
   sym[1] = 1;
   sym[2] = 1;
   SetCartSymVN(cctkGH, sym, "ML_BSSN::DPDstandardNthbeta12");
+  
+  sym[0] = 1;
+  sym[1] = 1;
+  sym[2] = 1;
+  SetCartSymVN(cctkGH, sym, "ML_BSSN::DPDstandardNthbeta131");
+  
+  sym[0] = 1;
+  sym[1] = 1;
+  sym[2] = 1;
+  SetCartSymVN(cctkGH, sym, "ML_BSSN::DPDstandardNthbeta132");
   
   sym[0] = 1;
   sym[1] = 1;
@@ -274,6 +304,11 @@ extern "C" void ML_BSSN_RegisterSymmetries(CCTK_ARGUMENTS)
   sym[0] = 1;
   sym[1] = 1;
   sym[2] = 1;
+  SetCartSymVN(cctkGH, sym, "ML_BSSN::DPDstandardNthbeta221");
+  
+  sym[0] = 1;
+  sym[1] = 1;
+  sym[2] = 1;
   SetCartSymVN(cctkGH, sym, "ML_BSSN::DPDstandardNthbeta222");
   
   sym[0] = 1;
@@ -285,6 +320,16 @@ extern "C" void ML_BSSN_RegisterSymmetries(CCTK_ARGUMENTS)
   sym[1] = 1;
   sym[2] = 1;
   SetCartSymVN(cctkGH, sym, "ML_BSSN::DPDstandardNthbeta22");
+  
+  sym[0] = 1;
+  sym[1] = 1;
+  sym[2] = 1;
+  SetCartSymVN(cctkGH, sym, "ML_BSSN::DPDstandardNthbeta231");
+  
+  sym[0] = 1;
+  sym[1] = 1;
+  sym[2] = 1;
+  SetCartSymVN(cctkGH, sym, "ML_BSSN::DPDstandardNthbeta232");
   
   sym[0] = 1;
   sym[1] = 1;
@@ -319,6 +364,11 @@ extern "C" void ML_BSSN_RegisterSymmetries(CCTK_ARGUMENTS)
   sym[0] = 1;
   sym[1] = 1;
   sym[2] = 1;
+  SetCartSymVN(cctkGH, sym, "ML_BSSN::DPDstandardNthbeta321");
+  
+  sym[0] = 1;
+  sym[1] = 1;
+  sym[2] = 1;
   SetCartSymVN(cctkGH, sym, "ML_BSSN::DPDstandardNthbeta322");
   
   sym[0] = 1;
@@ -330,6 +380,16 @@ extern "C" void ML_BSSN_RegisterSymmetries(CCTK_ARGUMENTS)
   sym[1] = 1;
   sym[2] = 1;
   SetCartSymVN(cctkGH, sym, "ML_BSSN::DPDstandardNthbeta32");
+  
+  sym[0] = 1;
+  sym[1] = 1;
+  sym[2] = 1;
+  SetCartSymVN(cctkGH, sym, "ML_BSSN::DPDstandardNthbeta331");
+  
+  sym[0] = 1;
+  sym[1] = 1;
+  sym[2] = 1;
+  SetCartSymVN(cctkGH, sym, "ML_BSSN::DPDstandardNthbeta332");
   
   sym[0] = 1;
   sym[1] = 1;
@@ -364,6 +424,11 @@ extern "C" void ML_BSSN_RegisterSymmetries(CCTK_ARGUMENTS)
   sym[0] = 1;
   sym[1] = 1;
   sym[2] = 1;
+  SetCartSymVN(cctkGH, sym, "ML_BSSN::DPDstandardNthgt1121");
+  
+  sym[0] = 1;
+  sym[1] = 1;
+  sym[2] = 1;
   SetCartSymVN(cctkGH, sym, "ML_BSSN::DPDstandardNthgt1122");
   
   sym[0] = 1;
@@ -375,6 +440,16 @@ extern "C" void ML_BSSN_RegisterSymmetries(CCTK_ARGUMENTS)
   sym[1] = 1;
   sym[2] = 1;
   SetCartSymVN(cctkGH, sym, "ML_BSSN::DPDstandardNthgt112");
+  
+  sym[0] = 1;
+  sym[1] = 1;
+  sym[2] = 1;
+  SetCartSymVN(cctkGH, sym, "ML_BSSN::DPDstandardNthgt1131");
+  
+  sym[0] = 1;
+  sym[1] = 1;
+  sym[2] = 1;
+  SetCartSymVN(cctkGH, sym, "ML_BSSN::DPDstandardNthgt1132");
   
   sym[0] = 1;
   sym[1] = 1;
@@ -409,6 +484,11 @@ extern "C" void ML_BSSN_RegisterSymmetries(CCTK_ARGUMENTS)
   sym[0] = 1;
   sym[1] = 1;
   sym[2] = 1;
+  SetCartSymVN(cctkGH, sym, "ML_BSSN::DPDstandardNthgt1221");
+  
+  sym[0] = 1;
+  sym[1] = 1;
+  sym[2] = 1;
   SetCartSymVN(cctkGH, sym, "ML_BSSN::DPDstandardNthgt1222");
   
   sym[0] = 1;
@@ -420,6 +500,16 @@ extern "C" void ML_BSSN_RegisterSymmetries(CCTK_ARGUMENTS)
   sym[1] = 1;
   sym[2] = 1;
   SetCartSymVN(cctkGH, sym, "ML_BSSN::DPDstandardNthgt122");
+  
+  sym[0] = 1;
+  sym[1] = 1;
+  sym[2] = 1;
+  SetCartSymVN(cctkGH, sym, "ML_BSSN::DPDstandardNthgt1231");
+  
+  sym[0] = 1;
+  sym[1] = 1;
+  sym[2] = 1;
+  SetCartSymVN(cctkGH, sym, "ML_BSSN::DPDstandardNthgt1232");
   
   sym[0] = 1;
   sym[1] = 1;
@@ -454,6 +544,11 @@ extern "C" void ML_BSSN_RegisterSymmetries(CCTK_ARGUMENTS)
   sym[0] = 1;
   sym[1] = 1;
   sym[2] = 1;
+  SetCartSymVN(cctkGH, sym, "ML_BSSN::DPDstandardNthgt1321");
+  
+  sym[0] = 1;
+  sym[1] = 1;
+  sym[2] = 1;
   SetCartSymVN(cctkGH, sym, "ML_BSSN::DPDstandardNthgt1322");
   
   sym[0] = 1;
@@ -465,6 +560,16 @@ extern "C" void ML_BSSN_RegisterSymmetries(CCTK_ARGUMENTS)
   sym[1] = 1;
   sym[2] = 1;
   SetCartSymVN(cctkGH, sym, "ML_BSSN::DPDstandardNthgt132");
+  
+  sym[0] = 1;
+  sym[1] = 1;
+  sym[2] = 1;
+  SetCartSymVN(cctkGH, sym, "ML_BSSN::DPDstandardNthgt1331");
+  
+  sym[0] = 1;
+  sym[1] = 1;
+  sym[2] = 1;
+  SetCartSymVN(cctkGH, sym, "ML_BSSN::DPDstandardNthgt1332");
   
   sym[0] = 1;
   sym[1] = 1;
@@ -499,6 +604,11 @@ extern "C" void ML_BSSN_RegisterSymmetries(CCTK_ARGUMENTS)
   sym[0] = 1;
   sym[1] = 1;
   sym[2] = 1;
+  SetCartSymVN(cctkGH, sym, "ML_BSSN::DPDstandardNthgt2221");
+  
+  sym[0] = 1;
+  sym[1] = 1;
+  sym[2] = 1;
   SetCartSymVN(cctkGH, sym, "ML_BSSN::DPDstandardNthgt2222");
   
   sym[0] = 1;
@@ -510,6 +620,16 @@ extern "C" void ML_BSSN_RegisterSymmetries(CCTK_ARGUMENTS)
   sym[1] = 1;
   sym[2] = 1;
   SetCartSymVN(cctkGH, sym, "ML_BSSN::DPDstandardNthgt222");
+  
+  sym[0] = 1;
+  sym[1] = 1;
+  sym[2] = 1;
+  SetCartSymVN(cctkGH, sym, "ML_BSSN::DPDstandardNthgt2231");
+  
+  sym[0] = 1;
+  sym[1] = 1;
+  sym[2] = 1;
+  SetCartSymVN(cctkGH, sym, "ML_BSSN::DPDstandardNthgt2232");
   
   sym[0] = 1;
   sym[1] = 1;
@@ -544,6 +664,11 @@ extern "C" void ML_BSSN_RegisterSymmetries(CCTK_ARGUMENTS)
   sym[0] = 1;
   sym[1] = 1;
   sym[2] = 1;
+  SetCartSymVN(cctkGH, sym, "ML_BSSN::DPDstandardNthgt2321");
+  
+  sym[0] = 1;
+  sym[1] = 1;
+  sym[2] = 1;
   SetCartSymVN(cctkGH, sym, "ML_BSSN::DPDstandardNthgt2322");
   
   sym[0] = 1;
@@ -555,6 +680,16 @@ extern "C" void ML_BSSN_RegisterSymmetries(CCTK_ARGUMENTS)
   sym[1] = 1;
   sym[2] = 1;
   SetCartSymVN(cctkGH, sym, "ML_BSSN::DPDstandardNthgt232");
+  
+  sym[0] = 1;
+  sym[1] = 1;
+  sym[2] = 1;
+  SetCartSymVN(cctkGH, sym, "ML_BSSN::DPDstandardNthgt2331");
+  
+  sym[0] = 1;
+  sym[1] = 1;
+  sym[2] = 1;
+  SetCartSymVN(cctkGH, sym, "ML_BSSN::DPDstandardNthgt2332");
   
   sym[0] = 1;
   sym[1] = 1;
@@ -589,6 +724,11 @@ extern "C" void ML_BSSN_RegisterSymmetries(CCTK_ARGUMENTS)
   sym[0] = 1;
   sym[1] = 1;
   sym[2] = 1;
+  SetCartSymVN(cctkGH, sym, "ML_BSSN::DPDstandardNthgt3321");
+  
+  sym[0] = 1;
+  sym[1] = 1;
+  sym[2] = 1;
   SetCartSymVN(cctkGH, sym, "ML_BSSN::DPDstandardNthgt3322");
   
   sym[0] = 1;
@@ -600,6 +740,16 @@ extern "C" void ML_BSSN_RegisterSymmetries(CCTK_ARGUMENTS)
   sym[1] = 1;
   sym[2] = 1;
   SetCartSymVN(cctkGH, sym, "ML_BSSN::DPDstandardNthgt332");
+  
+  sym[0] = 1;
+  sym[1] = 1;
+  sym[2] = 1;
+  SetCartSymVN(cctkGH, sym, "ML_BSSN::DPDstandardNthgt3331");
+  
+  sym[0] = 1;
+  sym[1] = 1;
+  sym[2] = 1;
+  SetCartSymVN(cctkGH, sym, "ML_BSSN::DPDstandardNthgt3332");
   
   sym[0] = 1;
   sym[1] = 1;
@@ -634,6 +784,11 @@ extern "C" void ML_BSSN_RegisterSymmetries(CCTK_ARGUMENTS)
   sym[0] = 1;
   sym[1] = 1;
   sym[2] = 1;
+  SetCartSymVN(cctkGH, sym, "ML_BSSN::DPDstandardNthphi21");
+  
+  sym[0] = 1;
+  sym[1] = 1;
+  sym[2] = 1;
   SetCartSymVN(cctkGH, sym, "ML_BSSN::DPDstandardNthphi22");
   
   sym[0] = 1;
@@ -645,6 +800,16 @@ extern "C" void ML_BSSN_RegisterSymmetries(CCTK_ARGUMENTS)
   sym[1] = 1;
   sym[2] = 1;
   SetCartSymVN(cctkGH, sym, "ML_BSSN::DPDstandardNthphi2");
+  
+  sym[0] = 1;
+  sym[1] = 1;
+  sym[2] = 1;
+  SetCartSymVN(cctkGH, sym, "ML_BSSN::DPDstandardNthphi31");
+  
+  sym[0] = 1;
+  sym[1] = 1;
+  sym[2] = 1;
+  SetCartSymVN(cctkGH, sym, "ML_BSSN::DPDstandardNthphi32");
   
   sym[0] = 1;
   sym[1] = 1;
