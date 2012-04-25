@@ -514,7 +514,7 @@ evolCalc =
                  rho, S[la], trS, fac1, fac2, dottrK, dotXt[ua], epsdiss[ua]},
   SplitBy -> {{dot[trK], dot[phi], dot[gt[la,lb]], dot[Xt[ui]], dot[alpha], dot[A], dot[beta[ua]], dot[B[ua]]},
               {dot[At[la,lb]]}},
-  SeparatedDerivatives -> {PD[_,__]},
+  SeparatedDerivatives -> If[device,{PD[_,__]},None],
   Equations -> 
   {
     dir[ua] -> Sign[beta[ua]],
