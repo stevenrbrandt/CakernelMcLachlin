@@ -560,15 +560,6 @@ if (CCTK_EQUALS(my_rhs_boundary_condition, "static"))
   schedule ML_BSSN_Host_RHSStaticBoundary IN ML_BSSN_Host_evolCalcGroup
   {
     LANG: C
-    SYNC: ML_curvrhs
-    SYNC: ML_dtlapserhs
-    SYNC: ML_dtshiftrhs
-    SYNC: ML_Gammarhs
-    SYNC: ML_lapserhs
-    SYNC: ML_log_confacrhs
-    SYNC: ML_metricrhs
-    SYNC: ML_shiftrhs
-    SYNC: ML_trace_curvrhs
     WRITES:   ML_BSSN_Host::ML_curvrhs
     WRITES:   ML_BSSN_Host::ML_dtlapserhs
     WRITES:   ML_BSSN_Host::ML_dtshiftrhs

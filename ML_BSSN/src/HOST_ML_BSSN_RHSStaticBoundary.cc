@@ -250,7 +250,7 @@ extern "C" void HOST_ML_BSSN_RHSStaticBoundary(CCTK_ARGUMENTS)
   GenericFD_AssertGroupStorage(cctkGH, "HOST_ML_BSSN_RHSStaticBoundary", 9, groups);
   
   
-  GenericFD_LoopOverBoundary(cctkGH, HOST_ML_BSSN_RHSStaticBoundary_Body);
+  GenericFD_LoopOverBoundaryWithGhosts(cctkGH, HOST_ML_BSSN_RHSStaticBoundary_Body);
   
   if (verbose > 1)
   {

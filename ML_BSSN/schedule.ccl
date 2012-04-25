@@ -2534,15 +2534,6 @@ if (CCTK_EQUALS(my_rhs_boundary_condition, "static"))
   schedule HOST_ML_BSSN_RHSStaticBoundary in ML_BSSN_RHSStaticBoundary IF Accelerator::host_process
   {
     LANG: C
-    SYNC: ML_curvrhs
-    SYNC: ML_dtlapserhs
-    SYNC: ML_dtshiftrhs
-    SYNC: ML_Gammarhs
-    SYNC: ML_lapserhs
-    SYNC: ML_log_confacrhs
-    SYNC: ML_metricrhs
-    SYNC: ML_shiftrhs
-    SYNC: ML_trace_curvrhs
     WRITES:   ML_BSSN::ML_curvrhs
     WRITES:   ML_BSSN::ML_dtlapserhs
     WRITES:   ML_BSSN::ML_dtshiftrhs
@@ -2561,15 +2552,6 @@ if (CCTK_EQUALS(my_rhs_boundary_condition, "static"))
   schedule CAKERNEL_Launch_DEVICE_ML_BSSN_RHSStaticBoundary as DEVICE_ML_BSSN_RHSStaticBoundary in ML_BSSN_RHSStaticBoundary IF Accelerator::device_process
   {
     LANG: C
-    SYNC: ML_curvrhs
-    SYNC: ML_dtlapserhs
-    SYNC: ML_dtshiftrhs
-    SYNC: ML_Gammarhs
-    SYNC: ML_lapserhs
-    SYNC: ML_log_confacrhs
-    SYNC: ML_metricrhs
-    SYNC: ML_shiftrhs
-    SYNC: ML_trace_curvrhs
     TAGS: Device=1
     WRITES:   ML_BSSN::ML_curvrhs
     WRITES:   ML_BSSN::ML_dtlapserhs
