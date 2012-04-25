@@ -37,6 +37,8 @@ derivatives =
   PDstandardNth[i_,i_] -> StandardCenteredDifferenceOperator[2,fdOrder/2,i],
   PDstandardNth[i_,j_] -> StandardCenteredDifferenceOperator[1,fdOrder/2,i] *
                           StandardCenteredDifferenceOperator[1,fdOrder/2,j],
+  PDstandard2nd[i_]    -> StandardCenteredDifferenceOperator[1,2/2,i],
+
   PDdissipationNth[i_] ->
     spacing[i]^(fdOrder+1) / 2^(fdOrder+2) *
     StandardCenteredDifferenceOperator[fdOrder+2,fdOrder/2+1,i],
@@ -78,8 +80,13 @@ derivatives =
          +3 shift[i]^(+5)) / (1680 spacing[i])],
 
     (* TODO: make these higher order stencils *)
-    PDonesided[i] -> (*(1-IntAbs[dir[i]]) * StandardCenteredDifferenceOperator[1,2/2,i]
-    +*) dir[i] (-1 + shift[i]^dir[i]) / spacing[i]} /. i->j, {j,1,3}],1]
+    PDonesided[i] -> dir[i] (-1 + shift[i]^dir[i]) / spacing[i],
+    PDonesidedPlus2nd[i] ->  (-shift[i]^(2) + 4 shift[i] - 3 )/(2 spacing[i]),
+    PDonesidedMinus2nd[i] -> - (-shift[i]^(-2) + 4 shift[i]^(-1) - 3 )/(2 spacing[i])
+   } /. i->j, {j,1,3}],1],
+
+  PDPlus[i_] -> DPlus[i],
+  PDMinus[i_] -> DMinus[i]
 } /. fdOrder -> 8;
 
 PD     = PDstandardNth;
@@ -807,35 +814,45 @@ initRHSCalc =
   }
 };
 
+
+Rad[var_] :=
+Plus@@Table[rn[i] PDBoundary[var,normal[i], i], {i, 1, 3}];
+
+PDBoundary[var_Symbol, normal_, i_] :=
+       IfThen[normal < 0,
+              PDonesidedPlus2nd[var,i], 
+              IfThen[normal > 0, PDonesidedMinus2nd[var,i],
+                     PDstandard2nd[var,i]]];
+
 RHSRadiativeBoundaryCalc =
 {
   Name -> BSSN <> "_RHSRadiativeBoundary",
   Schedule -> {"IN " <> BSSN <> "_evolCalcGroup"},
   ConditionalOnKeyword -> {"my_rhs_boundary_condition", "radiative"},
-  Where -> Boundary,
+  Where -> BoundaryNoSync,
   Shorthands -> {dir[ua],
                  detgt, gtu[ua,ub], em4phi, gu[ua,ub],
                  nn[la], nu[ua], nlen, nlen2, su[ua],
-                 vg,phi0,rn[ua],phi0},
+                 vg,phi0,rn[ua],phi0, v0},
   Equations -> 
   {
-    dir[ua] -> -Sign[normal[ua]],
-    
     rn1 -> -xCopy/rCopy, 
     rn2 -> -yCopy/rCopy,
     rn3 -> -zCopy/rCopy,
 
     phi0 -> IfThen[conformalMethod, 1, 0],
     
-    dot[phi]       -> -(phi-phi0)/rCopy + rn[uc] PDo[phi,lc],
-    dot[gt[la,lb]] -> -(gt[la,lb]-Euc[la,lb])/rCopy + rn[uc] PDo[gt[la,lb],lc],
-    dot[trK]       -> -trK/rCopy + rn[uc] PDo[trK,lc],
-    dot[At[la,lb]] -> -At[la,lb]/rCopy + rn[uc] PDo[At[la,lb],lc],
-    dot[Xt[ua]]    -> 0,
-    dot[alpha]     -> -(alpha-1)/rCopy + rn[uc] PDo[alpha,lc],
-    dot[A]         -> -A/rCopy + rn[uc] PDo[A,lc],
-    dot[beta[ua]]  -> -beta[ua]/rCopy +rn[uc] PDo[beta[ua],lc],
-    dot[B[ua]]     -> -B[ua]/rCopy + rn[uc] PDo[B[ua],lc]
+    v0 -> Sqrt[harmonicF],
+
+    dot[phi]       -> v0 (-(phi-phi0)/rCopy + Rad[phi]),
+    dot[gt[la,lb]] -> -(gt[la,lb]-Euc[la,lb])/rCopy + Rad[gt[la,lb]],
+    dot[trK]       -> v0 (-trK/rCopy + Rad[trK]),
+    dot[At[la,lb]] -> -At[la,lb]/rCopy + Rad[At[la,lb]],
+    dot[Xt[ua]]    -> -Xt[ua]/rCopy + Rad[Xt[ua]],
+    dot[alpha]     -> v0 (-(alpha-1)/rCopy + Rad[alpha]),
+    dot[A]         -> v0 (-A/rCopy + Rad[A]),
+    dot[beta[ua]]  -> -beta[ua]/rCopy + Rad[beta[ua]],
+    dot[B[ua]]     -> -B[ua]/rCopy + Rad[B[ua]]
   }
 };
 
@@ -1244,7 +1261,7 @@ Join[
   advectCalc,
   initRHSCalc,
   RHSStaticBoundaryCalc,
-  (* RHSRadiativeBoundaryCalc, *)
+  RHSRadiativeBoundaryCalc,
   enforceCalc,
   (* boundaryCalc *)
   convertToADMBaseCalc (*,
