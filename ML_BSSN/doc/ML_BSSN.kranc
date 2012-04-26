@@ -1,10 +1,23 @@
 # Expressions within @{...} are not yet supported by the script generator
 begin thorn ML_BSSN
 
+begin variables 
+  phi gt_ab Xt^a trK At_ab alpha A beta^a B^a H M_a cS cXt^a cA xCopy yCopy
+  zCopy
+  rCopy
+end variables
+
+begin temporaries 
+  detg detgt dottrK e4phi em4phi eta fac1 fac2 rho theta trAt trAts trS cdphi_a
+  dir^a dotXt^a epsdiss^a S_a Xtn^a Atm^a_b Ats_ab Atu^ab cdphi2_ab g_ab gtu^ab
+  gu^ab R_ab Rphi_ab Rt_ab Gt^a_bc Gtl_abc
+  Gtlu_ab^c
+end temporaries
+
 begin calculation ML_BSSN_Minkowski
   phi    = ((conformalMethod) ? (1) :
            (0))
-  gt_ab  = deltaab
+  gt_ab  = delta_ab
   trK    = 0
   At_ab  = 0
   Xt^a   = 0
