@@ -1238,9 +1238,9 @@ Join[
   initRHSCalc,
   RHSStaticBoundaryCalc,
   (* RHSRadiativeBoundaryCalc, *)
-  enforceCalc
+  enforceCalc,
   (* boundaryCalc *)
-(*  convertToADMBaseCalc,
+  convertToADMBaseCalc (*,
   convertToADMBaseDtLapseShiftCalc,
   convertToADMBaseDtLapseShiftBoundaryCalc,
   convertToADMBaseFakeDtLapseShiftCalc,*)
