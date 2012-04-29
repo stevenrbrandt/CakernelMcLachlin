@@ -370,7 +370,7 @@ convertToADMBaseCalc =
   {
     e4phi       -> IfThen [conformalMethod, 1/phi^2, Exp[4 phi]],
     admg[la,lb] -> e4phi gt[la,lb],
-    admK[la,lb] -> e4phi At[la,lb] + (1/3) admg[la,lb] trK,
+    admK[la,lb] -> e4phi At[la,lb] + (1/3) (e4phi gt[la,lb]) trK,
     admalpha    -> alpha,
     admbeta[ua] -> beta[ua]
   }
