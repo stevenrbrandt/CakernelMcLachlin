@@ -115,7 +115,7 @@ if (CCTK_EQUALS (evolution_method, "ML_BSSN")) {
   
   
   
-  SCHEDULE GROUP ML_BSSN_convertToADMBaseGroup IN ML_BSSN_convertToADMBaseGroupWrapper
+  SCHEDULE GROUP ML_BSSN_convertToADMBaseGroup at ANALYSIS before Accelerator_CopyBack as ToADMBase
   {
     #SYNC: ADMBase::metric
     #SYNC: ADMBase::curv
