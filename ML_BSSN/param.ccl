@@ -870,6 +870,18 @@ CCTK_INT DEVICE_ML_BSSN_enforce_calc_every "DEVICE_ML_BSSN_enforce_calc_every" S
 } 1
 
 restricted:
+CCTK_INT HOST_ML_BSSN_convertToADMBase_calc_every "HOST_ML_BSSN_convertToADMBase_calc_every" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 1
+
+restricted:
+CCTK_INT DEVICE_ML_BSSN_convertToADMBase_calc_every "DEVICE_ML_BSSN_convertToADMBase_calc_every" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 1
+
+restricted:
 CCTK_INT HOST_ML_BSSN_copy_to_device_calc_every "HOST_ML_BSSN_copy_to_device_calc_every" STEERABLE=ALWAYS
 {
   *:* :: ""
@@ -1507,6 +1519,18 @@ CCTK_INT HOST_ML_BSSN_enforce_calc_offset "HOST_ML_BSSN_enforce_calc_offset" STE
 
 restricted:
 CCTK_INT DEVICE_ML_BSSN_enforce_calc_offset "DEVICE_ML_BSSN_enforce_calc_offset" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 0
+
+restricted:
+CCTK_INT HOST_ML_BSSN_convertToADMBase_calc_offset "HOST_ML_BSSN_convertToADMBase_calc_offset" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 0
+
+restricted:
+CCTK_INT DEVICE_ML_BSSN_convertToADMBase_calc_offset "DEVICE_ML_BSSN_convertToADMBase_calc_offset" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 0

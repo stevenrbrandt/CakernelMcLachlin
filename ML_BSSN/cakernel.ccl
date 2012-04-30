@@ -921,6 +921,49 @@ CCTK_CUDA_KERNEL DEVICE_ML_BSSN_enforce TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40
   "MinimumLapse"
 }
 
+CCTK_CUDA_KERNEL DEVICE_ML_BSSN_convertToADMBase TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,0,0,0,0"
+{
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out {alp} "alp"
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in {alpha} "alpha"
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in {At11} "At11"
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in {At12} "At12"
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in {At13} "At13"
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in {At22} "At22"
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in {At23} "At23"
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in {At33} "At33"
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in {beta1} "beta1"
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in {beta2} "beta2"
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in {beta3} "beta3"
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out {betax} "betax"
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out {betay} "betay"
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out {betaz} "betaz"
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in {gt11} "gt11"
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in {gt12} "gt12"
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in {gt13} "gt13"
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in {gt22} "gt22"
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in {gt23} "gt23"
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in {gt33} "gt33"
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out {gxx} "gxx"
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out {gxy} "gxy"
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out {gxz} "gxz"
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out {gyy} "gyy"
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out {gyz} "gyz"
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out {gzz} "gzz"
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out {kxx} "kxx"
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out {kxy} "kxy"
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out {kxz} "kxz"
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out {kyy} "kyy"
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out {kyz} "kyz"
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out {kzz} "kzz"
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in {phi} "phi"
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in {trK} "trK"
+  CCTK_CUDA_KERNEL_PARAMETER 
+  {
+    conformalMethod
+  }
+  "conformalMethod"
+}
+
 CCTK_CUDA_KERNEL DEVICE_ML_BSSN_copy_to_device TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,0,0,0,0"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=inout {A} "A"

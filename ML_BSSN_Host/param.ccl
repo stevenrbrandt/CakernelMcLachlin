@@ -444,6 +444,12 @@ CCTK_INT ML_BSSN_Host_enforce_calc_every "ML_BSSN_Host_enforce_calc_every" STEER
 } 1
 
 restricted:
+CCTK_INT ML_BSSN_Host_convertToADMBase_calc_every "ML_BSSN_Host_convertToADMBase_calc_every" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 1
+
+restricted:
 CCTK_INT ML_BSSN_Host_Minkowski_calc_offset "ML_BSSN_Host_Minkowski_calc_offset" STEERABLE=ALWAYS
 {
   *:* :: ""
@@ -643,6 +649,12 @@ CCTK_INT ML_BSSN_Host_RHSStaticBoundary_calc_offset "ML_BSSN_Host_RHSStaticBound
 
 restricted:
 CCTK_INT ML_BSSN_Host_enforce_calc_offset "ML_BSSN_Host_enforce_calc_offset" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 0
+
+restricted:
+CCTK_INT ML_BSSN_Host_convertToADMBase_calc_offset "ML_BSSN_Host_convertToADMBase_calc_offset" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 0

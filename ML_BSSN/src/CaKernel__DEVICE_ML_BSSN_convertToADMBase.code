@@ -1,0 +1,162 @@
+#undef KRANC_DIFF_FUNCTIONS
+#define KRANC_C
+#include "Differencing.h"
+#include "GenericFD.h"
+
+#undef KRANC_GFOFFSET3D
+#define KRANC_GFOFFSET3D(u,i,j,k) I3D(u,i,j,k)
+
+
+/* Define macros used in calculations */
+#define INITVALUE (42)
+#define QAD(x) (SQR(SQR(x)))
+#define INV(x) ((1.0) / (x))
+#define SQR(x) ((x) * (x))
+#define CUB(x) ((x) * (x) * (x))
+
+CAKERNEL_DEVICE_ML_BSSN_convertToADMBase_Begin
+  
+  /* Include user-supplied include files */
+  
+  /* Initialise finite differencing variables */
+  CCTK_REAL const dx = params.cagh_dx;
+  CCTK_REAL const dy = params.cagh_dy;
+  CCTK_REAL const dz = params.cagh_dz;
+  CCTK_REAL const dt = params.cagh_dt;
+  CCTK_REAL const t = params.cagh_time;
+  CCTK_REAL const dxi = INV(dx);
+  CCTK_REAL const dyi = INV(dy);
+  CCTK_REAL const dzi = INV(dz);
+  CCTK_REAL const khalf = 0.5;
+  CCTK_REAL const kthird = 1/3.0;
+  CCTK_REAL const ktwothird = 2.0/3.0;
+  CCTK_REAL const kfourthird = 4.0/3.0;
+  CCTK_REAL const keightthird = 8.0/3.0;
+  CCTK_REAL const hdxi = 0.5 * dxi;
+  CCTK_REAL const hdyi = 0.5 * dyi;
+  CCTK_REAL const hdzi = 0.5 * dzi;
+  
+  /* Initialize predefined quantities */
+  CCTK_REAL const p1o1024dx = 0.0009765625*INV(dx);
+  CCTK_REAL const p1o1024dy = 0.0009765625*INV(dy);
+  CCTK_REAL const p1o1024dz = 0.0009765625*INV(dz);
+  CCTK_REAL const p1o1680dx = 0.000595238095238095238095238095238*INV(dx);
+  CCTK_REAL const p1o1680dy = 0.000595238095238095238095238095238*INV(dy);
+  CCTK_REAL const p1o1680dz = 0.000595238095238095238095238095238*INV(dz);
+  CCTK_REAL const p1o5040dx2 = 0.000198412698412698412698412698413*INV(SQR(dx));
+  CCTK_REAL const p1o5040dy2 = 0.000198412698412698412698412698413*INV(SQR(dy));
+  CCTK_REAL const p1o5040dz2 = 0.000198412698412698412698412698413*INV(SQR(dz));
+  CCTK_REAL const p1o560dx = 0.00178571428571428571428571428571*INV(dx);
+  CCTK_REAL const p1o560dy = 0.00178571428571428571428571428571*INV(dy);
+  CCTK_REAL const p1o560dz = 0.00178571428571428571428571428571*INV(dz);
+  CCTK_REAL const p1o705600dxdy = 1.41723356009070294784580498866e-6*INV(dx*dy);
+  CCTK_REAL const p1o705600dxdz = 1.41723356009070294784580498866e-6*INV(dx*dz);
+  CCTK_REAL const p1o705600dydz = 1.41723356009070294784580498866e-6*INV(dy*dz);
+  CCTK_REAL const p1o840dx = 0.00119047619047619047619047619048*INV(dx);
+  CCTK_REAL const p1o840dy = 0.00119047619047619047619047619048*INV(dy);
+  CCTK_REAL const p1o840dz = 0.00119047619047619047619047619048*INV(dz);
+  CCTK_REAL const p1odx = INV(dx);
+  CCTK_REAL const p1ody = INV(dy);
+  CCTK_REAL const p1odz = INV(dz);
+  CCTK_REAL const pm1o840dx = -0.00119047619047619047619047619048*INV(dx);
+  CCTK_REAL const pm1o840dy = -0.00119047619047619047619047619048*INV(dy);
+  CCTK_REAL const pm1o840dz = -0.00119047619047619047619047619048*INV(dz);
+  
+  /* Assign local copies of arrays functions */
+  
+  
+  
+  /* Calculate temporaries and arrays functions */
+  
+  /* Copy local copies back to grid functions */
+  CAKERNEL_DEVICE_ML_BSSN_convertToADMBase_Computations_Begin
+    
+    /* Assign local copies of grid functions */
+    
+    CCTK_REAL alphaL = I3D(alpha,0,0,0);
+    CCTK_REAL At11L = I3D(At11,0,0,0);
+    CCTK_REAL At12L = I3D(At12,0,0,0);
+    CCTK_REAL At13L = I3D(At13,0,0,0);
+    CCTK_REAL At22L = I3D(At22,0,0,0);
+    CCTK_REAL At23L = I3D(At23,0,0,0);
+    CCTK_REAL At33L = I3D(At33,0,0,0);
+    CCTK_REAL beta1L = I3D(beta1,0,0,0);
+    CCTK_REAL beta2L = I3D(beta2,0,0,0);
+    CCTK_REAL beta3L = I3D(beta3,0,0,0);
+    CCTK_REAL gt11L = I3D(gt11,0,0,0);
+    CCTK_REAL gt12L = I3D(gt12,0,0,0);
+    CCTK_REAL gt13L = I3D(gt13,0,0,0);
+    CCTK_REAL gt22L = I3D(gt22,0,0,0);
+    CCTK_REAL gt23L = I3D(gt23,0,0,0);
+    CCTK_REAL gt33L = I3D(gt33,0,0,0);
+    CCTK_REAL phiL = I3D(phi,0,0,0);
+    CCTK_REAL trKL = I3D(trK,0,0,0);
+    
+    
+    /* Include user supplied include files */
+    
+    /* Precompute derivatives */
+    
+    /* Calculate temporaries and grid functions */
+    CCTK_REAL e4phi = 
+      IfThen(conformalMethod,INV(SQR(phiL)),exp(4*phiL));
+    
+    CCTK_REAL gxxL = gt11L*e4phi;
+    
+    CCTK_REAL gxyL = gt12L*e4phi;
+    
+    CCTK_REAL gxzL = gt13L*e4phi;
+    
+    CCTK_REAL gyyL = gt22L*e4phi;
+    
+    CCTK_REAL gyzL = gt23L*e4phi;
+    
+    CCTK_REAL gzzL = gt33L*e4phi;
+    
+    CCTK_REAL kxxL = (At11L + 
+      0.333333333333333333333333333333*gt11L*trKL)*e4phi;
+    
+    CCTK_REAL kxyL = (At12L + 
+      0.333333333333333333333333333333*gt12L*trKL)*e4phi;
+    
+    CCTK_REAL kxzL = (At13L + 
+      0.333333333333333333333333333333*gt13L*trKL)*e4phi;
+    
+    CCTK_REAL kyyL = (At22L + 
+      0.333333333333333333333333333333*gt22L*trKL)*e4phi;
+    
+    CCTK_REAL kyzL = (At23L + 
+      0.333333333333333333333333333333*gt23L*trKL)*e4phi;
+    
+    CCTK_REAL kzzL = (At33L + 
+      0.333333333333333333333333333333*gt33L*trKL)*e4phi;
+    
+    CCTK_REAL alpL = alphaL;
+    
+    CCTK_REAL betaxL = beta1L;
+    
+    CCTK_REAL betayL = beta2L;
+    
+    CCTK_REAL betazL = beta3L;
+    
+    /* Copy local copies back to grid functions */
+    I3D(alp,0,0,0) = alpL;
+    I3D(betax,0,0,0) = betaxL;
+    I3D(betay,0,0,0) = betayL;
+    I3D(betaz,0,0,0) = betazL;
+    I3D(gxx,0,0,0) = gxxL;
+    I3D(gxy,0,0,0) = gxyL;
+    I3D(gxz,0,0,0) = gxzL;
+    I3D(gyy,0,0,0) = gyyL;
+    I3D(gyz,0,0,0) = gyzL;
+    I3D(gzz,0,0,0) = gzzL;
+    I3D(kxx,0,0,0) = kxxL;
+    I3D(kxy,0,0,0) = kxyL;
+    I3D(kxz,0,0,0) = kxzL;
+    I3D(kyy,0,0,0) = kyyL;
+    I3D(kyz,0,0,0) = kyzL;
+    I3D(kzz,0,0,0) = kzzL;
+    
+  CAKERNEL_DEVICE_ML_BSSN_convertToADMBase_Computations_End
+  
+CAKERNEL_DEVICE_ML_BSSN_convertToADMBase_End
