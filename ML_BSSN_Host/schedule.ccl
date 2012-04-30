@@ -211,15 +211,31 @@ if (CCTK_EQUALS(my_initial_data, "Minkowski"))
   schedule ML_BSSN_Host_Minkowski IN ADMBase_InitialData
   {
     LANG: C
-    WRITES:   ML_BSSN_Host::ML_curv
-    WRITES:   ML_BSSN_Host::ML_dtlapse
-    WRITES:   ML_BSSN_Host::ML_dtshift
-    WRITES:   ML_BSSN_Host::ML_Gamma
-    WRITES:   ML_BSSN_Host::ML_lapse
-    WRITES:   ML_BSSN_Host::ML_log_confac
-    WRITES:   ML_BSSN_Host::ML_metric
-    WRITES:   ML_BSSN_Host::ML_shift
-    WRITES:   ML_BSSN_Host::ML_trace_curv
+    WRITES:   ML_BSSN_Host::A
+    WRITES:   ML_BSSN_Host::alpha
+    WRITES:   ML_BSSN_Host::At11
+    WRITES:   ML_BSSN_Host::At12
+    WRITES:   ML_BSSN_Host::At13
+    WRITES:   ML_BSSN_Host::At22
+    WRITES:   ML_BSSN_Host::At23
+    WRITES:   ML_BSSN_Host::At33
+    WRITES:   ML_BSSN_Host::B1
+    WRITES:   ML_BSSN_Host::B2
+    WRITES:   ML_BSSN_Host::B3
+    WRITES:   ML_BSSN_Host::beta1
+    WRITES:   ML_BSSN_Host::beta2
+    WRITES:   ML_BSSN_Host::beta3
+    WRITES:   ML_BSSN_Host::gt11
+    WRITES:   ML_BSSN_Host::gt12
+    WRITES:   ML_BSSN_Host::gt13
+    WRITES:   ML_BSSN_Host::gt22
+    WRITES:   ML_BSSN_Host::gt23
+    WRITES:   ML_BSSN_Host::gt33
+    WRITES:   ML_BSSN_Host::phi
+    WRITES:   ML_BSSN_Host::trK
+    WRITES:   ML_BSSN_Host::Xt1
+    WRITES:   ML_BSSN_Host::Xt2
+    WRITES:   ML_BSSN_Host::Xt3
   } "ML_BSSN_Host_Minkowski"
 }
 
@@ -229,21 +245,50 @@ if (CCTK_EQUALS(my_initial_data, "ADMBase"))
   schedule ML_BSSN_Host_convertFromADMBase AT initial AFTER ADMBase_PostInitial
   {
     LANG: C
-    READS:    ADMBase::curv
-    READS:    ADMBase::lapse
-    READS:    ADMBase::metric
-    READS:    ADMBase::shift
-    READS:    grid::coordinates
-    READS:    Grid::coordinates
-    READS:    ML_BSSN_Host::ML_log_confac
-    READS:    ML_BSSN_Host::ML_trace_curv
-    WRITES:   ML_BSSN_Host::coords
-    WRITES:   ML_BSSN_Host::ML_curv
-    WRITES:   ML_BSSN_Host::ML_lapse
-    WRITES:   ML_BSSN_Host::ML_log_confac
-    WRITES:   ML_BSSN_Host::ML_metric
-    WRITES:   ML_BSSN_Host::ML_shift
-    WRITES:   ML_BSSN_Host::ML_trace_curv
+    READS:    ADMBase::alp
+    READS:    ADMBase::betax
+    READS:    ADMBase::betay
+    READS:    ADMBase::betaz
+    READS:    ADMBase::gxx
+    READS:    ADMBase::gxy
+    READS:    ADMBase::gxz
+    READS:    ADMBase::gyy
+    READS:    ADMBase::gyz
+    READS:    ADMBase::gzz
+    READS:    ADMBase::kxx
+    READS:    ADMBase::kxy
+    READS:    ADMBase::kxz
+    READS:    ADMBase::kyy
+    READS:    ADMBase::kyz
+    READS:    ADMBase::kzz
+    READS:    ML_BSSN_Host::phi
+    READS:    grid::r
+    READS:    ML_BSSN_Host::trK
+    READS:    grid::x
+    READS:    grid::y
+    READS:    grid::z
+    WRITES:   ML_BSSN_Host::alpha
+    WRITES:   ML_BSSN_Host::At11
+    WRITES:   ML_BSSN_Host::At12
+    WRITES:   ML_BSSN_Host::At13
+    WRITES:   ML_BSSN_Host::At22
+    WRITES:   ML_BSSN_Host::At23
+    WRITES:   ML_BSSN_Host::At33
+    WRITES:   ML_BSSN_Host::beta1
+    WRITES:   ML_BSSN_Host::beta2
+    WRITES:   ML_BSSN_Host::beta3
+    WRITES:   ML_BSSN_Host::gt11
+    WRITES:   ML_BSSN_Host::gt12
+    WRITES:   ML_BSSN_Host::gt13
+    WRITES:   ML_BSSN_Host::gt22
+    WRITES:   ML_BSSN_Host::gt23
+    WRITES:   ML_BSSN_Host::gt33
+    WRITES:   ML_BSSN_Host::phi
+    WRITES:   ML_BSSN_Host::rCopy
+    WRITES:   ML_BSSN_Host::trK
+    WRITES:   ML_BSSN_Host::xCopy
+    WRITES:   ML_BSSN_Host::yCopy
+    WRITES:   ML_BSSN_Host::zCopy
   } "ML_BSSN_Host_convertFromADMBase"
 }
 
@@ -253,9 +298,13 @@ if (CCTK_EQUALS(my_initial_data, "ADMBase"))
   schedule ML_BSSN_Host_InitGamma AT initial BEFORE ML_BSSN_Host_convertFromADMBaseGamma
   {
     LANG: C
-    WRITES:   ML_BSSN_Host::ML_dtlapse
-    WRITES:   ML_BSSN_Host::ML_dtshift
-    WRITES:   ML_BSSN_Host::ML_Gamma
+    WRITES:   ML_BSSN_Host::A
+    WRITES:   ML_BSSN_Host::B1
+    WRITES:   ML_BSSN_Host::B2
+    WRITES:   ML_BSSN_Host::B3
+    WRITES:   ML_BSSN_Host::Xt1
+    WRITES:   ML_BSSN_Host::Xt2
+    WRITES:   ML_BSSN_Host::Xt3
   } "ML_BSSN_Host_InitGamma"
 }
 
@@ -268,290 +317,415 @@ if (CCTK_EQUALS(my_initial_data, "ADMBase"))
     SYNC: ML_dtlapse
     SYNC: ML_dtshift
     SYNC: ML_Gamma
-    READS:    ADMBase::dtlapse
-    READS:    ADMBase::dtshift
-    READS:    ML_BSSN_Host::ML_lapse
-    READS:    ML_BSSN_Host::ML_metric
-    READS:    ML_BSSN_Host::ML_shift
-    WRITES:   ML_BSSN_Host::ML_dtlapse
-    WRITES:   ML_BSSN_Host::ML_dtshift
-    WRITES:   ML_BSSN_Host::ML_Gamma
+    READS:    ML_BSSN_Host::alpha
+    READS:    ML_BSSN_Host::beta1
+    READS:    ML_BSSN_Host::beta2
+    READS:    ML_BSSN_Host::beta3
+    READS:    ADMBase::dtalp
+    READS:    ADMBase::dtbetax
+    READS:    ADMBase::dtbetay
+    READS:    ADMBase::dtbetaz
+    READS:    ML_BSSN_Host::gt11
+    READS:    ML_BSSN_Host::gt12
+    READS:    ML_BSSN_Host::gt13
+    READS:    ML_BSSN_Host::gt22
+    READS:    ML_BSSN_Host::gt23
+    READS:    ML_BSSN_Host::gt33
+    WRITES:   ML_BSSN_Host::A
+    WRITES:   ML_BSSN_Host::B1
+    WRITES:   ML_BSSN_Host::B2
+    WRITES:   ML_BSSN_Host::B3
+    WRITES:   ML_BSSN_Host::Xt1
+    WRITES:   ML_BSSN_Host::Xt2
+    WRITES:   ML_BSSN_Host::Xt3
   } "ML_BSSN_Host_convertFromADMBaseGamma"
 }
 
 schedule ML_BSSN_Host_RHS1 in ML_BSSN_Host_RHS
 {
   LANG: C
-  READS:    ML_BSSN_Host::ML_curv
-  READS:    ML_BSSN_Host::ML_dtlapse
-  READS:    ML_BSSN_Host::ML_dtshift
-  READS:    ML_BSSN_Host::ML_Gamma
-  READS:    ML_BSSN_Host::ML_lapse
-  READS:    ML_BSSN_Host::ML_log_confac
-  READS:    ML_BSSN_Host::ML_metric
-  READS:    ML_BSSN_Host::ML_shift
-  READS:    ML_BSSN_Host::ML_trace_curv
-  WRITES:   ML_BSSN_Host::ML_dtlapserhs
-  WRITES:   ML_BSSN_Host::ML_dtshiftrhs
-  WRITES:   ML_BSSN_Host::ML_Gammarhs
-  WRITES:   ML_BSSN_Host::ML_lapserhs
-  WRITES:   ML_BSSN_Host::ML_log_confacrhs
-  WRITES:   ML_BSSN_Host::ML_metricrhs
-  WRITES:   ML_BSSN_Host::ML_shiftrhs
-  WRITES:   ML_BSSN_Host::ML_trace_curvrhs
+  READS:    ML_BSSN_Host::A
+  READS:    ML_BSSN_Host::alpha
+  READS:    ML_BSSN_Host::At11
+  READS:    ML_BSSN_Host::At12
+  READS:    ML_BSSN_Host::At13
+  READS:    ML_BSSN_Host::At22
+  READS:    ML_BSSN_Host::At23
+  READS:    ML_BSSN_Host::At33
+  READS:    ML_BSSN_Host::B1
+  READS:    ML_BSSN_Host::B2
+  READS:    ML_BSSN_Host::B3
+  READS:    ML_BSSN_Host::beta1
+  READS:    ML_BSSN_Host::beta2
+  READS:    ML_BSSN_Host::beta3
+  READS:    ML_BSSN_Host::gt11
+  READS:    ML_BSSN_Host::gt12
+  READS:    ML_BSSN_Host::gt13
+  READS:    ML_BSSN_Host::gt22
+  READS:    ML_BSSN_Host::gt23
+  READS:    ML_BSSN_Host::gt33
+  READS:    ML_BSSN_Host::phi
+  READS:    ML_BSSN_Host::trK
+  READS:    ML_BSSN_Host::Xt1
+  READS:    ML_BSSN_Host::Xt2
+  READS:    ML_BSSN_Host::Xt3
+  WRITES:   ML_BSSN_Host::alpharhs
+  WRITES:   ML_BSSN_Host::Arhs
+  WRITES:   ML_BSSN_Host::B1rhs
+  WRITES:   ML_BSSN_Host::B2rhs
+  WRITES:   ML_BSSN_Host::B3rhs
+  WRITES:   ML_BSSN_Host::beta1rhs
+  WRITES:   ML_BSSN_Host::beta2rhs
+  WRITES:   ML_BSSN_Host::beta3rhs
+  WRITES:   ML_BSSN_Host::gt11rhs
+  WRITES:   ML_BSSN_Host::gt12rhs
+  WRITES:   ML_BSSN_Host::gt13rhs
+  WRITES:   ML_BSSN_Host::gt22rhs
+  WRITES:   ML_BSSN_Host::gt23rhs
+  WRITES:   ML_BSSN_Host::gt33rhs
+  WRITES:   ML_BSSN_Host::phirhs
+  WRITES:   ML_BSSN_Host::trKrhs
+  WRITES:   ML_BSSN_Host::Xt1rhs
+  WRITES:   ML_BSSN_Host::Xt2rhs
+  WRITES:   ML_BSSN_Host::Xt3rhs
 } "ML_BSSN_Host_RHS1"
 
 schedule ML_BSSN_Host_RHS2 in ML_BSSN_Host_RHS
 {
   LANG: C
-  READS:    ML_BSSN_Host::ML_curv
-  READS:    ML_BSSN_Host::ML_Gamma
-  READS:    ML_BSSN_Host::ML_lapse
-  READS:    ML_BSSN_Host::ML_log_confac
-  READS:    ML_BSSN_Host::ML_metric
-  READS:    ML_BSSN_Host::ML_shift
-  READS:    ML_BSSN_Host::ML_trace_curv
-  WRITES:   ML_BSSN_Host::ML_curvrhs
+  READS:    ML_BSSN_Host::alpha
+  READS:    ML_BSSN_Host::At11
+  READS:    ML_BSSN_Host::At12
+  READS:    ML_BSSN_Host::At13
+  READS:    ML_BSSN_Host::At22
+  READS:    ML_BSSN_Host::At23
+  READS:    ML_BSSN_Host::At33
+  READS:    ML_BSSN_Host::beta1
+  READS:    ML_BSSN_Host::beta2
+  READS:    ML_BSSN_Host::beta3
+  READS:    ML_BSSN_Host::gt11
+  READS:    ML_BSSN_Host::gt12
+  READS:    ML_BSSN_Host::gt13
+  READS:    ML_BSSN_Host::gt22
+  READS:    ML_BSSN_Host::gt23
+  READS:    ML_BSSN_Host::gt33
+  READS:    ML_BSSN_Host::phi
+  READS:    ML_BSSN_Host::trK
+  READS:    ML_BSSN_Host::Xt1
+  READS:    ML_BSSN_Host::Xt2
+  READS:    ML_BSSN_Host::Xt3
+  WRITES:   ML_BSSN_Host::At11rhs
+  WRITES:   ML_BSSN_Host::At12rhs
+  WRITES:   ML_BSSN_Host::At13rhs
+  WRITES:   ML_BSSN_Host::At22rhs
+  WRITES:   ML_BSSN_Host::At23rhs
+  WRITES:   ML_BSSN_Host::At33rhs
 } "ML_BSSN_Host_RHS2"
 
 schedule ML_BSSN_Host_Advect_trKrhs in ML_BSSN_Host_Advect
 {
   LANG: C
-  READS:    ML_BSSN_Host::ML_shift
-  READS:    ML_BSSN_Host::ML_trace_curv
-  READS:    ML_BSSN_Host::ML_trace_curvrhs
-  WRITES:   ML_BSSN_Host::ML_trace_curvrhs
+  READS:    ML_BSSN_Host::beta1
+  READS:    ML_BSSN_Host::beta2
+  READS:    ML_BSSN_Host::beta3
+  READS:    ML_BSSN_Host::trK
+  READS:    ML_BSSN_Host::trKrhs
+  WRITES:   ML_BSSN_Host::trKrhs
 } "ML_BSSN_Host_Advect_trKrhs"
 
 schedule ML_BSSN_Host_Advect_phirhs in ML_BSSN_Host_Advect
 {
   LANG: C
-  READS:    ML_BSSN_Host::ML_log_confac
-  READS:    ML_BSSN_Host::ML_log_confacrhs
-  READS:    ML_BSSN_Host::ML_shift
-  WRITES:   ML_BSSN_Host::ML_log_confacrhs
+  READS:    ML_BSSN_Host::beta1
+  READS:    ML_BSSN_Host::beta2
+  READS:    ML_BSSN_Host::beta3
+  READS:    ML_BSSN_Host::phi
+  READS:    ML_BSSN_Host::phirhs
+  WRITES:   ML_BSSN_Host::phirhs
 } "ML_BSSN_Host_Advect_phirhs"
 
 schedule ML_BSSN_Host_Advect_gt11rhs in ML_BSSN_Host_Advect
 {
   LANG: C
-  READS:    ML_BSSN_Host::ML_metric
-  READS:    ML_BSSN_Host::ML_metricrhs
-  READS:    ML_BSSN_Host::ML_shift
-  WRITES:   ML_BSSN_Host::ML_metricrhs
+  READS:    ML_BSSN_Host::beta1
+  READS:    ML_BSSN_Host::beta2
+  READS:    ML_BSSN_Host::beta3
+  READS:    ML_BSSN_Host::gt11
+  READS:    ML_BSSN_Host::gt11rhs
+  WRITES:   ML_BSSN_Host::gt11rhs
 } "ML_BSSN_Host_Advect_gt11rhs"
 
 schedule ML_BSSN_Host_Advect_gt12rhs in ML_BSSN_Host_Advect
 {
   LANG: C
-  READS:    ML_BSSN_Host::ML_metric
-  READS:    ML_BSSN_Host::ML_metricrhs
-  READS:    ML_BSSN_Host::ML_shift
-  WRITES:   ML_BSSN_Host::ML_metricrhs
+  READS:    ML_BSSN_Host::beta1
+  READS:    ML_BSSN_Host::beta2
+  READS:    ML_BSSN_Host::beta3
+  READS:    ML_BSSN_Host::gt12
+  READS:    ML_BSSN_Host::gt12rhs
+  WRITES:   ML_BSSN_Host::gt12rhs
 } "ML_BSSN_Host_Advect_gt12rhs"
 
 schedule ML_BSSN_Host_Advect_gt13rhs in ML_BSSN_Host_Advect
 {
   LANG: C
-  READS:    ML_BSSN_Host::ML_metric
-  READS:    ML_BSSN_Host::ML_metricrhs
-  READS:    ML_BSSN_Host::ML_shift
-  WRITES:   ML_BSSN_Host::ML_metricrhs
+  READS:    ML_BSSN_Host::beta1
+  READS:    ML_BSSN_Host::beta2
+  READS:    ML_BSSN_Host::beta3
+  READS:    ML_BSSN_Host::gt13
+  READS:    ML_BSSN_Host::gt13rhs
+  WRITES:   ML_BSSN_Host::gt13rhs
 } "ML_BSSN_Host_Advect_gt13rhs"
 
 schedule ML_BSSN_Host_Advect_gt22rhs in ML_BSSN_Host_Advect
 {
   LANG: C
-  READS:    ML_BSSN_Host::ML_metric
-  READS:    ML_BSSN_Host::ML_metricrhs
-  READS:    ML_BSSN_Host::ML_shift
-  WRITES:   ML_BSSN_Host::ML_metricrhs
+  READS:    ML_BSSN_Host::beta1
+  READS:    ML_BSSN_Host::beta2
+  READS:    ML_BSSN_Host::beta3
+  READS:    ML_BSSN_Host::gt22
+  READS:    ML_BSSN_Host::gt22rhs
+  WRITES:   ML_BSSN_Host::gt22rhs
 } "ML_BSSN_Host_Advect_gt22rhs"
 
 schedule ML_BSSN_Host_Advect_gt23rhs in ML_BSSN_Host_Advect
 {
   LANG: C
-  READS:    ML_BSSN_Host::ML_metric
-  READS:    ML_BSSN_Host::ML_metricrhs
-  READS:    ML_BSSN_Host::ML_shift
-  WRITES:   ML_BSSN_Host::ML_metricrhs
+  READS:    ML_BSSN_Host::beta1
+  READS:    ML_BSSN_Host::beta2
+  READS:    ML_BSSN_Host::beta3
+  READS:    ML_BSSN_Host::gt23
+  READS:    ML_BSSN_Host::gt23rhs
+  WRITES:   ML_BSSN_Host::gt23rhs
 } "ML_BSSN_Host_Advect_gt23rhs"
 
 schedule ML_BSSN_Host_Advect_gt33rhs in ML_BSSN_Host_Advect
 {
   LANG: C
-  READS:    ML_BSSN_Host::ML_metric
-  READS:    ML_BSSN_Host::ML_metricrhs
-  READS:    ML_BSSN_Host::ML_shift
-  WRITES:   ML_BSSN_Host::ML_metricrhs
+  READS:    ML_BSSN_Host::beta1
+  READS:    ML_BSSN_Host::beta2
+  READS:    ML_BSSN_Host::beta3
+  READS:    ML_BSSN_Host::gt33
+  READS:    ML_BSSN_Host::gt33rhs
+  WRITES:   ML_BSSN_Host::gt33rhs
 } "ML_BSSN_Host_Advect_gt33rhs"
 
 schedule ML_BSSN_Host_Advect_Xt1rhs in ML_BSSN_Host_Advect
 {
   LANG: C
-  READS:    ML_BSSN_Host::ML_Gamma
-  READS:    ML_BSSN_Host::ML_Gammarhs
-  READS:    ML_BSSN_Host::ML_shift
-  WRITES:   ML_BSSN_Host::ML_Gammarhs
+  READS:    ML_BSSN_Host::beta1
+  READS:    ML_BSSN_Host::beta2
+  READS:    ML_BSSN_Host::beta3
+  READS:    ML_BSSN_Host::Xt1
+  READS:    ML_BSSN_Host::Xt1rhs
+  WRITES:   ML_BSSN_Host::Xt1rhs
 } "ML_BSSN_Host_Advect_Xt1rhs"
 
 schedule ML_BSSN_Host_Advect_Xt2rhs in ML_BSSN_Host_Advect
 {
   LANG: C
-  READS:    ML_BSSN_Host::ML_Gamma
-  READS:    ML_BSSN_Host::ML_Gammarhs
-  READS:    ML_BSSN_Host::ML_shift
-  WRITES:   ML_BSSN_Host::ML_Gammarhs
+  READS:    ML_BSSN_Host::beta1
+  READS:    ML_BSSN_Host::beta2
+  READS:    ML_BSSN_Host::beta3
+  READS:    ML_BSSN_Host::Xt2
+  READS:    ML_BSSN_Host::Xt2rhs
+  WRITES:   ML_BSSN_Host::Xt2rhs
 } "ML_BSSN_Host_Advect_Xt2rhs"
 
 schedule ML_BSSN_Host_Advect_Xt3rhs in ML_BSSN_Host_Advect
 {
   LANG: C
-  READS:    ML_BSSN_Host::ML_Gamma
-  READS:    ML_BSSN_Host::ML_Gammarhs
-  READS:    ML_BSSN_Host::ML_shift
-  WRITES:   ML_BSSN_Host::ML_Gammarhs
+  READS:    ML_BSSN_Host::beta1
+  READS:    ML_BSSN_Host::beta2
+  READS:    ML_BSSN_Host::beta3
+  READS:    ML_BSSN_Host::Xt3
+  READS:    ML_BSSN_Host::Xt3rhs
+  WRITES:   ML_BSSN_Host::Xt3rhs
 } "ML_BSSN_Host_Advect_Xt3rhs"
 
 schedule ML_BSSN_Host_Advect_alpharhs in ML_BSSN_Host_Advect
 {
   LANG: C
-  READS:    ML_BSSN_Host::ML_lapse
-  READS:    ML_BSSN_Host::ML_lapserhs
-  READS:    ML_BSSN_Host::ML_shift
-  WRITES:   ML_BSSN_Host::ML_lapserhs
+  READS:    ML_BSSN_Host::alpha
+  READS:    ML_BSSN_Host::alpharhs
+  READS:    ML_BSSN_Host::beta1
+  READS:    ML_BSSN_Host::beta2
+  READS:    ML_BSSN_Host::beta3
+  WRITES:   ML_BSSN_Host::alpharhs
 } "ML_BSSN_Host_Advect_alpharhs"
 
 schedule ML_BSSN_Host_Advect_Arhs in ML_BSSN_Host_Advect
 {
   LANG: C
-  READS:    ML_BSSN_Host::ML_dtlapse
-  READS:    ML_BSSN_Host::ML_dtlapserhs
-  READS:    ML_BSSN_Host::ML_shift
-  READS:    ML_BSSN_Host::ML_trace_curv
-  WRITES:   ML_BSSN_Host::ML_dtlapserhs
+  READS:    ML_BSSN_Host::A
+  READS:    ML_BSSN_Host::Arhs
+  READS:    ML_BSSN_Host::beta1
+  READS:    ML_BSSN_Host::beta2
+  READS:    ML_BSSN_Host::beta3
+  READS:    ML_BSSN_Host::trK
+  WRITES:   ML_BSSN_Host::Arhs
 } "ML_BSSN_Host_Advect_Arhs"
 
 schedule ML_BSSN_Host_Advect_beta1rhs in ML_BSSN_Host_Advect
 {
   LANG: C
-  READS:    ML_BSSN_Host::ML_shift
-  READS:    ML_BSSN_Host::ML_shiftrhs
-  WRITES:   ML_BSSN_Host::ML_shiftrhs
+  READS:    ML_BSSN_Host::beta1
+  READS:    ML_BSSN_Host::beta1rhs
+  READS:    ML_BSSN_Host::beta2
+  READS:    ML_BSSN_Host::beta3
+  WRITES:   ML_BSSN_Host::beta1rhs
 } "ML_BSSN_Host_Advect_beta1rhs"
 
 schedule ML_BSSN_Host_Advect_beta2rhs in ML_BSSN_Host_Advect
 {
   LANG: C
-  READS:    ML_BSSN_Host::ML_shift
-  READS:    ML_BSSN_Host::ML_shiftrhs
-  WRITES:   ML_BSSN_Host::ML_shiftrhs
+  READS:    ML_BSSN_Host::beta1
+  READS:    ML_BSSN_Host::beta2
+  READS:    ML_BSSN_Host::beta2rhs
+  READS:    ML_BSSN_Host::beta3
+  WRITES:   ML_BSSN_Host::beta2rhs
 } "ML_BSSN_Host_Advect_beta2rhs"
 
 schedule ML_BSSN_Host_Advect_beta3rhs in ML_BSSN_Host_Advect
 {
   LANG: C
-  READS:    ML_BSSN_Host::ML_shift
-  READS:    ML_BSSN_Host::ML_shiftrhs
-  WRITES:   ML_BSSN_Host::ML_shiftrhs
+  READS:    ML_BSSN_Host::beta1
+  READS:    ML_BSSN_Host::beta2
+  READS:    ML_BSSN_Host::beta3
+  READS:    ML_BSSN_Host::beta3rhs
+  WRITES:   ML_BSSN_Host::beta3rhs
 } "ML_BSSN_Host_Advect_beta3rhs"
 
 schedule ML_BSSN_Host_Advect_B1rhs in ML_BSSN_Host_Advect
 {
   LANG: C
-  READS:    ML_BSSN_Host::ML_dtshift
-  READS:    ML_BSSN_Host::ML_dtshiftrhs
-  READS:    ML_BSSN_Host::ML_Gamma
-  READS:    ML_BSSN_Host::ML_shift
-  WRITES:   ML_BSSN_Host::ML_dtshiftrhs
+  READS:    ML_BSSN_Host::B1
+  READS:    ML_BSSN_Host::B1rhs
+  READS:    ML_BSSN_Host::beta1
+  READS:    ML_BSSN_Host::beta2
+  READS:    ML_BSSN_Host::beta3
+  READS:    ML_BSSN_Host::Xt1
+  WRITES:   ML_BSSN_Host::B1rhs
 } "ML_BSSN_Host_Advect_B1rhs"
 
 schedule ML_BSSN_Host_Advect_B2rhs in ML_BSSN_Host_Advect
 {
   LANG: C
-  READS:    ML_BSSN_Host::ML_dtshift
-  READS:    ML_BSSN_Host::ML_dtshiftrhs
-  READS:    ML_BSSN_Host::ML_Gamma
-  READS:    ML_BSSN_Host::ML_shift
-  WRITES:   ML_BSSN_Host::ML_dtshiftrhs
+  READS:    ML_BSSN_Host::B2
+  READS:    ML_BSSN_Host::B2rhs
+  READS:    ML_BSSN_Host::beta1
+  READS:    ML_BSSN_Host::beta2
+  READS:    ML_BSSN_Host::beta3
+  READS:    ML_BSSN_Host::Xt2
+  WRITES:   ML_BSSN_Host::B2rhs
 } "ML_BSSN_Host_Advect_B2rhs"
 
 schedule ML_BSSN_Host_Advect_B3rhs in ML_BSSN_Host_Advect
 {
   LANG: C
-  READS:    ML_BSSN_Host::ML_dtshift
-  READS:    ML_BSSN_Host::ML_dtshiftrhs
-  READS:    ML_BSSN_Host::ML_Gamma
-  READS:    ML_BSSN_Host::ML_shift
-  WRITES:   ML_BSSN_Host::ML_dtshiftrhs
+  READS:    ML_BSSN_Host::B3
+  READS:    ML_BSSN_Host::B3rhs
+  READS:    ML_BSSN_Host::beta1
+  READS:    ML_BSSN_Host::beta2
+  READS:    ML_BSSN_Host::beta3
+  READS:    ML_BSSN_Host::Xt3
+  WRITES:   ML_BSSN_Host::B3rhs
 } "ML_BSSN_Host_Advect_B3rhs"
 
 schedule ML_BSSN_Host_Advect_At11rhs in ML_BSSN_Host_Advect
 {
   LANG: C
-  READS:    ML_BSSN_Host::ML_curv
-  READS:    ML_BSSN_Host::ML_curvrhs
-  READS:    ML_BSSN_Host::ML_shift
-  WRITES:   ML_BSSN_Host::ML_curvrhs
+  READS:    ML_BSSN_Host::At11
+  READS:    ML_BSSN_Host::At11rhs
+  READS:    ML_BSSN_Host::beta1
+  READS:    ML_BSSN_Host::beta2
+  READS:    ML_BSSN_Host::beta3
+  WRITES:   ML_BSSN_Host::At11rhs
 } "ML_BSSN_Host_Advect_At11rhs"
 
 schedule ML_BSSN_Host_Advect_At12rhs in ML_BSSN_Host_Advect
 {
   LANG: C
-  READS:    ML_BSSN_Host::ML_curv
-  READS:    ML_BSSN_Host::ML_curvrhs
-  READS:    ML_BSSN_Host::ML_shift
-  WRITES:   ML_BSSN_Host::ML_curvrhs
+  READS:    ML_BSSN_Host::At12
+  READS:    ML_BSSN_Host::At12rhs
+  READS:    ML_BSSN_Host::beta1
+  READS:    ML_BSSN_Host::beta2
+  READS:    ML_BSSN_Host::beta3
+  WRITES:   ML_BSSN_Host::At12rhs
 } "ML_BSSN_Host_Advect_At12rhs"
 
 schedule ML_BSSN_Host_Advect_At13rhs in ML_BSSN_Host_Advect
 {
   LANG: C
-  READS:    ML_BSSN_Host::ML_curv
-  READS:    ML_BSSN_Host::ML_curvrhs
-  READS:    ML_BSSN_Host::ML_shift
-  WRITES:   ML_BSSN_Host::ML_curvrhs
+  READS:    ML_BSSN_Host::At13
+  READS:    ML_BSSN_Host::At13rhs
+  READS:    ML_BSSN_Host::beta1
+  READS:    ML_BSSN_Host::beta2
+  READS:    ML_BSSN_Host::beta3
+  WRITES:   ML_BSSN_Host::At13rhs
 } "ML_BSSN_Host_Advect_At13rhs"
 
 schedule ML_BSSN_Host_Advect_At22rhs in ML_BSSN_Host_Advect
 {
   LANG: C
-  READS:    ML_BSSN_Host::ML_curv
-  READS:    ML_BSSN_Host::ML_curvrhs
-  READS:    ML_BSSN_Host::ML_shift
-  WRITES:   ML_BSSN_Host::ML_curvrhs
+  READS:    ML_BSSN_Host::At22
+  READS:    ML_BSSN_Host::At22rhs
+  READS:    ML_BSSN_Host::beta1
+  READS:    ML_BSSN_Host::beta2
+  READS:    ML_BSSN_Host::beta3
+  WRITES:   ML_BSSN_Host::At22rhs
 } "ML_BSSN_Host_Advect_At22rhs"
 
 schedule ML_BSSN_Host_Advect_At23rhs in ML_BSSN_Host_Advect
 {
   LANG: C
-  READS:    ML_BSSN_Host::ML_curv
-  READS:    ML_BSSN_Host::ML_curvrhs
-  READS:    ML_BSSN_Host::ML_shift
-  WRITES:   ML_BSSN_Host::ML_curvrhs
+  READS:    ML_BSSN_Host::At23
+  READS:    ML_BSSN_Host::At23rhs
+  READS:    ML_BSSN_Host::beta1
+  READS:    ML_BSSN_Host::beta2
+  READS:    ML_BSSN_Host::beta3
+  WRITES:   ML_BSSN_Host::At23rhs
 } "ML_BSSN_Host_Advect_At23rhs"
 
 schedule ML_BSSN_Host_Advect_At33rhs in ML_BSSN_Host_Advect
 {
   LANG: C
-  READS:    ML_BSSN_Host::ML_curv
-  READS:    ML_BSSN_Host::ML_curvrhs
-  READS:    ML_BSSN_Host::ML_shift
-  WRITES:   ML_BSSN_Host::ML_curvrhs
+  READS:    ML_BSSN_Host::At33
+  READS:    ML_BSSN_Host::At33rhs
+  READS:    ML_BSSN_Host::beta1
+  READS:    ML_BSSN_Host::beta2
+  READS:    ML_BSSN_Host::beta3
+  WRITES:   ML_BSSN_Host::At33rhs
 } "ML_BSSN_Host_Advect_At33rhs"
 
 schedule ML_BSSN_Host_InitRHS AT analysis BEFORE ML_BSSN_Host_evolCalcGroup
 {
   LANG: C
-  WRITES:   ML_BSSN_Host::ML_curvrhs
-  WRITES:   ML_BSSN_Host::ML_dtlapserhs
-  WRITES:   ML_BSSN_Host::ML_dtshiftrhs
-  WRITES:   ML_BSSN_Host::ML_Gammarhs
-  WRITES:   ML_BSSN_Host::ML_lapserhs
-  WRITES:   ML_BSSN_Host::ML_log_confacrhs
-  WRITES:   ML_BSSN_Host::ML_metricrhs
-  WRITES:   ML_BSSN_Host::ML_shiftrhs
-  WRITES:   ML_BSSN_Host::ML_trace_curvrhs
+  WRITES:   ML_BSSN_Host::alpharhs
+  WRITES:   ML_BSSN_Host::Arhs
+  WRITES:   ML_BSSN_Host::At11rhs
+  WRITES:   ML_BSSN_Host::At12rhs
+  WRITES:   ML_BSSN_Host::At13rhs
+  WRITES:   ML_BSSN_Host::At22rhs
+  WRITES:   ML_BSSN_Host::At23rhs
+  WRITES:   ML_BSSN_Host::At33rhs
+  WRITES:   ML_BSSN_Host::B1rhs
+  WRITES:   ML_BSSN_Host::B2rhs
+  WRITES:   ML_BSSN_Host::B3rhs
+  WRITES:   ML_BSSN_Host::beta1rhs
+  WRITES:   ML_BSSN_Host::beta2rhs
+  WRITES:   ML_BSSN_Host::beta3rhs
+  WRITES:   ML_BSSN_Host::gt11rhs
+  WRITES:   ML_BSSN_Host::gt12rhs
+  WRITES:   ML_BSSN_Host::gt13rhs
+  WRITES:   ML_BSSN_Host::gt22rhs
+  WRITES:   ML_BSSN_Host::gt23rhs
+  WRITES:   ML_BSSN_Host::gt33rhs
+  WRITES:   ML_BSSN_Host::phirhs
+  WRITES:   ML_BSSN_Host::trKrhs
+  WRITES:   ML_BSSN_Host::Xt1rhs
+  WRITES:   ML_BSSN_Host::Xt2rhs
+  WRITES:   ML_BSSN_Host::Xt3rhs
 } "ML_BSSN_Host_InitRHS"
 
 
@@ -560,26 +734,57 @@ if (CCTK_EQUALS(my_rhs_boundary_condition, "static"))
   schedule ML_BSSN_Host_RHSStaticBoundary IN ML_BSSN_Host_evolCalcGroup
   {
     LANG: C
-    WRITES:   ML_BSSN_Host::ML_curvrhs
-    WRITES:   ML_BSSN_Host::ML_dtlapserhs
-    WRITES:   ML_BSSN_Host::ML_dtshiftrhs
-    WRITES:   ML_BSSN_Host::ML_Gammarhs
-    WRITES:   ML_BSSN_Host::ML_lapserhs
-    WRITES:   ML_BSSN_Host::ML_log_confacrhs
-    WRITES:   ML_BSSN_Host::ML_metricrhs
-    WRITES:   ML_BSSN_Host::ML_shiftrhs
-    WRITES:   ML_BSSN_Host::ML_trace_curvrhs
+    WRITES:   ML_BSSN_Host::alpharhs
+    WRITES:   ML_BSSN_Host::Arhs
+    WRITES:   ML_BSSN_Host::At11rhs
+    WRITES:   ML_BSSN_Host::At12rhs
+    WRITES:   ML_BSSN_Host::At13rhs
+    WRITES:   ML_BSSN_Host::At22rhs
+    WRITES:   ML_BSSN_Host::At23rhs
+    WRITES:   ML_BSSN_Host::At33rhs
+    WRITES:   ML_BSSN_Host::B1rhs
+    WRITES:   ML_BSSN_Host::B2rhs
+    WRITES:   ML_BSSN_Host::B3rhs
+    WRITES:   ML_BSSN_Host::beta1rhs
+    WRITES:   ML_BSSN_Host::beta2rhs
+    WRITES:   ML_BSSN_Host::beta3rhs
+    WRITES:   ML_BSSN_Host::gt11rhs
+    WRITES:   ML_BSSN_Host::gt12rhs
+    WRITES:   ML_BSSN_Host::gt13rhs
+    WRITES:   ML_BSSN_Host::gt22rhs
+    WRITES:   ML_BSSN_Host::gt23rhs
+    WRITES:   ML_BSSN_Host::gt33rhs
+    WRITES:   ML_BSSN_Host::phirhs
+    WRITES:   ML_BSSN_Host::trKrhs
+    WRITES:   ML_BSSN_Host::Xt1rhs
+    WRITES:   ML_BSSN_Host::Xt2rhs
+    WRITES:   ML_BSSN_Host::Xt3rhs
   } "ML_BSSN_Host_RHSStaticBoundary"
 }
 
 schedule ML_BSSN_Host_enforce IN MoL_PostStepModify
 {
   LANG: C
-  READS:    ML_BSSN_Host::ML_curv
-  READS:    ML_BSSN_Host::ML_lapse
-  READS:    ML_BSSN_Host::ML_metric
-  WRITES:   ML_BSSN_Host::ML_curv
-  WRITES:   ML_BSSN_Host::ML_lapse
+  READS:    ML_BSSN_Host::alpha
+  READS:    ML_BSSN_Host::At11
+  READS:    ML_BSSN_Host::At12
+  READS:    ML_BSSN_Host::At13
+  READS:    ML_BSSN_Host::At22
+  READS:    ML_BSSN_Host::At23
+  READS:    ML_BSSN_Host::At33
+  READS:    ML_BSSN_Host::gt11
+  READS:    ML_BSSN_Host::gt12
+  READS:    ML_BSSN_Host::gt13
+  READS:    ML_BSSN_Host::gt22
+  READS:    ML_BSSN_Host::gt23
+  READS:    ML_BSSN_Host::gt33
+  WRITES:   ML_BSSN_Host::alpha
+  WRITES:   ML_BSSN_Host::At11
+  WRITES:   ML_BSSN_Host::At12
+  WRITES:   ML_BSSN_Host::At13
+  WRITES:   ML_BSSN_Host::At22
+  WRITES:   ML_BSSN_Host::At23
+  WRITES:   ML_BSSN_Host::At33
 } "ML_BSSN_Host_enforce"
 
 schedule ML_BSSN_Host_SelectBoundConds in MoL_PostStep
