@@ -146,6 +146,42 @@ static CCTK_REAL_VEC PDstandardNth32_impl(CCTK_REAL const* restrict const u, CCT
 #endif
 
 #ifndef KRANC_DIFF_FUNCTIONS
+#  define PDstandard2nd1(u) (kmul(p1o2dx,ksub(KRANC_GFOFFSET3D(u,1,0,0),KRANC_GFOFFSET3D(u,-1,0,0))))
+#else
+#  define PDstandard2nd1(u) (PDstandard2nd1_impl(u,p1o2dx,cdj,cdk))
+static CCTK_REAL_VEC PDstandard2nd1_impl(CCTK_REAL const* restrict const u, CCTK_REAL_VEC const p1o2dx, ptrdiff_t const cdj, ptrdiff_t const cdk) CCTK_ATTRIBUTE_NOINLINE CCTK_ATTRIBUTE_UNUSED;
+static CCTK_REAL_VEC PDstandard2nd1_impl(CCTK_REAL const* restrict const u, CCTK_REAL_VEC const p1o2dx, ptrdiff_t const cdj, ptrdiff_t const cdk)
+{
+  ptrdiff_t const cdi=sizeof(CCTK_REAL);
+  return kmul(p1o2dx,ksub(KRANC_GFOFFSET3D(u,1,0,0),KRANC_GFOFFSET3D(u,-1,0,0)));
+}
+#endif
+
+#ifndef KRANC_DIFF_FUNCTIONS
+#  define PDstandard2nd2(u) (kmul(p1o2dy,ksub(KRANC_GFOFFSET3D(u,0,1,0),KRANC_GFOFFSET3D(u,0,-1,0))))
+#else
+#  define PDstandard2nd2(u) (PDstandard2nd2_impl(u,p1o2dy,cdj,cdk))
+static CCTK_REAL_VEC PDstandard2nd2_impl(CCTK_REAL const* restrict const u, CCTK_REAL_VEC const p1o2dy, ptrdiff_t const cdj, ptrdiff_t const cdk) CCTK_ATTRIBUTE_NOINLINE CCTK_ATTRIBUTE_UNUSED;
+static CCTK_REAL_VEC PDstandard2nd2_impl(CCTK_REAL const* restrict const u, CCTK_REAL_VEC const p1o2dy, ptrdiff_t const cdj, ptrdiff_t const cdk)
+{
+  ptrdiff_t const cdi=sizeof(CCTK_REAL);
+  return kmul(p1o2dy,ksub(KRANC_GFOFFSET3D(u,0,1,0),KRANC_GFOFFSET3D(u,0,-1,0)));
+}
+#endif
+
+#ifndef KRANC_DIFF_FUNCTIONS
+#  define PDstandard2nd3(u) (kmul(p1o2dz,ksub(KRANC_GFOFFSET3D(u,0,0,1),KRANC_GFOFFSET3D(u,0,0,-1))))
+#else
+#  define PDstandard2nd3(u) (PDstandard2nd3_impl(u,p1o2dz,cdj,cdk))
+static CCTK_REAL_VEC PDstandard2nd3_impl(CCTK_REAL const* restrict const u, CCTK_REAL_VEC const p1o2dz, ptrdiff_t const cdj, ptrdiff_t const cdk) CCTK_ATTRIBUTE_NOINLINE CCTK_ATTRIBUTE_UNUSED;
+static CCTK_REAL_VEC PDstandard2nd3_impl(CCTK_REAL const* restrict const u, CCTK_REAL_VEC const p1o2dz, ptrdiff_t const cdj, ptrdiff_t const cdk)
+{
+  ptrdiff_t const cdi=sizeof(CCTK_REAL);
+  return kmul(p1o2dz,ksub(KRANC_GFOFFSET3D(u,0,0,1),KRANC_GFOFFSET3D(u,0,0,-1)));
+}
+#endif
+
+#ifndef KRANC_DIFF_FUNCTIONS
 #  define PDdissipationNth1(u) (kmul(p1o1024dx,kadd(KRANC_GFOFFSET3D(u,-5,0,0),kadd(KRANC_GFOFFSET3D(u,5,0,0),kmadd(KRANC_GFOFFSET3D(u,0,0,0),ToReal(-252),kmadd(kadd(KRANC_GFOFFSET3D(u,-2,0,0),KRANC_GFOFFSET3D(u,2,0,0)),ToReal(-120),kmadd(kadd(KRANC_GFOFFSET3D(u,-4,0,0),KRANC_GFOFFSET3D(u,4,0,0)),ToReal(-10),kmadd(kadd(KRANC_GFOFFSET3D(u,-3,0,0),KRANC_GFOFFSET3D(u,3,0,0)),ToReal(45),kmul(kadd(KRANC_GFOFFSET3D(u,-1,0,0),KRANC_GFOFFSET3D(u,1,0,0)),ToReal(210))))))))))
 #else
 #  define PDdissipationNth1(u) (PDdissipationNth1_impl(u,p1o1024dx,cdj,cdk))
@@ -224,6 +260,30 @@ static CCTK_REAL_VEC PDonesided1_impl(CCTK_REAL const* restrict const u, CCTK_RE
 #endif
 
 #ifndef KRANC_DIFF_FUNCTIONS
+#  define PDonesidedPlus2nd1(u) (kmul(pm1o2dx,kadd(KRANC_GFOFFSET3D(u,2,0,0),kmadd(KRANC_GFOFFSET3D(u,1,0,0),ToReal(-4),kmul(KRANC_GFOFFSET3D(u,0,0,0),ToReal(3))))))
+#else
+#  define PDonesidedPlus2nd1(u) (PDonesidedPlus2nd1_impl(u,pm1o2dx,cdj,cdk))
+static CCTK_REAL_VEC PDonesidedPlus2nd1_impl(CCTK_REAL const* restrict const u, CCTK_REAL_VEC const pm1o2dx, ptrdiff_t const cdj, ptrdiff_t const cdk) CCTK_ATTRIBUTE_NOINLINE CCTK_ATTRIBUTE_UNUSED;
+static CCTK_REAL_VEC PDonesidedPlus2nd1_impl(CCTK_REAL const* restrict const u, CCTK_REAL_VEC const pm1o2dx, ptrdiff_t const cdj, ptrdiff_t const cdk)
+{
+  ptrdiff_t const cdi=sizeof(CCTK_REAL);
+  return kmul(pm1o2dx,kadd(KRANC_GFOFFSET3D(u,2,0,0),kmadd(KRANC_GFOFFSET3D(u,1,0,0),ToReal(-4),kmul(KRANC_GFOFFSET3D(u,0,0,0),ToReal(3)))));
+}
+#endif
+
+#ifndef KRANC_DIFF_FUNCTIONS
+#  define PDonesidedMinus2nd1(u) (kmul(p1o2dx,kadd(KRANC_GFOFFSET3D(u,-2,0,0),kmadd(KRANC_GFOFFSET3D(u,-1,0,0),ToReal(-4),kmul(KRANC_GFOFFSET3D(u,0,0,0),ToReal(3))))))
+#else
+#  define PDonesidedMinus2nd1(u) (PDonesidedMinus2nd1_impl(u,p1o2dx,cdj,cdk))
+static CCTK_REAL_VEC PDonesidedMinus2nd1_impl(CCTK_REAL const* restrict const u, CCTK_REAL_VEC const p1o2dx, ptrdiff_t const cdj, ptrdiff_t const cdk) CCTK_ATTRIBUTE_NOINLINE CCTK_ATTRIBUTE_UNUSED;
+static CCTK_REAL_VEC PDonesidedMinus2nd1_impl(CCTK_REAL const* restrict const u, CCTK_REAL_VEC const p1o2dx, ptrdiff_t const cdj, ptrdiff_t const cdk)
+{
+  ptrdiff_t const cdi=sizeof(CCTK_REAL);
+  return kmul(p1o2dx,kadd(KRANC_GFOFFSET3D(u,-2,0,0),kmadd(KRANC_GFOFFSET3D(u,-1,0,0),ToReal(-4),kmul(KRANC_GFOFFSET3D(u,0,0,0),ToReal(3)))));
+}
+#endif
+
+#ifndef KRANC_DIFF_FUNCTIONS
 #  define PDupwindNth2(u) (kmul(p1o840dy,kmul(dir2,kmadd(KRANC_GFOFFSET3D(u,0,0,0),ToReal(-378),kmadd(KRANC_GFOFFSET3D(u,0,5,0),ToReal(3),kmul(ToReal(-5),kadd(KRANC_GFOFFSET3D(u,0,-3,0),kmadd(KRANC_GFOFFSET3D(u,0,1,0),ToReal(-210),kmadd(KRANC_GFOFFSET3D(u,0,3,0),ToReal(-28),kmadd(KRANC_GFOFFSET3D(u,0,-2,0),ToReal(-12),kmadd(KRANC_GFOFFSET3D(u,0,4,0),ToReal(6),kmul(kadd(KRANC_GFOFFSET3D(u,0,-1,0),KRANC_GFOFFSET3D(u,0,2,0)),ToReal(84)))))))))))))
 #else
 #  define PDupwindNth2(u) (PDupwindNth2_impl(u,p1o840dy,cdj,cdk))
@@ -266,6 +326,30 @@ static CCTK_REAL_VEC PDonesided2_impl(CCTK_REAL const* restrict const u, CCTK_RE
 #endif
 
 #ifndef KRANC_DIFF_FUNCTIONS
+#  define PDonesidedPlus2nd2(u) (kmul(pm1o2dy,kadd(KRANC_GFOFFSET3D(u,0,2,0),kmadd(KRANC_GFOFFSET3D(u,0,1,0),ToReal(-4),kmul(KRANC_GFOFFSET3D(u,0,0,0),ToReal(3))))))
+#else
+#  define PDonesidedPlus2nd2(u) (PDonesidedPlus2nd2_impl(u,pm1o2dy,cdj,cdk))
+static CCTK_REAL_VEC PDonesidedPlus2nd2_impl(CCTK_REAL const* restrict const u, CCTK_REAL_VEC const pm1o2dy, ptrdiff_t const cdj, ptrdiff_t const cdk) CCTK_ATTRIBUTE_NOINLINE CCTK_ATTRIBUTE_UNUSED;
+static CCTK_REAL_VEC PDonesidedPlus2nd2_impl(CCTK_REAL const* restrict const u, CCTK_REAL_VEC const pm1o2dy, ptrdiff_t const cdj, ptrdiff_t const cdk)
+{
+  ptrdiff_t const cdi=sizeof(CCTK_REAL);
+  return kmul(pm1o2dy,kadd(KRANC_GFOFFSET3D(u,0,2,0),kmadd(KRANC_GFOFFSET3D(u,0,1,0),ToReal(-4),kmul(KRANC_GFOFFSET3D(u,0,0,0),ToReal(3)))));
+}
+#endif
+
+#ifndef KRANC_DIFF_FUNCTIONS
+#  define PDonesidedMinus2nd2(u) (kmul(p1o2dy,kadd(KRANC_GFOFFSET3D(u,0,-2,0),kmadd(KRANC_GFOFFSET3D(u,0,-1,0),ToReal(-4),kmul(KRANC_GFOFFSET3D(u,0,0,0),ToReal(3))))))
+#else
+#  define PDonesidedMinus2nd2(u) (PDonesidedMinus2nd2_impl(u,p1o2dy,cdj,cdk))
+static CCTK_REAL_VEC PDonesidedMinus2nd2_impl(CCTK_REAL const* restrict const u, CCTK_REAL_VEC const p1o2dy, ptrdiff_t const cdj, ptrdiff_t const cdk) CCTK_ATTRIBUTE_NOINLINE CCTK_ATTRIBUTE_UNUSED;
+static CCTK_REAL_VEC PDonesidedMinus2nd2_impl(CCTK_REAL const* restrict const u, CCTK_REAL_VEC const p1o2dy, ptrdiff_t const cdj, ptrdiff_t const cdk)
+{
+  ptrdiff_t const cdi=sizeof(CCTK_REAL);
+  return kmul(p1o2dy,kadd(KRANC_GFOFFSET3D(u,0,-2,0),kmadd(KRANC_GFOFFSET3D(u,0,-1,0),ToReal(-4),kmul(KRANC_GFOFFSET3D(u,0,0,0),ToReal(3)))));
+}
+#endif
+
+#ifndef KRANC_DIFF_FUNCTIONS
 #  define PDupwindNth3(u) (kmul(p1o840dz,kmul(dir3,kmadd(KRANC_GFOFFSET3D(u,0,0,0),ToReal(-378),kmadd(KRANC_GFOFFSET3D(u,0,0,5),ToReal(3),kmul(ToReal(-5),kadd(KRANC_GFOFFSET3D(u,0,0,-3),kmadd(KRANC_GFOFFSET3D(u,0,0,1),ToReal(-210),kmadd(KRANC_GFOFFSET3D(u,0,0,3),ToReal(-28),kmadd(KRANC_GFOFFSET3D(u,0,0,-2),ToReal(-12),kmadd(KRANC_GFOFFSET3D(u,0,0,4),ToReal(6),kmul(kadd(KRANC_GFOFFSET3D(u,0,0,-1),KRANC_GFOFFSET3D(u,0,0,2)),ToReal(84)))))))))))))
 #else
 #  define PDupwindNth3(u) (PDupwindNth3_impl(u,p1o840dz,cdj,cdk))
@@ -305,5 +389,101 @@ static CCTK_REAL_VEC PDupwindNthSymm3_impl(CCTK_REAL const* restrict const u, CC
 static CCTK_REAL_VEC PDonesided3_impl(CCTK_REAL const* restrict const u, CCTK_REAL_VEC const p1odz, ptrdiff_t const cdj, ptrdiff_t const cdk) CCTK_ATTRIBUTE_NOINLINE CCTK_ATTRIBUTE_UNUSED;
 static CCTK_REAL_VEC PDonesided3_impl(CCTK_REAL const* restrict const u, CCTK_REAL_VEC const p1odz, ptrdiff_t const cdj, ptrdiff_t const cdk)
 { assert(0); return ToReal(1e30); /* ERROR */ }
+#endif
+
+#ifndef KRANC_DIFF_FUNCTIONS
+#  define PDonesidedPlus2nd3(u) (kmul(pm1o2dz,kadd(KRANC_GFOFFSET3D(u,0,0,2),kmadd(KRANC_GFOFFSET3D(u,0,0,1),ToReal(-4),kmul(KRANC_GFOFFSET3D(u,0,0,0),ToReal(3))))))
+#else
+#  define PDonesidedPlus2nd3(u) (PDonesidedPlus2nd3_impl(u,pm1o2dz,cdj,cdk))
+static CCTK_REAL_VEC PDonesidedPlus2nd3_impl(CCTK_REAL const* restrict const u, CCTK_REAL_VEC const pm1o2dz, ptrdiff_t const cdj, ptrdiff_t const cdk) CCTK_ATTRIBUTE_NOINLINE CCTK_ATTRIBUTE_UNUSED;
+static CCTK_REAL_VEC PDonesidedPlus2nd3_impl(CCTK_REAL const* restrict const u, CCTK_REAL_VEC const pm1o2dz, ptrdiff_t const cdj, ptrdiff_t const cdk)
+{
+  ptrdiff_t const cdi=sizeof(CCTK_REAL);
+  return kmul(pm1o2dz,kadd(KRANC_GFOFFSET3D(u,0,0,2),kmadd(KRANC_GFOFFSET3D(u,0,0,1),ToReal(-4),kmul(KRANC_GFOFFSET3D(u,0,0,0),ToReal(3)))));
+}
+#endif
+
+#ifndef KRANC_DIFF_FUNCTIONS
+#  define PDonesidedMinus2nd3(u) (kmul(p1o2dz,kadd(KRANC_GFOFFSET3D(u,0,0,-2),kmadd(KRANC_GFOFFSET3D(u,0,0,-1),ToReal(-4),kmul(KRANC_GFOFFSET3D(u,0,0,0),ToReal(3))))))
+#else
+#  define PDonesidedMinus2nd3(u) (PDonesidedMinus2nd3_impl(u,p1o2dz,cdj,cdk))
+static CCTK_REAL_VEC PDonesidedMinus2nd3_impl(CCTK_REAL const* restrict const u, CCTK_REAL_VEC const p1o2dz, ptrdiff_t const cdj, ptrdiff_t const cdk) CCTK_ATTRIBUTE_NOINLINE CCTK_ATTRIBUTE_UNUSED;
+static CCTK_REAL_VEC PDonesidedMinus2nd3_impl(CCTK_REAL const* restrict const u, CCTK_REAL_VEC const p1o2dz, ptrdiff_t const cdj, ptrdiff_t const cdk)
+{
+  ptrdiff_t const cdi=sizeof(CCTK_REAL);
+  return kmul(p1o2dz,kadd(KRANC_GFOFFSET3D(u,0,0,-2),kmadd(KRANC_GFOFFSET3D(u,0,0,-1),ToReal(-4),kmul(KRANC_GFOFFSET3D(u,0,0,0),ToReal(3)))));
+}
+#endif
+
+#ifndef KRANC_DIFF_FUNCTIONS
+#  define PDPlus1(u) (kmul(p1odx,ksub(KRANC_GFOFFSET3D(u,1,0,0),KRANC_GFOFFSET3D(u,0,0,0))))
+#else
+#  define PDPlus1(u) (PDPlus1_impl(u,p1odx,cdj,cdk))
+static CCTK_REAL_VEC PDPlus1_impl(CCTK_REAL const* restrict const u, CCTK_REAL_VEC const p1odx, ptrdiff_t const cdj, ptrdiff_t const cdk) CCTK_ATTRIBUTE_NOINLINE CCTK_ATTRIBUTE_UNUSED;
+static CCTK_REAL_VEC PDPlus1_impl(CCTK_REAL const* restrict const u, CCTK_REAL_VEC const p1odx, ptrdiff_t const cdj, ptrdiff_t const cdk)
+{
+  ptrdiff_t const cdi=sizeof(CCTK_REAL);
+  return kmul(p1odx,ksub(KRANC_GFOFFSET3D(u,1,0,0),KRANC_GFOFFSET3D(u,0,0,0)));
+}
+#endif
+
+#ifndef KRANC_DIFF_FUNCTIONS
+#  define PDPlus2(u) (kmul(p1ody,ksub(KRANC_GFOFFSET3D(u,0,1,0),KRANC_GFOFFSET3D(u,0,0,0))))
+#else
+#  define PDPlus2(u) (PDPlus2_impl(u,p1ody,cdj,cdk))
+static CCTK_REAL_VEC PDPlus2_impl(CCTK_REAL const* restrict const u, CCTK_REAL_VEC const p1ody, ptrdiff_t const cdj, ptrdiff_t const cdk) CCTK_ATTRIBUTE_NOINLINE CCTK_ATTRIBUTE_UNUSED;
+static CCTK_REAL_VEC PDPlus2_impl(CCTK_REAL const* restrict const u, CCTK_REAL_VEC const p1ody, ptrdiff_t const cdj, ptrdiff_t const cdk)
+{
+  ptrdiff_t const cdi=sizeof(CCTK_REAL);
+  return kmul(p1ody,ksub(KRANC_GFOFFSET3D(u,0,1,0),KRANC_GFOFFSET3D(u,0,0,0)));
+}
+#endif
+
+#ifndef KRANC_DIFF_FUNCTIONS
+#  define PDPlus3(u) (kmul(p1odz,ksub(KRANC_GFOFFSET3D(u,0,0,1),KRANC_GFOFFSET3D(u,0,0,0))))
+#else
+#  define PDPlus3(u) (PDPlus3_impl(u,p1odz,cdj,cdk))
+static CCTK_REAL_VEC PDPlus3_impl(CCTK_REAL const* restrict const u, CCTK_REAL_VEC const p1odz, ptrdiff_t const cdj, ptrdiff_t const cdk) CCTK_ATTRIBUTE_NOINLINE CCTK_ATTRIBUTE_UNUSED;
+static CCTK_REAL_VEC PDPlus3_impl(CCTK_REAL const* restrict const u, CCTK_REAL_VEC const p1odz, ptrdiff_t const cdj, ptrdiff_t const cdk)
+{
+  ptrdiff_t const cdi=sizeof(CCTK_REAL);
+  return kmul(p1odz,ksub(KRANC_GFOFFSET3D(u,0,0,1),KRANC_GFOFFSET3D(u,0,0,0)));
+}
+#endif
+
+#ifndef KRANC_DIFF_FUNCTIONS
+#  define PDMinus1(u) (kmul(p1odx,ksub(KRANC_GFOFFSET3D(u,0,0,0),KRANC_GFOFFSET3D(u,-1,0,0))))
+#else
+#  define PDMinus1(u) (PDMinus1_impl(u,p1odx,cdj,cdk))
+static CCTK_REAL_VEC PDMinus1_impl(CCTK_REAL const* restrict const u, CCTK_REAL_VEC const p1odx, ptrdiff_t const cdj, ptrdiff_t const cdk) CCTK_ATTRIBUTE_NOINLINE CCTK_ATTRIBUTE_UNUSED;
+static CCTK_REAL_VEC PDMinus1_impl(CCTK_REAL const* restrict const u, CCTK_REAL_VEC const p1odx, ptrdiff_t const cdj, ptrdiff_t const cdk)
+{
+  ptrdiff_t const cdi=sizeof(CCTK_REAL);
+  return kmul(p1odx,ksub(KRANC_GFOFFSET3D(u,0,0,0),KRANC_GFOFFSET3D(u,-1,0,0)));
+}
+#endif
+
+#ifndef KRANC_DIFF_FUNCTIONS
+#  define PDMinus2(u) (kmul(p1ody,ksub(KRANC_GFOFFSET3D(u,0,0,0),KRANC_GFOFFSET3D(u,0,-1,0))))
+#else
+#  define PDMinus2(u) (PDMinus2_impl(u,p1ody,cdj,cdk))
+static CCTK_REAL_VEC PDMinus2_impl(CCTK_REAL const* restrict const u, CCTK_REAL_VEC const p1ody, ptrdiff_t const cdj, ptrdiff_t const cdk) CCTK_ATTRIBUTE_NOINLINE CCTK_ATTRIBUTE_UNUSED;
+static CCTK_REAL_VEC PDMinus2_impl(CCTK_REAL const* restrict const u, CCTK_REAL_VEC const p1ody, ptrdiff_t const cdj, ptrdiff_t const cdk)
+{
+  ptrdiff_t const cdi=sizeof(CCTK_REAL);
+  return kmul(p1ody,ksub(KRANC_GFOFFSET3D(u,0,0,0),KRANC_GFOFFSET3D(u,0,-1,0)));
+}
+#endif
+
+#ifndef KRANC_DIFF_FUNCTIONS
+#  define PDMinus3(u) (kmul(p1odz,ksub(KRANC_GFOFFSET3D(u,0,0,0),KRANC_GFOFFSET3D(u,0,0,-1))))
+#else
+#  define PDMinus3(u) (PDMinus3_impl(u,p1odz,cdj,cdk))
+static CCTK_REAL_VEC PDMinus3_impl(CCTK_REAL const* restrict const u, CCTK_REAL_VEC const p1odz, ptrdiff_t const cdj, ptrdiff_t const cdk) CCTK_ATTRIBUTE_NOINLINE CCTK_ATTRIBUTE_UNUSED;
+static CCTK_REAL_VEC PDMinus3_impl(CCTK_REAL const* restrict const u, CCTK_REAL_VEC const p1odz, ptrdiff_t const cdj, ptrdiff_t const cdk)
+{
+  ptrdiff_t const cdi=sizeof(CCTK_REAL);
+  return kmul(p1odz,ksub(KRANC_GFOFFSET3D(u,0,0,0),KRANC_GFOFFSET3D(u,0,0,-1)));
+}
 #endif
 

@@ -762,6 +762,69 @@ if (CCTK_EQUALS(my_rhs_boundary_condition, "static"))
   } "ML_BSSN_Host_RHSStaticBoundary"
 }
 
+
+if (CCTK_EQUALS(my_rhs_boundary_condition, "radiative"))
+{
+  schedule ML_BSSN_Host_RHSRadiativeBoundary IN ML_BSSN_Host_evolCalcGroup
+  {
+    LANG: C
+    READS:    ML_BSSN_Host::A
+    READS:    ML_BSSN_Host::alpha
+    READS:    ML_BSSN_Host::At11
+    READS:    ML_BSSN_Host::At12
+    READS:    ML_BSSN_Host::At13
+    READS:    ML_BSSN_Host::At22
+    READS:    ML_BSSN_Host::At23
+    READS:    ML_BSSN_Host::At33
+    READS:    ML_BSSN_Host::B1
+    READS:    ML_BSSN_Host::B2
+    READS:    ML_BSSN_Host::B3
+    READS:    ML_BSSN_Host::beta1
+    READS:    ML_BSSN_Host::beta2
+    READS:    ML_BSSN_Host::beta3
+    READS:    ML_BSSN_Host::gt11
+    READS:    ML_BSSN_Host::gt12
+    READS:    ML_BSSN_Host::gt13
+    READS:    ML_BSSN_Host::gt22
+    READS:    ML_BSSN_Host::gt23
+    READS:    ML_BSSN_Host::gt33
+    READS:    ML_BSSN_Host::phi
+    READS:    ML_BSSN_Host::rCopy
+    READS:    ML_BSSN_Host::trK
+    READS:    ML_BSSN_Host::xCopy
+    READS:    ML_BSSN_Host::Xt1
+    READS:    ML_BSSN_Host::Xt2
+    READS:    ML_BSSN_Host::Xt3
+    READS:    ML_BSSN_Host::yCopy
+    READS:    ML_BSSN_Host::zCopy
+    WRITES:   ML_BSSN_Host::alpharhs
+    WRITES:   ML_BSSN_Host::Arhs
+    WRITES:   ML_BSSN_Host::At11rhs
+    WRITES:   ML_BSSN_Host::At12rhs
+    WRITES:   ML_BSSN_Host::At13rhs
+    WRITES:   ML_BSSN_Host::At22rhs
+    WRITES:   ML_BSSN_Host::At23rhs
+    WRITES:   ML_BSSN_Host::At33rhs
+    WRITES:   ML_BSSN_Host::B1rhs
+    WRITES:   ML_BSSN_Host::B2rhs
+    WRITES:   ML_BSSN_Host::B3rhs
+    WRITES:   ML_BSSN_Host::beta1rhs
+    WRITES:   ML_BSSN_Host::beta2rhs
+    WRITES:   ML_BSSN_Host::beta3rhs
+    WRITES:   ML_BSSN_Host::gt11rhs
+    WRITES:   ML_BSSN_Host::gt12rhs
+    WRITES:   ML_BSSN_Host::gt13rhs
+    WRITES:   ML_BSSN_Host::gt22rhs
+    WRITES:   ML_BSSN_Host::gt23rhs
+    WRITES:   ML_BSSN_Host::gt33rhs
+    WRITES:   ML_BSSN_Host::phirhs
+    WRITES:   ML_BSSN_Host::trKrhs
+    WRITES:   ML_BSSN_Host::Xt1rhs
+    WRITES:   ML_BSSN_Host::Xt2rhs
+    WRITES:   ML_BSSN_Host::Xt3rhs
+  } "ML_BSSN_Host_RHSRadiativeBoundary"
+}
+
 schedule ML_BSSN_Host_enforce IN MoL_PostStepModify
 {
   LANG: C

@@ -899,6 +899,74 @@ CCTK_CUDA_KERNEL DEVICE_ML_BSSN_RHSStaticBoundary TYPE=gpu_cuda_dc/boundary_s TI
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out {Xt3rhs} "Xt3rhs"
 }
 
+CCTK_CUDA_KERNEL DEVICE_ML_BSSN_RHSRadiativeBoundary TYPE=gpu_cuda_dc/boundary_s TILE="32,16,40" SHARECODE=yes
+{
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in {A} "A"
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in {alpha} "alpha"
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out {alpharhs} "alpharhs"
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out {Arhs} "Arhs"
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in {At11} "At11"
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out {At11rhs} "At11rhs"
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in {At12} "At12"
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out {At12rhs} "At12rhs"
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in {At13} "At13"
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out {At13rhs} "At13rhs"
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in {At22} "At22"
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out {At22rhs} "At22rhs"
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in {At23} "At23"
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out {At23rhs} "At23rhs"
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in {At33} "At33"
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out {At33rhs} "At33rhs"
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in {B1} "B1"
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out {B1rhs} "B1rhs"
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in {B2} "B2"
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out {B2rhs} "B2rhs"
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in {B3} "B3"
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out {B3rhs} "B3rhs"
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in {beta1} "beta1"
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out {beta1rhs} "beta1rhs"
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in {beta2} "beta2"
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out {beta2rhs} "beta2rhs"
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in {beta3} "beta3"
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out {beta3rhs} "beta3rhs"
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in {gt11} "gt11"
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out {gt11rhs} "gt11rhs"
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in {gt12} "gt12"
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out {gt12rhs} "gt12rhs"
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in {gt13} "gt13"
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out {gt13rhs} "gt13rhs"
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in {gt22} "gt22"
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out {gt22rhs} "gt22rhs"
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in {gt23} "gt23"
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out {gt23rhs} "gt23rhs"
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in {gt33} "gt33"
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out {gt33rhs} "gt33rhs"
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in {phi} "phi"
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out {phirhs} "phirhs"
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in {rCopy} "rCopy"
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in {trK} "trK"
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out {trKrhs} "trKrhs"
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in {xCopy} "xCopy"
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in {Xt1} "Xt1"
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out {Xt1rhs} "Xt1rhs"
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in {Xt2} "Xt2"
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out {Xt2rhs} "Xt2rhs"
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in {Xt3} "Xt3"
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out {Xt3rhs} "Xt3rhs"
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in {yCopy} "yCopy"
+  CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in {zCopy} "zCopy"
+  CCTK_CUDA_KERNEL_PARAMETER 
+  {
+    conformalMethod
+  }
+  "conformalMethod"
+  CCTK_CUDA_KERNEL_PARAMETER 
+  {
+    harmonicF
+  }
+  "harmonicF"
+}
+
 CCTK_CUDA_KERNEL DEVICE_ML_BSSN_enforce TYPE=gpu_cuda_dc/3dblock2 TILE="32,16,40" SHARECODE=yes STENCIL="0,0,0,0,0,0"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=inout {alpha} "alpha"

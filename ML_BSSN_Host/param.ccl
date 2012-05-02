@@ -445,6 +445,12 @@ CCTK_INT ML_BSSN_Host_RHSStaticBoundary_calc_every "ML_BSSN_Host_RHSStaticBounda
 } 1
 
 restricted:
+CCTK_INT ML_BSSN_Host_RHSRadiativeBoundary_calc_every "ML_BSSN_Host_RHSRadiativeBoundary_calc_every" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 1
+
+restricted:
 CCTK_INT ML_BSSN_Host_enforce_calc_every "ML_BSSN_Host_enforce_calc_every" STEERABLE=ALWAYS
 {
   *:* :: ""
@@ -650,6 +656,12 @@ CCTK_INT ML_BSSN_Host_InitRHS_calc_offset "ML_BSSN_Host_InitRHS_calc_offset" STE
 
 restricted:
 CCTK_INT ML_BSSN_Host_RHSStaticBoundary_calc_offset "ML_BSSN_Host_RHSStaticBoundary_calc_offset" STEERABLE=ALWAYS
+{
+  *:* :: ""
+} 0
+
+restricted:
+CCTK_INT ML_BSSN_Host_RHSRadiativeBoundary_calc_offset "ML_BSSN_Host_RHSRadiativeBoundary_calc_offset" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 0

@@ -2958,6 +2958,133 @@ if (CCTK_EQUALS(my_rhs_boundary_condition, "static"))
   } "DEVICE_ML_BSSN_RHSStaticBoundary"
 }
 
+
+if (CCTK_EQUALS(my_rhs_boundary_condition, "radiative"))
+{
+  schedule HOST_ML_BSSN_RHSRadiativeBoundary in ML_BSSN_RHSRadiativeBoundary IF Accelerator::host_process
+  {
+    LANG: C
+    READS:    ML_BSSN::A
+    READS:    ML_BSSN::alpha
+    READS:    ML_BSSN::At11
+    READS:    ML_BSSN::At12
+    READS:    ML_BSSN::At13
+    READS:    ML_BSSN::At22
+    READS:    ML_BSSN::At23
+    READS:    ML_BSSN::At33
+    READS:    ML_BSSN::B1
+    READS:    ML_BSSN::B2
+    READS:    ML_BSSN::B3
+    READS:    ML_BSSN::beta1
+    READS:    ML_BSSN::beta2
+    READS:    ML_BSSN::beta3
+    READS:    ML_BSSN::gt11
+    READS:    ML_BSSN::gt12
+    READS:    ML_BSSN::gt13
+    READS:    ML_BSSN::gt22
+    READS:    ML_BSSN::gt23
+    READS:    ML_BSSN::gt33
+    READS:    ML_BSSN::phi
+    READS:    ML_BSSN::rCopy
+    READS:    ML_BSSN::trK
+    READS:    ML_BSSN::xCopy
+    READS:    ML_BSSN::Xt1
+    READS:    ML_BSSN::Xt2
+    READS:    ML_BSSN::Xt3
+    READS:    ML_BSSN::yCopy
+    READS:    ML_BSSN::zCopy
+    WRITES:   ML_BSSN::alpharhs
+    WRITES:   ML_BSSN::Arhs
+    WRITES:   ML_BSSN::At11rhs
+    WRITES:   ML_BSSN::At12rhs
+    WRITES:   ML_BSSN::At13rhs
+    WRITES:   ML_BSSN::At22rhs
+    WRITES:   ML_BSSN::At23rhs
+    WRITES:   ML_BSSN::At33rhs
+    WRITES:   ML_BSSN::B1rhs
+    WRITES:   ML_BSSN::B2rhs
+    WRITES:   ML_BSSN::B3rhs
+    WRITES:   ML_BSSN::beta1rhs
+    WRITES:   ML_BSSN::beta2rhs
+    WRITES:   ML_BSSN::beta3rhs
+    WRITES:   ML_BSSN::gt11rhs
+    WRITES:   ML_BSSN::gt12rhs
+    WRITES:   ML_BSSN::gt13rhs
+    WRITES:   ML_BSSN::gt22rhs
+    WRITES:   ML_BSSN::gt23rhs
+    WRITES:   ML_BSSN::gt33rhs
+    WRITES:   ML_BSSN::phirhs
+    WRITES:   ML_BSSN::trKrhs
+    WRITES:   ML_BSSN::Xt1rhs
+    WRITES:   ML_BSSN::Xt2rhs
+    WRITES:   ML_BSSN::Xt3rhs
+  } "HOST_ML_BSSN_RHSRadiativeBoundary"
+}
+
+
+if (CCTK_EQUALS(my_rhs_boundary_condition, "radiative"))
+{
+  schedule CAKERNEL_Launch_DEVICE_ML_BSSN_RHSRadiativeBoundary as DEVICE_ML_BSSN_RHSRadiativeBoundary in ML_BSSN_RHSRadiativeBoundary IF Accelerator::device_process
+  {
+    LANG: C
+    TAGS: Device=1
+    READS:    ML_BSSN::A
+    READS:    ML_BSSN::alpha
+    READS:    ML_BSSN::At11
+    READS:    ML_BSSN::At12
+    READS:    ML_BSSN::At13
+    READS:    ML_BSSN::At22
+    READS:    ML_BSSN::At23
+    READS:    ML_BSSN::At33
+    READS:    ML_BSSN::B1
+    READS:    ML_BSSN::B2
+    READS:    ML_BSSN::B3
+    READS:    ML_BSSN::beta1
+    READS:    ML_BSSN::beta2
+    READS:    ML_BSSN::beta3
+    READS:    ML_BSSN::gt11
+    READS:    ML_BSSN::gt12
+    READS:    ML_BSSN::gt13
+    READS:    ML_BSSN::gt22
+    READS:    ML_BSSN::gt23
+    READS:    ML_BSSN::gt33
+    READS:    ML_BSSN::phi
+    READS:    ML_BSSN::rCopy
+    READS:    ML_BSSN::trK
+    READS:    ML_BSSN::xCopy
+    READS:    ML_BSSN::Xt1
+    READS:    ML_BSSN::Xt2
+    READS:    ML_BSSN::Xt3
+    READS:    ML_BSSN::yCopy
+    READS:    ML_BSSN::zCopy
+    WRITES:   ML_BSSN::alpharhs
+    WRITES:   ML_BSSN::Arhs
+    WRITES:   ML_BSSN::At11rhs
+    WRITES:   ML_BSSN::At12rhs
+    WRITES:   ML_BSSN::At13rhs
+    WRITES:   ML_BSSN::At22rhs
+    WRITES:   ML_BSSN::At23rhs
+    WRITES:   ML_BSSN::At33rhs
+    WRITES:   ML_BSSN::B1rhs
+    WRITES:   ML_BSSN::B2rhs
+    WRITES:   ML_BSSN::B3rhs
+    WRITES:   ML_BSSN::beta1rhs
+    WRITES:   ML_BSSN::beta2rhs
+    WRITES:   ML_BSSN::beta3rhs
+    WRITES:   ML_BSSN::gt11rhs
+    WRITES:   ML_BSSN::gt12rhs
+    WRITES:   ML_BSSN::gt13rhs
+    WRITES:   ML_BSSN::gt22rhs
+    WRITES:   ML_BSSN::gt23rhs
+    WRITES:   ML_BSSN::gt33rhs
+    WRITES:   ML_BSSN::phirhs
+    WRITES:   ML_BSSN::trKrhs
+    WRITES:   ML_BSSN::Xt1rhs
+    WRITES:   ML_BSSN::Xt2rhs
+    WRITES:   ML_BSSN::Xt3rhs
+  } "DEVICE_ML_BSSN_RHSRadiativeBoundary"
+}
+
 schedule HOST_ML_BSSN_enforce in ML_BSSN_enforce IF Accelerator::host_process
 {
   LANG: C
@@ -3295,6 +3422,11 @@ schedule group ML_BSSN_InitRHS AT analysis BEFORE ML_BSSN_evolCalcGroup
 } ""
 
 schedule group ML_BSSN_RHS IN ML_BSSN_evolCalcGroup
+{
+  # no language specified
+} ""
+
+schedule group ML_BSSN_RHSRadiativeBoundary IN ML_BSSN_evolCalcGroup
 {
   # no language specified
 } ""

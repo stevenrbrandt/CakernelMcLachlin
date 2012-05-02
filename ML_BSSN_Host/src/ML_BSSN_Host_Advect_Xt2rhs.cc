@@ -74,6 +74,9 @@ static void ML_BSSN_Host_Advect_Xt2rhs_Body(cGH const * restrict const cctkGH, i
   CCTK_REAL_VEC const p1o1680dx = kmul(INV(dx),ToReal(0.000595238095238095238095238095238));
   CCTK_REAL_VEC const p1o1680dy = kmul(INV(dy),ToReal(0.000595238095238095238095238095238));
   CCTK_REAL_VEC const p1o1680dz = kmul(INV(dz),ToReal(0.000595238095238095238095238095238));
+  CCTK_REAL_VEC const p1o2dx = kmul(INV(dx),ToReal(0.5));
+  CCTK_REAL_VEC const p1o2dy = kmul(INV(dy),ToReal(0.5));
+  CCTK_REAL_VEC const p1o2dz = kmul(INV(dz),ToReal(0.5));
   CCTK_REAL_VEC const p1o5040dx2 = kmul(INV(SQR(dx)),ToReal(0.000198412698412698412698412698413));
   CCTK_REAL_VEC const p1o5040dy2 = kmul(INV(SQR(dy)),ToReal(0.000198412698412698412698412698413));
   CCTK_REAL_VEC const p1o5040dz2 = kmul(INV(SQR(dz)),ToReal(0.000198412698412698412698412698413));
@@ -89,6 +92,9 @@ static void ML_BSSN_Host_Advect_Xt2rhs_Body(cGH const * restrict const cctkGH, i
   CCTK_REAL_VEC const p1odx = INV(dx);
   CCTK_REAL_VEC const p1ody = INV(dy);
   CCTK_REAL_VEC const p1odz = INV(dz);
+  CCTK_REAL_VEC const pm1o2dx = kmul(INV(dx),ToReal(-0.5));
+  CCTK_REAL_VEC const pm1o2dy = kmul(INV(dy),ToReal(-0.5));
+  CCTK_REAL_VEC const pm1o2dz = kmul(INV(dz),ToReal(-0.5));
   
   /* Assign local copies of arrays functions */
   
