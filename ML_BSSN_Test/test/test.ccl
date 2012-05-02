@@ -23,3 +23,8 @@ TEST ML_BSSN_sgw3d_4proc
 {
   NPROCS 4
 }
+TEST ML_BSSN_Host_NewRad
+{
+  NPROCS 2
+  ABSTOL 1e-11
+}
