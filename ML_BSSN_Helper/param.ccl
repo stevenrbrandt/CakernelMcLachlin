@@ -21,6 +21,7 @@ USES CCTK_INT rhs_timelevels
 USES KEYWORD calculate_ADMBase_variables_at
 
 USES CCTK_REAL harmonicF
+USES CCTK_REAL conformalMethod
 
 EXTENDS KEYWORD my_initial_boundary_condition
 {

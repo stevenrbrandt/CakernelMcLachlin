@@ -19,7 +19,7 @@ ML_BSSN_NewRad (CCTK_ARGUMENTS)
   
   CCTK_REAL const v0 = sqrt (harmonicF);
   
-  newrad (cctkGH, phi  , phirhs  , 0.0, v0 );
+  newrad (cctkGH, phi  , phirhs  , conformalMethod ? 1 : 0, v0 );
   
   newrad (cctkGH, gt11 , gt11rhs , 1.0, 1.0);
   newrad (cctkGH, gt12 , gt12rhs , 0.0, 1.0);
