@@ -787,44 +787,48 @@ schedule ML_BSSN_Host_enforce IN MoL_PostStepModify
   WRITES:   ML_BSSN_Host::At33
 } "ML_BSSN_Host_enforce"
 
-schedule ML_BSSN_Host_convertToADMBase IN ML_BSSN_Host_convertToADMBaseGroup
+
+if (CCTK_EQUALS(calculate_ADMBase_variables, "yes"))
 {
-  LANG: C
-  READS:    ML_BSSN_Host::alpha
-  READS:    ML_BSSN_Host::At11
-  READS:    ML_BSSN_Host::At12
-  READS:    ML_BSSN_Host::At13
-  READS:    ML_BSSN_Host::At22
-  READS:    ML_BSSN_Host::At23
-  READS:    ML_BSSN_Host::At33
-  READS:    ML_BSSN_Host::beta1
-  READS:    ML_BSSN_Host::beta2
-  READS:    ML_BSSN_Host::beta3
-  READS:    ML_BSSN_Host::gt11
-  READS:    ML_BSSN_Host::gt12
-  READS:    ML_BSSN_Host::gt13
-  READS:    ML_BSSN_Host::gt22
-  READS:    ML_BSSN_Host::gt23
-  READS:    ML_BSSN_Host::gt33
-  READS:    ML_BSSN_Host::phi
-  READS:    ML_BSSN_Host::trK
-  WRITES:   ADMBase::alp
-  WRITES:   ADMBase::betax
-  WRITES:   ADMBase::betay
-  WRITES:   ADMBase::betaz
-  WRITES:   ADMBase::gxx
-  WRITES:   ADMBase::gxy
-  WRITES:   ADMBase::gxz
-  WRITES:   ADMBase::gyy
-  WRITES:   ADMBase::gyz
-  WRITES:   ADMBase::gzz
-  WRITES:   ADMBase::kxx
-  WRITES:   ADMBase::kxy
-  WRITES:   ADMBase::kxz
-  WRITES:   ADMBase::kyy
-  WRITES:   ADMBase::kyz
-  WRITES:   ADMBase::kzz
-} "ML_BSSN_Host_convertToADMBase"
+  schedule ML_BSSN_Host_convertToADMBase IN ML_BSSN_Host_convertToADMBaseGroup
+  {
+    LANG: C
+    READS:    ML_BSSN_Host::alpha
+    READS:    ML_BSSN_Host::At11
+    READS:    ML_BSSN_Host::At12
+    READS:    ML_BSSN_Host::At13
+    READS:    ML_BSSN_Host::At22
+    READS:    ML_BSSN_Host::At23
+    READS:    ML_BSSN_Host::At33
+    READS:    ML_BSSN_Host::beta1
+    READS:    ML_BSSN_Host::beta2
+    READS:    ML_BSSN_Host::beta3
+    READS:    ML_BSSN_Host::gt11
+    READS:    ML_BSSN_Host::gt12
+    READS:    ML_BSSN_Host::gt13
+    READS:    ML_BSSN_Host::gt22
+    READS:    ML_BSSN_Host::gt23
+    READS:    ML_BSSN_Host::gt33
+    READS:    ML_BSSN_Host::phi
+    READS:    ML_BSSN_Host::trK
+    WRITES:   ADMBase::alp
+    WRITES:   ADMBase::betax
+    WRITES:   ADMBase::betay
+    WRITES:   ADMBase::betaz
+    WRITES:   ADMBase::gxx
+    WRITES:   ADMBase::gxy
+    WRITES:   ADMBase::gxz
+    WRITES:   ADMBase::gyy
+    WRITES:   ADMBase::gyz
+    WRITES:   ADMBase::gzz
+    WRITES:   ADMBase::kxx
+    WRITES:   ADMBase::kxy
+    WRITES:   ADMBase::kxz
+    WRITES:   ADMBase::kyy
+    WRITES:   ADMBase::kyz
+    WRITES:   ADMBase::kzz
+  } "ML_BSSN_Host_convertToADMBase"
+}
 
 schedule ML_BSSN_Host_SelectBoundConds in MoL_PostStep
 {

@@ -189,6 +189,13 @@ KEYWORD calculate_ADMBase_variables_at "calculate_ADMBase_variables_at"
 } "MoL_PostStep"
 
 restricted:
+KEYWORD calculate_ADMBase_variables "calculate_ADMBase_variables"
+{
+  "no" :: "no"
+  "yes" :: "yes"
+} "yes"
+
+restricted:
 KEYWORD UseSpatialBetaDriver "UseSpatialBetaDriver"
 {
   "no" :: "no"

@@ -3009,84 +3009,92 @@ schedule CAKERNEL_Launch_DEVICE_ML_BSSN_enforce as DEVICE_ML_BSSN_enforce in ML_
   WRITES:   ML_BSSN::At33
 } "DEVICE_ML_BSSN_enforce"
 
-schedule HOST_ML_BSSN_convertToADMBase in ML_BSSN_convertToADMBase IF Accelerator::host_process
-{
-  LANG: C
-  READS:    ML_BSSN::alpha
-  READS:    ML_BSSN::At11
-  READS:    ML_BSSN::At12
-  READS:    ML_BSSN::At13
-  READS:    ML_BSSN::At22
-  READS:    ML_BSSN::At23
-  READS:    ML_BSSN::At33
-  READS:    ML_BSSN::beta1
-  READS:    ML_BSSN::beta2
-  READS:    ML_BSSN::beta3
-  READS:    ML_BSSN::gt11
-  READS:    ML_BSSN::gt12
-  READS:    ML_BSSN::gt13
-  READS:    ML_BSSN::gt22
-  READS:    ML_BSSN::gt23
-  READS:    ML_BSSN::gt33
-  READS:    ML_BSSN::phi
-  READS:    ML_BSSN::trK
-  WRITES:   ADMBase::alp
-  WRITES:   ADMBase::betax
-  WRITES:   ADMBase::betay
-  WRITES:   ADMBase::betaz
-  WRITES:   ADMBase::gxx
-  WRITES:   ADMBase::gxy
-  WRITES:   ADMBase::gxz
-  WRITES:   ADMBase::gyy
-  WRITES:   ADMBase::gyz
-  WRITES:   ADMBase::gzz
-  WRITES:   ADMBase::kxx
-  WRITES:   ADMBase::kxy
-  WRITES:   ADMBase::kxz
-  WRITES:   ADMBase::kyy
-  WRITES:   ADMBase::kyz
-  WRITES:   ADMBase::kzz
-} "HOST_ML_BSSN_convertToADMBase"
 
-schedule CAKERNEL_Launch_DEVICE_ML_BSSN_convertToADMBase as DEVICE_ML_BSSN_convertToADMBase in ML_BSSN_convertToADMBase IF Accelerator::device_process
+if (CCTK_EQUALS(calculate_ADMBase_variables, "yes"))
 {
-  LANG: C
-  TAGS: Device=1
-  READS:    ML_BSSN::alpha
-  READS:    ML_BSSN::At11
-  READS:    ML_BSSN::At12
-  READS:    ML_BSSN::At13
-  READS:    ML_BSSN::At22
-  READS:    ML_BSSN::At23
-  READS:    ML_BSSN::At33
-  READS:    ML_BSSN::beta1
-  READS:    ML_BSSN::beta2
-  READS:    ML_BSSN::beta3
-  READS:    ML_BSSN::gt11
-  READS:    ML_BSSN::gt12
-  READS:    ML_BSSN::gt13
-  READS:    ML_BSSN::gt22
-  READS:    ML_BSSN::gt23
-  READS:    ML_BSSN::gt33
-  READS:    ML_BSSN::phi
-  READS:    ML_BSSN::trK
-  WRITES:   ADMBase::alp
-  WRITES:   ADMBase::betax
-  WRITES:   ADMBase::betay
-  WRITES:   ADMBase::betaz
-  WRITES:   ADMBase::gxx
-  WRITES:   ADMBase::gxy
-  WRITES:   ADMBase::gxz
-  WRITES:   ADMBase::gyy
-  WRITES:   ADMBase::gyz
-  WRITES:   ADMBase::gzz
-  WRITES:   ADMBase::kxx
-  WRITES:   ADMBase::kxy
-  WRITES:   ADMBase::kxz
-  WRITES:   ADMBase::kyy
-  WRITES:   ADMBase::kyz
-  WRITES:   ADMBase::kzz
-} "DEVICE_ML_BSSN_convertToADMBase"
+  schedule HOST_ML_BSSN_convertToADMBase in ML_BSSN_convertToADMBase IF Accelerator::host_process
+  {
+    LANG: C
+    READS:    ML_BSSN::alpha
+    READS:    ML_BSSN::At11
+    READS:    ML_BSSN::At12
+    READS:    ML_BSSN::At13
+    READS:    ML_BSSN::At22
+    READS:    ML_BSSN::At23
+    READS:    ML_BSSN::At33
+    READS:    ML_BSSN::beta1
+    READS:    ML_BSSN::beta2
+    READS:    ML_BSSN::beta3
+    READS:    ML_BSSN::gt11
+    READS:    ML_BSSN::gt12
+    READS:    ML_BSSN::gt13
+    READS:    ML_BSSN::gt22
+    READS:    ML_BSSN::gt23
+    READS:    ML_BSSN::gt33
+    READS:    ML_BSSN::phi
+    READS:    ML_BSSN::trK
+    WRITES:   ADMBase::alp
+    WRITES:   ADMBase::betax
+    WRITES:   ADMBase::betay
+    WRITES:   ADMBase::betaz
+    WRITES:   ADMBase::gxx
+    WRITES:   ADMBase::gxy
+    WRITES:   ADMBase::gxz
+    WRITES:   ADMBase::gyy
+    WRITES:   ADMBase::gyz
+    WRITES:   ADMBase::gzz
+    WRITES:   ADMBase::kxx
+    WRITES:   ADMBase::kxy
+    WRITES:   ADMBase::kxz
+    WRITES:   ADMBase::kyy
+    WRITES:   ADMBase::kyz
+    WRITES:   ADMBase::kzz
+  } "HOST_ML_BSSN_convertToADMBase"
+}
+
+
+if (CCTK_EQUALS(calculate_ADMBase_variables, "yes"))
+{
+  schedule CAKERNEL_Launch_DEVICE_ML_BSSN_convertToADMBase as DEVICE_ML_BSSN_convertToADMBase in ML_BSSN_convertToADMBase IF Accelerator::device_process
+  {
+    LANG: C
+    TAGS: Device=1
+    READS:    ML_BSSN::alpha
+    READS:    ML_BSSN::At11
+    READS:    ML_BSSN::At12
+    READS:    ML_BSSN::At13
+    READS:    ML_BSSN::At22
+    READS:    ML_BSSN::At23
+    READS:    ML_BSSN::At33
+    READS:    ML_BSSN::beta1
+    READS:    ML_BSSN::beta2
+    READS:    ML_BSSN::beta3
+    READS:    ML_BSSN::gt11
+    READS:    ML_BSSN::gt12
+    READS:    ML_BSSN::gt13
+    READS:    ML_BSSN::gt22
+    READS:    ML_BSSN::gt23
+    READS:    ML_BSSN::gt33
+    READS:    ML_BSSN::phi
+    READS:    ML_BSSN::trK
+    WRITES:   ADMBase::alp
+    WRITES:   ADMBase::betax
+    WRITES:   ADMBase::betay
+    WRITES:   ADMBase::betaz
+    WRITES:   ADMBase::gxx
+    WRITES:   ADMBase::gxy
+    WRITES:   ADMBase::gxz
+    WRITES:   ADMBase::gyy
+    WRITES:   ADMBase::gyz
+    WRITES:   ADMBase::gzz
+    WRITES:   ADMBase::kxx
+    WRITES:   ADMBase::kxy
+    WRITES:   ADMBase::kxz
+    WRITES:   ADMBase::kyy
+    WRITES:   ADMBase::kyz
+    WRITES:   ADMBase::kzz
+  } "DEVICE_ML_BSSN_convertToADMBase"
+}
 
 schedule HOST_ML_BSSN_copy_to_device in ML_BSSN_copy_to_device IF Accelerator::host_process
 {
