@@ -28,3 +28,8 @@ TEST ML_BSSN_Host_NewRad
   NPROCS 2
   ABSTOL 1e-11
 }
+TEST ML_BSSN_Host_Radiative
+{
+  NPROCS 2
+  ABSTOL 1e-11
+}
