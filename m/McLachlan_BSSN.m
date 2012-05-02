@@ -364,6 +364,7 @@ convertToADMBaseCalc =
 {
   Name -> BSSN <> "_convertToADMBase",
   Schedule -> {"IN " <> BSSN <> "_convertToADMBaseGroup"},
+  ConditionalOnKeyword -> {"calculate_ADMBase_variables", "yes"},
   Where -> Everywhere,
   Shorthands -> {e4phi},
   Equations -> 
@@ -1097,6 +1098,12 @@ keywordParameters =
     (* Description -> "ddd", *)
     AllowedValues -> {"MoL_PostStep", "CCTK_EVOL", "CCTK_ANALYSIS"},
     Default -> "MoL_PostStep"
+  },
+  {
+    Name -> "calculate_ADMBase_variables",
+    Visibility -> "restricted",
+    AllowedValues -> {"no", "yes"},
+    Default -> "yes"
   },
   {
     Name -> "UseSpatialBetaDriver",
