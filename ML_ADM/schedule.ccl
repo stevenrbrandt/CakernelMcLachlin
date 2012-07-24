@@ -121,12 +121,6 @@ schedule ML_ADM_Startup at STARTUP
   OPTIONS: meta
 } "create banner"
 
-schedule ML_ADM_RegisterVars in MoL_Register
-{
-  LANG: C
-  OPTIONS: meta
-} "Register Variables for MoL"
-
 schedule ML_ADM_RegisterSymmetries in SymmetryRegister
 {
   LANG: C
@@ -139,6 +133,22 @@ if (CCTK_EQUALS(my_initial_data, "Minkowski"))
   schedule ML_ADM_Minkowski IN ADMBase_InitialData
   {
     LANG: C
+    WRITES:   ML_ADM::alpha
+    WRITES:   ML_ADM::beta1
+    WRITES:   ML_ADM::beta2
+    WRITES:   ML_ADM::beta3
+    WRITES:   ML_ADM::g11
+    WRITES:   ML_ADM::g12
+    WRITES:   ML_ADM::g13
+    WRITES:   ML_ADM::g22
+    WRITES:   ML_ADM::g23
+    WRITES:   ML_ADM::g33
+    WRITES:   ML_ADM::K11
+    WRITES:   ML_ADM::K12
+    WRITES:   ML_ADM::K13
+    WRITES:   ML_ADM::K22
+    WRITES:   ML_ADM::K23
+    WRITES:   ML_ADM::K33
   } "ML_ADM_Minkowski"
 }
 
@@ -148,12 +158,76 @@ if (CCTK_EQUALS(my_initial_data, "ADMBase"))
   schedule ML_ADM_convertFromADMBase AT initial AFTER ADMBase_PostInitial
   {
     LANG: C
+    READS:    ADMBase::alp
+    READS:    ADMBase::betax
+    READS:    ADMBase::betay
+    READS:    ADMBase::betaz
+    READS:    ADMBase::gxx
+    READS:    ADMBase::gxy
+    READS:    ADMBase::gxz
+    READS:    ADMBase::gyy
+    READS:    ADMBase::gyz
+    READS:    ADMBase::gzz
+    READS:    ADMBase::kxx
+    READS:    ADMBase::kxy
+    READS:    ADMBase::kxz
+    READS:    ADMBase::kyy
+    READS:    ADMBase::kyz
+    READS:    ADMBase::kzz
+    WRITES:   ML_ADM::alpha
+    WRITES:   ML_ADM::beta1
+    WRITES:   ML_ADM::beta2
+    WRITES:   ML_ADM::beta3
+    WRITES:   ML_ADM::g11
+    WRITES:   ML_ADM::g12
+    WRITES:   ML_ADM::g13
+    WRITES:   ML_ADM::g22
+    WRITES:   ML_ADM::g23
+    WRITES:   ML_ADM::g33
+    WRITES:   ML_ADM::K11
+    WRITES:   ML_ADM::K12
+    WRITES:   ML_ADM::K13
+    WRITES:   ML_ADM::K22
+    WRITES:   ML_ADM::K23
+    WRITES:   ML_ADM::K33
   } "ML_ADM_convertFromADMBase"
 }
 
 schedule ML_ADM_RHS IN MoL_CalcRHS
 {
   LANG: C
+  READS:    ML_ADM::alpha
+  READS:    ML_ADM::beta1
+  READS:    ML_ADM::beta2
+  READS:    ML_ADM::beta3
+  READS:    ML_ADM::g11
+  READS:    ML_ADM::g12
+  READS:    ML_ADM::g13
+  READS:    ML_ADM::g22
+  READS:    ML_ADM::g23
+  READS:    ML_ADM::g33
+  READS:    ML_ADM::K11
+  READS:    ML_ADM::K12
+  READS:    ML_ADM::K13
+  READS:    ML_ADM::K22
+  READS:    ML_ADM::K23
+  READS:    ML_ADM::K33
+  WRITES:   ML_ADM::alpharhs
+  WRITES:   ML_ADM::beta1rhs
+  WRITES:   ML_ADM::beta2rhs
+  WRITES:   ML_ADM::beta3rhs
+  WRITES:   ML_ADM::g11rhs
+  WRITES:   ML_ADM::g12rhs
+  WRITES:   ML_ADM::g13rhs
+  WRITES:   ML_ADM::g22rhs
+  WRITES:   ML_ADM::g23rhs
+  WRITES:   ML_ADM::g33rhs
+  WRITES:   ML_ADM::K11rhs
+  WRITES:   ML_ADM::K12rhs
+  WRITES:   ML_ADM::K13rhs
+  WRITES:   ML_ADM::K22rhs
+  WRITES:   ML_ADM::K23rhs
+  WRITES:   ML_ADM::K33rhs
 } "ML_ADM_RHS"
 
 schedule ML_ADM_RHS AT analysis
@@ -163,6 +237,38 @@ schedule ML_ADM_RHS AT analysis
   SYNC: ML_lapserhs
   SYNC: ML_metricrhs
   SYNC: ML_shiftrhs
+  READS:    ML_ADM::alpha
+  READS:    ML_ADM::beta1
+  READS:    ML_ADM::beta2
+  READS:    ML_ADM::beta3
+  READS:    ML_ADM::g11
+  READS:    ML_ADM::g12
+  READS:    ML_ADM::g13
+  READS:    ML_ADM::g22
+  READS:    ML_ADM::g23
+  READS:    ML_ADM::g33
+  READS:    ML_ADM::K11
+  READS:    ML_ADM::K12
+  READS:    ML_ADM::K13
+  READS:    ML_ADM::K22
+  READS:    ML_ADM::K23
+  READS:    ML_ADM::K33
+  WRITES:   ML_ADM::alpharhs
+  WRITES:   ML_ADM::beta1rhs
+  WRITES:   ML_ADM::beta2rhs
+  WRITES:   ML_ADM::beta3rhs
+  WRITES:   ML_ADM::g11rhs
+  WRITES:   ML_ADM::g12rhs
+  WRITES:   ML_ADM::g13rhs
+  WRITES:   ML_ADM::g22rhs
+  WRITES:   ML_ADM::g23rhs
+  WRITES:   ML_ADM::g33rhs
+  WRITES:   ML_ADM::K11rhs
+  WRITES:   ML_ADM::K12rhs
+  WRITES:   ML_ADM::K13rhs
+  WRITES:   ML_ADM::K22rhs
+  WRITES:   ML_ADM::K23rhs
+  WRITES:   ML_ADM::K33rhs
 } "ML_ADM_RHS"
 
 
@@ -171,12 +277,64 @@ if (CCTK_EQUALS(my_boundary_condition, "Minkowski"))
   schedule ML_ADM_boundary IN MoL_PostStep
   {
     LANG: C
+    WRITES:   ML_ADM::alpha
+    WRITES:   ML_ADM::beta1
+    WRITES:   ML_ADM::beta2
+    WRITES:   ML_ADM::beta3
+    WRITES:   ML_ADM::g11
+    WRITES:   ML_ADM::g12
+    WRITES:   ML_ADM::g13
+    WRITES:   ML_ADM::g22
+    WRITES:   ML_ADM::g23
+    WRITES:   ML_ADM::g33
+    WRITES:   ML_ADM::K11
+    WRITES:   ML_ADM::K12
+    WRITES:   ML_ADM::K13
+    WRITES:   ML_ADM::K22
+    WRITES:   ML_ADM::K23
+    WRITES:   ML_ADM::K33
   } "ML_ADM_boundary"
 }
 
 schedule ML_ADM_convertToADMBase IN MoL_PostStep AFTER ML_ADM_ApplyBCs
 {
   LANG: C
+  READS:    ML_ADM::alpha
+  READS:    ML_ADM::beta1
+  READS:    ML_ADM::beta2
+  READS:    ML_ADM::beta3
+  READS:    ML_ADM::g11
+  READS:    ML_ADM::g12
+  READS:    ML_ADM::g13
+  READS:    ML_ADM::g22
+  READS:    ML_ADM::g23
+  READS:    ML_ADM::g33
+  READS:    ML_ADM::K11
+  READS:    ML_ADM::K12
+  READS:    ML_ADM::K13
+  READS:    ML_ADM::K22
+  READS:    ML_ADM::K23
+  READS:    ML_ADM::K33
+  WRITES:   ADMBase::alp
+  WRITES:   ADMBase::betax
+  WRITES:   ADMBase::betay
+  WRITES:   ADMBase::betaz
+  WRITES:   ADMBase::dtalp
+  WRITES:   ADMBase::dtbetax
+  WRITES:   ADMBase::dtbetay
+  WRITES:   ADMBase::dtbetaz
+  WRITES:   ADMBase::gxx
+  WRITES:   ADMBase::gxy
+  WRITES:   ADMBase::gxz
+  WRITES:   ADMBase::gyy
+  WRITES:   ADMBase::gyz
+  WRITES:   ADMBase::gzz
+  WRITES:   ADMBase::kxx
+  WRITES:   ADMBase::kxy
+  WRITES:   ADMBase::kxz
+  WRITES:   ADMBase::kyy
+  WRITES:   ADMBase::kyz
+  WRITES:   ADMBase::kzz
 } "ML_ADM_convertToADMBase"
 
 schedule ML_ADM_constraints AT analysis
@@ -186,11 +344,31 @@ schedule ML_ADM_constraints AT analysis
   SYNC: ML_mom
   TRIGGERS: ML_Ham
   TRIGGERS: ML_mom
+  READS:    ML_ADM::g11
+  READS:    ML_ADM::g12
+  READS:    ML_ADM::g13
+  READS:    ML_ADM::g22
+  READS:    ML_ADM::g23
+  READS:    ML_ADM::g33
+  READS:    ML_ADM::K11
+  READS:    ML_ADM::K12
+  READS:    ML_ADM::K13
+  READS:    ML_ADM::K22
+  READS:    ML_ADM::K23
+  READS:    ML_ADM::K33
+  WRITES:   ML_ADM::H
+  WRITES:   ML_ADM::M1
+  WRITES:   ML_ADM::M2
+  WRITES:   ML_ADM::M3
 } "ML_ADM_constraints"
 
 schedule ML_ADM_constraints_boundary AT analysis AFTER ML_ADM_constraints
 {
   LANG: C
+  WRITES:   ML_ADM::H
+  WRITES:   ML_ADM::M1
+  WRITES:   ML_ADM::M2
+  WRITES:   ML_ADM::M3
 } "ML_ADM_constraints_boundary"
 
 schedule ML_ADM_SelectBoundConds in MoL_PostStep
@@ -208,6 +386,12 @@ schedule ML_ADM_CheckBoundaries at BASEGRID
   LANG: C
   OPTIONS: meta
 } "check boundaries treatment"
+
+schedule ML_ADM_RegisterVars in MoL_Register
+{
+  LANG: C
+  OPTIONS: meta
+} "Register Variables for MoL"
 
 schedule group ApplyBCs as ML_ADM_ApplyBCs in MoL_PostStep after ML_ADM_SelectBoundConds
 {

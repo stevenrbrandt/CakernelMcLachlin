@@ -17,10 +17,10 @@
 
 /* Define macros used in calculations */
 #define INITVALUE (42)
-#define QAD(x) (SQR(SQR(x)))
-#define INV(x) ((1.0) / (x))
+#define INV(x) ((CCTK_REAL)1.0 / (x))
 #define SQR(x) ((x) * (x))
-#define CUB(x) ((x) * (x) * (x))
+#define CUB(x) ((x) * SQR(x))
+#define QAD(x) (SQR(SQR(x)))
 
 extern "C" void WT_RHS_SelectBCs(CCTK_ARGUMENTS)
 {
@@ -42,8 +42,6 @@ static void WT_RHS_Body(cGH const * restrict const cctkGH, int const dir, int co
   DECLARE_CCTK_ARGUMENTS;
   DECLARE_CCTK_PARAMETERS;
   
-  
-  /* Declare finite differencing variables */
   
   /* Include user-supplied include files */
   
@@ -75,9 +73,9 @@ static void WT_RHS_Body(cGH const * restrict const cctkGH, int const dir, int co
   CCTK_REAL const p1o12dx = 0.0833333333333333333333333333333*INV(dx);
   CCTK_REAL const p1o12dy = 0.0833333333333333333333333333333*INV(dy);
   CCTK_REAL const p1o12dz = 0.0833333333333333333333333333333*INV(dz);
-  CCTK_REAL const p1o144dxdy = 0.00694444444444444444444444444444*INV(dx)*INV(dy);
-  CCTK_REAL const p1o144dxdz = 0.00694444444444444444444444444444*INV(dx)*INV(dz);
-  CCTK_REAL const p1o144dydz = 0.00694444444444444444444444444444*INV(dy)*INV(dz);
+  CCTK_REAL const p1o144dxdy = 0.00694444444444444444444444444444*INV(dx*dy);
+  CCTK_REAL const p1o144dxdz = 0.00694444444444444444444444444444*INV(dx*dz);
+  CCTK_REAL const p1o144dydz = 0.00694444444444444444444444444444*INV(dy*dz);
   CCTK_REAL const pm1o12dx2 = -0.0833333333333333333333333333333*INV(SQR(dx));
   CCTK_REAL const pm1o12dy2 = -0.0833333333333333333333333333333*INV(SQR(dy));
   CCTK_REAL const pm1o12dz2 = -0.0833333333333333333333333333333*INV(SQR(dz));
@@ -92,9 +90,9 @@ static void WT_RHS_Body(cGH const * restrict const cctkGH, int const dir, int co
   
   /* Loop over the grid points */
   #pragma omp parallel
-  CCTK_LOOP3 (WT_RHS,
+  CCTK_LOOP3(WT_RHS,
     i,j,k, imin[0],imin[1],imin[2], imax[0],imax[1],imax[2],
-    cctk_lsh[0],cctk_lsh[1],cctk_lsh[2])
+    cctk_ash[0],cctk_ash[1],cctk_ash[2])
   {
     ptrdiff_t const index = di*i + dj*j + dk*k;
     
@@ -121,7 +119,7 @@ static void WT_RHS_Body(cGH const * restrict const cctkGH, int const dir, int co
     rhorhs[index] = rhorhsL;
     urhs[index] = urhsL;
   }
-  CCTK_ENDLOOP3 (WT_RHS);
+  CCTK_ENDLOOP3(WT_RHS);
 }
 
 extern "C" void WT_RHS(CCTK_ARGUMENTS)
@@ -140,12 +138,16 @@ extern "C" void WT_RHS(CCTK_ARGUMENTS)
     return;
   }
   
-  const char *groups[] = {"ML_WaveToy::WT_rho","ML_WaveToy::WT_rhorhs","ML_WaveToy::WT_u","ML_WaveToy::WT_urhs"};
+  const char *const groups[] = {
+    "ML_WaveToy::WT_rho",
+    "ML_WaveToy::WT_rhorhs",
+    "ML_WaveToy::WT_u",
+    "ML_WaveToy::WT_urhs"};
   GenericFD_AssertGroupStorage(cctkGH, "WT_RHS", 4, groups);
   
   GenericFD_EnsureStencilFits(cctkGH, "WT_RHS", 2, 2, 2);
   
-  GenericFD_LoopOverInterior(cctkGH, &WT_RHS_Body);
+  GenericFD_LoopOverInterior(cctkGH, WT_RHS_Body);
   
   if (verbose > 1)
   {

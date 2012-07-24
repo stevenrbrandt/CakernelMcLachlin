@@ -17,18 +17,16 @@
 
 /* Define macros used in calculations */
 #define INITVALUE (42)
-#define QAD(x) (SQR(SQR(x)))
-#define INV(x) ((1.0) / (x))
+#define INV(x) ((CCTK_REAL)1.0 / (x))
 #define SQR(x) ((x) * (x))
-#define CUB(x) ((x) * (x) * (x))
+#define CUB(x) ((x) * SQR(x))
+#define QAD(x) (SQR(SQR(x)))
 
 static void hydro_con2prim_Body(cGH const * restrict const cctkGH, int const dir, int const face, CCTK_REAL const normal[3], CCTK_REAL const tangentA[3], CCTK_REAL const tangentB[3], int const imin[3], int const imax[3], int const n_subblock_gfs, CCTK_REAL * restrict const subblock_gfs[])
 {
   DECLARE_CCTK_ARGUMENTS;
   DECLARE_CCTK_PARAMETERS;
   
-  
-  /* Declare finite differencing variables */
   
   /* Include user-supplied include files */
   
@@ -60,9 +58,9 @@ static void hydro_con2prim_Body(cGH const * restrict const cctkGH, int const dir
   CCTK_REAL const p1o2dx = 0.5*INV(dx);
   CCTK_REAL const p1o2dy = 0.5*INV(dy);
   CCTK_REAL const p1o2dz = 0.5*INV(dz);
-  CCTK_REAL const p1o4dxdy = 0.25*INV(dx)*INV(dy);
-  CCTK_REAL const p1o4dxdz = 0.25*INV(dx)*INV(dz);
-  CCTK_REAL const p1o4dydz = 0.25*INV(dy)*INV(dz);
+  CCTK_REAL const p1o4dxdy = 0.25*INV(dx*dy);
+  CCTK_REAL const p1o4dxdz = 0.25*INV(dx*dz);
+  CCTK_REAL const p1o4dydz = 0.25*INV(dy*dz);
   CCTK_REAL const p1odx2 = INV(SQR(dx));
   CCTK_REAL const p1ody2 = INV(SQR(dy));
   CCTK_REAL const p1odz2 = INV(SQR(dz));
@@ -77,9 +75,9 @@ static void hydro_con2prim_Body(cGH const * restrict const cctkGH, int const dir
   
   /* Loop over the grid points */
   #pragma omp parallel
-  CCTK_LOOP3 (hydro_con2prim,
+  CCTK_LOOP3(hydro_con2prim,
     i,j,k, imin[0],imin[1],imin[2], imax[0],imax[1],imax[2],
-    cctk_lsh[0],cctk_lsh[1],cctk_lsh[2])
+    cctk_ash[0],cctk_ash[1],cctk_ash[2])
   {
     ptrdiff_t const index = di*i + dj*j + dk*k;
     
@@ -124,7 +122,7 @@ static void hydro_con2prim_Body(cGH const * restrict const cctkGH, int const dir
     vel2[index] = vel2L;
     vel3[index] = vel3L;
   }
-  CCTK_ENDLOOP3 (hydro_con2prim);
+  CCTK_ENDLOOP3(hydro_con2prim);
 }
 
 extern "C" void hydro_con2prim(CCTK_ARGUMENTS)
@@ -143,11 +141,19 @@ extern "C" void hydro_con2prim(CCTK_ARGUMENTS)
     return;
   }
   
-  const char *groups[] = {"ML_hydro::ene_group","ML_hydro::eps_group","ML_hydro::mass_group","ML_hydro::mom_group","ML_hydro::press_group","ML_hydro::rho_group","ML_hydro::vel_group","ML_hydro::vol_group"};
+  const char *const groups[] = {
+    "ML_hydro::ene_group",
+    "ML_hydro::eps_group",
+    "ML_hydro::mass_group",
+    "ML_hydro::mom_group",
+    "ML_hydro::press_group",
+    "ML_hydro::rho_group",
+    "ML_hydro::vel_group",
+    "ML_hydro::vol_group"};
   GenericFD_AssertGroupStorage(cctkGH, "hydro_con2prim", 8, groups);
   
   
-  GenericFD_LoopOverEverything(cctkGH, &hydro_con2prim_Body);
+  GenericFD_LoopOverEverything(cctkGH, hydro_con2prim_Body);
   
   if (verbose > 1)
   {

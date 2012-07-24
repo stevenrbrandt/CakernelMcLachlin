@@ -33,12 +33,6 @@ schedule ML_ADMConstraints_MP_Startup at STARTUP
   OPTIONS: meta
 } "create banner"
 
-schedule ML_ADMConstraints_MP_RegisterVars in MoL_Register
-{
-  LANG: C
-  OPTIONS: meta
-} "Register Variables for MoL"
-
 schedule ML_ADMConstraints_MP_RegisterSymmetries in SymmetryRegister
 {
   LANG: C
@@ -53,6 +47,36 @@ schedule group ML_ADMConstraints_MP_group in MoL_PseudoEvolution after MoL_PostS
 schedule ML_ADMConstraints_MP in ML_ADMConstraints_MP_group
 {
   LANG: C
+  READS:    ADMBase::alp
+  READS:    ADMBase::betax
+  READS:    ADMBase::betay
+  READS:    ADMBase::betaz
+  READS:    TmunuBase::eTtt
+  READS:    TmunuBase::eTtx
+  READS:    TmunuBase::eTty
+  READS:    TmunuBase::eTtz
+  READS:    TmunuBase::eTxx
+  READS:    TmunuBase::eTxy
+  READS:    TmunuBase::eTxz
+  READS:    TmunuBase::eTyy
+  READS:    TmunuBase::eTyz
+  READS:    TmunuBase::eTzz
+  READS:    ADMBase::gxx
+  READS:    ADMBase::gxy
+  READS:    ADMBase::gxz
+  READS:    ADMBase::gyy
+  READS:    ADMBase::gyz
+  READS:    ADMBase::gzz
+  READS:    ADMBase::kxx
+  READS:    ADMBase::kxy
+  READS:    ADMBase::kxz
+  READS:    ADMBase::kyy
+  READS:    ADMBase::kyz
+  READS:    ADMBase::kzz
+  WRITES:   ML_ADMConstraints_MP::H
+  WRITES:   ML_ADMConstraints_MP::M1
+  WRITES:   ML_ADMConstraints_MP::M2
+  WRITES:   ML_ADMConstraints_MP::M3
 } "ML_ADMConstraints_MP"
 
 schedule ML_ADMConstraints_MP_SelectBCs in ML_ADMConstraints_MP_bc_group
@@ -89,6 +113,12 @@ schedule ML_ADMConstraints_MP_CheckBoundaries at BASEGRID
   LANG: C
   OPTIONS: meta
 } "check boundaries treatment"
+
+schedule ML_ADMConstraints_MP_RegisterVars in MoL_Register
+{
+  LANG: C
+  OPTIONS: meta
+} "Register Variables for MoL"
 
 schedule group ApplyBCs as ML_ADMConstraints_MP_ApplyBCs in MoL_PostStep after ML_ADMConstraints_MP_SelectBoundConds
 {

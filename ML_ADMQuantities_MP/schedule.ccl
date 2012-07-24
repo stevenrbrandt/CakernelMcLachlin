@@ -33,12 +33,6 @@ schedule ML_ADMQuantities_MP_Startup at STARTUP
   OPTIONS: meta
 } "create banner"
 
-schedule ML_ADMQuantities_MP_RegisterVars in MoL_Register
-{
-  LANG: C
-  OPTIONS: meta
-} "Register Variables for MoL"
-
 schedule ML_ADMQuantities_MP_RegisterSymmetries in SymmetryRegister
 {
   LANG: C
@@ -53,6 +47,44 @@ schedule group ML_ADMQuantities_MP_group in MoL_PseudoEvolution after MoL_PostSt
 schedule ML_ADMQuantities_MP in ML_ADMQuantities_MP_group
 {
   LANG: C
+  READS:    ML_BSSN::alpha
+  READS:    ML_BSSN::At11
+  READS:    ML_BSSN::At12
+  READS:    ML_BSSN::At13
+  READS:    ML_BSSN::At22
+  READS:    ML_BSSN::At23
+  READS:    ML_BSSN::At33
+  READS:    ML_BSSN::beta1
+  READS:    ML_BSSN::beta2
+  READS:    ML_BSSN::beta3
+  READS:    TmunuBase::eTtt
+  READS:    TmunuBase::eTtx
+  READS:    TmunuBase::eTty
+  READS:    TmunuBase::eTtz
+  READS:    TmunuBase::eTxx
+  READS:    TmunuBase::eTxy
+  READS:    TmunuBase::eTxz
+  READS:    TmunuBase::eTyy
+  READS:    TmunuBase::eTyz
+  READS:    TmunuBase::eTzz
+  READS:    ML_BSSN::gt11
+  READS:    ML_BSSN::gt12
+  READS:    ML_BSSN::gt13
+  READS:    ML_BSSN::gt22
+  READS:    ML_BSSN::gt23
+  READS:    ML_BSSN::gt33
+  READS:    ML_BSSN::phi
+  READS:    ML_BSSN::trK
+  READS:    grid::x
+  READS:    ML_BSSN::Xt1
+  READS:    ML_BSSN::Xt2
+  READS:    ML_BSSN::Xt3
+  READS:    grid::y
+  READS:    grid::z
+  WRITES:   ML_ADMQuantities_MP::Jadm1
+  WRITES:   ML_ADMQuantities_MP::Jadm2
+  WRITES:   ML_ADMQuantities_MP::Jadm3
+  WRITES:   ML_ADMQuantities_MP::Madm
 } "ML_ADMQuantities_MP"
 
 schedule ML_ADMQuantities_MP_SelectBCs in ML_ADMQuantities_MP_bc_group
@@ -89,6 +121,12 @@ schedule ML_ADMQuantities_MP_CheckBoundaries at BASEGRID
   LANG: C
   OPTIONS: meta
 } "check boundaries treatment"
+
+schedule ML_ADMQuantities_MP_RegisterVars in MoL_Register
+{
+  LANG: C
+  OPTIONS: meta
+} "Register Variables for MoL"
 
 schedule group ApplyBCs as ML_ADMQuantities_MP_ApplyBCs in MoL_PostStep after ML_ADMQuantities_MP_SelectBoundConds
 {

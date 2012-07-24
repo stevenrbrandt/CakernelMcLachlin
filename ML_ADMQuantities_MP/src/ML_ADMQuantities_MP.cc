@@ -17,10 +17,10 @@
 
 /* Define macros used in calculations */
 #define INITVALUE (42)
-#define QAD(x) (SQR(SQR(x)))
-#define INV(x) ((1.0) / (x))
+#define INV(x) ((CCTK_REAL)1.0 / (x))
 #define SQR(x) ((x) * (x))
-#define CUB(x) ((x) * (x) * (x))
+#define CUB(x) ((x) * SQR(x))
+#define QAD(x) (SQR(SQR(x)))
 
 extern "C" void ML_ADMQuantities_MP_SelectBCs(CCTK_ARGUMENTS)
 {
@@ -42,8 +42,6 @@ static void ML_ADMQuantities_MP_Body(cGH const * restrict const cctkGH, int cons
   DECLARE_CCTK_ARGUMENTS;
   DECLARE_CCTK_PARAMETERS;
   
-  
-  /* Declare finite differencing variables */
   
   /* Include user-supplied include files */
   
@@ -75,9 +73,9 @@ static void ML_ADMQuantities_MP_Body(cGH const * restrict const cctkGH, int cons
   CCTK_REAL const p1o12dx = 0.0833333333333333333333333333333*INV(dx);
   CCTK_REAL const p1o12dy = 0.0833333333333333333333333333333*INV(dy);
   CCTK_REAL const p1o12dz = 0.0833333333333333333333333333333*INV(dz);
-  CCTK_REAL const p1o144dxdy = 0.00694444444444444444444444444444*INV(dx)*INV(dy);
-  CCTK_REAL const p1o144dxdz = 0.00694444444444444444444444444444*INV(dx)*INV(dz);
-  CCTK_REAL const p1o144dydz = 0.00694444444444444444444444444444*INV(dy)*INV(dz);
+  CCTK_REAL const p1o144dxdy = 0.00694444444444444444444444444444*INV(dx*dy);
+  CCTK_REAL const p1o144dxdz = 0.00694444444444444444444444444444*INV(dx*dz);
+  CCTK_REAL const p1o144dydz = 0.00694444444444444444444444444444*INV(dy*dz);
   CCTK_REAL const p1odx = INV(dx);
   CCTK_REAL const p1ody = INV(dy);
   CCTK_REAL const p1odz = INV(dz);
@@ -140,9 +138,9 @@ static void ML_ADMQuantities_MP_Body(cGH const * restrict const cctkGH, int cons
   
   /* Loop over the grid points */
   #pragma omp parallel
-  CCTK_LOOP3 (ML_ADMQuantities_MP,
+  CCTK_LOOP3(ML_ADMQuantities_MP,
     i,j,k, imin[0],imin[1],imin[2], imax[0],imax[1],imax[2],
-    cctk_lsh[0],cctk_lsh[1],cctk_lsh[2])
+    cctk_ash[0],cctk_ash[1],cctk_ash[2])
   {
     ptrdiff_t const index = di*i + dj*j + dk*k;
     
@@ -1484,7 +1482,7 @@ static void ML_ADMQuantities_MP_Body(cGH const * restrict const cctkGH, int cons
     Jadm3[index] = Jadm3L;
     Madm[index] = MadmL;
   }
-  CCTK_ENDLOOP3 (ML_ADMQuantities_MP);
+  CCTK_ENDLOOP3(ML_ADMQuantities_MP);
 }
 
 extern "C" void ML_ADMQuantities_MP(CCTK_ARGUMENTS)
@@ -1503,12 +1501,23 @@ extern "C" void ML_ADMQuantities_MP(CCTK_ARGUMENTS)
     return;
   }
   
-  const char *groups[] = {"grid::coordinates","Grid::coordinates","ML_BSSN::ML_curv","ML_BSSN::ML_Gamma","ML_BSSN::ML_lapse","ML_BSSN::ML_log_confac","ML_BSSN::ML_metric","ML_BSSN::ML_shift","ML_BSSN::ML_trace_curv","ML_ADMQuantities_MP::ML_Jadm","ML_ADMQuantities_MP::ML_Madm"};
+  const char *const groups[] = {
+    "grid::coordinates",
+    "Grid::coordinates",
+    "ML_BSSN::ML_curv",
+    "ML_BSSN::ML_Gamma",
+    "ML_BSSN::ML_lapse",
+    "ML_BSSN::ML_log_confac",
+    "ML_BSSN::ML_metric",
+    "ML_BSSN::ML_shift",
+    "ML_BSSN::ML_trace_curv",
+    "ML_ADMQuantities_MP::ML_Jadm",
+    "ML_ADMQuantities_MP::ML_Madm"};
   GenericFD_AssertGroupStorage(cctkGH, "ML_ADMQuantities_MP", 11, groups);
   
   GenericFD_EnsureStencilFits(cctkGH, "ML_ADMQuantities_MP", 2, 2, 2);
   
-  GenericFD_LoopOverInterior(cctkGH, &ML_ADMQuantities_MP_Body);
+  GenericFD_LoopOverInterior(cctkGH, ML_ADMQuantities_MP_Body);
   
   if (verbose > 1)
   {

@@ -17,10 +17,10 @@
 
 /* Define macros used in calculations */
 #define INITVALUE (42)
-#define QAD(x) (SQR(SQR(x)))
-#define INV(x) ((1.0) / (x))
+#define INV(x) ((CCTK_REAL)1.0 / (x))
 #define SQR(x) ((x) * (x))
-#define CUB(x) ((x) * (x) * (x))
+#define CUB(x) ((x) * SQR(x))
+#define QAD(x) (SQR(SQR(x)))
 
 extern "C" void ML_ADMConstraints_O2_SelectBCs(CCTK_ARGUMENTS)
 {
@@ -42,8 +42,6 @@ static void ML_ADMConstraints_O2_Body(cGH const * restrict const cctkGH, int con
   DECLARE_CCTK_ARGUMENTS;
   DECLARE_CCTK_PARAMETERS;
   
-  
-  /* Declare finite differencing variables */
   
   /* Include user-supplied include files */
   
@@ -75,9 +73,9 @@ static void ML_ADMConstraints_O2_Body(cGH const * restrict const cctkGH, int con
   CCTK_REAL const p1o2dx = 0.5*INV(dx);
   CCTK_REAL const p1o2dy = 0.5*INV(dy);
   CCTK_REAL const p1o2dz = 0.5*INV(dz);
-  CCTK_REAL const p1o4dxdy = 0.25*INV(dx)*INV(dy);
-  CCTK_REAL const p1o4dxdz = 0.25*INV(dx)*INV(dz);
-  CCTK_REAL const p1o4dydz = 0.25*INV(dy)*INV(dz);
+  CCTK_REAL const p1o4dxdy = 0.25*INV(dx*dy);
+  CCTK_REAL const p1o4dxdz = 0.25*INV(dx*dz);
+  CCTK_REAL const p1o4dydz = 0.25*INV(dy*dz);
   CCTK_REAL const p1odx2 = INV(SQR(dx));
   CCTK_REAL const p1ody2 = INV(SQR(dy));
   CCTK_REAL const p1odz2 = INV(SQR(dz));
@@ -92,9 +90,9 @@ static void ML_ADMConstraints_O2_Body(cGH const * restrict const cctkGH, int con
   
   /* Loop over the grid points */
   #pragma omp parallel
-  CCTK_LOOP3 (ML_ADMConstraints_O2,
+  CCTK_LOOP3(ML_ADMConstraints_O2,
     i,j,k, imin[0],imin[1],imin[2], imax[0],imax[1],imax[2],
-    cctk_lsh[0],cctk_lsh[1],cctk_lsh[2])
+    cctk_ash[0],cctk_ash[1],cctk_ash[2])
   {
     ptrdiff_t const index = di*i + dj*j + dk*k;
     
@@ -501,7 +499,7 @@ static void ML_ADMConstraints_O2_Body(cGH const * restrict const cctkGH, int con
     M2[index] = M2L;
     M3[index] = M3L;
   }
-  CCTK_ENDLOOP3 (ML_ADMConstraints_O2);
+  CCTK_ENDLOOP3(ML_ADMConstraints_O2);
 }
 
 extern "C" void ML_ADMConstraints_O2(CCTK_ARGUMENTS)
@@ -520,12 +518,18 @@ extern "C" void ML_ADMConstraints_O2(CCTK_ARGUMENTS)
     return;
   }
   
-  const char *groups[] = {"ADMBase::curv","ADMBase::lapse","ADMBase::metric","ADMBase::shift","ML_ADMConstraints_O2::ML_Ham","ML_ADMConstraints_O2::ML_mom"};
+  const char *const groups[] = {
+    "ADMBase::curv",
+    "ADMBase::lapse",
+    "ADMBase::metric",
+    "ADMBase::shift",
+    "ML_ADMConstraints_O2::ML_Ham",
+    "ML_ADMConstraints_O2::ML_mom"};
   GenericFD_AssertGroupStorage(cctkGH, "ML_ADMConstraints_O2", 6, groups);
   
   GenericFD_EnsureStencilFits(cctkGH, "ML_ADMConstraints_O2", 1, 1, 1);
   
-  GenericFD_LoopOverInterior(cctkGH, &ML_ADMConstraints_O2_Body);
+  GenericFD_LoopOverInterior(cctkGH, ML_ADMConstraints_O2_Body);
   
   if (verbose > 1)
   {

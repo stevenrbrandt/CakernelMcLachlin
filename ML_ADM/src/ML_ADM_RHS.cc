@@ -18,10 +18,14 @@
 
 /* Define macros used in calculations */
 #define INITVALUE (42)
-#define QAD(x) (SQR(SQR(x)))
+#define ScalarINV(x) ((CCTK_REAL)1.0 / (x))
+#define ScalarSQR(x) ((x) * (x))
+#define ScalarCUB(x) ((x) * ScalarSQR(x))
+#define ScalarQAD(x) (ScalarSQR(ScalarSQR(x)))
 #define INV(x) (kdiv(ToReal(1.0),x))
 #define SQR(x) (kmul(x,x))
 #define CUB(x) (kmul(x,SQR(x)))
+#define QAD(x) (SQR(SQR(x)))
 
 extern "C" void ML_ADM_RHS_SelectBCs(CCTK_ARGUMENTS)
 {
@@ -50,8 +54,6 @@ static void ML_ADM_RHS_Body(cGH const * restrict const cctkGH, int const dir, in
   DECLARE_CCTK_PARAMETERS;
   
   
-  /* Declare finite differencing variables */
-  
   /* Include user-supplied include files */
   
   /* Initialise finite differencing variables */
@@ -79,42 +81,42 @@ static void ML_ADM_RHS_Body(cGH const * restrict const cctkGH, int const dir, in
   CCTK_REAL_VEC const hdzi = kmul(ToReal(0.5), dzi);
   
   /* Initialize predefined quantities */
-  CCTK_REAL_VEC const p1o12dx = kmul(INV(dx),ToReal(0.0833333333333333333333333333333));
-  CCTK_REAL_VEC const p1o12dy = kmul(INV(dy),ToReal(0.0833333333333333333333333333333));
-  CCTK_REAL_VEC const p1o12dz = kmul(INV(dz),ToReal(0.0833333333333333333333333333333));
-  CCTK_REAL_VEC const p1o144dxdy = kmul(INV(dx),kmul(INV(dy),ToReal(0.00694444444444444444444444444444)));
-  CCTK_REAL_VEC const p1o144dxdz = kmul(INV(dx),kmul(INV(dz),ToReal(0.00694444444444444444444444444444)));
-  CCTK_REAL_VEC const p1o144dydz = kmul(INV(dy),kmul(INV(dz),ToReal(0.00694444444444444444444444444444)));
-  CCTK_REAL_VEC const p1o180dx2 = kmul(INV(SQR(dx)),ToReal(0.00555555555555555555555555555556));
-  CCTK_REAL_VEC const p1o180dy2 = kmul(INV(SQR(dy)),ToReal(0.00555555555555555555555555555556));
-  CCTK_REAL_VEC const p1o180dz2 = kmul(INV(SQR(dz)),ToReal(0.00555555555555555555555555555556));
-  CCTK_REAL_VEC const p1o2dx = kmul(INV(dx),ToReal(0.5));
-  CCTK_REAL_VEC const p1o2dy = kmul(INV(dy),ToReal(0.5));
-  CCTK_REAL_VEC const p1o2dz = kmul(INV(dz),ToReal(0.5));
-  CCTK_REAL_VEC const p1o3600dxdy = kmul(INV(dx),kmul(INV(dy),ToReal(0.000277777777777777777777777777778)));
-  CCTK_REAL_VEC const p1o3600dxdz = kmul(INV(dx),kmul(INV(dz),ToReal(0.000277777777777777777777777777778)));
-  CCTK_REAL_VEC const p1o3600dydz = kmul(INV(dy),kmul(INV(dz),ToReal(0.000277777777777777777777777777778)));
-  CCTK_REAL_VEC const p1o4dxdy = kmul(INV(dx),kmul(INV(dy),ToReal(0.25)));
-  CCTK_REAL_VEC const p1o4dxdz = kmul(INV(dx),kmul(INV(dz),ToReal(0.25)));
-  CCTK_REAL_VEC const p1o4dydz = kmul(INV(dy),kmul(INV(dz),ToReal(0.25)));
-  CCTK_REAL_VEC const p1o5040dx2 = kmul(INV(SQR(dx)),ToReal(0.000198412698412698412698412698413));
-  CCTK_REAL_VEC const p1o5040dy2 = kmul(INV(SQR(dy)),ToReal(0.000198412698412698412698412698413));
-  CCTK_REAL_VEC const p1o5040dz2 = kmul(INV(SQR(dz)),ToReal(0.000198412698412698412698412698413));
-  CCTK_REAL_VEC const p1o60dx = kmul(INV(dx),ToReal(0.0166666666666666666666666666667));
-  CCTK_REAL_VEC const p1o60dy = kmul(INV(dy),ToReal(0.0166666666666666666666666666667));
-  CCTK_REAL_VEC const p1o60dz = kmul(INV(dz),ToReal(0.0166666666666666666666666666667));
-  CCTK_REAL_VEC const p1o705600dxdy = kmul(INV(dx),kmul(INV(dy),ToReal(1.41723356009070294784580498866e-6)));
-  CCTK_REAL_VEC const p1o705600dxdz = kmul(INV(dx),kmul(INV(dz),ToReal(1.41723356009070294784580498866e-6)));
-  CCTK_REAL_VEC const p1o705600dydz = kmul(INV(dy),kmul(INV(dz),ToReal(1.41723356009070294784580498866e-6)));
-  CCTK_REAL_VEC const p1o840dx = kmul(INV(dx),ToReal(0.00119047619047619047619047619048));
-  CCTK_REAL_VEC const p1o840dy = kmul(INV(dy),ToReal(0.00119047619047619047619047619048));
-  CCTK_REAL_VEC const p1o840dz = kmul(INV(dz),ToReal(0.00119047619047619047619047619048));
-  CCTK_REAL_VEC const p1odx2 = INV(SQR(dx));
-  CCTK_REAL_VEC const p1ody2 = INV(SQR(dy));
-  CCTK_REAL_VEC const p1odz2 = INV(SQR(dz));
-  CCTK_REAL_VEC const pm1o12dx2 = kmul(INV(SQR(dx)),ToReal(-0.0833333333333333333333333333333));
-  CCTK_REAL_VEC const pm1o12dy2 = kmul(INV(SQR(dy)),ToReal(-0.0833333333333333333333333333333));
-  CCTK_REAL_VEC const pm1o12dz2 = kmul(INV(SQR(dz)),ToReal(-0.0833333333333333333333333333333));
+  CCTK_REAL_VEC const p1o12dx = kdiv(ToReal(0.0833333333333333333333333333333),dx);
+  CCTK_REAL_VEC const p1o12dy = kdiv(ToReal(0.0833333333333333333333333333333),dy);
+  CCTK_REAL_VEC const p1o12dz = kdiv(ToReal(0.0833333333333333333333333333333),dz);
+  CCTK_REAL_VEC const p1o144dxdy = kdiv(ToReal(0.00694444444444444444444444444444),kmul(dy,dx));
+  CCTK_REAL_VEC const p1o144dxdz = kdiv(ToReal(0.00694444444444444444444444444444),kmul(dz,dx));
+  CCTK_REAL_VEC const p1o144dydz = kdiv(ToReal(0.00694444444444444444444444444444),kmul(dz,dy));
+  CCTK_REAL_VEC const p1o180dx2 = kdiv(ToReal(0.00555555555555555555555555555556),kmul(dx,dx));
+  CCTK_REAL_VEC const p1o180dy2 = kdiv(ToReal(0.00555555555555555555555555555556),kmul(dy,dy));
+  CCTK_REAL_VEC const p1o180dz2 = kdiv(ToReal(0.00555555555555555555555555555556),kmul(dz,dz));
+  CCTK_REAL_VEC const p1o2dx = kdiv(ToReal(0.5),dx);
+  CCTK_REAL_VEC const p1o2dy = kdiv(ToReal(0.5),dy);
+  CCTK_REAL_VEC const p1o2dz = kdiv(ToReal(0.5),dz);
+  CCTK_REAL_VEC const p1o3600dxdy = kdiv(ToReal(0.000277777777777777777777777777778),kmul(dy,dx));
+  CCTK_REAL_VEC const p1o3600dxdz = kdiv(ToReal(0.000277777777777777777777777777778),kmul(dz,dx));
+  CCTK_REAL_VEC const p1o3600dydz = kdiv(ToReal(0.000277777777777777777777777777778),kmul(dz,dy));
+  CCTK_REAL_VEC const p1o4dxdy = kdiv(ToReal(0.25),kmul(dy,dx));
+  CCTK_REAL_VEC const p1o4dxdz = kdiv(ToReal(0.25),kmul(dz,dx));
+  CCTK_REAL_VEC const p1o4dydz = kdiv(ToReal(0.25),kmul(dz,dy));
+  CCTK_REAL_VEC const p1o5040dx2 = kdiv(ToReal(0.000198412698412698412698412698413),kmul(dx,dx));
+  CCTK_REAL_VEC const p1o5040dy2 = kdiv(ToReal(0.000198412698412698412698412698413),kmul(dy,dy));
+  CCTK_REAL_VEC const p1o5040dz2 = kdiv(ToReal(0.000198412698412698412698412698413),kmul(dz,dz));
+  CCTK_REAL_VEC const p1o60dx = kdiv(ToReal(0.0166666666666666666666666666667),dx);
+  CCTK_REAL_VEC const p1o60dy = kdiv(ToReal(0.0166666666666666666666666666667),dy);
+  CCTK_REAL_VEC const p1o60dz = kdiv(ToReal(0.0166666666666666666666666666667),dz);
+  CCTK_REAL_VEC const p1o705600dxdy = kdiv(ToReal(1.41723356009070294784580498866e-6),kmul(dy,dx));
+  CCTK_REAL_VEC const p1o705600dxdz = kdiv(ToReal(1.41723356009070294784580498866e-6),kmul(dz,dx));
+  CCTK_REAL_VEC const p1o705600dydz = kdiv(ToReal(1.41723356009070294784580498866e-6),kmul(dz,dy));
+  CCTK_REAL_VEC const p1o840dx = kdiv(ToReal(0.00119047619047619047619047619048),dx);
+  CCTK_REAL_VEC const p1o840dy = kdiv(ToReal(0.00119047619047619047619047619048),dy);
+  CCTK_REAL_VEC const p1o840dz = kdiv(ToReal(0.00119047619047619047619047619048),dz);
+  CCTK_REAL_VEC const p1odx2 = kdiv(ToReal(1),kmul(dx,dx));
+  CCTK_REAL_VEC const p1ody2 = kdiv(ToReal(1),kmul(dy,dy));
+  CCTK_REAL_VEC const p1odz2 = kdiv(ToReal(1),kmul(dz,dz));
+  CCTK_REAL_VEC const pm1o12dx2 = kdiv(ToReal(-0.0833333333333333333333333333333),kmul(dx,dx));
+  CCTK_REAL_VEC const pm1o12dy2 = kdiv(ToReal(-0.0833333333333333333333333333333),kmul(dy,dy));
+  CCTK_REAL_VEC const pm1o12dz2 = kdiv(ToReal(-0.0833333333333333333333333333333),kmul(dz,dz));
   
   /* Jacobian variable pointers */
   bool const use_jacobian = (!CCTK_IsFunctionAliased("MultiPatch_GetMap") || MultiPatch_GetMap(cctkGH) != jacobian_identity_map)
@@ -171,9 +173,9 @@ static void ML_ADM_RHS_Body(cGH const * restrict const cctkGH, int const dir, in
   
   /* Loop over the grid points */
   #pragma omp parallel
-  LC_LOOP3VEC (ML_ADM_RHS,
+  LC_LOOP3VEC(ML_ADM_RHS,
     i,j,k, imin[0],imin[1],imin[2], imax[0],imax[1],imax[2],
-    cctk_lsh[0],cctk_lsh[1],cctk_lsh[2],
+    cctk_ash[0],cctk_ash[1],cctk_ash[2],
     CCTK_REAL_VEC_SIZE)
   {
     ptrdiff_t const index = di*i + dj*j + dk*k;
@@ -948,40 +950,40 @@ static void ML_ADM_RHS_Body(cGH const * restrict const cctkGH, int const dir, in
         kmadd(J13L,PDstandardNth1K33,kmadd(J23L,PDstandardNth2K33,kmul(J33L,PDstandardNth3K33)));
       
       JacPDstandardNth11alpha = 
-        kmadd(dJ111L,PDstandardNth1alpha,kmadd(dJ211L,PDstandardNth2alpha,kmadd(dJ311L,PDstandardNth3alpha,kmadd(PDstandardNth11alpha,SQR(J11L),kmadd(PDstandardNth22alpha,SQR(J21L),kmadd(PDstandardNth33alpha,SQR(J31L),kmul(kmadd(J11L,kmadd(J21L,PDstandardNth12alpha,kmul(J31L,PDstandardNth13alpha)),kmul(J21L,kmul(J31L,PDstandardNth23alpha))),ToReal(2))))))));
+        kmadd(dJ111L,PDstandardNth1alpha,kmadd(dJ211L,PDstandardNth2alpha,kmadd(dJ311L,PDstandardNth3alpha,kmadd(PDstandardNth11alpha,kmul(J11L,J11L),kmadd(PDstandardNth22alpha,kmul(J21L,J21L),kmadd(PDstandardNth33alpha,kmul(J31L,J31L),kmul(kmadd(J11L,kmadd(J21L,PDstandardNth12alpha,kmul(J31L,PDstandardNth13alpha)),kmul(J21L,kmul(J31L,PDstandardNth23alpha))),ToReal(2))))))));
       
       JacPDstandardNth11g22 = 
-        kmadd(dJ111L,PDstandardNth1g22,kmadd(dJ211L,PDstandardNth2g22,kmadd(dJ311L,PDstandardNth3g22,kmadd(PDstandardNth11g22,SQR(J11L),kmadd(PDstandardNth22g22,SQR(J21L),kmadd(PDstandardNth33g22,SQR(J31L),kmul(kmadd(J11L,kmadd(J21L,PDstandardNth12g22,kmul(J31L,PDstandardNth13g22)),kmul(J21L,kmul(J31L,PDstandardNth23g22))),ToReal(2))))))));
+        kmadd(dJ111L,PDstandardNth1g22,kmadd(dJ211L,PDstandardNth2g22,kmadd(dJ311L,PDstandardNth3g22,kmadd(PDstandardNth11g22,kmul(J11L,J11L),kmadd(PDstandardNth22g22,kmul(J21L,J21L),kmadd(PDstandardNth33g22,kmul(J31L,J31L),kmul(kmadd(J11L,kmadd(J21L,PDstandardNth12g22,kmul(J31L,PDstandardNth13g22)),kmul(J21L,kmul(J31L,PDstandardNth23g22))),ToReal(2))))))));
       
       JacPDstandardNth11g23 = 
-        kmadd(dJ111L,PDstandardNth1g23,kmadd(dJ211L,PDstandardNth2g23,kmadd(dJ311L,PDstandardNth3g23,kmadd(PDstandardNth11g23,SQR(J11L),kmadd(PDstandardNth22g23,SQR(J21L),kmadd(PDstandardNth33g23,SQR(J31L),kmul(kmadd(J11L,kmadd(J21L,PDstandardNth12g23,kmul(J31L,PDstandardNth13g23)),kmul(J21L,kmul(J31L,PDstandardNth23g23))),ToReal(2))))))));
+        kmadd(dJ111L,PDstandardNth1g23,kmadd(dJ211L,PDstandardNth2g23,kmadd(dJ311L,PDstandardNth3g23,kmadd(PDstandardNth11g23,kmul(J11L,J11L),kmadd(PDstandardNth22g23,kmul(J21L,J21L),kmadd(PDstandardNth33g23,kmul(J31L,J31L),kmul(kmadd(J11L,kmadd(J21L,PDstandardNth12g23,kmul(J31L,PDstandardNth13g23)),kmul(J21L,kmul(J31L,PDstandardNth23g23))),ToReal(2))))))));
       
       JacPDstandardNth11g33 = 
-        kmadd(dJ111L,PDstandardNth1g33,kmadd(dJ211L,PDstandardNth2g33,kmadd(dJ311L,PDstandardNth3g33,kmadd(PDstandardNth11g33,SQR(J11L),kmadd(PDstandardNth22g33,SQR(J21L),kmadd(PDstandardNth33g33,SQR(J31L),kmul(kmadd(J11L,kmadd(J21L,PDstandardNth12g33,kmul(J31L,PDstandardNth13g33)),kmul(J21L,kmul(J31L,PDstandardNth23g33))),ToReal(2))))))));
+        kmadd(dJ111L,PDstandardNth1g33,kmadd(dJ211L,PDstandardNth2g33,kmadd(dJ311L,PDstandardNth3g33,kmadd(PDstandardNth11g33,kmul(J11L,J11L),kmadd(PDstandardNth22g33,kmul(J21L,J21L),kmadd(PDstandardNth33g33,kmul(J31L,J31L),kmul(kmadd(J11L,kmadd(J21L,PDstandardNth12g33,kmul(J31L,PDstandardNth13g33)),kmul(J21L,kmul(J31L,PDstandardNth23g33))),ToReal(2))))))));
       
       JacPDstandardNth22alpha = 
-        kmadd(dJ122L,PDstandardNth1alpha,kmadd(dJ222L,PDstandardNth2alpha,kmadd(dJ322L,PDstandardNth3alpha,kmadd(PDstandardNth11alpha,SQR(J12L),kmadd(PDstandardNth22alpha,SQR(J22L),kmadd(PDstandardNth33alpha,SQR(J32L),kmul(kmadd(J12L,kmadd(J22L,PDstandardNth12alpha,kmul(J32L,PDstandardNth13alpha)),kmul(J22L,kmul(J32L,PDstandardNth23alpha))),ToReal(2))))))));
+        kmadd(dJ122L,PDstandardNth1alpha,kmadd(dJ222L,PDstandardNth2alpha,kmadd(dJ322L,PDstandardNth3alpha,kmadd(PDstandardNth11alpha,kmul(J12L,J12L),kmadd(PDstandardNth22alpha,kmul(J22L,J22L),kmadd(PDstandardNth33alpha,kmul(J32L,J32L),kmul(kmadd(J12L,kmadd(J22L,PDstandardNth12alpha,kmul(J32L,PDstandardNth13alpha)),kmul(J22L,kmul(J32L,PDstandardNth23alpha))),ToReal(2))))))));
       
       JacPDstandardNth22g11 = 
-        kmadd(dJ122L,PDstandardNth1g11,kmadd(dJ222L,PDstandardNth2g11,kmadd(dJ322L,PDstandardNth3g11,kmadd(PDstandardNth11g11,SQR(J12L),kmadd(PDstandardNth22g11,SQR(J22L),kmadd(PDstandardNth33g11,SQR(J32L),kmul(kmadd(J12L,kmadd(J22L,PDstandardNth12g11,kmul(J32L,PDstandardNth13g11)),kmul(J22L,kmul(J32L,PDstandardNth23g11))),ToReal(2))))))));
+        kmadd(dJ122L,PDstandardNth1g11,kmadd(dJ222L,PDstandardNth2g11,kmadd(dJ322L,PDstandardNth3g11,kmadd(PDstandardNth11g11,kmul(J12L,J12L),kmadd(PDstandardNth22g11,kmul(J22L,J22L),kmadd(PDstandardNth33g11,kmul(J32L,J32L),kmul(kmadd(J12L,kmadd(J22L,PDstandardNth12g11,kmul(J32L,PDstandardNth13g11)),kmul(J22L,kmul(J32L,PDstandardNth23g11))),ToReal(2))))))));
       
       JacPDstandardNth22g13 = 
-        kmadd(dJ122L,PDstandardNth1g13,kmadd(dJ222L,PDstandardNth2g13,kmadd(dJ322L,PDstandardNth3g13,kmadd(PDstandardNth11g13,SQR(J12L),kmadd(PDstandardNth22g13,SQR(J22L),kmadd(PDstandardNth33g13,SQR(J32L),kmul(kmadd(J12L,kmadd(J22L,PDstandardNth12g13,kmul(J32L,PDstandardNth13g13)),kmul(J22L,kmul(J32L,PDstandardNth23g13))),ToReal(2))))))));
+        kmadd(dJ122L,PDstandardNth1g13,kmadd(dJ222L,PDstandardNth2g13,kmadd(dJ322L,PDstandardNth3g13,kmadd(PDstandardNth11g13,kmul(J12L,J12L),kmadd(PDstandardNth22g13,kmul(J22L,J22L),kmadd(PDstandardNth33g13,kmul(J32L,J32L),kmul(kmadd(J12L,kmadd(J22L,PDstandardNth12g13,kmul(J32L,PDstandardNth13g13)),kmul(J22L,kmul(J32L,PDstandardNth23g13))),ToReal(2))))))));
       
       JacPDstandardNth22g33 = 
-        kmadd(dJ122L,PDstandardNth1g33,kmadd(dJ222L,PDstandardNth2g33,kmadd(dJ322L,PDstandardNth3g33,kmadd(PDstandardNth11g33,SQR(J12L),kmadd(PDstandardNth22g33,SQR(J22L),kmadd(PDstandardNth33g33,SQR(J32L),kmul(kmadd(J12L,kmadd(J22L,PDstandardNth12g33,kmul(J32L,PDstandardNth13g33)),kmul(J22L,kmul(J32L,PDstandardNth23g33))),ToReal(2))))))));
+        kmadd(dJ122L,PDstandardNth1g33,kmadd(dJ222L,PDstandardNth2g33,kmadd(dJ322L,PDstandardNth3g33,kmadd(PDstandardNth11g33,kmul(J12L,J12L),kmadd(PDstandardNth22g33,kmul(J22L,J22L),kmadd(PDstandardNth33g33,kmul(J32L,J32L),kmul(kmadd(J12L,kmadd(J22L,PDstandardNth12g33,kmul(J32L,PDstandardNth13g33)),kmul(J22L,kmul(J32L,PDstandardNth23g33))),ToReal(2))))))));
       
       JacPDstandardNth33alpha = 
-        kmadd(dJ133L,PDstandardNth1alpha,kmadd(dJ233L,PDstandardNth2alpha,kmadd(dJ333L,PDstandardNth3alpha,kmadd(PDstandardNth11alpha,SQR(J13L),kmadd(PDstandardNth22alpha,SQR(J23L),kmadd(PDstandardNth33alpha,SQR(J33L),kmul(kmadd(J13L,kmadd(J23L,PDstandardNth12alpha,kmul(J33L,PDstandardNth13alpha)),kmul(J23L,kmul(J33L,PDstandardNth23alpha))),ToReal(2))))))));
+        kmadd(dJ133L,PDstandardNth1alpha,kmadd(dJ233L,PDstandardNth2alpha,kmadd(dJ333L,PDstandardNth3alpha,kmadd(PDstandardNth11alpha,kmul(J13L,J13L),kmadd(PDstandardNth22alpha,kmul(J23L,J23L),kmadd(PDstandardNth33alpha,kmul(J33L,J33L),kmul(kmadd(J13L,kmadd(J23L,PDstandardNth12alpha,kmul(J33L,PDstandardNth13alpha)),kmul(J23L,kmul(J33L,PDstandardNth23alpha))),ToReal(2))))))));
       
       JacPDstandardNth33g11 = 
-        kmadd(dJ133L,PDstandardNth1g11,kmadd(dJ233L,PDstandardNth2g11,kmadd(dJ333L,PDstandardNth3g11,kmadd(PDstandardNth11g11,SQR(J13L),kmadd(PDstandardNth22g11,SQR(J23L),kmadd(PDstandardNth33g11,SQR(J33L),kmul(kmadd(J13L,kmadd(J23L,PDstandardNth12g11,kmul(J33L,PDstandardNth13g11)),kmul(J23L,kmul(J33L,PDstandardNth23g11))),ToReal(2))))))));
+        kmadd(dJ133L,PDstandardNth1g11,kmadd(dJ233L,PDstandardNth2g11,kmadd(dJ333L,PDstandardNth3g11,kmadd(PDstandardNth11g11,kmul(J13L,J13L),kmadd(PDstandardNth22g11,kmul(J23L,J23L),kmadd(PDstandardNth33g11,kmul(J33L,J33L),kmul(kmadd(J13L,kmadd(J23L,PDstandardNth12g11,kmul(J33L,PDstandardNth13g11)),kmul(J23L,kmul(J33L,PDstandardNth23g11))),ToReal(2))))))));
       
       JacPDstandardNth33g12 = 
-        kmadd(dJ133L,PDstandardNth1g12,kmadd(dJ233L,PDstandardNth2g12,kmadd(dJ333L,PDstandardNth3g12,kmadd(PDstandardNth11g12,SQR(J13L),kmadd(PDstandardNth22g12,SQR(J23L),kmadd(PDstandardNth33g12,SQR(J33L),kmul(kmadd(J13L,kmadd(J23L,PDstandardNth12g12,kmul(J33L,PDstandardNth13g12)),kmul(J23L,kmul(J33L,PDstandardNth23g12))),ToReal(2))))))));
+        kmadd(dJ133L,PDstandardNth1g12,kmadd(dJ233L,PDstandardNth2g12,kmadd(dJ333L,PDstandardNth3g12,kmadd(PDstandardNth11g12,kmul(J13L,J13L),kmadd(PDstandardNth22g12,kmul(J23L,J23L),kmadd(PDstandardNth33g12,kmul(J33L,J33L),kmul(kmadd(J13L,kmadd(J23L,PDstandardNth12g12,kmul(J33L,PDstandardNth13g12)),kmul(J23L,kmul(J33L,PDstandardNth23g12))),ToReal(2))))))));
       
       JacPDstandardNth33g22 = 
-        kmadd(dJ133L,PDstandardNth1g22,kmadd(dJ233L,PDstandardNth2g22,kmadd(dJ333L,PDstandardNth3g22,kmadd(PDstandardNth11g22,SQR(J13L),kmadd(PDstandardNth22g22,SQR(J23L),kmadd(PDstandardNth33g22,SQR(J33L),kmul(kmadd(J13L,kmadd(J23L,PDstandardNth12g22,kmul(J33L,PDstandardNth13g22)),kmul(J23L,kmul(J33L,PDstandardNth23g22))),ToReal(2))))))));
+        kmadd(dJ133L,PDstandardNth1g22,kmadd(dJ233L,PDstandardNth2g22,kmadd(dJ333L,PDstandardNth3g22,kmadd(PDstandardNth11g22,kmul(J13L,J13L),kmadd(PDstandardNth22g22,kmul(J23L,J23L),kmadd(PDstandardNth33g22,kmul(J33L,J33L),kmul(kmadd(J13L,kmadd(J23L,PDstandardNth12g22,kmul(J33L,PDstandardNth13g22)),kmul(J23L,kmul(J33L,PDstandardNth23g22))),ToReal(2))))))));
       
       JacPDstandardNth12alpha = 
         kmadd(J12L,kmadd(J11L,PDstandardNth11alpha,kmadd(J21L,PDstandardNth12alpha,kmul(J31L,PDstandardNth13alpha))),kmadd(J11L,kmadd(J22L,PDstandardNth12alpha,kmul(J32L,PDstandardNth13alpha)),kmadd(dJ112L,PDstandardNth1alpha,kmadd(J22L,kmadd(J21L,PDstandardNth22alpha,kmul(J31L,PDstandardNth23alpha)),kmadd(dJ212L,PDstandardNth2alpha,kmadd(J32L,kmadd(J21L,PDstandardNth23alpha,kmul(J31L,PDstandardNth33alpha)),kmul(dJ312L,PDstandardNth3alpha)))))));
@@ -1302,31 +1304,34 @@ static void ML_ADM_RHS_Body(cGH const * restrict const cctkGH, int const dir, in
     }
     
     CCTK_REAL_VEC detg = 
-      knmsub(g22L,SQR(g13L),knmsub(g11L,SQR(g23L),kmadd(g33L,kmsub(g11L,g22L,SQR(g12L)),kmul(g12L,kmul(g13L,kmul(g23L,ToReal(2)))))));
+      knmsub(g22L,kmul(g13L,g13L),knmsub(g11L,kmul(g23L,g23L),kmadd(g33L,kmsub(g11L,g22L,kmul(g12L,g12L)),kmul(g12L,kmul(g13L,kmul(g23L,ToReal(2)))))));
     
-    CCTK_REAL_VEC gu11 = kmul(INV(detg),kmsub(g22L,g33L,SQR(g23L)));
+    CCTK_REAL_VEC gu11 = 
+      kdiv(kmsub(g22L,g33L,kmul(g23L,g23L)),detg);
     
     CCTK_REAL_VEC gu12 = 
-      kmul(INV(detg),kmsub(g13L,g23L,kmul(g12L,g33L)));
+      kdiv(kmsub(g13L,g23L,kmul(g12L,g33L)),detg);
     
     CCTK_REAL_VEC gu13 = 
-      kmul(INV(detg),kmsub(g12L,g23L,kmul(g13L,g22L)));
+      kdiv(kmsub(g12L,g23L,kmul(g13L,g22L)),detg);
     
     CCTK_REAL_VEC gu21 = 
-      kmul(INV(detg),kmsub(g13L,g23L,kmul(g12L,g33L)));
+      kdiv(kmsub(g13L,g23L,kmul(g12L,g33L)),detg);
     
-    CCTK_REAL_VEC gu22 = kmul(INV(detg),kmsub(g11L,g33L,SQR(g13L)));
+    CCTK_REAL_VEC gu22 = 
+      kdiv(kmsub(g11L,g33L,kmul(g13L,g13L)),detg);
     
     CCTK_REAL_VEC gu23 = 
-      kmul(INV(detg),kmsub(g12L,g13L,kmul(g11L,g23L)));
+      kdiv(kmsub(g12L,g13L,kmul(g11L,g23L)),detg);
     
     CCTK_REAL_VEC gu31 = 
-      kmul(INV(detg),kmsub(g12L,g23L,kmul(g13L,g22L)));
+      kdiv(kmsub(g12L,g23L,kmul(g13L,g22L)),detg);
     
     CCTK_REAL_VEC gu32 = 
-      kmul(INV(detg),kmsub(g12L,g13L,kmul(g11L,g23L)));
+      kdiv(kmsub(g12L,g13L,kmul(g11L,g23L)),detg);
     
-    CCTK_REAL_VEC gu33 = kmul(INV(detg),kmsub(g11L,g22L,SQR(g12L)));
+    CCTK_REAL_VEC gu33 = 
+      kdiv(kmsub(g11L,g22L,kmul(g12L,g12L)),detg);
     
     CCTK_REAL_VEC G111 = 
       kmul(ToReal(0.5),kmadd(gu11,JacPDstandardNth1g11,knmsub(gu12,JacPDstandardNth2g11,kmsub(kmadd(gu12,JacPDstandardNth1g12,kmul(gu13,JacPDstandardNth1g13)),ToReal(2),kmul(gu13,JacPDstandardNth3g11)))));
@@ -1383,7 +1388,7 @@ static void ML_ADM_RHS_Body(cGH const * restrict const cctkGH, int const dir, in
       kmul(ToReal(0.5),kmadd(gu33,JacPDstandardNth3g33,kmadd(gu31,kmsub(JacPDstandardNth3g13,ToReal(2),JacPDstandardNth1g33),kmul(gu32,kmsub(JacPDstandardNth3g23,ToReal(2),JacPDstandardNth2g33)))));
     
     CCTK_REAL_VEC R11 = 
-      kmul(ToReal(0.5),kmadd(gu23,JacPDstandardNth31g12,kmadd(gu32,JacPDstandardNth31g12,kmadd(G111,kmul(kadd(G212,G313),ToReal(-2)),knmsub(JacPDstandardNth11g23,kadd(gu32,gu23),kmadd(gu12,ksub(JacPDstandardNth21g11,JacPDstandardNth12g11),kmadd(gu13,ksub(JacPDstandardNth31g11,JacPDstandardNth13g11),kmadd(gu23,ksub(JacPDstandardNth21g13,JacPDstandardNth23g11),kmadd(gu32,ksub(JacPDstandardNth21g13,JacPDstandardNth32g11),kmadd(SQR(G212),ToReal(2),kmadd(SQR(G313),ToReal(2),kmadd(G211,kmadd(G222,ToReal(-2),kmadd(G323,ToReal(-2),kmul(G112,ToReal(2)))),kmadd(G311,kmadd(G223,ToReal(-2),kmadd(G333,ToReal(-2),kmul(G113,ToReal(2)))),kmadd(gu22,ksub(kmsub(JacPDstandardNth21g12,ToReal(2),JacPDstandardNth22g11),JacPDstandardNth11g22),kmadd(gu33,ksub(kmsub(JacPDstandardNth31g13,ToReal(2),JacPDstandardNth33g11),JacPDstandardNth11g33),kmul(G213,kmul(G312,ToReal(4))))))))))))))))));
+      kmul(ToReal(0.5),kmadd(gu23,JacPDstandardNth31g12,kmadd(gu32,JacPDstandardNth31g12,kmadd(G111,kmul(kadd(G212,G313),ToReal(-2)),knmsub(JacPDstandardNth11g23,kadd(gu32,gu23),kmadd(gu12,ksub(JacPDstandardNth21g11,JacPDstandardNth12g11),kmadd(gu13,ksub(JacPDstandardNth31g11,JacPDstandardNth13g11),kmadd(gu23,ksub(JacPDstandardNth21g13,JacPDstandardNth23g11),kmadd(gu32,ksub(JacPDstandardNth21g13,JacPDstandardNth32g11),kmadd(kmul(G212,G212),ToReal(2),kmadd(kmul(G313,G313),ToReal(2),kmadd(G211,kmadd(G222,ToReal(-2),kmadd(G323,ToReal(-2),kmul(G112,ToReal(2)))),kmadd(G311,kmadd(G223,ToReal(-2),kmadd(G333,ToReal(-2),kmul(G113,ToReal(2)))),kmadd(gu22,ksub(kmsub(JacPDstandardNth21g12,ToReal(2),JacPDstandardNth22g11),JacPDstandardNth11g22),kmadd(gu33,ksub(kmsub(JacPDstandardNth31g13,ToReal(2),JacPDstandardNth33g11),JacPDstandardNth11g33),kmul(G213,kmul(G312,ToReal(4))))))))))))))))));
     
     CCTK_REAL_VEC R12 = 
       kmul(ToReal(0.5),kmadd(gu12,kadd(JacPDstandardNth11g22,JacPDstandardNth22g11),kmadd(gu32,JacPDstandardNth31g22,kmadd(gu13,JacPDstandardNth32g11,kmadd(gu23,JacPDstandardNth32g12,kmadd(gu33,JacPDstandardNth32g13,kmadd(kmadd(G112,kadd(G212,G313),kmadd(G212,G323,kmadd(G312,G333,kmul(gu12,JacPDstandardNth12g12)))),ToReal(-2),knmsub(JacPDstandardNth12g23,kadd(gu32,gu23),kmadd(gu22,ksub(JacPDstandardNth21g22,JacPDstandardNth12g22),kmadd(gu13,ksub(JacPDstandardNth11g23,kadd(JacPDstandardNth13g12,JacPDstandardNth12g13)),kmadd(gu23,ksub(JacPDstandardNth21g23,JacPDstandardNth23g12),kmadd(gu32,ksub(JacPDstandardNth22g13,JacPDstandardNth32g12),kmadd(gu33,ksub(JacPDstandardNth31g23,kadd(JacPDstandardNth33g12,JacPDstandardNth12g33)),kmul(kmadd(G122,G211,kmadd(G123,G311,kmadd(G213,G322,kmul(G313,G323)))),ToReal(2)))))))))))))));
@@ -1392,13 +1397,13 @@ static void ML_ADM_RHS_Body(cGH const * restrict const cctkGH, int const dir, in
       kmul(ToReal(0.5),kmadd(gu22,JacPDstandardNth23g12,kmadd(gu32,JacPDstandardNth31g23,kmadd(gu13,kadd(JacPDstandardNth11g33,JacPDstandardNth33g11),kmadd(gu23,JacPDstandardNth33g12,kmadd(kmadd(G213,G222,kmadd(G223,G313,kmadd(G113,kadd(G212,G313),kmul(gu13,JacPDstandardNth13g13)))),ToReal(-2),knmsub(JacPDstandardNth13g23,kadd(gu32,gu23),kmadd(gu12,kadd(JacPDstandardNth11g23,ksub(JacPDstandardNth23g11,kadd(JacPDstandardNth13g12,JacPDstandardNth12g13))),kmadd(gu33,ksub(JacPDstandardNth31g33,JacPDstandardNth13g33),kmadd(gu22,ksub(JacPDstandardNth21g23,kadd(JacPDstandardNth22g13,JacPDstandardNth13g22)),kmadd(gu23,ksub(JacPDstandardNth21g33,JacPDstandardNth23g13),kmadd(gu32,ksub(JacPDstandardNth23g13,JacPDstandardNth32g13),kmul(kmadd(G123,G211,kmadd(G212,G223,kmadd(G133,G311,kmul(G233,G312)))),ToReal(2))))))))))))));
     
     CCTK_REAL_VEC R22 = 
-      kmul(ToReal(0.5),kmadd(kadd(gu13,gu31),JacPDstandardNth12g23,kmadd(gu13,JacPDstandardNth32g12,kmadd(gu31,JacPDstandardNth32g12,kmadd(kmadd(G112,G222,kmadd(G113,G322,kmul(G222,G323))),ToReal(-2),kmadd(gu21,ksub(JacPDstandardNth12g22,JacPDstandardNth21g22),knmsub(gu13,kadd(JacPDstandardNth22g13,JacPDstandardNth13g22),kmadd(gu23,ksub(JacPDstandardNth32g22,JacPDstandardNth23g22),knmsub(gu31,kadd(JacPDstandardNth31g22,JacPDstandardNth22g13),kmadd(SQR(G112),ToReal(2),kmadd(SQR(G323),ToReal(2),kmadd(G122,kmadd(G111,ToReal(-2),kmadd(G313,ToReal(-2),kmul(G212,ToReal(2)))),kmadd(G322,kmadd(G333,ToReal(-2),kmul(G223,ToReal(2))),kmadd(gu11,ksub(kmsub(JacPDstandardNth12g12,ToReal(2),JacPDstandardNth22g11),JacPDstandardNth11g22),kmadd(gu33,ksub(kmsub(JacPDstandardNth32g23,ToReal(2),JacPDstandardNth33g22),JacPDstandardNth22g33),kmul(G123,kmul(G312,ToReal(4))))))))))))))))));
+      kmul(ToReal(0.5),kmadd(kadd(gu13,gu31),JacPDstandardNth12g23,kmadd(gu13,JacPDstandardNth32g12,kmadd(gu31,JacPDstandardNth32g12,kmadd(kmadd(G112,G222,kmadd(G113,G322,kmul(G222,G323))),ToReal(-2),kmadd(gu21,ksub(JacPDstandardNth12g22,JacPDstandardNth21g22),knmsub(gu13,kadd(JacPDstandardNth22g13,JacPDstandardNth13g22),kmadd(gu23,ksub(JacPDstandardNth32g22,JacPDstandardNth23g22),knmsub(gu31,kadd(JacPDstandardNth31g22,JacPDstandardNth22g13),kmadd(kmul(G112,G112),ToReal(2),kmadd(kmul(G323,G323),ToReal(2),kmadd(G122,kmadd(G111,ToReal(-2),kmadd(G313,ToReal(-2),kmul(G212,ToReal(2)))),kmadd(G322,kmadd(G333,ToReal(-2),kmul(G223,ToReal(2))),kmadd(gu11,ksub(kmsub(JacPDstandardNth12g12,ToReal(2),JacPDstandardNth22g11),JacPDstandardNth11g22),kmadd(gu33,ksub(kmsub(JacPDstandardNth32g23,ToReal(2),JacPDstandardNth33g22),JacPDstandardNth22g33),kmul(G123,kmul(G312,ToReal(4))))))))))))))))));
     
     CCTK_REAL_VEC R23 = 
       kmul(ToReal(0.5),kmadd(gu23,kadd(JacPDstandardNth22g33,JacPDstandardNth33g22),kmadd(kmadd(G111,G123,kmadd(kadd(G113,G223),G323,kmul(gu23,JacPDstandardNth23g23))),ToReal(-2),kmadd(gu11,kadd(JacPDstandardNth12g13,ksub(JacPDstandardNth13g12,kadd(JacPDstandardNth23g11,JacPDstandardNth11g23))),kmadd(gu21,kadd(JacPDstandardNth13g22,ksub(JacPDstandardNth22g13,kadd(JacPDstandardNth23g12,JacPDstandardNth21g23))),kmadd(gu13,kadd(JacPDstandardNth12g33,ksub(JacPDstandardNth33g12,kadd(JacPDstandardNth23g13,JacPDstandardNth13g23))),kmadd(gu33,ksub(JacPDstandardNth32g33,JacPDstandardNth23g33),kmadd(gu31,kadd(JacPDstandardNth13g23,ksub(JacPDstandardNth32g13,kadd(JacPDstandardNth31g23,JacPDstandardNth23g13))),kmul(kmadd(G122,G213,kmadd(G133,G312,kmadd(G233,G322,kmul(G112,ksub(G113,G223))))),ToReal(2))))))))));
     
     CCTK_REAL_VEC R33 = 
-      kmul(ToReal(0.5),kmadd(gu12,JacPDstandardNth23g13,kmadd(gu21,JacPDstandardNth23g13,kmadd(kmadd(G111,G133,kmadd(G133,G212,kmadd(G112,G233,kmadd(G222,G233,kmadd(G113,G333,kmul(G223,G333)))))),ToReal(-2),kmadd(gu31,ksub(JacPDstandardNth13g33,JacPDstandardNth31g33),kmadd(gu32,ksub(JacPDstandardNth23g33,JacPDstandardNth32g33),knmsub(gu11,kadd(JacPDstandardNth33g11,JacPDstandardNth11g33),kmadd(gu12,ksub(JacPDstandardNth13g23,kadd(JacPDstandardNth33g12,JacPDstandardNth12g33)),kmadd(gu21,ksub(JacPDstandardNth13g23,kadd(JacPDstandardNth33g12,JacPDstandardNth21g33)),kmadd(kmadd(G133,G313,kmadd(G233,G323,kmul(gu11,JacPDstandardNth13g13))),ToReal(2),kmadd(SQR(G113),ToReal(2),kmadd(SQR(G223),ToReal(2),kmadd(gu22,ksub(kmsub(JacPDstandardNth23g23,ToReal(2),JacPDstandardNth33g22),JacPDstandardNth22g33),kmul(G123,kmul(G213,ToReal(4))))))))))))))));
+      kmul(ToReal(0.5),kmadd(gu12,JacPDstandardNth23g13,kmadd(gu21,JacPDstandardNth23g13,kmadd(kmadd(G111,G133,kmadd(G133,G212,kmadd(G112,G233,kmadd(G222,G233,kmadd(G113,G333,kmul(G223,G333)))))),ToReal(-2),kmadd(gu31,ksub(JacPDstandardNth13g33,JacPDstandardNth31g33),kmadd(gu32,ksub(JacPDstandardNth23g33,JacPDstandardNth32g33),knmsub(gu11,kadd(JacPDstandardNth33g11,JacPDstandardNth11g33),kmadd(gu12,ksub(JacPDstandardNth13g23,kadd(JacPDstandardNth33g12,JacPDstandardNth12g33)),kmadd(gu21,ksub(JacPDstandardNth13g23,kadd(JacPDstandardNth33g12,JacPDstandardNth21g33)),kmadd(kmadd(G133,G313,kmadd(G233,G323,kmul(gu11,JacPDstandardNth13g13))),ToReal(2),kmadd(kmul(G113,G113),ToReal(2),kmadd(kmul(G223,G223),ToReal(2),kmadd(gu22,ksub(kmsub(JacPDstandardNth23g23,ToReal(2),JacPDstandardNth33g22),JacPDstandardNth22g33),kmul(G123,kmul(G213,ToReal(4))))))))))))))));
     
     CCTK_REAL_VEC Km11 = 
       kmadd(K11L,gu11,kmadd(K12L,gu12,kmul(K13L,gu13)));
@@ -1473,96 +1478,26 @@ static void ML_ADM_RHS_Body(cGH const * restrict const cctkGH, int const dir, in
     
     CCTK_REAL_VEC beta3rhsL = ToReal(0);
     
-    /* If necessary, store only partial vectors after the first iteration */
-    
-    if (CCTK_REAL_VEC_SIZE > 2 && CCTK_BUILTIN_EXPECT(i < lc_imin && i+CCTK_REAL_VEC_SIZE > lc_imax, 0))
-    {
-      ptrdiff_t const elt_count_lo = lc_imin-i;
-      ptrdiff_t const elt_count_hi = lc_imax-i;
-      vec_store_nta_partial_mid(alpharhs[index],alpharhsL,elt_count_lo,elt_count_hi);
-      vec_store_nta_partial_mid(beta1rhs[index],beta1rhsL,elt_count_lo,elt_count_hi);
-      vec_store_nta_partial_mid(beta2rhs[index],beta2rhsL,elt_count_lo,elt_count_hi);
-      vec_store_nta_partial_mid(beta3rhs[index],beta3rhsL,elt_count_lo,elt_count_hi);
-      vec_store_nta_partial_mid(g11rhs[index],g11rhsL,elt_count_lo,elt_count_hi);
-      vec_store_nta_partial_mid(g12rhs[index],g12rhsL,elt_count_lo,elt_count_hi);
-      vec_store_nta_partial_mid(g13rhs[index],g13rhsL,elt_count_lo,elt_count_hi);
-      vec_store_nta_partial_mid(g22rhs[index],g22rhsL,elt_count_lo,elt_count_hi);
-      vec_store_nta_partial_mid(g23rhs[index],g23rhsL,elt_count_lo,elt_count_hi);
-      vec_store_nta_partial_mid(g33rhs[index],g33rhsL,elt_count_lo,elt_count_hi);
-      vec_store_nta_partial_mid(K11rhs[index],K11rhsL,elt_count_lo,elt_count_hi);
-      vec_store_nta_partial_mid(K12rhs[index],K12rhsL,elt_count_lo,elt_count_hi);
-      vec_store_nta_partial_mid(K13rhs[index],K13rhsL,elt_count_lo,elt_count_hi);
-      vec_store_nta_partial_mid(K22rhs[index],K22rhsL,elt_count_lo,elt_count_hi);
-      vec_store_nta_partial_mid(K23rhs[index],K23rhsL,elt_count_lo,elt_count_hi);
-      vec_store_nta_partial_mid(K33rhs[index],K33rhsL,elt_count_lo,elt_count_hi);
-      break;
-    }
-    
-    /* If necessary, store only partial vectors after the first iteration */
-    
-    if (CCTK_REAL_VEC_SIZE > 1 && CCTK_BUILTIN_EXPECT(i < lc_imin, 0))
-    {
-      ptrdiff_t const elt_count = lc_imin-i;
-      vec_store_nta_partial_hi(alpharhs[index],alpharhsL,elt_count);
-      vec_store_nta_partial_hi(beta1rhs[index],beta1rhsL,elt_count);
-      vec_store_nta_partial_hi(beta2rhs[index],beta2rhsL,elt_count);
-      vec_store_nta_partial_hi(beta3rhs[index],beta3rhsL,elt_count);
-      vec_store_nta_partial_hi(g11rhs[index],g11rhsL,elt_count);
-      vec_store_nta_partial_hi(g12rhs[index],g12rhsL,elt_count);
-      vec_store_nta_partial_hi(g13rhs[index],g13rhsL,elt_count);
-      vec_store_nta_partial_hi(g22rhs[index],g22rhsL,elt_count);
-      vec_store_nta_partial_hi(g23rhs[index],g23rhsL,elt_count);
-      vec_store_nta_partial_hi(g33rhs[index],g33rhsL,elt_count);
-      vec_store_nta_partial_hi(K11rhs[index],K11rhsL,elt_count);
-      vec_store_nta_partial_hi(K12rhs[index],K12rhsL,elt_count);
-      vec_store_nta_partial_hi(K13rhs[index],K13rhsL,elt_count);
-      vec_store_nta_partial_hi(K22rhs[index],K22rhsL,elt_count);
-      vec_store_nta_partial_hi(K23rhs[index],K23rhsL,elt_count);
-      vec_store_nta_partial_hi(K33rhs[index],K33rhsL,elt_count);
-      continue;
-    }
-    
-    /* If necessary, store only partial vectors after the last iteration */
-    
-    if (CCTK_REAL_VEC_SIZE > 1 && CCTK_BUILTIN_EXPECT(i+CCTK_REAL_VEC_SIZE > lc_imax, 0))
-    {
-      ptrdiff_t const elt_count = lc_imax-i;
-      vec_store_nta_partial_lo(alpharhs[index],alpharhsL,elt_count);
-      vec_store_nta_partial_lo(beta1rhs[index],beta1rhsL,elt_count);
-      vec_store_nta_partial_lo(beta2rhs[index],beta2rhsL,elt_count);
-      vec_store_nta_partial_lo(beta3rhs[index],beta3rhsL,elt_count);
-      vec_store_nta_partial_lo(g11rhs[index],g11rhsL,elt_count);
-      vec_store_nta_partial_lo(g12rhs[index],g12rhsL,elt_count);
-      vec_store_nta_partial_lo(g13rhs[index],g13rhsL,elt_count);
-      vec_store_nta_partial_lo(g22rhs[index],g22rhsL,elt_count);
-      vec_store_nta_partial_lo(g23rhs[index],g23rhsL,elt_count);
-      vec_store_nta_partial_lo(g33rhs[index],g33rhsL,elt_count);
-      vec_store_nta_partial_lo(K11rhs[index],K11rhsL,elt_count);
-      vec_store_nta_partial_lo(K12rhs[index],K12rhsL,elt_count);
-      vec_store_nta_partial_lo(K13rhs[index],K13rhsL,elt_count);
-      vec_store_nta_partial_lo(K22rhs[index],K22rhsL,elt_count);
-      vec_store_nta_partial_lo(K23rhs[index],K23rhsL,elt_count);
-      vec_store_nta_partial_lo(K33rhs[index],K33rhsL,elt_count);
-      break;
-    }
-    vec_store_nta(alpharhs[index],alpharhsL);
-    vec_store_nta(beta1rhs[index],beta1rhsL);
-    vec_store_nta(beta2rhs[index],beta2rhsL);
-    vec_store_nta(beta3rhs[index],beta3rhsL);
-    vec_store_nta(g11rhs[index],g11rhsL);
-    vec_store_nta(g12rhs[index],g12rhsL);
-    vec_store_nta(g13rhs[index],g13rhsL);
-    vec_store_nta(g22rhs[index],g22rhsL);
-    vec_store_nta(g23rhs[index],g23rhsL);
-    vec_store_nta(g33rhs[index],g33rhsL);
-    vec_store_nta(K11rhs[index],K11rhsL);
-    vec_store_nta(K12rhs[index],K12rhsL);
-    vec_store_nta(K13rhs[index],K13rhsL);
-    vec_store_nta(K22rhs[index],K22rhsL);
-    vec_store_nta(K23rhs[index],K23rhsL);
-    vec_store_nta(K33rhs[index],K33rhsL);
+    /* Copy local copies back to grid functions */
+    vec_store_partial_prepare(i,lc_imin,lc_imax);
+    vec_store_nta_partial(alpharhs[index],alpharhsL);
+    vec_store_nta_partial(beta1rhs[index],beta1rhsL);
+    vec_store_nta_partial(beta2rhs[index],beta2rhsL);
+    vec_store_nta_partial(beta3rhs[index],beta3rhsL);
+    vec_store_nta_partial(g11rhs[index],g11rhsL);
+    vec_store_nta_partial(g12rhs[index],g12rhsL);
+    vec_store_nta_partial(g13rhs[index],g13rhsL);
+    vec_store_nta_partial(g22rhs[index],g22rhsL);
+    vec_store_nta_partial(g23rhs[index],g23rhsL);
+    vec_store_nta_partial(g33rhs[index],g33rhsL);
+    vec_store_nta_partial(K11rhs[index],K11rhsL);
+    vec_store_nta_partial(K12rhs[index],K12rhsL);
+    vec_store_nta_partial(K13rhs[index],K13rhsL);
+    vec_store_nta_partial(K22rhs[index],K22rhsL);
+    vec_store_nta_partial(K23rhs[index],K23rhsL);
+    vec_store_nta_partial(K33rhs[index],K33rhsL);
   }
-  LC_ENDLOOP3VEC (ML_ADM_RHS);
+  LC_ENDLOOP3VEC(ML_ADM_RHS);
 }
 
 extern "C" void ML_ADM_RHS(CCTK_ARGUMENTS)
@@ -1581,7 +1516,15 @@ extern "C" void ML_ADM_RHS(CCTK_ARGUMENTS)
     return;
   }
   
-  const char *groups[] = {"ML_ADM::ML_curv","ML_ADM::ML_curvrhs","ML_ADM::ML_lapse","ML_ADM::ML_lapserhs","ML_ADM::ML_metric","ML_ADM::ML_metricrhs","ML_ADM::ML_shift","ML_ADM::ML_shiftrhs"};
+  const char *const groups[] = {
+    "ML_ADM::ML_curv",
+    "ML_ADM::ML_curvrhs",
+    "ML_ADM::ML_lapse",
+    "ML_ADM::ML_lapserhs",
+    "ML_ADM::ML_metric",
+    "ML_ADM::ML_metricrhs",
+    "ML_ADM::ML_shift",
+    "ML_ADM::ML_shiftrhs"};
   GenericFD_AssertGroupStorage(cctkGH, "ML_ADM_RHS", 8, groups);
   
   switch(fdOrder)
@@ -1603,7 +1546,7 @@ extern "C" void ML_ADM_RHS(CCTK_ARGUMENTS)
       break;
   }
   
-  GenericFD_LoopOverInterior(cctkGH, &ML_ADM_RHS_Body);
+  GenericFD_LoopOverInterior(cctkGH, ML_ADM_RHS_Body);
   
   if (verbose > 1)
   {

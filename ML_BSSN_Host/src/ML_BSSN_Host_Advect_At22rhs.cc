@@ -18,10 +18,14 @@
 
 /* Define macros used in calculations */
 #define INITVALUE (42)
-#define QAD(x) (SQR(SQR(x)))
+#define ScalarINV(x) ((CCTK_REAL)1.0 / (x))
+#define ScalarSQR(x) ((x) * (x))
+#define ScalarCUB(x) ((x) * ScalarSQR(x))
+#define ScalarQAD(x) (ScalarSQR(ScalarSQR(x)))
 #define INV(x) (kdiv(ToReal(1.0),x))
 #define SQR(x) (kmul(x,x))
 #define CUB(x) (kmul(x,SQR(x)))
+#define QAD(x) (SQR(SQR(x)))
 
 extern "C" void ML_BSSN_Host_Advect_At22rhs_SelectBCs(CCTK_ARGUMENTS)
 {
@@ -68,33 +72,33 @@ static void ML_BSSN_Host_Advect_At22rhs_Body(cGH const * restrict const cctkGH, 
   CCTK_REAL_VEC const hdzi = kmul(ToReal(0.5), dzi);
   
   /* Initialize predefined quantities */
-  CCTK_REAL_VEC const p1o1024dx = kmul(INV(dx),ToReal(0.0009765625));
-  CCTK_REAL_VEC const p1o1024dy = kmul(INV(dy),ToReal(0.0009765625));
-  CCTK_REAL_VEC const p1o1024dz = kmul(INV(dz),ToReal(0.0009765625));
-  CCTK_REAL_VEC const p1o1680dx = kmul(INV(dx),ToReal(0.000595238095238095238095238095238));
-  CCTK_REAL_VEC const p1o1680dy = kmul(INV(dy),ToReal(0.000595238095238095238095238095238));
-  CCTK_REAL_VEC const p1o1680dz = kmul(INV(dz),ToReal(0.000595238095238095238095238095238));
-  CCTK_REAL_VEC const p1o2dx = kmul(INV(dx),ToReal(0.5));
-  CCTK_REAL_VEC const p1o2dy = kmul(INV(dy),ToReal(0.5));
-  CCTK_REAL_VEC const p1o2dz = kmul(INV(dz),ToReal(0.5));
-  CCTK_REAL_VEC const p1o5040dx2 = kmul(INV(SQR(dx)),ToReal(0.000198412698412698412698412698413));
-  CCTK_REAL_VEC const p1o5040dy2 = kmul(INV(SQR(dy)),ToReal(0.000198412698412698412698412698413));
-  CCTK_REAL_VEC const p1o5040dz2 = kmul(INV(SQR(dz)),ToReal(0.000198412698412698412698412698413));
-  CCTK_REAL_VEC const p1o560dx = kmul(INV(dx),ToReal(0.00178571428571428571428571428571));
-  CCTK_REAL_VEC const p1o560dy = kmul(INV(dy),ToReal(0.00178571428571428571428571428571));
-  CCTK_REAL_VEC const p1o560dz = kmul(INV(dz),ToReal(0.00178571428571428571428571428571));
-  CCTK_REAL_VEC const p1o705600dxdy = kmul(INV(kmul(dx,dy)),ToReal(1.41723356009070294784580498866e-6));
-  CCTK_REAL_VEC const p1o705600dxdz = kmul(INV(kmul(dx,dz)),ToReal(1.41723356009070294784580498866e-6));
-  CCTK_REAL_VEC const p1o705600dydz = kmul(INV(kmul(dy,dz)),ToReal(1.41723356009070294784580498866e-6));
-  CCTK_REAL_VEC const p1o840dx = kmul(INV(dx),ToReal(0.00119047619047619047619047619048));
-  CCTK_REAL_VEC const p1o840dy = kmul(INV(dy),ToReal(0.00119047619047619047619047619048));
-  CCTK_REAL_VEC const p1o840dz = kmul(INV(dz),ToReal(0.00119047619047619047619047619048));
-  CCTK_REAL_VEC const p1odx = INV(dx);
-  CCTK_REAL_VEC const p1ody = INV(dy);
-  CCTK_REAL_VEC const p1odz = INV(dz);
-  CCTK_REAL_VEC const pm1o2dx = kmul(INV(dx),ToReal(-0.5));
-  CCTK_REAL_VEC const pm1o2dy = kmul(INV(dy),ToReal(-0.5));
-  CCTK_REAL_VEC const pm1o2dz = kmul(INV(dz),ToReal(-0.5));
+  CCTK_REAL_VEC const p1o1024dx = kdiv(ToReal(0.0009765625),dx);
+  CCTK_REAL_VEC const p1o1024dy = kdiv(ToReal(0.0009765625),dy);
+  CCTK_REAL_VEC const p1o1024dz = kdiv(ToReal(0.0009765625),dz);
+  CCTK_REAL_VEC const p1o1680dx = kdiv(ToReal(0.000595238095238095238095238095238),dx);
+  CCTK_REAL_VEC const p1o1680dy = kdiv(ToReal(0.000595238095238095238095238095238),dy);
+  CCTK_REAL_VEC const p1o1680dz = kdiv(ToReal(0.000595238095238095238095238095238),dz);
+  CCTK_REAL_VEC const p1o2dx = kdiv(ToReal(0.5),dx);
+  CCTK_REAL_VEC const p1o2dy = kdiv(ToReal(0.5),dy);
+  CCTK_REAL_VEC const p1o2dz = kdiv(ToReal(0.5),dz);
+  CCTK_REAL_VEC const p1o5040dx2 = kdiv(ToReal(0.000198412698412698412698412698413),kmul(dx,dx));
+  CCTK_REAL_VEC const p1o5040dy2 = kdiv(ToReal(0.000198412698412698412698412698413),kmul(dy,dy));
+  CCTK_REAL_VEC const p1o5040dz2 = kdiv(ToReal(0.000198412698412698412698412698413),kmul(dz,dz));
+  CCTK_REAL_VEC const p1o560dx = kdiv(ToReal(0.00178571428571428571428571428571),dx);
+  CCTK_REAL_VEC const p1o560dy = kdiv(ToReal(0.00178571428571428571428571428571),dy);
+  CCTK_REAL_VEC const p1o560dz = kdiv(ToReal(0.00178571428571428571428571428571),dz);
+  CCTK_REAL_VEC const p1o705600dxdy = kdiv(ToReal(1.41723356009070294784580498866e-6),kmul(dy,dx));
+  CCTK_REAL_VEC const p1o705600dxdz = kdiv(ToReal(1.41723356009070294784580498866e-6),kmul(dz,dx));
+  CCTK_REAL_VEC const p1o705600dydz = kdiv(ToReal(1.41723356009070294784580498866e-6),kmul(dz,dy));
+  CCTK_REAL_VEC const p1o840dx = kdiv(ToReal(0.00119047619047619047619047619048),dx);
+  CCTK_REAL_VEC const p1o840dy = kdiv(ToReal(0.00119047619047619047619047619048),dy);
+  CCTK_REAL_VEC const p1o840dz = kdiv(ToReal(0.00119047619047619047619047619048),dz);
+  CCTK_REAL_VEC const p1odx = kdiv(ToReal(1),dx);
+  CCTK_REAL_VEC const p1ody = kdiv(ToReal(1),dy);
+  CCTK_REAL_VEC const p1odz = kdiv(ToReal(1),dz);
+  CCTK_REAL_VEC const pm1o2dx = kdiv(ToReal(-0.5),dx);
+  CCTK_REAL_VEC const pm1o2dy = kdiv(ToReal(-0.5),dy);
+  CCTK_REAL_VEC const pm1o2dz = kdiv(ToReal(-0.5),dz);
   
   /* Assign local copies of arrays functions */
   
@@ -108,7 +112,7 @@ static void ML_BSSN_Host_Advect_At22rhs_Body(cGH const * restrict const cctkGH, 
   #pragma omp parallel
   LC_LOOP3VEC(ML_BSSN_Host_Advect_At22rhs,
     i,j,k, imin[0],imin[1],imin[2], imax[0],imax[1],imax[2],
-    cctk_lsh[0],cctk_lsh[1],cctk_lsh[2],
+    cctk_ash[0],cctk_ash[1],cctk_ash[2],
     CCTK_REAL_VEC_SIZE)
   {
     ptrdiff_t const index = di*i + dj*j + dk*k;

@@ -12,14 +12,15 @@
 #include "cctk_Parameters.h"
 #include "GenericFD.h"
 #include "Differencing.h"
+#include "cctk_Loop.h"
 #include "loopcontrol.h"
 
 /* Define macros used in calculations */
 #define INITVALUE (42)
-#define QAD(x) (SQR(SQR(x)))
-#define INV(x) ((1.0) / (x))
+#define INV(x) ((CCTK_REAL)1.0 / (x))
 #define SQR(x) ((x) * (x))
-#define CUB(x) ((x) * (x) * (x))
+#define CUB(x) ((x) * SQR(x))
+#define QAD(x) (SQR(SQR(x)))
 
 extern "C" void WTFO_constraints_SelectBCs(CCTK_ARGUMENTS)
 {
@@ -38,8 +39,6 @@ static void WTFO_constraints_Body(cGH const * restrict const cctkGH, int const d
   DECLARE_CCTK_ARGUMENTS;
   DECLARE_CCTK_PARAMETERS;
   
-  
-  /* Declare finite differencing variables */
   
   /* Include user-supplied include files */
   
@@ -71,9 +70,9 @@ static void WTFO_constraints_Body(cGH const * restrict const cctkGH, int const d
   CCTK_REAL const p1o12dx = 0.0833333333333333333333333333333*INV(dx);
   CCTK_REAL const p1o12dy = 0.0833333333333333333333333333333*INV(dy);
   CCTK_REAL const p1o12dz = 0.0833333333333333333333333333333*INV(dz);
-  CCTK_REAL const p1o144dxdy = 0.00694444444444444444444444444444*INV(dx)*INV(dy);
-  CCTK_REAL const p1o144dxdz = 0.00694444444444444444444444444444*INV(dx)*INV(dz);
-  CCTK_REAL const p1o144dydz = 0.00694444444444444444444444444444*INV(dy)*INV(dz);
+  CCTK_REAL const p1o144dxdy = 0.00694444444444444444444444444444*INV(dx*dy);
+  CCTK_REAL const p1o144dxdz = 0.00694444444444444444444444444444*INV(dx*dz);
+  CCTK_REAL const p1o144dydz = 0.00694444444444444444444444444444*INV(dy*dz);
   CCTK_REAL const pm1o12dx2 = -0.0833333333333333333333333333333*INV(SQR(dx));
   CCTK_REAL const pm1o12dy2 = -0.0833333333333333333333333333333*INV(SQR(dy));
   CCTK_REAL const pm1o12dz2 = -0.0833333333333333333333333333333*INV(SQR(dz));
@@ -88,9 +87,9 @@ static void WTFO_constraints_Body(cGH const * restrict const cctkGH, int const d
   
   /* Loop over the grid points */
   #pragma omp parallel
-  LC_LOOP3 (WTFO_constraints,
+  CCTK_LOOP3(WTFO_constraints,
     i,j,k, imin[0],imin[1],imin[2], imax[0],imax[1],imax[2],
-    cctk_lsh[0],cctk_lsh[1],cctk_lsh[2])
+    cctk_ash[0],cctk_ash[1],cctk_ash[2])
   {
     ptrdiff_t const index = di*i + dj*j + dk*k;
     
@@ -123,7 +122,7 @@ static void WTFO_constraints_Body(cGH const * restrict const cctkGH, int const d
     w2[index] = w2L;
     w3[index] = w3L;
   }
-  LC_ENDLOOP3 (WTFO_constraints);
+  CCTK_ENDLOOP3(WTFO_constraints);
 }
 
 extern "C" void WTFO_constraints(CCTK_ARGUMENTS)
@@ -142,12 +141,14 @@ extern "C" void WTFO_constraints(CCTK_ARGUMENTS)
     return;
   }
   
-  const char *groups[] = {"ML_WaveToyFO::WT_v","ML_WaveToyFO::WT_w"};
+  const char *const groups[] = {
+    "ML_WaveToyFO::WT_v",
+    "ML_WaveToyFO::WT_w"};
   GenericFD_AssertGroupStorage(cctkGH, "WTFO_constraints", 2, groups);
   
   GenericFD_EnsureStencilFits(cctkGH, "WTFO_constraints", 2, 2, 2);
   
-  GenericFD_LoopOverInterior(cctkGH, &WTFO_constraints_Body);
+  GenericFD_LoopOverInterior(cctkGH, WTFO_constraints_Body);
   
   if (verbose > 1)
   {

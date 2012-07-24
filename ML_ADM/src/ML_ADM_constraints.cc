@@ -18,10 +18,14 @@
 
 /* Define macros used in calculations */
 #define INITVALUE (42)
-#define QAD(x) (SQR(SQR(x)))
+#define ScalarINV(x) ((CCTK_REAL)1.0 / (x))
+#define ScalarSQR(x) ((x) * (x))
+#define ScalarCUB(x) ((x) * ScalarSQR(x))
+#define ScalarQAD(x) (ScalarSQR(ScalarSQR(x)))
 #define INV(x) (kdiv(ToReal(1.0),x))
 #define SQR(x) (kmul(x,x))
 #define CUB(x) (kmul(x,SQR(x)))
+#define QAD(x) (SQR(SQR(x)))
 
 extern "C" void ML_ADM_constraints_SelectBCs(CCTK_ARGUMENTS)
 {
@@ -43,8 +47,6 @@ static void ML_ADM_constraints_Body(cGH const * restrict const cctkGH, int const
   DECLARE_CCTK_ARGUMENTS;
   DECLARE_CCTK_PARAMETERS;
   
-  
-  /* Declare finite differencing variables */
   
   /* Include user-supplied include files */
   
@@ -73,42 +75,42 @@ static void ML_ADM_constraints_Body(cGH const * restrict const cctkGH, int const
   CCTK_REAL_VEC const hdzi = kmul(ToReal(0.5), dzi);
   
   /* Initialize predefined quantities */
-  CCTK_REAL_VEC const p1o12dx = kmul(INV(dx),ToReal(0.0833333333333333333333333333333));
-  CCTK_REAL_VEC const p1o12dy = kmul(INV(dy),ToReal(0.0833333333333333333333333333333));
-  CCTK_REAL_VEC const p1o12dz = kmul(INV(dz),ToReal(0.0833333333333333333333333333333));
-  CCTK_REAL_VEC const p1o144dxdy = kmul(INV(dx),kmul(INV(dy),ToReal(0.00694444444444444444444444444444)));
-  CCTK_REAL_VEC const p1o144dxdz = kmul(INV(dx),kmul(INV(dz),ToReal(0.00694444444444444444444444444444)));
-  CCTK_REAL_VEC const p1o144dydz = kmul(INV(dy),kmul(INV(dz),ToReal(0.00694444444444444444444444444444)));
-  CCTK_REAL_VEC const p1o180dx2 = kmul(INV(SQR(dx)),ToReal(0.00555555555555555555555555555556));
-  CCTK_REAL_VEC const p1o180dy2 = kmul(INV(SQR(dy)),ToReal(0.00555555555555555555555555555556));
-  CCTK_REAL_VEC const p1o180dz2 = kmul(INV(SQR(dz)),ToReal(0.00555555555555555555555555555556));
-  CCTK_REAL_VEC const p1o2dx = kmul(INV(dx),ToReal(0.5));
-  CCTK_REAL_VEC const p1o2dy = kmul(INV(dy),ToReal(0.5));
-  CCTK_REAL_VEC const p1o2dz = kmul(INV(dz),ToReal(0.5));
-  CCTK_REAL_VEC const p1o3600dxdy = kmul(INV(dx),kmul(INV(dy),ToReal(0.000277777777777777777777777777778)));
-  CCTK_REAL_VEC const p1o3600dxdz = kmul(INV(dx),kmul(INV(dz),ToReal(0.000277777777777777777777777777778)));
-  CCTK_REAL_VEC const p1o3600dydz = kmul(INV(dy),kmul(INV(dz),ToReal(0.000277777777777777777777777777778)));
-  CCTK_REAL_VEC const p1o4dxdy = kmul(INV(dx),kmul(INV(dy),ToReal(0.25)));
-  CCTK_REAL_VEC const p1o4dxdz = kmul(INV(dx),kmul(INV(dz),ToReal(0.25)));
-  CCTK_REAL_VEC const p1o4dydz = kmul(INV(dy),kmul(INV(dz),ToReal(0.25)));
-  CCTK_REAL_VEC const p1o5040dx2 = kmul(INV(SQR(dx)),ToReal(0.000198412698412698412698412698413));
-  CCTK_REAL_VEC const p1o5040dy2 = kmul(INV(SQR(dy)),ToReal(0.000198412698412698412698412698413));
-  CCTK_REAL_VEC const p1o5040dz2 = kmul(INV(SQR(dz)),ToReal(0.000198412698412698412698412698413));
-  CCTK_REAL_VEC const p1o60dx = kmul(INV(dx),ToReal(0.0166666666666666666666666666667));
-  CCTK_REAL_VEC const p1o60dy = kmul(INV(dy),ToReal(0.0166666666666666666666666666667));
-  CCTK_REAL_VEC const p1o60dz = kmul(INV(dz),ToReal(0.0166666666666666666666666666667));
-  CCTK_REAL_VEC const p1o705600dxdy = kmul(INV(dx),kmul(INV(dy),ToReal(1.41723356009070294784580498866e-6)));
-  CCTK_REAL_VEC const p1o705600dxdz = kmul(INV(dx),kmul(INV(dz),ToReal(1.41723356009070294784580498866e-6)));
-  CCTK_REAL_VEC const p1o705600dydz = kmul(INV(dy),kmul(INV(dz),ToReal(1.41723356009070294784580498866e-6)));
-  CCTK_REAL_VEC const p1o840dx = kmul(INV(dx),ToReal(0.00119047619047619047619047619048));
-  CCTK_REAL_VEC const p1o840dy = kmul(INV(dy),ToReal(0.00119047619047619047619047619048));
-  CCTK_REAL_VEC const p1o840dz = kmul(INV(dz),ToReal(0.00119047619047619047619047619048));
-  CCTK_REAL_VEC const p1odx2 = INV(SQR(dx));
-  CCTK_REAL_VEC const p1ody2 = INV(SQR(dy));
-  CCTK_REAL_VEC const p1odz2 = INV(SQR(dz));
-  CCTK_REAL_VEC const pm1o12dx2 = kmul(INV(SQR(dx)),ToReal(-0.0833333333333333333333333333333));
-  CCTK_REAL_VEC const pm1o12dy2 = kmul(INV(SQR(dy)),ToReal(-0.0833333333333333333333333333333));
-  CCTK_REAL_VEC const pm1o12dz2 = kmul(INV(SQR(dz)),ToReal(-0.0833333333333333333333333333333));
+  CCTK_REAL_VEC const p1o12dx = kdiv(ToReal(0.0833333333333333333333333333333),dx);
+  CCTK_REAL_VEC const p1o12dy = kdiv(ToReal(0.0833333333333333333333333333333),dy);
+  CCTK_REAL_VEC const p1o12dz = kdiv(ToReal(0.0833333333333333333333333333333),dz);
+  CCTK_REAL_VEC const p1o144dxdy = kdiv(ToReal(0.00694444444444444444444444444444),kmul(dy,dx));
+  CCTK_REAL_VEC const p1o144dxdz = kdiv(ToReal(0.00694444444444444444444444444444),kmul(dz,dx));
+  CCTK_REAL_VEC const p1o144dydz = kdiv(ToReal(0.00694444444444444444444444444444),kmul(dz,dy));
+  CCTK_REAL_VEC const p1o180dx2 = kdiv(ToReal(0.00555555555555555555555555555556),kmul(dx,dx));
+  CCTK_REAL_VEC const p1o180dy2 = kdiv(ToReal(0.00555555555555555555555555555556),kmul(dy,dy));
+  CCTK_REAL_VEC const p1o180dz2 = kdiv(ToReal(0.00555555555555555555555555555556),kmul(dz,dz));
+  CCTK_REAL_VEC const p1o2dx = kdiv(ToReal(0.5),dx);
+  CCTK_REAL_VEC const p1o2dy = kdiv(ToReal(0.5),dy);
+  CCTK_REAL_VEC const p1o2dz = kdiv(ToReal(0.5),dz);
+  CCTK_REAL_VEC const p1o3600dxdy = kdiv(ToReal(0.000277777777777777777777777777778),kmul(dy,dx));
+  CCTK_REAL_VEC const p1o3600dxdz = kdiv(ToReal(0.000277777777777777777777777777778),kmul(dz,dx));
+  CCTK_REAL_VEC const p1o3600dydz = kdiv(ToReal(0.000277777777777777777777777777778),kmul(dz,dy));
+  CCTK_REAL_VEC const p1o4dxdy = kdiv(ToReal(0.25),kmul(dy,dx));
+  CCTK_REAL_VEC const p1o4dxdz = kdiv(ToReal(0.25),kmul(dz,dx));
+  CCTK_REAL_VEC const p1o4dydz = kdiv(ToReal(0.25),kmul(dz,dy));
+  CCTK_REAL_VEC const p1o5040dx2 = kdiv(ToReal(0.000198412698412698412698412698413),kmul(dx,dx));
+  CCTK_REAL_VEC const p1o5040dy2 = kdiv(ToReal(0.000198412698412698412698412698413),kmul(dy,dy));
+  CCTK_REAL_VEC const p1o5040dz2 = kdiv(ToReal(0.000198412698412698412698412698413),kmul(dz,dz));
+  CCTK_REAL_VEC const p1o60dx = kdiv(ToReal(0.0166666666666666666666666666667),dx);
+  CCTK_REAL_VEC const p1o60dy = kdiv(ToReal(0.0166666666666666666666666666667),dy);
+  CCTK_REAL_VEC const p1o60dz = kdiv(ToReal(0.0166666666666666666666666666667),dz);
+  CCTK_REAL_VEC const p1o705600dxdy = kdiv(ToReal(1.41723356009070294784580498866e-6),kmul(dy,dx));
+  CCTK_REAL_VEC const p1o705600dxdz = kdiv(ToReal(1.41723356009070294784580498866e-6),kmul(dz,dx));
+  CCTK_REAL_VEC const p1o705600dydz = kdiv(ToReal(1.41723356009070294784580498866e-6),kmul(dz,dy));
+  CCTK_REAL_VEC const p1o840dx = kdiv(ToReal(0.00119047619047619047619047619048),dx);
+  CCTK_REAL_VEC const p1o840dy = kdiv(ToReal(0.00119047619047619047619047619048),dy);
+  CCTK_REAL_VEC const p1o840dz = kdiv(ToReal(0.00119047619047619047619047619048),dz);
+  CCTK_REAL_VEC const p1odx2 = kdiv(ToReal(1),kmul(dx,dx));
+  CCTK_REAL_VEC const p1ody2 = kdiv(ToReal(1),kmul(dy,dy));
+  CCTK_REAL_VEC const p1odz2 = kdiv(ToReal(1),kmul(dz,dz));
+  CCTK_REAL_VEC const pm1o12dx2 = kdiv(ToReal(-0.0833333333333333333333333333333),kmul(dx,dx));
+  CCTK_REAL_VEC const pm1o12dy2 = kdiv(ToReal(-0.0833333333333333333333333333333),kmul(dy,dy));
+  CCTK_REAL_VEC const pm1o12dz2 = kdiv(ToReal(-0.0833333333333333333333333333333),kmul(dz,dz));
   
   /* Jacobian variable pointers */
   bool const use_jacobian = (!CCTK_IsFunctionAliased("MultiPatch_GetMap") || MultiPatch_GetMap(cctkGH) != jacobian_identity_map)
@@ -165,9 +167,9 @@ static void ML_ADM_constraints_Body(cGH const * restrict const cctkGH, int const
   
   /* Loop over the grid points */
   #pragma omp parallel
-  LC_LOOP3VEC (ML_ADM_constraints,
+  LC_LOOP3VEC(ML_ADM_constraints,
     i,j,k, imin[0],imin[1],imin[2], imax[0],imax[1],imax[2],
-    cctk_lsh[0],cctk_lsh[1],cctk_lsh[2],
+    cctk_ash[0],cctk_ash[1],cctk_ash[2],
     CCTK_REAL_VEC_SIZE)
   {
     ptrdiff_t const index = di*i + dj*j + dk*k;
@@ -782,31 +784,31 @@ static void ML_ADM_constraints_Body(cGH const * restrict const cctkGH, int const
         kmadd(J13L,PDstandardNth1K23,kmadd(J23L,PDstandardNth2K23,kmul(J33L,PDstandardNth3K23)));
       
       JacPDstandardNth11g22 = 
-        kmadd(dJ111L,PDstandardNth1g22,kmadd(dJ211L,PDstandardNth2g22,kmadd(dJ311L,PDstandardNth3g22,kmadd(PDstandardNth11g22,SQR(J11L),kmadd(PDstandardNth22g22,SQR(J21L),kmadd(PDstandardNth33g22,SQR(J31L),kmul(kmadd(J11L,kmadd(J21L,PDstandardNth12g22,kmul(J31L,PDstandardNth13g22)),kmul(J21L,kmul(J31L,PDstandardNth23g22))),ToReal(2))))))));
+        kmadd(dJ111L,PDstandardNth1g22,kmadd(dJ211L,PDstandardNth2g22,kmadd(dJ311L,PDstandardNth3g22,kmadd(PDstandardNth11g22,kmul(J11L,J11L),kmadd(PDstandardNth22g22,kmul(J21L,J21L),kmadd(PDstandardNth33g22,kmul(J31L,J31L),kmul(kmadd(J11L,kmadd(J21L,PDstandardNth12g22,kmul(J31L,PDstandardNth13g22)),kmul(J21L,kmul(J31L,PDstandardNth23g22))),ToReal(2))))))));
       
       JacPDstandardNth11g23 = 
-        kmadd(dJ111L,PDstandardNth1g23,kmadd(dJ211L,PDstandardNth2g23,kmadd(dJ311L,PDstandardNth3g23,kmadd(PDstandardNth11g23,SQR(J11L),kmadd(PDstandardNth22g23,SQR(J21L),kmadd(PDstandardNth33g23,SQR(J31L),kmul(kmadd(J11L,kmadd(J21L,PDstandardNth12g23,kmul(J31L,PDstandardNth13g23)),kmul(J21L,kmul(J31L,PDstandardNth23g23))),ToReal(2))))))));
+        kmadd(dJ111L,PDstandardNth1g23,kmadd(dJ211L,PDstandardNth2g23,kmadd(dJ311L,PDstandardNth3g23,kmadd(PDstandardNth11g23,kmul(J11L,J11L),kmadd(PDstandardNth22g23,kmul(J21L,J21L),kmadd(PDstandardNth33g23,kmul(J31L,J31L),kmul(kmadd(J11L,kmadd(J21L,PDstandardNth12g23,kmul(J31L,PDstandardNth13g23)),kmul(J21L,kmul(J31L,PDstandardNth23g23))),ToReal(2))))))));
       
       JacPDstandardNth11g33 = 
-        kmadd(dJ111L,PDstandardNth1g33,kmadd(dJ211L,PDstandardNth2g33,kmadd(dJ311L,PDstandardNth3g33,kmadd(PDstandardNth11g33,SQR(J11L),kmadd(PDstandardNth22g33,SQR(J21L),kmadd(PDstandardNth33g33,SQR(J31L),kmul(kmadd(J11L,kmadd(J21L,PDstandardNth12g33,kmul(J31L,PDstandardNth13g33)),kmul(J21L,kmul(J31L,PDstandardNth23g33))),ToReal(2))))))));
+        kmadd(dJ111L,PDstandardNth1g33,kmadd(dJ211L,PDstandardNth2g33,kmadd(dJ311L,PDstandardNth3g33,kmadd(PDstandardNth11g33,kmul(J11L,J11L),kmadd(PDstandardNth22g33,kmul(J21L,J21L),kmadd(PDstandardNth33g33,kmul(J31L,J31L),kmul(kmadd(J11L,kmadd(J21L,PDstandardNth12g33,kmul(J31L,PDstandardNth13g33)),kmul(J21L,kmul(J31L,PDstandardNth23g33))),ToReal(2))))))));
       
       JacPDstandardNth22g11 = 
-        kmadd(dJ122L,PDstandardNth1g11,kmadd(dJ222L,PDstandardNth2g11,kmadd(dJ322L,PDstandardNth3g11,kmadd(PDstandardNth11g11,SQR(J12L),kmadd(PDstandardNth22g11,SQR(J22L),kmadd(PDstandardNth33g11,SQR(J32L),kmul(kmadd(J12L,kmadd(J22L,PDstandardNth12g11,kmul(J32L,PDstandardNth13g11)),kmul(J22L,kmul(J32L,PDstandardNth23g11))),ToReal(2))))))));
+        kmadd(dJ122L,PDstandardNth1g11,kmadd(dJ222L,PDstandardNth2g11,kmadd(dJ322L,PDstandardNth3g11,kmadd(PDstandardNth11g11,kmul(J12L,J12L),kmadd(PDstandardNth22g11,kmul(J22L,J22L),kmadd(PDstandardNth33g11,kmul(J32L,J32L),kmul(kmadd(J12L,kmadd(J22L,PDstandardNth12g11,kmul(J32L,PDstandardNth13g11)),kmul(J22L,kmul(J32L,PDstandardNth23g11))),ToReal(2))))))));
       
       JacPDstandardNth22g13 = 
-        kmadd(dJ122L,PDstandardNth1g13,kmadd(dJ222L,PDstandardNth2g13,kmadd(dJ322L,PDstandardNth3g13,kmadd(PDstandardNth11g13,SQR(J12L),kmadd(PDstandardNth22g13,SQR(J22L),kmadd(PDstandardNth33g13,SQR(J32L),kmul(kmadd(J12L,kmadd(J22L,PDstandardNth12g13,kmul(J32L,PDstandardNth13g13)),kmul(J22L,kmul(J32L,PDstandardNth23g13))),ToReal(2))))))));
+        kmadd(dJ122L,PDstandardNth1g13,kmadd(dJ222L,PDstandardNth2g13,kmadd(dJ322L,PDstandardNth3g13,kmadd(PDstandardNth11g13,kmul(J12L,J12L),kmadd(PDstandardNth22g13,kmul(J22L,J22L),kmadd(PDstandardNth33g13,kmul(J32L,J32L),kmul(kmadd(J12L,kmadd(J22L,PDstandardNth12g13,kmul(J32L,PDstandardNth13g13)),kmul(J22L,kmul(J32L,PDstandardNth23g13))),ToReal(2))))))));
       
       JacPDstandardNth22g33 = 
-        kmadd(dJ122L,PDstandardNth1g33,kmadd(dJ222L,PDstandardNth2g33,kmadd(dJ322L,PDstandardNth3g33,kmadd(PDstandardNth11g33,SQR(J12L),kmadd(PDstandardNth22g33,SQR(J22L),kmadd(PDstandardNth33g33,SQR(J32L),kmul(kmadd(J12L,kmadd(J22L,PDstandardNth12g33,kmul(J32L,PDstandardNth13g33)),kmul(J22L,kmul(J32L,PDstandardNth23g33))),ToReal(2))))))));
+        kmadd(dJ122L,PDstandardNth1g33,kmadd(dJ222L,PDstandardNth2g33,kmadd(dJ322L,PDstandardNth3g33,kmadd(PDstandardNth11g33,kmul(J12L,J12L),kmadd(PDstandardNth22g33,kmul(J22L,J22L),kmadd(PDstandardNth33g33,kmul(J32L,J32L),kmul(kmadd(J12L,kmadd(J22L,PDstandardNth12g33,kmul(J32L,PDstandardNth13g33)),kmul(J22L,kmul(J32L,PDstandardNth23g33))),ToReal(2))))))));
       
       JacPDstandardNth33g11 = 
-        kmadd(dJ133L,PDstandardNth1g11,kmadd(dJ233L,PDstandardNth2g11,kmadd(dJ333L,PDstandardNth3g11,kmadd(PDstandardNth11g11,SQR(J13L),kmadd(PDstandardNth22g11,SQR(J23L),kmadd(PDstandardNth33g11,SQR(J33L),kmul(kmadd(J13L,kmadd(J23L,PDstandardNth12g11,kmul(J33L,PDstandardNth13g11)),kmul(J23L,kmul(J33L,PDstandardNth23g11))),ToReal(2))))))));
+        kmadd(dJ133L,PDstandardNth1g11,kmadd(dJ233L,PDstandardNth2g11,kmadd(dJ333L,PDstandardNth3g11,kmadd(PDstandardNth11g11,kmul(J13L,J13L),kmadd(PDstandardNth22g11,kmul(J23L,J23L),kmadd(PDstandardNth33g11,kmul(J33L,J33L),kmul(kmadd(J13L,kmadd(J23L,PDstandardNth12g11,kmul(J33L,PDstandardNth13g11)),kmul(J23L,kmul(J33L,PDstandardNth23g11))),ToReal(2))))))));
       
       JacPDstandardNth33g12 = 
-        kmadd(dJ133L,PDstandardNth1g12,kmadd(dJ233L,PDstandardNth2g12,kmadd(dJ333L,PDstandardNth3g12,kmadd(PDstandardNth11g12,SQR(J13L),kmadd(PDstandardNth22g12,SQR(J23L),kmadd(PDstandardNth33g12,SQR(J33L),kmul(kmadd(J13L,kmadd(J23L,PDstandardNth12g12,kmul(J33L,PDstandardNth13g12)),kmul(J23L,kmul(J33L,PDstandardNth23g12))),ToReal(2))))))));
+        kmadd(dJ133L,PDstandardNth1g12,kmadd(dJ233L,PDstandardNth2g12,kmadd(dJ333L,PDstandardNth3g12,kmadd(PDstandardNth11g12,kmul(J13L,J13L),kmadd(PDstandardNth22g12,kmul(J23L,J23L),kmadd(PDstandardNth33g12,kmul(J33L,J33L),kmul(kmadd(J13L,kmadd(J23L,PDstandardNth12g12,kmul(J33L,PDstandardNth13g12)),kmul(J23L,kmul(J33L,PDstandardNth23g12))),ToReal(2))))))));
       
       JacPDstandardNth33g22 = 
-        kmadd(dJ133L,PDstandardNth1g22,kmadd(dJ233L,PDstandardNth2g22,kmadd(dJ333L,PDstandardNth3g22,kmadd(PDstandardNth11g22,SQR(J13L),kmadd(PDstandardNth22g22,SQR(J23L),kmadd(PDstandardNth33g22,SQR(J33L),kmul(kmadd(J13L,kmadd(J23L,PDstandardNth12g22,kmul(J33L,PDstandardNth13g22)),kmul(J23L,kmul(J33L,PDstandardNth23g22))),ToReal(2))))))));
+        kmadd(dJ133L,PDstandardNth1g22,kmadd(dJ233L,PDstandardNth2g22,kmadd(dJ333L,PDstandardNth3g22,kmadd(PDstandardNth11g22,kmul(J13L,J13L),kmadd(PDstandardNth22g22,kmul(J23L,J23L),kmadd(PDstandardNth33g22,kmul(J33L,J33L),kmul(kmadd(J13L,kmadd(J23L,PDstandardNth12g22,kmul(J33L,PDstandardNth13g22)),kmul(J23L,kmul(J33L,PDstandardNth23g22))),ToReal(2))))))));
       
       JacPDstandardNth12g11 = 
         kmadd(J12L,kmadd(J11L,PDstandardNth11g11,kmadd(J21L,PDstandardNth12g11,kmul(J31L,PDstandardNth13g11))),kmadd(J11L,kmadd(J22L,PDstandardNth12g11,kmul(J32L,PDstandardNth13g11)),kmadd(dJ112L,PDstandardNth1g11,kmadd(J22L,kmadd(J21L,PDstandardNth22g11,kmul(J31L,PDstandardNth23g11)),kmadd(dJ212L,PDstandardNth2g11,kmadd(J32L,kmadd(J21L,PDstandardNth23g11,kmul(J31L,PDstandardNth33g11)),kmul(dJ312L,PDstandardNth3g11)))))));
@@ -1076,31 +1078,34 @@ static void ML_ADM_constraints_Body(cGH const * restrict const cctkGH, int const
     }
     
     CCTK_REAL_VEC detg = 
-      knmsub(g22L,SQR(g13L),knmsub(g11L,SQR(g23L),kmadd(g33L,kmsub(g11L,g22L,SQR(g12L)),kmul(g12L,kmul(g13L,kmul(g23L,ToReal(2)))))));
+      knmsub(g22L,kmul(g13L,g13L),knmsub(g11L,kmul(g23L,g23L),kmadd(g33L,kmsub(g11L,g22L,kmul(g12L,g12L)),kmul(g12L,kmul(g13L,kmul(g23L,ToReal(2)))))));
     
-    CCTK_REAL_VEC gu11 = kmul(INV(detg),kmsub(g22L,g33L,SQR(g23L)));
+    CCTK_REAL_VEC gu11 = 
+      kdiv(kmsub(g22L,g33L,kmul(g23L,g23L)),detg);
     
     CCTK_REAL_VEC gu12 = 
-      kmul(INV(detg),kmsub(g13L,g23L,kmul(g12L,g33L)));
+      kdiv(kmsub(g13L,g23L,kmul(g12L,g33L)),detg);
     
     CCTK_REAL_VEC gu13 = 
-      kmul(INV(detg),kmsub(g12L,g23L,kmul(g13L,g22L)));
+      kdiv(kmsub(g12L,g23L,kmul(g13L,g22L)),detg);
     
     CCTK_REAL_VEC gu21 = 
-      kmul(INV(detg),kmsub(g13L,g23L,kmul(g12L,g33L)));
+      kdiv(kmsub(g13L,g23L,kmul(g12L,g33L)),detg);
     
-    CCTK_REAL_VEC gu22 = kmul(INV(detg),kmsub(g11L,g33L,SQR(g13L)));
+    CCTK_REAL_VEC gu22 = 
+      kdiv(kmsub(g11L,g33L,kmul(g13L,g13L)),detg);
     
     CCTK_REAL_VEC gu23 = 
-      kmul(INV(detg),kmsub(g12L,g13L,kmul(g11L,g23L)));
+      kdiv(kmsub(g12L,g13L,kmul(g11L,g23L)),detg);
     
     CCTK_REAL_VEC gu31 = 
-      kmul(INV(detg),kmsub(g12L,g23L,kmul(g13L,g22L)));
+      kdiv(kmsub(g12L,g23L,kmul(g13L,g22L)),detg);
     
     CCTK_REAL_VEC gu32 = 
-      kmul(INV(detg),kmsub(g12L,g13L,kmul(g11L,g23L)));
+      kdiv(kmsub(g12L,g13L,kmul(g11L,g23L)),detg);
     
-    CCTK_REAL_VEC gu33 = kmul(INV(detg),kmsub(g11L,g22L,SQR(g12L)));
+    CCTK_REAL_VEC gu33 = 
+      kdiv(kmsub(g11L,g22L,kmul(g12L,g12L)),detg);
     
     CCTK_REAL_VEC G111 = 
       kmul(ToReal(0.5),kmadd(gu11,JacPDstandardNth1g11,knmsub(gu12,JacPDstandardNth2g11,kmsub(kmadd(gu12,JacPDstandardNth1g12,kmul(gu13,JacPDstandardNth1g13)),ToReal(2),kmul(gu13,JacPDstandardNth3g11)))));
@@ -1157,22 +1162,22 @@ static void ML_ADM_constraints_Body(cGH const * restrict const cctkGH, int const
       kmul(ToReal(0.5),kmadd(gu33,JacPDstandardNth3g33,kmadd(gu31,kmsub(JacPDstandardNth3g13,ToReal(2),JacPDstandardNth1g33),kmul(gu32,kmsub(JacPDstandardNth3g23,ToReal(2),JacPDstandardNth2g33)))));
     
     CCTK_REAL_VEC R11 = 
-      kmul(ToReal(0.5),knmsub(gu22,kadd(JacPDstandardNth11g22,kmadd(JacPDstandardNth21g12,ToReal(-2),JacPDstandardNth22g11)),kmadd(gu12,ksub(JacPDstandardNth21g11,JacPDstandardNth12g11),kmadd(gu13,ksub(JacPDstandardNth31g11,JacPDstandardNth13g11),kmadd(gu23,kadd(JacPDstandardNth21g13,ksub(JacPDstandardNth31g12,kadd(JacPDstandardNth23g11,JacPDstandardNth11g23))),kmadd(gu32,kadd(JacPDstandardNth21g13,ksub(JacPDstandardNth31g12,kadd(JacPDstandardNth32g11,JacPDstandardNth11g23))),kmadd(ToReal(2),kmadd(gu23,kmadd(g13L,kmul(G112,G313),kmadd(g23L,kmul(G212,G313),kmadd(g33L,kmul(G312,G313),kmadd(g11L,kmsub(G112,G113,kmul(G111,G123)),kmadd(g12L,kmadd(G113,G212,kmsub(G112,G213,kmadd(G111,G223,kmul(G123,G211)))),kmadd(g22L,kmsub(G212,G213,kmul(G211,G223)),knmsub(G311,kmadd(g13L,G123,kmadd(g33L,G323,kmul(g23L,G223))),kmadd(g13L,kmsub(G113,G312,kmul(G111,G323)),kmul(g23L,kmsub(G213,G312,kmul(G211,G323))))))))))),kmadd(gu32,kmadd(g13L,kmul(G112,G313),kmadd(g23L,kmul(G212,G313),kmadd(g33L,kmul(G312,G313),kmadd(g11L,kmsub(G112,G113,kmul(G111,G123)),kmadd(g12L,kmadd(G113,G212,kmsub(G112,G213,kmadd(G111,G223,kmul(G123,G211)))),kmadd(g22L,kmsub(G212,G213,kmul(G211,G223)),knmsub(G311,kmadd(g13L,G123,kmadd(g33L,G323,kmul(g23L,G223))),kmadd(g13L,kmsub(G113,G312,kmul(G111,G323)),kmul(g23L,kmsub(G213,G312,kmul(G211,G323))))))))))),kmul(gu22,kmadd(g22L,SQR(G212),knmsub(g12L,kmadd(G122,G211,kmadd(G111,G222,kmul(G112,kmul(G212,ToReal(-2))))),kmadd(g11L,knmsub(G111,G122,SQR(G112)),knmsub(G222,kmadd(g23L,G311,kmul(g22L,G211)),kmadd(g33L,knmsub(G311,G322,SQR(G312)),kmadd(g13L,knmsub(G122,G311,kmsub(G112,kmul(G312,ToReal(2)),kmul(G111,G322))),kmul(g23L,kmsub(G212,kmul(G312,ToReal(2)),kmul(G211,G322)))))))))))),kmul(gu33,ksub(ksub(kmadd(JacPDstandardNth31g13,ToReal(2),kmul(ToReal(2),kmadd(g22L,SQR(G213),knmsub(g12L,kmadd(G133,G211,kmadd(G111,G233,kmul(G113,kmul(G213,ToReal(-2))))),kmadd(g11L,knmsub(G111,G133,SQR(G113)),knmsub(G233,kmadd(g23L,G311,kmul(g22L,G211)),kmadd(g33L,knmsub(G311,G333,SQR(G313)),kmadd(g13L,knmsub(G133,G311,kmsub(G113,kmul(G313,ToReal(2)),kmul(G111,G333))),kmul(g23L,kmsub(G213,kmul(G313,ToReal(2)),kmul(G211,G333))))))))))),JacPDstandardNth33g11),JacPDstandardNth11g33)))))))));
+      kmul(ToReal(0.5),knmsub(gu22,kadd(JacPDstandardNth11g22,kmadd(JacPDstandardNth21g12,ToReal(-2),JacPDstandardNth22g11)),kmadd(gu12,ksub(JacPDstandardNth21g11,JacPDstandardNth12g11),kmadd(gu13,ksub(JacPDstandardNth31g11,JacPDstandardNth13g11),kmadd(gu23,kadd(JacPDstandardNth21g13,ksub(JacPDstandardNth31g12,kadd(JacPDstandardNth23g11,JacPDstandardNth11g23))),kmadd(gu32,kadd(JacPDstandardNth21g13,ksub(JacPDstandardNth31g12,kadd(JacPDstandardNth32g11,JacPDstandardNth11g23))),kmadd(ToReal(2),kmadd(gu23,kmadd(g13L,kmul(G112,G313),kmadd(g23L,kmul(G212,G313),kmadd(g33L,kmul(G312,G313),kmadd(g11L,kmsub(G112,G113,kmul(G111,G123)),kmadd(g12L,kmadd(G113,G212,kmsub(G112,G213,kmadd(G111,G223,kmul(G123,G211)))),kmadd(g22L,kmsub(G212,G213,kmul(G211,G223)),knmsub(G311,kmadd(g13L,G123,kmadd(g33L,G323,kmul(g23L,G223))),kmadd(g13L,kmsub(G113,G312,kmul(G111,G323)),kmul(g23L,kmsub(G213,G312,kmul(G211,G323))))))))))),kmadd(gu32,kmadd(g13L,kmul(G112,G313),kmadd(g23L,kmul(G212,G313),kmadd(g33L,kmul(G312,G313),kmadd(g11L,kmsub(G112,G113,kmul(G111,G123)),kmadd(g12L,kmadd(G113,G212,kmsub(G112,G213,kmadd(G111,G223,kmul(G123,G211)))),kmadd(g22L,kmsub(G212,G213,kmul(G211,G223)),knmsub(G311,kmadd(g13L,G123,kmadd(g33L,G323,kmul(g23L,G223))),kmadd(g13L,kmsub(G113,G312,kmul(G111,G323)),kmul(g23L,kmsub(G213,G312,kmul(G211,G323))))))))))),kmul(gu22,kmadd(g22L,kmul(G212,G212),knmsub(g12L,kmadd(G122,G211,kmadd(G111,G222,kmul(G112,kmul(G212,ToReal(-2))))),kmadd(g11L,kmsub(G112,G112,kmul(G111,G122)),knmsub(G222,kmadd(g23L,G311,kmul(g22L,G211)),kmadd(g33L,kmsub(G312,G312,kmul(G311,G322)),kmadd(g13L,knmsub(G122,G311,kmsub(G112,kmul(G312,ToReal(2)),kmul(G111,G322))),kmul(g23L,kmsub(G212,kmul(G312,ToReal(2)),kmul(G211,G322)))))))))))),kmul(gu33,ksub(ksub(kmadd(JacPDstandardNth31g13,ToReal(2),kmul(ToReal(2),kmadd(g22L,kmul(G213,G213),knmsub(g12L,kmadd(G133,G211,kmadd(G111,G233,kmul(G113,kmul(G213,ToReal(-2))))),kmadd(g11L,kmsub(G113,G113,kmul(G111,G133)),knmsub(G233,kmadd(g23L,G311,kmul(g22L,G211)),kmadd(g33L,kmsub(G313,G313,kmul(G311,G333)),kmadd(g13L,knmsub(G133,G311,kmsub(G113,kmul(G313,ToReal(2)),kmul(G111,G333))),kmul(g23L,kmsub(G213,kmul(G313,ToReal(2)),kmul(G211,G333))))))))))),JacPDstandardNth33g11),JacPDstandardNth11g33)))))))));
     
     CCTK_REAL_VEC R12 = 
-      kmul(ToReal(0.5),kmadd(gu12,kadd(JacPDstandardNth11g22,kmadd(JacPDstandardNth12g12,ToReal(-2),JacPDstandardNth22g11)),kmadd(gu22,ksub(JacPDstandardNth21g22,JacPDstandardNth12g22),kmadd(gu13,kadd(JacPDstandardNth11g23,ksub(JacPDstandardNth32g11,kadd(JacPDstandardNth13g12,JacPDstandardNth12g13))),kmadd(gu23,kadd(JacPDstandardNth21g23,ksub(JacPDstandardNth32g12,kadd(JacPDstandardNth23g12,JacPDstandardNth12g23))),kmadd(gu32,kadd(JacPDstandardNth22g13,ksub(JacPDstandardNth31g22,kadd(JacPDstandardNth32g12,JacPDstandardNth12g23))),kmadd(gu33,kadd(JacPDstandardNth31g23,ksub(JacPDstandardNth32g13,kadd(JacPDstandardNth33g12,JacPDstandardNth12g33))),kmul(kmadd(gu21,kmadd(G122,kmadd(g11L,G111,kmadd(g12L,G211,kmul(g13L,G311))),kmadd(G222,kmadd(g22L,G211,kmul(g23L,G311)),kmadd(kmadd(g13L,G111,kmadd(g23L,G211,kmul(g33L,G311))),G322,kmadd(kmadd(g13L,kmul(G112,G312),kmul(g23L,kmul(G212,G312))),ToReal(-2),kmsub(g12L,kmadd(G111,G222,kmul(G112,kmul(G212,ToReal(-2)))),kmadd(g11L,SQR(G112),kmadd(g33L,SQR(G312),kmul(g22L,SQR(G212))))))))),kmadd(gu31,kmadd(g13L,kmul(G111,G323),kmadd(g23L,kmul(G211,G323),kmadd(G311,kmadd(g13L,G123,kmadd(g23L,G223,kmul(g33L,G323))),kmadd(g11L,kmsub(G111,G123,kmul(G112,G113)),knmsub(G313,kmadd(g23L,G212,kmul(g13L,G112)),kmadd(g12L,kmadd(G123,G211,kmsub(G111,G223,kmadd(G112,G213,kmul(G113,G212)))),kmsub(g22L,kmsub(G211,G223,kmul(G212,G213)),kmul(G312,kmadd(g13L,G113,kmadd(g33L,G313,kmul(g23L,G213))))))))))),kmadd(gu23,kmadd(g13L,kmul(G113,G322),kmadd(g23L,kmul(G213,G322),kmadd(g33L,kmul(G313,G322),kmadd(g11L,kmsub(G113,G122,kmul(G112,G123)),kmadd(g12L,kmadd(G122,G213,kmsub(G113,G222,kmadd(G112,G223,kmul(G123,G212)))),kmadd(g22L,kmsub(G213,G222,kmul(G212,G223)),knmsub(G312,kmadd(g13L,G123,kmadd(g33L,G323,kmul(g23L,G223))),kmadd(g13L,kmsub(G122,G313,kmul(G112,G323)),kmul(g23L,kmsub(G222,G313,kmul(G212,G323))))))))))),kmul(gu33,kmadd(g13L,kmul(G113,G323),kmadd(g23L,kmul(G213,G323),kmadd(g33L,kmul(G313,G323),kmadd(g11L,kmsub(G113,G123,kmul(G112,G133)),kmadd(g12L,kmadd(G123,G213,kmsub(G113,G223,kmadd(G112,G233,kmul(G133,G212)))),kmadd(g22L,kmsub(G213,G223,kmul(G212,G233)),knmsub(G312,kmadd(g13L,G133,kmadd(g33L,G333,kmul(g23L,G233))),kmadd(g13L,kmsub(G123,G313,kmul(G112,G333)),kmul(g23L,kmsub(G223,G313,kmul(G212,G333))))))))))))))),ToReal(2)))))))));
+      kmul(ToReal(0.5),kmadd(gu12,kadd(JacPDstandardNth11g22,kmadd(JacPDstandardNth12g12,ToReal(-2),JacPDstandardNth22g11)),kmadd(gu22,ksub(JacPDstandardNth21g22,JacPDstandardNth12g22),kmadd(gu13,kadd(JacPDstandardNth11g23,ksub(JacPDstandardNth32g11,kadd(JacPDstandardNth13g12,JacPDstandardNth12g13))),kmadd(gu23,kadd(JacPDstandardNth21g23,ksub(JacPDstandardNth32g12,kadd(JacPDstandardNth23g12,JacPDstandardNth12g23))),kmadd(gu32,kadd(JacPDstandardNth22g13,ksub(JacPDstandardNth31g22,kadd(JacPDstandardNth32g12,JacPDstandardNth12g23))),kmadd(gu33,kadd(JacPDstandardNth31g23,ksub(JacPDstandardNth32g13,kadd(JacPDstandardNth33g12,JacPDstandardNth12g33))),kmul(kmadd(gu21,kmadd(G122,kmadd(g11L,G111,kmadd(g12L,G211,kmul(g13L,G311))),kmadd(G222,kmadd(g22L,G211,kmul(g23L,G311)),kmadd(kmadd(g13L,G111,kmadd(g23L,G211,kmul(g33L,G311))),G322,kmadd(kmadd(g13L,kmul(G112,G312),kmul(g23L,kmul(G212,G312))),ToReal(-2),kmsub(g12L,kmadd(G111,G222,kmul(G112,kmul(G212,ToReal(-2)))),kmadd(g11L,kmul(G112,G112),kmadd(g33L,kmul(G312,G312),kmul(g22L,kmul(G212,G212))))))))),kmadd(gu31,kmadd(g13L,kmul(G111,G323),kmadd(g23L,kmul(G211,G323),kmadd(G311,kmadd(g13L,G123,kmadd(g23L,G223,kmul(g33L,G323))),kmadd(g11L,kmsub(G111,G123,kmul(G112,G113)),knmsub(G313,kmadd(g23L,G212,kmul(g13L,G112)),kmadd(g12L,kmadd(G123,G211,kmsub(G111,G223,kmadd(G112,G213,kmul(G113,G212)))),kmsub(g22L,kmsub(G211,G223,kmul(G212,G213)),kmul(G312,kmadd(g13L,G113,kmadd(g33L,G313,kmul(g23L,G213))))))))))),kmadd(gu23,kmadd(g13L,kmul(G113,G322),kmadd(g23L,kmul(G213,G322),kmadd(g33L,kmul(G313,G322),kmadd(g11L,kmsub(G113,G122,kmul(G112,G123)),kmadd(g12L,kmadd(G122,G213,kmsub(G113,G222,kmadd(G112,G223,kmul(G123,G212)))),kmadd(g22L,kmsub(G213,G222,kmul(G212,G223)),knmsub(G312,kmadd(g13L,G123,kmadd(g33L,G323,kmul(g23L,G223))),kmadd(g13L,kmsub(G122,G313,kmul(G112,G323)),kmul(g23L,kmsub(G222,G313,kmul(G212,G323))))))))))),kmul(gu33,kmadd(g13L,kmul(G113,G323),kmadd(g23L,kmul(G213,G323),kmadd(g33L,kmul(G313,G323),kmadd(g11L,kmsub(G113,G123,kmul(G112,G133)),kmadd(g12L,kmadd(G123,G213,kmsub(G113,G223,kmadd(G112,G233,kmul(G133,G212)))),kmadd(g22L,kmsub(G213,G223,kmul(G212,G233)),knmsub(G312,kmadd(g13L,G133,kmadd(g33L,G333,kmul(g23L,G233))),kmadd(g13L,kmsub(G123,G313,kmul(G112,G333)),kmul(g23L,kmsub(G223,G313,kmul(G212,G333))))))))))))))),ToReal(2)))))))));
     
     CCTK_REAL_VEC R13 = 
-      kmul(ToReal(0.5),kmadd(gu13,kadd(JacPDstandardNth11g33,kmadd(JacPDstandardNth13g13,ToReal(-2),JacPDstandardNth33g11)),kmadd(gu12,kadd(JacPDstandardNth11g23,ksub(JacPDstandardNth23g11,kadd(JacPDstandardNth13g12,JacPDstandardNth12g13))),kmadd(gu33,ksub(JacPDstandardNth31g33,JacPDstandardNth13g33),kmadd(gu22,kadd(JacPDstandardNth21g23,ksub(JacPDstandardNth23g12,kadd(JacPDstandardNth22g13,JacPDstandardNth13g22))),kmadd(gu23,kadd(JacPDstandardNth21g33,ksub(JacPDstandardNth33g12,kadd(JacPDstandardNth23g13,JacPDstandardNth13g23))),kmadd(gu32,kadd(JacPDstandardNth23g13,ksub(JacPDstandardNth31g23,kadd(JacPDstandardNth32g13,JacPDstandardNth13g23))),kmul(kmadd(gu31,kmadd(G133,kmadd(g11L,G111,kmadd(g12L,G211,kmul(g13L,G311))),kmadd(G233,kmadd(g22L,G211,kmul(g23L,G311)),kmadd(kmadd(g13L,G111,kmadd(g23L,G211,kmul(g33L,G311))),G333,kmadd(kmadd(g13L,kmul(G113,G313),kmul(g23L,kmul(G213,G313))),ToReal(-2),kmsub(g12L,kmadd(G111,G233,kmul(G113,kmul(G213,ToReal(-2)))),kmadd(g11L,SQR(G113),kmadd(g33L,SQR(G313),kmul(g22L,SQR(G213))))))))),kmadd(gu21,kmadd(g13L,kmul(G111,G323),kmadd(g23L,kmul(G211,G323),kmadd(G311,kmadd(g13L,G123,kmadd(g23L,G223,kmul(g33L,G323))),kmadd(g11L,kmsub(G111,G123,kmul(G112,G113)),knmsub(G313,kmadd(g23L,G212,kmul(g13L,G112)),kmadd(g12L,kmadd(G123,G211,kmsub(G111,G223,kmadd(G112,G213,kmul(G113,G212)))),kmsub(g22L,kmsub(G211,G223,kmul(G212,G213)),kmul(G312,kmadd(g13L,G113,kmadd(g33L,G313,kmul(g23L,G213))))))))))),kmadd(gu22,kmadd(g13L,kmul(G112,G323),kmadd(g23L,kmul(G212,G323),kmadd(G312,kmadd(g13L,G123,kmadd(g23L,G223,kmul(g33L,G323))),kmadd(g11L,kmsub(G112,G123,kmul(G113,G122)),knmsub(G322,kmadd(g23L,G213,kmul(g13L,G113)),kmadd(g12L,kmadd(G123,G212,kmsub(G112,G223,kmadd(G113,G222,kmul(G122,G213)))),kmsub(g22L,kmsub(G212,G223,kmul(G213,G222)),kmul(G313,kmadd(g13L,G122,kmadd(g33L,G322,kmul(g23L,G222))))))))))),kmul(gu32,kmadd(g13L,kmul(G112,G333),kmadd(g23L,kmul(G212,G333),kmadd(G312,kmadd(g13L,G133,kmadd(g23L,G233,kmul(g33L,G333))),kmadd(g11L,kmsub(G112,G133,kmul(G113,G123)),knmsub(G323,kmadd(g23L,G213,kmul(g13L,G113)),kmadd(g12L,kmadd(G133,G212,kmsub(G112,G233,kmadd(G113,G223,kmul(G123,G213)))),kmsub(g22L,kmsub(G212,G233,kmul(G213,G223)),kmul(G313,kmadd(g13L,G123,kmadd(g33L,G323,kmul(g23L,G223))))))))))))))),ToReal(2)))))))));
+      kmul(ToReal(0.5),kmadd(gu13,kadd(JacPDstandardNth11g33,kmadd(JacPDstandardNth13g13,ToReal(-2),JacPDstandardNth33g11)),kmadd(gu12,kadd(JacPDstandardNth11g23,ksub(JacPDstandardNth23g11,kadd(JacPDstandardNth13g12,JacPDstandardNth12g13))),kmadd(gu33,ksub(JacPDstandardNth31g33,JacPDstandardNth13g33),kmadd(gu22,kadd(JacPDstandardNth21g23,ksub(JacPDstandardNth23g12,kadd(JacPDstandardNth22g13,JacPDstandardNth13g22))),kmadd(gu23,kadd(JacPDstandardNth21g33,ksub(JacPDstandardNth33g12,kadd(JacPDstandardNth23g13,JacPDstandardNth13g23))),kmadd(gu32,kadd(JacPDstandardNth23g13,ksub(JacPDstandardNth31g23,kadd(JacPDstandardNth32g13,JacPDstandardNth13g23))),kmul(kmadd(gu31,kmadd(G133,kmadd(g11L,G111,kmadd(g12L,G211,kmul(g13L,G311))),kmadd(G233,kmadd(g22L,G211,kmul(g23L,G311)),kmadd(kmadd(g13L,G111,kmadd(g23L,G211,kmul(g33L,G311))),G333,kmadd(kmadd(g13L,kmul(G113,G313),kmul(g23L,kmul(G213,G313))),ToReal(-2),kmsub(g12L,kmadd(G111,G233,kmul(G113,kmul(G213,ToReal(-2)))),kmadd(g11L,kmul(G113,G113),kmadd(g33L,kmul(G313,G313),kmul(g22L,kmul(G213,G213))))))))),kmadd(gu21,kmadd(g13L,kmul(G111,G323),kmadd(g23L,kmul(G211,G323),kmadd(G311,kmadd(g13L,G123,kmadd(g23L,G223,kmul(g33L,G323))),kmadd(g11L,kmsub(G111,G123,kmul(G112,G113)),knmsub(G313,kmadd(g23L,G212,kmul(g13L,G112)),kmadd(g12L,kmadd(G123,G211,kmsub(G111,G223,kmadd(G112,G213,kmul(G113,G212)))),kmsub(g22L,kmsub(G211,G223,kmul(G212,G213)),kmul(G312,kmadd(g13L,G113,kmadd(g33L,G313,kmul(g23L,G213))))))))))),kmadd(gu22,kmadd(g13L,kmul(G112,G323),kmadd(g23L,kmul(G212,G323),kmadd(G312,kmadd(g13L,G123,kmadd(g23L,G223,kmul(g33L,G323))),kmadd(g11L,kmsub(G112,G123,kmul(G113,G122)),knmsub(G322,kmadd(g23L,G213,kmul(g13L,G113)),kmadd(g12L,kmadd(G123,G212,kmsub(G112,G223,kmadd(G113,G222,kmul(G122,G213)))),kmsub(g22L,kmsub(G212,G223,kmul(G213,G222)),kmul(G313,kmadd(g13L,G122,kmadd(g33L,G322,kmul(g23L,G222))))))))))),kmul(gu32,kmadd(g13L,kmul(G112,G333),kmadd(g23L,kmul(G212,G333),kmadd(G312,kmadd(g13L,G133,kmadd(g23L,G233,kmul(g33L,G333))),kmadd(g11L,kmsub(G112,G133,kmul(G113,G123)),knmsub(G323,kmadd(g23L,G213,kmul(g13L,G113)),kmadd(g12L,kmadd(G133,G212,kmsub(G112,G233,kmadd(G113,G223,kmul(G123,G213)))),kmsub(g22L,kmsub(G212,G233,kmul(G213,G223)),kmul(G313,kmadd(g13L,G123,kmadd(g33L,G323,kmul(g23L,G223))))))))))))))),ToReal(2)))))))));
     
     CCTK_REAL_VEC R22 = 
-      kmul(ToReal(0.5),knmsub(gu11,kadd(JacPDstandardNth11g22,kmadd(JacPDstandardNth12g12,ToReal(-2),JacPDstandardNth22g11)),kmadd(gu21,ksub(JacPDstandardNth12g22,JacPDstandardNth21g22),kmadd(gu13,kadd(JacPDstandardNth12g23,ksub(JacPDstandardNth32g12,kadd(JacPDstandardNth22g13,JacPDstandardNth13g22))),kmadd(gu23,ksub(JacPDstandardNth32g22,JacPDstandardNth23g22),kmadd(gu31,kadd(JacPDstandardNth12g23,ksub(JacPDstandardNth32g12,kadd(JacPDstandardNth31g22,JacPDstandardNth22g13))),kmadd(ToReal(2),kmadd(gu13,kmadd(g13L,kmul(G112,G323),kmadd(g23L,kmul(G212,G323),kmadd(g11L,kmsub(G112,G123,kmul(G113,G122)),kmadd(g12L,kmadd(G123,G212,kmsub(G112,G223,kmadd(G113,G222,kmul(G122,G213)))),kmadd(g22L,kmsub(G212,G223,kmul(G213,G222)),kmadd(g13L,kmsub(G123,G312,kmadd(G113,G322,kmul(G122,G313))),kmadd(g23L,kmsub(G223,G312,kmadd(G213,G322,kmul(G222,G313))),kmul(g33L,kmsub(G312,G323,kmul(G313,G322)))))))))),kmadd(gu31,kmadd(g13L,kmul(G112,G323),kmadd(g23L,kmul(G212,G323),kmadd(g11L,kmsub(G112,G123,kmul(G113,G122)),kmadd(g12L,kmadd(G123,G212,kmsub(G112,G223,kmadd(G113,G222,kmul(G122,G213)))),kmadd(g22L,kmsub(G212,G223,kmul(G213,G222)),kmadd(g13L,kmsub(G123,G312,kmadd(G113,G322,kmul(G122,G313))),kmadd(g23L,kmsub(G223,G312,kmadd(G213,G322,kmul(G222,G313))),kmul(g33L,kmsub(G312,G323,kmul(G313,G322)))))))))),kmul(gu11,kmadd(g22L,SQR(G212),knmsub(g12L,kmadd(G122,G211,kmadd(G111,G222,kmul(G112,kmul(G212,ToReal(-2))))),kmadd(g11L,knmsub(G111,G122,SQR(G112)),knmsub(G222,kmadd(g23L,G311,kmul(g22L,G211)),kmadd(g33L,knmsub(G311,G322,SQR(G312)),kmadd(g13L,knmsub(G122,G311,kmsub(G112,kmul(G312,ToReal(2)),kmul(G111,G322))),kmul(g23L,kmsub(G212,kmul(G312,ToReal(2)),kmul(G211,G322)))))))))))),kmul(gu33,ksub(ksub(kmadd(JacPDstandardNth32g23,ToReal(2),kmul(ToReal(2),kmadd(g22L,SQR(G223),knmsub(g12L,kmadd(G133,G222,kmadd(G122,G233,kmul(G123,kmul(G223,ToReal(-2))))),kmadd(g11L,knmsub(G122,G133,SQR(G123)),knmsub(G233,kmadd(g23L,G322,kmul(g22L,G222)),kmadd(g33L,knmsub(G322,G333,SQR(G323)),kmadd(g13L,knmsub(G133,G322,kmsub(G123,kmul(G323,ToReal(2)),kmul(G122,G333))),kmul(g23L,kmsub(G223,kmul(G323,ToReal(2)),kmul(G222,G333))))))))))),JacPDstandardNth33g22),JacPDstandardNth22g33)))))))));
+      kmul(ToReal(0.5),knmsub(gu11,kadd(JacPDstandardNth11g22,kmadd(JacPDstandardNth12g12,ToReal(-2),JacPDstandardNth22g11)),kmadd(gu21,ksub(JacPDstandardNth12g22,JacPDstandardNth21g22),kmadd(gu13,kadd(JacPDstandardNth12g23,ksub(JacPDstandardNth32g12,kadd(JacPDstandardNth22g13,JacPDstandardNth13g22))),kmadd(gu23,ksub(JacPDstandardNth32g22,JacPDstandardNth23g22),kmadd(gu31,kadd(JacPDstandardNth12g23,ksub(JacPDstandardNth32g12,kadd(JacPDstandardNth31g22,JacPDstandardNth22g13))),kmadd(ToReal(2),kmadd(gu13,kmadd(g13L,kmul(G112,G323),kmadd(g23L,kmul(G212,G323),kmadd(g11L,kmsub(G112,G123,kmul(G113,G122)),kmadd(g12L,kmadd(G123,G212,kmsub(G112,G223,kmadd(G113,G222,kmul(G122,G213)))),kmadd(g22L,kmsub(G212,G223,kmul(G213,G222)),kmadd(g13L,kmsub(G123,G312,kmadd(G113,G322,kmul(G122,G313))),kmadd(g23L,kmsub(G223,G312,kmadd(G213,G322,kmul(G222,G313))),kmul(g33L,kmsub(G312,G323,kmul(G313,G322)))))))))),kmadd(gu31,kmadd(g13L,kmul(G112,G323),kmadd(g23L,kmul(G212,G323),kmadd(g11L,kmsub(G112,G123,kmul(G113,G122)),kmadd(g12L,kmadd(G123,G212,kmsub(G112,G223,kmadd(G113,G222,kmul(G122,G213)))),kmadd(g22L,kmsub(G212,G223,kmul(G213,G222)),kmadd(g13L,kmsub(G123,G312,kmadd(G113,G322,kmul(G122,G313))),kmadd(g23L,kmsub(G223,G312,kmadd(G213,G322,kmul(G222,G313))),kmul(g33L,kmsub(G312,G323,kmul(G313,G322)))))))))),kmul(gu11,kmadd(g22L,kmul(G212,G212),knmsub(g12L,kmadd(G122,G211,kmadd(G111,G222,kmul(G112,kmul(G212,ToReal(-2))))),kmadd(g11L,kmsub(G112,G112,kmul(G111,G122)),knmsub(G222,kmadd(g23L,G311,kmul(g22L,G211)),kmadd(g33L,kmsub(G312,G312,kmul(G311,G322)),kmadd(g13L,knmsub(G122,G311,kmsub(G112,kmul(G312,ToReal(2)),kmul(G111,G322))),kmul(g23L,kmsub(G212,kmul(G312,ToReal(2)),kmul(G211,G322)))))))))))),kmul(gu33,ksub(ksub(kmadd(JacPDstandardNth32g23,ToReal(2),kmul(ToReal(2),kmadd(g22L,kmul(G223,G223),knmsub(g12L,kmadd(G133,G222,kmadd(G122,G233,kmul(G123,kmul(G223,ToReal(-2))))),kmadd(g11L,kmsub(G123,G123,kmul(G122,G133)),knmsub(G233,kmadd(g23L,G322,kmul(g22L,G222)),kmadd(g33L,kmsub(G323,G323,kmul(G322,G333)),kmadd(g13L,knmsub(G133,G322,kmsub(G123,kmul(G323,ToReal(2)),kmul(G122,G333))),kmul(g23L,kmsub(G223,kmul(G323,ToReal(2)),kmul(G222,G333))))))))))),JacPDstandardNth33g22),JacPDstandardNth22g33)))))))));
     
     CCTK_REAL_VEC R23 = 
-      kmul(ToReal(0.5),kmadd(gu23,kadd(JacPDstandardNth22g33,kmadd(JacPDstandardNth23g23,ToReal(-2),JacPDstandardNth33g22)),kmadd(gu11,kadd(JacPDstandardNth12g13,ksub(JacPDstandardNth13g12,kadd(JacPDstandardNth23g11,JacPDstandardNth11g23))),kmadd(gu21,kadd(JacPDstandardNth13g22,ksub(JacPDstandardNth22g13,kadd(JacPDstandardNth23g12,JacPDstandardNth21g23))),kmadd(gu13,kadd(JacPDstandardNth12g33,ksub(JacPDstandardNth33g12,kadd(JacPDstandardNth23g13,JacPDstandardNth13g23))),kmadd(gu33,ksub(JacPDstandardNth32g33,JacPDstandardNth23g33),kmadd(gu31,kadd(JacPDstandardNth13g23,ksub(JacPDstandardNth32g13,kadd(JacPDstandardNth31g23,JacPDstandardNth23g13))),kmul(kmadd(gu32,kmadd(G133,kmadd(g11L,G122,kmadd(g12L,G222,kmul(g13L,G322))),kmadd(G233,kmadd(g22L,G222,kmul(g23L,G322)),kmadd(kmadd(g13L,G122,kmadd(g23L,G222,kmul(g33L,G322))),G333,kmadd(kmadd(g13L,kmul(G123,G323),kmul(g23L,kmul(G223,G323))),ToReal(-2),kmsub(g12L,kmadd(G122,G233,kmul(G123,kmul(G223,ToReal(-2)))),kmadd(g11L,SQR(G123),kmadd(g33L,SQR(G323),kmul(g22L,SQR(G223))))))))),kmadd(gu31,kmadd(g13L,kmul(G112,G333),kmadd(g23L,kmul(G212,G333),kmadd(G312,kmadd(g13L,G133,kmadd(g23L,G233,kmul(g33L,G333))),kmadd(g11L,kmsub(G112,G133,kmul(G113,G123)),knmsub(G323,kmadd(g23L,G213,kmul(g13L,G113)),kmadd(g12L,kmadd(G133,G212,kmsub(G112,G233,kmadd(G113,G223,kmul(G123,G213)))),kmsub(g22L,kmsub(G212,G233,kmul(G213,G223)),kmul(G313,kmadd(g13L,G123,kmadd(g33L,G323,kmul(g23L,G223))))))))))),kmadd(gu11,kmadd(g13L,kmul(G112,G313),kmadd(g23L,kmul(G212,G313),kmadd(g33L,kmul(G312,G313),kmadd(g11L,kmsub(G112,G113,kmul(G111,G123)),kmadd(g12L,kmadd(G113,G212,kmsub(G112,G213,kmadd(G111,G223,kmul(G123,G211)))),kmadd(g22L,kmsub(G212,G213,kmul(G211,G223)),knmsub(G311,kmadd(g13L,G123,kmadd(g33L,G323,kmul(g23L,G223))),kmadd(g13L,kmsub(G113,G312,kmul(G111,G323)),kmul(g23L,kmsub(G213,G312,kmul(G211,G323))))))))))),kmul(gu12,kmadd(g13L,kmul(G113,G322),kmadd(g23L,kmul(G213,G322),kmadd(g33L,kmul(G313,G322),kmadd(g11L,kmsub(G113,G122,kmul(G112,G123)),kmadd(g12L,kmadd(G122,G213,kmsub(G113,G222,kmadd(G112,G223,kmul(G123,G212)))),kmadd(g22L,kmsub(G213,G222,kmul(G212,G223)),knmsub(G312,kmadd(g13L,G123,kmadd(g33L,G323,kmul(g23L,G223))),kmadd(g13L,kmsub(G122,G313,kmul(G112,G323)),kmul(g23L,kmsub(G222,G313,kmul(G212,G323))))))))))))))),ToReal(2)))))))));
+      kmul(ToReal(0.5),kmadd(gu23,kadd(JacPDstandardNth22g33,kmadd(JacPDstandardNth23g23,ToReal(-2),JacPDstandardNth33g22)),kmadd(gu11,kadd(JacPDstandardNth12g13,ksub(JacPDstandardNth13g12,kadd(JacPDstandardNth23g11,JacPDstandardNth11g23))),kmadd(gu21,kadd(JacPDstandardNth13g22,ksub(JacPDstandardNth22g13,kadd(JacPDstandardNth23g12,JacPDstandardNth21g23))),kmadd(gu13,kadd(JacPDstandardNth12g33,ksub(JacPDstandardNth33g12,kadd(JacPDstandardNth23g13,JacPDstandardNth13g23))),kmadd(gu33,ksub(JacPDstandardNth32g33,JacPDstandardNth23g33),kmadd(gu31,kadd(JacPDstandardNth13g23,ksub(JacPDstandardNth32g13,kadd(JacPDstandardNth31g23,JacPDstandardNth23g13))),kmul(kmadd(gu32,kmadd(G133,kmadd(g11L,G122,kmadd(g12L,G222,kmul(g13L,G322))),kmadd(G233,kmadd(g22L,G222,kmul(g23L,G322)),kmadd(kmadd(g13L,G122,kmadd(g23L,G222,kmul(g33L,G322))),G333,kmadd(kmadd(g13L,kmul(G123,G323),kmul(g23L,kmul(G223,G323))),ToReal(-2),kmsub(g12L,kmadd(G122,G233,kmul(G123,kmul(G223,ToReal(-2)))),kmadd(g11L,kmul(G123,G123),kmadd(g33L,kmul(G323,G323),kmul(g22L,kmul(G223,G223))))))))),kmadd(gu31,kmadd(g13L,kmul(G112,G333),kmadd(g23L,kmul(G212,G333),kmadd(G312,kmadd(g13L,G133,kmadd(g23L,G233,kmul(g33L,G333))),kmadd(g11L,kmsub(G112,G133,kmul(G113,G123)),knmsub(G323,kmadd(g23L,G213,kmul(g13L,G113)),kmadd(g12L,kmadd(G133,G212,kmsub(G112,G233,kmadd(G113,G223,kmul(G123,G213)))),kmsub(g22L,kmsub(G212,G233,kmul(G213,G223)),kmul(G313,kmadd(g13L,G123,kmadd(g33L,G323,kmul(g23L,G223))))))))))),kmadd(gu11,kmadd(g13L,kmul(G112,G313),kmadd(g23L,kmul(G212,G313),kmadd(g33L,kmul(G312,G313),kmadd(g11L,kmsub(G112,G113,kmul(G111,G123)),kmadd(g12L,kmadd(G113,G212,kmsub(G112,G213,kmadd(G111,G223,kmul(G123,G211)))),kmadd(g22L,kmsub(G212,G213,kmul(G211,G223)),knmsub(G311,kmadd(g13L,G123,kmadd(g33L,G323,kmul(g23L,G223))),kmadd(g13L,kmsub(G113,G312,kmul(G111,G323)),kmul(g23L,kmsub(G213,G312,kmul(G211,G323))))))))))),kmul(gu12,kmadd(g13L,kmul(G113,G322),kmadd(g23L,kmul(G213,G322),kmadd(g33L,kmul(G313,G322),kmadd(g11L,kmsub(G113,G122,kmul(G112,G123)),kmadd(g12L,kmadd(G122,G213,kmsub(G113,G222,kmadd(G112,G223,kmul(G123,G212)))),kmadd(g22L,kmsub(G213,G222,kmul(G212,G223)),knmsub(G312,kmadd(g13L,G123,kmadd(g33L,G323,kmul(g23L,G223))),kmadd(g13L,kmsub(G122,G313,kmul(G112,G323)),kmul(g23L,kmsub(G222,G313,kmul(G212,G323))))))))))))))),ToReal(2)))))))));
     
     CCTK_REAL_VEC R33 = 
-      kmul(ToReal(0.5),knmsub(gu11,kadd(JacPDstandardNth11g33,kmadd(JacPDstandardNth13g13,ToReal(-2),JacPDstandardNth33g11)),kmadd(gu31,ksub(JacPDstandardNth13g33,JacPDstandardNth31g33),kmadd(gu32,ksub(JacPDstandardNth23g33,JacPDstandardNth32g33),kmadd(gu12,kadd(JacPDstandardNth13g23,ksub(JacPDstandardNth23g13,kadd(JacPDstandardNth33g12,JacPDstandardNth12g33))),kmadd(gu21,kadd(JacPDstandardNth13g23,ksub(JacPDstandardNth23g13,kadd(JacPDstandardNth33g12,JacPDstandardNth21g33))),kmadd(ToReal(2),kmadd(gu12,kmadd(g13L,kmul(G113,G323),kmadd(g23L,kmul(G213,G323),kmadd(g33L,kmul(G313,G323),kmadd(g11L,kmsub(G113,G123,kmul(G112,G133)),kmadd(g12L,kmadd(G123,G213,kmsub(G113,G223,kmadd(G112,G233,kmul(G133,G212)))),kmadd(g22L,kmsub(G213,G223,kmul(G212,G233)),knmsub(G312,kmadd(g13L,G133,kmadd(g33L,G333,kmul(g23L,G233))),kmadd(g13L,kmsub(G123,G313,kmul(G112,G333)),kmul(g23L,kmsub(G223,G313,kmul(G212,G333))))))))))),kmadd(gu21,kmadd(g13L,kmul(G113,G323),kmadd(g23L,kmul(G213,G323),kmadd(g33L,kmul(G313,G323),kmadd(g11L,kmsub(G113,G123,kmul(G112,G133)),kmadd(g12L,kmadd(G123,G213,kmsub(G113,G223,kmadd(G112,G233,kmul(G133,G212)))),kmadd(g22L,kmsub(G213,G223,kmul(G212,G233)),knmsub(G312,kmadd(g13L,G133,kmadd(g33L,G333,kmul(g23L,G233))),kmadd(g13L,kmsub(G123,G313,kmul(G112,G333)),kmul(g23L,kmsub(G223,G313,kmul(G212,G333))))))))))),kmul(gu11,kmadd(g22L,SQR(G213),knmsub(g12L,kmadd(G133,G211,kmadd(G111,G233,kmul(G113,kmul(G213,ToReal(-2))))),kmadd(g11L,knmsub(G111,G133,SQR(G113)),knmsub(G233,kmadd(g23L,G311,kmul(g22L,G211)),kmadd(g33L,knmsub(G311,G333,SQR(G313)),kmadd(g13L,knmsub(G133,G311,kmsub(G113,kmul(G313,ToReal(2)),kmul(G111,G333))),kmul(g23L,kmsub(G213,kmul(G313,ToReal(2)),kmul(G211,G333)))))))))))),kmul(gu22,ksub(ksub(kmadd(JacPDstandardNth23g23,ToReal(2),kmul(ToReal(2),kmadd(g22L,SQR(G223),knmsub(g12L,kmadd(G133,G222,kmadd(G122,G233,kmul(G123,kmul(G223,ToReal(-2))))),kmadd(g11L,knmsub(G122,G133,SQR(G123)),knmsub(G233,kmadd(g23L,G322,kmul(g22L,G222)),kmadd(g33L,knmsub(G322,G333,SQR(G323)),kmadd(g13L,knmsub(G133,G322,kmsub(G123,kmul(G323,ToReal(2)),kmul(G122,G333))),kmul(g23L,kmsub(G223,kmul(G323,ToReal(2)),kmul(G222,G333))))))))))),JacPDstandardNth33g22),JacPDstandardNth22g33)))))))));
+      kmul(ToReal(0.5),knmsub(gu11,kadd(JacPDstandardNth11g33,kmadd(JacPDstandardNth13g13,ToReal(-2),JacPDstandardNth33g11)),kmadd(gu31,ksub(JacPDstandardNth13g33,JacPDstandardNth31g33),kmadd(gu32,ksub(JacPDstandardNth23g33,JacPDstandardNth32g33),kmadd(gu12,kadd(JacPDstandardNth13g23,ksub(JacPDstandardNth23g13,kadd(JacPDstandardNth33g12,JacPDstandardNth12g33))),kmadd(gu21,kadd(JacPDstandardNth13g23,ksub(JacPDstandardNth23g13,kadd(JacPDstandardNth33g12,JacPDstandardNth21g33))),kmadd(ToReal(2),kmadd(gu12,kmadd(g13L,kmul(G113,G323),kmadd(g23L,kmul(G213,G323),kmadd(g33L,kmul(G313,G323),kmadd(g11L,kmsub(G113,G123,kmul(G112,G133)),kmadd(g12L,kmadd(G123,G213,kmsub(G113,G223,kmadd(G112,G233,kmul(G133,G212)))),kmadd(g22L,kmsub(G213,G223,kmul(G212,G233)),knmsub(G312,kmadd(g13L,G133,kmadd(g33L,G333,kmul(g23L,G233))),kmadd(g13L,kmsub(G123,G313,kmul(G112,G333)),kmul(g23L,kmsub(G223,G313,kmul(G212,G333))))))))))),kmadd(gu21,kmadd(g13L,kmul(G113,G323),kmadd(g23L,kmul(G213,G323),kmadd(g33L,kmul(G313,G323),kmadd(g11L,kmsub(G113,G123,kmul(G112,G133)),kmadd(g12L,kmadd(G123,G213,kmsub(G113,G223,kmadd(G112,G233,kmul(G133,G212)))),kmadd(g22L,kmsub(G213,G223,kmul(G212,G233)),knmsub(G312,kmadd(g13L,G133,kmadd(g33L,G333,kmul(g23L,G233))),kmadd(g13L,kmsub(G123,G313,kmul(G112,G333)),kmul(g23L,kmsub(G223,G313,kmul(G212,G333))))))))))),kmul(gu11,kmadd(g22L,kmul(G213,G213),knmsub(g12L,kmadd(G133,G211,kmadd(G111,G233,kmul(G113,kmul(G213,ToReal(-2))))),kmadd(g11L,kmsub(G113,G113,kmul(G111,G133)),knmsub(G233,kmadd(g23L,G311,kmul(g22L,G211)),kmadd(g33L,kmsub(G313,G313,kmul(G311,G333)),kmadd(g13L,knmsub(G133,G311,kmsub(G113,kmul(G313,ToReal(2)),kmul(G111,G333))),kmul(g23L,kmsub(G213,kmul(G313,ToReal(2)),kmul(G211,G333)))))))))))),kmul(gu22,ksub(ksub(kmadd(JacPDstandardNth23g23,ToReal(2),kmul(ToReal(2),kmadd(g22L,kmul(G223,G223),knmsub(g12L,kmadd(G133,G222,kmadd(G122,G233,kmul(G123,kmul(G223,ToReal(-2))))),kmadd(g11L,kmsub(G123,G123,kmul(G122,G133)),knmsub(G233,kmadd(g23L,G322,kmul(g22L,G222)),kmadd(g33L,kmsub(G323,G323,kmul(G322,G333)),kmadd(g13L,knmsub(G133,G322,kmsub(G123,kmul(G323,ToReal(2)),kmul(G122,G333))),kmul(g23L,kmsub(G223,kmul(G323,ToReal(2)),kmul(G222,G333))))))))))),JacPDstandardNth33g22),JacPDstandardNth22g33)))))))));
     
     CCTK_REAL_VEC trR = 
       kmadd(gu11,R11,kmadd(kadd(gu12,gu21),R12,kmadd(kadd(gu13,gu31),R13,kmadd(gu22,R22,kmadd(kadd(gu23,gu32),R23,kmul(gu33,R33))))));
@@ -1207,7 +1212,7 @@ static void ML_ADM_constraints_Body(cGH const * restrict const cctkGH, int const
     CCTK_REAL_VEC trK = kadd(Km11,kadd(Km22,Km33));
     
     CCTK_REAL_VEC HL = 
-      kadd(trR,kadd(SQR(trK),kmsub(kmadd(Km12,Km21,kmadd(Km13,Km31,kmul(Km23,Km32))),ToReal(-2),kadd(kadd(SQR(Km33),SQR(Km22)),SQR(Km11)))));
+      kadd(trR,kmadd(trK,trK,kmsub(kmadd(Km12,Km21,kmadd(Km13,Km31,kmul(Km23,Km32))),ToReal(-2),kmadd(Km11,Km11,kmadd(Km33,Km33,kmul(Km22,Km22))))));
     
     CCTK_REAL_VEC M1L = 
       kmadd(gu21,kmadd(K22L,G211,kmadd(K23L,G311,kadd(JacPDstandardNth2K11,knmsub(K11L,G112,knmsub(K13L,G312,kmsub(K12L,ksub(G111,G212),JacPDstandardNth1K12)))))),kmadd(gu22,kmadd(K22L,G212,kmadd(K23L,G312,kadd(JacPDstandardNth2K12,knmsub(K11L,G122,knmsub(K13L,G322,kmsub(K12L,ksub(G112,G222),JacPDstandardNth1K22)))))),kmadd(gu23,kmadd(K22L,G213,kmadd(K23L,G313,kadd(JacPDstandardNth2K13,knmsub(K11L,G123,knmsub(K13L,G323,kmsub(K12L,ksub(G113,G223),JacPDstandardNth1K23)))))),kmadd(gu31,kmadd(K23L,G211,kmadd(K33L,G311,kadd(JacPDstandardNth3K11,knmsub(K11L,G113,knmsub(K12L,G213,kmsub(K13L,ksub(G111,G313),JacPDstandardNth1K13)))))),kmadd(gu32,kmadd(K23L,G212,kmadd(K33L,G312,kadd(JacPDstandardNth3K12,knmsub(K11L,G123,knmsub(K12L,G223,kmsub(K13L,ksub(G112,G323),JacPDstandardNth1K23)))))),kmul(gu33,kmadd(K23L,G213,kmadd(K33L,G313,kadd(JacPDstandardNth3K13,knmsub(K11L,G133,knmsub(K12L,G233,kmsub(K13L,ksub(G113,G333),JacPDstandardNth1K33))))))))))));
@@ -1218,48 +1223,14 @@ static void ML_ADM_constraints_Body(cGH const * restrict const cctkGH, int const
     CCTK_REAL_VEC M3L = 
       kmadd(gu11,kmadd(K11L,G113,kmadd(K12L,G213,kadd(JacPDstandardNth1K13,knmsub(K23L,G211,knmsub(K33L,G311,kmsub(K13L,ksub(G313,G111),JacPDstandardNth3K11)))))),kmadd(gu12,kmadd(K11L,G123,kmadd(K12L,G223,kadd(JacPDstandardNth1K23,knmsub(K23L,G212,knmsub(K33L,G312,kmsub(K13L,ksub(G323,G112),JacPDstandardNth3K12)))))),kmadd(gu13,kmadd(K11L,G133,kmadd(K12L,G233,kadd(JacPDstandardNth1K33,knmsub(K23L,G213,knmsub(K33L,G313,kmsub(K13L,ksub(G333,G113),JacPDstandardNth3K13)))))),kmadd(gu21,kmadd(K12L,G113,kmadd(K22L,G213,kadd(JacPDstandardNth2K13,knmsub(K13L,G112,knmsub(K33L,G312,kmsub(K23L,ksub(G313,G212),JacPDstandardNth3K12)))))),kmadd(gu22,kmadd(K12L,G123,kmadd(K22L,G223,kadd(JacPDstandardNth2K23,knmsub(K13L,G122,knmsub(K33L,G322,kmsub(K23L,ksub(G323,G222),JacPDstandardNth3K22)))))),kmul(gu23,kmadd(K12L,G133,kmadd(K22L,G233,kadd(JacPDstandardNth2K33,knmsub(K13L,G123,knmsub(K33L,G323,kmsub(K23L,ksub(G333,G223),JacPDstandardNth3K23))))))))))));
     
-    /* If necessary, store only partial vectors after the first iteration */
-    
-    if (CCTK_REAL_VEC_SIZE > 2 && CCTK_BUILTIN_EXPECT(i < lc_imin && i+CCTK_REAL_VEC_SIZE > lc_imax, 0))
-    {
-      ptrdiff_t const elt_count_lo = lc_imin-i;
-      ptrdiff_t const elt_count_hi = lc_imax-i;
-      vec_store_nta_partial_mid(H[index],HL,elt_count_lo,elt_count_hi);
-      vec_store_nta_partial_mid(M1[index],M1L,elt_count_lo,elt_count_hi);
-      vec_store_nta_partial_mid(M2[index],M2L,elt_count_lo,elt_count_hi);
-      vec_store_nta_partial_mid(M3[index],M3L,elt_count_lo,elt_count_hi);
-      break;
-    }
-    
-    /* If necessary, store only partial vectors after the first iteration */
-    
-    if (CCTK_REAL_VEC_SIZE > 1 && CCTK_BUILTIN_EXPECT(i < lc_imin, 0))
-    {
-      ptrdiff_t const elt_count = lc_imin-i;
-      vec_store_nta_partial_hi(H[index],HL,elt_count);
-      vec_store_nta_partial_hi(M1[index],M1L,elt_count);
-      vec_store_nta_partial_hi(M2[index],M2L,elt_count);
-      vec_store_nta_partial_hi(M3[index],M3L,elt_count);
-      continue;
-    }
-    
-    /* If necessary, store only partial vectors after the last iteration */
-    
-    if (CCTK_REAL_VEC_SIZE > 1 && CCTK_BUILTIN_EXPECT(i+CCTK_REAL_VEC_SIZE > lc_imax, 0))
-    {
-      ptrdiff_t const elt_count = lc_imax-i;
-      vec_store_nta_partial_lo(H[index],HL,elt_count);
-      vec_store_nta_partial_lo(M1[index],M1L,elt_count);
-      vec_store_nta_partial_lo(M2[index],M2L,elt_count);
-      vec_store_nta_partial_lo(M3[index],M3L,elt_count);
-      break;
-    }
-    vec_store_nta(H[index],HL);
-    vec_store_nta(M1[index],M1L);
-    vec_store_nta(M2[index],M2L);
-    vec_store_nta(M3[index],M3L);
+    /* Copy local copies back to grid functions */
+    vec_store_partial_prepare(i,lc_imin,lc_imax);
+    vec_store_nta_partial(H[index],HL);
+    vec_store_nta_partial(M1[index],M1L);
+    vec_store_nta_partial(M2[index],M2L);
+    vec_store_nta_partial(M3[index],M3L);
   }
-  LC_ENDLOOP3VEC (ML_ADM_constraints);
+  LC_ENDLOOP3VEC(ML_ADM_constraints);
 }
 
 extern "C" void ML_ADM_constraints(CCTK_ARGUMENTS)
@@ -1278,7 +1249,11 @@ extern "C" void ML_ADM_constraints(CCTK_ARGUMENTS)
     return;
   }
   
-  const char *groups[] = {"ML_ADM::ML_curv","ML_ADM::ML_Ham","ML_ADM::ML_metric","ML_ADM::ML_mom"};
+  const char *const groups[] = {
+    "ML_ADM::ML_curv",
+    "ML_ADM::ML_Ham",
+    "ML_ADM::ML_metric",
+    "ML_ADM::ML_mom"};
   GenericFD_AssertGroupStorage(cctkGH, "ML_ADM_constraints", 4, groups);
   
   switch(fdOrder)
@@ -1300,7 +1275,7 @@ extern "C" void ML_ADM_constraints(CCTK_ARGUMENTS)
       break;
   }
   
-  GenericFD_LoopOverInterior(cctkGH, &ML_ADM_constraints_Body);
+  GenericFD_LoopOverInterior(cctkGH, ML_ADM_constraints_Body);
   
   if (verbose > 1)
   {

@@ -18,10 +18,14 @@
 
 /* Define macros used in calculations */
 #define INITVALUE (42)
-#define QAD(x) (SQR(SQR(x)))
+#define ScalarINV(x) ((CCTK_REAL)1.0 / (x))
+#define ScalarSQR(x) ((x) * (x))
+#define ScalarCUB(x) ((x) * ScalarSQR(x))
+#define ScalarQAD(x) (ScalarSQR(ScalarSQR(x)))
 #define INV(x) (kdiv(ToReal(1.0),x))
 #define SQR(x) (kmul(x,x))
 #define CUB(x) (kmul(x,SQR(x)))
+#define QAD(x) (SQR(SQR(x)))
 
 extern "C" void ML_BSSN_Host_convertFromADMBaseGamma_SelectBCs(CCTK_ARGUMENTS)
 {
@@ -74,33 +78,33 @@ static void ML_BSSN_Host_convertFromADMBaseGamma_Body(cGH const * restrict const
   CCTK_REAL_VEC const hdzi = kmul(ToReal(0.5), dzi);
   
   /* Initialize predefined quantities */
-  CCTK_REAL_VEC const p1o1024dx = kmul(INV(dx),ToReal(0.0009765625));
-  CCTK_REAL_VEC const p1o1024dy = kmul(INV(dy),ToReal(0.0009765625));
-  CCTK_REAL_VEC const p1o1024dz = kmul(INV(dz),ToReal(0.0009765625));
-  CCTK_REAL_VEC const p1o1680dx = kmul(INV(dx),ToReal(0.000595238095238095238095238095238));
-  CCTK_REAL_VEC const p1o1680dy = kmul(INV(dy),ToReal(0.000595238095238095238095238095238));
-  CCTK_REAL_VEC const p1o1680dz = kmul(INV(dz),ToReal(0.000595238095238095238095238095238));
-  CCTK_REAL_VEC const p1o2dx = kmul(INV(dx),ToReal(0.5));
-  CCTK_REAL_VEC const p1o2dy = kmul(INV(dy),ToReal(0.5));
-  CCTK_REAL_VEC const p1o2dz = kmul(INV(dz),ToReal(0.5));
-  CCTK_REAL_VEC const p1o5040dx2 = kmul(INV(SQR(dx)),ToReal(0.000198412698412698412698412698413));
-  CCTK_REAL_VEC const p1o5040dy2 = kmul(INV(SQR(dy)),ToReal(0.000198412698412698412698412698413));
-  CCTK_REAL_VEC const p1o5040dz2 = kmul(INV(SQR(dz)),ToReal(0.000198412698412698412698412698413));
-  CCTK_REAL_VEC const p1o560dx = kmul(INV(dx),ToReal(0.00178571428571428571428571428571));
-  CCTK_REAL_VEC const p1o560dy = kmul(INV(dy),ToReal(0.00178571428571428571428571428571));
-  CCTK_REAL_VEC const p1o560dz = kmul(INV(dz),ToReal(0.00178571428571428571428571428571));
-  CCTK_REAL_VEC const p1o705600dxdy = kmul(INV(kmul(dx,dy)),ToReal(1.41723356009070294784580498866e-6));
-  CCTK_REAL_VEC const p1o705600dxdz = kmul(INV(kmul(dx,dz)),ToReal(1.41723356009070294784580498866e-6));
-  CCTK_REAL_VEC const p1o705600dydz = kmul(INV(kmul(dy,dz)),ToReal(1.41723356009070294784580498866e-6));
-  CCTK_REAL_VEC const p1o840dx = kmul(INV(dx),ToReal(0.00119047619047619047619047619048));
-  CCTK_REAL_VEC const p1o840dy = kmul(INV(dy),ToReal(0.00119047619047619047619047619048));
-  CCTK_REAL_VEC const p1o840dz = kmul(INV(dz),ToReal(0.00119047619047619047619047619048));
-  CCTK_REAL_VEC const p1odx = INV(dx);
-  CCTK_REAL_VEC const p1ody = INV(dy);
-  CCTK_REAL_VEC const p1odz = INV(dz);
-  CCTK_REAL_VEC const pm1o2dx = kmul(INV(dx),ToReal(-0.5));
-  CCTK_REAL_VEC const pm1o2dy = kmul(INV(dy),ToReal(-0.5));
-  CCTK_REAL_VEC const pm1o2dz = kmul(INV(dz),ToReal(-0.5));
+  CCTK_REAL_VEC const p1o1024dx = kdiv(ToReal(0.0009765625),dx);
+  CCTK_REAL_VEC const p1o1024dy = kdiv(ToReal(0.0009765625),dy);
+  CCTK_REAL_VEC const p1o1024dz = kdiv(ToReal(0.0009765625),dz);
+  CCTK_REAL_VEC const p1o1680dx = kdiv(ToReal(0.000595238095238095238095238095238),dx);
+  CCTK_REAL_VEC const p1o1680dy = kdiv(ToReal(0.000595238095238095238095238095238),dy);
+  CCTK_REAL_VEC const p1o1680dz = kdiv(ToReal(0.000595238095238095238095238095238),dz);
+  CCTK_REAL_VEC const p1o2dx = kdiv(ToReal(0.5),dx);
+  CCTK_REAL_VEC const p1o2dy = kdiv(ToReal(0.5),dy);
+  CCTK_REAL_VEC const p1o2dz = kdiv(ToReal(0.5),dz);
+  CCTK_REAL_VEC const p1o5040dx2 = kdiv(ToReal(0.000198412698412698412698412698413),kmul(dx,dx));
+  CCTK_REAL_VEC const p1o5040dy2 = kdiv(ToReal(0.000198412698412698412698412698413),kmul(dy,dy));
+  CCTK_REAL_VEC const p1o5040dz2 = kdiv(ToReal(0.000198412698412698412698412698413),kmul(dz,dz));
+  CCTK_REAL_VEC const p1o560dx = kdiv(ToReal(0.00178571428571428571428571428571),dx);
+  CCTK_REAL_VEC const p1o560dy = kdiv(ToReal(0.00178571428571428571428571428571),dy);
+  CCTK_REAL_VEC const p1o560dz = kdiv(ToReal(0.00178571428571428571428571428571),dz);
+  CCTK_REAL_VEC const p1o705600dxdy = kdiv(ToReal(1.41723356009070294784580498866e-6),kmul(dy,dx));
+  CCTK_REAL_VEC const p1o705600dxdz = kdiv(ToReal(1.41723356009070294784580498866e-6),kmul(dz,dx));
+  CCTK_REAL_VEC const p1o705600dydz = kdiv(ToReal(1.41723356009070294784580498866e-6),kmul(dz,dy));
+  CCTK_REAL_VEC const p1o840dx = kdiv(ToReal(0.00119047619047619047619047619048),dx);
+  CCTK_REAL_VEC const p1o840dy = kdiv(ToReal(0.00119047619047619047619047619048),dy);
+  CCTK_REAL_VEC const p1o840dz = kdiv(ToReal(0.00119047619047619047619047619048),dz);
+  CCTK_REAL_VEC const p1odx = kdiv(ToReal(1),dx);
+  CCTK_REAL_VEC const p1ody = kdiv(ToReal(1),dy);
+  CCTK_REAL_VEC const p1odz = kdiv(ToReal(1),dz);
+  CCTK_REAL_VEC const pm1o2dx = kdiv(ToReal(-0.5),dx);
+  CCTK_REAL_VEC const pm1o2dy = kdiv(ToReal(-0.5),dy);
+  CCTK_REAL_VEC const pm1o2dz = kdiv(ToReal(-0.5),dz);
   
   /* Assign local copies of arrays functions */
   
@@ -114,7 +118,7 @@ static void ML_BSSN_Host_convertFromADMBaseGamma_Body(cGH const * restrict const
   #pragma omp parallel
   LC_LOOP3VEC(ML_BSSN_Host_convertFromADMBaseGamma,
     i,j,k, imin[0],imin[1],imin[2], imax[0],imax[1],imax[2],
-    cctk_lsh[0],cctk_lsh[1],cctk_lsh[2],
+    cctk_ash[0],cctk_ash[1],cctk_ash[2],
     CCTK_REAL_VEC_SIZE)
   {
     ptrdiff_t const index = di*i + dj*j + dk*k;
@@ -193,22 +197,22 @@ static void ML_BSSN_Host_convertFromADMBaseGamma_Body(cGH const * restrict const
     CCTK_REAL_VEC detgt = ToReal(1);
     
     CCTK_REAL_VEC gtu11 = 
-      kmul(INV(detgt),kmsub(gt22L,gt33L,SQR(gt23L)));
+      kdiv(kmsub(gt22L,gt33L,kmul(gt23L,gt23L)),detgt);
     
     CCTK_REAL_VEC gtu12 = 
-      kmul(INV(detgt),kmsub(gt13L,gt23L,kmul(gt12L,gt33L)));
+      kdiv(kmsub(gt13L,gt23L,kmul(gt12L,gt33L)),detgt);
     
     CCTK_REAL_VEC gtu13 = 
-      kmul(INV(detgt),kmsub(gt12L,gt23L,kmul(gt13L,gt22L)));
+      kdiv(kmsub(gt12L,gt23L,kmul(gt13L,gt22L)),detgt);
     
     CCTK_REAL_VEC gtu22 = 
-      kmul(INV(detgt),kmsub(gt11L,gt33L,SQR(gt13L)));
+      kdiv(kmsub(gt11L,gt33L,kmul(gt13L,gt13L)),detgt);
     
     CCTK_REAL_VEC gtu23 = 
-      kmul(INV(detgt),kmsub(gt12L,gt13L,kmul(gt11L,gt23L)));
+      kdiv(kmsub(gt12L,gt13L,kmul(gt11L,gt23L)),detgt);
     
     CCTK_REAL_VEC gtu33 = 
-      kmul(INV(detgt),kmsub(gt11L,gt22L,SQR(gt12L)));
+      kdiv(kmsub(gt11L,gt22L,kmul(gt12L,gt12L)),detgt);
     
     CCTK_REAL_VEC Gt111 = 
       kmul(ToReal(0.5),kmadd(gtu11,PDstandardNth1gt11,knmsub(gtu12,PDstandardNth2gt11,kmsub(kmadd(gtu12,PDstandardNth1gt12,kmul(gtu13,PDstandardNth1gt13)),ToReal(2),kmul(gtu13,PDstandardNth3gt11)))));
@@ -274,7 +278,7 @@ static void ML_BSSN_Host_convertFromADMBaseGamma_Body(cGH const * restrict const
       kmadd(Gt311,gtu11,kmadd(Gt322,gtu22,kmadd(Gt333,gtu33,kmul(kmadd(Gt312,gtu12,kmadd(Gt313,gtu13,kmul(Gt323,gtu23))),ToReal(2)))));
     
     CCTK_REAL_VEC AL = IfThen(LapseACoeff != 
-      0,kneg(kmul(INV(ToReal(harmonicF)),kmul(kpow(alphaL,-harmonicN),knmsub(kmadd(beta1L,PDupwindNthAnti1alpha,kmadd(beta2L,PDupwindNthAnti2alpha,kmadd(beta3L,PDupwindNthAnti3alpha,kmadd(PDupwindNthSymm1alpha,kfabs(beta1L),kmadd(PDupwindNthSymm2alpha,kfabs(beta2L),kmul(PDupwindNthSymm3alpha,kfabs(beta3L))))))),ToReal(LapseAdvectionCoeff),dtalpL)))),ToReal(0));
+      0,kneg(kmul(kmul(kpow(alphaL,-harmonicN),knmsub(kmadd(beta1L,PDupwindNthAnti1alpha,kmadd(beta2L,PDupwindNthAnti2alpha,kmadd(beta3L,PDupwindNthAnti3alpha,kmadd(PDupwindNthSymm1alpha,kfabs(beta1L),kmadd(PDupwindNthSymm2alpha,kfabs(beta2L),kmul(PDupwindNthSymm3alpha,kfabs(beta3L))))))),ToReal(LapseAdvectionCoeff),dtalpL)),ToReal(ScalarINV(harmonicF)))),ToReal(0));
     
     CCTK_REAL_VEC theta = ToReal(1);
     
@@ -285,13 +289,13 @@ static void ML_BSSN_Host_convertFromADMBaseGamma_Body(cGH const * restrict const
     if (ShiftBCoeff*ShiftGammaCoeff != 0)
     {
       B1L = 
-        kmul(INV(kmul(theta,ToReal(ShiftGammaCoeff))),knmsub(kmadd(beta1L,PDupwindNthAnti1beta1,kmadd(beta2L,PDupwindNthAnti2beta1,kmadd(beta3L,PDupwindNthAnti3beta1,kmadd(PDupwindNthSymm1beta1,kfabs(beta1L),kmadd(PDupwindNthSymm2beta1,kfabs(beta2L),kmul(PDupwindNthSymm3beta1,kfabs(beta3L))))))),ToReal(ShiftAdvectionCoeff),dtbetaxL));
+        kdiv(knmsub(kmadd(beta1L,PDupwindNthAnti1beta1,kmadd(beta2L,PDupwindNthAnti2beta1,kmadd(beta3L,PDupwindNthAnti3beta1,kmadd(PDupwindNthSymm1beta1,kfabs(beta1L),kmadd(PDupwindNthSymm2beta1,kfabs(beta2L),kmul(PDupwindNthSymm3beta1,kfabs(beta3L))))))),ToReal(ShiftAdvectionCoeff),dtbetaxL),kmul(ToReal(ShiftGammaCoeff),theta));
       
       B2L = 
-        kmul(INV(kmul(theta,ToReal(ShiftGammaCoeff))),knmsub(kmadd(beta1L,PDupwindNthAnti1beta2,kmadd(beta2L,PDupwindNthAnti2beta2,kmadd(beta3L,PDupwindNthAnti3beta2,kmadd(PDupwindNthSymm1beta2,kfabs(beta1L),kmadd(PDupwindNthSymm2beta2,kfabs(beta2L),kmul(PDupwindNthSymm3beta2,kfabs(beta3L))))))),ToReal(ShiftAdvectionCoeff),dtbetayL));
+        kdiv(knmsub(kmadd(beta1L,PDupwindNthAnti1beta2,kmadd(beta2L,PDupwindNthAnti2beta2,kmadd(beta3L,PDupwindNthAnti3beta2,kmadd(PDupwindNthSymm1beta2,kfabs(beta1L),kmadd(PDupwindNthSymm2beta2,kfabs(beta2L),kmul(PDupwindNthSymm3beta2,kfabs(beta3L))))))),ToReal(ShiftAdvectionCoeff),dtbetayL),kmul(ToReal(ShiftGammaCoeff),theta));
       
       B3L = 
-        kmul(INV(kmul(theta,ToReal(ShiftGammaCoeff))),knmsub(kmadd(beta1L,PDupwindNthAnti1beta3,kmadd(beta2L,PDupwindNthAnti2beta3,kmadd(beta3L,PDupwindNthAnti3beta3,kmadd(PDupwindNthSymm1beta3,kfabs(beta1L),kmadd(PDupwindNthSymm2beta3,kfabs(beta2L),kmul(PDupwindNthSymm3beta3,kfabs(beta3L))))))),ToReal(ShiftAdvectionCoeff),dtbetazL));
+        kdiv(knmsub(kmadd(beta1L,PDupwindNthAnti1beta3,kmadd(beta2L,PDupwindNthAnti2beta3,kmadd(beta3L,PDupwindNthAnti3beta3,kmadd(PDupwindNthSymm1beta3,kfabs(beta1L),kmadd(PDupwindNthSymm2beta3,kfabs(beta2L),kmul(PDupwindNthSymm3beta3,kfabs(beta3L))))))),ToReal(ShiftAdvectionCoeff),dtbetazL),kmul(ToReal(ShiftGammaCoeff),theta));
     }
     else
     {

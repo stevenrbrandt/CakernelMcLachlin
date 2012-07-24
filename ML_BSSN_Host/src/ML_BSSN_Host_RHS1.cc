@@ -18,10 +18,14 @@
 
 /* Define macros used in calculations */
 #define INITVALUE (42)
-#define QAD(x) (SQR(SQR(x)))
+#define ScalarINV(x) ((CCTK_REAL)1.0 / (x))
+#define ScalarSQR(x) ((x) * (x))
+#define ScalarCUB(x) ((x) * ScalarSQR(x))
+#define ScalarQAD(x) (ScalarSQR(ScalarSQR(x)))
 #define INV(x) (kdiv(ToReal(1.0),x))
 #define SQR(x) (kmul(x,x))
 #define CUB(x) (kmul(x,SQR(x)))
+#define QAD(x) (SQR(SQR(x)))
 
 extern "C" void ML_BSSN_Host_RHS1_SelectBCs(CCTK_ARGUMENTS)
 {
@@ -89,33 +93,33 @@ static void ML_BSSN_Host_RHS1_Body(cGH const * restrict const cctkGH, int const 
   CCTK_REAL_VEC const hdzi = kmul(ToReal(0.5), dzi);
   
   /* Initialize predefined quantities */
-  CCTK_REAL_VEC const p1o1024dx = kmul(INV(dx),ToReal(0.0009765625));
-  CCTK_REAL_VEC const p1o1024dy = kmul(INV(dy),ToReal(0.0009765625));
-  CCTK_REAL_VEC const p1o1024dz = kmul(INV(dz),ToReal(0.0009765625));
-  CCTK_REAL_VEC const p1o1680dx = kmul(INV(dx),ToReal(0.000595238095238095238095238095238));
-  CCTK_REAL_VEC const p1o1680dy = kmul(INV(dy),ToReal(0.000595238095238095238095238095238));
-  CCTK_REAL_VEC const p1o1680dz = kmul(INV(dz),ToReal(0.000595238095238095238095238095238));
-  CCTK_REAL_VEC const p1o2dx = kmul(INV(dx),ToReal(0.5));
-  CCTK_REAL_VEC const p1o2dy = kmul(INV(dy),ToReal(0.5));
-  CCTK_REAL_VEC const p1o2dz = kmul(INV(dz),ToReal(0.5));
-  CCTK_REAL_VEC const p1o5040dx2 = kmul(INV(SQR(dx)),ToReal(0.000198412698412698412698412698413));
-  CCTK_REAL_VEC const p1o5040dy2 = kmul(INV(SQR(dy)),ToReal(0.000198412698412698412698412698413));
-  CCTK_REAL_VEC const p1o5040dz2 = kmul(INV(SQR(dz)),ToReal(0.000198412698412698412698412698413));
-  CCTK_REAL_VEC const p1o560dx = kmul(INV(dx),ToReal(0.00178571428571428571428571428571));
-  CCTK_REAL_VEC const p1o560dy = kmul(INV(dy),ToReal(0.00178571428571428571428571428571));
-  CCTK_REAL_VEC const p1o560dz = kmul(INV(dz),ToReal(0.00178571428571428571428571428571));
-  CCTK_REAL_VEC const p1o705600dxdy = kmul(INV(kmul(dx,dy)),ToReal(1.41723356009070294784580498866e-6));
-  CCTK_REAL_VEC const p1o705600dxdz = kmul(INV(kmul(dx,dz)),ToReal(1.41723356009070294784580498866e-6));
-  CCTK_REAL_VEC const p1o705600dydz = kmul(INV(kmul(dy,dz)),ToReal(1.41723356009070294784580498866e-6));
-  CCTK_REAL_VEC const p1o840dx = kmul(INV(dx),ToReal(0.00119047619047619047619047619048));
-  CCTK_REAL_VEC const p1o840dy = kmul(INV(dy),ToReal(0.00119047619047619047619047619048));
-  CCTK_REAL_VEC const p1o840dz = kmul(INV(dz),ToReal(0.00119047619047619047619047619048));
-  CCTK_REAL_VEC const p1odx = INV(dx);
-  CCTK_REAL_VEC const p1ody = INV(dy);
-  CCTK_REAL_VEC const p1odz = INV(dz);
-  CCTK_REAL_VEC const pm1o2dx = kmul(INV(dx),ToReal(-0.5));
-  CCTK_REAL_VEC const pm1o2dy = kmul(INV(dy),ToReal(-0.5));
-  CCTK_REAL_VEC const pm1o2dz = kmul(INV(dz),ToReal(-0.5));
+  CCTK_REAL_VEC const p1o1024dx = kdiv(ToReal(0.0009765625),dx);
+  CCTK_REAL_VEC const p1o1024dy = kdiv(ToReal(0.0009765625),dy);
+  CCTK_REAL_VEC const p1o1024dz = kdiv(ToReal(0.0009765625),dz);
+  CCTK_REAL_VEC const p1o1680dx = kdiv(ToReal(0.000595238095238095238095238095238),dx);
+  CCTK_REAL_VEC const p1o1680dy = kdiv(ToReal(0.000595238095238095238095238095238),dy);
+  CCTK_REAL_VEC const p1o1680dz = kdiv(ToReal(0.000595238095238095238095238095238),dz);
+  CCTK_REAL_VEC const p1o2dx = kdiv(ToReal(0.5),dx);
+  CCTK_REAL_VEC const p1o2dy = kdiv(ToReal(0.5),dy);
+  CCTK_REAL_VEC const p1o2dz = kdiv(ToReal(0.5),dz);
+  CCTK_REAL_VEC const p1o5040dx2 = kdiv(ToReal(0.000198412698412698412698412698413),kmul(dx,dx));
+  CCTK_REAL_VEC const p1o5040dy2 = kdiv(ToReal(0.000198412698412698412698412698413),kmul(dy,dy));
+  CCTK_REAL_VEC const p1o5040dz2 = kdiv(ToReal(0.000198412698412698412698412698413),kmul(dz,dz));
+  CCTK_REAL_VEC const p1o560dx = kdiv(ToReal(0.00178571428571428571428571428571),dx);
+  CCTK_REAL_VEC const p1o560dy = kdiv(ToReal(0.00178571428571428571428571428571),dy);
+  CCTK_REAL_VEC const p1o560dz = kdiv(ToReal(0.00178571428571428571428571428571),dz);
+  CCTK_REAL_VEC const p1o705600dxdy = kdiv(ToReal(1.41723356009070294784580498866e-6),kmul(dy,dx));
+  CCTK_REAL_VEC const p1o705600dxdz = kdiv(ToReal(1.41723356009070294784580498866e-6),kmul(dz,dx));
+  CCTK_REAL_VEC const p1o705600dydz = kdiv(ToReal(1.41723356009070294784580498866e-6),kmul(dz,dy));
+  CCTK_REAL_VEC const p1o840dx = kdiv(ToReal(0.00119047619047619047619047619048),dx);
+  CCTK_REAL_VEC const p1o840dy = kdiv(ToReal(0.00119047619047619047619047619048),dy);
+  CCTK_REAL_VEC const p1o840dz = kdiv(ToReal(0.00119047619047619047619047619048),dz);
+  CCTK_REAL_VEC const p1odx = kdiv(ToReal(1),dx);
+  CCTK_REAL_VEC const p1ody = kdiv(ToReal(1),dy);
+  CCTK_REAL_VEC const p1odz = kdiv(ToReal(1),dz);
+  CCTK_REAL_VEC const pm1o2dx = kdiv(ToReal(-0.5),dx);
+  CCTK_REAL_VEC const pm1o2dy = kdiv(ToReal(-0.5),dy);
+  CCTK_REAL_VEC const pm1o2dz = kdiv(ToReal(-0.5),dz);
   
   /* Assign local copies of arrays functions */
   
@@ -129,7 +133,7 @@ static void ML_BSSN_Host_RHS1_Body(cGH const * restrict const cctkGH, int const 
   #pragma omp parallel
   LC_LOOP3VEC(ML_BSSN_Host_RHS1,
     i,j,k, imin[0],imin[1],imin[2], imax[0],imax[1],imax[2],
-    cctk_lsh[0],cctk_lsh[1],cctk_lsh[2],
+    cctk_ash[0],cctk_ash[1],cctk_ash[2],
     CCTK_REAL_VEC_SIZE)
   {
     ptrdiff_t const index = di*i + dj*j + dk*k;
@@ -237,22 +241,22 @@ static void ML_BSSN_Host_RHS1_Body(cGH const * restrict const cctkGH, int const 
     CCTK_REAL_VEC detgt = ToReal(1);
     
     CCTK_REAL_VEC gtu11 = 
-      kmul(INV(detgt),kmsub(gt22L,gt33L,SQR(gt23L)));
+      kdiv(kmsub(gt22L,gt33L,kmul(gt23L,gt23L)),detgt);
     
     CCTK_REAL_VEC gtu12 = 
-      kmul(INV(detgt),kmsub(gt13L,gt23L,kmul(gt12L,gt33L)));
+      kdiv(kmsub(gt13L,gt23L,kmul(gt12L,gt33L)),detgt);
     
     CCTK_REAL_VEC gtu13 = 
-      kmul(INV(detgt),kmsub(gt12L,gt23L,kmul(gt13L,gt22L)));
+      kdiv(kmsub(gt12L,gt23L,kmul(gt13L,gt22L)),detgt);
     
     CCTK_REAL_VEC gtu22 = 
-      kmul(INV(detgt),kmsub(gt11L,gt33L,SQR(gt13L)));
+      kdiv(kmsub(gt11L,gt33L,kmul(gt13L,gt13L)),detgt);
     
     CCTK_REAL_VEC gtu23 = 
-      kmul(INV(detgt),kmsub(gt12L,gt13L,kmul(gt11L,gt23L)));
+      kdiv(kmsub(gt12L,gt13L,kmul(gt11L,gt23L)),detgt);
     
     CCTK_REAL_VEC gtu33 = 
-      kmul(INV(detgt),kmsub(gt11L,gt22L,SQR(gt12L)));
+      kdiv(kmsub(gt11L,gt22L,kmul(gt12L,gt12L)),detgt);
     
     CCTK_REAL_VEC Gtl111 = kmul(PDstandardNth1gt11,ToReal(0.5));
     
@@ -363,7 +367,7 @@ static void ML_BSSN_Host_RHS1_Body(cGH const * restrict const cctkGH, int const 
       kmadd(Gt311,gtu11,kmadd(Gt322,gtu22,kmadd(Gt333,gtu33,kmul(kmadd(Gt312,gtu12,kmadd(Gt313,gtu13,kmul(Gt323,gtu23))),ToReal(2)))));
     
     CCTK_REAL_VEC fac1 = 
-      IfThen(conformalMethod,kmul(INV(phiL),ToReal(-0.5)),ToReal(1));
+      IfThen(conformalMethod,kdiv(ToReal(-0.5),phiL),ToReal(1));
     
     CCTK_REAL_VEC cdphi1 = kmul(fac1,PDstandardNth1phi);
     
@@ -417,9 +421,9 @@ static void ML_BSSN_Host_RHS1_Body(cGH const * restrict const cctkGH, int const 
       kmadd(Atm31,gtu13,kmadd(Atm32,gtu23,kmul(Atm33,gtu33)));
     
     CCTK_REAL_VEC e4phi = 
-      IfThen(conformalMethod,INV(SQR(phiL)),kexp(kmul(phiL,ToReal(4))));
+      IfThen(conformalMethod,kdiv(ToReal(1),kmul(phiL,phiL)),kexp(kmul(phiL,ToReal(4))));
     
-    CCTK_REAL_VEC em4phi = INV(e4phi);
+    CCTK_REAL_VEC em4phi = kdiv(ToReal(1),e4phi);
     
     CCTK_REAL_VEC phirhsL = 
       IfThen(conformalMethod,kmul(phiL,kmadd(kadd(PDstandardNth1beta1,kadd(PDstandardNth2beta2,PDstandardNth3beta3)),ToReal(-0.333333333333333333333333333333),kmul(alphaL,kmul(trKL,ToReal(0.333333333333333333333333333333))))),kmadd(alphaL,kmul(trKL,ToReal(-0.166666666666666666666666666667)),kmul(kadd(PDstandardNth1beta1,kadd(PDstandardNth2beta2,PDstandardNth3beta3)),ToReal(0.166666666666666666666666666667))));
@@ -458,12 +462,13 @@ static void ML_BSSN_Host_RHS1_Body(cGH const * restrict const cctkGH, int const 
     CCTK_REAL_VEC Xt3rhsL = dotXt3;
     
     CCTK_REAL_VEC dottrK = 
-      kmsub(alphaL,kadd(SQR(Atm11),kadd(SQR(Atm22),kadd(SQR(Atm33),kmadd(SQR(trKL),ToReal(0.333333333333333333333333333333),kmul(kmadd(Atm12,Atm21,kmadd(Atm13,Atm31,kmul(Atm23,Atm32))),ToReal(2)))))),kmul(em4phi,kmadd(gtu11,PDstandardNth11alpha,kmadd(gtu22,PDstandardNth22alpha,knmsub(PDstandardNth3alpha,Xtn3,kmadd(kmadd(gtu12,PDstandardNth12alpha,kmadd(gtu13,kmadd(cdphi1,PDstandardNth3alpha,PDstandardNth13alpha),kmul(gtu23,kmadd(cdphi2,PDstandardNth3alpha,PDstandardNth23alpha)))),ToReal(2),kmadd(PDstandardNth1alpha,kmsub(kmadd(cdphi1,gtu11,kmadd(cdphi2,gtu12,kmul(cdphi3,gtu13))),ToReal(2),Xtn1),kmadd(PDstandardNth2alpha,kmsub(kmadd(cdphi1,gtu12,kmadd(cdphi2,gtu22,kmul(cdphi3,gtu23))),ToReal(2),Xtn2),kmul(gtu33,kmadd(cdphi3,kmul(PDstandardNth3alpha,ToReal(2)),PDstandardNth33alpha))))))))));
+      kmsub(alphaL,kmadd(Atm11,Atm11,kmadd(Atm22,Atm22,kmadd(Atm33,Atm33,kmadd(kmul(trKL,trKL),ToReal(0.333333333333333333333333333333),kmul(kmadd(Atm12,Atm21,kmadd(Atm13,Atm31,kmul(Atm23,Atm32))),ToReal(2)))))),kmul(em4phi,kmadd(gtu11,PDstandardNth11alpha,kmadd(gtu22,PDstandardNth22alpha,knmsub(PDstandardNth3alpha,Xtn3,kmadd(kmadd(gtu12,PDstandardNth12alpha,kmadd(gtu13,kmadd(cdphi1,PDstandardNth3alpha,PDstandardNth13alpha),kmul(gtu23,kmadd(cdphi2,PDstandardNth3alpha,PDstandardNth23alpha)))),ToReal(2),kmadd(PDstandardNth1alpha,kmsub(kmadd(cdphi1,gtu11,kmadd(cdphi2,gtu12,kmul(cdphi3,gtu13))),ToReal(2),Xtn1),kmadd(PDstandardNth2alpha,kmsub(kmadd(cdphi1,gtu12,kmadd(cdphi2,gtu22,kmul(cdphi3,gtu23))),ToReal(2),Xtn2),kmul(gtu33,kmadd(cdphi3,kmul(PDstandardNth3alpha,ToReal(2)),PDstandardNth33alpha))))))))));
     
     CCTK_REAL_VEC trKrhsL = dottrK;
     
     CCTK_REAL_VEC alpharhsL = 
-      kneg(kmul(kpow(alphaL,harmonicN),kmul(ToReal(harmonicF),kmadd(AL,ToReal(LapseACoeff),kmul(kmadd(kadd(alphaL,ToReal(-1)),ToReal(AlphaDriver),trKL),ksub(ToReal(1),ToReal(LapseACoeff)))))));
+      kneg(kmul(kpow(alphaL,harmonicN),kmul(ToReal(harmonicF),kmadd(AL,ToReal(LapseACoeff),kmul(kmadd(kadd(alphaL,ToReal(-1)),ToReal(AlphaDriver),trKL),ToReal(1 
+      - LapseACoeff))))));
     
     CCTK_REAL_VEC ArhsL = 
       kmul(knmsub(AL,ToReal(AlphaDriver),dottrK),ToReal(LapseACoeff));
@@ -479,24 +484,27 @@ static void ML_BSSN_Host_RHS1_Body(cGH const * restrict const cctkGH, int const 
     if (harmonicShift)
     {
       beta1rhsL = 
-        kmul(alphaL,kmul(phiL,kmul(ToReal(0.5),kmadd(alphaL,kmadd(kmadd(gtu12,kmadd(phiL,kmul(gtu23,PDstandardNth3gt22),PDstandardNth2phi),kmul(gtu13,PDstandardNth3phi)),ToReal(2),kmadd(gtu11,kmadd(phiL,kmadd(gtu12,PDstandardNth2gt11,kmul(gtu13,PDstandardNth3gt11)),kmul(kmadd(phiL,kmul(gtu23,PDstandardNth2gt13),PDstandardNth1phi),ToReal(2))),kmul(phiL,kmadd(gtu33,kmsub(gtu13,PDstandardNth3gt33,kmul(gtu12,PDstandardNth2gt33)),kmul(kmadd(gtu13,kmul(gtu22,PDstandardNth2gt23),kmadd(gtu11,kmul(gtu33,PDstandardNth3gt13),kmul(PDstandardNth1gt22,SQR(gtu12)))),ToReal(2)))))),kmul(phiL,kmadd(kmadd(gtu12,PDstandardNth2alpha,kmul(gtu13,PDstandardNth3alpha)),ToReal(-2),kmadd(gtu11,kmadd(kmadd(alphaL,kmul(gtu23,PDstandardNth1gt23),PDstandardNth1alpha),ToReal(-2),kmul(alphaL,kmsub(kmadd(gtu12,PDstandardNth1gt12,kmadd(gtu13,PDstandardNth1gt13,kmadd(gtu22,PDstandardNth2gt12,kmul(gtu23,PDstandardNth3gt12)))),ToReal(2),kmul(gtu22,PDstandardNth1gt22)))),kmul(alphaL,kmadd(PDstandardNth1gt11,SQR(gtu11),kmadd(PDstandardNth1gt33,kmul(SQR(gtu13),ToReal(2)),kmadd(gtu13,kmsub(gtu23,kmul(PDstandardNth2gt33,ToReal(2)),kmul(gtu22,PDstandardNth3gt22)),kmadd(gtu33,kmsub(gtu12,kmul(PDstandardNth3gt23,ToReal(2)),kmul(gtu11,PDstandardNth1gt33)),kmul(gtu12,kmadd(gtu22,PDstandardNth2gt22,kmul(gtu13,kmul(PDstandardNth1gt23,ToReal(4)))))))))))))))));
+        kmul(alphaL,kmul(phiL,kmul(ToReal(0.5),kmadd(alphaL,kmadd(kmadd(gtu12,kmadd(phiL,kmul(gtu23,PDstandardNth3gt22),PDstandardNth2phi),kmul(gtu13,PDstandardNth3phi)),ToReal(2),kmadd(gtu11,kmadd(phiL,kmadd(gtu12,PDstandardNth2gt11,kmul(gtu13,PDstandardNth3gt11)),kmul(kmadd(phiL,kmul(gtu23,PDstandardNth2gt13),PDstandardNth1phi),ToReal(2))),kmul(phiL,kmadd(gtu33,kmsub(gtu13,PDstandardNth3gt33,kmul(gtu12,PDstandardNth2gt33)),kmul(kmadd(gtu13,kmul(gtu22,PDstandardNth2gt23),kmadd(gtu11,kmul(gtu33,PDstandardNth3gt13),kmul(PDstandardNth1gt22,kmul(gtu12,gtu12)))),ToReal(2)))))),kmul(phiL,kmadd(kmadd(gtu12,PDstandardNth2alpha,kmul(gtu13,PDstandardNth3alpha)),ToReal(-2),kmadd(gtu11,kmadd(kmadd(alphaL,kmul(gtu23,PDstandardNth1gt23),PDstandardNth1alpha),ToReal(-2),kmul(alphaL,kmsub(kmadd(gtu12,PDstandardNth1gt12,kmadd(gtu13,PDstandardNth1gt13,kmadd(gtu22,PDstandardNth2gt12,kmul(gtu23,PDstandardNth3gt12)))),ToReal(2),kmul(gtu22,PDstandardNth1gt22)))),kmul(alphaL,kmadd(PDstandardNth1gt11,kmul(gtu11,gtu11),kmadd(PDstandardNth1gt33,kmul(kmul(gtu13,gtu13),ToReal(2)),kmadd(gtu13,kmsub(gtu23,kmul(PDstandardNth2gt33,ToReal(2)),kmul(gtu22,PDstandardNth3gt22)),kmadd(gtu33,kmsub(gtu12,kmul(PDstandardNth3gt23,ToReal(2)),kmul(gtu11,PDstandardNth1gt33)),kmul(gtu12,kmadd(gtu22,PDstandardNth2gt22,kmul(gtu13,kmul(PDstandardNth1gt23,ToReal(4)))))))))))))))));
       
       beta2rhsL = 
-        kmul(alphaL,kmul(phiL,kmul(ToReal(0.5),kmadd(alphaL,kmadd(kmadd(gtu12,PDstandardNth1phi,kmadd(gtu22,kmadd(phiL,kmadd(gtu23,PDstandardNth2gt23,kmul(gtu13,PDstandardNth3gt12)),PDstandardNth2phi),kmul(gtu23,PDstandardNth3phi))),ToReal(2),kmul(phiL,kmadd(gtu23,kmul(gtu33,PDstandardNth3gt33),kmadd(PDstandardNth2gt22,SQR(gtu22),kmadd(gtu22,kmadd(gtu23,PDstandardNth3gt22,kmsub(gtu13,kmul(PDstandardNth2gt13,ToReal(-2)),kmul(gtu11,PDstandardNth2gt11))),kmul(gtu12,kmul(gtu13,kmul(PDstandardNth3gt11,ToReal(2))))))))),kmul(phiL,kmadd(gtu23,kmsub(PDstandardNth3alpha,ToReal(-2),kmul(alphaL,kmul(gtu11,PDstandardNth3gt11))),kmadd(alphaL,kmul(kmadd(gtu11,kmadd(gtu22,PDstandardNth1gt12,kmul(gtu23,PDstandardNth1gt13)),kmadd(gtu13,kmadd(gtu22,PDstandardNth1gt23,kmul(gtu23,PDstandardNth1gt33)),kmadd(gtu12,kmadd(gtu22,PDstandardNth2gt12,kmul(gtu33,PDstandardNth3gt13)),kmadd(PDstandardNth2gt11,SQR(gtu12),kmul(PDstandardNth2gt33,SQR(gtu23)))))),ToReal(2)),kmadd(gtu22,kmadd(PDstandardNth2alpha,ToReal(-2),kmul(alphaL,kmul(gtu33,kmsub(PDstandardNth3gt23,ToReal(2),PDstandardNth2gt33)))),kmul(gtu12,kmadd(PDstandardNth1alpha,ToReal(-2),kmul(alphaL,kmadd(gtu11,PDstandardNth1gt11,kmadd(gtu22,PDstandardNth1gt22,kmsub(gtu23,kmul(PDstandardNth2gt13,ToReal(4)),kmul(gtu33,PDstandardNth1gt33)))))))))))))));
+        kmul(alphaL,kmul(phiL,kmul(ToReal(0.5),kmadd(alphaL,kmadd(kmadd(gtu12,PDstandardNth1phi,kmadd(gtu22,kmadd(phiL,kmadd(gtu23,PDstandardNth2gt23,kmul(gtu13,PDstandardNth3gt12)),PDstandardNth2phi),kmul(gtu23,PDstandardNth3phi))),ToReal(2),kmul(phiL,kmadd(gtu23,kmul(gtu33,PDstandardNth3gt33),kmadd(PDstandardNth2gt22,kmul(gtu22,gtu22),kmadd(gtu22,kmadd(gtu23,PDstandardNth3gt22,kmsub(gtu13,kmul(PDstandardNth2gt13,ToReal(-2)),kmul(gtu11,PDstandardNth2gt11))),kmul(gtu12,kmul(gtu13,kmul(PDstandardNth3gt11,ToReal(2))))))))),kmul(phiL,kmadd(gtu23,kmsub(PDstandardNth3alpha,ToReal(-2),kmul(alphaL,kmul(gtu11,PDstandardNth3gt11))),kmadd(alphaL,kmul(kmadd(gtu11,kmadd(gtu22,PDstandardNth1gt12,kmul(gtu23,PDstandardNth1gt13)),kmadd(gtu13,kmadd(gtu22,PDstandardNth1gt23,kmul(gtu23,PDstandardNth1gt33)),kmadd(gtu12,kmadd(gtu22,PDstandardNth2gt12,kmul(gtu33,PDstandardNth3gt13)),kmadd(PDstandardNth2gt11,kmul(gtu12,gtu12),kmul(PDstandardNth2gt33,kmul(gtu23,gtu23)))))),ToReal(2)),kmadd(gtu22,kmadd(PDstandardNth2alpha,ToReal(-2),kmul(alphaL,kmul(gtu33,kmsub(PDstandardNth3gt23,ToReal(2),PDstandardNth2gt33)))),kmul(gtu12,kmadd(PDstandardNth1alpha,ToReal(-2),kmul(alphaL,kmadd(gtu11,PDstandardNth1gt11,kmadd(gtu22,PDstandardNth1gt22,kmsub(gtu23,kmul(PDstandardNth2gt13,ToReal(4)),kmul(gtu33,PDstandardNth1gt33)))))))))))))));
       
       beta3rhsL = 
-        kmul(alphaL,kmul(phiL,kmul(ToReal(0.5),kmadd(alphaL,kmul(kmadd(gtu23,PDstandardNth2phi,kmadd(gtu13,kmadd(phiL,kmadd(gtu12,PDstandardNth2gt11,kmadd(gtu22,PDstandardNth2gt12,kmul(gtu33,PDstandardNth3gt13))),PDstandardNth1phi),kmadd(gtu33,PDstandardNth3phi,kmul(phiL,kmadd(gtu33,kmadd(gtu22,PDstandardNth2gt23,kmul(gtu23,PDstandardNth3gt23)),kmul(PDstandardNth3gt22,SQR(gtu23))))))),ToReal(2)),kmul(phiL,kmadd(gtu23,kmadd(PDstandardNth2alpha,ToReal(-2),kmul(alphaL,kmadd(gtu22,PDstandardNth2gt22,kmsub(gtu33,PDstandardNth2gt33,kmul(gtu11,PDstandardNth2gt11))))),kmadd(gtu33,kmsub(kmadd(alphaL,kmul(gtu12,PDstandardNth3gt12),PDstandardNth3alpha),ToReal(-2),kmul(alphaL,kmadd(gtu22,PDstandardNth3gt22,kmul(gtu11,PDstandardNth3gt11)))),kmadd(alphaL,kmadd(PDstandardNth3gt33,SQR(gtu33),kmul(kmadd(gtu11,kmadd(gtu23,PDstandardNth1gt12,kmul(gtu33,PDstandardNth1gt13)),kmadd(gtu12,kmadd(gtu23,PDstandardNth1gt22,kmul(gtu33,kadd(PDstandardNth1gt23,PDstandardNth2gt13))),kmul(PDstandardNth3gt11,SQR(gtu13)))),ToReal(2))),kmul(gtu13,kmadd(PDstandardNth1alpha,ToReal(-2),kmul(alphaL,kmadd(gtu11,PDstandardNth1gt11,kmadd(gtu33,PDstandardNth1gt33,kmsub(gtu23,kmul(PDstandardNth3gt12,ToReal(4)),kmul(gtu22,PDstandardNth1gt22)))))))))))))));
+        kmul(alphaL,kmul(phiL,kmul(ToReal(0.5),kmadd(alphaL,kmul(kmadd(gtu23,PDstandardNth2phi,kmadd(gtu13,kmadd(phiL,kmadd(gtu12,PDstandardNth2gt11,kmadd(gtu22,PDstandardNth2gt12,kmul(gtu33,PDstandardNth3gt13))),PDstandardNth1phi),kmadd(gtu33,PDstandardNth3phi,kmul(phiL,kmadd(gtu33,kmadd(gtu22,PDstandardNth2gt23,kmul(gtu23,PDstandardNth3gt23)),kmul(PDstandardNth3gt22,kmul(gtu23,gtu23))))))),ToReal(2)),kmul(phiL,kmadd(gtu23,kmadd(PDstandardNth2alpha,ToReal(-2),kmul(alphaL,kmadd(gtu22,PDstandardNth2gt22,kmsub(gtu33,PDstandardNth2gt33,kmul(gtu11,PDstandardNth2gt11))))),kmadd(gtu33,kmsub(kmadd(alphaL,kmul(gtu12,PDstandardNth3gt12),PDstandardNth3alpha),ToReal(-2),kmul(alphaL,kmadd(gtu22,PDstandardNth3gt22,kmul(gtu11,PDstandardNth3gt11)))),kmadd(alphaL,kmadd(PDstandardNth3gt33,kmul(gtu33,gtu33),kmul(kmadd(gtu11,kmadd(gtu23,PDstandardNth1gt12,kmul(gtu33,PDstandardNth1gt13)),kmadd(gtu12,kmadd(gtu23,PDstandardNth1gt22,kmul(gtu33,kadd(PDstandardNth1gt23,PDstandardNth2gt13))),kmul(PDstandardNth3gt11,kmul(gtu13,gtu13)))),ToReal(2))),kmul(gtu13,kmadd(PDstandardNth1alpha,ToReal(-2),kmul(alphaL,kmadd(gtu11,PDstandardNth1gt11,kmadd(gtu33,PDstandardNth1gt33,kmsub(gtu23,kmul(PDstandardNth3gt12,ToReal(4)),kmul(gtu22,PDstandardNth1gt22)))))))))))))));
     }
     else
     {
       beta1rhsL = 
-        kmul(theta,kmul(kadd(Xt1L,kmadd(ksub(B1L,Xt1L),ToReal(ShiftBCoeff),kmul(beta1L,kmul(eta,kmul(ToReal(BetaDriver),kadd(ToReal(-1),ToReal(ShiftBCoeff))))))),ToReal(ShiftGammaCoeff)));
+        kmul(theta,kmul(kadd(Xt1L,kmadd(ksub(B1L,Xt1L),ToReal(ShiftBCoeff),kmul(beta1L,kmul(eta,ToReal(BetaDriver*(-1 
+        + ShiftBCoeff)))))),ToReal(ShiftGammaCoeff)));
       
       beta2rhsL = 
-        kmul(theta,kmul(kadd(Xt2L,kmadd(ksub(B2L,Xt2L),ToReal(ShiftBCoeff),kmul(beta2L,kmul(eta,kmul(ToReal(BetaDriver),kadd(ToReal(-1),ToReal(ShiftBCoeff))))))),ToReal(ShiftGammaCoeff)));
+        kmul(theta,kmul(kadd(Xt2L,kmadd(ksub(B2L,Xt2L),ToReal(ShiftBCoeff),kmul(beta2L,kmul(eta,ToReal(BetaDriver*(-1 
+        + ShiftBCoeff)))))),ToReal(ShiftGammaCoeff)));
       
       beta3rhsL = 
-        kmul(theta,kmul(kadd(Xt3L,kmadd(ksub(B3L,Xt3L),ToReal(ShiftBCoeff),kmul(beta3L,kmul(eta,kmul(ToReal(BetaDriver),kadd(ToReal(-1),ToReal(ShiftBCoeff))))))),ToReal(ShiftGammaCoeff)));
+        kmul(theta,kmul(kadd(Xt3L,kmadd(ksub(B3L,Xt3L),ToReal(ShiftBCoeff),kmul(beta3L,kmul(eta,ToReal(BetaDriver*(-1 
+        + ShiftBCoeff)))))),ToReal(ShiftGammaCoeff)));
     }
     
     CCTK_REAL_VEC B1rhsL = 

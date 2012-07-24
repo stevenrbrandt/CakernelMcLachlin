@@ -18,10 +18,14 @@
 
 /* Define macros used in calculations */
 #define INITVALUE (42)
-#define QAD(x) (SQR(SQR(x)))
+#define ScalarINV(x) ((CCTK_REAL)1.0 / (x))
+#define ScalarSQR(x) ((x) * (x))
+#define ScalarCUB(x) ((x) * ScalarSQR(x))
+#define ScalarQAD(x) (ScalarSQR(ScalarSQR(x)))
 #define INV(x) (kdiv(ToReal(1.0),x))
 #define SQR(x) (kmul(x,x))
 #define CUB(x) (kmul(x,SQR(x)))
+#define QAD(x) (SQR(SQR(x)))
 
 extern "C" void ML_BSSN_Host_RHSRadiativeBoundary_SelectBCs(CCTK_ARGUMENTS)
 {
@@ -92,33 +96,33 @@ static void ML_BSSN_Host_RHSRadiativeBoundary_Body(cGH const * restrict const cc
   CCTK_REAL_VEC const hdzi = kmul(ToReal(0.5), dzi);
   
   /* Initialize predefined quantities */
-  CCTK_REAL_VEC const p1o1024dx = kmul(INV(dx),ToReal(0.0009765625));
-  CCTK_REAL_VEC const p1o1024dy = kmul(INV(dy),ToReal(0.0009765625));
-  CCTK_REAL_VEC const p1o1024dz = kmul(INV(dz),ToReal(0.0009765625));
-  CCTK_REAL_VEC const p1o1680dx = kmul(INV(dx),ToReal(0.000595238095238095238095238095238));
-  CCTK_REAL_VEC const p1o1680dy = kmul(INV(dy),ToReal(0.000595238095238095238095238095238));
-  CCTK_REAL_VEC const p1o1680dz = kmul(INV(dz),ToReal(0.000595238095238095238095238095238));
-  CCTK_REAL_VEC const p1o2dx = kmul(INV(dx),ToReal(0.5));
-  CCTK_REAL_VEC const p1o2dy = kmul(INV(dy),ToReal(0.5));
-  CCTK_REAL_VEC const p1o2dz = kmul(INV(dz),ToReal(0.5));
-  CCTK_REAL_VEC const p1o5040dx2 = kmul(INV(SQR(dx)),ToReal(0.000198412698412698412698412698413));
-  CCTK_REAL_VEC const p1o5040dy2 = kmul(INV(SQR(dy)),ToReal(0.000198412698412698412698412698413));
-  CCTK_REAL_VEC const p1o5040dz2 = kmul(INV(SQR(dz)),ToReal(0.000198412698412698412698412698413));
-  CCTK_REAL_VEC const p1o560dx = kmul(INV(dx),ToReal(0.00178571428571428571428571428571));
-  CCTK_REAL_VEC const p1o560dy = kmul(INV(dy),ToReal(0.00178571428571428571428571428571));
-  CCTK_REAL_VEC const p1o560dz = kmul(INV(dz),ToReal(0.00178571428571428571428571428571));
-  CCTK_REAL_VEC const p1o705600dxdy = kmul(INV(kmul(dx,dy)),ToReal(1.41723356009070294784580498866e-6));
-  CCTK_REAL_VEC const p1o705600dxdz = kmul(INV(kmul(dx,dz)),ToReal(1.41723356009070294784580498866e-6));
-  CCTK_REAL_VEC const p1o705600dydz = kmul(INV(kmul(dy,dz)),ToReal(1.41723356009070294784580498866e-6));
-  CCTK_REAL_VEC const p1o840dx = kmul(INV(dx),ToReal(0.00119047619047619047619047619048));
-  CCTK_REAL_VEC const p1o840dy = kmul(INV(dy),ToReal(0.00119047619047619047619047619048));
-  CCTK_REAL_VEC const p1o840dz = kmul(INV(dz),ToReal(0.00119047619047619047619047619048));
-  CCTK_REAL_VEC const p1odx = INV(dx);
-  CCTK_REAL_VEC const p1ody = INV(dy);
-  CCTK_REAL_VEC const p1odz = INV(dz);
-  CCTK_REAL_VEC const pm1o2dx = kmul(INV(dx),ToReal(-0.5));
-  CCTK_REAL_VEC const pm1o2dy = kmul(INV(dy),ToReal(-0.5));
-  CCTK_REAL_VEC const pm1o2dz = kmul(INV(dz),ToReal(-0.5));
+  CCTK_REAL_VEC const p1o1024dx = kdiv(ToReal(0.0009765625),dx);
+  CCTK_REAL_VEC const p1o1024dy = kdiv(ToReal(0.0009765625),dy);
+  CCTK_REAL_VEC const p1o1024dz = kdiv(ToReal(0.0009765625),dz);
+  CCTK_REAL_VEC const p1o1680dx = kdiv(ToReal(0.000595238095238095238095238095238),dx);
+  CCTK_REAL_VEC const p1o1680dy = kdiv(ToReal(0.000595238095238095238095238095238),dy);
+  CCTK_REAL_VEC const p1o1680dz = kdiv(ToReal(0.000595238095238095238095238095238),dz);
+  CCTK_REAL_VEC const p1o2dx = kdiv(ToReal(0.5),dx);
+  CCTK_REAL_VEC const p1o2dy = kdiv(ToReal(0.5),dy);
+  CCTK_REAL_VEC const p1o2dz = kdiv(ToReal(0.5),dz);
+  CCTK_REAL_VEC const p1o5040dx2 = kdiv(ToReal(0.000198412698412698412698412698413),kmul(dx,dx));
+  CCTK_REAL_VEC const p1o5040dy2 = kdiv(ToReal(0.000198412698412698412698412698413),kmul(dy,dy));
+  CCTK_REAL_VEC const p1o5040dz2 = kdiv(ToReal(0.000198412698412698412698412698413),kmul(dz,dz));
+  CCTK_REAL_VEC const p1o560dx = kdiv(ToReal(0.00178571428571428571428571428571),dx);
+  CCTK_REAL_VEC const p1o560dy = kdiv(ToReal(0.00178571428571428571428571428571),dy);
+  CCTK_REAL_VEC const p1o560dz = kdiv(ToReal(0.00178571428571428571428571428571),dz);
+  CCTK_REAL_VEC const p1o705600dxdy = kdiv(ToReal(1.41723356009070294784580498866e-6),kmul(dy,dx));
+  CCTK_REAL_VEC const p1o705600dxdz = kdiv(ToReal(1.41723356009070294784580498866e-6),kmul(dz,dx));
+  CCTK_REAL_VEC const p1o705600dydz = kdiv(ToReal(1.41723356009070294784580498866e-6),kmul(dz,dy));
+  CCTK_REAL_VEC const p1o840dx = kdiv(ToReal(0.00119047619047619047619047619048),dx);
+  CCTK_REAL_VEC const p1o840dy = kdiv(ToReal(0.00119047619047619047619047619048),dy);
+  CCTK_REAL_VEC const p1o840dz = kdiv(ToReal(0.00119047619047619047619047619048),dz);
+  CCTK_REAL_VEC const p1odx = kdiv(ToReal(1),dx);
+  CCTK_REAL_VEC const p1ody = kdiv(ToReal(1),dy);
+  CCTK_REAL_VEC const p1odz = kdiv(ToReal(1),dz);
+  CCTK_REAL_VEC const pm1o2dx = kdiv(ToReal(-0.5),dx);
+  CCTK_REAL_VEC const pm1o2dy = kdiv(ToReal(-0.5),dy);
+  CCTK_REAL_VEC const pm1o2dz = kdiv(ToReal(-0.5),dz);
   
   /* Assign local copies of arrays functions */
   
@@ -132,7 +136,7 @@ static void ML_BSSN_Host_RHSRadiativeBoundary_Body(cGH const * restrict const cc
   #pragma omp parallel
   LC_LOOP3VEC(ML_BSSN_Host_RHSRadiativeBoundary,
     i,j,k, imin[0],imin[1],imin[2], imax[0],imax[1],imax[2],
-    cctk_lsh[0],cctk_lsh[1],cctk_lsh[2],
+    cctk_ash[0],cctk_ash[1],cctk_ash[2],
     CCTK_REAL_VEC_SIZE)
   {
     ptrdiff_t const index = di*i + dj*j + dk*k;
@@ -400,24 +404,24 @@ static void ML_BSSN_Host_RHSRadiativeBoundary_Body(cGH const * restrict const cc
     CCTK_REAL_VEC const PDonesidedMinus2nd3Xt3 = PDonesidedMinus2nd3(&Xt3[index]);
     
     /* Calculate temporaries and grid functions */
-    CCTK_REAL_VEC rn1 = kneg(kmul(xCopyL,INV(rCopyL)));
+    CCTK_REAL_VEC rn1 = kneg(kdiv(xCopyL,rCopyL));
     
-    CCTK_REAL_VEC rn2 = kneg(kmul(yCopyL,INV(rCopyL)));
+    CCTK_REAL_VEC rn2 = kneg(kdiv(yCopyL,rCopyL));
     
-    CCTK_REAL_VEC rn3 = kneg(kmul(zCopyL,INV(rCopyL)));
+    CCTK_REAL_VEC rn3 = kneg(kdiv(zCopyL,rCopyL));
     
     CCTK_REAL_VEC phi0 = IfThen(conformalMethod,ToReal(1),ToReal(0));
     
     CCTK_REAL_VEC v0 = ksqrt(ToReal(harmonicF));
     
     CCTK_REAL_VEC phirhsL = 
-      kmul(v0,kmul(INV(rCopyL),kadd(phi0,kmsub(rCopyL,kmadd(rn1,IfThen(normal[0] 
-      < 0,PDonesidedPlus2nd1phi,IfThen(normal[0] > 
+      kdiv(kmul(v0,kadd(phi0,kmsub(rCopyL,kmadd(rn1,IfThen(normal[0] < 
+      0,PDonesidedPlus2nd1phi,IfThen(normal[0] > 
       0,PDonesidedMinus2nd1phi,PDstandard2nd1phi)),kmadd(rn2,IfThen(normal[1] < 
       0,PDonesidedPlus2nd2phi,IfThen(normal[1] > 
       0,PDonesidedMinus2nd2phi,PDstandard2nd2phi)),kmul(rn3,IfThen(normal[2] < 
       0,PDonesidedPlus2nd3phi,IfThen(normal[2] > 
-      0,PDonesidedMinus2nd3phi,PDstandard2nd3phi))))),phiL))));
+      0,PDonesidedMinus2nd3phi,PDstandard2nd3phi))))),phiL))),rCopyL);
     
     CCTK_REAL_VEC gt11rhsL = kmadd(rn1,IfThen(normal[0] < 
       0,PDonesidedPlus2nd1gt11,IfThen(normal[0] > 
@@ -425,7 +429,7 @@ static void ML_BSSN_Host_RHSRadiativeBoundary_Body(cGH const * restrict const cc
       < 0,PDonesidedPlus2nd2gt11,IfThen(normal[1] > 
       0,PDonesidedMinus2nd2gt11,PDstandard2nd2gt11)),kmadd(rn3,IfThen(normal[2] 
       < 0,PDonesidedPlus2nd3gt11,IfThen(normal[2] > 
-      0,PDonesidedMinus2nd3gt11,PDstandard2nd3gt11)),kmul(INV(rCopyL),ksub(ToReal(1),gt11L)))));
+      0,PDonesidedMinus2nd3gt11,PDstandard2nd3gt11)),kdiv(ksub(ToReal(1),gt11L),rCopyL))));
     
     CCTK_REAL_VEC gt12rhsL = kmadd(rn1,IfThen(normal[0] < 
       0,PDonesidedPlus2nd1gt12,IfThen(normal[0] > 
@@ -433,7 +437,7 @@ static void ML_BSSN_Host_RHSRadiativeBoundary_Body(cGH const * restrict const cc
       < 0,PDonesidedPlus2nd2gt12,IfThen(normal[1] > 
       0,PDonesidedMinus2nd2gt12,PDstandard2nd2gt12)),kmsub(rn3,IfThen(normal[2] 
       < 0,PDonesidedPlus2nd3gt12,IfThen(normal[2] > 
-      0,PDonesidedMinus2nd3gt12,PDstandard2nd3gt12)),kmul(gt12L,INV(rCopyL)))));
+      0,PDonesidedMinus2nd3gt12,PDstandard2nd3gt12)),kdiv(gt12L,rCopyL))));
     
     CCTK_REAL_VEC gt13rhsL = kmadd(rn1,IfThen(normal[0] < 
       0,PDonesidedPlus2nd1gt13,IfThen(normal[0] > 
@@ -441,7 +445,7 @@ static void ML_BSSN_Host_RHSRadiativeBoundary_Body(cGH const * restrict const cc
       < 0,PDonesidedPlus2nd2gt13,IfThen(normal[1] > 
       0,PDonesidedMinus2nd2gt13,PDstandard2nd2gt13)),kmsub(rn3,IfThen(normal[2] 
       < 0,PDonesidedPlus2nd3gt13,IfThen(normal[2] > 
-      0,PDonesidedMinus2nd3gt13,PDstandard2nd3gt13)),kmul(gt13L,INV(rCopyL)))));
+      0,PDonesidedMinus2nd3gt13,PDstandard2nd3gt13)),kdiv(gt13L,rCopyL))));
     
     CCTK_REAL_VEC gt22rhsL = kmadd(rn1,IfThen(normal[0] < 
       0,PDonesidedPlus2nd1gt22,IfThen(normal[0] > 
@@ -449,7 +453,7 @@ static void ML_BSSN_Host_RHSRadiativeBoundary_Body(cGH const * restrict const cc
       < 0,PDonesidedPlus2nd2gt22,IfThen(normal[1] > 
       0,PDonesidedMinus2nd2gt22,PDstandard2nd2gt22)),kmadd(rn3,IfThen(normal[2] 
       < 0,PDonesidedPlus2nd3gt22,IfThen(normal[2] > 
-      0,PDonesidedMinus2nd3gt22,PDstandard2nd3gt22)),kmul(INV(rCopyL),ksub(ToReal(1),gt22L)))));
+      0,PDonesidedMinus2nd3gt22,PDstandard2nd3gt22)),kdiv(ksub(ToReal(1),gt22L),rCopyL))));
     
     CCTK_REAL_VEC gt23rhsL = kmadd(rn1,IfThen(normal[0] < 
       0,PDonesidedPlus2nd1gt23,IfThen(normal[0] > 
@@ -457,7 +461,7 @@ static void ML_BSSN_Host_RHSRadiativeBoundary_Body(cGH const * restrict const cc
       < 0,PDonesidedPlus2nd2gt23,IfThen(normal[1] > 
       0,PDonesidedMinus2nd2gt23,PDstandard2nd2gt23)),kmsub(rn3,IfThen(normal[2] 
       < 0,PDonesidedPlus2nd3gt23,IfThen(normal[2] > 
-      0,PDonesidedMinus2nd3gt23,PDstandard2nd3gt23)),kmul(gt23L,INV(rCopyL)))));
+      0,PDonesidedMinus2nd3gt23,PDstandard2nd3gt23)),kdiv(gt23L,rCopyL))));
     
     CCTK_REAL_VEC gt33rhsL = kmadd(rn1,IfThen(normal[0] < 
       0,PDonesidedPlus2nd1gt33,IfThen(normal[0] > 
@@ -465,7 +469,7 @@ static void ML_BSSN_Host_RHSRadiativeBoundary_Body(cGH const * restrict const cc
       < 0,PDonesidedPlus2nd2gt33,IfThen(normal[1] > 
       0,PDonesidedMinus2nd2gt33,PDstandard2nd2gt33)),kmadd(rn3,IfThen(normal[2] 
       < 0,PDonesidedPlus2nd3gt33,IfThen(normal[2] > 
-      0,PDonesidedMinus2nd3gt33,PDstandard2nd3gt33)),kmul(INV(rCopyL),ksub(ToReal(1),gt33L)))));
+      0,PDonesidedMinus2nd3gt33,PDstandard2nd3gt33)),kdiv(ksub(ToReal(1),gt33L),rCopyL))));
     
     CCTK_REAL_VEC trKrhsL = kmul(v0,kmadd(rn1,IfThen(normal[0] < 
       0,PDonesidedPlus2nd1trK,IfThen(normal[0] > 
@@ -473,7 +477,7 @@ static void ML_BSSN_Host_RHSRadiativeBoundary_Body(cGH const * restrict const cc
       0,PDonesidedPlus2nd2trK,IfThen(normal[1] > 
       0,PDonesidedMinus2nd2trK,PDstandard2nd2trK)),kmsub(rn3,IfThen(normal[2] < 
       0,PDonesidedPlus2nd3trK,IfThen(normal[2] > 
-      0,PDonesidedMinus2nd3trK,PDstandard2nd3trK)),kmul(trKL,INV(rCopyL))))));
+      0,PDonesidedMinus2nd3trK,PDstandard2nd3trK)),kdiv(trKL,rCopyL)))));
     
     CCTK_REAL_VEC At11rhsL = kmadd(rn1,IfThen(normal[0] < 
       0,PDonesidedPlus2nd1At11,IfThen(normal[0] > 
@@ -481,7 +485,7 @@ static void ML_BSSN_Host_RHSRadiativeBoundary_Body(cGH const * restrict const cc
       < 0,PDonesidedPlus2nd2At11,IfThen(normal[1] > 
       0,PDonesidedMinus2nd2At11,PDstandard2nd2At11)),kmsub(rn3,IfThen(normal[2] 
       < 0,PDonesidedPlus2nd3At11,IfThen(normal[2] > 
-      0,PDonesidedMinus2nd3At11,PDstandard2nd3At11)),kmul(At11L,INV(rCopyL)))));
+      0,PDonesidedMinus2nd3At11,PDstandard2nd3At11)),kdiv(At11L,rCopyL))));
     
     CCTK_REAL_VEC At12rhsL = kmadd(rn1,IfThen(normal[0] < 
       0,PDonesidedPlus2nd1At12,IfThen(normal[0] > 
@@ -489,7 +493,7 @@ static void ML_BSSN_Host_RHSRadiativeBoundary_Body(cGH const * restrict const cc
       < 0,PDonesidedPlus2nd2At12,IfThen(normal[1] > 
       0,PDonesidedMinus2nd2At12,PDstandard2nd2At12)),kmsub(rn3,IfThen(normal[2] 
       < 0,PDonesidedPlus2nd3At12,IfThen(normal[2] > 
-      0,PDonesidedMinus2nd3At12,PDstandard2nd3At12)),kmul(At12L,INV(rCopyL)))));
+      0,PDonesidedMinus2nd3At12,PDstandard2nd3At12)),kdiv(At12L,rCopyL))));
     
     CCTK_REAL_VEC At13rhsL = kmadd(rn1,IfThen(normal[0] < 
       0,PDonesidedPlus2nd1At13,IfThen(normal[0] > 
@@ -497,7 +501,7 @@ static void ML_BSSN_Host_RHSRadiativeBoundary_Body(cGH const * restrict const cc
       < 0,PDonesidedPlus2nd2At13,IfThen(normal[1] > 
       0,PDonesidedMinus2nd2At13,PDstandard2nd2At13)),kmsub(rn3,IfThen(normal[2] 
       < 0,PDonesidedPlus2nd3At13,IfThen(normal[2] > 
-      0,PDonesidedMinus2nd3At13,PDstandard2nd3At13)),kmul(At13L,INV(rCopyL)))));
+      0,PDonesidedMinus2nd3At13,PDstandard2nd3At13)),kdiv(At13L,rCopyL))));
     
     CCTK_REAL_VEC At22rhsL = kmadd(rn1,IfThen(normal[0] < 
       0,PDonesidedPlus2nd1At22,IfThen(normal[0] > 
@@ -505,7 +509,7 @@ static void ML_BSSN_Host_RHSRadiativeBoundary_Body(cGH const * restrict const cc
       < 0,PDonesidedPlus2nd2At22,IfThen(normal[1] > 
       0,PDonesidedMinus2nd2At22,PDstandard2nd2At22)),kmsub(rn3,IfThen(normal[2] 
       < 0,PDonesidedPlus2nd3At22,IfThen(normal[2] > 
-      0,PDonesidedMinus2nd3At22,PDstandard2nd3At22)),kmul(At22L,INV(rCopyL)))));
+      0,PDonesidedMinus2nd3At22,PDstandard2nd3At22)),kdiv(At22L,rCopyL))));
     
     CCTK_REAL_VEC At23rhsL = kmadd(rn1,IfThen(normal[0] < 
       0,PDonesidedPlus2nd1At23,IfThen(normal[0] > 
@@ -513,7 +517,7 @@ static void ML_BSSN_Host_RHSRadiativeBoundary_Body(cGH const * restrict const cc
       < 0,PDonesidedPlus2nd2At23,IfThen(normal[1] > 
       0,PDonesidedMinus2nd2At23,PDstandard2nd2At23)),kmsub(rn3,IfThen(normal[2] 
       < 0,PDonesidedPlus2nd3At23,IfThen(normal[2] > 
-      0,PDonesidedMinus2nd3At23,PDstandard2nd3At23)),kmul(At23L,INV(rCopyL)))));
+      0,PDonesidedMinus2nd3At23,PDstandard2nd3At23)),kdiv(At23L,rCopyL))));
     
     CCTK_REAL_VEC At33rhsL = kmadd(rn1,IfThen(normal[0] < 
       0,PDonesidedPlus2nd1At33,IfThen(normal[0] > 
@@ -521,7 +525,7 @@ static void ML_BSSN_Host_RHSRadiativeBoundary_Body(cGH const * restrict const cc
       < 0,PDonesidedPlus2nd2At33,IfThen(normal[1] > 
       0,PDonesidedMinus2nd2At33,PDstandard2nd2At33)),kmsub(rn3,IfThen(normal[2] 
       < 0,PDonesidedPlus2nd3At33,IfThen(normal[2] > 
-      0,PDonesidedMinus2nd3At33,PDstandard2nd3At33)),kmul(At33L,INV(rCopyL)))));
+      0,PDonesidedMinus2nd3At33,PDstandard2nd3At33)),kdiv(At33L,rCopyL))));
     
     CCTK_REAL_VEC Xt1rhsL = kmadd(rn1,IfThen(normal[0] < 
       0,PDonesidedPlus2nd1Xt1,IfThen(normal[0] > 
@@ -529,7 +533,7 @@ static void ML_BSSN_Host_RHSRadiativeBoundary_Body(cGH const * restrict const cc
       0,PDonesidedPlus2nd2Xt1,IfThen(normal[1] > 
       0,PDonesidedMinus2nd2Xt1,PDstandard2nd2Xt1)),kmsub(rn3,IfThen(normal[2] < 
       0,PDonesidedPlus2nd3Xt1,IfThen(normal[2] > 
-      0,PDonesidedMinus2nd3Xt1,PDstandard2nd3Xt1)),kmul(Xt1L,INV(rCopyL)))));
+      0,PDonesidedMinus2nd3Xt1,PDstandard2nd3Xt1)),kdiv(Xt1L,rCopyL))));
     
     CCTK_REAL_VEC Xt2rhsL = kmadd(rn1,IfThen(normal[0] < 
       0,PDonesidedPlus2nd1Xt2,IfThen(normal[0] > 
@@ -537,7 +541,7 @@ static void ML_BSSN_Host_RHSRadiativeBoundary_Body(cGH const * restrict const cc
       0,PDonesidedPlus2nd2Xt2,IfThen(normal[1] > 
       0,PDonesidedMinus2nd2Xt2,PDstandard2nd2Xt2)),kmsub(rn3,IfThen(normal[2] < 
       0,PDonesidedPlus2nd3Xt2,IfThen(normal[2] > 
-      0,PDonesidedMinus2nd3Xt2,PDstandard2nd3Xt2)),kmul(Xt2L,INV(rCopyL)))));
+      0,PDonesidedMinus2nd3Xt2,PDstandard2nd3Xt2)),kdiv(Xt2L,rCopyL))));
     
     CCTK_REAL_VEC Xt3rhsL = kmadd(rn1,IfThen(normal[0] < 
       0,PDonesidedPlus2nd1Xt3,IfThen(normal[0] > 
@@ -545,7 +549,7 @@ static void ML_BSSN_Host_RHSRadiativeBoundary_Body(cGH const * restrict const cc
       0,PDonesidedPlus2nd2Xt3,IfThen(normal[1] > 
       0,PDonesidedMinus2nd2Xt3,PDstandard2nd2Xt3)),kmsub(rn3,IfThen(normal[2] < 
       0,PDonesidedPlus2nd3Xt3,IfThen(normal[2] > 
-      0,PDonesidedMinus2nd3Xt3,PDstandard2nd3Xt3)),kmul(Xt3L,INV(rCopyL)))));
+      0,PDonesidedMinus2nd3Xt3,PDstandard2nd3Xt3)),kdiv(Xt3L,rCopyL))));
     
     CCTK_REAL_VEC alpharhsL = kmul(v0,kmadd(rn1,IfThen(normal[0] < 
       0,PDonesidedPlus2nd1alpha,IfThen(normal[0] > 
@@ -553,7 +557,7 @@ static void ML_BSSN_Host_RHSRadiativeBoundary_Body(cGH const * restrict const cc
       < 0,PDonesidedPlus2nd2alpha,IfThen(normal[1] > 
       0,PDonesidedMinus2nd2alpha,PDstandard2nd2alpha)),kmadd(rn3,IfThen(normal[2] 
       < 0,PDonesidedPlus2nd3alpha,IfThen(normal[2] > 
-      0,PDonesidedMinus2nd3alpha,PDstandard2nd3alpha)),kmul(INV(rCopyL),ksub(ToReal(1),alphaL))))));
+      0,PDonesidedMinus2nd3alpha,PDstandard2nd3alpha)),kdiv(ksub(ToReal(1),alphaL),rCopyL)))));
     
     CCTK_REAL_VEC ArhsL = kmul(v0,kmadd(rn1,IfThen(normal[0] < 
       0,PDonesidedPlus2nd1A,IfThen(normal[0] > 
@@ -561,7 +565,7 @@ static void ML_BSSN_Host_RHSRadiativeBoundary_Body(cGH const * restrict const cc
       0,PDonesidedPlus2nd2A,IfThen(normal[1] > 
       0,PDonesidedMinus2nd2A,PDstandard2nd2A)),kmsub(rn3,IfThen(normal[2] < 
       0,PDonesidedPlus2nd3A,IfThen(normal[2] > 
-      0,PDonesidedMinus2nd3A,PDstandard2nd3A)),kmul(AL,INV(rCopyL))))));
+      0,PDonesidedMinus2nd3A,PDstandard2nd3A)),kdiv(AL,rCopyL)))));
     
     CCTK_REAL_VEC beta1rhsL = kmadd(rn1,IfThen(normal[0] < 
       0,PDonesidedPlus2nd1beta1,IfThen(normal[0] > 
@@ -569,7 +573,7 @@ static void ML_BSSN_Host_RHSRadiativeBoundary_Body(cGH const * restrict const cc
       < 0,PDonesidedPlus2nd2beta1,IfThen(normal[1] > 
       0,PDonesidedMinus2nd2beta1,PDstandard2nd2beta1)),kmsub(rn3,IfThen(normal[2] 
       < 0,PDonesidedPlus2nd3beta1,IfThen(normal[2] > 
-      0,PDonesidedMinus2nd3beta1,PDstandard2nd3beta1)),kmul(beta1L,INV(rCopyL)))));
+      0,PDonesidedMinus2nd3beta1,PDstandard2nd3beta1)),kdiv(beta1L,rCopyL))));
     
     CCTK_REAL_VEC beta2rhsL = kmadd(rn1,IfThen(normal[0] < 
       0,PDonesidedPlus2nd1beta2,IfThen(normal[0] > 
@@ -577,7 +581,7 @@ static void ML_BSSN_Host_RHSRadiativeBoundary_Body(cGH const * restrict const cc
       < 0,PDonesidedPlus2nd2beta2,IfThen(normal[1] > 
       0,PDonesidedMinus2nd2beta2,PDstandard2nd2beta2)),kmsub(rn3,IfThen(normal[2] 
       < 0,PDonesidedPlus2nd3beta2,IfThen(normal[2] > 
-      0,PDonesidedMinus2nd3beta2,PDstandard2nd3beta2)),kmul(beta2L,INV(rCopyL)))));
+      0,PDonesidedMinus2nd3beta2,PDstandard2nd3beta2)),kdiv(beta2L,rCopyL))));
     
     CCTK_REAL_VEC beta3rhsL = kmadd(rn1,IfThen(normal[0] < 
       0,PDonesidedPlus2nd1beta3,IfThen(normal[0] > 
@@ -585,7 +589,7 @@ static void ML_BSSN_Host_RHSRadiativeBoundary_Body(cGH const * restrict const cc
       < 0,PDonesidedPlus2nd2beta3,IfThen(normal[1] > 
       0,PDonesidedMinus2nd2beta3,PDstandard2nd2beta3)),kmsub(rn3,IfThen(normal[2] 
       < 0,PDonesidedPlus2nd3beta3,IfThen(normal[2] > 
-      0,PDonesidedMinus2nd3beta3,PDstandard2nd3beta3)),kmul(beta3L,INV(rCopyL)))));
+      0,PDonesidedMinus2nd3beta3,PDstandard2nd3beta3)),kdiv(beta3L,rCopyL))));
     
     CCTK_REAL_VEC B1rhsL = kmadd(rn1,IfThen(normal[0] < 
       0,PDonesidedPlus2nd1B1,IfThen(normal[0] > 
@@ -593,7 +597,7 @@ static void ML_BSSN_Host_RHSRadiativeBoundary_Body(cGH const * restrict const cc
       0,PDonesidedPlus2nd2B1,IfThen(normal[1] > 
       0,PDonesidedMinus2nd2B1,PDstandard2nd2B1)),kmsub(rn3,IfThen(normal[2] < 
       0,PDonesidedPlus2nd3B1,IfThen(normal[2] > 
-      0,PDonesidedMinus2nd3B1,PDstandard2nd3B1)),kmul(B1L,INV(rCopyL)))));
+      0,PDonesidedMinus2nd3B1,PDstandard2nd3B1)),kdiv(B1L,rCopyL))));
     
     CCTK_REAL_VEC B2rhsL = kmadd(rn1,IfThen(normal[0] < 
       0,PDonesidedPlus2nd1B2,IfThen(normal[0] > 
@@ -601,7 +605,7 @@ static void ML_BSSN_Host_RHSRadiativeBoundary_Body(cGH const * restrict const cc
       0,PDonesidedPlus2nd2B2,IfThen(normal[1] > 
       0,PDonesidedMinus2nd2B2,PDstandard2nd2B2)),kmsub(rn3,IfThen(normal[2] < 
       0,PDonesidedPlus2nd3B2,IfThen(normal[2] > 
-      0,PDonesidedMinus2nd3B2,PDstandard2nd3B2)),kmul(B2L,INV(rCopyL)))));
+      0,PDonesidedMinus2nd3B2,PDstandard2nd3B2)),kdiv(B2L,rCopyL))));
     
     CCTK_REAL_VEC B3rhsL = kmadd(rn1,IfThen(normal[0] < 
       0,PDonesidedPlus2nd1B3,IfThen(normal[0] > 
@@ -609,7 +613,7 @@ static void ML_BSSN_Host_RHSRadiativeBoundary_Body(cGH const * restrict const cc
       0,PDonesidedPlus2nd2B3,IfThen(normal[1] > 
       0,PDonesidedMinus2nd2B3,PDstandard2nd2B3)),kmsub(rn3,IfThen(normal[2] < 
       0,PDonesidedPlus2nd3B3,IfThen(normal[2] > 
-      0,PDonesidedMinus2nd3B3,PDstandard2nd3B3)),kmul(B3L,INV(rCopyL)))));
+      0,PDonesidedMinus2nd3B3,PDstandard2nd3B3)),kdiv(B3L,rCopyL))));
     
     /* Copy local copies back to grid functions */
     vec_store_partial_prepare(i,lc_imin,lc_imax);

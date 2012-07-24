@@ -17,10 +17,10 @@
 
 /* Define macros used in calculations */
 #define INITVALUE (42)
-#define QAD(x) (SQR(SQR(x)))
-#define INV(x) ((1.0) / (x))
+#define INV(x) ((CCTK_REAL)1.0 / (x))
 #define SQR(x) ((x) * (x))
-#define CUB(x) ((x) * (x) * (x))
+#define CUB(x) ((x) * SQR(x))
+#define QAD(x) (SQR(SQR(x)))
 
 extern "C" void ML_ADMConstraints_SelectBCs(CCTK_ARGUMENTS)
 {
@@ -42,8 +42,6 @@ static void ML_ADMConstraints_Body(cGH const * restrict const cctkGH, int const 
   DECLARE_CCTK_ARGUMENTS;
   DECLARE_CCTK_PARAMETERS;
   
-  
-  /* Declare finite differencing variables */
   
   /* Include user-supplied include files */
   
@@ -75,9 +73,9 @@ static void ML_ADMConstraints_Body(cGH const * restrict const cctkGH, int const 
   CCTK_REAL const p1o12dx = 0.0833333333333333333333333333333*INV(dx);
   CCTK_REAL const p1o12dy = 0.0833333333333333333333333333333*INV(dy);
   CCTK_REAL const p1o12dz = 0.0833333333333333333333333333333*INV(dz);
-  CCTK_REAL const p1o144dxdy = 0.00694444444444444444444444444444*INV(dx)*INV(dy);
-  CCTK_REAL const p1o144dxdz = 0.00694444444444444444444444444444*INV(dx)*INV(dz);
-  CCTK_REAL const p1o144dydz = 0.00694444444444444444444444444444*INV(dy)*INV(dz);
+  CCTK_REAL const p1o144dxdy = 0.00694444444444444444444444444444*INV(dx*dy);
+  CCTK_REAL const p1o144dxdz = 0.00694444444444444444444444444444*INV(dx*dz);
+  CCTK_REAL const p1o144dydz = 0.00694444444444444444444444444444*INV(dy*dz);
   CCTK_REAL const pm1o12dx2 = -0.0833333333333333333333333333333*INV(SQR(dx));
   CCTK_REAL const pm1o12dy2 = -0.0833333333333333333333333333333*INV(SQR(dy));
   CCTK_REAL const pm1o12dz2 = -0.0833333333333333333333333333333*INV(SQR(dz));
@@ -92,9 +90,9 @@ static void ML_ADMConstraints_Body(cGH const * restrict const cctkGH, int const 
   
   /* Loop over the grid points */
   #pragma omp parallel
-  CCTK_LOOP3 (ML_ADMConstraints,
+  CCTK_LOOP3(ML_ADMConstraints,
     i,j,k, imin[0],imin[1],imin[2], imax[0],imax[1],imax[2],
-    cctk_lsh[0],cctk_lsh[1],cctk_lsh[2])
+    cctk_ash[0],cctk_ash[1],cctk_ash[2])
   {
     ptrdiff_t const index = di*i + dj*j + dk*k;
     
@@ -501,7 +499,7 @@ static void ML_ADMConstraints_Body(cGH const * restrict const cctkGH, int const 
     M2[index] = M2L;
     M3[index] = M3L;
   }
-  CCTK_ENDLOOP3 (ML_ADMConstraints);
+  CCTK_ENDLOOP3(ML_ADMConstraints);
 }
 
 extern "C" void ML_ADMConstraints(CCTK_ARGUMENTS)
@@ -520,12 +518,18 @@ extern "C" void ML_ADMConstraints(CCTK_ARGUMENTS)
     return;
   }
   
-  const char *groups[] = {"ADMBase::curv","ADMBase::lapse","ADMBase::metric","ADMBase::shift","ML_ADMConstraints::ML_Ham","ML_ADMConstraints::ML_mom"};
+  const char *const groups[] = {
+    "ADMBase::curv",
+    "ADMBase::lapse",
+    "ADMBase::metric",
+    "ADMBase::shift",
+    "ML_ADMConstraints::ML_Ham",
+    "ML_ADMConstraints::ML_mom"};
   GenericFD_AssertGroupStorage(cctkGH, "ML_ADMConstraints", 6, groups);
   
   GenericFD_EnsureStencilFits(cctkGH, "ML_ADMConstraints", 2, 2, 2);
   
-  GenericFD_LoopOverInterior(cctkGH, &ML_ADMConstraints_Body);
+  GenericFD_LoopOverInterior(cctkGH, ML_ADMConstraints_Body);
   
   if (verbose > 1)
   {

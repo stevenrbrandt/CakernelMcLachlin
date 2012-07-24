@@ -17,18 +17,16 @@
 
 /* Define macros used in calculations */
 #define INITVALUE (42)
-#define QAD(x) (SQR(SQR(x)))
-#define INV(x) ((1.0) / (x))
+#define INV(x) ((CCTK_REAL)1.0 / (x))
 #define SQR(x) ((x) * (x))
-#define CUB(x) ((x) * (x) * (x))
+#define CUB(x) ((x) * SQR(x))
+#define QAD(x) (SQR(SQR(x)))
 
 static void hydro_soundWave_Body(cGH const * restrict const cctkGH, int const dir, int const face, CCTK_REAL const normal[3], CCTK_REAL const tangentA[3], CCTK_REAL const tangentB[3], int const imin[3], int const imax[3], int const n_subblock_gfs, CCTK_REAL * restrict const subblock_gfs[])
 {
   DECLARE_CCTK_ARGUMENTS;
   DECLARE_CCTK_PARAMETERS;
   
-  
-  /* Declare finite differencing variables */
   
   /* Include user-supplied include files */
   
@@ -60,9 +58,9 @@ static void hydro_soundWave_Body(cGH const * restrict const cctkGH, int const di
   CCTK_REAL const p1o2dx = 0.5*INV(dx);
   CCTK_REAL const p1o2dy = 0.5*INV(dy);
   CCTK_REAL const p1o2dz = 0.5*INV(dz);
-  CCTK_REAL const p1o4dxdy = 0.25*INV(dx)*INV(dy);
-  CCTK_REAL const p1o4dxdz = 0.25*INV(dx)*INV(dz);
-  CCTK_REAL const p1o4dydz = 0.25*INV(dy)*INV(dz);
+  CCTK_REAL const p1o4dxdy = 0.25*INV(dx*dy);
+  CCTK_REAL const p1o4dxdz = 0.25*INV(dx*dz);
+  CCTK_REAL const p1o4dydz = 0.25*INV(dy*dz);
   CCTK_REAL const p1odx2 = INV(SQR(dx));
   CCTK_REAL const p1ody2 = INV(SQR(dy));
   CCTK_REAL const p1odz2 = INV(SQR(dz));
@@ -77,9 +75,9 @@ static void hydro_soundWave_Body(cGH const * restrict const cctkGH, int const di
   
   /* Loop over the grid points */
   #pragma omp parallel
-  CCTK_LOOP3 (hydro_soundWave,
+  CCTK_LOOP3(hydro_soundWave,
     i,j,k, imin[0],imin[1],imin[2], imax[0],imax[1],imax[2],
-    cctk_lsh[0],cctk_lsh[1],cctk_lsh[2])
+    cctk_ash[0],cctk_ash[1],cctk_ash[2])
   {
     ptrdiff_t const index = di*i + dj*j + dk*k;
     
@@ -95,11 +93,11 @@ static void hydro_soundWave_Body(cGH const * restrict const cctkGH, int const di
     /* Calculate temporaries and grid functions */
     CCTK_REAL rhoL = 1.;
     
-    CCTK_REAL vel1L = Sin(2*xL*Pi*INV(ToReal(L)))*ToReal(A);
+    CCTK_REAL vel1L = sin(2*xL*Pi*INV(ToReal(L)))*ToReal(A);
     
-    CCTK_REAL vel2L = Sin(2*xL*Pi*INV(ToReal(L)))*ToReal(A);
+    CCTK_REAL vel2L = sin(2*xL*Pi*INV(ToReal(L)))*ToReal(A);
     
-    CCTK_REAL vel3L = Sin(2*xL*Pi*INV(ToReal(L)))*ToReal(A);
+    CCTK_REAL vel3L = sin(2*xL*Pi*INV(ToReal(L)))*ToReal(A);
     
     CCTK_REAL epsL = 1.;
     
@@ -110,7 +108,7 @@ static void hydro_soundWave_Body(cGH const * restrict const cctkGH, int const di
     vel2[index] = vel2L;
     vel3[index] = vel3L;
   }
-  CCTK_ENDLOOP3 (hydro_soundWave);
+  CCTK_ENDLOOP3(hydro_soundWave);
 }
 
 extern "C" void hydro_soundWave(CCTK_ARGUMENTS)
@@ -129,11 +127,15 @@ extern "C" void hydro_soundWave(CCTK_ARGUMENTS)
     return;
   }
   
-  const char *groups[] = {"ML_hydro::eps_group","grid::coordinates","ML_hydro::rho_group","ML_hydro::vel_group"};
+  const char *const groups[] = {
+    "ML_hydro::eps_group",
+    "grid::coordinates",
+    "ML_hydro::rho_group",
+    "ML_hydro::vel_group"};
   GenericFD_AssertGroupStorage(cctkGH, "hydro_soundWave", 4, groups);
   
   
-  GenericFD_LoopOverEverything(cctkGH, &hydro_soundWave_Body);
+  GenericFD_LoopOverEverything(cctkGH, hydro_soundWave_Body);
   
   if (verbose > 1)
   {

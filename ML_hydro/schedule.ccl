@@ -125,12 +125,6 @@ schedule ML_hydro_Startup at STARTUP
   OPTIONS: meta
 } "create banner"
 
-schedule ML_hydro_RegisterVars in MoL_Register
-{
-  LANG: C
-  OPTIONS: meta
-} "Register Variables for MoL"
-
 schedule ML_hydro_RegisterSymmetries in SymmetryRegister
 {
   LANG: C
@@ -143,6 +137,11 @@ if (CCTK_EQUALS(initial_data, "vacuum"))
   schedule hydro_vacuum IN ADMBase_InitialData
   {
     LANG: C
+    WRITES:   ML_hydro::eps
+    WRITES:   ML_hydro::rho
+    WRITES:   ML_hydro::vel1
+    WRITES:   ML_hydro::vel2
+    WRITES:   ML_hydro::vel3
   } "hydro_vacuum"
 }
 
@@ -152,17 +151,53 @@ if (CCTK_EQUALS(initial_data, "sound wave"))
   schedule hydro_soundWave IN ADMBase_InitialData
   {
     LANG: C
+    READS:    grid::x
+    WRITES:   ML_hydro::eps
+    WRITES:   ML_hydro::rho
+    WRITES:   ML_hydro::vel1
+    WRITES:   ML_hydro::vel2
+    WRITES:   ML_hydro::vel3
   } "hydro_soundWave"
 }
 
 schedule hydro_prim2con AT initial AFTER ADMBase_PostInitial
 {
   LANG: C
+  READS:    ML_hydro::eps
+  READS:    ML_hydro::mass
+  READS:    ML_hydro::rho
+  READS:    ML_hydro::vel1
+  READS:    ML_hydro::vel2
+  READS:    ML_hydro::vel3
+  READS:    ML_hydro::vol
+  WRITES:   ML_hydro::ene
+  WRITES:   ML_hydro::mass
+  WRITES:   ML_hydro::mom1
+  WRITES:   ML_hydro::mom2
+  WRITES:   ML_hydro::mom3
+  WRITES:   ML_hydro::vol
 } "hydro_prim2con"
 
 schedule hydro_con2prim IN hydro_con2primGroup
 {
   LANG: C
+  READS:    ML_hydro::ene
+  READS:    ML_hydro::eps
+  READS:    ML_hydro::mass
+  READS:    ML_hydro::mom1
+  READS:    ML_hydro::mom2
+  READS:    ML_hydro::mom3
+  READS:    ML_hydro::rho
+  READS:    ML_hydro::vel1
+  READS:    ML_hydro::vel2
+  READS:    ML_hydro::vel3
+  READS:    ML_hydro::vol
+  WRITES:   ML_hydro::eps
+  WRITES:   ML_hydro::press
+  WRITES:   ML_hydro::rho
+  WRITES:   ML_hydro::vel1
+  WRITES:   ML_hydro::vel2
+  WRITES:   ML_hydro::vel3
 } "hydro_con2prim"
 
 schedule hydro_RHS IN hydro_evolCalcGroup AFTER hydro_fluxes
@@ -171,6 +206,26 @@ schedule hydro_RHS IN hydro_evolCalcGroup AFTER hydro_fluxes
   SYNC: ene_grouprhs
   SYNC: mass_grouprhs
   SYNC: mom_grouprhs
+  READS:    ML_hydro::eneflux1
+  READS:    ML_hydro::eneflux2
+  READS:    ML_hydro::eneflux3
+  READS:    ML_hydro::massflux1
+  READS:    ML_hydro::massflux2
+  READS:    ML_hydro::massflux3
+  READS:    ML_hydro::momflux11
+  READS:    ML_hydro::momflux12
+  READS:    ML_hydro::momflux13
+  READS:    ML_hydro::momflux21
+  READS:    ML_hydro::momflux22
+  READS:    ML_hydro::momflux23
+  READS:    ML_hydro::momflux31
+  READS:    ML_hydro::momflux32
+  READS:    ML_hydro::momflux33
+  WRITES:   ML_hydro::enerhs
+  WRITES:   ML_hydro::massrhs
+  WRITES:   ML_hydro::mom1rhs
+  WRITES:   ML_hydro::mom2rhs
+  WRITES:   ML_hydro::mom3rhs
 } "hydro_RHS"
 
 schedule ML_hydro_SelectBoundConds in MoL_PostStep
@@ -187,6 +242,12 @@ schedule ML_hydro_CheckBoundaries at BASEGRID
   LANG: C
   OPTIONS: meta
 } "check boundaries treatment"
+
+schedule ML_hydro_RegisterVars in MoL_Register
+{
+  LANG: C
+  OPTIONS: meta
+} "Register Variables for MoL"
 
 schedule group ApplyBCs as ML_hydro_ApplyBCs in MoL_PostStep after ML_hydro_SelectBoundConds
 {
