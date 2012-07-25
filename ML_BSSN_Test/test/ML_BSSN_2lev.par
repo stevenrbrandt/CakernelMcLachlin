@@ -1,5 +1,5 @@
 
-ActiveThorns = "CoordBase SymBase Boundary NanChecker CartGrid3d Time MoL CarpetIOBasic CarpetIOScalar IOUtil Carpet CarpetLib CarpetReduce CarpetSlab CarpetIOASCII ADMBase StaticConformal SpaceMask Exact GenericFD CoordGauge ADMCoupling LoopControl ML_BSSN ML_BSSN_Helper GenericFD TMuNuBase SphericalSurface ADMMacros TimerReport NewRad CaKernel Accelerator CaCUDALib"
+ActiveThorns = "CoordBase SymBase Boundary NanChecker CartGrid3d Time MoL CarpetIOBasic CarpetIOScalar IOUtil Carpet CarpetLib CarpetReduce CarpetSlab CarpetIOASCII ADMBase StaticConformal SpaceMask Exact GenericFD CoordGauge ADMCoupling LoopControl ML_BSSN ML_BSSN_Helper GenericFD TMuNuBase SphericalSurface ADMMacros TimerReport NewRad CarpetRegrid2 CaKernel Accelerator CaCUDALib"
 
 ADMBase::evolution_method         = "ML_BSSN"
 ADMBase::lapse_evolution_method   = "ML_BSSN"
@@ -32,9 +32,9 @@ CoordBase::domainsize                   = minmax
 CoordBase::boundary_size_x_lower        = 5
 CoordBase::boundary_size_y_lower        = 5
 CoordBase::boundary_size_z_lower        = 5
-CoordBase::boundary_shiftout_x_lower    = 1
-CoordBase::boundary_shiftout_y_lower    = 1
-CoordBase::boundary_shiftout_z_lower    = 1
+CoordBase::boundary_shiftout_x_lower    = 0
+CoordBase::boundary_shiftout_y_lower    = 0
+CoordBase::boundary_shiftout_z_lower    = 0
 
 CoordBase::boundary_size_x_upper        = 5
 CoordBase::boundary_size_y_upper        = 5
@@ -47,13 +47,13 @@ CartGrid3D::type                        = "coordbase"
 CartGrid3D::domain                      = "full"
 CartGrid3D::avoid_origin                = "no"
 
-CoordBase::xmin                         = 0
-CoordBase::ymin                         = 0
-CoordBase::zmin                         = 0
+CoordBase::xmin                         = -1.0
+CoordBase::ymin                         = -1.0
+CoordBase::zmin                         = -1.0
 
-CoordBase::xmax                         = 1
-CoordBase::ymax                         = 1
-CoordBase::zmax                         = 1
+CoordBase::xmax                         = +1.0
+CoordBase::ymax                         = +1.0
+CoordBase::zmax                         = +1.0
 
 CoordBase::dx                           = 0.1
 CoordBase::dy                           = 0.1
@@ -62,11 +62,12 @@ CoordBase::dz                           = 0.1
 Carpet::max_refinement_levels           = 2
 CarpetRegrid2::num_centres              = 1
 CarpetRegrid2::num_levels_1             = 2
+CarpetRegrid2::radius_1[1]              = 0.2
 
 Carpet::use_buffer_zones                = no
 Carpet::suppress_restriction            = yes
 Carpet::prolongation_order_space        = 5
-Carpet::prolongation_order_time         = 2
+Carpet::prolongation_order_time         = 1
 
 #############################################################
 # Carpet
@@ -74,7 +75,7 @@ Carpet::prolongation_order_time         = 2
 
 Carpet::ghost_size                      = 5
 Carpet::domain_from_coordbase           = "yes"
-Carpet::init_3_timelevels               = "no"
+Carpet::init_fill_timelevels            = "yes"
 Carpet::poison_new_timelevels           = yes
 
 #############################################################
