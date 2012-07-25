@@ -3361,6 +3361,12 @@ schedule ML_BSSN_RegisterVars in MoL_Register
   OPTIONS: meta
 } "Register Variables for MoL"
 
+schedule ML_BSSN_Init in CCTK_BASEGRID after Accelerator_SetDevice
+{
+  LANG: C
+  OPTIONS: local
+} "Initialize CUDA Device"
+
 schedule group ApplyBCs as ML_BSSN_ApplyBCs in MoL_PostStep after ML_BSSN_SelectBoundConds
 {
   # no language specified
