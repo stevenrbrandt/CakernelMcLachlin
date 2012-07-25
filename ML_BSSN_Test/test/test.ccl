@@ -48,3 +48,13 @@ TEST ML_BSSN_2lev
 {
   NPROCS 1
 }
+
+TEST ML_BSSN_Host_2lev_2proc
+{
+  NPROCS 2
+}
+
+TEST ML_BSSN_2lev_2proc
+{
+  NPROCS 2
+}
