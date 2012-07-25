@@ -47,25 +47,22 @@ CartGrid3D::type                        = "coordbase"
 CartGrid3D::domain                      = "full"
 CartGrid3D::avoid_origin                = "no"
 
-CoordBase::xmin                         = 0
-CoordBase::ymin                         = 0
-CoordBase::zmin                         = 0
+CoordBase::xmin                         = -1.0
+CoordBase::ymin                         = -1.0
+CoordBase::zmin                         = -1.0
 
-CoordBase::xmax                         = 1
-CoordBase::ymax                         = 1
-CoordBase::zmax                         = 1
+CoordBase::xmax                         = +1.0
+CoordBase::ymax                         = +1.0
+CoordBase::zmax                         = +1.0
 
-CoordBase::dx                           = 0.025
-CoordBase::dy                           = 0.025
-CoordBase::dz                           = 0.025
+CoordBase::dx                           = 0.05
+CoordBase::dy                           = 0.05
+CoordBase::dz                           = 0.05
 
 Carpet::max_refinement_levels           = 2
 CarpetRegrid2::num_centres              = 1
 CarpetRegrid2::num_levels_1             = 2
-CarpetRegrid2::position_x_1             = 0.5
-CarpetRegrid2::position_y_1             = 0.5
-CarpetRegrid2::position_z_1             = 0.5
-CarpetRegrid2::radius_1[1]              = 0.25
+CarpetRegrid2::radius_1[1]              = 0.5
 
 Carpet::use_buffer_zones                = yes
 Carpet::prolongation_order_space        = 5

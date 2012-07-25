@@ -55,14 +55,14 @@ CoordBase::xmax                         = +1.0
 CoordBase::ymax                         = +1.0
 CoordBase::zmax                         = +1.0
 
-CoordBase::dx                           = 0.1
-CoordBase::dy                           = 0.1
-CoordBase::dz                           = 0.1
+CoordBase::dx                           = 0.05
+CoordBase::dy                           = 0.05
+CoordBase::dz                           = 0.05
 
 Carpet::max_refinement_levels           = 2
 CarpetRegrid2::num_centres              = 1
 CarpetRegrid2::num_levels_1             = 2
-CarpetRegrid2::radius_1[1]              = 0.2
+CarpetRegrid2::radius_1[1]              = 0.5
 
 Carpet::use_buffer_zones                = no
 Carpet::suppress_restriction            = yes
