@@ -38,3 +38,13 @@ TEST ML_BSSN_Radiative
   NPROCS 2
   ABSTOL 1e-11
 }
+
+TEST ML_BSSN_Host_2lev
+{
+  NPROCS 1
+}
+
+TEST ML_BSSN_2lev
+{
+  NPROCS 1
+}
