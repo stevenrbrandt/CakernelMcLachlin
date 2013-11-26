@@ -9,7 +9,7 @@ extern "C" void ML_BSSN_RegisterVars(CCTK_ARGUMENTS)
   DECLARE_CCTK_ARGUMENTS;
   DECLARE_CCTK_PARAMETERS;
   
-  CCTK_INT ierr = 0;
+  CCTK_INT ierr CCTK_ATTRIBUTE_UNUSED = 0;
   
   /* Register all the evolved grid functions with MoL */
   ierr += MoLRegisterEvolved(CCTK_VarIndex("ML_BSSN::At11"),  CCTK_VarIndex("ML_BSSN::At11rhs"));

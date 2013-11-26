@@ -37,6 +37,7 @@ EXTENDS CCTK_KEYWORD dtshift_evolution_method "dtshift_evolution_method"
 
 shares: GenericFD
 
+USES CCTK_INT assume_stress_energy_state
 
 
 shares: MethodOfLines
@@ -49,6 +50,12 @@ CCTK_INT verbose "verbose" STEERABLE=ALWAYS
 {
   *:* :: ""
 } 0
+
+restricted:
+CCTK_INT other_timelevels "Number of active timelevels for non-evolved grid functions" STEERABLE=RECOVER
+{
+  0:2 :: ""
+} 1
 
 restricted:
 CCTK_REAL LapseACoeff "Whether to evolve A in time"
@@ -236,12 +243,6 @@ CCTK_INT timelevels "Number of active timelevels" STEERABLE=RECOVER
 
 restricted:
 CCTK_INT rhs_timelevels "Number of active RHS timelevels" STEERABLE=RECOVER
-{
-  0:2 :: ""
-} 1
-
-restricted:
-CCTK_INT other_timelevels "Number of active timelevels for non-evolved grid functions" STEERABLE=RECOVER
 {
   0:2 :: ""
 } 1
@@ -679,174 +680,6 @@ CCTK_INT ML_BSSN_Host_convertToADMBase_calc_offset "ML_BSSN_Host_convertToADMBas
 } 0
 
 private:
-KEYWORD At11_bound "Boundary condition to implement" STEERABLE=ALWAYS
-{
-  "flat" :: "Flat boundary condition"
-  "none" :: "No boundary condition"
-  "static" :: "Boundaries held fixed"
-  "radiative" :: "Radiation boundary condition"
-  "scalar" :: "Dirichlet boundary condition"
-  "newrad" :: "Improved radiative boundary condition"
-  "skip" :: "skip boundary condition code"
-} "skip"
-
-private:
-KEYWORD At12_bound "Boundary condition to implement" STEERABLE=ALWAYS
-{
-  "flat" :: "Flat boundary condition"
-  "none" :: "No boundary condition"
-  "static" :: "Boundaries held fixed"
-  "radiative" :: "Radiation boundary condition"
-  "scalar" :: "Dirichlet boundary condition"
-  "newrad" :: "Improved radiative boundary condition"
-  "skip" :: "skip boundary condition code"
-} "skip"
-
-private:
-KEYWORD At13_bound "Boundary condition to implement" STEERABLE=ALWAYS
-{
-  "flat" :: "Flat boundary condition"
-  "none" :: "No boundary condition"
-  "static" :: "Boundaries held fixed"
-  "radiative" :: "Radiation boundary condition"
-  "scalar" :: "Dirichlet boundary condition"
-  "newrad" :: "Improved radiative boundary condition"
-  "skip" :: "skip boundary condition code"
-} "skip"
-
-private:
-KEYWORD At22_bound "Boundary condition to implement" STEERABLE=ALWAYS
-{
-  "flat" :: "Flat boundary condition"
-  "none" :: "No boundary condition"
-  "static" :: "Boundaries held fixed"
-  "radiative" :: "Radiation boundary condition"
-  "scalar" :: "Dirichlet boundary condition"
-  "newrad" :: "Improved radiative boundary condition"
-  "skip" :: "skip boundary condition code"
-} "skip"
-
-private:
-KEYWORD At23_bound "Boundary condition to implement" STEERABLE=ALWAYS
-{
-  "flat" :: "Flat boundary condition"
-  "none" :: "No boundary condition"
-  "static" :: "Boundaries held fixed"
-  "radiative" :: "Radiation boundary condition"
-  "scalar" :: "Dirichlet boundary condition"
-  "newrad" :: "Improved radiative boundary condition"
-  "skip" :: "skip boundary condition code"
-} "skip"
-
-private:
-KEYWORD At33_bound "Boundary condition to implement" STEERABLE=ALWAYS
-{
-  "flat" :: "Flat boundary condition"
-  "none" :: "No boundary condition"
-  "static" :: "Boundaries held fixed"
-  "radiative" :: "Radiation boundary condition"
-  "scalar" :: "Dirichlet boundary condition"
-  "newrad" :: "Improved radiative boundary condition"
-  "skip" :: "skip boundary condition code"
-} "skip"
-
-private:
-KEYWORD A_bound "Boundary condition to implement" STEERABLE=ALWAYS
-{
-  "flat" :: "Flat boundary condition"
-  "none" :: "No boundary condition"
-  "static" :: "Boundaries held fixed"
-  "radiative" :: "Radiation boundary condition"
-  "scalar" :: "Dirichlet boundary condition"
-  "newrad" :: "Improved radiative boundary condition"
-  "skip" :: "skip boundary condition code"
-} "skip"
-
-private:
-KEYWORD B1_bound "Boundary condition to implement" STEERABLE=ALWAYS
-{
-  "flat" :: "Flat boundary condition"
-  "none" :: "No boundary condition"
-  "static" :: "Boundaries held fixed"
-  "radiative" :: "Radiation boundary condition"
-  "scalar" :: "Dirichlet boundary condition"
-  "newrad" :: "Improved radiative boundary condition"
-  "skip" :: "skip boundary condition code"
-} "skip"
-
-private:
-KEYWORD B2_bound "Boundary condition to implement" STEERABLE=ALWAYS
-{
-  "flat" :: "Flat boundary condition"
-  "none" :: "No boundary condition"
-  "static" :: "Boundaries held fixed"
-  "radiative" :: "Radiation boundary condition"
-  "scalar" :: "Dirichlet boundary condition"
-  "newrad" :: "Improved radiative boundary condition"
-  "skip" :: "skip boundary condition code"
-} "skip"
-
-private:
-KEYWORD B3_bound "Boundary condition to implement" STEERABLE=ALWAYS
-{
-  "flat" :: "Flat boundary condition"
-  "none" :: "No boundary condition"
-  "static" :: "Boundaries held fixed"
-  "radiative" :: "Radiation boundary condition"
-  "scalar" :: "Dirichlet boundary condition"
-  "newrad" :: "Improved radiative boundary condition"
-  "skip" :: "skip boundary condition code"
-} "skip"
-
-private:
-KEYWORD Xt1_bound "Boundary condition to implement" STEERABLE=ALWAYS
-{
-  "flat" :: "Flat boundary condition"
-  "none" :: "No boundary condition"
-  "static" :: "Boundaries held fixed"
-  "radiative" :: "Radiation boundary condition"
-  "scalar" :: "Dirichlet boundary condition"
-  "newrad" :: "Improved radiative boundary condition"
-  "skip" :: "skip boundary condition code"
-} "skip"
-
-private:
-KEYWORD Xt2_bound "Boundary condition to implement" STEERABLE=ALWAYS
-{
-  "flat" :: "Flat boundary condition"
-  "none" :: "No boundary condition"
-  "static" :: "Boundaries held fixed"
-  "radiative" :: "Radiation boundary condition"
-  "scalar" :: "Dirichlet boundary condition"
-  "newrad" :: "Improved radiative boundary condition"
-  "skip" :: "skip boundary condition code"
-} "skip"
-
-private:
-KEYWORD Xt3_bound "Boundary condition to implement" STEERABLE=ALWAYS
-{
-  "flat" :: "Flat boundary condition"
-  "none" :: "No boundary condition"
-  "static" :: "Boundaries held fixed"
-  "radiative" :: "Radiation boundary condition"
-  "scalar" :: "Dirichlet boundary condition"
-  "newrad" :: "Improved radiative boundary condition"
-  "skip" :: "skip boundary condition code"
-} "skip"
-
-private:
-KEYWORD alpha_bound "Boundary condition to implement" STEERABLE=ALWAYS
-{
-  "flat" :: "Flat boundary condition"
-  "none" :: "No boundary condition"
-  "static" :: "Boundaries held fixed"
-  "radiative" :: "Radiation boundary condition"
-  "scalar" :: "Dirichlet boundary condition"
-  "newrad" :: "Improved radiative boundary condition"
-  "skip" :: "skip boundary condition code"
-} "skip"
-
-private:
 KEYWORD phi_bound "Boundary condition to implement" STEERABLE=ALWAYS
 {
   "flat" :: "Flat boundary condition"
@@ -931,6 +764,150 @@ KEYWORD gt33_bound "Boundary condition to implement" STEERABLE=ALWAYS
 } "skip"
 
 private:
+KEYWORD Xt1_bound "Boundary condition to implement" STEERABLE=ALWAYS
+{
+  "flat" :: "Flat boundary condition"
+  "none" :: "No boundary condition"
+  "static" :: "Boundaries held fixed"
+  "radiative" :: "Radiation boundary condition"
+  "scalar" :: "Dirichlet boundary condition"
+  "newrad" :: "Improved radiative boundary condition"
+  "skip" :: "skip boundary condition code"
+} "skip"
+
+private:
+KEYWORD Xt2_bound "Boundary condition to implement" STEERABLE=ALWAYS
+{
+  "flat" :: "Flat boundary condition"
+  "none" :: "No boundary condition"
+  "static" :: "Boundaries held fixed"
+  "radiative" :: "Radiation boundary condition"
+  "scalar" :: "Dirichlet boundary condition"
+  "newrad" :: "Improved radiative boundary condition"
+  "skip" :: "skip boundary condition code"
+} "skip"
+
+private:
+KEYWORD Xt3_bound "Boundary condition to implement" STEERABLE=ALWAYS
+{
+  "flat" :: "Flat boundary condition"
+  "none" :: "No boundary condition"
+  "static" :: "Boundaries held fixed"
+  "radiative" :: "Radiation boundary condition"
+  "scalar" :: "Dirichlet boundary condition"
+  "newrad" :: "Improved radiative boundary condition"
+  "skip" :: "skip boundary condition code"
+} "skip"
+
+private:
+KEYWORD trK_bound "Boundary condition to implement" STEERABLE=ALWAYS
+{
+  "flat" :: "Flat boundary condition"
+  "none" :: "No boundary condition"
+  "static" :: "Boundaries held fixed"
+  "radiative" :: "Radiation boundary condition"
+  "scalar" :: "Dirichlet boundary condition"
+  "newrad" :: "Improved radiative boundary condition"
+  "skip" :: "skip boundary condition code"
+} "skip"
+
+private:
+KEYWORD At11_bound "Boundary condition to implement" STEERABLE=ALWAYS
+{
+  "flat" :: "Flat boundary condition"
+  "none" :: "No boundary condition"
+  "static" :: "Boundaries held fixed"
+  "radiative" :: "Radiation boundary condition"
+  "scalar" :: "Dirichlet boundary condition"
+  "newrad" :: "Improved radiative boundary condition"
+  "skip" :: "skip boundary condition code"
+} "skip"
+
+private:
+KEYWORD At12_bound "Boundary condition to implement" STEERABLE=ALWAYS
+{
+  "flat" :: "Flat boundary condition"
+  "none" :: "No boundary condition"
+  "static" :: "Boundaries held fixed"
+  "radiative" :: "Radiation boundary condition"
+  "scalar" :: "Dirichlet boundary condition"
+  "newrad" :: "Improved radiative boundary condition"
+  "skip" :: "skip boundary condition code"
+} "skip"
+
+private:
+KEYWORD At13_bound "Boundary condition to implement" STEERABLE=ALWAYS
+{
+  "flat" :: "Flat boundary condition"
+  "none" :: "No boundary condition"
+  "static" :: "Boundaries held fixed"
+  "radiative" :: "Radiation boundary condition"
+  "scalar" :: "Dirichlet boundary condition"
+  "newrad" :: "Improved radiative boundary condition"
+  "skip" :: "skip boundary condition code"
+} "skip"
+
+private:
+KEYWORD At22_bound "Boundary condition to implement" STEERABLE=ALWAYS
+{
+  "flat" :: "Flat boundary condition"
+  "none" :: "No boundary condition"
+  "static" :: "Boundaries held fixed"
+  "radiative" :: "Radiation boundary condition"
+  "scalar" :: "Dirichlet boundary condition"
+  "newrad" :: "Improved radiative boundary condition"
+  "skip" :: "skip boundary condition code"
+} "skip"
+
+private:
+KEYWORD At23_bound "Boundary condition to implement" STEERABLE=ALWAYS
+{
+  "flat" :: "Flat boundary condition"
+  "none" :: "No boundary condition"
+  "static" :: "Boundaries held fixed"
+  "radiative" :: "Radiation boundary condition"
+  "scalar" :: "Dirichlet boundary condition"
+  "newrad" :: "Improved radiative boundary condition"
+  "skip" :: "skip boundary condition code"
+} "skip"
+
+private:
+KEYWORD At33_bound "Boundary condition to implement" STEERABLE=ALWAYS
+{
+  "flat" :: "Flat boundary condition"
+  "none" :: "No boundary condition"
+  "static" :: "Boundaries held fixed"
+  "radiative" :: "Radiation boundary condition"
+  "scalar" :: "Dirichlet boundary condition"
+  "newrad" :: "Improved radiative boundary condition"
+  "skip" :: "skip boundary condition code"
+} "skip"
+
+private:
+KEYWORD alpha_bound "Boundary condition to implement" STEERABLE=ALWAYS
+{
+  "flat" :: "Flat boundary condition"
+  "none" :: "No boundary condition"
+  "static" :: "Boundaries held fixed"
+  "radiative" :: "Radiation boundary condition"
+  "scalar" :: "Dirichlet boundary condition"
+  "newrad" :: "Improved radiative boundary condition"
+  "skip" :: "skip boundary condition code"
+} "skip"
+
+private:
+KEYWORD A_bound "Boundary condition to implement" STEERABLE=ALWAYS
+{
+  "flat" :: "Flat boundary condition"
+  "none" :: "No boundary condition"
+  "static" :: "Boundaries held fixed"
+  "radiative" :: "Radiation boundary condition"
+  "scalar" :: "Dirichlet boundary condition"
+  "newrad" :: "Improved radiative boundary condition"
+  "skip" :: "skip boundary condition code"
+} "skip"
+
+private:
 KEYWORD beta1_bound "Boundary condition to implement" STEERABLE=ALWAYS
 {
   "flat" :: "Flat boundary condition"
@@ -967,7 +944,7 @@ KEYWORD beta3_bound "Boundary condition to implement" STEERABLE=ALWAYS
 } "skip"
 
 private:
-KEYWORD trK_bound "Boundary condition to implement" STEERABLE=ALWAYS
+KEYWORD B1_bound "Boundary condition to implement" STEERABLE=ALWAYS
 {
   "flat" :: "Flat boundary condition"
   "none" :: "No boundary condition"
@@ -979,7 +956,7 @@ KEYWORD trK_bound "Boundary condition to implement" STEERABLE=ALWAYS
 } "skip"
 
 private:
-KEYWORD ML_curv_bound "Boundary condition to implement" STEERABLE=ALWAYS
+KEYWORD B2_bound "Boundary condition to implement" STEERABLE=ALWAYS
 {
   "flat" :: "Flat boundary condition"
   "none" :: "No boundary condition"
@@ -988,10 +965,10 @@ KEYWORD ML_curv_bound "Boundary condition to implement" STEERABLE=ALWAYS
   "scalar" :: "Dirichlet boundary condition"
   "newrad" :: "Improved radiative boundary condition"
   "skip" :: "skip boundary condition code"
-} "none"
+} "skip"
 
 private:
-KEYWORD ML_dtlapse_bound "Boundary condition to implement" STEERABLE=ALWAYS
+KEYWORD B3_bound "Boundary condition to implement" STEERABLE=ALWAYS
 {
   "flat" :: "Flat boundary condition"
   "none" :: "No boundary condition"
@@ -1000,43 +977,7 @@ KEYWORD ML_dtlapse_bound "Boundary condition to implement" STEERABLE=ALWAYS
   "scalar" :: "Dirichlet boundary condition"
   "newrad" :: "Improved radiative boundary condition"
   "skip" :: "skip boundary condition code"
-} "none"
-
-private:
-KEYWORD ML_dtshift_bound "Boundary condition to implement" STEERABLE=ALWAYS
-{
-  "flat" :: "Flat boundary condition"
-  "none" :: "No boundary condition"
-  "static" :: "Boundaries held fixed"
-  "radiative" :: "Radiation boundary condition"
-  "scalar" :: "Dirichlet boundary condition"
-  "newrad" :: "Improved radiative boundary condition"
-  "skip" :: "skip boundary condition code"
-} "none"
-
-private:
-KEYWORD ML_Gamma_bound "Boundary condition to implement" STEERABLE=ALWAYS
-{
-  "flat" :: "Flat boundary condition"
-  "none" :: "No boundary condition"
-  "static" :: "Boundaries held fixed"
-  "radiative" :: "Radiation boundary condition"
-  "scalar" :: "Dirichlet boundary condition"
-  "newrad" :: "Improved radiative boundary condition"
-  "skip" :: "skip boundary condition code"
-} "none"
-
-private:
-KEYWORD ML_lapse_bound "Boundary condition to implement" STEERABLE=ALWAYS
-{
-  "flat" :: "Flat boundary condition"
-  "none" :: "No boundary condition"
-  "static" :: "Boundaries held fixed"
-  "radiative" :: "Radiation boundary condition"
-  "scalar" :: "Dirichlet boundary condition"
-  "newrad" :: "Improved radiative boundary condition"
-  "skip" :: "skip boundary condition code"
-} "none"
+} "skip"
 
 private:
 KEYWORD ML_log_confac_bound "Boundary condition to implement" STEERABLE=ALWAYS
@@ -1063,7 +1004,7 @@ KEYWORD ML_metric_bound "Boundary condition to implement" STEERABLE=ALWAYS
 } "none"
 
 private:
-KEYWORD ML_shift_bound "Boundary condition to implement" STEERABLE=ALWAYS
+KEYWORD ML_Gamma_bound "Boundary condition to implement" STEERABLE=ALWAYS
 {
   "flat" :: "Flat boundary condition"
   "none" :: "No boundary condition"
@@ -1087,88 +1028,64 @@ KEYWORD ML_trace_curv_bound "Boundary condition to implement" STEERABLE=ALWAYS
 } "none"
 
 private:
-CCTK_REAL At11_bound_speed "characteristic speed at boundary" STEERABLE=ALWAYS
+KEYWORD ML_curv_bound "Boundary condition to implement" STEERABLE=ALWAYS
 {
-  "0:*" :: "outgoing characteristic speed > 0"
-} 1.
+  "flat" :: "Flat boundary condition"
+  "none" :: "No boundary condition"
+  "static" :: "Boundaries held fixed"
+  "radiative" :: "Radiation boundary condition"
+  "scalar" :: "Dirichlet boundary condition"
+  "newrad" :: "Improved radiative boundary condition"
+  "skip" :: "skip boundary condition code"
+} "none"
 
 private:
-CCTK_REAL At12_bound_speed "characteristic speed at boundary" STEERABLE=ALWAYS
+KEYWORD ML_lapse_bound "Boundary condition to implement" STEERABLE=ALWAYS
 {
-  "0:*" :: "outgoing characteristic speed > 0"
-} 1.
+  "flat" :: "Flat boundary condition"
+  "none" :: "No boundary condition"
+  "static" :: "Boundaries held fixed"
+  "radiative" :: "Radiation boundary condition"
+  "scalar" :: "Dirichlet boundary condition"
+  "newrad" :: "Improved radiative boundary condition"
+  "skip" :: "skip boundary condition code"
+} "none"
 
 private:
-CCTK_REAL At13_bound_speed "characteristic speed at boundary" STEERABLE=ALWAYS
+KEYWORD ML_dtlapse_bound "Boundary condition to implement" STEERABLE=ALWAYS
 {
-  "0:*" :: "outgoing characteristic speed > 0"
-} 1.
+  "flat" :: "Flat boundary condition"
+  "none" :: "No boundary condition"
+  "static" :: "Boundaries held fixed"
+  "radiative" :: "Radiation boundary condition"
+  "scalar" :: "Dirichlet boundary condition"
+  "newrad" :: "Improved radiative boundary condition"
+  "skip" :: "skip boundary condition code"
+} "none"
 
 private:
-CCTK_REAL At22_bound_speed "characteristic speed at boundary" STEERABLE=ALWAYS
+KEYWORD ML_shift_bound "Boundary condition to implement" STEERABLE=ALWAYS
 {
-  "0:*" :: "outgoing characteristic speed > 0"
-} 1.
+  "flat" :: "Flat boundary condition"
+  "none" :: "No boundary condition"
+  "static" :: "Boundaries held fixed"
+  "radiative" :: "Radiation boundary condition"
+  "scalar" :: "Dirichlet boundary condition"
+  "newrad" :: "Improved radiative boundary condition"
+  "skip" :: "skip boundary condition code"
+} "none"
 
 private:
-CCTK_REAL At23_bound_speed "characteristic speed at boundary" STEERABLE=ALWAYS
+KEYWORD ML_dtshift_bound "Boundary condition to implement" STEERABLE=ALWAYS
 {
-  "0:*" :: "outgoing characteristic speed > 0"
-} 1.
-
-private:
-CCTK_REAL At33_bound_speed "characteristic speed at boundary" STEERABLE=ALWAYS
-{
-  "0:*" :: "outgoing characteristic speed > 0"
-} 1.
-
-private:
-CCTK_REAL A_bound_speed "characteristic speed at boundary" STEERABLE=ALWAYS
-{
-  "0:*" :: "outgoing characteristic speed > 0"
-} 1.
-
-private:
-CCTK_REAL B1_bound_speed "characteristic speed at boundary" STEERABLE=ALWAYS
-{
-  "0:*" :: "outgoing characteristic speed > 0"
-} 1.
-
-private:
-CCTK_REAL B2_bound_speed "characteristic speed at boundary" STEERABLE=ALWAYS
-{
-  "0:*" :: "outgoing characteristic speed > 0"
-} 1.
-
-private:
-CCTK_REAL B3_bound_speed "characteristic speed at boundary" STEERABLE=ALWAYS
-{
-  "0:*" :: "outgoing characteristic speed > 0"
-} 1.
-
-private:
-CCTK_REAL Xt1_bound_speed "characteristic speed at boundary" STEERABLE=ALWAYS
-{
-  "0:*" :: "outgoing characteristic speed > 0"
-} 1.
-
-private:
-CCTK_REAL Xt2_bound_speed "characteristic speed at boundary" STEERABLE=ALWAYS
-{
-  "0:*" :: "outgoing characteristic speed > 0"
-} 1.
-
-private:
-CCTK_REAL Xt3_bound_speed "characteristic speed at boundary" STEERABLE=ALWAYS
-{
-  "0:*" :: "outgoing characteristic speed > 0"
-} 1.
-
-private:
-CCTK_REAL alpha_bound_speed "characteristic speed at boundary" STEERABLE=ALWAYS
-{
-  "0:*" :: "outgoing characteristic speed > 0"
-} 1.
+  "flat" :: "Flat boundary condition"
+  "none" :: "No boundary condition"
+  "static" :: "Boundaries held fixed"
+  "radiative" :: "Radiation boundary condition"
+  "scalar" :: "Dirichlet boundary condition"
+  "newrad" :: "Improved radiative boundary condition"
+  "skip" :: "skip boundary condition code"
+} "none"
 
 private:
 CCTK_REAL phi_bound_speed "characteristic speed at boundary" STEERABLE=ALWAYS
@@ -1213,6 +1130,78 @@ CCTK_REAL gt33_bound_speed "characteristic speed at boundary" STEERABLE=ALWAYS
 } 1.
 
 private:
+CCTK_REAL Xt1_bound_speed "characteristic speed at boundary" STEERABLE=ALWAYS
+{
+  "0:*" :: "outgoing characteristic speed > 0"
+} 1.
+
+private:
+CCTK_REAL Xt2_bound_speed "characteristic speed at boundary" STEERABLE=ALWAYS
+{
+  "0:*" :: "outgoing characteristic speed > 0"
+} 1.
+
+private:
+CCTK_REAL Xt3_bound_speed "characteristic speed at boundary" STEERABLE=ALWAYS
+{
+  "0:*" :: "outgoing characteristic speed > 0"
+} 1.
+
+private:
+CCTK_REAL trK_bound_speed "characteristic speed at boundary" STEERABLE=ALWAYS
+{
+  "0:*" :: "outgoing characteristic speed > 0"
+} 1.
+
+private:
+CCTK_REAL At11_bound_speed "characteristic speed at boundary" STEERABLE=ALWAYS
+{
+  "0:*" :: "outgoing characteristic speed > 0"
+} 1.
+
+private:
+CCTK_REAL At12_bound_speed "characteristic speed at boundary" STEERABLE=ALWAYS
+{
+  "0:*" :: "outgoing characteristic speed > 0"
+} 1.
+
+private:
+CCTK_REAL At13_bound_speed "characteristic speed at boundary" STEERABLE=ALWAYS
+{
+  "0:*" :: "outgoing characteristic speed > 0"
+} 1.
+
+private:
+CCTK_REAL At22_bound_speed "characteristic speed at boundary" STEERABLE=ALWAYS
+{
+  "0:*" :: "outgoing characteristic speed > 0"
+} 1.
+
+private:
+CCTK_REAL At23_bound_speed "characteristic speed at boundary" STEERABLE=ALWAYS
+{
+  "0:*" :: "outgoing characteristic speed > 0"
+} 1.
+
+private:
+CCTK_REAL At33_bound_speed "characteristic speed at boundary" STEERABLE=ALWAYS
+{
+  "0:*" :: "outgoing characteristic speed > 0"
+} 1.
+
+private:
+CCTK_REAL alpha_bound_speed "characteristic speed at boundary" STEERABLE=ALWAYS
+{
+  "0:*" :: "outgoing characteristic speed > 0"
+} 1.
+
+private:
+CCTK_REAL A_bound_speed "characteristic speed at boundary" STEERABLE=ALWAYS
+{
+  "0:*" :: "outgoing characteristic speed > 0"
+} 1.
+
+private:
 CCTK_REAL beta1_bound_speed "characteristic speed at boundary" STEERABLE=ALWAYS
 {
   "0:*" :: "outgoing characteristic speed > 0"
@@ -1231,37 +1220,19 @@ CCTK_REAL beta3_bound_speed "characteristic speed at boundary" STEERABLE=ALWAYS
 } 1.
 
 private:
-CCTK_REAL trK_bound_speed "characteristic speed at boundary" STEERABLE=ALWAYS
+CCTK_REAL B1_bound_speed "characteristic speed at boundary" STEERABLE=ALWAYS
 {
   "0:*" :: "outgoing characteristic speed > 0"
 } 1.
 
 private:
-CCTK_REAL ML_curv_bound_speed "characteristic speed at boundary" STEERABLE=ALWAYS
+CCTK_REAL B2_bound_speed "characteristic speed at boundary" STEERABLE=ALWAYS
 {
   "0:*" :: "outgoing characteristic speed > 0"
 } 1.
 
 private:
-CCTK_REAL ML_dtlapse_bound_speed "characteristic speed at boundary" STEERABLE=ALWAYS
-{
-  "0:*" :: "outgoing characteristic speed > 0"
-} 1.
-
-private:
-CCTK_REAL ML_dtshift_bound_speed "characteristic speed at boundary" STEERABLE=ALWAYS
-{
-  "0:*" :: "outgoing characteristic speed > 0"
-} 1.
-
-private:
-CCTK_REAL ML_Gamma_bound_speed "characteristic speed at boundary" STEERABLE=ALWAYS
-{
-  "0:*" :: "outgoing characteristic speed > 0"
-} 1.
-
-private:
-CCTK_REAL ML_lapse_bound_speed "characteristic speed at boundary" STEERABLE=ALWAYS
+CCTK_REAL B3_bound_speed "characteristic speed at boundary" STEERABLE=ALWAYS
 {
   "0:*" :: "outgoing characteristic speed > 0"
 } 1.
@@ -1279,7 +1250,7 @@ CCTK_REAL ML_metric_bound_speed "characteristic speed at boundary" STEERABLE=ALW
 } 1.
 
 private:
-CCTK_REAL ML_shift_bound_speed "characteristic speed at boundary" STEERABLE=ALWAYS
+CCTK_REAL ML_Gamma_bound_speed "characteristic speed at boundary" STEERABLE=ALWAYS
 {
   "0:*" :: "outgoing characteristic speed > 0"
 } 1.
@@ -1291,88 +1262,34 @@ CCTK_REAL ML_trace_curv_bound_speed "characteristic speed at boundary" STEERABLE
 } 1.
 
 private:
-CCTK_REAL At11_bound_limit "limit value for r -> infinity" STEERABLE=ALWAYS
+CCTK_REAL ML_curv_bound_speed "characteristic speed at boundary" STEERABLE=ALWAYS
 {
-  "*:*" :: "value of limit value is unrestricted"
-} 0.
+  "0:*" :: "outgoing characteristic speed > 0"
+} 1.
 
 private:
-CCTK_REAL At12_bound_limit "limit value for r -> infinity" STEERABLE=ALWAYS
+CCTK_REAL ML_lapse_bound_speed "characteristic speed at boundary" STEERABLE=ALWAYS
 {
-  "*:*" :: "value of limit value is unrestricted"
-} 0.
+  "0:*" :: "outgoing characteristic speed > 0"
+} 1.
 
 private:
-CCTK_REAL At13_bound_limit "limit value for r -> infinity" STEERABLE=ALWAYS
+CCTK_REAL ML_dtlapse_bound_speed "characteristic speed at boundary" STEERABLE=ALWAYS
 {
-  "*:*" :: "value of limit value is unrestricted"
-} 0.
+  "0:*" :: "outgoing characteristic speed > 0"
+} 1.
 
 private:
-CCTK_REAL At22_bound_limit "limit value for r -> infinity" STEERABLE=ALWAYS
+CCTK_REAL ML_shift_bound_speed "characteristic speed at boundary" STEERABLE=ALWAYS
 {
-  "*:*" :: "value of limit value is unrestricted"
-} 0.
+  "0:*" :: "outgoing characteristic speed > 0"
+} 1.
 
 private:
-CCTK_REAL At23_bound_limit "limit value for r -> infinity" STEERABLE=ALWAYS
+CCTK_REAL ML_dtshift_bound_speed "characteristic speed at boundary" STEERABLE=ALWAYS
 {
-  "*:*" :: "value of limit value is unrestricted"
-} 0.
-
-private:
-CCTK_REAL At33_bound_limit "limit value for r -> infinity" STEERABLE=ALWAYS
-{
-  "*:*" :: "value of limit value is unrestricted"
-} 0.
-
-private:
-CCTK_REAL A_bound_limit "limit value for r -> infinity" STEERABLE=ALWAYS
-{
-  "*:*" :: "value of limit value is unrestricted"
-} 0.
-
-private:
-CCTK_REAL B1_bound_limit "limit value for r -> infinity" STEERABLE=ALWAYS
-{
-  "*:*" :: "value of limit value is unrestricted"
-} 0.
-
-private:
-CCTK_REAL B2_bound_limit "limit value for r -> infinity" STEERABLE=ALWAYS
-{
-  "*:*" :: "value of limit value is unrestricted"
-} 0.
-
-private:
-CCTK_REAL B3_bound_limit "limit value for r -> infinity" STEERABLE=ALWAYS
-{
-  "*:*" :: "value of limit value is unrestricted"
-} 0.
-
-private:
-CCTK_REAL Xt1_bound_limit "limit value for r -> infinity" STEERABLE=ALWAYS
-{
-  "*:*" :: "value of limit value is unrestricted"
-} 0.
-
-private:
-CCTK_REAL Xt2_bound_limit "limit value for r -> infinity" STEERABLE=ALWAYS
-{
-  "*:*" :: "value of limit value is unrestricted"
-} 0.
-
-private:
-CCTK_REAL Xt3_bound_limit "limit value for r -> infinity" STEERABLE=ALWAYS
-{
-  "*:*" :: "value of limit value is unrestricted"
-} 0.
-
-private:
-CCTK_REAL alpha_bound_limit "limit value for r -> infinity" STEERABLE=ALWAYS
-{
-  "*:*" :: "value of limit value is unrestricted"
-} 0.
+  "0:*" :: "outgoing characteristic speed > 0"
+} 1.
 
 private:
 CCTK_REAL phi_bound_limit "limit value for r -> infinity" STEERABLE=ALWAYS
@@ -1417,6 +1334,78 @@ CCTK_REAL gt33_bound_limit "limit value for r -> infinity" STEERABLE=ALWAYS
 } 0.
 
 private:
+CCTK_REAL Xt1_bound_limit "limit value for r -> infinity" STEERABLE=ALWAYS
+{
+  "*:*" :: "value of limit value is unrestricted"
+} 0.
+
+private:
+CCTK_REAL Xt2_bound_limit "limit value for r -> infinity" STEERABLE=ALWAYS
+{
+  "*:*" :: "value of limit value is unrestricted"
+} 0.
+
+private:
+CCTK_REAL Xt3_bound_limit "limit value for r -> infinity" STEERABLE=ALWAYS
+{
+  "*:*" :: "value of limit value is unrestricted"
+} 0.
+
+private:
+CCTK_REAL trK_bound_limit "limit value for r -> infinity" STEERABLE=ALWAYS
+{
+  "*:*" :: "value of limit value is unrestricted"
+} 0.
+
+private:
+CCTK_REAL At11_bound_limit "limit value for r -> infinity" STEERABLE=ALWAYS
+{
+  "*:*" :: "value of limit value is unrestricted"
+} 0.
+
+private:
+CCTK_REAL At12_bound_limit "limit value for r -> infinity" STEERABLE=ALWAYS
+{
+  "*:*" :: "value of limit value is unrestricted"
+} 0.
+
+private:
+CCTK_REAL At13_bound_limit "limit value for r -> infinity" STEERABLE=ALWAYS
+{
+  "*:*" :: "value of limit value is unrestricted"
+} 0.
+
+private:
+CCTK_REAL At22_bound_limit "limit value for r -> infinity" STEERABLE=ALWAYS
+{
+  "*:*" :: "value of limit value is unrestricted"
+} 0.
+
+private:
+CCTK_REAL At23_bound_limit "limit value for r -> infinity" STEERABLE=ALWAYS
+{
+  "*:*" :: "value of limit value is unrestricted"
+} 0.
+
+private:
+CCTK_REAL At33_bound_limit "limit value for r -> infinity" STEERABLE=ALWAYS
+{
+  "*:*" :: "value of limit value is unrestricted"
+} 0.
+
+private:
+CCTK_REAL alpha_bound_limit "limit value for r -> infinity" STEERABLE=ALWAYS
+{
+  "*:*" :: "value of limit value is unrestricted"
+} 0.
+
+private:
+CCTK_REAL A_bound_limit "limit value for r -> infinity" STEERABLE=ALWAYS
+{
+  "*:*" :: "value of limit value is unrestricted"
+} 0.
+
+private:
 CCTK_REAL beta1_bound_limit "limit value for r -> infinity" STEERABLE=ALWAYS
 {
   "*:*" :: "value of limit value is unrestricted"
@@ -1435,37 +1424,19 @@ CCTK_REAL beta3_bound_limit "limit value for r -> infinity" STEERABLE=ALWAYS
 } 0.
 
 private:
-CCTK_REAL trK_bound_limit "limit value for r -> infinity" STEERABLE=ALWAYS
+CCTK_REAL B1_bound_limit "limit value for r -> infinity" STEERABLE=ALWAYS
 {
   "*:*" :: "value of limit value is unrestricted"
 } 0.
 
 private:
-CCTK_REAL ML_curv_bound_limit "limit value for r -> infinity" STEERABLE=ALWAYS
+CCTK_REAL B2_bound_limit "limit value for r -> infinity" STEERABLE=ALWAYS
 {
   "*:*" :: "value of limit value is unrestricted"
 } 0.
 
 private:
-CCTK_REAL ML_dtlapse_bound_limit "limit value for r -> infinity" STEERABLE=ALWAYS
-{
-  "*:*" :: "value of limit value is unrestricted"
-} 0.
-
-private:
-CCTK_REAL ML_dtshift_bound_limit "limit value for r -> infinity" STEERABLE=ALWAYS
-{
-  "*:*" :: "value of limit value is unrestricted"
-} 0.
-
-private:
-CCTK_REAL ML_Gamma_bound_limit "limit value for r -> infinity" STEERABLE=ALWAYS
-{
-  "*:*" :: "value of limit value is unrestricted"
-} 0.
-
-private:
-CCTK_REAL ML_lapse_bound_limit "limit value for r -> infinity" STEERABLE=ALWAYS
+CCTK_REAL B3_bound_limit "limit value for r -> infinity" STEERABLE=ALWAYS
 {
   "*:*" :: "value of limit value is unrestricted"
 } 0.
@@ -1483,7 +1454,7 @@ CCTK_REAL ML_metric_bound_limit "limit value for r -> infinity" STEERABLE=ALWAYS
 } 0.
 
 private:
-CCTK_REAL ML_shift_bound_limit "limit value for r -> infinity" STEERABLE=ALWAYS
+CCTK_REAL ML_Gamma_bound_limit "limit value for r -> infinity" STEERABLE=ALWAYS
 {
   "*:*" :: "value of limit value is unrestricted"
 } 0.
@@ -1495,87 +1466,33 @@ CCTK_REAL ML_trace_curv_bound_limit "limit value for r -> infinity" STEERABLE=AL
 } 0.
 
 private:
-CCTK_REAL At11_bound_scalar "Dirichlet boundary value" STEERABLE=ALWAYS
+CCTK_REAL ML_curv_bound_limit "limit value for r -> infinity" STEERABLE=ALWAYS
 {
-  "*:*" :: "unrestricted"
+  "*:*" :: "value of limit value is unrestricted"
 } 0.
 
 private:
-CCTK_REAL At12_bound_scalar "Dirichlet boundary value" STEERABLE=ALWAYS
+CCTK_REAL ML_lapse_bound_limit "limit value for r -> infinity" STEERABLE=ALWAYS
 {
-  "*:*" :: "unrestricted"
+  "*:*" :: "value of limit value is unrestricted"
 } 0.
 
 private:
-CCTK_REAL At13_bound_scalar "Dirichlet boundary value" STEERABLE=ALWAYS
+CCTK_REAL ML_dtlapse_bound_limit "limit value for r -> infinity" STEERABLE=ALWAYS
 {
-  "*:*" :: "unrestricted"
+  "*:*" :: "value of limit value is unrestricted"
 } 0.
 
 private:
-CCTK_REAL At22_bound_scalar "Dirichlet boundary value" STEERABLE=ALWAYS
+CCTK_REAL ML_shift_bound_limit "limit value for r -> infinity" STEERABLE=ALWAYS
 {
-  "*:*" :: "unrestricted"
+  "*:*" :: "value of limit value is unrestricted"
 } 0.
 
 private:
-CCTK_REAL At23_bound_scalar "Dirichlet boundary value" STEERABLE=ALWAYS
+CCTK_REAL ML_dtshift_bound_limit "limit value for r -> infinity" STEERABLE=ALWAYS
 {
-  "*:*" :: "unrestricted"
-} 0.
-
-private:
-CCTK_REAL At33_bound_scalar "Dirichlet boundary value" STEERABLE=ALWAYS
-{
-  "*:*" :: "unrestricted"
-} 0.
-
-private:
-CCTK_REAL A_bound_scalar "Dirichlet boundary value" STEERABLE=ALWAYS
-{
-  "*:*" :: "unrestricted"
-} 0.
-
-private:
-CCTK_REAL B1_bound_scalar "Dirichlet boundary value" STEERABLE=ALWAYS
-{
-  "*:*" :: "unrestricted"
-} 0.
-
-private:
-CCTK_REAL B2_bound_scalar "Dirichlet boundary value" STEERABLE=ALWAYS
-{
-  "*:*" :: "unrestricted"
-} 0.
-
-private:
-CCTK_REAL B3_bound_scalar "Dirichlet boundary value" STEERABLE=ALWAYS
-{
-  "*:*" :: "unrestricted"
-} 0.
-
-private:
-CCTK_REAL Xt1_bound_scalar "Dirichlet boundary value" STEERABLE=ALWAYS
-{
-  "*:*" :: "unrestricted"
-} 0.
-
-private:
-CCTK_REAL Xt2_bound_scalar "Dirichlet boundary value" STEERABLE=ALWAYS
-{
-  "*:*" :: "unrestricted"
-} 0.
-
-private:
-CCTK_REAL Xt3_bound_scalar "Dirichlet boundary value" STEERABLE=ALWAYS
-{
-  "*:*" :: "unrestricted"
-} 0.
-
-private:
-CCTK_REAL alpha_bound_scalar "Dirichlet boundary value" STEERABLE=ALWAYS
-{
-  "*:*" :: "unrestricted"
+  "*:*" :: "value of limit value is unrestricted"
 } 0.
 
 private:
@@ -1621,6 +1538,78 @@ CCTK_REAL gt33_bound_scalar "Dirichlet boundary value" STEERABLE=ALWAYS
 } 0.
 
 private:
+CCTK_REAL Xt1_bound_scalar "Dirichlet boundary value" STEERABLE=ALWAYS
+{
+  "*:*" :: "unrestricted"
+} 0.
+
+private:
+CCTK_REAL Xt2_bound_scalar "Dirichlet boundary value" STEERABLE=ALWAYS
+{
+  "*:*" :: "unrestricted"
+} 0.
+
+private:
+CCTK_REAL Xt3_bound_scalar "Dirichlet boundary value" STEERABLE=ALWAYS
+{
+  "*:*" :: "unrestricted"
+} 0.
+
+private:
+CCTK_REAL trK_bound_scalar "Dirichlet boundary value" STEERABLE=ALWAYS
+{
+  "*:*" :: "unrestricted"
+} 0.
+
+private:
+CCTK_REAL At11_bound_scalar "Dirichlet boundary value" STEERABLE=ALWAYS
+{
+  "*:*" :: "unrestricted"
+} 0.
+
+private:
+CCTK_REAL At12_bound_scalar "Dirichlet boundary value" STEERABLE=ALWAYS
+{
+  "*:*" :: "unrestricted"
+} 0.
+
+private:
+CCTK_REAL At13_bound_scalar "Dirichlet boundary value" STEERABLE=ALWAYS
+{
+  "*:*" :: "unrestricted"
+} 0.
+
+private:
+CCTK_REAL At22_bound_scalar "Dirichlet boundary value" STEERABLE=ALWAYS
+{
+  "*:*" :: "unrestricted"
+} 0.
+
+private:
+CCTK_REAL At23_bound_scalar "Dirichlet boundary value" STEERABLE=ALWAYS
+{
+  "*:*" :: "unrestricted"
+} 0.
+
+private:
+CCTK_REAL At33_bound_scalar "Dirichlet boundary value" STEERABLE=ALWAYS
+{
+  "*:*" :: "unrestricted"
+} 0.
+
+private:
+CCTK_REAL alpha_bound_scalar "Dirichlet boundary value" STEERABLE=ALWAYS
+{
+  "*:*" :: "unrestricted"
+} 0.
+
+private:
+CCTK_REAL A_bound_scalar "Dirichlet boundary value" STEERABLE=ALWAYS
+{
+  "*:*" :: "unrestricted"
+} 0.
+
+private:
 CCTK_REAL beta1_bound_scalar "Dirichlet boundary value" STEERABLE=ALWAYS
 {
   "*:*" :: "unrestricted"
@@ -1639,37 +1628,19 @@ CCTK_REAL beta3_bound_scalar "Dirichlet boundary value" STEERABLE=ALWAYS
 } 0.
 
 private:
-CCTK_REAL trK_bound_scalar "Dirichlet boundary value" STEERABLE=ALWAYS
+CCTK_REAL B1_bound_scalar "Dirichlet boundary value" STEERABLE=ALWAYS
 {
   "*:*" :: "unrestricted"
 } 0.
 
 private:
-CCTK_REAL ML_curv_bound_scalar "Dirichlet boundary value" STEERABLE=ALWAYS
+CCTK_REAL B2_bound_scalar "Dirichlet boundary value" STEERABLE=ALWAYS
 {
   "*:*" :: "unrestricted"
 } 0.
 
 private:
-CCTK_REAL ML_dtlapse_bound_scalar "Dirichlet boundary value" STEERABLE=ALWAYS
-{
-  "*:*" :: "unrestricted"
-} 0.
-
-private:
-CCTK_REAL ML_dtshift_bound_scalar "Dirichlet boundary value" STEERABLE=ALWAYS
-{
-  "*:*" :: "unrestricted"
-} 0.
-
-private:
-CCTK_REAL ML_Gamma_bound_scalar "Dirichlet boundary value" STEERABLE=ALWAYS
-{
-  "*:*" :: "unrestricted"
-} 0.
-
-private:
-CCTK_REAL ML_lapse_bound_scalar "Dirichlet boundary value" STEERABLE=ALWAYS
+CCTK_REAL B3_bound_scalar "Dirichlet boundary value" STEERABLE=ALWAYS
 {
   "*:*" :: "unrestricted"
 } 0.
@@ -1687,13 +1658,43 @@ CCTK_REAL ML_metric_bound_scalar "Dirichlet boundary value" STEERABLE=ALWAYS
 } 0.
 
 private:
-CCTK_REAL ML_shift_bound_scalar "Dirichlet boundary value" STEERABLE=ALWAYS
+CCTK_REAL ML_Gamma_bound_scalar "Dirichlet boundary value" STEERABLE=ALWAYS
 {
   "*:*" :: "unrestricted"
 } 0.
 
 private:
 CCTK_REAL ML_trace_curv_bound_scalar "Dirichlet boundary value" STEERABLE=ALWAYS
+{
+  "*:*" :: "unrestricted"
+} 0.
+
+private:
+CCTK_REAL ML_curv_bound_scalar "Dirichlet boundary value" STEERABLE=ALWAYS
+{
+  "*:*" :: "unrestricted"
+} 0.
+
+private:
+CCTK_REAL ML_lapse_bound_scalar "Dirichlet boundary value" STEERABLE=ALWAYS
+{
+  "*:*" :: "unrestricted"
+} 0.
+
+private:
+CCTK_REAL ML_dtlapse_bound_scalar "Dirichlet boundary value" STEERABLE=ALWAYS
+{
+  "*:*" :: "unrestricted"
+} 0.
+
+private:
+CCTK_REAL ML_shift_bound_scalar "Dirichlet boundary value" STEERABLE=ALWAYS
+{
+  "*:*" :: "unrestricted"
+} 0.
+
+private:
+CCTK_REAL ML_dtshift_bound_scalar "Dirichlet boundary value" STEERABLE=ALWAYS
 {
   "*:*" :: "unrestricted"
 } 0.

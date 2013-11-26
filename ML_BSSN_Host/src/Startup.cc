@@ -4,7 +4,7 @@
 
 extern "C" int ML_BSSN_Host_Startup(void)
 {
-  const char * banner = "ML_BSSN_Host";
+  const char* banner CCTK_ATTRIBUTE_UNUSED = "ML_BSSN_Host";
   CCTK_RegisterBanner(banner);
   return 0;
 }

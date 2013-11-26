@@ -27,7 +27,7 @@
 #define CUB(x) (kmul(x,SQR(x)))
 #define QAD(x) (SQR(SQR(x)))
 
-static void ML_BSSN_Host_convertFromADMBase_Body(cGH const * restrict const cctkGH, int const dir, int const face, CCTK_REAL const normal[3], CCTK_REAL const tangentA[3], CCTK_REAL const tangentB[3], int const imin[3], int const imax[3], int const n_subblock_gfs, CCTK_REAL * restrict const subblock_gfs[])
+static void ML_BSSN_Host_convertFromADMBase_Body(const cGH* restrict const cctkGH, const int dir, const int face, const CCTK_REAL normal[3], const CCTK_REAL tangentA[3], const CCTK_REAL tangentB[3], const int imin[3], const int imax[3], const int n_subblock_gfs, CCTK_REAL* restrict const subblock_gfs[])
 {
   DECLARE_CCTK_ARGUMENTS;
   DECLARE_CCTK_PARAMETERS;
@@ -36,57 +36,62 @@ static void ML_BSSN_Host_convertFromADMBase_Body(cGH const * restrict const cctk
   /* Include user-supplied include files */
   
   /* Initialise finite differencing variables */
-  ptrdiff_t const di = 1;
-  ptrdiff_t const dj = CCTK_GFINDEX3D(cctkGH,0,1,0) - CCTK_GFINDEX3D(cctkGH,0,0,0);
-  ptrdiff_t const dk = CCTK_GFINDEX3D(cctkGH,0,0,1) - CCTK_GFINDEX3D(cctkGH,0,0,0);
-  ptrdiff_t const cdi = sizeof(CCTK_REAL) * di;
-  ptrdiff_t const cdj = sizeof(CCTK_REAL) * dj;
-  ptrdiff_t const cdk = sizeof(CCTK_REAL) * dk;
-  CCTK_REAL_VEC const dx = ToReal(CCTK_DELTA_SPACE(0));
-  CCTK_REAL_VEC const dy = ToReal(CCTK_DELTA_SPACE(1));
-  CCTK_REAL_VEC const dz = ToReal(CCTK_DELTA_SPACE(2));
-  CCTK_REAL_VEC const dt = ToReal(CCTK_DELTA_TIME);
-  CCTK_REAL_VEC const t = ToReal(cctk_time);
-  CCTK_REAL_VEC const dxi = INV(dx);
-  CCTK_REAL_VEC const dyi = INV(dy);
-  CCTK_REAL_VEC const dzi = INV(dz);
-  CCTK_REAL_VEC const khalf = ToReal(0.5);
-  CCTK_REAL_VEC const kthird = ToReal(1.0/3.0);
-  CCTK_REAL_VEC const ktwothird = ToReal(2.0/3.0);
-  CCTK_REAL_VEC const kfourthird = ToReal(4.0/3.0);
-  CCTK_REAL_VEC const keightthird = ToReal(8.0/3.0);
-  CCTK_REAL_VEC const hdxi = kmul(ToReal(0.5), dxi);
-  CCTK_REAL_VEC const hdyi = kmul(ToReal(0.5), dyi);
-  CCTK_REAL_VEC const hdzi = kmul(ToReal(0.5), dzi);
+  const ptrdiff_t di CCTK_ATTRIBUTE_UNUSED = 1;
+  const ptrdiff_t dj CCTK_ATTRIBUTE_UNUSED = CCTK_GFINDEX3D(cctkGH,0,1,0) - CCTK_GFINDEX3D(cctkGH,0,0,0);
+  const ptrdiff_t dk CCTK_ATTRIBUTE_UNUSED = CCTK_GFINDEX3D(cctkGH,0,0,1) - CCTK_GFINDEX3D(cctkGH,0,0,0);
+  const ptrdiff_t cdi CCTK_ATTRIBUTE_UNUSED = sizeof(CCTK_REAL) * di;
+  const ptrdiff_t cdj CCTK_ATTRIBUTE_UNUSED = sizeof(CCTK_REAL) * dj;
+  const ptrdiff_t cdk CCTK_ATTRIBUTE_UNUSED = sizeof(CCTK_REAL) * dk;
+  const CCTK_REAL_VEC dx CCTK_ATTRIBUTE_UNUSED = ToReal(CCTK_DELTA_SPACE(0));
+  const CCTK_REAL_VEC dy CCTK_ATTRIBUTE_UNUSED = ToReal(CCTK_DELTA_SPACE(1));
+  const CCTK_REAL_VEC dz CCTK_ATTRIBUTE_UNUSED = ToReal(CCTK_DELTA_SPACE(2));
+  const CCTK_REAL_VEC dt CCTK_ATTRIBUTE_UNUSED = ToReal(CCTK_DELTA_TIME);
+  const CCTK_REAL_VEC t CCTK_ATTRIBUTE_UNUSED = ToReal(cctk_time);
+  const CCTK_REAL_VEC dxi CCTK_ATTRIBUTE_UNUSED = INV(dx);
+  const CCTK_REAL_VEC dyi CCTK_ATTRIBUTE_UNUSED = INV(dy);
+  const CCTK_REAL_VEC dzi CCTK_ATTRIBUTE_UNUSED = INV(dz);
+  const CCTK_REAL_VEC khalf CCTK_ATTRIBUTE_UNUSED = ToReal(0.5);
+  const CCTK_REAL_VEC kthird CCTK_ATTRIBUTE_UNUSED = 
+    ToReal(0.333333333333333333333333333333);
+  const CCTK_REAL_VEC ktwothird CCTK_ATTRIBUTE_UNUSED = 
+    ToReal(0.666666666666666666666666666667);
+  const CCTK_REAL_VEC kfourthird CCTK_ATTRIBUTE_UNUSED = 
+    ToReal(1.33333333333333333333333333333);
+  const CCTK_REAL_VEC hdxi CCTK_ATTRIBUTE_UNUSED = 
+    kmul(dxi,ToReal(0.5));
+  const CCTK_REAL_VEC hdyi CCTK_ATTRIBUTE_UNUSED = 
+    kmul(dyi,ToReal(0.5));
+  const CCTK_REAL_VEC hdzi CCTK_ATTRIBUTE_UNUSED = 
+    kmul(dzi,ToReal(0.5));
   
   /* Initialize predefined quantities */
-  CCTK_REAL_VEC const p1o1024dx = kdiv(ToReal(0.0009765625),dx);
-  CCTK_REAL_VEC const p1o1024dy = kdiv(ToReal(0.0009765625),dy);
-  CCTK_REAL_VEC const p1o1024dz = kdiv(ToReal(0.0009765625),dz);
-  CCTK_REAL_VEC const p1o1680dx = kdiv(ToReal(0.000595238095238095238095238095238),dx);
-  CCTK_REAL_VEC const p1o1680dy = kdiv(ToReal(0.000595238095238095238095238095238),dy);
-  CCTK_REAL_VEC const p1o1680dz = kdiv(ToReal(0.000595238095238095238095238095238),dz);
-  CCTK_REAL_VEC const p1o2dx = kdiv(ToReal(0.5),dx);
-  CCTK_REAL_VEC const p1o2dy = kdiv(ToReal(0.5),dy);
-  CCTK_REAL_VEC const p1o2dz = kdiv(ToReal(0.5),dz);
-  CCTK_REAL_VEC const p1o5040dx2 = kdiv(ToReal(0.000198412698412698412698412698413),kmul(dx,dx));
-  CCTK_REAL_VEC const p1o5040dy2 = kdiv(ToReal(0.000198412698412698412698412698413),kmul(dy,dy));
-  CCTK_REAL_VEC const p1o5040dz2 = kdiv(ToReal(0.000198412698412698412698412698413),kmul(dz,dz));
-  CCTK_REAL_VEC const p1o560dx = kdiv(ToReal(0.00178571428571428571428571428571),dx);
-  CCTK_REAL_VEC const p1o560dy = kdiv(ToReal(0.00178571428571428571428571428571),dy);
-  CCTK_REAL_VEC const p1o560dz = kdiv(ToReal(0.00178571428571428571428571428571),dz);
-  CCTK_REAL_VEC const p1o705600dxdy = kdiv(ToReal(1.41723356009070294784580498866e-6),kmul(dy,dx));
-  CCTK_REAL_VEC const p1o705600dxdz = kdiv(ToReal(1.41723356009070294784580498866e-6),kmul(dz,dx));
-  CCTK_REAL_VEC const p1o705600dydz = kdiv(ToReal(1.41723356009070294784580498866e-6),kmul(dz,dy));
-  CCTK_REAL_VEC const p1o840dx = kdiv(ToReal(0.00119047619047619047619047619048),dx);
-  CCTK_REAL_VEC const p1o840dy = kdiv(ToReal(0.00119047619047619047619047619048),dy);
-  CCTK_REAL_VEC const p1o840dz = kdiv(ToReal(0.00119047619047619047619047619048),dz);
-  CCTK_REAL_VEC const p1odx = kdiv(ToReal(1),dx);
-  CCTK_REAL_VEC const p1ody = kdiv(ToReal(1),dy);
-  CCTK_REAL_VEC const p1odz = kdiv(ToReal(1),dz);
-  CCTK_REAL_VEC const pm1o2dx = kdiv(ToReal(-0.5),dx);
-  CCTK_REAL_VEC const pm1o2dy = kdiv(ToReal(-0.5),dy);
-  CCTK_REAL_VEC const pm1o2dz = kdiv(ToReal(-0.5),dz);
+  const CCTK_REAL_VEC p1o1024dx CCTK_ATTRIBUTE_UNUSED = kdiv(ToReal(0.0009765625),dx);
+  const CCTK_REAL_VEC p1o1024dy CCTK_ATTRIBUTE_UNUSED = kdiv(ToReal(0.0009765625),dy);
+  const CCTK_REAL_VEC p1o1024dz CCTK_ATTRIBUTE_UNUSED = kdiv(ToReal(0.0009765625),dz);
+  const CCTK_REAL_VEC p1o1680dx CCTK_ATTRIBUTE_UNUSED = kdiv(ToReal(0.000595238095238095238095238095238),dx);
+  const CCTK_REAL_VEC p1o1680dy CCTK_ATTRIBUTE_UNUSED = kdiv(ToReal(0.000595238095238095238095238095238),dy);
+  const CCTK_REAL_VEC p1o1680dz CCTK_ATTRIBUTE_UNUSED = kdiv(ToReal(0.000595238095238095238095238095238),dz);
+  const CCTK_REAL_VEC p1o2dx CCTK_ATTRIBUTE_UNUSED = kdiv(ToReal(0.5),dx);
+  const CCTK_REAL_VEC p1o2dy CCTK_ATTRIBUTE_UNUSED = kdiv(ToReal(0.5),dy);
+  const CCTK_REAL_VEC p1o2dz CCTK_ATTRIBUTE_UNUSED = kdiv(ToReal(0.5),dz);
+  const CCTK_REAL_VEC p1o5040dx2 CCTK_ATTRIBUTE_UNUSED = kdiv(ToReal(0.000198412698412698412698412698413),kmul(dx,dx));
+  const CCTK_REAL_VEC p1o5040dy2 CCTK_ATTRIBUTE_UNUSED = kdiv(ToReal(0.000198412698412698412698412698413),kmul(dy,dy));
+  const CCTK_REAL_VEC p1o5040dz2 CCTK_ATTRIBUTE_UNUSED = kdiv(ToReal(0.000198412698412698412698412698413),kmul(dz,dz));
+  const CCTK_REAL_VEC p1o560dx CCTK_ATTRIBUTE_UNUSED = kdiv(ToReal(0.00178571428571428571428571428571),dx);
+  const CCTK_REAL_VEC p1o560dy CCTK_ATTRIBUTE_UNUSED = kdiv(ToReal(0.00178571428571428571428571428571),dy);
+  const CCTK_REAL_VEC p1o560dz CCTK_ATTRIBUTE_UNUSED = kdiv(ToReal(0.00178571428571428571428571428571),dz);
+  const CCTK_REAL_VEC p1o705600dxdy CCTK_ATTRIBUTE_UNUSED = kdiv(ToReal(1.41723356009070294784580498866e-6),kmul(dy,dx));
+  const CCTK_REAL_VEC p1o705600dxdz CCTK_ATTRIBUTE_UNUSED = kdiv(ToReal(1.41723356009070294784580498866e-6),kmul(dz,dx));
+  const CCTK_REAL_VEC p1o705600dydz CCTK_ATTRIBUTE_UNUSED = kdiv(ToReal(1.41723356009070294784580498866e-6),kmul(dz,dy));
+  const CCTK_REAL_VEC p1o840dx CCTK_ATTRIBUTE_UNUSED = kdiv(ToReal(0.00119047619047619047619047619048),dx);
+  const CCTK_REAL_VEC p1o840dy CCTK_ATTRIBUTE_UNUSED = kdiv(ToReal(0.00119047619047619047619047619048),dy);
+  const CCTK_REAL_VEC p1o840dz CCTK_ATTRIBUTE_UNUSED = kdiv(ToReal(0.00119047619047619047619047619048),dz);
+  const CCTK_REAL_VEC p1odx CCTK_ATTRIBUTE_UNUSED = kdiv(ToReal(1),dx);
+  const CCTK_REAL_VEC p1ody CCTK_ATTRIBUTE_UNUSED = kdiv(ToReal(1),dy);
+  const CCTK_REAL_VEC p1odz CCTK_ATTRIBUTE_UNUSED = kdiv(ToReal(1),dz);
+  const CCTK_REAL_VEC pm1o2dx CCTK_ATTRIBUTE_UNUSED = kdiv(ToReal(-0.5),dx);
+  const CCTK_REAL_VEC pm1o2dy CCTK_ATTRIBUTE_UNUSED = kdiv(ToReal(-0.5),dy);
+  const CCTK_REAL_VEC pm1o2dz CCTK_ATTRIBUTE_UNUSED = kdiv(ToReal(-0.5),dz);
   
   /* Assign local copies of arrays functions */
   
@@ -97,38 +102,45 @@ static void ML_BSSN_Host_convertFromADMBase_Body(cGH const * restrict const cctk
   /* Copy local copies back to grid functions */
   
   /* Loop over the grid points */
-  #pragma omp parallel
-  LC_LOOP3VEC(ML_BSSN_Host_convertFromADMBase,
-    i,j,k, imin[0],imin[1],imin[2], imax[0],imax[1],imax[2],
+  const int imin0=imin[0];
+  const int imin1=imin[1];
+  const int imin2=imin[2];
+  const int imax0=imax[0];
+  const int imax1=imax[1];
+  const int imax2=imax[2];
+  #pragma omp parallel // reduction(+: vec_iter_counter, vec_op_counter, vec_mem_counter)
+  CCTK_LOOP3STR(ML_BSSN_Host_convertFromADMBase,
+    i,j,k, imin0,imin1,imin2, imax0,imax1,imax2,
     cctk_ash[0],cctk_ash[1],cctk_ash[2],
-    CCTK_REAL_VEC_SIZE)
+    vecimin,vecimax, CCTK_REAL_VEC_SIZE)
   {
-    ptrdiff_t const index = di*i + dj*j + dk*k;
+    const ptrdiff_t index CCTK_ATTRIBUTE_UNUSED = di*i + dj*j + dk*k;
+    // vec_iter_counter+=CCTK_REAL_VEC_SIZE;
     
     /* Assign local copies of grid functions */
     
-    CCTK_REAL_VEC alpL = vec_load(alp[index]);
-    CCTK_REAL_VEC betaxL = vec_load(betax[index]);
-    CCTK_REAL_VEC betayL = vec_load(betay[index]);
-    CCTK_REAL_VEC betazL = vec_load(betaz[index]);
-    CCTK_REAL_VEC gxxL = vec_load(gxx[index]);
-    CCTK_REAL_VEC gxyL = vec_load(gxy[index]);
-    CCTK_REAL_VEC gxzL = vec_load(gxz[index]);
-    CCTK_REAL_VEC gyyL = vec_load(gyy[index]);
-    CCTK_REAL_VEC gyzL = vec_load(gyz[index]);
-    CCTK_REAL_VEC gzzL = vec_load(gzz[index]);
-    CCTK_REAL_VEC kxxL = vec_load(kxx[index]);
-    CCTK_REAL_VEC kxyL = vec_load(kxy[index]);
-    CCTK_REAL_VEC kxzL = vec_load(kxz[index]);
-    CCTK_REAL_VEC kyyL = vec_load(kyy[index]);
-    CCTK_REAL_VEC kyzL = vec_load(kyz[index]);
-    CCTK_REAL_VEC kzzL = vec_load(kzz[index]);
-    CCTK_REAL_VEC phiL = vec_load(phi[index]);
-    CCTK_REAL_VEC rL = vec_load(r[index]);
-    CCTK_REAL_VEC trKL = vec_load(trK[index]);
-    CCTK_REAL_VEC xL = vec_load(x[index]);
-    CCTK_REAL_VEC yL = vec_load(y[index]);
-    CCTK_REAL_VEC zL = vec_load(z[index]);
+    CCTK_REAL_VEC alpL CCTK_ATTRIBUTE_UNUSED = vec_load(alp[index]);
+    CCTK_REAL_VEC betaxL CCTK_ATTRIBUTE_UNUSED = vec_load(betax[index]);
+    CCTK_REAL_VEC betayL CCTK_ATTRIBUTE_UNUSED = vec_load(betay[index]);
+    CCTK_REAL_VEC betazL CCTK_ATTRIBUTE_UNUSED = vec_load(betaz[index]);
+    CCTK_REAL_VEC gxxL CCTK_ATTRIBUTE_UNUSED = vec_load(gxx[index]);
+    CCTK_REAL_VEC gxyL CCTK_ATTRIBUTE_UNUSED = vec_load(gxy[index]);
+    CCTK_REAL_VEC gxzL CCTK_ATTRIBUTE_UNUSED = vec_load(gxz[index]);
+    CCTK_REAL_VEC gyyL CCTK_ATTRIBUTE_UNUSED = vec_load(gyy[index]);
+    CCTK_REAL_VEC gyzL CCTK_ATTRIBUTE_UNUSED = vec_load(gyz[index]);
+    CCTK_REAL_VEC gzzL CCTK_ATTRIBUTE_UNUSED = vec_load(gzz[index]);
+    CCTK_REAL_VEC kxxL CCTK_ATTRIBUTE_UNUSED = vec_load(kxx[index]);
+    CCTK_REAL_VEC kxyL CCTK_ATTRIBUTE_UNUSED = vec_load(kxy[index]);
+    CCTK_REAL_VEC kxzL CCTK_ATTRIBUTE_UNUSED = vec_load(kxz[index]);
+    CCTK_REAL_VEC kyyL CCTK_ATTRIBUTE_UNUSED = vec_load(kyy[index]);
+    CCTK_REAL_VEC kyzL CCTK_ATTRIBUTE_UNUSED = vec_load(kyz[index]);
+    CCTK_REAL_VEC kzzL CCTK_ATTRIBUTE_UNUSED = vec_load(kzz[index]);
+    CCTK_REAL_VEC phiL CCTK_ATTRIBUTE_UNUSED = vec_load(phi[index]);
+    CCTK_REAL_VEC rL CCTK_ATTRIBUTE_UNUSED = vec_load(r[index]);
+    CCTK_REAL_VEC trKL CCTK_ATTRIBUTE_UNUSED = vec_load(trK[index]);
+    CCTK_REAL_VEC xL CCTK_ATTRIBUTE_UNUSED = vec_load(x[index]);
+    CCTK_REAL_VEC yL CCTK_ATTRIBUTE_UNUSED = vec_load(y[index]);
+    CCTK_REAL_VEC zL CCTK_ATTRIBUTE_UNUSED = vec_load(z[index]);
     
     
     /* Include user supplied include files */
@@ -136,34 +148,40 @@ static void ML_BSSN_Host_convertFromADMBase_Body(cGH const * restrict const cctk
     /* Precompute derivatives */
     
     /* Calculate temporaries and grid functions */
-    CCTK_REAL_VEC g11 = gxxL;
+    CCTK_REAL_VEC g11 CCTK_ATTRIBUTE_UNUSED = gxxL;
     
-    CCTK_REAL_VEC g12 = gxyL;
+    CCTK_REAL_VEC g12 CCTK_ATTRIBUTE_UNUSED = gxyL;
     
-    CCTK_REAL_VEC g13 = gxzL;
+    CCTK_REAL_VEC g13 CCTK_ATTRIBUTE_UNUSED = gxzL;
     
-    CCTK_REAL_VEC g22 = gyyL;
+    CCTK_REAL_VEC g22 CCTK_ATTRIBUTE_UNUSED = gyyL;
     
-    CCTK_REAL_VEC g23 = gyzL;
+    CCTK_REAL_VEC g23 CCTK_ATTRIBUTE_UNUSED = gyzL;
     
-    CCTK_REAL_VEC g33 = gzzL;
+    CCTK_REAL_VEC g33 CCTK_ATTRIBUTE_UNUSED = gzzL;
     
-    CCTK_REAL_VEC detg = 
+    CCTK_REAL_VEC detg CCTK_ATTRIBUTE_UNUSED = 
       knmsub(g22,kmul(g13,g13),knmsub(g11,kmul(g23,g23),kmadd(g33,kmsub(g11,g22,kmul(g12,g12)),kmul(g12,kmul(g13,kmul(g23,ToReal(2)))))));
     
-    CCTK_REAL_VEC gu11 = kdiv(kmsub(g22,g33,kmul(g23,g23)),detg);
+    CCTK_REAL_VEC gu11 CCTK_ATTRIBUTE_UNUSED = 
+      kdiv(kmsub(g22,g33,kmul(g23,g23)),detg);
     
-    CCTK_REAL_VEC gu12 = kdiv(kmsub(g13,g23,kmul(g12,g33)),detg);
+    CCTK_REAL_VEC gu12 CCTK_ATTRIBUTE_UNUSED = 
+      kdiv(kmsub(g13,g23,kmul(g12,g33)),detg);
     
-    CCTK_REAL_VEC gu13 = kdiv(kmsub(g12,g23,kmul(g13,g22)),detg);
+    CCTK_REAL_VEC gu13 CCTK_ATTRIBUTE_UNUSED = 
+      kdiv(kmsub(g12,g23,kmul(g13,g22)),detg);
     
-    CCTK_REAL_VEC gu22 = kdiv(kmsub(g11,g33,kmul(g13,g13)),detg);
+    CCTK_REAL_VEC gu22 CCTK_ATTRIBUTE_UNUSED = 
+      kdiv(kmsub(g11,g33,kmul(g13,g13)),detg);
     
-    CCTK_REAL_VEC gu23 = kdiv(kmsub(g12,g13,kmul(g11,g23)),detg);
+    CCTK_REAL_VEC gu23 CCTK_ATTRIBUTE_UNUSED = 
+      kdiv(kmsub(g12,g13,kmul(g11,g23)),detg);
     
-    CCTK_REAL_VEC gu33 = kdiv(kmsub(g11,g22,kmul(g12,g12)),detg);
+    CCTK_REAL_VEC gu33 CCTK_ATTRIBUTE_UNUSED = 
+      kdiv(kmsub(g11,g22,kmul(g12,g12)),detg);
     
-    CCTK_REAL_VEC em4phi;
+    CCTK_REAL_VEC em4phi CCTK_ATTRIBUTE_UNUSED;
     
     if (conformalMethod)
     {
@@ -178,57 +196,57 @@ static void ML_BSSN_Host_convertFromADMBase_Body(cGH const * restrict const cctk
       em4phi = kexp(kmul(phiL,ToReal(-4)));
     }
     
-    CCTK_REAL_VEC gt11L = kmul(em4phi,g11);
+    CCTK_REAL_VEC gt11L CCTK_ATTRIBUTE_UNUSED = kmul(em4phi,g11);
     
-    CCTK_REAL_VEC gt12L = kmul(em4phi,g12);
+    CCTK_REAL_VEC gt12L CCTK_ATTRIBUTE_UNUSED = kmul(em4phi,g12);
     
-    CCTK_REAL_VEC gt13L = kmul(em4phi,g13);
+    CCTK_REAL_VEC gt13L CCTK_ATTRIBUTE_UNUSED = kmul(em4phi,g13);
     
-    CCTK_REAL_VEC gt22L = kmul(em4phi,g22);
+    CCTK_REAL_VEC gt22L CCTK_ATTRIBUTE_UNUSED = kmul(em4phi,g22);
     
-    CCTK_REAL_VEC gt23L = kmul(em4phi,g23);
+    CCTK_REAL_VEC gt23L CCTK_ATTRIBUTE_UNUSED = kmul(em4phi,g23);
     
-    CCTK_REAL_VEC gt33L = kmul(em4phi,g33);
+    CCTK_REAL_VEC gt33L CCTK_ATTRIBUTE_UNUSED = kmul(em4phi,g33);
     
     trKL = 
       kmadd(kxxL,gu11,kmadd(kyyL,gu22,kmadd(kzzL,gu33,kmul(kmadd(kxyL,gu12,kmadd(kxzL,gu13,kmul(kyzL,gu23))),ToReal(2)))));
     
-    CCTK_REAL_VEC At11L = 
+    CCTK_REAL_VEC At11L CCTK_ATTRIBUTE_UNUSED = 
       kmul(em4phi,kmadd(trKL,kmul(g11,ToReal(-0.333333333333333333333333333333)),kxxL));
     
-    CCTK_REAL_VEC At12L = 
+    CCTK_REAL_VEC At12L CCTK_ATTRIBUTE_UNUSED = 
       kmul(em4phi,kmadd(trKL,kmul(g12,ToReal(-0.333333333333333333333333333333)),kxyL));
     
-    CCTK_REAL_VEC At13L = 
+    CCTK_REAL_VEC At13L CCTK_ATTRIBUTE_UNUSED = 
       kmul(em4phi,kmadd(trKL,kmul(g13,ToReal(-0.333333333333333333333333333333)),kxzL));
     
-    CCTK_REAL_VEC At22L = 
+    CCTK_REAL_VEC At22L CCTK_ATTRIBUTE_UNUSED = 
       kmul(em4phi,kmadd(trKL,kmul(g22,ToReal(-0.333333333333333333333333333333)),kyyL));
     
-    CCTK_REAL_VEC At23L = 
+    CCTK_REAL_VEC At23L CCTK_ATTRIBUTE_UNUSED = 
       kmul(em4phi,kmadd(trKL,kmul(g23,ToReal(-0.333333333333333333333333333333)),kyzL));
     
-    CCTK_REAL_VEC At33L = 
+    CCTK_REAL_VEC At33L CCTK_ATTRIBUTE_UNUSED = 
       kmul(em4phi,kmadd(trKL,kmul(g33,ToReal(-0.333333333333333333333333333333)),kzzL));
     
-    CCTK_REAL_VEC alphaL = alpL;
+    CCTK_REAL_VEC alphaL CCTK_ATTRIBUTE_UNUSED = alpL;
     
-    CCTK_REAL_VEC beta1L = betaxL;
+    CCTK_REAL_VEC beta1L CCTK_ATTRIBUTE_UNUSED = betaxL;
     
-    CCTK_REAL_VEC beta2L = betayL;
+    CCTK_REAL_VEC beta2L CCTK_ATTRIBUTE_UNUSED = betayL;
     
-    CCTK_REAL_VEC beta3L = betazL;
+    CCTK_REAL_VEC beta3L CCTK_ATTRIBUTE_UNUSED = betazL;
     
-    CCTK_REAL_VEC xCopyL = xL;
+    CCTK_REAL_VEC xCopyL CCTK_ATTRIBUTE_UNUSED = xL;
     
-    CCTK_REAL_VEC yCopyL = yL;
+    CCTK_REAL_VEC yCopyL CCTK_ATTRIBUTE_UNUSED = yL;
     
-    CCTK_REAL_VEC zCopyL = zL;
+    CCTK_REAL_VEC zCopyL CCTK_ATTRIBUTE_UNUSED = zL;
     
-    CCTK_REAL_VEC rCopyL = rL;
+    CCTK_REAL_VEC rCopyL CCTK_ATTRIBUTE_UNUSED = rL;
     
     /* Copy local copies back to grid functions */
-    vec_store_partial_prepare(i,lc_imin,lc_imax);
+    vec_store_partial_prepare(i,vecimin,vecimax);
     vec_store_nta_partial(alpha[index],alphaL);
     vec_store_nta_partial(At11[index],At11L);
     vec_store_nta_partial(At12[index],At12L);
@@ -252,7 +270,7 @@ static void ML_BSSN_Host_convertFromADMBase_Body(cGH const * restrict const cctk
     vec_store_nta_partial(yCopy[index],yCopyL);
     vec_store_nta_partial(zCopy[index],zCopyL);
   }
-  LC_ENDLOOP3VEC(ML_BSSN_Host_convertFromADMBase);
+  CCTK_ENDLOOP3STR(ML_BSSN_Host_convertFromADMBase);
 }
 
 extern "C" void ML_BSSN_Host_convertFromADMBase(CCTK_ARGUMENTS)
@@ -271,21 +289,20 @@ extern "C" void ML_BSSN_Host_convertFromADMBase(CCTK_ARGUMENTS)
     return;
   }
   
-  const char *const groups[] = {
+  const char* const groups[] = {
     "ADMBase::curv",
     "ADMBase::lapse",
     "ADMBase::metric",
     "ADMBase::shift",
     "ML_BSSN_Host::coords",
     "grid::coordinates",
-    "Grid::coordinates",
     "ML_BSSN_Host::ML_curv",
     "ML_BSSN_Host::ML_lapse",
     "ML_BSSN_Host::ML_log_confac",
     "ML_BSSN_Host::ML_metric",
     "ML_BSSN_Host::ML_shift",
     "ML_BSSN_Host::ML_trace_curv"};
-  GenericFD_AssertGroupStorage(cctkGH, "ML_BSSN_Host_convertFromADMBase", 13, groups);
+  GenericFD_AssertGroupStorage(cctkGH, "ML_BSSN_Host_convertFromADMBase", 12, groups);
   
   
   GenericFD_LoopOverEverything(cctkGH, ML_BSSN_Host_convertFromADMBase_Body);

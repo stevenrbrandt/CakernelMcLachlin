@@ -19,54 +19,54 @@ CAKERNEL_DEVICE_ML_BSSN_Advect_beta2rhs_Begin
   /* Include user-supplied include files */
   
   /* Initialise finite differencing variables */
-  CCTK_REAL const dx = params.cagh_dx;
-  CCTK_REAL const dy = params.cagh_dy;
-  CCTK_REAL const dz = params.cagh_dz;
-  CCTK_REAL const dt = params.cagh_dt;
-  CCTK_REAL const t = params.cagh_time;
-  CCTK_REAL const dxi = INV(dx);
-  CCTK_REAL const dyi = INV(dy);
-  CCTK_REAL const dzi = INV(dz);
-  CCTK_REAL const khalf = 0.5;
-  CCTK_REAL const kthird = 1/3.0;
-  CCTK_REAL const ktwothird = 2.0/3.0;
-  CCTK_REAL const kfourthird = 4.0/3.0;
-  CCTK_REAL const keightthird = 8.0/3.0;
-  CCTK_REAL const hdxi = 0.5 * dxi;
-  CCTK_REAL const hdyi = 0.5 * dyi;
-  CCTK_REAL const hdzi = 0.5 * dzi;
+  const CCTK_REAL dx CCTK_ATTRIBUTE_UNUSED = params.cagh_dx;
+  const CCTK_REAL dy CCTK_ATTRIBUTE_UNUSED = params.cagh_dy;
+  const CCTK_REAL dz CCTK_ATTRIBUTE_UNUSED = params.cagh_dz;
+  const CCTK_REAL dt CCTK_ATTRIBUTE_UNUSED = params.cagh_dt;
+  const CCTK_REAL t CCTK_ATTRIBUTE_UNUSED = params.cagh_time;
+  const CCTK_REAL dxi CCTK_ATTRIBUTE_UNUSED = INV(dx);
+  const CCTK_REAL dyi CCTK_ATTRIBUTE_UNUSED = INV(dy);
+  const CCTK_REAL dzi CCTK_ATTRIBUTE_UNUSED = INV(dz);
+  const CCTK_REAL khalf CCTK_ATTRIBUTE_UNUSED = 0.5;
+  const CCTK_REAL kthird CCTK_ATTRIBUTE_UNUSED = 1/3.0;
+  const CCTK_REAL ktwothird CCTK_ATTRIBUTE_UNUSED = 2.0/3.0;
+  const CCTK_REAL kfourthird CCTK_ATTRIBUTE_UNUSED = 4.0/3.0;
+  const CCTK_REAL keightthird CCTK_ATTRIBUTE_UNUSED = 8.0/3.0;
+  const CCTK_REAL hdxi CCTK_ATTRIBUTE_UNUSED = 0.5 * dxi;
+  const CCTK_REAL hdyi CCTK_ATTRIBUTE_UNUSED = 0.5 * dyi;
+  const CCTK_REAL hdzi CCTK_ATTRIBUTE_UNUSED = 0.5 * dzi;
   
   /* Initialize predefined quantities */
-  CCTK_REAL const p1o1024dx = 0.0009765625*INV(dx);
-  CCTK_REAL const p1o1024dy = 0.0009765625*INV(dy);
-  CCTK_REAL const p1o1024dz = 0.0009765625*INV(dz);
-  CCTK_REAL const p1o1680dx = 0.000595238095238095238095238095238*INV(dx);
-  CCTK_REAL const p1o1680dy = 0.000595238095238095238095238095238*INV(dy);
-  CCTK_REAL const p1o1680dz = 0.000595238095238095238095238095238*INV(dz);
-  CCTK_REAL const p1o2dx = 0.5*INV(dx);
-  CCTK_REAL const p1o2dy = 0.5*INV(dy);
-  CCTK_REAL const p1o2dz = 0.5*INV(dz);
-  CCTK_REAL const p1o5040dx2 = 0.000198412698412698412698412698413*INV(SQR(dx));
-  CCTK_REAL const p1o5040dy2 = 0.000198412698412698412698412698413*INV(SQR(dy));
-  CCTK_REAL const p1o5040dz2 = 0.000198412698412698412698412698413*INV(SQR(dz));
-  CCTK_REAL const p1o560dx = 0.00178571428571428571428571428571*INV(dx);
-  CCTK_REAL const p1o560dy = 0.00178571428571428571428571428571*INV(dy);
-  CCTK_REAL const p1o560dz = 0.00178571428571428571428571428571*INV(dz);
-  CCTK_REAL const p1o705600dxdy = 1.41723356009070294784580498866e-6*INV(dx*dy);
-  CCTK_REAL const p1o705600dxdz = 1.41723356009070294784580498866e-6*INV(dx*dz);
-  CCTK_REAL const p1o705600dydz = 1.41723356009070294784580498866e-6*INV(dy*dz);
-  CCTK_REAL const p1o840dx = 0.00119047619047619047619047619048*INV(dx);
-  CCTK_REAL const p1o840dy = 0.00119047619047619047619047619048*INV(dy);
-  CCTK_REAL const p1o840dz = 0.00119047619047619047619047619048*INV(dz);
-  CCTK_REAL const p1odx = INV(dx);
-  CCTK_REAL const p1ody = INV(dy);
-  CCTK_REAL const p1odz = INV(dz);
-  CCTK_REAL const pm1o2dx = -0.5*INV(dx);
-  CCTK_REAL const pm1o2dy = -0.5*INV(dy);
-  CCTK_REAL const pm1o2dz = -0.5*INV(dz);
-  CCTK_REAL const pm1o840dx = -0.00119047619047619047619047619048*INV(dx);
-  CCTK_REAL const pm1o840dy = -0.00119047619047619047619047619048*INV(dy);
-  CCTK_REAL const pm1o840dz = -0.00119047619047619047619047619048*INV(dz);
+  const CCTK_REAL p1o1024dx CCTK_ATTRIBUTE_UNUSED = 0.0009765625*INV(dx);
+  const CCTK_REAL p1o1024dy CCTK_ATTRIBUTE_UNUSED = 0.0009765625*INV(dy);
+  const CCTK_REAL p1o1024dz CCTK_ATTRIBUTE_UNUSED = 0.0009765625*INV(dz);
+  const CCTK_REAL p1o1680dx CCTK_ATTRIBUTE_UNUSED = 0.000595238095238095238095238095238*INV(dx);
+  const CCTK_REAL p1o1680dy CCTK_ATTRIBUTE_UNUSED = 0.000595238095238095238095238095238*INV(dy);
+  const CCTK_REAL p1o1680dz CCTK_ATTRIBUTE_UNUSED = 0.000595238095238095238095238095238*INV(dz);
+  const CCTK_REAL p1o2dx CCTK_ATTRIBUTE_UNUSED = 0.5*INV(dx);
+  const CCTK_REAL p1o2dy CCTK_ATTRIBUTE_UNUSED = 0.5*INV(dy);
+  const CCTK_REAL p1o2dz CCTK_ATTRIBUTE_UNUSED = 0.5*INV(dz);
+  const CCTK_REAL p1o5040dx2 CCTK_ATTRIBUTE_UNUSED = 0.000198412698412698412698412698413*INV(SQR(dx));
+  const CCTK_REAL p1o5040dy2 CCTK_ATTRIBUTE_UNUSED = 0.000198412698412698412698412698413*INV(SQR(dy));
+  const CCTK_REAL p1o5040dz2 CCTK_ATTRIBUTE_UNUSED = 0.000198412698412698412698412698413*INV(SQR(dz));
+  const CCTK_REAL p1o560dx CCTK_ATTRIBUTE_UNUSED = 0.00178571428571428571428571428571*INV(dx);
+  const CCTK_REAL p1o560dy CCTK_ATTRIBUTE_UNUSED = 0.00178571428571428571428571428571*INV(dy);
+  const CCTK_REAL p1o560dz CCTK_ATTRIBUTE_UNUSED = 0.00178571428571428571428571428571*INV(dz);
+  const CCTK_REAL p1o705600dxdy CCTK_ATTRIBUTE_UNUSED = 1.41723356009070294784580498866e-6*INV(dx*dy);
+  const CCTK_REAL p1o705600dxdz CCTK_ATTRIBUTE_UNUSED = 1.41723356009070294784580498866e-6*INV(dx*dz);
+  const CCTK_REAL p1o705600dydz CCTK_ATTRIBUTE_UNUSED = 1.41723356009070294784580498866e-6*INV(dy*dz);
+  const CCTK_REAL p1o840dx CCTK_ATTRIBUTE_UNUSED = 0.00119047619047619047619047619048*INV(dx);
+  const CCTK_REAL p1o840dy CCTK_ATTRIBUTE_UNUSED = 0.00119047619047619047619047619048*INV(dy);
+  const CCTK_REAL p1o840dz CCTK_ATTRIBUTE_UNUSED = 0.00119047619047619047619047619048*INV(dz);
+  const CCTK_REAL p1odx CCTK_ATTRIBUTE_UNUSED = INV(dx);
+  const CCTK_REAL p1ody CCTK_ATTRIBUTE_UNUSED = INV(dy);
+  const CCTK_REAL p1odz CCTK_ATTRIBUTE_UNUSED = INV(dz);
+  const CCTK_REAL pm1o2dx CCTK_ATTRIBUTE_UNUSED = -0.5*INV(dx);
+  const CCTK_REAL pm1o2dy CCTK_ATTRIBUTE_UNUSED = -0.5*INV(dy);
+  const CCTK_REAL pm1o2dz CCTK_ATTRIBUTE_UNUSED = -0.5*INV(dz);
+  const CCTK_REAL pm1o840dx CCTK_ATTRIBUTE_UNUSED = -0.00119047619047619047619047619048*INV(dx);
+  const CCTK_REAL pm1o840dy CCTK_ATTRIBUTE_UNUSED = -0.00119047619047619047619047619048*INV(dy);
+  const CCTK_REAL pm1o840dz CCTK_ATTRIBUTE_UNUSED = -0.00119047619047619047619047619048*INV(dz);
   
   /* Assign local copies of arrays functions */
   
@@ -79,34 +79,33 @@ CAKERNEL_DEVICE_ML_BSSN_Advect_beta2rhs_Begin
     
     /* Assign local copies of grid functions */
     
-    CCTK_REAL beta1L = I3D(beta1,0,0,0);
-    CCTK_REAL beta2L = I3D(beta2,0,0,0);
-    CCTK_REAL beta2rhsL = I3D(beta2rhs,0,0,0);
-    CCTK_REAL beta3L = I3D(beta3,0,0,0);
+    CCTK_REAL beta1L CCTK_ATTRIBUTE_UNUSED = I3D(beta1,0,0,0);
+    CCTK_REAL beta2L CCTK_ATTRIBUTE_UNUSED = I3D(beta2,0,0,0);
+    CCTK_REAL beta2rhsL CCTK_ATTRIBUTE_UNUSED = I3D(beta2rhs,0,0,0);
+    CCTK_REAL beta3L CCTK_ATTRIBUTE_UNUSED = I3D(beta3,0,0,0);
     
     
     /* Include user supplied include files */
     
     /* Precompute derivatives */
-    CCTK_REAL const PDupwindNthAnti1beta2 = PDupwindNthAnti1(beta2);
-    CCTK_REAL const PDupwindNthSymm1beta2 = PDupwindNthSymm1(beta2);
-    CCTK_REAL const PDupwindNthAnti2beta2 = PDupwindNthAnti2(beta2);
-    CCTK_REAL const PDupwindNthSymm2beta2 = PDupwindNthSymm2(beta2);
-    CCTK_REAL const PDupwindNthAnti3beta2 = PDupwindNthAnti3(beta2);
-    CCTK_REAL const PDupwindNthSymm3beta2 = PDupwindNthSymm3(beta2);
+    const CCTK_REAL PDupwindNthAnti1beta2 CCTK_ATTRIBUTE_UNUSED = PDupwindNthAnti1(beta2);
+    const CCTK_REAL PDupwindNthSymm1beta2 CCTK_ATTRIBUTE_UNUSED = PDupwindNthSymm1(beta2);
+    const CCTK_REAL PDupwindNthAnti2beta2 CCTK_ATTRIBUTE_UNUSED = PDupwindNthAnti2(beta2);
+    const CCTK_REAL PDupwindNthSymm2beta2 CCTK_ATTRIBUTE_UNUSED = PDupwindNthSymm2(beta2);
+    const CCTK_REAL PDupwindNthAnti3beta2 CCTK_ATTRIBUTE_UNUSED = PDupwindNthAnti3(beta2);
+    const CCTK_REAL PDupwindNthSymm3beta2 CCTK_ATTRIBUTE_UNUSED = PDupwindNthSymm3(beta2);
     
     /* Calculate temporaries and grid functions */
-    ptrdiff_t dir1 = Sign(beta1L);
+    ptrdiff_t dir1 CCTK_ATTRIBUTE_UNUSED = isgn(beta1L);
     
-    ptrdiff_t dir2 = Sign(beta2L);
+    ptrdiff_t dir2 CCTK_ATTRIBUTE_UNUSED = isgn(beta2L);
     
-    ptrdiff_t dir3 = Sign(beta3L);
+    ptrdiff_t dir3 CCTK_ATTRIBUTE_UNUSED = isgn(beta3L);
     
     beta2rhsL = beta2rhsL + (beta1L*PDupwindNthAnti1beta2 + 
       beta2L*PDupwindNthAnti2beta2 + beta3L*PDupwindNthAnti3beta2 + 
-      PDupwindNthSymm1beta2*fabs(beta1L) + 
-      PDupwindNthSymm2beta2*fabs(beta2L) + 
-      PDupwindNthSymm3beta2*fabs(beta3L))*ToReal(ShiftAdvectionCoeff);
+      PDupwindNthSymm1beta2*fabs(beta1L) + PDupwindNthSymm2beta2*fabs(beta2L) 
+      + PDupwindNthSymm3beta2*fabs(beta3L))*ToReal(ShiftAdvectionCoeff);
     
     /* Copy local copies back to grid functions */
     I3D(beta2rhs,0,0,0) = beta2rhsL;
