@@ -2250,7 +2250,7 @@ schedule CAKERNEL_Launch_DEVICE_ML_BSSN_Advect_At33rhs as DEVICE_ML_BSSN_Advect_
   WRITES: ML_BSSN::At33rhs(Interior)
 } "DEVICE_ML_BSSN_Advect_At33rhs"
 
-schedule HOST_ML_BSSN_InitRHS in ML_BSSN_InitRHS IF Accelerator::host_process
+schedule HOST_ML_BSSN_InitRHS in ML_BSSN_InitRHS IF ChemoraDevice::host_process
 {
   LANG: C
   WRITES: ML_BSSN::alpharhs(Everywhere)
@@ -2280,7 +2280,7 @@ schedule HOST_ML_BSSN_InitRHS in ML_BSSN_InitRHS IF Accelerator::host_process
   WRITES: ML_BSSN::Xt3rhs(Everywhere)
 } "HOST_ML_BSSN_InitRHS"
 
-schedule CAKERNEL_Launch_DEVICE_ML_BSSN_InitRHS as DEVICE_ML_BSSN_InitRHS in ML_BSSN_InitRHS IF Accelerator::device_process
+schedule CAKERNEL_Launch_DEVICE_ML_BSSN_InitRHS as DEVICE_ML_BSSN_InitRHS in ML_BSSN_InitRHS IF ChemoraDevice::device_process
 {
   LANG: C
   TAGS: Device=1
@@ -2314,7 +2314,7 @@ schedule CAKERNEL_Launch_DEVICE_ML_BSSN_InitRHS as DEVICE_ML_BSSN_InitRHS in ML_
 
 if (CCTK_EQUALS(my_rhs_boundary_condition, "static"))
 {
-  schedule HOST_ML_BSSN_RHSStaticBoundary in ML_BSSN_RHSStaticBoundary IF Accelerator::host_process
+  schedule HOST_ML_BSSN_RHSStaticBoundary in ML_BSSN_RHSStaticBoundary IF ChemoraDevice::host_process
   {
     LANG: C
     WRITES: ML_BSSN::alpharhs(ERROR(BoundaryWithGhosts))
@@ -2348,7 +2348,7 @@ if (CCTK_EQUALS(my_rhs_boundary_condition, "static"))
 
 if (CCTK_EQUALS(my_rhs_boundary_condition, "static"))
 {
-  schedule CAKERNEL_Launch_DEVICE_ML_BSSN_RHSStaticBoundary as DEVICE_ML_BSSN_RHSStaticBoundary in ML_BSSN_RHSStaticBoundary IF Accelerator::device_process
+  schedule CAKERNEL_Launch_DEVICE_ML_BSSN_RHSStaticBoundary as DEVICE_ML_BSSN_RHSStaticBoundary in ML_BSSN_RHSStaticBoundary IF ChemoraDevice::device_process
   {
     LANG: C
     TAGS: Device=1
@@ -2383,7 +2383,7 @@ if (CCTK_EQUALS(my_rhs_boundary_condition, "static"))
 
 if (CCTK_EQUALS(my_rhs_boundary_condition, "radiative"))
 {
-  schedule HOST_ML_BSSN_RHSRadiativeBoundary in ML_BSSN_RHSRadiativeBoundary IF Accelerator::host_process
+  schedule HOST_ML_BSSN_RHSRadiativeBoundary in ML_BSSN_RHSRadiativeBoundary IF ChemoraDevice::host_process
   {
     LANG: C
     READS: ML_BSSN::xCopy(Everywhere)
@@ -2446,7 +2446,7 @@ if (CCTK_EQUALS(my_rhs_boundary_condition, "radiative"))
 
 if (CCTK_EQUALS(my_rhs_boundary_condition, "radiative"))
 {
-  schedule CAKERNEL_Launch_DEVICE_ML_BSSN_RHSRadiativeBoundary as DEVICE_ML_BSSN_RHSRadiativeBoundary in ML_BSSN_RHSRadiativeBoundary IF Accelerator::device_process
+  schedule CAKERNEL_Launch_DEVICE_ML_BSSN_RHSRadiativeBoundary as DEVICE_ML_BSSN_RHSRadiativeBoundary in ML_BSSN_RHSRadiativeBoundary IF ChemoraDevice::device_process
   {
     LANG: C
     TAGS: Device=1
@@ -2507,7 +2507,7 @@ if (CCTK_EQUALS(my_rhs_boundary_condition, "radiative"))
   } "DEVICE_ML_BSSN_RHSRadiativeBoundary"
 }
 
-schedule HOST_ML_BSSN_enforce in ML_BSSN_enforce IF Accelerator::host_process
+schedule HOST_ML_BSSN_enforce in ML_BSSN_enforce IF ChemoraDevice::host_process
 {
   LANG: C
   READS: ML_BSSN::At11(Everywhere)
@@ -2532,7 +2532,7 @@ schedule HOST_ML_BSSN_enforce in ML_BSSN_enforce IF Accelerator::host_process
   WRITES: ML_BSSN::At33(Everywhere)
 } "HOST_ML_BSSN_enforce"
 
-schedule CAKERNEL_Launch_DEVICE_ML_BSSN_enforce as DEVICE_ML_BSSN_enforce in ML_BSSN_enforce IF Accelerator::device_process
+schedule CAKERNEL_Launch_DEVICE_ML_BSSN_enforce as DEVICE_ML_BSSN_enforce in ML_BSSN_enforce IF ChemoraDevice::device_process
 {
   LANG: C
   TAGS: Device=1
@@ -2561,7 +2561,7 @@ schedule CAKERNEL_Launch_DEVICE_ML_BSSN_enforce as DEVICE_ML_BSSN_enforce in ML_
 
 if (CCTK_EQUALS(calculate_ADMBase_variables, "yes"))
 {
-  schedule HOST_ML_BSSN_convertToADMBase in ML_BSSN_convertToADMBase IF Accelerator::host_process
+  schedule HOST_ML_BSSN_convertToADMBase in ML_BSSN_convertToADMBase IF ChemoraDevice::host_process
   {
     LANG: C
     READS: ML_BSSN::At11(Everywhere)
@@ -2604,7 +2604,7 @@ if (CCTK_EQUALS(calculate_ADMBase_variables, "yes"))
 
 if (CCTK_EQUALS(calculate_ADMBase_variables, "yes"))
 {
-  schedule CAKERNEL_Launch_DEVICE_ML_BSSN_convertToADMBase as DEVICE_ML_BSSN_convertToADMBase in ML_BSSN_convertToADMBase IF Accelerator::device_process
+  schedule CAKERNEL_Launch_DEVICE_ML_BSSN_convertToADMBase as DEVICE_ML_BSSN_convertToADMBase in ML_BSSN_convertToADMBase IF ChemoraDevice::device_process
   {
     LANG: C
     TAGS: Device=1
@@ -2645,7 +2645,7 @@ if (CCTK_EQUALS(calculate_ADMBase_variables, "yes"))
   } "DEVICE_ML_BSSN_convertToADMBase"
 }
 
-schedule HOST_ML_BSSN_copy_to_device in ML_BSSN_copy_to_device IF Accelerator::host_process
+schedule HOST_ML_BSSN_copy_to_device in ML_BSSN_copy_to_device IF ChemoraDevice::host_process
 {
   LANG: C
   READS: ML_BSSN::At11(Everywhere)
@@ -2700,7 +2700,7 @@ schedule HOST_ML_BSSN_copy_to_device in ML_BSSN_copy_to_device IF Accelerator::h
   WRITES: ML_BSSN::Xt3(Everywhere)
 } "HOST_ML_BSSN_copy_to_device"
 
-schedule CAKERNEL_Launch_DEVICE_ML_BSSN_copy_to_device as DEVICE_ML_BSSN_copy_to_device in ML_BSSN_copy_to_device IF Accelerator::device_process
+schedule CAKERNEL_Launch_DEVICE_ML_BSSN_copy_to_device as DEVICE_ML_BSSN_copy_to_device in ML_BSSN_copy_to_device IF ChemoraDevice::device_process
 {
   LANG: C
   TAGS: Device=1
@@ -2793,11 +2793,11 @@ schedule group ApplyBCs as ML_BSSN_ApplyBCs in MoL_PostStep after ML_BSSN_Select
 {
 } "Apply boundary conditions controlled by thorn Boundary"
 
-schedule group DEVICE_ML_BSSN_Advect in ML_BSSN_Advect IF Accelerator::device_process
+schedule group DEVICE_ML_BSSN_Advect in ML_BSSN_Advect IF ChemoraDevice::device_process
 {
 } ""
 
-schedule group DEVICE_ML_BSSN_RHS in ML_BSSN_RHS IF Accelerator::device_process
+schedule group DEVICE_ML_BSSN_RHS in ML_BSSN_RHS IF ChemoraDevice::device_process
 {
 } ""
 
@@ -2805,11 +2805,11 @@ schedule group DEVICE_ML_BSSN_RHS_NonDerivatives in DEVICE_ML_BSSN_RHS
 {
 } ""
 
-schedule group HOST_ML_BSSN_Advect in ML_BSSN_Advect IF Accelerator::host_process
+schedule group HOST_ML_BSSN_Advect in ML_BSSN_Advect IF ChemoraDevice::host_process
 {
 } ""
 
-schedule group HOST_ML_BSSN_RHS in ML_BSSN_RHS IF Accelerator::host_process
+schedule group HOST_ML_BSSN_RHS in ML_BSSN_RHS IF ChemoraDevice::host_process
 {
 } ""
 
