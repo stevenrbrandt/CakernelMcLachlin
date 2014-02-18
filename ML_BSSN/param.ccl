@@ -114,19 +114,19 @@ CCTK_REAL MinimumLapse "Minimum value of the lapse function"
 restricted:
 CCTK_REAL SpatialBetaDriverRadius "Radius at which the BetaDriver starts to be reduced"
 {
-  "*:*" :: ""
+  "(0:*" :: "Positive"
 } 1000000000000
 
 restricted:
 CCTK_REAL SpatialShiftGammaCoeffRadius "Radius at which the ShiftGammaCoefficient starts to be reduced"
 {
-  "*:*" :: ""
+  "(0:*" :: "Positive"
 } 1000000000000
 
 restricted:
 CCTK_REAL EpsDiss "Dissipation strength"
 {
-  "*:*" :: ""
+  "(0:*" :: "Positive"
 } 0
 
 restricted:
@@ -144,83 +144,85 @@ CCTK_INT ShiftAlphaPower "ShiftAlphaPower"
 restricted:
 CCTK_INT conformalMethod "Treatment of conformal factor"
 {
-  *:* :: ""
+  0 :: "phi method"
+  1 :: "W method"
 } 0
 
 restricted:
 CCTK_INT fdOrder "fdOrder"
 {
-  *:* :: ""
+  8 :: ""
 } 2
 
 restricted:
 CCTK_INT harmonicShift "Whether to use the harmonic shift"
 {
-  *:* :: ""
+  0 :: "Gamma driver shift"
+  1 :: "Harmonic shift"
 } 0
 
 private:
 KEYWORD my_initial_data "my_initial_data"
 {
-  "ADMBase" :: "ADMBase"
-  "Minkowski" :: "Minkowski"
+  "ADMBase" :: ""
+  "Minkowski" :: ""
 } "ADMBase"
 
 restricted:
 KEYWORD my_initial_boundary_condition "my_initial_boundary_condition"
 {
-  "none" :: "none"
+  "none" :: ""
 } "none"
 
 restricted:
 KEYWORD my_rhs_boundary_condition "my_rhs_boundary_condition"
 {
-  "none" :: "none"
-  "static" :: "static"
-  "radiative" :: "radiative"
+  "none" :: ""
+  "static" :: ""
+  "radiative" :: ""
 } "none"
 
 private:
 KEYWORD my_boundary_condition "my_boundary_condition"
 {
-  "none" :: "none"
-  "Minkowski" :: "Minkowski"
+  "none" :: ""
+  "Minkowski" :: ""
 } "none"
 
 restricted:
 KEYWORD calculate_ADMBase_variables_at "calculate_ADMBase_variables_at"
 {
-  "MoL_PostStep" :: "MoL_PostStep"
-  "CCTK_EVOL" :: "CCTK_EVOL"
-  "CCTK_ANALYSIS" :: "CCTK_ANALYSIS"
+  "MoL_PostStep" :: ""
+  "CCTK_EVOL" :: ""
+  "CCTK_ANALYSIS" :: ""
 } "MoL_PostStep"
 
 restricted:
 KEYWORD calculate_ADMBase_variables "calculate_ADMBase_variables"
 {
-  "no" :: "no"
-  "yes" :: "yes"
+  "no" :: ""
+  "yes" :: ""
 } "yes"
 
 restricted:
 KEYWORD UseSpatialBetaDriver "UseSpatialBetaDriver"
 {
-  "no" :: "no"
-  "yes" :: "yes"
+  "no" :: ""
+  "yes" :: ""
 } "no"
 
 private:
 KEYWORD dt_lapse_shift_method "Treatment of ADMBase dtlapse and dtshift"
 {
-  "correct" :: "correct"
-  "noLapseShiftAdvection" :: "noLapseShiftAdvection"
+  "correct" :: ""
+  "noLapseShiftAdvection" :: ""
 } "correct"
 
 private:
 KEYWORD apply_dissipation "Whether to apply dissipation to the RHSs"
 {
-  "always" :: "always"
-  "never" :: "never"
+  "always" :: ""
+  "never" :: ""
 } "always"
 
 restricted:
