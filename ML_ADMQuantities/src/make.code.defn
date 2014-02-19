@@ -1,3 +1,0 @@
-# File produced by Kranc
-
-SRCS = Startup.cc RegisterSymmetries.cc RegisterMoL.cc ML_ADMQuantities.cc Boundaries.cc 

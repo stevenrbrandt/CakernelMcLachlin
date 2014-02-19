@@ -1,3 +1,0 @@
-# File produced by Kranc
-
-SRCS = Startup.cc RegisterSymmetries.cc RegisterMoL.cc hydro_vacuum.cc hydro_soundWave.cc hydro_prim2con.cc hydro_con2prim.cc hydro_RHS.cc Boundaries.cc 

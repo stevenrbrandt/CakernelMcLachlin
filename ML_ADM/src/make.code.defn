@@ -1,3 +1,0 @@
-# File produced by Kranc
-
-SRCS = Startup.cc RegisterSymmetries.cc RegisterMoL.cc ML_ADM_Minkowski.cc ML_ADM_convertFromADMBase.cc ML_ADM_RHS.cc ML_ADM_boundary.cc ML_ADM_convertToADMBase.cc ML_ADM_constraints.cc ML_ADM_constraints_boundary.cc Boundaries.cc 

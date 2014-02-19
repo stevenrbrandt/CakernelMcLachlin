@@ -1,3 +1,0 @@
-# File produced by Kranc
-
-SRCS = Startup.cc RegisterSymmetries.cc RegisterMoL.cc WTFO_Gaussian.cc WTFO_RHS.cc WTFO_constraints.cc Boundaries.cc 
