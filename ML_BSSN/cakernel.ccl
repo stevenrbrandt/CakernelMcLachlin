@@ -1,4 +1,4 @@
-CCTK_CUDA_KERNEL DEVICE_ML_BSSN_RHS_Dalpha_1_etc TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,0,0" EXTERIOR="0,0,0,0,0,0"
+CCTK_CUDA_KERNEL DEVICE_ML_BSSN_RHS_Dalpha_1_etc TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,0,0" EXTERIOR="1,1,1,1,1,1"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in {alpha} "alpha"
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in {beta1} "beta1"
@@ -43,7 +43,7 @@ CCTK_CUDA_KERNEL DEVICE_ML_BSSN_RHS_Dalpha_1_etc TYPE=gpu_cuda/3dblock TILE="32,
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in {Xt3} "Xt3"
 }
 
-CCTK_CUDA_KERNEL DEVICE_ML_BSSN_RHS_Dalpha_2_etc TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,0,0" EXTERIOR="0,0,0,0,0,0"
+CCTK_CUDA_KERNEL DEVICE_ML_BSSN_RHS_Dalpha_2_etc TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,0,0" EXTERIOR="1,1,1,1,1,1"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in {alpha} "alpha"
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in {beta1} "beta1"
@@ -88,7 +88,7 @@ CCTK_CUDA_KERNEL DEVICE_ML_BSSN_RHS_Dalpha_2_etc TYPE=gpu_cuda/3dblock TILE="32,
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in {Xt3} "Xt3"
 }
 
-CCTK_CUDA_KERNEL DEVICE_ML_BSSN_RHS_Dalpha_3_etc TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="0,0,0,0,4,4" EXTERIOR="0,0,0,0,0,0"
+CCTK_CUDA_KERNEL DEVICE_ML_BSSN_RHS_Dalpha_3_etc TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="0,0,0,0,4,4" EXTERIOR="1,1,1,1,1,1"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in {alpha} "alpha"
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in {beta1} "beta1"
@@ -133,7 +133,7 @@ CCTK_CUDA_KERNEL DEVICE_ML_BSSN_RHS_Dalpha_3_etc TYPE=gpu_cuda/3dblock TILE="32,
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in {Xt3} "Xt3"
 }
 
-CCTK_CUDA_KERNEL DEVICE_ML_BSSN_RHS_Dalpha2_1_etc TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,0,0" EXTERIOR="0,0,0,0,0,0"
+CCTK_CUDA_KERNEL DEVICE_ML_BSSN_RHS_Dalpha2_1_etc TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="4,4,0,0,0,0" EXTERIOR="1,1,1,1,1,1"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in {DPDstandardNthalpha2} "DPDstandardNthalpha2"
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out {DPDstandardNthalpha21} "DPDstandardNthalpha21"
@@ -181,7 +181,7 @@ CCTK_CUDA_KERNEL DEVICE_ML_BSSN_RHS_Dalpha2_1_etc TYPE=gpu_cuda/3dblock TILE="32
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out {DPDstandardNthphi31} "DPDstandardNthphi31"
 }
 
-CCTK_CUDA_KERNEL DEVICE_ML_BSSN_RHS_Dalpha3_2_etc TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,0,0" EXTERIOR="0,0,0,0,0,0"
+CCTK_CUDA_KERNEL DEVICE_ML_BSSN_RHS_Dalpha3_2_etc TYPE=gpu_cuda/3dblock TILE="32,16,40" SHARECODE=yes STENCIL="0,0,4,4,0,0" EXTERIOR="1,1,1,1,1,1"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in {DPDstandardNthalpha3} "DPDstandardNthalpha3"
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out {DPDstandardNthalpha32} "DPDstandardNthalpha32"
