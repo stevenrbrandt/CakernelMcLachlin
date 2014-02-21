@@ -899,7 +899,7 @@ CCTK_CUDA_KERNEL DEVICE_ML_BSSN_RHSStaticBoundary TYPE=gpu_cuda/boundary_s TILE=
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=out {Xt3rhs} "Xt3rhs"
 }
 
-CCTK_CUDA_KERNEL DEVICE_ML_BSSN_RHSRadiativeBoundary TYPE=gpu_cuda/boundary_s TILE="32,16,40" SHARECODE=yes EXTERIOR="1,1,1,1,1,1"
+CCTK_CUDA_KERNEL DEVICE_ML_BSSN_RHSRadiativeBoundary TYPE=gpu_cuda/boundary_s TILE="32,16,40" SHARECODE=yes EXTERIOR="0,0,0,0,0,0"
 {
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in {A} "A"
   CCTK_CUDA_KERNEL_VARIABLE  cached=no intent=in {alpha} "alpha"
