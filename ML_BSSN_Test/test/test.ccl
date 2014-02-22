@@ -58,3 +58,8 @@ TEST ML_BSSN_2lev_2proc
 {
   NPROCS 2
 }
+
+TEST ML_BSSN_sgw3d_hybrid
+{
+  NPROCS 2
+}
